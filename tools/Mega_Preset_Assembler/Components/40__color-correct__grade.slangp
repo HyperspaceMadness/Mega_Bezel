@@ -1,0 +1,4 @@
+shaders = 1
+
+// Color Correction with Dogway's awesome Grade shader
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang

@@ -1,0 +1,17 @@
+#reference "../Base_CRT_Presets/MBZ__2__ADV-NO-REFLECT__GDV.slangp"
+
+BackgroundImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+BackgroundVertImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+NightLightingImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+FrameTextureImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+
+// Parameters
+HSM_ASPECT_RATIO_MODE = 0
+HSM_INT_SCALE_MODE = 1
+HSM_INT_SCALE_BORDER_MIN_HEIGHT = -10
+HSM_CURVATURE_MODE = -1
+HSM_SCREEN_CORNER_RADIUS = 4
+HSM_SCREEN_EDGE_SHARPNESS = 90
+HSM_BG_OPACITY = "0.000000"
+g_vignette = "0.0"
+

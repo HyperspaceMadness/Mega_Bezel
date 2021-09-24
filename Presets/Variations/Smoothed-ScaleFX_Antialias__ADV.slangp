@@ -1,0 +1,17 @@
+#reference "../Base_CRT_Presets/MBZ__1__ADV__GDV.slangp"
+
+BackgroundImage = ../../shaders/HyperspaceMadness/textures/HSM_Duimon_Super_Famicom_3840x2160.png
+BackgroundVertImage = ../../shaders/HyperspaceMadness/textures/HSM_Duimon_Super_Famicom_3840x2160.png
+
+HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR = "100"
+HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = "100"
+HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY = "1.000000"
+
+SHARPEN = "0.200000"
+HSM_SCALEFX_ON = "1.000000"
+
+HSM_INTERLACE_TRIGGER_RES = "800.000000"
+HSM_BZL_COLOR_VALUE = 30
+HSM_NIGHT_OPACITY = 98
+
+MDAPT_MODE = 2

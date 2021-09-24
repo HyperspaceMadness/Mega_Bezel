@@ -1,0 +1,26 @@
+#reference ":/shaders/shaders_slang/bezel/Mega_Bezel/Presets/Base_CRT_Presets/MBZ__3__STD__GDV.slangp"
+
+// Thanks to Nesguy from the Libretro forum for the settings in this preset!
+
+// Parameters
+wp_temperature = "8004.000000"
+LUTLOW = "20.000000"
+HSM_GAMMA_IN_LINEARIZE = "2.199999"
+glow = "0.000000"
+brightboost = "2.999999"
+brightboost1 = "3.000000"
+beam_min = "1.500000"
+beam_max = "1.100000"
+beam_size = "1.000000"
+vertmask = "0.100000"
+scans = "1.000000"
+spike = "0.000000"
+h_sharp = "3.000000"
+s_sharp = "0.000000"
+shadowMask = "6.000000"
+maskstr = "0.700000"
+mcut = "0.300000"
+slotmask = "0.700000"
+slotwidth = "3.000000"
+mclip = "0.700000"
+gamma_out = "2.500000"

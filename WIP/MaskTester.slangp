@@ -1,0 +1,12 @@
+#reference "../presets/base/MBZ__2__STANDARD__GUEST-DrVENOM.slangp"
+
+BackgroundImage = ../shaders/HyperspaceMadness/textures/Placeholder_White_16x16.png
+
+// Parameters
+HSM_ASPECT_RATIO_MODE = 2
+HSM_ASPECT_RATIO_ORIENTATION = 1
+HSM_BG_OPACITY = 100
+HSM_BG_BLEND_MODE = 2
+HSM_DEFAULT_IMG_ASPECT_RATIO_MODE = 1
+HSM_REFLECT_IS_LAST_PASS = 1
+HSM_NIGHT_OPACITY = 98

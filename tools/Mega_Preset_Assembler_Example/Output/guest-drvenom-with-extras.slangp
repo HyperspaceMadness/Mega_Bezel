@@ -1,0 +1,125 @@
+shaders = 19
+
+shader0 = :/shaders/shaders_slang/dithering/shaders/mdapt/passes/mdapt-pass0.slang
+filter_linear0 = false
+scale_type0 = source
+scale0 = 1.0
+
+shader1 = :/shaders/shaders_slang/dithering/shaders/mdapt/passes/mdapt-pass1.slang
+filter_linear1 = false
+scale_type1 = source
+scale1 = 1.0
+
+shader2 = :/shaders/shaders_slang/dithering/shaders/mdapt/passes/mdapt-pass2.slang
+filter_linear2 = false
+scale_type2 = source
+scale2 = 1.0
+
+shader3 = :/shaders/shaders_slang/dithering/shaders/mdapt/passes/mdapt-pass3.slang
+filter_linear3 = false
+scale_type3 = source
+scale3 = 1.0
+
+shader4 = :/shaders/shaders_slang/dithering/shaders/mdapt/passes/mdapt-pass4.slang
+filter_linear4 = false
+scale_type4 = source
+scale4 = 1.0
+
+shader5 = :/shaders/shaders_slang/misc/grade.slang
+
+shader6 = :/shaders/shaders_slang/crt/shaders/gtu-v050/pass1.slang
+scale_type6 = source
+scale6 = 1.0
+float_framebuffer6 = true
+
+shader7 = :/shaders/shaders_slang/crt/shaders/gtu-v050/pass2.slang
+scale_type_x7 = viewport
+scale_x7 = 1.0
+scale_type_y7 = source
+scale_y7 = 1.0
+filter_linear7 = true
+float_framebuffer7 = true
+
+shader8 = :/shaders/shaders_slang/stock.slang
+filter_linear8 = false
+scale_type8 = source
+scale8 = 1.0
+alias8 = StockPass
+
+shader9 = :/shaders/shaders_slang/crt/shaders/guest/crt-gdv-new/afterglow0.slang
+filter_linear9 = false
+scale_type9 = source
+scale9 = 1.0
+alias9 = AfterglowPass
+
+shader10 = :/shaders/shaders_slang/crt/shaders/guest/crt-gdv-new/pre-shaders-afterglow.slang
+filter_linear10 = false
+scale_type10 = source
+scale10 = 1.0
+alias10 = PrePass
+
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4"
+SamplerLUT1 = :/shaders/shaders_slang/crt/shaders/guest/lut/sony_trinitron1.png
+SamplerLUT1_linear = true 
+SamplerLUT2 = :/shaders/shaders_slang/crt/shaders/guest/lut/sony_trinitron2.png
+SamplerLUT2_linear = true 
+SamplerLUT3 = :/shaders/shaders_slang/crt/shaders/guest/lut/other1.png
+SamplerLUT3_linear = true
+SamplerLUT4 = :/shaders/shaders_slang/crt/shaders/guest/lut/custom_lut.png
+SamplerLUT4_linear = true
+
+shader11 = :/shaders/shaders_slang/crt/shaders/guest/crt-gdv-new/avg-lum.slang
+filter_linear11 = true
+scale_type11 = source
+scale11 = 1.0
+mipmap_input11 = true
+alias11 = AvgLumPass
+
+shader12 = :/shaders/shaders_slang/crt/shaders/guest/crt-gdv-new/linearize.slang
+filter_linear12 = true
+scale_type12 = source
+scale12 = 1.0
+alias12 = LinearizePass
+float_framebuffer12 = true  # comment this line for max precision
+
+shader13 = :/shaders/shaders_slang/crt/shaders/guest/crt-gdv-new/gaussian_horizontal.slang
+filter_linear13 = true
+scale_type_x13 = viewport
+scale_x13 = 0.5
+scale_type_y13 = source
+scale_y13 = 1.0 
+
+shader14 = :/shaders/shaders_slang/crt/shaders/guest/crt-gdv-new/gaussian_vertical.slang
+filter_linear14 = true
+scale_type_x14 = viewport
+scale_x14 = 0.5
+scale_type_y14 = viewport
+scale_y14 = 0.5
+alias14 = GlowPass
+
+shader15 = :/shaders/shaders_slang/crt/shaders/guest/crt-gdv-new/bloom_horizontal.slang
+filter_linear15 = true
+scale_type_x15 = source
+scale_x15 = 1.0
+scale_type_y15 = source
+scale_y15 = 1.0 
+
+shader16 = :/shaders/shaders_slang/crt/shaders/guest/crt-gdv-new/bloom_vertical.slang
+filter_linear16 = true
+scale_type_x16 = source
+scale_x16 = 1.0
+scale_type_y16 = source
+scale_y16 = 1.0
+alias16 = BloomPass
+
+shader17 = :/shaders/shaders_slang/crt/shaders/guest/crt-gdv-new/crt-guest-dr-venom2.slang
+filter_linear17 = true
+scale_type17 = viewport
+scale_x17 = 1.0
+scale_y17 = 1.0
+
+shader18 = :/shaders/shaders_slang/crt/shaders/guest/crt-gdv-new/deconvergence.slang
+filter_linear18 = true
+scale_type18 = viewport
+scale_x18 = 1.0
+scale_y18 = 1.0

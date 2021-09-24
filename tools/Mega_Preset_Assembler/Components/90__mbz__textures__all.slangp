@@ -1,0 +1,60 @@
+// Define textures to be used by the different passes
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;ColoredGelImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;LEDImage;TopLayerImage;"
+
+SamplerLUT1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/lut/trinitron-lut.png
+SamplerLUT1_linear = true 
+SamplerLUT2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/lut/inv-trinitron-lut.png
+SamplerLUT2_linear = true 
+SamplerLUT3 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/lut/nec-lut.png
+SamplerLUT3_linear = true
+SamplerLUT4 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/lut/ntsc-lut.png
+SamplerLUT4_linear = true
+
+IntroImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/IntroImage_MegaBezelLogo.png
+IntroImage_linear = true
+
+ScreenPlacementImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+ScreenPlacementImage_linear = false
+
+ColoredGelImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+ColoredGelImage_linear = true
+
+TubeStaticReflectionImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/TubeGlassOverlayImage_3840x2160.png
+TubeStaticReflectionImage_linear = true
+
+ReflectionMaskImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_White_16x16.png
+ReflectionMaskImage_linear = true
+
+FrameTextureImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/FrameTexture_2800x2120.png
+FrameTextureImage_linear = true
+
+BackgroundImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/BackgroundImage_Carbon_3840x2160.png
+BackgroundImage_linear = true
+
+BackgroundVertImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/BackgroundImage_Carbon_3840x2160.png
+BackgroundVertImage_linear = true
+
+CabinetGlassImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+CabinetGlassImage_linear = true
+
+DeviceImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+DeviceImage_linear = true
+
+DeviceVertImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+DeviceVertImage_linear = true
+
+DecalImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+DecalImage_linear = true
+
+NightLightingImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/NightLighting_3840x2160.jpg
+NightLightingImage_linear = true
+
+LEDImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+LEDImage_linear = true
+
+TopLayerImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+TopLayerImage_linear = true
+
+// Use for matching vanilla GDV-Advanced
+// HSM_ASPECT_RATIO_MODE = 6
+// HSM_CURVATURE_MODE = -1

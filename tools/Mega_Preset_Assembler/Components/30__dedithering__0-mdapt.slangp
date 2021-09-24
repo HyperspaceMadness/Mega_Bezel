@@ -1,0 +1,11 @@
+shaders = 6
+
+shader0 = :/shaders/shaders_slang/stock.slang
+alias0 = "PreDeDitheringPass"
+
+// De-Dithering - Mdapt
+shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-mdapt/hsm-mdapt-pass0.slang
+shader2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-mdapt/hsm-mdapt-pass1.slang
+shader3 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-mdapt/hsm-mdapt-pass2.slang
+shader4 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-mdapt/hsm-mdapt-pass3.slang
+shader5 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-mdapt/hsm-mdapt-pass4.slang

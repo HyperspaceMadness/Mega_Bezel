@@ -1,0 +1,7 @@
+#reference "../Base_CRT_Presets/MBZ__1__ADV__GDV.slangp"
+
+BackgroundImage = ../../shaders/HyperspaceMadness/textures/HSM_Duimon_Super_Famicom_3840x2160.png
+
+HSM_VIEWPORT_VIGNETTE_OPACITY = 0
+HSM_BZL_COLOR_VALUE = 30
+HSM_NIGHT_OPACITY = 98

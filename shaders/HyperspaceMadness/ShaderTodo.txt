@@ -1,0 +1,219 @@
+Mega Bezel is updated to V 0.9.022 2021-09-05
+
+Changes:
+  * ADV
+    * All Pre-CRT Passes
+    * Image Layering
+    * Reflection
+  * STD
+    * Minimal Pre-CRT Passes (Still includes Grade)
+    * Image Layering
+    * Reflection
+  * STD-NO-REFLECT - (Closest Preset we had to this was BASIC)
+    * Minimal Pre-CRT Passes (Still includes Grade)
+    * Image Layering
+  * POTATO
+    * Minimal Pre-CRT Passes (No Grade)
+    * Background Image
+
+
+
+*  Performance of Base presets at 3840x2160 on Nvidia RTX2060:
+  *  ADVANCED -                      78 FPS  -  No comparable old preset
+  *  GLASS -                        150 FPS  -  Old Glass Preset        128 FPS
+  *  STANDARD -                     135 FPS  -  Old Full Preset         140 FPS
+  *  STANDARD-HD-CORE -             105 FPS
+  *  BASIC-BORDER-WITH-REFLECTION - 175 FPS  -  Old Reflect Only Preset 165 FPS
+  *  BASIC-BORDER -                 295 FPS  -  Old Screen Scale Preset 370 FPS
+
+*  Performance on HD-CORE E.G. 1920x1080:
+  *  ADVANCED -                     60 FPS 
+  *  ADVANCED-HD-CORE -             70 FPS 
+  *  STANDARD -                     85 FPS 
+  *  STANDARD-HD-CORE -             100 FPS 
+  *  BASIC-BORDER-WITH-REFLECTION - 126 FPS 
+  *  BASIC-BORDER                 - 180 FPS 
+
+Mega Bezel Still to Come:
+
+V1 TODO
+  * Fix Inner Edge Static Highlights, Bezel over screen
+  * Negative Cropping
+  * Optimize GDC out of frame, Potato & Other?
+  * Good Preset for FBNeo & Instructions
+  * Catch 320x480 as Horizontal Aspect
+  * Add Death to Pixels
+  * Viewport Zoom & Position
+  * Add Split for Gel
+  * Add GDV-NTSC presets
+  * MrRetrolust Presets with new Mega_Bezel
+  * Do some more OrionsAngel Presets with new Mega_Bezel
+  * Add NTSC Adaptive Preset?
+  * Add Variations CRT Royale Glass & Advanced
+  * Add vscode link in readme [![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/organization/repository)
+  * Add Pixel Shifting for Burn-in Mitigation
+  * Get Intro to play on shader Load
+  * Split Libraries, so minimum can be loaded
+
+  * Black Edges should be driven by bezel not screen (Right now bezel overlaps the screen with no black line)
+  * When in interlacing mode for vertical opposite mult should do something
+  * Fix frame inner edge color not picking up HSV, (Advanced Preset?)
+  * Fix bright area of screen showing outside the black line when bezel is hidden
+  * Add Humbar in Post CRT
+  Update Docs & add some notes about GDV & Grade
+  * Rotate Dual Screen
+  * Debug Info showing Shader Type? Num Shaders x Num Flavors = ~20 files :(, Add text in extra pass
+  * Adjust Black adjustment so it affects not just black, Falloff? Tweak Afterglow?
+  * Modulate Range on top of Hue & Value?
+  * Raw Pixel Preset
+  * Raw Pixels Sampling Modes? Quillez Nearest Neighbor, etc
+  * Add Crop Shift X & Y?
+  * Viewport orientation Debug
+  * Add Cutout to STANDARD Preset?
+  * Logo
+    * Put Logo on Screen 1 & Scale Properly, options for which screen?
+    * Position offset?
+  * Add Images and Readme to root of the Repo
+  * LCD behavior when reaching resolution limit - Possible LCD Replacements LCD 3x, Sameboy lcd
+  * Local vs FullScreen Blur on Corner reflection?
+  * Shadow from Cutout?
+  * Large Slotmask Bitmap Mask
+
+
+Post V1  
+  * Do Hylian Sync Version
+  * Night light single glow - Place Glows
+
+Independent
+  * Add Test_Max_Resources to Repo
+  * Make Resolution text shader it's own pass for Repo
+
+Examples
+  * Guest ADV - Deconvergence before CRT? 2 Passes, one before one after and switch?
+  * Punch Out - Dual Screen
+  * Vector Preset
+  * Use MipMaps for image sampling when we have the image texture sizes
+  * Add Gameboy Palettes https://www.deviantart.com/thewolfbunny/gallery/69987002/game-boy-palettes
+  * Split background (Background and Bezel image?) and shift halves to far left and right
+  * Add Sharp Pixel Preset - No CRT Processing, Options for reflection area, Adjustable Quilez Sharpening?
+  * Independent Bezel Scaling not the same as non-int scale, why? Maybe only in Portrait Res
+  * Need x Scale for screen size of Independent bezel
+  * Outer reflection corner radius should be independent when in independent mode
+  * See why very inner edge seems not affected by reflection mask
+  * Startup Animation - Sprite Sheet
+  * Bilinear scale option per layer?
+  * Add Shadow for Image Cutout
+  * Frame Shading
+    * Shading on frame interior edge?
+    * Frame Inner edge static lighter line
+    * Frame Interior Edge thickness
+    * Fix shading with rounded outer corner
+    * Frame shadow should follow corner radius
+  * Integer Scale Guides
+  * Source Image Passthrough on CRT Pass, for straight bilinear from core image
+  * Gameboy
+    * Fix DMG Shader
+    * Fix Low Contrast Issue
+    * Multiple palettes including Custom for Gameboy
+  * Reflection fade option to have reflection come to 100% at inner frame boundary so you can have a glass like effect outside the bezel
+  * Per Layer Scaling of Cutout?
+  * Noise Sampling on Tube Highlight
+  * Aspect Ratio on Images, test if we can get it from the image, DX11 might work
+  * When reflection is off still see inner bezel edge reflection
+  * Guess Resolution for Core Sampling Multiplier?, Set target vertical downsampled resolution, try to get multiple.
+  * Move Resolution Debug to be top justified
+  * Reflection on Control Panel and Speaker Panel
+
+  * Black edge should scale with tube (It's much larger when the tube scaling is smaller)
+  
+  * Add Deconvergence (Dogway Glass?)
+  * Simulated Gamma & Display Gamma
+  * Calibrate brightness of crt shaders & LCD to Guest-Venom
+
+  * Put Torridgristle LUT back in for blue skys
+
+  * Scanlines
+    * Get GTU to respect scanline direction
+    * Fake Scanline improvements
+      * Parameterized scanline behavior, thickness etc
+      * Implement Rolling scanlines & interference similar to Newpixie-Crt
+  * Auto Aspect Ratio
+    *  Bloody Roar II and Tobal 2, Tekken 3 and R4 (Tekken 3 & 4 are registering as vertical)
+  * Color Management/Correction
+    * Brightness balance the presets so they are consistent, some are currently brighter than others
+  * Add some standard deconvergence which can be used with the rolling scanlines
+  * Reflection on areas outside the frame, e.g. Arcade Speaker Panel and Control Panel
+  * Optimize presets using non-float frame buffers
+  * Independent frame scaling?
+
+Documentation
+  Setup
+    Turn off video rotation 
+
+  Troubleshooting 
+    New install of retroarch 
+    Turn all overlays off 
+    I have rings, wavy distortions (Moire)
+
+  Vertical Arcade game setup
+    FBNeo
+    Mame 2003
+    Mame 2010
+
+Moire
+  The Waves you are seeing are called a Moire effect, it’s the same effect you see through a screen door sometimes.
+  It is caused by using a crt shader with scanlines and tube curvature and made worse when the resolution is limited. It is a thorny problem , and sometimes hard to get rid of at 1080, it is much less of a problem at 4k.
+  Things which can help/fix the problem
+    Reducing strength of scanlines, 
+    Reducing or curvature or setting it to 0 will definitely fix it.
+    If you keep using curvature using Integer scale in the shader parameters can sometimes help.
+
+    If making own presets reference from crt-Base presets 
+
+Old Megabezel https://github.com/HyperspaceMadness/shaders_slang/tree/adf6dc3c0f09db11ebf4fbcf85098ac8232acfcc
+
+Retroarch Features
+  * Shaders folder as a path token, e.g. "[shaders]/shaders_slang/"
+  * Hide Parameters
+  * Add Shader Preset - to add a shader preset to the beginning of the chain
+  * Fix MyTextureNameSize for textures in Vulkan
+  * Shader Textures in Sub Menu - Add ability to set texture overrides in retroarch UI
+  * Shader Passes in Sub Menu
+  * Reload Last Preset
+  * Original scaling Type?
+  * MaxAbsolute scaling type?
+  * Add Preset to beginning of chain (Autechre's request )
+  * Next/Previous Shader sometimes uses different directories, probably related to shader_path in live shader rather than originally loaded preset
+  * Replace Text, for shader type, game & core, content directory
+    core_name
+    game_name
+    [shadertype], [gamename], [corename], [contentdirectory]
+    * Check textures and use default if not found
+  * Multiple references in one file for adding passes and parameter overrides
+  * Add Shader Preset - In UI Add a shader preset to Concatenate passes at beginning of shader stack
+  * Fix loss of current parameter values when retroarch goes from full screen to window
+  * Add History other than OriginalHistory1 ...
+  * Fix <texture>Size, only works for textures in DX11, 12, not Vulkan
+  * Video Aspect Ratio which uses Monitor
+  * Stop Reloading Shader multiple times on Save (Keep optional param)
+  * GIF support
+  * Check for alias used multiple times appears as semantic error now
+  * global.x is semantic error if x not in global
+
+
+  Notes:
+  Fake Scanlines
+    Parameter for simulated line count
+    Option to try to match a integer division of the core resolution
+    Option for integer "perfect" scanlines
+    Offset on scan axis
+    Curvature Multiplier
+    Try mame hlsl darkening
+    Check Lottes tone mapping
+    Crawl
+
+  Super Glow HighFX Version?, manage brightness
+
+
+Questions for Survey
+

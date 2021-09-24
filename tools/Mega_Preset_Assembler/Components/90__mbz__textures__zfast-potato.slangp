@@ -1,0 +1,18 @@
+// Define textures to be used by the different passes
+textures = "ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
+
+ScreenPlacementImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+ScreenPlacementImage_linear = false
+
+BackgroundImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Baked_Frame_Carbonfiber_Background.png
+BackgroundImage_linear = true
+
+BackgroundVertImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Baked_Frame_Carbonfiber_Background_Vert.png
+BackgroundVertImage_linear = true
+
+// Parameters
+HSM_ASPECT_RATIO_MODE = 1
+
+// Use for matching vanilla GDV-Advanced
+// HSM_ASPECT_RATIO_MODE = 6
+// HSM_CURVATURE_MODE = -1

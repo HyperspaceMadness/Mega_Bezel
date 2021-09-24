@@ -1,0 +1,405 @@
+shader0 = hsm-test-max-resources.glsl
+scale_type0 = source
+scale0 = 1.0
+float_framebuffer0 = true
+alias0 = PassName_0
+
+shader1 = hsm-test-max-resources.glsl
+scale_type1 = source
+scale1 = 1.0
+float_framebuffer1 = true
+alias1 = PassName_1
+
+shader2 = hsm-test-max-resources.glsl
+scale_type2 = source
+scale2 = 1.0
+float_framebuffer2 = true
+alias2 = PassName_2
+
+shader3 = hsm-test-max-resources.glsl
+scale_type3 = source
+scale3 = 1.0
+float_framebuffer3 = true
+alias3 = PassName_3
+
+shader4 = hsm-test-max-resources.glsl
+scale_type4 = source
+scale4 = 1.0
+float_framebuffer4 = true
+alias4 = PassName_4
+
+shader5 = hsm-test-max-resources.glsl
+scale_type5 = source
+scale5 = 1.0
+float_framebuffer5 = true
+alias5 = PassName_5
+
+shader6 = hsm-test-max-resources.glsl
+scale_type6 = source
+scale6 = 1.0
+float_framebuffer6 = true
+alias6 = PassName_6
+
+shader7 = hsm-test-max-resources.glsl
+scale_type7 = source
+scale7 = 1.0
+float_framebuffer7 = true
+alias7 = PassName_7
+
+shader8 = hsm-test-max-resources.glsl
+scale_type8 = source
+scale8 = 1.0
+float_framebuffer8 = true
+alias8 = PassName_8
+
+shader9 = hsm-test-max-resources.glsl
+scale_type9 = source
+scale9 = 1.0
+float_framebuffer9 = true
+alias9 = PassName_9
+
+shader10 = hsm-test-max-resources.glsl
+scale_type10 = source
+scale10 = 1.0
+float_framebuffer10 = true
+alias10 = PassName_10
+
+shader11 = hsm-test-max-resources.glsl
+scale_type11 = source
+scale11 = 1.0
+float_framebuffer11 = true
+alias11 = PassName_11
+
+shader12 = hsm-test-max-resources.glsl
+scale_type12 = source
+scale12 = 1.0
+float_framebuffer12 = true
+alias12 = PassName_12
+
+shader13 = hsm-test-max-resources.glsl
+scale_type13 = source
+scale13 = 1.0
+float_framebuffer13 = true
+alias13 = PassName_13
+
+shader14 = hsm-test-max-resources.glsl
+scale_type14 = source
+scale14 = 1.0
+float_framebuffer14 = true
+alias14 = PassName_14
+
+shader15 = hsm-test-max-resources.glsl
+scale_type15 = source
+scale15 = 1.0
+float_framebuffer15 = true
+alias15 = PassName_15
+
+shader16 = hsm-test-max-resources.glsl
+scale_type16 = source
+scale16 = 1.0
+float_framebuffer16 = true
+alias16 = PassName_16
+
+shader17 = hsm-test-max-resources.glsl
+scale_type17 = source
+scale17 = 1.0
+float_framebuffer17 = true
+alias17 = PassName_17
+
+shader18 = hsm-test-max-resources.glsl
+scale_type18 = source
+scale18 = 1.0
+float_framebuffer18 = true
+alias18 = PassName_18
+
+shader19 = hsm-test-max-resources.glsl
+scale_type19 = source
+scale19 = 1.0
+float_framebuffer19 = true
+alias19 = PassName_19
+
+shader20 = hsm-test-max-resources.glsl
+scale_type20 = source
+scale20 = 1.0
+float_framebuffer20 = true
+alias20 = PassName_20
+
+shader21 = hsm-test-max-resources.glsl
+scale_type21 = source
+scale21 = 1.0
+float_framebuffer21 = true
+alias21 = PassName_21
+
+shader22 = hsm-test-max-resources.glsl
+scale_type22 = source
+scale22 = 1.0
+float_framebuffer22 = true
+alias22 = PassName_22
+
+shader23 = hsm-test-max-resources.glsl
+scale_type23 = source
+scale23 = 1.0
+float_framebuffer23 = true
+alias23 = PassName_23
+
+shader24 = hsm-test-max-resources.glsl
+scale_type24 = source
+scale24 = 1.0
+float_framebuffer24 = true
+alias24 = PassName_24
+
+shader25 = hsm-test-max-resources.glsl
+scale_type25 = source
+scale25 = 1.0
+float_framebuffer25 = true
+alias25 = PassName_25
+
+shader26 = hsm-test-max-resources.glsl
+scale_type26 = source
+scale26 = 1.0
+float_framebuffer26 = true
+alias26 = PassName_26
+
+shader27 = hsm-test-max-resources.glsl
+scale_type27 = source
+scale27 = 1.0
+float_framebuffer27 = true
+alias27 = PassName_27
+
+shader28 = hsm-test-max-resources.glsl
+scale_type28 = source
+scale28 = 1.0
+float_framebuffer28 = true
+alias28 = PassName_28
+
+shader29 = hsm-test-max-resources.glsl
+scale_type29 = source
+scale29 = 1.0
+float_framebuffer29 = true
+alias29 = PassName_29
+
+shader30 = hsm-test-max-resources.glsl
+scale_type30 = source
+scale30 = 1.0
+float_framebuffer30 = true
+alias30 = PassName_30
+
+shader31 = hsm-test-max-resources.glsl
+scale_type31 = source
+scale31 = 1.0
+float_framebuffer31 = true
+alias31 = PassName_31
+
+shader32 = hsm-test-max-resources.glsl
+scale_type32 = source
+scale32 = 1.0
+float_framebuffer32 = true
+alias32 = PassName_32
+
+shader33 = hsm-test-max-resources.glsl
+scale_type33 = source
+scale33 = 1.0
+float_framebuffer33 = true
+alias33 = PassName_33
+
+shader34 = hsm-test-max-resources.glsl
+scale_type34 = source
+scale34 = 1.0
+float_framebuffer34 = true
+alias34 = PassName_34
+
+shader35 = hsm-test-max-resources.glsl
+scale_type35 = source
+scale35 = 1.0
+float_framebuffer35 = true
+alias35 = PassName_35
+
+shader36 = hsm-test-max-resources.glsl
+scale_type36 = source
+scale36 = 1.0
+float_framebuffer36 = true
+alias36 = PassName_36
+
+shader37 = hsm-test-max-resources.glsl
+scale_type37 = source
+scale37 = 1.0
+float_framebuffer37 = true
+alias37 = PassName_37
+
+shader38 = hsm-test-max-resources.glsl
+scale_type38 = source
+scale38 = 1.0
+float_framebuffer38 = true
+alias38 = PassName_38
+
+shader39 = hsm-test-max-resources.glsl
+scale_type39 = source
+scale39 = 1.0
+float_framebuffer39 = true
+alias39 = PassName_39
+
+shader40 = hsm-test-max-resources.glsl
+scale_type40 = source
+scale40 = 1.0
+float_framebuffer40 = true
+alias40 = PassName_40
+
+shader41 = hsm-test-max-resources.glsl
+scale_type41 = source
+scale41 = 1.0
+float_framebuffer41 = true
+alias41 = PassName_41
+
+shader42 = hsm-test-max-resources.glsl
+scale_type42 = source
+scale42 = 1.0
+float_framebuffer42 = true
+alias42 = PassName_42
+
+shader43 = hsm-test-max-resources.glsl
+scale_type43 = source
+scale43 = 1.0
+float_framebuffer43 = true
+alias43 = PassName_43
+
+shader44 = hsm-test-max-resources.glsl
+scale_type44 = source
+scale44 = 1.0
+float_framebuffer44 = true
+alias44 = PassName_44
+
+shader45 = hsm-test-max-resources.glsl
+scale_type45 = source
+scale45 = 1.0
+float_framebuffer45 = true
+alias45 = PassName_45
+
+shader46 = hsm-test-max-resources.glsl
+scale_type46 = source
+scale46 = 1.0
+float_framebuffer46 = true
+alias46 = PassName_46
+
+shader47 = hsm-test-max-resources.glsl
+scale_type47 = source
+scale47 = 1.0
+float_framebuffer47 = true
+alias47 = PassName_47
+
+shader48 = hsm-test-max-resources.glsl
+scale_type48 = source
+scale48 = 1.0
+float_framebuffer48 = true
+alias48 = PassName_48
+
+shader49 = hsm-test-max-resources.glsl
+scale_type49 = source
+scale49 = 1.0
+float_framebuffer49 = true
+alias49 = PassName_49
+
+shader50 = hsm-test-max-resources.glsl
+scale_type50 = source
+scale50 = 1.0
+float_framebuffer50 = true
+alias50 = PassName_50
+
+shader51 = hsm-test-max-resources.glsl
+scale_type51 = source
+scale51 = 1.0
+float_framebuffer51 = true
+alias51 = PassName_51
+
+shader52 = hsm-test-max-resources.glsl
+scale_type52 = source
+scale52 = 1.0
+float_framebuffer52 = true
+alias52 = PassName_52
+
+shader53 = hsm-test-max-resources.glsl
+scale_type53 = source
+scale53 = 1.0
+float_framebuffer53 = true
+alias53 = PassName_53
+
+shader54 = hsm-test-max-resources.glsl
+scale_type54 = source
+scale54 = 1.0
+float_framebuffer54 = true
+alias54 = PassName_54
+
+shader55 = hsm-test-max-resources.glsl
+scale_type55 = source
+scale55 = 1.0
+float_framebuffer55 = true
+alias55 = PassName_55
+
+shader56 = hsm-test-max-resources.glsl
+scale_type56 = source
+scale56 = 1.0
+float_framebuffer56 = true
+alias56 = PassName_56
+
+shader57 = hsm-test-max-resources.glsl
+scale_type57 = source
+scale57 = 1.0
+float_framebuffer57 = true
+alias57 = PassName_57
+
+shader58 = hsm-test-max-resources.glsl
+scale_type58 = source
+scale58 = 1.0
+float_framebuffer58 = true
+alias58 = PassName_58
+
+shader59 = hsm-test-max-resources.glsl
+scale_type59 = source
+scale59 = 1.0
+float_framebuffer59 = true
+alias59 = PassName_59
+
+shader60 = hsm-test-max-resources.glsl
+scale_type60 = source
+scale60 = 1.0
+float_framebuffer60 = true
+alias60 = PassName_60
+
+shader61 = hsm-test-max-resources.glsl
+scale_type61 = source
+scale61 = 1.0
+float_framebuffer61 = true
+alias61 = PassName_61
+
+shader62 = hsm-test-max-resources.glsl
+scale_type62 = source
+scale62 = 1.0
+float_framebuffer62 = true
+alias62 = PassName_62
+
+shader63 = hsm-test-max-resources.glsl
+scale_type63 = source
+scale63 = 1.0
+float_framebuffer63 = true
+alias63 = PassName_63
+
+shaders = 39
+
+// Define textures to be used by the different passes
+textures = "PresetTex_1;PresetTex_2;PresetTex_3;PresetTex_4;PresetTex_5;PresetTex_6;PresetTex_7;PresetTex_8;PresetTex_9;PresetTex_10;PresetTex_11;PresetTex_12;PresetTex_13;PresetTex_14;PresetTex_15;PresetTex_16;"
+PresetTex_1  = ./textures/PresetTex_1.png
+PresetTex_2  = ./textures/PresetTex_2.png
+PresetTex_3  = ./textures/PresetTex_3.png
+PresetTex_4  = ./textures/PresetTex_4.png
+PresetTex_5  = ./textures/PresetTex_5.png
+PresetTex_6  = ./textures/PresetTex_6.png
+PresetTex_7  = ./textures/PresetTex_7.png
+PresetTex_8  = ./textures/PresetTex_8.png
+PresetTex_9  = ./textures/PresetTex_9.png
+PresetTex_10 = ./textures/PresetTex_10.png
+PresetTex_11 = ./textures/PresetTex_11.png
+PresetTex_12 = ./textures/PresetTex_12.png
+PresetTex_13 = ./textures/PresetTex_13.png
+PresetTex_14 = ./textures/PresetTex_14.png
+PresetTex_15 = ./textures/PresetTex_15.png
+PresetTex_16 = ./textures/PresetTex_16.png
+

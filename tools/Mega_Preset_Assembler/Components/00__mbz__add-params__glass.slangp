@@ -1,0 +1,3 @@
+shaders = 1
+
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm/hsm-prep-add-params-glass.slang

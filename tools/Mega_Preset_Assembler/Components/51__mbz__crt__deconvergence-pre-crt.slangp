@@ -1,0 +1,7 @@
+shaders = 1
+
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-deconvergence-pre-crt.slang
+filter_linear0 = true
+scale_type0 = viewport
+scale_x0 = 1.0
+scale_y0 = 1.0

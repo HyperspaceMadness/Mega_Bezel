@@ -1,0 +1,100 @@
+// Add Mega Bezel Params & Initial Prep
+//      Add Mega Bezel parameters at the beginning of the list for easy access
+//      Add Color Correction
+//      Calculate Average Luminance and put in alpha channel
+//      Debug Drawing of the resolution & screen scaling info
+shader0 = shaders/HyperspaceMadness/hsm/hsm-prep-intro.slang
+float_framebuffer0 = true
+alias0  = "PreDeDitheringPass"
+
+// De-Dithering - Mdapt
+shader1 = shaders/HyperspaceMadness/hsm-mdapt/hsm-mdapt-pass0.slang
+shader2 = shaders/HyperspaceMadness/hsm-mdapt/hsm-mdapt-pass1.slang
+shader3 = shaders/HyperspaceMadness/hsm-mdapt/hsm-mdapt-pass2.slang
+shader4 = shaders/HyperspaceMadness/hsm-mdapt/hsm-mdapt-pass3.slang
+shader5 = shaders/HyperspaceMadness/hsm-mdapt/hsm-mdapt-pass4.slang
+alias5 = refpass
+
+shader6 = shaders/HyperspaceMadness/hsm-scalefx/hsm-scalefx-pass0.slang
+filter_linear6 = false
+scale_type6 = source
+scale6 = 1.0
+float_framebuffer6 = true
+alias6 = scalefx_pass0
+
+shader7 = shaders/HyperspaceMadness/hsm-scalefx/hsm-scalefx-pass1.slang
+filter_linear7 = false
+scale_type7 = source
+scale7 = 1.0
+float_framebuffer7 = true
+
+shader8 = shaders/HyperspaceMadness/hsm-scalefx/hsm-scalefx-pass2.slang
+filter_linear8 = false
+scale_type8 = source
+scale8 = 1.0
+
+shader9 = shaders/HyperspaceMadness/hsm-scalefx/hsm-scalefx-pass3.slang
+filter_linear9 = false
+scale_type9 = source
+scale9 = 1.0
+
+shader10 = shaders/HyperspaceMadness/hsm-scalefx/hsm-scalefx-pass4.slang
+filter_linear10 = false
+scale_type10 = source
+scale10 = 3
+
+// GTU TV Processing
+shader11 = shaders/HyperspaceMadness/hsm-gtu/hsm-gtu-pass1.slang
+scale_type11 = source
+scale11 = 1.0
+float_framebuffer11 = true
+
+shader12 = shaders/HyperspaceMadness/hsm-gtu/hsm-gtu-pass2.slang
+scale_type_x12 = source
+scale_x12 = 1.0
+scale_type_y12 = source
+scale_y12 = 1.0
+filter_linear12 = false
+float_framebuffer12 = true
+
+// //NTSC passes added here so you can swap out with GTU
+// shader12 = shaders/HyperspaceMadness/hsm-ntsc-adaptive/hsm-ntsc-pass1.slang
+// scale_type12 = source
+// scale_x12 = 4.0
+// filter_linear12 = false
+// float_framebuffer12 = true
+
+// shader13 = shaders/HyperspaceMadness/hsm-ntsc-adaptive/hsm-ntsc-pass2.slang
+// scale_type13 = source
+// scale_x13 = 0.25
+// filter_linear13 = false
+
+shader13 = ../../../../stock.slang
+shader14 = ../../../../stock.slang
+shader15 = ../../../../stock.slang
+shader16 = ../../../../stock.slang
+shader17 = ../../../../stock.slang
+
+// Simple Scanline Shader
+shader18 = shaders/HyperspaceMadness/hsm-test-simple-scanline.slang
+filter_linear18 = true
+scale_type18 = viewport
+float_framebuffer18 = true
+
+// Define how many shaders will be used from this list
+shaders = 19
+
+// Define textures to be used by the different passes
+textures = "SamplerLUT3;IntroImage;ScreenPlacementImage;ColoredGelImage;TubeStaticReflectionImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;LEDImage;TopLayerImage;"
+SamplerLUT3 = shaders/HyperspaceMadness/textures/lut/other1_32.png
+SamplerLUT3_linear = true
+
+BackgroundImage = shaders/HyperspaceMadness/textures/BackgroundImage_Carbon_3840x2160.png
+ColoredGelImage = shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+TubeStaticReflectionImage = shaders/HyperspaceMadness/textures/TubeGlassOverlayImage_3840x2160.png
+DeviceImage = shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+DeviceVertImage = shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+DecalImage = shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+NightLightingImage = shaders/HyperspaceMadness/textures/NightLighting_3840x2160.jpg
+LEDImage = shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+TopLayerImage = shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png

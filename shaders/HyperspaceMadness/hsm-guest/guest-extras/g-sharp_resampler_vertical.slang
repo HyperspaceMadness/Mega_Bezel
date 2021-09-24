@@ -1,0 +1,124 @@
+#version 450
+
+/*
+   G-sharp resampler - vertical pass, dynamic range, resizable
+   
+   Copyright (C) 2020 guest(r) - guest.r@gmail.com
+
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+   Anti-Ringing inspired by Hyllian
+   
+*/ 
+
+layout(push_constant) uniform Push
+{
+	vec4 SourceSize;
+	vec4 OriginalSize;
+	vec4 OutputSize;
+	uint FrameCount;
+	float SIGMA_GV;
+	float VSHARP0;
+	float VAR;
+	float VSHAR;
+} params;
+
+#pragma parameter bogus-line1 "-------------------------------------------------" 0.0 0.0 0.0 0.0 
+
+#pragma parameter VSHARP0 "Vertical Filter Range" 1.2 1.0 8.0 0.1
+#define VSHARP0 params.VSHARP0
+
+#pragma parameter SIGMA_GV "Vertical Blur Sigma" 0.75 0.1 7.0 0.05
+#define SIGMA_GV params.SIGMA_GV
+
+#pragma parameter VSHAR "Sharpness Definition - Vertical" 0.5 0.0 2.0 0.05
+#define VSHAR params.VSHAR
+
+#pragma parameter VAR "Vertical Anti-Ringing" 0.5 0.0 1.0 0.1
+#define VAR params.VAR
+
+layout(std140, set = 0, binding = 0) uniform UBO
+{
+	mat4 MVP;
+} global;
+
+#pragma stage vertex
+layout(location = 0) in vec4 Position;
+layout(location = 1) in vec2 TexCoord;
+layout(location = 0) out vec2 vTexCoord;
+
+void main()
+{
+   gl_Position = global.MVP * Position;
+   vTexCoord = TexCoord;
+}
+
+#pragma stage fragment
+layout(location = 0) in vec2 vTexCoord;
+layout(location = 0) out vec4 FragColor;
+layout(set = 0, binding = 2) uniform sampler2D Source;
+
+#define COMPAT_TEXTURE(c,d) texture(c,d)
+#define SourceSize params.SourceSize
+
+float invsqrsigma = 1.0/(2.0*SIGMA_GV*SIGMA_GV);
+
+float gaussian(float x)
+{
+	return exp(-x*x*invsqrsigma);
+}
+
+void main()
+{
+	float f = fract(SourceSize.y * vTexCoord.y);
+	f = 0.5 - f;
+	vec2 tex = floor(SourceSize.xy * vTexCoord)*SourceSize.zw + 0.5*SourceSize.zw;
+	vec3 color = vec3(0.0);
+	vec2 dy  = vec2(0.0, SourceSize.w);
+
+	float w;
+	float wsum = 0.0;
+	vec3 pixel; vec3 pixel1;
+
+	vec3 cmax = 0.0.xxx;
+	vec3 cmin = 1.0.xxx;
+	float sharp = gaussian(VSHARP0);
+	float maxsharp = 0.21;
+	float FPR = VSHARP0;
+	float fpx;
+
+	float LOOPSIZE = ceil(2.0*FPR);
+	float n = -LOOPSIZE;
+	
+	do
+	{
+		pixel  = COMPAT_TEXTURE(Source, tex + n*dy).rgb;
+		w = gaussian(n+f) - sharp; 
+		fpx = abs(n+f-sign(n)*FPR)/FPR;
+		if (abs(n) <= FPR) { cmax = max(cmax, pixel); cmin = min(cmin, pixel); }
+		if (w < 0.0) w = clamp(w, mix(-maxsharp, 0.0, pow(fpx, VSHAR)), 0.0);
+	
+		color = color + w * pixel;
+		wsum  = wsum+ w;
+		n = n + 1.0;
+			
+	} while (n <= LOOPSIZE);
+
+	color = color / wsum;
+	
+	color = mix(clamp(color, 0.0, 1.0), clamp(color, cmin, cmax), VAR);
+	
+	FragColor = vec4(color, 1.0);
+}

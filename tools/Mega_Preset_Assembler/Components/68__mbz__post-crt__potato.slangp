@@ -1,0 +1,4 @@
+shaders = 1
+
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm/hsm-prep-post-crt-potato.slang
+alias0 = "MBZ_PostCRTPass"

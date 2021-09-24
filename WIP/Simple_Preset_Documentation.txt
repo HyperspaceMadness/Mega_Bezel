@@ -1,0 +1,20 @@
+If you load a preset from the config folder when you save it somewhere it will not save a new reference to the preset loaded. It will instead save a preset with a reference to what was referenced by the original preset loaded. 
+
+E.G. if I have a per-game preset:
+
+`config/mame/arkanoid.slangp` 
+
+which has a reference:
+
+`#reference ../../shaders/crt/crt-geom.slangp` 
+
+If I load this preset then save, it  it will NOT save a preset which has the reference:
+
+`#reference :/config/mame/arkanoid.slangp`, 
+
+instead it will save a preset with a reference like the loaded preset had:
+
+`#reference ../../shaders/crt/crt-geom.slangp`
+
+But this is only when you save from within Retroarch, you can put anything you want inside the preset files if you edit the text files, (e.g. references to presets in the config folder) and it will be preserved when saving and loading
+You can have 16 layers deep before the program will give an error and not load. This limit is just so that we catch cyclical references. Basically it was number I picked out of the air of how many is starting to be nuts.
