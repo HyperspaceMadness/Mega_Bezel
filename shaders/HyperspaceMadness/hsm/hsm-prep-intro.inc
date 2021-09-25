@@ -235,29 +235,23 @@ void main()
    // Apply black level & gamma with input as non linearized
    // FragColor = HSM_ApplyBlackLevel(FragColor, 0);
 
-   // //--------------------------------------------------------------------------------------------
-   // // Save values in the alpha of the different quadrants of the screen
-   // //    Top Left is Average Luma
-   // //    Bottom Left is Y position of the center of the screen
-   // //    Bottom Right is height of the screen as a percentage of the full height of the screen
+	if (HSM_LIVE_UPDATE_ON > 0.5 )
+	{
+		float final_aspect = SCREEN_ASPECT;
+		vec2 corner_offset = vec2(0.08, 0.1);
+		vec2 center_coord = vec2(1 - corner_offset.x * final_aspect, 1 - corner_offset.y);
+		vec2 test_coord = vec2(1 - (1 - viewport_coord_adjusted.x) * final_aspect, viewport_coord_adjusted.y);
+		float distance =  length(test_coord - center_coord);
 
-   // // Put the average luma in the top left quadrant
-   // if (VIEWPORT_COORD.x < 0.5 && VIEWPORT_COORD.y < 0.5)
-   //    // Put Average Luminance in the alpha channel
-   //    FragColor.a = GetAverageLuma();
-
-   // if (VIEWPORT_COORD.y > 0.5)
-   // {
-   //    // Look at the alpha of the placement image to get the automatic position and height of the screen
-   //    vec2 screen_y_pos_and_height = GetScreenPlacementYPosAndHeight(sampler2D in_sampler_2D, float num_samples);
-
-   //    // Put the y position of the center of the screen in the bottom left quadrant
-   //    if (VIEWPORT_COORD.x < 0.5)
-   //       FragColor.a = screen_y_pos_and_height.x;
-   //    // Put the y position of the center of the screen in the bottom right quadrant
-   //    if (VIEWPORT_COORD.x > 0.5)
-   //       FragColor.a = screen_y_pos_and_height.y;
-   // }
+		if (distance < 0.05)
+		{
+			float modulation = clamp(0.4 + abs(mod(global.FrameCount, 90) / 90 - 0.5) * 1.2, 0, 1);
+			// modulation = HHLP_EasePowerInOut(modulation, 2);
+			// float scanline_mask = 1 - abs(scan - 0.5) * 2;
+			FragColor *= 1 - modulation;
+			FragColor += modulation * vec4(1, 0, 0, 1);
+		}
+	}
    
    //////// Draw text to show out_colorolutions ////////// 
    if (HSM_RESOLUTION_DEBUG_ON == 1)
