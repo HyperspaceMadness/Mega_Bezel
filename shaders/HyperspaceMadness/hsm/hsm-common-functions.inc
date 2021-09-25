@@ -13,6 +13,15 @@ Description:
 #include "hsm-royale-geometry-functions.inc"
 #endif
 
+// vec2 HSM_GetViewportCoordWithZoomAndPan(vec2 viewport_coord)
+// {
+// 	vec2 out_coord = viewport_coord;
+// 	out_coord.x += HSM_VIEWPORT_POSITION_X; 
+// 	out_coord.y -= HSM_VIEWPORT_POSITION_Y; 
+// 	out_coord = (out_coord - 0.5) / HSM_VIEWPORT_ZOOM + 0.5;
+// 	return out_coord;
+// }
+
 float HSM_GetAspectRatioFromMode(float in_aspect_ratio_mode, float in_explicit_aspect)
 {
 	float out_explicit_aspect = in_explicit_aspect;

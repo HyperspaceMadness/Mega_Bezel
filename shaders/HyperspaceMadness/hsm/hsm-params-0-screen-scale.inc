@@ -16,6 +16,20 @@ float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
 #pragma parameter HSM_LIVE_UPDATE_ON								"          Live Update (Graphics & Bezel)" 0 0 1 1
 float HSM_LIVE_UPDATE_ON = global.HSM_LIVE_UPDATE_ON;
 
+// //---------------------------------------------------------------------------------------------------
+// //    Zoom & Pan
+// //---------------------------------------------------------------------------------------------------
+// #pragma parameter HSM_VIEWPORT_ZOOM_TITLE							"[ Viewport Zoom ]:" 0 0 0.01 0.01
+
+// #pragma parameter HSM_VIEWPORT_ZOOM									"          Viewport Zoom"  100 10 1000 100
+// float HSM_VIEWPORT_ZOOM = global.HSM_VIEWPORT_ZOOM / 100;
+
+// #pragma parameter HSM_VIEWPORT_POSITION_X							"          Viewport Position X"  0 -100 100 0
+// float HSM_VIEWPORT_POSITION_X = global.HSM_VIEWPORT_POSITION_X / 100;
+
+// #pragma parameter HSM_VIEWPORT_POSITION_y							"          Viewport Position Y"  0 -100 100 0
+// float HSM_VIEWPORT_POSITION_y = global.HSM_VIEWPORT_POSITION_Y / 100;
+
 //---------------------------------------------------------------------------------------------------
 //    FLIP & ROTATE
 //---------------------------------------------------------------------------------------------------

@@ -15,7 +15,7 @@ Changes:
   * POTATO
     * Minimal Pre-CRT Passes (No Grade)
     * Background Image
-
+  * Added blinking red visual Live mode indicator when live mode is on
 
 
 *  Performance of Base presets at 3840x2160 on Nvidia RTX2060:
