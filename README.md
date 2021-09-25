@@ -13,7 +13,7 @@ What does it do?
   * Enable easier use of bezels and more "natural" presentation
   * Ease of use for screen scaling and automatic aspect ratio with existing shaders
   * Provide a consistent set of enhanced features wrapped around the core crt shaders
-  * Layering images to add art and visual effects
+  * Layering images to add artwork and visual effects
 
 
 
@@ -61,25 +61,31 @@ As the name's index number increases the presets get faster but less flexible
 
 **Presets in Mega_Bezel / Presets**
 
-- All of the presets in the root of the Presets folder use @guest.r's awesome Guest-DrVenom CRT shader
+- All of the presets in the root of the Presets folder use @guest.r's awesome Guest-DrVenom CRT shader except for POTATO Guest-DrVenom-Advanced preset is considered the default CRT shader for the Mega Bezel
 
-  * **MBZ______1______ADVANCED**
-    * Most flexible shader presets, one preset for each different CRT Shader 
-    * Guest-DrVenom preset is considered the default preset
-    * Includes MDAPT, ScaleFX & GTU
-  * **MBZ______2______GLASS** - Glass presets which show a blurry reflection in the area around the screen 
+  * **MBZ______1______ADV**
+    * Reflection
+    * Multiple image layering
+    * Full Pre-CRT shader chain includes MDAPT, ScaleFX & GTU
+  * **MBZ______1______ADV-NO-REFLECT**
+    * Same as the previous but with no reflection
+  * **MBZ______2______ADV-GLASS** - Glass presets which show a blurry reflection in the area around the screen 
     * Reflection is the last pass
-    * Does not include advanced image layering.
-    * Includes MDAPT, ScaleFX & GTU
-  * **MBZ______2______STANDARD**
-      * Includes the basic image layering
-      * Reflection is the last pass
-      * Includes MDAPT, ScaleFX & GTU
-  * **MBZ______3______BASIC-BORDER**
-    * No Reflections
-    * Includes the screen scaling and screen effects like fake scanlines
-    * Includes a Background image to function similarly to how a RetroArch overlay does
-    * The CRT pass is the last pass
+    * Has only one images for image layering used for the glass gradient highlight
+    * Full Pre-CRT shader chain includes MDAPT, ScaleFX & GTU
+  * **MBZ______3______STD**
+    * Reflection
+    * Multiple image layering
+    * Simple Pre-CRT shader chain with fewer passes
+      * Includes Grade
+      * No Upscaling in the chain so works better with higher res core output, e.g. 4x Internal Res
+  * **MBZ______4______STD-NO-REFLECT**
+    * Same as the previous but no reflection
+  * **MBZ______5______POTATO**
+    * For all your low spec "potato" computer needs
+    * Minimal Pre-CRT shader chain
+      * No Grade
+    * Uses ZFast as teh CRT shader because this is a simple but very fast shader
 
 **Presets in Mega_Bezel / Presets / Base_CRT_Presets**
 
@@ -133,7 +139,13 @@ Troubleshooting
     
     * If this solves your issue please consider posting on the thread at the top of this document the issue you had so that we can improve the auto aspect ratio in the future
     
-      
+  * Artifacts on the screen that look round swirls or circles which look like tree trunk rings
+
+    * This kind of artifact is called a Moiré pattern - https://en.wikipedia.org/wiki/Moiré_pattern
+
+    * The base cause of the Moiré pattern is usually the curvature, if you set the curvature to 0 the moire should go away
+
+    * Also in general moire artifacts are less of a problem when you are at an integer scale and using a higher resolution monitor.
 
 ----------------------------------------
 

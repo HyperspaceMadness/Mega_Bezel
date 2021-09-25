@@ -37,7 +37,6 @@ Changes:
 Mega Bezel Still to Come:
 
 V1 TODO
-  * Fix Inner Edge Static Highlights, Bezel over screen
   * Negative Cropping
   * Optimize GDC out of frame, Potato & Other?
   * Good Preset for FBNeo & Instructions

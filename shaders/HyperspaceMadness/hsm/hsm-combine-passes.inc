@@ -116,8 +116,6 @@ void main()
 	else if (HSM_CRT_SCREEN_BLEND_MODE > 0.5)
 		out_color = HSM_PreMultAlphaBlend(out_color, crt_layer);
 
-	vec4 over_layer = texture(BR_LayersOverCRTPass, vTexCoord);
-	out_color = HSM_PreMultAlphaBlend(out_color, over_layer);
 
 #ifndef IS_NO_REFLECT_PRESET
 	float outside_tube_mask_smaller = 1 - HSM_GetCornerMask((tube_curved_coord - 0.5) * 1.01 + 0.5, SCREEN_ASPECT, bezel_corner_radius, 0.99);
@@ -125,10 +123,31 @@ void main()
 	out_color.rgb += reflection_layer.rgb;
 #endif
 
+	vec4 over_layer = texture(BR_LayersOverCRTPass, vTexCoord);
+	out_color = HSM_PreMultAlphaBlend(out_color, over_layer);
+
 	FragColor = HSM_ApplyGamma(clamp(out_color, 0, 1), HSM_DEFAULT_SRGB_GAMMA);
 
 	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
 		FragColor = vec4(0.01, 0.01, 0.01, 10);
+
+	// if (HSM_LIVE_UPDATE_ON > 0.5 )
+	// {
+	// 	float final_aspect = global.FinalViewportSize.x/global.FinalViewportSize.y;
+	// 	vec2 corner_offset = vec2(0.05, 0.1);
+	// 	vec2 center_coord = vec2(1 - corner_offset.x * final_aspect, 1 - corner_offset.y);
+	// 	vec2 test_coord = vec2(1 - (1 - vTexCoord.x) * final_aspect, vTexCoord.y);
+	// 	float distance =  length(test_coord - center_coord);
+
+	// 	if (distance < 0.02)
+	// 	{
+	// 		float modulation = clamp(0.4 + abs(mod(global.FrameCount, 90) / 90 - 0.5) * 1.2, 0, 1);
+	// 		// modulation = HHLP_EasePowerInOut(modulation, 2);
+	// 		// float scanline_mask = 1 - abs(scan - 0.5) * 2;
+	// 		out_color *= 1 - modulation;
+	// 		out_color += modulation * vec4(0.2, 0, 0, 1);
+	// 	}
+	// }
 
 	return;
 }

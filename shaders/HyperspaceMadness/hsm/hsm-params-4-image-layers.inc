@@ -27,17 +27,14 @@ float HSM_LED_LAYER_ORDER = global.HSM_LED_LAYER_ORDER;
 #pragma parameter HSM_DEVICE_LAYER_ORDER         "          Device Image"  3 0 12 1
 float HSM_DEVICE_LAYER_ORDER = global.HSM_DEVICE_LAYER_ORDER;
 
-#pragma parameter HSM_DECAL_LAYER_ORDER           "          DECAL Image"  5 0 12 1
+#pragma parameter HSM_CRT_LAYER_ORDER             "          CRT Screen Bezel & Frame"  5 0 12 1
+float HSM_CRT_LAYER_ORDER = global.HSM_CRT_LAYER_ORDER;
+
+#pragma parameter HSM_DECAL_LAYER_ORDER           "          DECAL Image"  7 0 12 1
 float HSM_DECAL_LAYER_ORDER = global.HSM_DECAL_LAYER_ORDER;
 
-#pragma parameter HSM_CAB_GLASS_LAYER_ORDER       "          Cabinet Glass Image"  7 0 12 1
+#pragma parameter HSM_CAB_GLASS_LAYER_ORDER       "          Cabinet Glass Image"  9 0 12 1
 float HSM_CAB_GLASS_LAYER_ORDER = global.HSM_CAB_GLASS_LAYER_ORDER;
-
-#pragma parameter HSM_BZL_LAYER_ORDER             "          Bezel & Frame"  9 0 12 1
-float HSM_BZL_LAYER_ORDER = global.HSM_BZL_LAYER_ORDER;
-
-#pragma parameter HSM_CRT_LAYER_ORDER             "          CRT Screen Bezel & Frame"  10 0 12 1
-float HSM_CRT_LAYER_ORDER = global.HSM_CRT_LAYER_ORDER;
 
 #pragma parameter HSM_TOP_LAYER_ORDER             "          Top Image"  12 0 12 1
 float HSM_TOP_LAYER_ORDER = global.HSM_TOP_LAYER_ORDER;

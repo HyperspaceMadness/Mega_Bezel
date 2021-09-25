@@ -170,13 +170,6 @@ layout(set = 0, binding = 12) uniform sampler2D BR_LayersUnderCRTPassFeedback;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
 {
-	// vec4 feedback_color_test = texture(BR_LayersUnderCRTPassFeedback, vec2(0,0));
-	// if (HSM_LIVE_UPDATE_ON < 0.5 && feedback_color_test.a > 1000)
-	// {
-	// 	FragColor = texture(BR_LayersUnderCRTPassFeedback, vTexCoord);
-	// 	return;
-	// }
-
 	vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
 	if (HSM_LIVE_UPDATE_ON < 0.5 && feedback_color_test.a > 0.001)
 	{
@@ -192,63 +185,6 @@ void main()
 	vec4 night_lighting_image = vec4(1);
 	if (HSM_NIGHT_OPACITY > 0)
 		night_lighting_image = HSM_GetNightLightingMultiplyColor( VIEWPORT_COORD, NightLightingImage );
-
-
-// #ifdef IS_BASIC_REFLECT_PRESET
-// 	//-----------------------------------------------------------------------------------------
-// 	// Background
-// 	//-----------------------------------------------------------------------------------------
-// 	BACKGROUND_CURVED_COORD = VIEWPORT_COORD;
-// 	BACKGROUND_CURVED_COORD.x = (BACKGROUND_CURVED_COORD.x - 0.5) / (HSM_GetAspectRatioFromMode(HSM_BG_TEXTURE_ASPECT_MODE, HSM_BG_EXPLICIT_TEXTURE_ASPECT) / (global.FinalViewportSize.x/global.FinalViewportSize.y)) + 0.5;
-
-// 	vec4 bg_image = vec4(0);
-// 	if (HSM_BG_OPACITY > 0)
-// 	{
-// 		if (SCREEN_ASPECT > 1) 
-// 			bg_image = texture(BackgroundImage, BACKGROUND_CURVED_COORD);
-// 		else
-// 			bg_image = texture(BackgroundVertImage, BACKGROUND_CURVED_COORD);
-
-// 		// Premultiply Alpha
-// 		bg_image = HSM_GetPreMultipliedColorLinear(bg_image, HSM_BG_SOURCE_MATTE_TYPE, HSM_DEFAULT_SRGB_GAMMA);
-
-// 		// Apply Brightness
-// 		bg_image.rgb *= HSM_BG_BRIGHTNESS;
-
-// 		if (HSM_STATIC_LAYERS_GAMMA != 1)
-// 			bg_image = HSM_ApplyGamma(bg_image, HSM_STATIC_LAYERS_GAMMA);
-
-// 		// NIGHT LIGHTING
-// 		if (HSM_NIGHT_OPACITY > 0)
-// 			bg_image.rgb *= night_lighting_image.rgb;
-// 	}
-
-// 	vec4 frag_color_linear = vec4(0);
-
-// #ifdef LAYERS_UNDER_CRT
-// 	if (HSM_STANDARD_BG_SHOW_OVER_SCREEN == 0)
-// 	{
-// 		bg_image.a *= outside_tube_mask_wider * (1 - edge_mask);
-
-// 		// Add BG
-// 		frag_color_linear = HSM_BlendModeLayerMix(frag_color_linear, bg_image, HSM_BG_BLEND_MODE, HSM_BG_OPACITY);
-// 	}
-// #endif
-// 	// Add CRT
-// 	// frag_color_linear = HSM_BlendModeLayerMix(frag_color_linear, crt_linear, HSM_CRT_SCREEN_BLEND_MODE, 1);
-
-// 	// Add Reflection
-// 	// frag_color_linear += reflection_color;
-
-// #ifdef LAYERS_OVER_CRT
-// 	// Add BG
-// 	if (HSM_STANDARD_BG_SHOW_OVER_SCREEN == 1)
-// 		frag_color_linear = HSM_BlendModeLayerMix(frag_color_linear, bg_image, HSM_BG_BLEND_MODE, HSM_BG_OPACITY);
-// #endif
-// 	// FragColor = HSM_ApplyGamma(clamp(frag_color_linear, 0, 1), HSM_DEFAULT_SRGB_GAMMA);
-// 	FragColor = frag_color_linear;
-// 	return;
-// #endif
 
 	VIEWPORT_COORD = vTexCoord;
 
@@ -322,9 +258,7 @@ void main()
 	BEZEL_MASK = INSIDE_BEZEL_MASK * outside_tube_mask;
 	FRAME_MASK = OUTSIDE_BEZEL_MASK * (1 - OUTSIDE_FRAME_MASK);
 
-
-
-#ifdef LAYERS_OVER_CRT
+#ifdef LAYERS_UNDER_CRT
 	//----------------------------------------------------
 	//  Calculate Corner Highlight Mask
 	//----------------------------------------------------
@@ -460,7 +394,6 @@ void main()
 	vec3 bezel_color = bezel_diffuse_color + HSM_BZL_HIGHLIGHT * combined_highlight_mask;
 	bezel_color += HSM_BZL_HIGHLIGHT * edge_highlight_mask;
 
-
 	// Add the inner edge highlight on top of the bezel color which has it's own highlight
 	vec3 frame_inner_edge_color = bezel_color + hmbz_bezel_brightness_frame_inner_edge + HSM_BZL_HIGHLIGHT * 10 * hmbz_bezel_brightness_frame_inner_edge;
 	bezel_color = mix(bezel_color, frame_inner_edge_color, frame_inner_edge_mask);
@@ -508,8 +441,6 @@ void main()
 		// // Put the frame and bezel over top a black tube
 		// bezel_and_frame_rgba = HSM_PreMultAlphaBlend(vec4(0, 0, 0, 1 - outside_tube_mask_wider), bezel_and_frame_rgba);
 
-		// bezel_and_frame_rgba = HSM_PreMultAlphaBlend(vec4(0,0,0,outside_tube_mask_wider), bezel_and_frame_rgba);
-
 		if (HSM_STATIC_LAYERS_GAMMA != 1)
 			bezel_and_frame_rgba = HSM_ApplyGamma(bezel_and_frame_rgba, HSM_STATIC_LAYERS_GAMMA);
 
@@ -518,20 +449,6 @@ void main()
 			if (HSM_BZL_BLEND_MODE != BLEND_MODE_ADD)
 				bezel_and_frame_rgba.rgb *= night_lighting_image.rgb;
 
-// #ifdef IS_STD_PRESET
-// 		// Mask out the area outside the frame
-// 		// bezel_layer = bezel_and_frame_rgba * (1 - OUTSIDE_FRAME_MASK);
-// 		bezel_layer = bezel_and_frame_rgba;
-
-// 		// Adjust the masks for the transparency of each portion, Bezel and from the frame outwards
-// 		bezel_layer *= clamp(HSM_BZL_OPACITY * BEZEL_MASK + HSM_FRM_OPACITY * FRAME_MASK + TUBE_MASK, 0, 1);
-
-// 		// Layer this on top of the shadow
-// 		bezel_layer = HSM_BlendModeLayerMix(frame_shadow_layer * HSM_FRM_SHADOW_OPACITY * HSM_FRM_OPACITY, bezel_layer, BLEND_MODE_NORMAL, 1);
-// // end of #ifndef IS_STD_PRESET
-// #endif
-
-// #ifdef IS_ADV_PRESET
 		float FRAME_AND_BEZEL_MASK = outside_tube_mask * (1 - OUTSIDE_FRAME_MASK);
 
 		if (HSM_BZL_OPACITY > 0 )
@@ -544,11 +461,9 @@ void main()
 
 		if (HSM_FRM_OPACITY > 0 )
 			frame_layer = clamp(bezel_and_frame_rgba * FRAME_MASK, 0, 1);
-// end of #ifndef IS_ADV_PRESET
-// #endif
 	}
 
-// end of ifndef LAYERS_OVER_CRT
+// end of ifndef LAYERS_UNDER_CRT
 #endif
 
 	//-----------------------------------------------------------------------------------------
@@ -705,76 +620,6 @@ void main()
 				decal_image.rgb *= night_lighting_image.rgb;
 	}
 
-// //----------------------------------------------------
-// //  STD Composite all Layers
-// //----------------------------------------------------
-// #ifdef IS_STD_PRESET
-
-// 	vec4 frag_color_linear = vec4(0);
-
-// #ifdef LAYERS_UNDER_CRT
-
-// 	if (HSM_STANDARD_LED_SHOW_OVER_SCREEN == 0)
-// 		led_image *= outside_tube_mask_wider;
-
-// 	//-----------------------------------------------------------------------------------------
-// 	// Full Viewport Vignette
-// 	//-----------------------------------------------------------------------------------------
-// 	vec4 vignette_layer = vec4(0);
-// 	if (HSM_VIEWPORT_VIGNETTE_OPACITY > 0)
-// 	{
-// 		vignette_layer.a += 0.75 * HHLP_QuadraticBezier(1 - HSM_GetVignetteFactor(VIEWPORT_COORD, HSM_VIEWPORT_VIGNETTE_OPACITY, 1), vec2(1, 0.5)) * OUTSIDE_BEZEL_MASK;
-// 	}
-
-
-// 	//-----------------------------------------------------------------------------------------
-// 	// COMPOSITE ALL LAYERS
-// 	//-----------------------------------------------------------------------------------------
-
-// 	// BACKGROUND
-// 	frag_color_linear = HSM_BlendModeLayerMix(frag_color_linear, bg_image, HSM_BG_BLEND_MODE, HSM_BG_OPACITY);
-
-// 		// VIGNETTE
-// 	frag_color_linear = HSM_BlendModeLayerMix(frag_color_linear, vignette_layer, BLEND_MODE_NORMAL, 1);
-// 		// LED IMAGE
-// 	frag_color_linear = HSM_BlendModeLayerMix(frag_color_linear, led_image, HSM_LED_BLEND_MODE, HSM_LED_OPACITY);
-
-// 		// DEVICE IMAGE
-// 	frag_color_linear = HSM_BlendModeLayerMix(frag_color_linear, device_image, HSM_DEVICE_BLEND_MODE, HSM_DEVICE_OPACITY);
-
-// 	// DECAL
-// 	if (HSM_STANDARD_DECAL_SHOW_UNDER_FRAME == 1)
-// 	{
-// 		decal_image *= outside_tube_mask_wider;
-// 		frag_color_linear = HSM_BlendModeLayerMix(frag_color_linear, decal_image, HSM_DECAL_BLEND_MODE, HSM_DECAL_OPACITY);
-// 	}
-
-// 		// BEZEL
-// 		// GENERATED BEZEL LAYER
-// 	frag_color_linear = HSM_BlendModeLayerMix(frag_color_linear, bezel_layer, BLEND_MODE_NORMAL, 1);
-
-// 		// DECAL IMAGE
-// 	if (HSM_STANDARD_DECAL_SHOW_UNDER_FRAME == 0)
-// 		frag_color_linear = HSM_BlendModeLayerMix(frag_color_linear, decal_image, HSM_DECAL_BLEND_MODE, HSM_DECAL_OPACITY);
-
-// 	if ( HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_OUTSIDE_TUBE_MASK )
-// 		frag_color_linear = vec4(1 - TUBE_MASK);
-
-// 	if ( HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_OUTSIDE_SCREEN_MASK )
-// 		frag_color_linear = vec4(1 - SCREEN_MASK);
-
-// // end of #ifdef LAYERS_UNDER_CRT
-// #endif
-
-// #ifdef LAYERS_OVER_CRT
-// 	if (HSM_STANDARD_BG_SHOW_OVER_SCREEN > 0.5)
-// 		frag_color_linear = HSM_BlendModeLayerMix(vec4(0), bg_image, HSM_BG_BLEND_MODE, HSM_BG_OPACITY);
-// // end of #ifdef LAYERS_OVER_CRT
-// #endif
-
-// // end of #ifdef IS_STD_PRESET
-// #endif
-
 //----------------------------------------------------
 //  ADV Get Additional Layers and Composite 
 //----------------------------------------------------
@@ -914,41 +759,6 @@ void main()
 
 	vec4 frag_color_linear = vec4(0);
 
-#ifdef LAYERS_OVER_CRT
-	// BEZEL
-	// GENERATED BEZEL LAYER
-	if (HSM_BZL_OPACITY > 0)
-		frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
-												bezel_layer, 
-												HSM_BZL_BLEND_MODE, 
-												MASK_MODE_ALL, 
-												0, 
-												IMAGE_DUALSCREEN_MODE_BOTH,
-												HSM_BZL_OPACITY);
-	if (HSM_FRM_OPACITY > 0)
-	{
-		if (HSM_FRM_SHADOW_OPACITY > 0)
-			frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
-													frame_shadow_layer, 
-													BLEND_MODE_NORMAL, 
-													MASK_MODE_OUTSIDE_BEZEL,
-													0, 
-													IMAGE_DUALSCREEN_MODE_BOTH,
-													HSM_FRM_OPACITY * HSM_FRM_SHADOW_OPACITY);
-
-		// GENERATED FRAME LAYER
-		frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
-												frame_layer, 
-												HSM_FRM_BLEND_MODE, 
-												MASK_MODE_ALL, 
-												0, 
-												IMAGE_DUALSCREEN_MODE_BOTH,
-												HSM_FRM_OPACITY);
-	}
-
-// end #ifdef LAYERS_OVER_CRT
-#endif
-
 	int start_layer = 0;
 	int end_layer = int(MAX_LAYER_ORDER);
 
@@ -957,7 +767,7 @@ void main()
 	end_layer = int(MAX_LAYER_ORDER);
 #else
 	start_layer = 0;
-	end_layer = int(HSM_CRT_LAYER_ORDER);
+	end_layer = int(HSM_CRT_LAYER_ORDER - 1);
 #endif
 
 	OUTSIDE_TUBE_MASK_FOR_IMAGE = 1 - HSM_GetCornerMask(tube_curved_coord_ctr * 1.003 + 0.5, SCREEN_ASPECT, HSM_FRM_OUTER_CORNER_RADIUS, 1);
@@ -1040,10 +850,41 @@ void main()
 														HSM_TOP_OPACITY);
 	}
 
-// // end of #ifdef IS_ADV_PRESET
-// #endif
+#ifdef LAYERS_UNDER_CRT
+	// BEZEL
+	// GENERATED BEZEL LAYER
+	if (HSM_BZL_OPACITY > 0)
+		frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+												bezel_layer, 
+												HSM_BZL_BLEND_MODE, 
+												MASK_MODE_ALL, 
+												0, 
+												IMAGE_DUALSCREEN_MODE_BOTH,
+												HSM_BZL_OPACITY);
+	if (HSM_FRM_OPACITY > 0)
+	{
+		if (HSM_FRM_SHADOW_OPACITY > 0)
+			frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+													frame_shadow_layer, 
+													BLEND_MODE_NORMAL, 
+													MASK_MODE_OUTSIDE_BEZEL,
+													0, 
+													IMAGE_DUALSCREEN_MODE_BOTH,
+													HSM_FRM_OPACITY * HSM_FRM_SHADOW_OPACITY);
 
-// #ifdef IS_ADV_PRESET
+		// GENERATED FRAME LAYER
+		frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+												frame_layer, 
+												HSM_FRM_BLEND_MODE, 
+												MASK_MODE_ALL, 
+												0, 
+												IMAGE_DUALSCREEN_MODE_BOTH,
+												HSM_FRM_OPACITY);
+	}
+
+// end #ifdef LAYERS_UNDER_CRT
+#endif
+
 	//-----------------------------------------------------------------------------------------
 	// MASK DEBUG DISPLAY
 	//-----------------------------------------------------------------------------------------
@@ -1061,12 +902,6 @@ void main()
 		frag_color_linear = clamp(frag_color_linear, 0, 1);
 	}
 
-// // end #ifdef IS_ADV_PRESET
-// #endif
-
-	// Convert from linear to gamma space values
-	// FragColor = HSM_ApplyGamma(clamp(frag_color_linear, 0, 1), HSM_DEFAULT_SRGB_GAMMA);
-
 	if ( HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_OUTSIDE_TUBE_MASK )
 		frag_color_linear = vec4(1 - TUBE_MASK);
 
@@ -1078,7 +913,6 @@ void main()
 	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
 		FragColor = vec4(0.01, 0.01, 0.01, 10);
 
-	// FragColor = HSM_Linearize(FragColor, HSM_DEFAULT_CRT_GAMMA);
 	//-----------------------------------------------------------------------------------------
 	// END OF MAIN IMAGE LAYERING
 	//-----------------------------------------------------------------------------------------
