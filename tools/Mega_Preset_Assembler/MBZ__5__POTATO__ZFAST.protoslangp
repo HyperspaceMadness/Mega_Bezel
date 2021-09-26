@@ -1,6 +1,7 @@
 #reference "Components/00__mbz__add-params__potato.slangp"
 #reference "Components/01__downrez__none.slangp"
 #reference "Components/10__mbz__info-cache-and-intro__potato.slangp"
+#reference "Components/40__color-correct__grade.slangp"
 #reference "Components/60__mbz__crt__zfast-potato.slangp"
 #reference "Components/68__mbz__post-crt__potato.slangp"
 #reference "Components/90__mbz__textures__zfast-potato.slangp"

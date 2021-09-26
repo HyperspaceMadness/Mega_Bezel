@@ -1,4 +1,4 @@
-shaders = 6
+shaders = 7
 
 shader0 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-add-params-potato.slang
 
@@ -24,14 +24,17 @@ scale_type3 = source
 scale3 = 1.0
 alias3 = "IntroPass"
 
-shader4 = ../../shaders/HyperspaceMadness/hsm-zfast/hsm-zfast_crt.slang
-scale_type4 = viewport
-scale_x4 = 1.0
-scale_y4 = 1.0
-filter_linear4 = true
+// Color Correction with Dogway's awesome Grade shader
+shader4 = ../../shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
 
-shader5 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-post-crt-potato.slang
-alias5 = "MBZ_PostCRTPass"
+shader5 = ../../shaders/HyperspaceMadness/hsm-zfast/hsm-zfast_crt.slang
+scale_type5 = viewport
+scale_x5 = 1.0
+scale_y5 = 1.0
+filter_linear5 = true
+
+shader6 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-post-crt-potato.slang
+alias6 = "MBZ_PostCRTPass"
 // Define textures to be used by the different passes
 textures = "ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
 
