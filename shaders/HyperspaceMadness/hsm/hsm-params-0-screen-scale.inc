@@ -125,19 +125,19 @@ float HSM_SCREEN_POSITION_Y = -1 * global.HSM_SCREEN_POSITION_Y / 1000;
 #pragma parameter HSM_CROP_MODE 									"          Crop Mode  -  OFF | CROP BLACK ONLY | CROP ANY" 2 0 2 1
 float HSM_CROP_MODE = global.HSM_CROP_MODE;
 
-#pragma parameter HSM_CROP_PERCENT_ZOOM								"          Crop Zoom %" 0 0 100 0.5
-float HSM_CROP_PERCENT_ZOOM = global.HSM_CROP_PERCENT_ZOOM / 100;
+#pragma parameter HSM_CROP_PERCENT_ZOOM								"          Crop Zoom %" 0 -10 100 0.1
+float HSM_CROP_PERCENT_ZOOM = global.HSM_CROP_PERCENT_ZOOM / 100 + 0.1;
 
-#pragma parameter HSM_CROP_PERCENT_TOP 								"          Crop Top %" 0 0 100 0.1
+#pragma parameter HSM_CROP_PERCENT_TOP 								"          Crop Top %" 0 -10 100 0.1
 float HSM_CROP_PERCENT_TOP = global.HSM_CROP_PERCENT_TOP / 100 + HSM_CROP_PERCENT_ZOOM;
 
-#pragma parameter HSM_CROP_PERCENT_BOTTOM 							"          Crop Bottom %" 0 0 100 0.1
+#pragma parameter HSM_CROP_PERCENT_BOTTOM 							"          Crop Bottom %" 0 -10 100 0.1
 float HSM_CROP_PERCENT_BOTTOM = global.HSM_CROP_PERCENT_BOTTOM / 100 + HSM_CROP_PERCENT_ZOOM;
 
-#pragma parameter HSM_CROP_PERCENT_LEFT 							"          Crop Left %" 0 0 100 0.1
+#pragma parameter HSM_CROP_PERCENT_LEFT 							"          Crop Left %" 0 -10 100 0.1
 float HSM_CROP_PERCENT_LEFT = global.HSM_CROP_PERCENT_LEFT / 100 + HSM_CROP_PERCENT_ZOOM;
 
-#pragma parameter HSM_CROP_PERCENT_RIGHT 							"          Crop Right %" 0 0 100 0.1
+#pragma parameter HSM_CROP_PERCENT_RIGHT 							"          Crop Right %" 0 -10 100 0.1
 float HSM_CROP_PERCENT_RIGHT = global.HSM_CROP_PERCENT_RIGHT / 100 + HSM_CROP_PERCENT_ZOOM;
 
 #pragma parameter HSM_CROP_BLACK_THRESHOLD 							"          Black Threshold for 'CROP BLACK ONLY'" 0 0 100 1

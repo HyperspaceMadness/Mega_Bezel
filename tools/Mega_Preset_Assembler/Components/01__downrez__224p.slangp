@@ -7,4 +7,3 @@ srgb_framebuffer0 = true
 scale_type0 = absolute
 scale_x0 = 320
 scale_y0 = 224
-alias0 = "DerezedPass"

@@ -875,6 +875,7 @@ vec3 vcolor = adj;
     // HSM Added
     vec2 vpos = vTexCoord;
 
+    vpos = (vpos - 0.5) / 0.81 + 0.5;
     vpos *= 1.0 - vpos.xy;
     float vig = vpos.x * vpos.y * vstr;
     vig = min(pow(vig, vpower), 1.0);
