@@ -235,7 +235,7 @@ void main()
    // Apply black level & gamma with input as non linearized
    // FragColor = HSM_ApplyBlackLevel(FragColor, 0);
 
-	if (HSM_LIVE_UPDATE_ON > 0.5 )
+	if (HSM_LIVE_UPDATE_ON == 1 )
 	{
 		float final_aspect = SCREEN_ASPECT;
 		vec2 corner_offset = vec2(0.08, 0.1);

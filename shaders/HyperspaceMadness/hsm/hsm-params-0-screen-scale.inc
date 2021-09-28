@@ -13,7 +13,7 @@ Description:
 #pragma parameter HSM_RESOLUTION_DEBUG_ON							"          Show Resolution Info" 0 0 1 1
 float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
 
-#pragma parameter HSM_LIVE_UPDATE_ON								"          Live Update (Graphics & Bezel)" 0 0 1 1
+#pragma parameter HSM_LIVE_UPDATE_ON								"          Live Update Graphic/Bezel: OFF | ON | ON NO INDICATOR" 0 0 2 1
 float HSM_LIVE_UPDATE_ON = global.HSM_LIVE_UPDATE_ON;
 
 // //---------------------------------------------------------------------------------------------------
@@ -290,7 +290,7 @@ float HSM_DUALSCREEN_2ND_SCREEN_POS_Y = global.HSM_DUALSCREEN_2ND_SCREEN_POS_Y /
 
 // #pragma parameter HSM_USE_GEOM 										"          Use Geom Curvature" 0 -1 3 1
 // float HSM_USE_GEOM = global.HSM_USE_GEOM;
-float HSM_USE_GEOM = 0;
+// float HSM_USE_GEOM = 0;
 
 #pragma parameter HSM_CURVATURE_MODE 								"          Curvature Mode  -1:OFF 0:2D 1-2:3D Sphere, 3:3D Cyl" 0 -1 3 1
 float HSM_CURVATURE_MODE = global.HSM_CURVATURE_MODE;
@@ -348,8 +348,6 @@ float HSM_RENDER_SIMPLE_MODE = global.HSM_RENDER_SIMPLE_MODE;
 //---------------------------------------------------------------------------------------------------
 // #pragma parameter HSM_COLOR_AND_PERSISTENCE_TITLE				"[ SCANLINES ON BLACK ]:" 0 0 0.01 0.01
 
-// #pragma parameter HSM_COLOR_BLACK_LEVEL 							"          Black Level - Def -4" -4 -100 100 1
-// #define HSM_COLOR_BLACK_LEVEL global.HSM_COLOR_BLACK_LEVEL / 100
 
 // Not in use because negative cropping is disabled
 // #pragma parameter HSM_COLOR_NEGATIVE_CROP_BRIGHTNESS				"          Negative Crop Brightness - Def 1.8" 1.8 0 100 0.2
@@ -359,6 +357,9 @@ float HSM_RENDER_SIMPLE_MODE = global.HSM_RENDER_SIMPLE_MODE;
 //    CRT Layer
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_CRT_TITLE			             "[ CRT SCREEN LAYER ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_BRIGHTEN_BLACK 							"          Black Brightness (4 for scanlines on black)" 0 -1000 1000 1
+#define HSM_BRIGHTEN_BLACK global.HSM_BRIGHTEN_BLACK / 100
 
 #pragma parameter HSM_GAMMA_IN_LINEARIZE   							"          CRT Gamma In (Gamma to Linear Space Decode) Def 2.4" 2.4 0.1 5 0.05
 #define HSM_GAMMA_IN_LINEARIZE global.HSM_GAMMA_IN_LINEARIZE

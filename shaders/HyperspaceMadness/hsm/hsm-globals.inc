@@ -84,7 +84,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float HSM_CROP_PERCENT_ZOOM;
 
 	float HSM_CURVATURE_MODE;
-	float HSM_USE_GEOM;
+	// float HSM_USE_GEOM;
 	float HSM_CURVATURE_3D_RADIUS;
 	float HSM_CURVATURE_3D_VIEW_DIST;
 	float HSM_CURVATURE_3D_TILT_ANGLE_X;
@@ -95,7 +95,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float HSM_CURVATURE_POST_SCALE_X;
 	float HSM_CURVATURE_POST_SCALE_Y;
 
-	float HSM_COLOR_BLACK_LEVEL;
+	float HSM_BRIGHTEN_BLACK;
 	float HSM_COLOR_NEGATIVE_CROP_BRIGHTNESS;
 	float HSM_GAMMA_IN_LINEARIZE;
 	float HSM_GAMMA_OUT_CRT;
@@ -436,6 +436,12 @@ float HSM_CAB_GLASS_APPLY_NIGHTLIGHTING;
 
 	float slotmask;
 	float slotmask1;
+
+	float g_grade_on;
+    float wp_temperature;
+    float g_satr;
+    float g_satg;
+    float g_satb;
 } global;
 
 /////////////// DEFINES ///////////////
@@ -553,6 +559,8 @@ vec2 ROTATED_RAW_ORIGINAL_SIZE = vec2(1);
 vec2 CROPPED_ROTATED_ORIGINAL_SIZE_WITH_CORE_RES_MULT = vec2(1);
 vec2 CROPPED_ROTATED_ORIGINAL_SIZE = vec2(1);
 vec2 SAMPLE_AREA_START_RAW_PIXEL_COORD = vec2(1);
+
+float HSM_VIGNETTE_MODE = 1;
 
 // float SCREEN_ASPECT_2nd = 1;
 // vec2 SCREEN_SCALE_2nd = vec2(1);

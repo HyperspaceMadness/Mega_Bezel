@@ -1,22 +1,30 @@
 Mega Bezel is updated to V 0.9.022 2021-09-05
 
 Changes:
-  * ADV
-    * All Pre-CRT Passes
-    * Image Layering
-    * Reflection
-  * STD
-    * Minimal Pre-CRT Passes (Still includes Grade)
-    * Image Layering
-    * Reflection
-  * STD-NO-REFLECT - (Closest Preset we had to this was BASIC)
-    * Minimal Pre-CRT Passes (Still includes Grade)
-    * Image Layering
-  * POTATO
-    * Minimal Pre-CRT Passes (No Grade)
-    * Background Image
-  * Added blinking red visual Live mode indicator when live mode is on
+  * Caching Added for much better Performance
+    * When caching is on (on by default) the performance will be much better
+    * Stuff that is cached:
+      * Passes which do not change dynamically every frame
+      * Portions of the viewport which do not change dynamically every frame (E.G. Outside the Bezel)
+    * Blinking red visual Live mode indicator when live mode is on
 
+  * BIG Changes to what each preset level does
+    * ADV
+      * All Pre-CRT Passes
+      * Image Layering
+      * Reflection
+    * STD
+      * Minimal Pre-CRT Passes (Still includes Grade)
+      * Image Layering
+      * Reflection
+    * STD-NO-REFLECT - (Closest Preset we had to this was BASIC)
+      * Minimal Pre-CRT Passes (Still includes Grade)
+      * Image Layering
+    * POTATO
+      * Minimal Pre-CRT Passes (No Grade)
+      * Background Image
+
+  * Added Negative Cropping
 
 *  Performance of Base presets at 3840x2160 on Nvidia RTX2060:
   *  ADVANCED -                      78 FPS  -  No comparable old preset
@@ -37,8 +45,11 @@ Changes:
 Mega Bezel Still to Come:
 
 V1 TODO
-  * Negative Cropping
-  * Optimize GDC out of frame, Potato & Other?
+  * Put Grade after afterglow
+  * Add Neg-Crop size to chain for resolution debug
+  * "          Live Mode: OFF | ON | ON + INDICATOR
+  * Optimize GDV out of frame?, Potato & Other?
+  * Check out 3D Cores
   * Good Preset for FBNeo & Instructions
   * Catch 320x480 as Horizontal Aspect
   * Add Death to Pixels
@@ -46,13 +57,13 @@ V1 TODO
   * Add Split for Gel
   * Add GDV-NTSC presets
   * MrRetrolust Presets with new Mega_Bezel
-  * Do some more OrionsAngel Presets with new Mega_Bezel
   * Add NTSC Adaptive Preset?
   * Add Variations CRT Royale Glass & Advanced
   * Add vscode link in readme [![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/organization/repository)
   * Add Pixel Shifting for Burn-in Mitigation
-  * Get Intro to play on shader Load
+  * Get Intro to play on shader Load?
   * Split Libraries, so minimum can be loaded
+  * Do some more OrionsAngel Presets with new Mega_Bezel
 
   * Black Edges should be driven by bezel not screen (Right now bezel overlaps the screen with no black line)
   * When in interlacing mode for vertical opposite mult should do something

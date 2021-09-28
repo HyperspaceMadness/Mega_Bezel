@@ -1,5 +1,7 @@
 #version 450
 
+#include "../hsm/hsm-globals-and-screen-scale-params.inc"
+
 layout(push_constant) uniform Push
 {
     float g_gamma_in;
@@ -36,23 +38,23 @@ layout(push_constant) uniform Push
     float bg;
 } params;
 
-layout(std140, set = 0, binding = 0) uniform UBO
-{
-    mat4 MVP;
-    vec4 SourceSize;
-    vec4 OriginalSize;
-    vec4 OutputSize;
-    uint FrameCount;
-    float g_grade_on;
-    float wp_temperature;
-    float g_satr;
-    float g_satg;
-    float g_satb;
-    // float LUT_Size1;
-    // float LUT1_toggle;
-    // float LUT_Size2;
-    // float LUT2_toggle;
-} global;
+// layout(std140, set = 0, binding = 0) uniform UBO
+// {
+//     mat4 MVP;
+//     vec4 SourceSize;
+//     vec4 OriginalSize;
+//     vec4 OutputSize;
+//     uint FrameCount;
+//     float g_grade_on;
+//     float wp_temperature;
+//     float g_satr;
+//     float g_satg;
+//     float g_satb;
+//     // float LUT_Size1;
+//     // float LUT1_toggle;
+//     // float LUT_Size2;
+//     // float LUT2_toggle;
+// } global;
 
 /*
    Grade
@@ -218,6 +220,8 @@ void main()
 #pragma stage fragment
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
+
+layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
 layout(set = 0, binding = 2) uniform sampler2D Source;
 // HSM Removed
 // layout(set = 0, binding = 3) uniform sampler2D SamplerLUT1;
@@ -733,6 +737,9 @@ void main()
 
     //HSM Added
     vec4 src_rgba = texture(Source, vTexCoord.xy);
+
+    src_rgba = HSM_ApplyBlackLevel(src_rgba, 0);
+
     vec3 src = src_rgba.rgb * lum_exp;
 
     if (g_grade_on == 0)
@@ -873,7 +880,13 @@ vec3 vcolor = adj;
 */
 
     // HSM Added
-    vec2 vpos = vTexCoord;
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+    vec2 derezed_size = HSM_GetDerezedSize();
+    vec2 cur_pixel_pos = vTexCoord * derezed_size;
+    vec2 pos_in_cropped_coords = (cur_pixel_pos - SAMPLE_AREA_START_RAW_PIXEL_COORD) / CROPPED_ROTATED_ORIGINAL_SIZE;
+    pos_in_cropped_coords = (pos_in_cropped_coords - 0.5) * CROPPED_ROTATED_ORIGINAL_SIZE / ROTATED_RAW_ORIGINAL_SIZE + 0.5;
+
+    vec2 vpos = pos_in_cropped_coords;
 
     vpos = (vpos - 0.5) / 0.81 + 0.5;
     vpos *= 1.0 - vpos.xy;

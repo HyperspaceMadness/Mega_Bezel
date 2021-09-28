@@ -801,10 +801,10 @@ vec2 HSM_GetCurvedCoord(vec2 in_coord, float curvature_multiplier, float screen_
 #ifndef IS_POTATO_PRESET
 	if (HSM_CURVATURE_MODE > 0.5)
 	{
-		if (HSM_USE_GEOM > 0.5)
-			curved_coord = HSM_GetGeomCurvedCoord(in_coord, HSM_CURVATURE_3D_TILT_ANGLE_X, HSM_CURVATURE_3D_TILT_ANGLE_Y, HSM_CURVATURE_3D_RADIUS, HSM_CURVATURE_3D_VIEW_DIST, screen_aspect);
-		else
-		{
+		// if (HSM_USE_GEOM > 0.5)
+		// 	curved_coord = HSM_GetGeomCurvedCoord(in_coord, HSM_CURVATURE_3D_TILT_ANGLE_X, HSM_CURVATURE_3D_TILT_ANGLE_Y, HSM_CURVATURE_3D_RADIUS, HSM_CURVATURE_3D_VIEW_DIST, screen_aspect);
+		// else
+		// {
 			float geom_radius_with_mult = HSM_CURVATURE_3D_RADIUS;
 			if (HSM_CURVATURE_MODE == 1) geom_radius_with_mult -= 0.40;
 			if (HSM_CURVATURE_MODE == 3) geom_radius_with_mult -= 1;
@@ -823,7 +823,7 @@ vec2 HSM_GetCurvedCoord(vec2 in_coord, float curvature_multiplier, float screen_
 													global.SourceSize.xy,
 													global.OutputSize.xy,
 													pixel_to_video_uv);
-		}
+		// }
 	}
 	else
 	{
@@ -916,31 +916,31 @@ vec2 HSM_GetTubeCurvedCoord(vec2 screen_coord, float curvature_scale, vec2 scree
 //     return max(0.0,dot(normal,Lnorm)) * evaluateLight(pos);
 // }
 
-// vec4 HSM_ApplyBlackLevel(vec4 in_color, float color_is_linear)
-// {
-// 	vec4 out_color = in_color;
+vec4 HSM_ApplyBlackLevel(vec4 in_color, float color_is_linear)
+{
+	vec4 out_color = in_color;
 
-// 	// Linearize if color isn't linear
-// 	if (color_is_linear == 0)
-// 	{
-// 		out_color = HSM_Linearize(out_color, HSM_DEFAULT_CRT_GAMMA);
-// 	}
+	// Linearize if color isn't linear
+	if (color_is_linear == 0)
+	{
+		out_color = HSM_Linearize(out_color, HSM_DEFAULT_CRT_GAMMA);
+	}
 
-// 	// Black Level
-// 	out_color -= HSM_COLOR_BLACK_LEVEL / 100;
-// 	out_color *= 1 / vec4(1.0 - HSM_COLOR_BLACK_LEVEL / 100);
-// 	out_color = clamp(out_color, 0, 2);
+	// Black Level
+	out_color += HSM_BRIGHTEN_BLACK / 100;
+	out_color *= 1 / vec4(1.0 + HSM_BRIGHTEN_BLACK / 100);
+	out_color = clamp(out_color, 0, 2);
 
-// 	// If color isn't linear put default gamma back on
-// 	if (color_is_linear == 0)
-// 	{
-// 		out_color = HSM_Delinearize(out_color, HSM_DEFAULT_CRT_GAMMA);
-// 	}
+	// If color isn't linear put default gamma back on
+	if (color_is_linear == 0)
+	{
+		out_color = HSM_Delinearize(out_color, HSM_DEFAULT_CRT_GAMMA);
+	}
 
-// 	out_color.w = in_color.w;
+	out_color.w = in_color.w;
 
-// 	return clamp(out_color, 0, 1);
-// }
+	return clamp(out_color, 0, 1);
+}
 
 vec2 HSM_RotateCoordinate(vec2 in_coord, float rotation_on)
 {
