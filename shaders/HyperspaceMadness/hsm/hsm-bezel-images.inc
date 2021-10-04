@@ -170,6 +170,8 @@ layout(set = 0, binding = 12) uniform sampler2D BR_LayersUnderCRTPassFeedback;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
 {
+	VIEWPORT_COORD = vTexCoord;
+
 	vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
 	if (HSM_LIVE_UPDATE_ON < 0.5 && feedback_color_test.a > 0.001)
 	{
@@ -186,10 +188,7 @@ void main()
 	if (HSM_NIGHT_OPACITY > 0)
 		night_lighting_image = HSM_GetNightLightingMultiplyColor( VIEWPORT_COORD, NightLightingImage );
 
-	VIEWPORT_COORD = vTexCoord;
-
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, VIEWPORT_COORD);
-
 
 	SCREEN_BLACK_EDGE_CURVED_COORD = HSM_GetCurvedCoord(SCREEN_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, SCREEN_ASPECT);
 

@@ -50,12 +50,13 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float ei_limit;
 	float sth;
 	float gamma_out;
-	float overscanY;
+	float overscanX;
+	float overscanY;	
 	float intres;
 	float prescalex;
 	float c_shape;
 	float barspeed;
-	float barintensity;
+	float barintensity;   
 	float bardir;	
 } global;
 
@@ -168,7 +169,10 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter c_shape "          Curvature Shape" 0.25 0.05 0.60 0.05
 #define c_shape        global.c_shape     // curvature shape
 
-#pragma parameter overscanY "          Overscan Y original pixels" 0.0 -50.0 50.0 1.0
+#pragma parameter overscanX "          Overscan X original pixels" 0.0 -100.0 100.0 1.0
+#define overscanX        global.overscanX     // OverscanX pixels
+
+#pragma parameter overscanY "          Overscan Y original pixels" 0.0 -100.0 100.0 1.0
 #define overscanY        global.overscanY     // OverscanY pixels
 
 #pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader)" 1.0 1.0 4.0 1.0
@@ -176,7 +180,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter bogus_masks "[ CRT MASK OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-#pragma parameter shadowMask "          CRT Mask: 0:CGWG, 1-4:Lottes, 5-7:'Trinitron'" 0.0 -1.0 8.0 1.0
+#pragma parameter shadowMask "          CRT Mask: 0:CGWG, 1-4:Lottes, 5-7:'Trinitron'" 0.0 -1.0 9.0 1.0
 #define shadowMask   params.shadowMask     // Mask Style
 
 #pragma parameter maskstr "          Mask Strength (0, 5-8)" 0.3 -0.5 1.0 0.05
@@ -295,7 +299,7 @@ vec3 Mask(vec2 pos, float mx)
 	else if (shadowMask == 0.0)
 	{
 		pos.x = fract(pos.x*0.5);
-		if (pos.x < 0.5) { mask.r = 1.0; mask.g = mc; mask.b = 1.0; }
+		if (pos.x < 0.49) { mask.r = 1.0; mask.g = mc; mask.b = 1.0; }
 		else { mask.r = mc; mask.g = 1.0; mask.b = mc; }
 	}    
    
@@ -305,15 +309,15 @@ vec3 Mask(vec2 pos, float mx)
 		float line = maskLight;
 		float odd  = 0.0;
 
-		if (fract(pos.x/6.0) < 0.5)
+		if (fract(pos.x/6.0) < 0.49)
 			odd = 1.0;
-		if (fract((pos.y + odd)/2.0) < 0.5)
+		if (fract((pos.y + odd)/2.0) < 0.49)
 			line = maskDark;
 
 		pos.x = fract(pos.x/3.0);
     
-		if      (pos.x < 0.333) mask.r = maskLight;
-		else if (pos.x < 0.666) mask.g = maskLight;
+		if      (pos.x < 0.3) mask.r = maskLight;
+		else if (pos.x < 0.6) mask.g = maskLight;
 		else                    mask.b = maskLight;
 		
 		mask*=line;  
@@ -324,8 +328,8 @@ vec3 Mask(vec2 pos, float mx)
 	{
 		pos.x = fract(pos.x/3.0);
 
-		if      (pos.x < 0.333) mask.r = maskLight;
-		else if (pos.x < 0.666) mask.g = maskLight;
+		if      (pos.x < 0.3) mask.r = maskLight;
+		else if (pos.x < 0.6) mask.g = maskLight;
 		else                    mask.b = maskLight;
 	} 
 
@@ -335,8 +339,8 @@ vec3 Mask(vec2 pos, float mx)
 		pos.x += pos.y*3.0;
 		pos.x  = fract(pos.x/6.0);
 
-		if      (pos.x < 0.333) mask.r = maskLight;
-		else if (pos.x < 0.666) mask.g = maskLight;
+		if      (pos.x < 0.3) mask.r = maskLight;
+		else if (pos.x < 0.6) mask.g = maskLight;
 		else                    mask.b = maskLight;
 	}
 
@@ -347,8 +351,8 @@ vec3 Mask(vec2 pos, float mx)
 		pos.x += pos.y*3.0;
 		pos.x  = fract(pos.x/6.0);
 
-		if      (pos.x < 0.333) mask.r = maskLight;
-		else if (pos.x < 0.666) mask.g = maskLight;
+		if      (pos.x < 0.3) mask.r = maskLight;
+		else if (pos.x < 0.6) mask.g = maskLight;
 		else                    mask.b = maskLight;
 	}
 	
@@ -357,7 +361,7 @@ vec3 Mask(vec2 pos, float mx)
 	{
 		mask = vec3(0.0);		
 		pos.x = fract(pos.x/2.0);
-		if  (pos.x < 0.5)
+		if  (pos.x < 0.49)
 		{	mask.r  = 1.0;
 			mask.b  = 1.0;
 		}
@@ -370,8 +374,8 @@ vec3 Mask(vec2 pos, float mx)
 	{
 		mask = vec3(0.0);
 		pos.x = fract(pos.x/3.0);
-		if      (pos.x < 0.333) mask.r = 1.0;
-		else if (pos.x < 0.666) mask.g = 1.0;
+		if      (pos.x < 0.3) mask.r = 1.0;
+		else if (pos.x < 0.6) mask.g = 1.0;
 		else                    mask.b = 1.0;
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
 	}
@@ -382,11 +386,11 @@ vec3 Mask(vec2 pos, float mx)
 		float maskTmp = clamp(mix( mix(1.0, 0.0, mcut), mix(1.0, 0.0, maskstr), mx), 0.0, 1.0) * dark_compensate;
 		mask = vec3(maskTmp);
 		pos.x = fract(pos.x/2.0);
-		if  (pos.x < 0.5) mask = vec3(1.0);
+		if  (pos.x < 0.49) mask = vec3(1.0);
 	}    
 
 	// 4k mask
-	else 
+	else if (shadowMask == 8.0)
 	{
 		mask = vec3(mc);
 		pos.x = fract(pos.x * 0.25);
@@ -394,6 +398,15 @@ vec3 Mask(vec2 pos, float mx)
 		else if (pos.x < 0.4)  mask.rg = 1.0.xx;
 		else if (pos.x < 0.7)  mask.gb = 1.0.xx;	
 		else                   mask.b  = 1.0;	
+	}     
+	else
+	{
+		mask = vec3(mc);
+		pos.x = fract(pos.x * 0.25);
+		if      (pos.x < 0.2)  mask.r  = 1.0;
+		else if (pos.x < 0.4)  mask.rb = 1.0.xx;
+		else if (pos.x < 0.7)  mask.gb = 1.0.xx;	
+		else                   mask.g  = 1.0;	
 	}     
  
 	return mask;
@@ -505,7 +518,7 @@ void main()
 	float factor  = 1.00 + (1.0-0.5*OS)*BLOOM/100.0 - lum*BLOOM/100.0;
 	texcoord  = Overscan(texcoord, factor, factor);
 
-	texcoord = Overscan(texcoord, 1.0, (SourceSize.y - overscanY)/SourceSize.y);
+	texcoord = Overscan(texcoord, (SourceSize.x - overscanX)/SourceSize.x, (SourceSize.y - overscanY)/SourceSize.y);
 
 	vec2 pos  = Warp(texcoord);
 	vec2 pos0 = Warp(TEX0.xy);

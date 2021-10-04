@@ -8,6 +8,8 @@ Changes:
       * Portions of the viewport which do not change dynamically every frame (E.G. Outside the Bezel)
     * Blinking red visual Live mode indicator when live mode is on
   * Fixed ZFast Cropping
+  * Put Vignette in Post-CRT pass, Turn off Grade Vignette by default
+  * Updated Guest to crt-guest-advanced-2021-09-07-release1
 
   * BIG Changes to what each preset level does
     * ADV
@@ -46,16 +48,12 @@ Changes:
 Mega Bezel Still to Come:
 
 V1 TODO
-  * Finish moving Vignette
+  * Update Guest Venom ADV to latest
   * Test Mupen (& N64 preset) & Duckstation
-  * Fix Bezel Masking Problem Again :(
   * Add Gamma for Device Image
-  * Add Vignette in Post-CRT pass, Turn off Grade Vignette
   * Put Grade after afterglow, remove brighten black from afterglow
-  * Fix Potato Cropping
   * Add Negative-Crop size to chain for resolution debug
   * Optimize GDV out of frame?, Potato & Other?
-  * Use Torridgristle Curvature for 0-1 space
   * Check out 3D Cores
   * Good Preset for FBNeo & Instructions
   * Catch 320x480 as Horizontal Aspect
