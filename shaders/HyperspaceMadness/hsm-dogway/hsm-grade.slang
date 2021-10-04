@@ -126,7 +126,7 @@ layout(push_constant) uniform Push
 #pragma parameter g_mid                             "          Contrast Pivot"       0.5  0.0 1.0 0.01
 
 #pragma parameter DG_VIGNETTE_TITLE                 "[ VIGNETTE ]:" 0 0 0 1
-#pragma parameter g_vignette                        "          Use Vignette"          1.0  0.0 1.0 1.0
+#pragma parameter g_vignette                        "          Use Vignette"          0.0  0.0 1.0 1.0
 #pragma parameter g_vstr                            "          Amount (Strength)"     40.0 0.0 98.0 2.0
 #pragma parameter g_vpower                          "          Corner Amount (Power)" 26 0.0 200 2
 
@@ -738,8 +738,6 @@ void main()
     //HSM Added
     vec4 src_rgba = texture(Source, vTexCoord.xy);
 
-    src_rgba = HSM_ApplyBlackLevel(src_rgba, 0);
-
     vec3 src = src_rgba.rgb * lum_exp;
 
     if (g_grade_on == 0)
@@ -883,17 +881,22 @@ vec3 vcolor = adj;
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
     vec2 derezed_size = HSM_GetDerezedSize();
     vec2 cur_pixel_pos = vTexCoord * derezed_size;
-    vec2 pos_in_cropped_coords = (cur_pixel_pos - SAMPLE_AREA_START_RAW_PIXEL_COORD) / CROPPED_ROTATED_ORIGINAL_SIZE;
-    pos_in_cropped_coords = (pos_in_cropped_coords - 0.5) * CROPPED_ROTATED_ORIGINAL_SIZE / ROTATED_RAW_ORIGINAL_SIZE + 0.5;
+    vec2 cropped_size = HSM_ROTATE_CORE_IMAGE > 0.5 ? vec2(CROPPED_ROTATED_ORIGINAL_SIZE.y, CROPPED_ROTATED_ORIGINAL_SIZE.x) : CROPPED_ROTATED_ORIGINAL_SIZE;
+    vec2 raw_size = HSM_ROTATE_CORE_IMAGE > 0.5 ? vec2(ROTATED_RAW_ORIGINAL_SIZE.y, ROTATED_RAW_ORIGINAL_SIZE.x) : ROTATED_RAW_ORIGINAL_SIZE;
+    vec2 sample_start_area = HSM_ROTATE_CORE_IMAGE > 0.5 ? vec2(SAMPLE_AREA_START_RAW_PIXEL_COORD.y, SAMPLE_AREA_START_RAW_PIXEL_COORD.x) : SAMPLE_AREA_START_RAW_PIXEL_COORD;
+    vec2 pos_in_cropped_coords = (cur_pixel_pos - sample_start_area) /  cropped_size;
+    pos_in_cropped_coords = (pos_in_cropped_coords - 0.5) * 0.8 + 0.5;
 
     vec2 vpos = pos_in_cropped_coords;
 
-    vpos = (vpos - 0.5) / 0.81 + 0.5;
-    vpos *= 1.0 - vpos.xy;
-    float vig = vpos.x * vpos.y * vstr;
-    vig = min(pow(vig, vpower), 1.0);
-    contrast *= (vignette == 1.0) ? vig : 1.0;
-
+    if (vignette > 0.5)
+    {
+        vpos = (vpos - 0.5) / 0.81 + 0.5;
+        vpos *= 1.0 - vpos.xy;
+        float vig = vpos.x * vpos.y * vstr;
+        vig = min(pow(vig, vpower), 1.0);
+        contrast *= (vignette == 1.0) ? vig : 1.0;
+    }
     contrast += (lift / 20.0) * (1.0 - contrast);
 
 

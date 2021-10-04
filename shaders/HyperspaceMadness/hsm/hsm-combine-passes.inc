@@ -92,22 +92,26 @@ void main()
 		if (HSM_LIVE_UPDATE_ON < 0.5 && feedback_color_test.a > 0.001)
 		{
 			FragColor = texture(PassFeedback, UNFLIPPED_VIEWPORT_COORD);
-			//TODO add Caching Debug
-			// - vec4(0.0,0.05,0.05,0);
 			return;
 		}
 	}
-
-	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_SCREEN_CORNER_RADIUS;
-	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
-		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
-
-	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(SCREEN_COORD, 1, SCREEN_SCALE, TUBE_SCALE, SCREEN_ASPECT, 1);
 
 	vec4 out_color = texture(BR_LayersUnderCRTPass, vTexCoord);
 
 	vec4 crt_layer = texture(MiddlePass, vTexCoord);
 	vec4 reflection_layer = crt_layer;
+
+	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_SCREEN_CORNER_RADIUS;
+	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
+		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
+	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(SCREEN_COORD, 1, SCREEN_SCALE, TUBE_SCALE, SCREEN_ASPECT, 1);
+
+	float TUBE_MASK_EXPAND = HSM_GetCornerMask((tube_curved_coord - 0.5) * 0.997 + 0.5, SCREEN_ASPECT, bezel_corner_radius, 0.99);
+	crt_layer *= TUBE_MASK_EXPAND;
+
+	float TUBE_MASK_TRIM = HSM_GetCornerMask((tube_curved_coord - 0.5) * 1.003 + 0.5, SCREEN_ASPECT, bezel_corner_radius, 0.99);
+	crt_layer.rgb *= TUBE_MASK_TRIM;
+
 	if (HSM_CRT_SCREEN_BLEND_MODE > 1.5)
 	{
 		crt_layer.rgb *= crt_layer.a;
@@ -116,10 +120,9 @@ void main()
 	else if (HSM_CRT_SCREEN_BLEND_MODE > 0.5)
 		out_color = HSM_PreMultAlphaBlend(out_color, crt_layer);
 
-
 #ifndef IS_NO_REFLECT_PRESET
 	float outside_tube_mask_smaller = 1 - HSM_GetCornerMask((tube_curved_coord - 0.5) * 1.01 + 0.5, SCREEN_ASPECT, bezel_corner_radius, 0.99);
-	reflection_layer *= outside_tube_mask_smaller;
+	reflection_layer *= 1 - TUBE_MASK_TRIM;
 	out_color.rgb += reflection_layer.rgb;
 #endif
 

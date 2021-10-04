@@ -770,15 +770,45 @@ vec2 HSM_GetCrtPiCurvedCoord(vec2 in_coord, vec2 in_curvature)
     return in_coord;
 }
 
+vec2 HSM_GetTorridGristleCurvedCoord(vec2 in_coord, vec2 in_curvature){
+	// default curvature is vec2(0.031, 0.041
+	vec2 Distortion = in_curvature * 15;// * vec2(0.031, 0.041);
+
+	vec2 curvedCoords = in_coord * 2.0 - 1.0;
+	float curvedCoordsDistance = sqrt(curvedCoords.x*curvedCoords.x+curvedCoords.y*curvedCoords.y);
+
+	curvedCoords = curvedCoords / curvedCoordsDistance;
+
+	curvedCoords = curvedCoords * (1.0-pow(vec2(1.0-(curvedCoordsDistance/1.4142135623730950488016887242097)),(1.0/(1.0+Distortion*0.2))));
+
+	curvedCoords = curvedCoords / (1.0-pow(vec2(0.29289321881345247559915563789515),(1.0/(vec2(1.0)+Distortion*0.2))));
+
+	curvedCoords = curvedCoords * 0.5 + 0.5;
+	return curvedCoords;
+}
+
 vec2 HSM_Get2DCurvedCoord(vec2 in_coord, vec2 curvature_values)
 {
-	vec2 ctr_curved_coord =  HSM_GetCrtPiCurvedCoord(in_coord, curvature_values) - 0.5;
+	vec2 ctr_curved_coord = vec2(0) ;
 
-	vec2 right_edge_curved_ctr_coord = HSM_GetCrtPiCurvedCoord(vec2(1, 0.5), curvature_values) - 0.5;
-	ctr_curved_coord.x = ctr_curved_coord.x * 0.5 / right_edge_curved_ctr_coord.x;
+	// ctr_curved_coord = HSM_GetTorridGristleCurvedCoord(in_coord, curvature_values) - 0.5;
 
-	vec2 bottom_edge_curved_ctr_coord =  HSM_GetCrtPiCurvedCoord(vec2(0.5, 1), curvature_values) - 0.5;
-	ctr_curved_coord.y = ctr_curved_coord.y * 0.5 / bottom_edge_curved_ctr_coord.y;
+	// vec2 right_edge_curved_ctr_coord = HSM_GetTorridGristleCurvedCoord(vec2(1, 0.5), curvature_values) - 0.5;
+	// ctr_curved_coord.x = ctr_curved_coord.x * 0.5 / right_edge_curved_ctr_coord.x;
+
+	// vec2 bottom_edge_curved_ctr_coord =  HSM_GetTorridGristleCurvedCoord(vec2(0.5, 1), curvature_values) - 0.5;
+	// ctr_curved_coord.y = ctr_curved_coord.y * 0.5 / bottom_edge_curved_ctr_coord.y;
+
+	// if (abs(ctr_curved_coord.x) > 0.5 || abs(ctr_curved_coord.y) > 0.5)
+	// {
+		ctr_curved_coord = HSM_GetCrtPiCurvedCoord(in_coord, curvature_values) - 0.5;
+
+		vec2 right_edge_curved_ctr_coord = HSM_GetCrtPiCurvedCoord(vec2(1, 0.5), curvature_values) - 0.5;
+		ctr_curved_coord.x = ctr_curved_coord.x * 0.5 / right_edge_curved_ctr_coord.x;
+
+		vec2 bottom_edge_curved_ctr_coord =  HSM_GetCrtPiCurvedCoord(vec2(0.5, 1), curvature_values) - 0.5;
+		ctr_curved_coord.y = ctr_curved_coord.y * 0.5 / bottom_edge_curved_ctr_coord.y;
+	// }
 
 	return ctr_curved_coord + 0.5;
 }
@@ -916,31 +946,27 @@ vec2 HSM_GetTubeCurvedCoord(vec2 screen_coord, float curvature_scale, vec2 scree
 //     return max(0.0,dot(normal,Lnorm)) * evaluateLight(pos);
 // }
 
-vec4 HSM_ApplyBlackLevel(vec4 in_color, float color_is_linear)
-{
-	vec4 out_color = in_color;
+// vec4 HSM_ApplyBlackLevel(vec4 in_color, float color_is_linear)
+// {
+// 	vec4 out_color = in_color;
 
-	// Linearize if color isn't linear
-	if (color_is_linear == 0)
-	{
-		out_color = HSM_Linearize(out_color, HSM_DEFAULT_CRT_GAMMA);
-	}
+// 	// Linearize if color isn't linear
+// 	if (color_is_linear == 0)
+// 		out_color = HSM_Linearize(out_color, HSM_DEFAULT_CRT_GAMMA);
 
-	// Black Level
-	out_color += HSM_BRIGHTEN_BLACK / 100;
-	out_color *= 1 / vec4(1.0 + HSM_BRIGHTEN_BLACK / 100);
-	out_color = clamp(out_color, 0, 2);
+// 	// Black Level
+// 	out_color += HSM_BRIGHTEN_BLACK / 100;
+// 	out_color *= 1 / vec4(1.0 + HSM_BRIGHTEN_BLACK / 100);
+// 	out_color = clamp(out_color, 0, 2);
 
-	// If color isn't linear put default gamma back on
-	if (color_is_linear == 0)
-	{
-		out_color = HSM_Delinearize(out_color, HSM_DEFAULT_CRT_GAMMA);
-	}
+// 	// If color isn't linear put default gamma back on
+// 	if (color_is_linear == 0)
+// 		out_color = HSM_Delinearize(out_color, HSM_DEFAULT_CRT_GAMMA);
 
-	out_color.w = in_color.w;
+// 	out_color.w = in_color.w;
 
-	return clamp(out_color, 0, 1);
-}
+// 	return clamp(out_color, 0, 1);
+// }
 
 vec2 HSM_RotateCoordinate(vec2 in_coord, float rotation_on)
 {
@@ -964,16 +990,6 @@ vec2 HSM_GetMirrorWrapCoord(vec2 in_coord)
 
 	return ctr_mirror_coord + 0.5;
 }
-
-// // Check to see if we are in the negative crop area
-// float HSM_IsInNegativeCropArea(vec2 in_coord)
-// {
-// 	float result = abs(clamp(HSM_CROP_PERCENT_TOP, -1, 0) * clamp(in_coord.y, -1, 0)) * 100000 +
-// 				   abs(clamp(HSM_CROP_PERCENT_BOTTOM, -1, 0) * (clamp(in_coord.y, 1, 2) - 1)) * 100000 +
-// 				   abs(clamp(HSM_CROP_PERCENT_LEFT, -1, 0) * clamp(in_coord.x, -1, 0)) * 100000 +
-// 				   abs(clamp(HSM_CROP_PERCENT_RIGHT, -1, 0) * (clamp(in_coord.x, 1, 2) - 1)) * 100000;
-// 	return clamp(result, 0, 1);
-// }
 
 float HSM_rand(inout float r)
 {
@@ -1352,6 +1368,18 @@ float HSM_GetScreenVignetteFactor(vec2 coord, float amount)
 }
 */
 
+float HSM_GetScreenVignetteFactor(vec2 in_coord)
+{
+	vec2 vpos = HSM_GetMirrorWrappedCoord(in_coord);
+	vpos = (vpos - 0.5) / 1.01 + 0.5;
+	vpos *= 1.0 - vpos.xy;
+    float vig = vpos.x * vpos.y * HSM_SCREEN_VIGNETTE_STRENGTH;
+    vig = min(pow(vig, HSM_SCREEN_VIGNETTE_POWER), 1.0);
+
+	return vig;
+}
+
+
 // TODO need to remove calls to Get RotatedOriginalSize etc
 // Torridgristle - ScanlineSimple pass - Public domain
 vec4 HSM_ApplyScanlineMask(vec4 in_color, vec2 screen_scale, vec2 in_coord, vec2 in_curved_coord)
@@ -1472,9 +1500,63 @@ vec4 HSM_ApplyMonochrome(vec4 in_color)
 	return out_color;
 }
 
+float HSM_Get_Screen_Black_Edge_Mask(vec2 screen_coord, bool apply_to_mirror)
+{
+	if (apply_to_mirror)
+		screen_coord = HSM_GetMirrorWrappedCoord(screen_coord);
+
+	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_SCREEN_CORNER_RADIUS;
+	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
+		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
+
+	SCREEN_BLACK_EDGE_CURVED_COORD = HSM_GetCurvedCoord(screen_coord, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, SCREEN_ASPECT);
+	SCREEN_MASK = HSM_GetCornerMask(((SCREEN_BLACK_EDGE_CURVED_COORD - 0.5) * 1.001) + 0.5, SCREEN_ASPECT, HSM_SCREEN_CORNER_RADIUS, HSM_SCREEN_EDGE_SHARPNESS);
+
+	return SCREEN_MASK;
+}
+
+vec4 HSM_Get_Tube_Highlight(vec2 tube_curved_coord, bool apply_to_mirror, in sampler2D TubeStaticReflectionImage)
+{
+	vec4 out_color = vec4(0);
+	
+	vec2 mirrored_tube_coord = tube_curved_coord;
+	if (apply_to_mirror)
+		mirrored_tube_coord = HSM_GetMirrorWrappedCoord(tube_curved_coord);
+
+	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_SCREEN_CORNER_RADIUS;
+	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
+		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
+
+	// float outside_tube_mask = 1 - HSM_GetCornerMask(tube_curved_coord, SCREEN_ASPECT, bezel_corner_radius, 0.99);
+	// TUBE_MASK = 1 - outside_tube_mask;
+	// out_color *= TUBE_MASK;
+
+	if (HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY > 0)
+	{
+		vec2 tube_highlight_coord = (mirrored_tube_coord - 0.5) / HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE + 0.5;
+
+		// TODO need to update this for flip horizontal
+		tube_highlight_coord = mix( tube_highlight_coord, -1 * (tube_highlight_coord - 0.5) + 0.5 , HSM_FLIP_VIEWPORT_VERTICAL);
+/*
+		// Dithering for the glass reflection if needed to reduce banding
+		float blur_max_size = 1;
+		float blur_amount = 0.2;
+		vec4 tube_highlight_image = HSM_GetStoichaicBlurredSample(TubeStaticReflectionImage, tube_highlight_coord, HSM_TUBE_STATIC_REFLECTION_IMAGE_DITHERING_SAMPLES, blur_max_size, blur_amount);
+*/
+		// Mask the very outer edge of the tube for a very small shadowing effect
+		float tube_highlight_mask = HSM_GetCornerMask((tube_curved_coord - 0.5) * 0.995 + 0.5 , SCREEN_ASPECT, HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_SCREEN_CORNER_RADIUS, 0.05);
+
+		vec4 tube_highlight_image = texture(TubeStaticReflectionImage, tube_highlight_coord);
+		tube_highlight_image = HSM_Linearize(tube_highlight_image, HSM_DEFAULT_SRGB_GAMMA) * tube_highlight_mask;
+
+		out_color = HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY * tube_highlight_image * tube_highlight_image.a;
+	}
+	return out_color;
+}
+
 #ifdef IS_POTATO_PRESET
 vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, vec2 screen_curved_coord, in sampler2D BackgroundImage, in sampler2D BackgroundVertImage)
-{
+{ 
 	if (HSM_MONOCHROME_MODE > 0.5)
 		in_color_with_gamma = HSM_ApplyMonochrome(in_color_with_gamma);
 
@@ -1523,9 +1605,11 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	vec4 out_color = HSM_Linearize(in_color_with_gamma, HSM_DEFAULT_SRGB_GAMMA);
 	out_color *= HSM_POST_CRT_BRIGHTNESS;
 
+	if (HSM_SCREEN_VIGNETTE_ON > 0.5)
+		out_color *= HSM_GetScreenVignetteFactor(screen_curved_coord);
+
 	vec4 night_lighting_image = HSM_GetNightLightingMultiplyColor( VIEWPORT_COORD, NightLightingImage );
 
-	float screen_mask = HSM_GetCornerMask((screen_curved_coord - 0.5) * 0.999 + 0.5, SCREEN_ASPECT, HSM_SCREEN_CORNER_RADIUS, 0.9);
 	// float screen_edge_mask = HSM_GetCornerMask(screen_curved_coord, SCREEN_ASPECT, HSM_SCREEN_CORNER_RADIUS, HSM_SCREEN_EDGE_SHARPNESS);
 	// screen_edge_mask = 1 - ((1 - screen_edge_mask) * screen_mask);
 
@@ -1552,6 +1636,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 
 	out_color *= vignette_factor;
 */
+
 	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(SCREEN_COORD, 1, SCREEN_SCALE, TUBE_SCALE, SCREEN_ASPECT, 1);
 	vec2 mirrored_tube_coord = HSM_GetMirrorWrappedCoord(tube_curved_coord);
 
@@ -1598,72 +1683,24 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	out_color.a = in_color_with_gamma.a;
 
 	#ifdef IS_NOREFLECT_PRESET
+	out_color.rgb *= HSM_Get_Screen_Black_Edge_Mask(SCREEN_COORD, false);
 
-	// If we are not using this with the bezel we want to mask outside the screen
-	{
-		float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_SCREEN_CORNER_RADIUS;
-		if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
-			bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
-	
-		float outside_tube_mask = 1 - HSM_GetCornerMask(tube_curved_coord, SCREEN_ASPECT, bezel_corner_radius, 0.99);
-		TUBE_MASK = 1 - outside_tube_mask;
-		out_color *= TUBE_MASK;
-		out_color.rgb *= screen_mask;
-
-		// if (HSM_BG_OPACITY > 0)
-		// {
-		// 	//-----------------------------------------------------------------------------------------
-		// 	// Background
-		// 	//-----------------------------------------------------------------------------------------
-		// 	BACKGROUND_CURVED_COORD = VIEWPORT_COORD;
-		// 	// Correct image coordinate for image aspect ratio
-		// 	BACKGROUND_CURVED_COORD.x = (BACKGROUND_CURVED_COORD.x - 0.5) / (HSM_GetAspectRatioFromMode(HSM_BG_TEXTURE_ASPECT_MODE, HSM_BG_EXPLICIT_TEXTURE_ASPECT) / (global.FinalViewportSize.x/global.FinalViewportSize.y)) + 0.5;
-
-		// 	vec4 bg_layer = vec4(0);
-		// 	if (SCREEN_ASPECT > 1) 
-		// 		bg_layer = texture(BackgroundImage, BACKGROUND_CURVED_COORD);
-		// 	else
-		// 		bg_layer = texture(BackgroundVertImage, BACKGROUND_CURVED_COORD);
-		// 	bg_layer = HSM_Linearize(bg_layer, HSM_DEFAULT_SRGB_GAMMA);
-
-		// 	bg_layer.rgb *= HSM_BG_BRIGHTNESS;
-		// 	bg_layer.rgb *= night_lighting_image.rgb;
-
-		// 	if (HSM_STANDARD_BG_SHOW_OVER_SCREEN == 1)
-		// 		out_color = HSM_BlendModeLayerMix(out_color, bg_layer, HSM_BG_BLEND_MODE, HSM_BG_OPACITY);
-		// 	else
-		// 		out_color = HSM_BlendModeLayerMix(bg_layer, out_color, HSM_CRT_SCREEN_BLEND_MODE, 1);
-		// }
-
+	// TUBE HIGHLIGHT
+	if (HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_NONE)
 		if (HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY > 0)
-		{
-			vec2 tube_highlight_coord = (mirrored_tube_coord - 0.5) / HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE + 0.5;
-
-			// TODO need to update this for flip horizontal
-			tube_highlight_coord = mix( tube_highlight_coord, -1 * (tube_highlight_coord - 0.5) + 0.5 , HSM_FLIP_VIEWPORT_VERTICAL);
-	/*
-			// Dithering for the glass reflection if needed to reduce banding
-			float blur_max_size = 1;
-			float blur_amount = 0.2;
-			vec4 tube_highlight_image = HSM_GetStoichaicBlurredSample(TubeStaticReflectionImage, tube_highlight_coord, HSM_TUBE_STATIC_REFLECTION_IMAGE_DITHERING_SAMPLES, blur_max_size, blur_amount);
-	*/
-			// Mask the very outer edge of the tube for a very small shadowing effect
-			float tube_highlight_mask = HSM_GetCornerMask((tube_curved_coord - 0.5) * 0.995 + 0.5 , SCREEN_ASPECT, HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_SCREEN_CORNER_RADIUS, 0.05);
-
-			vec4 tube_highlight_image = texture(TubeStaticReflectionImage, tube_highlight_coord);
-			tube_highlight_image = HSM_Linearize(tube_highlight_image, HSM_DEFAULT_SRGB_GAMMA) * tube_highlight_mask;
-
-			out_color.rgb += HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY * tube_highlight_image.a * tube_highlight_image.rgb;
-		}
-
-	}
-
+			out_color += HSM_Get_Tube_Highlight(tube_curved_coord, false, TubeStaticReflectionImage);
 	#endif
 
 	#ifndef IS_NOREFLECT_PRESET
 	// Apply the final Gamma
 	out_color = HSM_Delinearize(out_color, HSM_DEFAULT_SRGB_GAMMA);
 	#endif
+
+	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_SCREEN_CORNER_RADIUS;
+	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
+		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
+
+	TUBE_MASK = HSM_GetCornerMask(tube_curved_coord, SCREEN_ASPECT, bezel_corner_radius, 0.99);
 
 	if ( HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_BLACK_TUBE )
 		out_color = HSM_PreMultAlphaBlend(out_color, vec4(0, 0, 0, 1) * (1 - TUBE_MASK));

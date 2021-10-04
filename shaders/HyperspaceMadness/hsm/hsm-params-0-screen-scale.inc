@@ -344,22 +344,9 @@ float HSM_RENDER_SIMPLE_MODE = global.HSM_RENDER_SIMPLE_MODE;
 
 
 //---------------------------------------------------------------------------------------------------
-//    Black Level
-//---------------------------------------------------------------------------------------------------
-// #pragma parameter HSM_COLOR_AND_PERSISTENCE_TITLE				"[ SCANLINES ON BLACK ]:" 0 0 0.01 0.01
-
-
-// Not in use because negative cropping is disabled
-// #pragma parameter HSM_COLOR_NEGATIVE_CROP_BRIGHTNESS				"          Negative Crop Brightness - Def 1.8" 1.8 0 100 0.2
-// #define HSM_COLOR_NEGATIVE_CROP_BRIGHTNESS global.HSM_COLOR_NEGATIVE_CROP_BRIGHTNESS
-
-//---------------------------------------------------------------------------------------------------
 //    CRT Layer
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_CRT_TITLE			             "[ CRT SCREEN LAYER ]:" 0 0 0.01 0.01
-
-#pragma parameter HSM_BRIGHTEN_BLACK 							"          Black Brightness (4 for scanlines on black)" 0 -1000 1000 1
-#define HSM_BRIGHTEN_BLACK global.HSM_BRIGHTEN_BLACK / 100
 
 #pragma parameter HSM_GAMMA_IN_LINEARIZE   							"          CRT Gamma In (Gamma to Linear Space Decode) Def 2.4" 2.4 0.1 5 0.05
 #define HSM_GAMMA_IN_LINEARIZE global.HSM_GAMMA_IN_LINEARIZE
@@ -390,10 +377,16 @@ float HSM_CRT_SCREEN_BLEND_MODE = global.HSM_CRT_SCREEN_BLEND_MODE;
 #define HSM_MONOCHROME_SATURATION (global.HSM_MONOCHROME_SATURATION / 100)
 
 
-// #pragma parameter HSM_SCREEN_VIGNETTE_TITLE							"[ SCREEN VIGNETTE ]:" 0 0 0.01 0.01
+#pragma parameter HSM_SCREEN_VIGNETTE_TITLE							"[ SCREEN VIGNETTE ]:" 0 0 0.01 0.01
 
-// #pragma parameter HSM_SCREEN_VIGNETTE                				"          Screen Vignette Opacity" 0 0 100 1
-// #define HSM_SCREEN_VIGNETTE global.HSM_SCREEN_VIGNETTE / 200
+#pragma parameter HSM_SCREEN_VIGNETTE_ON                			"          Use Vignette" 1 0 1 1
+#define HSM_SCREEN_VIGNETTE_ON global.HSM_SCREEN_VIGNETTE_ON
+
+#pragma parameter HSM_SCREEN_VIGNETTE_STRENGTH                		"          Amount (Strength)" 40 0 98 2
+#define HSM_SCREEN_VIGNETTE_STRENGTH (1 - global.HSM_SCREEN_VIGNETTE_STRENGTH / 100) * 50
+
+#pragma parameter HSM_SCREEN_VIGNETTE_POWER                			"          Corner Amount (Power)" 26 0 200 2
+#define HSM_SCREEN_VIGNETTE_POWER global.HSM_SCREEN_VIGNETTE_POWER / 100
 
 
 #pragma parameter HSM_REFLECTIONAPPEARANCE_TITLE					"[ REFLECTION TRANSFORM ]:" 0 0 0.01 0.01

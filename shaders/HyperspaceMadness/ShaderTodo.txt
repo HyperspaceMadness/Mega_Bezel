@@ -7,6 +7,7 @@ Changes:
       * Passes which do not change dynamically every frame
       * Portions of the viewport which do not change dynamically every frame (E.G. Outside the Bezel)
     * Blinking red visual Live mode indicator when live mode is on
+  * Fixed ZFast Cropping
 
   * BIG Changes to what each preset level does
     * ADV
@@ -45,10 +46,16 @@ Changes:
 Mega Bezel Still to Come:
 
 V1 TODO
-  * Put Grade after afterglow
-  * Add Neg-Crop size to chain for resolution debug
-  * "          Live Mode: OFF | ON | ON + INDICATOR
+  * Finish moving Vignette
+  * Test Mupen (& N64 preset) & Duckstation
+  * Fix Bezel Masking Problem Again :(
+  * Add Gamma for Device Image
+  * Add Vignette in Post-CRT pass, Turn off Grade Vignette
+  * Put Grade after afterglow, remove brighten black from afterglow
+  * Fix Potato Cropping
+  * Add Negative-Crop size to chain for resolution debug
   * Optimize GDV out of frame?, Potato & Other?
+  * Use Torridgristle Curvature for 0-1 space
   * Check out 3D Cores
   * Good Preset for FBNeo & Instructions
   * Catch 320x480 as Horizontal Aspect

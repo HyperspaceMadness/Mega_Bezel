@@ -226,28 +226,22 @@ void main()
    if (HSM_ANTI_FLICKER_ON == 1)
       FragColor = AntiFlicker(viewport_coord_adjusted, FragColor);
 
-   // HSM_Linearize(FragColor, HSM_DEFAULT_SRGB_GAMMA);
-
    if (HSM_INTRO_WHEN_TO_SHOW > 0)
       FragColor = GetColorWithIntro(FragColor, viewport_coord_adjusted);
 #endif
 
-   // Apply black level & gamma with input as non linearized
-   // FragColor = HSM_ApplyBlackLevel(FragColor, 0);
-
 	if (HSM_LIVE_UPDATE_ON == 1 )
 	{
 		float final_aspect = SCREEN_ASPECT;
-		vec2 corner_offset = vec2(0.08, 0.1);
+		vec2 corner_offset = vec2(0.18, 0.2);
 		vec2 center_coord = vec2(1 - corner_offset.x * final_aspect, 1 - corner_offset.y);
 		vec2 test_coord = vec2(1 - (1 - viewport_coord_adjusted.x) * final_aspect, viewport_coord_adjusted.y);
 		float distance =  length(test_coord - center_coord);
 
-		if (distance < 0.05)
+		if (distance < 0.04)
 		{
 			float modulation = clamp(0.4 + abs(mod(global.FrameCount, 90) / 90 - 0.5) * 1.2, 0, 1);
-			// modulation = HHLP_EasePowerInOut(modulation, 2);
-			// float scanline_mask = 1 - abs(scan - 0.5) * 2;
+			modulation = HHLP_EasePowerInOut(modulation, 2);
 			FragColor *= 1 - modulation;
 			FragColor += modulation * vec4(1, 0, 0, 1);
 		}
@@ -257,5 +251,4 @@ void main()
    if (HSM_RESOLUTION_DEBUG_ON == 1)
       FragColor = AddText(viewport_coord_adjusted, FragColor);
 
-   // FragColor = HSM_Delinearize(FragColor, HSM_DEFAULT_SRGB_GAMMA);
 }

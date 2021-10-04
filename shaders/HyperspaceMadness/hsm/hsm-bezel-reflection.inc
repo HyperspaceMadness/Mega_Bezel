@@ -143,14 +143,14 @@ void main()
 	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_SCREEN_CORNER_RADIUS;
 	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
 		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
-	
+
 	float edge_mask =  HSM_GetCornerMask(edge_mask_coord, SCREEN_ASPECT, bezel_corner_radius, HSM_BZL_INNER_EDGE_SHARPNESS);
 
 	float outside_tube_mask = 1 - HSM_GetCornerMask(tube_curved_coord, SCREEN_ASPECT, bezel_corner_radius, 0.99);
 	TUBE_MASK = 1 - outside_tube_mask;
 
 	// Shrink the mask by 0.001 to clip off outer edge
-	SCREEN_MASK = HSM_GetCornerMask(((SCREEN_BLACK_EDGE_CURVED_COORD - 0.5) * 1.001) + 0.5, SCREEN_ASPECT, HSM_SCREEN_CORNER_RADIUS, HSM_SCREEN_EDGE_SHARPNESS);
+	SCREEN_MASK = HSM_Get_Screen_Black_Edge_Mask(SCREEN_COORD, false);
 
 	OUTSIDE_BEZEL_MASK = 1 - HSM_GetCornerMask(BEZEL_OUTSIDE_CURVED_COORD, SCREEN_ASPECT, bezel_corner_radius * HSM_BZL_OUTER_CORNER_RADIUS_SCALE, 0.9);
 
@@ -454,87 +454,13 @@ void main()
 	if (HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_NONE)
 		if (HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY > 0)
 		{
-			vec2 tube_highlight_coord = (tube_curved_coord - 0.5) / HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE + 0.5;
-
-			// // Dithering for the glass reflection if needed to reduce banding
-			// float blur_max_size = 1;
-			// float blur_amount = 0.2;
-			// vec4 tube_highlight_image = HSM_GetStoichaicBlurredSample(TubeStaticReflectionImage, tube_highlight_coord, HSM_TUBE_STATIC_REFLECTION_IMAGE_DITHERING_SAMPLES, blur_max_size, blur_amount);
-			
-			float tube_highlight_mask = HSM_GetCornerMask((tube_curved_coord - 0.5) * 0.995 + 0.5 , SCREEN_ASPECT, bezel_corner_radius, 0.05);
-
-			vec4 tube_highlight_image = texture(TubeStaticReflectionImage, tube_highlight_coord);
-			tube_highlight_image = HSM_Linearize(tube_highlight_image, HSM_DEFAULT_SRGB_GAMMA) * tube_highlight_mask;
-
-			// Since the tube highlight has already been applied in the crt pass and we've already masked it to the screen
-			// We just need to add the tube highlight on the black screen area
-			crt_linear += HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY * tube_highlight_image * tube_highlight_image.a;
+			crt_linear += HSM_Get_Tube_Highlight(tube_curved_coord, false, TubeStaticReflectionImage);
 		}
 
 	// Clamp otherwise we get artifacts (blue overlays of brighter parts of image)
 	crt_linear = clamp(crt_linear, 0, 1);
 
 	FragColor = vec4(0);
-
-// #ifdef IS_BASIC_REFLECT_PRESET_OLD
-// 	//-----------------------------------------------------------------------------------------
-// 	// Background
-// 	//-----------------------------------------------------------------------------------------
-// 	BACKGROUND_CURVED_COORD = VIEWPORT_COORD;
-// 	BACKGROUND_CURVED_COORD.x = (BACKGROUND_CURVED_COORD.x - 0.5) / (HSM_GetAspectRatioFromMode(HSM_BG_TEXTURE_ASPECT_MODE, HSM_BG_EXPLICIT_TEXTURE_ASPECT) / (global.FinalViewportSize.x/global.FinalViewportSize.y)) + 0.5;
-
-// 	vec4 bg_image = vec4(0);
-// 	if (HSM_BG_OPACITY > 0)
-// 	{
-// 		if (SCREEN_ASPECT > 1) 
-// 			bg_image = texture(BackgroundImage, BACKGROUND_CURVED_COORD);
-// 		else
-// 			bg_image = texture(BackgroundVertImage, BACKGROUND_CURVED_COORD);
-
-// 		// Premultiply Alpha
-// 		bg_image = HSM_GetPreMultipliedColorLinear(bg_image, HSM_BG_SOURCE_MATTE_TYPE, HSM_DEFAULT_SRGB_GAMMA);
-
-// 		// Apply Brightness
-// 		bg_image.rgb *= HSM_BG_BRIGHTNESS;
-
-// 		if (HSM_STATIC_LAYERS_GAMMA != 1)
-// 			bg_image = HSM_ApplyGamma(bg_image, HSM_STATIC_LAYERS_GAMMA);
-
-// 		vec4 night_lighting_image = vec4(1);
-// 		if (HSM_NIGHT_OPACITY > 0)
-// 			night_lighting_image = HSM_GetNightLightingMultiplyColor( VIEWPORT_COORD, NightLightingImage );
-
-// 		// NIGHT LIGHTING
-// 		if (HSM_NIGHT_OPACITY > 0)
-// 			bg_image.rgb *= night_lighting_image.rgb;
-// 	}
-
-// 	reflection_color *= 1 - OUTSIDE_BEZEL_MASK;
-
-// 	vec4 frag_color_linear = vec4(0);
-
-// 	if (HSM_STANDARD_BG_SHOW_OVER_SCREEN == 0)
-// 	{
-// 		bg_image.a *= outside_tube_mask_wider * (1 - edge_mask);
-
-// 		// Add BG
-// 		frag_color_linear = HSM_BlendModeLayerMix(frag_color_linear, bg_image, HSM_BG_BLEND_MODE, HSM_BG_OPACITY);
-// 	}
-
-// 	// Add CRT
-// 	frag_color_linear = HSM_BlendModeLayerMix(frag_color_linear, crt_linear, HSM_CRT_SCREEN_BLEND_MODE, 1);
-
-// 	// Add Reflection
-// 	frag_color_linear += reflection_color;
-
-// 	// Add BG
-// 	if (HSM_STANDARD_BG_SHOW_OVER_SCREEN == 1)
-// 		frag_color_linear = HSM_BlendModeLayerMix(frag_color_linear, bg_image, HSM_BG_BLEND_MODE, HSM_BG_OPACITY);
-
-// 	FragColor = HSM_ApplyGamma(clamp(frag_color_linear, 0, 1), HSM_DEFAULT_SRGB_GAMMA);
-
-// 	return;
-// #endif
 
 #ifdef IS_GLASS_PRESET
 	vec4 bg_image = texture(BackgroundImage, VIEWPORT_COORD);
@@ -556,44 +482,6 @@ vec4 crt_and_reflect_layer = vec4(0);
 crt_and_reflect_layer = HSM_BlendModeLayerMix(crt_and_reflect_layer, crt_linear, BLEND_MODE_NORMAL, 1);
 crt_and_reflect_layer.rgb += reflection_color.rgb;
 crt_and_reflect_layer *= 1 - OUTSIDE_BEZEL_MASK;
-
-// #ifdef IS_ADV_PRESET
-	
-// 	vec4 under_layer = texture(BR_LayersUnderCRTPass, UNFLIPPED_VIEWPORT_COORD);
-// 	vec4 over_layer = texture(BR_LayersOverCRTPass, UNFLIPPED_VIEWPORT_COORD);
-
-// 	vec4 out_color = vec4(0);
-// 	out_color = HSM_PreMultAlphaBlend(under_layer, crt_and_reflect_layer);
-// 	if (HSM_CRT_SCREEN_BLEND_MODE > 1.5)
-// 		out_color = under_layer + crt_and_reflect_layer;
-// 	else if (HSM_CRT_SCREEN_BLEND_MODE > 0.5)
-// 		out_color = HSM_PreMultAlphaBlend(out_color, over_layer);
-
-// 	if (HSM_LIVE_UPDATE_ON > 0.5 )
-// 	{
-// 		float final_aspect = global.FinalViewportSize.x/global.FinalViewportSize.y;
-// 		vec2 corner_offset = vec2(0.05, 0.1);
-// 		vec2 center_coord = vec2(1 - corner_offset.x * final_aspect, 1 - corner_offset.y);
-// 		vec2 test_coord = vec2(1 - (1 - vTexCoord.x) * final_aspect, vTexCoord.y);
-// 		float distance =  length(test_coord - center_coord);
-
-// 		if (distance < 0.02)
-// 		{
-// 			float modulation = clamp(0.4 + abs(mod(global.FrameCount, 90) / 90 - 0.5) * 1.2, 0, 1);
-// 			// modulation = HHLP_EasePowerInOut(modulation, 2);
-// 			// float scanline_mask = 1 - abs(scan - 0.5) * 2;
-// 			out_color *= 1 - modulation;
-// 			out_color += modulation * vec4(0.2, 0, 0, 1);
-// 		}
-// 	}
-
-// 	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
-// 		FragColor = vec4(0.01, 0.01, 0.01, 1);
-
-// 	FragColor = HSM_ApplyGamma(clamp(out_color, 0, 1), HSM_DEFAULT_SRGB_GAMMA);
-
-// 	return;
-// #endif
 
 FragColor = crt_and_reflect_layer;
 return;
