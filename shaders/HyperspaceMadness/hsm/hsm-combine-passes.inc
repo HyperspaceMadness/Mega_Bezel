@@ -11,7 +11,7 @@ License: GPL
 #include "hsm-common-functions-bezel.inc"
 
 
-vec2 VIEWPORT_COORD = vec2(0.5);
+vec2 UNFLIPPED_VIEWPORT_COORD = vec2(0.5);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma stage vertex
@@ -20,7 +20,6 @@ layout(location = 0) in vec4 Position;
 layout(location = 1) in vec2 TexCoord;
 
 layout(location = 6) out vec2 vTexCoord;
-layout(location = 7) out vec2 UNFLIPPED_VIEWPORT_COORD;
 layout(location = 8) out vec3 BEZEL_FRAME_ORIGINAL_COLOR_RGB;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,14 +30,6 @@ void main()
 
 	UNFLIPPED_VIEWPORT_COORD = vTexCoord * 1.0001;
 
-	if (HSM_FLIP_VIEWPORT_VERTICAL > 0.5)
-		vTexCoord.y =  1 - vTexCoord.y;
-
-	if (HSM_FLIP_VIEWPORT_HORIZONTAL > 0.5)
-		vTexCoord.x =  1 - vTexCoord.x;
-
-	VIEWPORT_COORD = vTexCoord * 1.0001;
-
 	// Not sure why we need linearize this but it seems to have a smoother range this way
 	BEZEL_FRAME_ORIGINAL_COLOR_RGB = HSM_Linearize(vec4(HSM_HSVtoRGB(vec3(HSM_BZL_COLOR_HUE, HSM_BZL_COLOR_SATURATION, HSM_BZL_COLOR_VALUE)), 1), HSM_DEFAULT_SRGB_GAMMA).rgb;
 }
@@ -47,7 +38,6 @@ void main()
 #pragma stage fragment
 
 layout(location = 6) in vec2 vTexCoord;
-layout(location = 7) in vec2 UNFLIPPED_VIEWPORT_COORD;
 
 layout(location = 0) out vec4 FragColor;
 
@@ -72,8 +62,8 @@ layout(set = 0, binding = 5) uniform sampler2D CombinePassFeedback;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
 {
-	VIEWPORT_COORD = vTexCoord;
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, VIEWPORT_COORD);
+	UNFLIPPED_VIEWPORT_COORD = vTexCoord;
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, UNFLIPPED_VIEWPORT_COORD);
 
 	vec2 frame_outside_curved_coord = vec2(0.5, 0.5);
 	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
@@ -89,7 +79,7 @@ void main()
 	if (BEZEL_OUTSIDE_COORD.x < -0.01 || BEZEL_OUTSIDE_COORD.x > 1.01 || BEZEL_OUTSIDE_COORD.y < -0.01 || BEZEL_OUTSIDE_COORD.y > 1.01)
 	{
 		vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
-		if (HSM_LIVE_UPDATE_ON < 0.5 && feedback_color_test.a > 0.001)
+		if (HSM_LIVE_UPDATE_ON < 0.5 && feedback_color_test.a > 10)
 		{
 			FragColor = texture(PassFeedback, UNFLIPPED_VIEWPORT_COORD);
 			return;
@@ -97,8 +87,8 @@ void main()
 	}
 
 	vec4 out_color = texture(BR_LayersUnderCRTPass, vTexCoord);
-
 	vec4 crt_layer = texture(MiddlePass, vTexCoord);
+
 	vec4 reflection_layer = crt_layer;
 
 	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_SCREEN_CORNER_RADIUS;
@@ -132,7 +122,7 @@ void main()
 	FragColor = HSM_ApplyGamma(clamp(out_color, 0, 1), HSM_DEFAULT_SRGB_GAMMA);
 
 	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
-		FragColor = vec4(0.01, 0.01, 0.01, 10);
+		FragColor = vec4(0.01, 0.01, 0.01, 11);
 
 	return;
 }

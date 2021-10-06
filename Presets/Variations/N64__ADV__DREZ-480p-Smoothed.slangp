@@ -1,4 +1,4 @@
-#reference "../Base_CRT_Presets_DREZ/MBZ__2__STD__DREZ-480p__GDV.slangp"
+#reference "../Base_CRT_Presets_DREZ/MBZ__1__ADV__DREZ-480p__GDV.slangp"
 
 BackgroundImage = ../../shaders/HyperspaceMadness/textures/HSM_Duimon_Super_Famicom_3840x2160.png
 

@@ -48,8 +48,6 @@ Changes:
 Mega Bezel Still to Come:
 
 V1 TODO
-  * Update Guest Venom ADV to latest
-  * Test Mupen (& N64 preset) & Duckstation
   * Add Gamma for Device Image
   * Put Grade after afterglow, remove brighten black from afterglow
   * Add Negative-Crop size to chain for resolution debug
@@ -188,6 +186,8 @@ Moire
 Old Megabezel https://github.com/HyperspaceMadness/shaders_slang/tree/adf6dc3c0f09db11ebf4fbcf85098ac8232acfcc
 
 Retroarch Features
+  * Add "Timer" uniform variable vec4(total-count, count-since-shader-load, oscillator[1,0,1,0,1,...], [unknown/undefined])
+    * Unknown could be frames since direction change, good for rewind effect 
   * Shaders folder as a path token, e.g. "[shaders]/shaders_slang/"
   * Hide Parameters
   * Add Shader Preset - to add a shader preset to the beginning of the chain

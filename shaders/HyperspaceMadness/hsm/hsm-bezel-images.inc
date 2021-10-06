@@ -173,7 +173,7 @@ void main()
 	VIEWPORT_COORD = vTexCoord;
 
 	vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
-	if (HSM_LIVE_UPDATE_ON < 0.5 && feedback_color_test.a > 0.001)
+	if (HSM_LIVE_UPDATE_ON < 0.5 && feedback_color_test.a > 10)
 	{
 		FragColor = texture(PassFeedback, UNFLIPPED_VIEWPORT_COORD);
 		return;
@@ -910,7 +910,7 @@ void main()
 	FragColor = frag_color_linear;
 
 	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
-		FragColor = vec4(0.01, 0.01, 0.01, 10);
+		FragColor = vec4(0.01, 0.01, 0.01, 11);
 
 	//-----------------------------------------------------------------------------------------
 	// END OF MAIN IMAGE LAYERING
