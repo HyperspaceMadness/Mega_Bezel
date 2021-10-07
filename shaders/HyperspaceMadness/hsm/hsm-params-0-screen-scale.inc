@@ -361,6 +361,17 @@ float HSM_RENDER_SIMPLE_MODE = global.HSM_RENDER_SIMPLE_MODE;
 float HSM_CRT_SCREEN_BLEND_MODE = global.HSM_CRT_SCREEN_BLEND_MODE;
 
 
+#pragma parameter HSM_SCREEN_VIGNETTE_TITLE							"[ SCREEN VIGNETTE ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_SCREEN_VIGNETTE_ON                			"          Use Vignette" 1 0 1 1
+#define HSM_SCREEN_VIGNETTE_ON global.HSM_SCREEN_VIGNETTE_ON
+
+#pragma parameter HSM_SCREEN_VIGNETTE_STRENGTH                		"          Amount (Strength)" 40 0 98 2
+#define HSM_SCREEN_VIGNETTE_STRENGTH (1 - global.HSM_SCREEN_VIGNETTE_STRENGTH / 100) * 50
+
+#pragma parameter HSM_SCREEN_VIGNETTE_POWER                			"          Corner Amount (Power)" 26 0 200 2
+#define HSM_SCREEN_VIGNETTE_POWER global.HSM_SCREEN_VIGNETTE_POWER / 100
+
 
 #pragma parameter HSM_MONOCHROME_TITLE 								"[ MONOCHROME ]:" 0 0 0.01 0.01
 
@@ -375,18 +386,6 @@ float HSM_CRT_SCREEN_BLEND_MODE = global.HSM_CRT_SCREEN_BLEND_MODE;
 
 #pragma parameter HSM_MONOCHROME_SATURATION 						"          Monochrome Saturation" 100 -100 200 1
 #define HSM_MONOCHROME_SATURATION (global.HSM_MONOCHROME_SATURATION / 100)
-
-
-#pragma parameter HSM_SCREEN_VIGNETTE_TITLE							"[ SCREEN VIGNETTE ]:" 0 0 0.01 0.01
-
-#pragma parameter HSM_SCREEN_VIGNETTE_ON                			"          Use Vignette" 1 0 1 1
-#define HSM_SCREEN_VIGNETTE_ON global.HSM_SCREEN_VIGNETTE_ON
-
-#pragma parameter HSM_SCREEN_VIGNETTE_STRENGTH                		"          Amount (Strength)" 40 0 98 2
-#define HSM_SCREEN_VIGNETTE_STRENGTH (1 - global.HSM_SCREEN_VIGNETTE_STRENGTH / 100) * 50
-
-#pragma parameter HSM_SCREEN_VIGNETTE_POWER                			"          Corner Amount (Power)" 26 0 200 2
-#define HSM_SCREEN_VIGNETTE_POWER global.HSM_SCREEN_VIGNETTE_POWER / 100
 
 
 #pragma parameter HSM_REFLECTIONAPPEARANCE_TITLE					"[ REFLECTION TRANSFORM ]:" 0 0 0.01 0.01

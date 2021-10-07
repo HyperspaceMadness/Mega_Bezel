@@ -1564,6 +1564,9 @@ vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_CO
 	
 	out_color *= HSM_POST_CRT_BRIGHTNESS;
 
+	if (HSM_SCREEN_VIGNETTE_ON > 0.5)
+		out_color *= HSM_GetScreenVignetteFactor(screen_curved_coord);
+
 	float screen_mask = HSM_GetCornerMask((screen_curved_coord - 0.5) * 0.999 + 0.5, SCREEN_ASPECT, HSM_SCREEN_CORNER_RADIUS, 0.9);
 	out_color *= screen_mask;
 

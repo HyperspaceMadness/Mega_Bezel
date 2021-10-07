@@ -14,3 +14,4 @@
 #reference "Components/80__mbz__bezel-images.slangp"
 #reference "Components/85__mbz__combine-passes.slangp"
 #reference "Components/90__mbz__textures__all.slangp"
+#reference "Components/90__mbz__parameters__easymode.slangp"
