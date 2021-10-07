@@ -105,6 +105,9 @@ float HSM_BG_SATURATION = global.HSM_BG_SATURATION / 100;
 #pragma parameter HSM_BG_BRIGHTNESS                "          Brightness" 100 0 200 1
 float HSM_BG_BRIGHTNESS = global.HSM_BG_BRIGHTNESS / 100;
 
+#pragma parameter HSM_BG_GAMMA                     "          Gamma Adjust" 1 0 5 0.01
+float HSM_BG_GAMMA = global.HSM_BG_GAMMA;
+
 #pragma parameter HSM_BG_SOURCE_MATTE_TYPE        "          Source Matte Color - BLACK | WHITE | NONE"  0 0 2 1
 float HSM_BG_SOURCE_MATTE_TYPE = global.HSM_BG_SOURCE_MATTE_TYPE;
 
@@ -252,6 +255,9 @@ float HSM_DEVICE_SATURATION = global.HSM_DEVICE_SATURATION / 100;
 
 #pragma parameter HSM_DEVICE_BRIGHTNESS                "          Brightness" 100 0 200 1
 float HSM_DEVICE_BRIGHTNESS = global.HSM_DEVICE_BRIGHTNESS / 100;
+
+#pragma parameter HSM_DEVICE_GAMMA                     "          Gamma Adjust" 1 0 5 0.01
+float HSM_DEVICE_GAMMA = global.HSM_DEVICE_GAMMA;
 
 #pragma parameter HSM_DEVICE_BLEND_MODE                "          Blend Mode - OFF | NORMAL | ADD | MULTIPLY"  1 0 3 1
 float HSM_DEVICE_BLEND_MODE = global.HSM_DEVICE_BLEND_MODE;

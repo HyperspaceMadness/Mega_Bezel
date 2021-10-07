@@ -499,6 +499,9 @@ void main()
 		if (HSM_BG_COLORIZE_ON > 0.5 || HSM_BG_HUE != 0 || HSM_BG_SATURATION != 1 || HSM_BG_BRIGHTNESS != 1)
 			bg_image.rgb = HSM_ApplyHSVAdjustment(bg_image.rgb, HSM_BG_HUE, HSM_BG_SATURATION, HSM_BG_BRIGHTNESS, HSM_BG_COLORIZE_ON);
 		
+		if (HSM_BG_GAMMA != 1)
+			bg_image = HSM_ApplyGamma(bg_image, HSM_BG_GAMMA);
+
 		if (HSM_BG_APPLY_ADJUSTMENT == 1)
 			if (HSM_STATIC_LAYERS_GAMMA != 1)
 				bg_image = HSM_ApplyGamma(bg_image, HSM_STATIC_LAYERS_GAMMA);
@@ -537,7 +540,10 @@ void main()
 
 		// HSV Adjustments
 		// if (HSM_DEVICE_COLORIZE_ON == 1 || HSM_DEVICE_HUE != 0 || HSM_DEVICE_SATURATION != 1 || HSM_DEVICE_BRIGHTNESS != 1)
-			device_image.rgb = HSM_ApplyHSVAdjustment(device_image.rgb, HSM_DEVICE_HUE, HSM_DEVICE_SATURATION, HSM_DEVICE_BRIGHTNESS, HSM_DEVICE_COLORIZE_ON);
+		device_image.rgb = HSM_ApplyHSVAdjustment(device_image.rgb, HSM_DEVICE_HUE, HSM_DEVICE_SATURATION, HSM_DEVICE_BRIGHTNESS, HSM_DEVICE_COLORIZE_ON);
+
+		if (HSM_DEVICE_GAMMA != 1)
+			device_image = HSM_ApplyGamma(device_image, HSM_DEVICE_GAMMA);
 
 		if (HSM_STATIC_LAYERS_GAMMA != 1)
 			device_image = HSM_ApplyGamma(device_image, HSM_STATIC_LAYERS_GAMMA);

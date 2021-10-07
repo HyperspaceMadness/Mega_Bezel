@@ -48,7 +48,6 @@ Changes:
 Mega Bezel Still to Come:
 
 V1 TODO
-  * Add Gamma for Device Image
   * Put Grade after afterglow, remove brighten black from afterglow
   * Add Negative-Crop size to chain for resolution debug
   * Optimize GDV out of frame?, Potato & Other?

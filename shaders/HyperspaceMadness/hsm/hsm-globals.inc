@@ -256,6 +256,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float HSM_BG_COLORIZE_ON;
 	float HSM_BG_SATURATION;
 	float HSM_BG_BRIGHTNESS;
+float HSM_BG_GAMMA;
 	float HSM_BG_APPLY_ADJUSTMENT;
 	float HSM_BG_BLEND_MODE;
 	float HSM_BG_SOURCE_MATTE_TYPE;
@@ -308,6 +309,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float HSM_DEVICE_COLORIZE_ON;
 	float HSM_DEVICE_SATURATION;
 	float HSM_DEVICE_BRIGHTNESS;
+float HSM_DEVICE_GAMMA;
 	float HSM_DEVICE_BLEND_MODE;
 	float HSM_DEVICE_SOURCE_MATTE_TYPE;
 	float HSM_DEVICE_MASK_MODE;
