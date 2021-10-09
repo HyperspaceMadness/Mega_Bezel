@@ -4,7 +4,6 @@
 #reference "Components/10__mbz__info-cache.slangp"
 #reference "Components/10__mbz__intro__std.slangp"
 #reference "Components/35__fast-sharpen.slangp"
-#reference "Components/40__color-correct__grade.slangp"
 #reference "Components/59__mbz__crt__gdv-adv-prep-and-linearize.slangp"
 #reference "Components/60__mbz__crt__easymode.slangp"
 #reference "Components/61__mbz__crt__gdv-adv-deconvergence.slangp"

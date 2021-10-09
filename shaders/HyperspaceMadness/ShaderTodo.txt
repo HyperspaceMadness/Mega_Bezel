@@ -10,6 +10,7 @@ Changes:
   * Fixed ZFast Cropping
   * Put Vignette in Post-CRT pass, Turn off Grade Vignette by default
   * Updated Guest to crt-guest-advanced-2021-09-07-release1
+  * Put Grade after afterglow, remove brighten black from afterglow
 
   * BIG Changes to what each preset level does
     * ADV
@@ -48,7 +49,6 @@ Changes:
 Mega Bezel Still to Come:
 
 V1 TODO
-  * Put Grade after afterglow, remove brighten black from afterglow
   * Add Negative-Crop size to chain for resolution debug
   * Optimize GDV out of frame?, Potato & Other?
   * Check out 3D Cores
@@ -67,18 +67,16 @@ V1 TODO
   * Split Libraries, so minimum can be loaded
   * Do some more OrionsAngel Presets with new Mega_Bezel
 
-  * Black Edges should be driven by bezel not screen (Right now bezel overlaps the screen with no black line)
+  * Add Rewind Effect?
+  * Black Edges should be driven by bezel not screen? (Right now bezel overlaps the screen with no black line)
   * When in interlacing mode for vertical opposite mult should do something
   * Fix frame inner edge color not picking up HSV, (Advanced Preset?)
   * Fix bright area of screen showing outside the black line when bezel is hidden
   * Add Humbar in Post CRT
   Update Docs & add some notes about GDV & Grade
   * Rotate Dual Screen
-  * Debug Info showing Shader Type? Num Shaders x Num Flavors = ~20 files :(, Add text in extra pass
   * Adjust Black adjustment so it affects not just black, Falloff? Tweak Afterglow?
   * Modulate Range on top of Hue & Value?
-  * Raw Pixel Preset
-  * Raw Pixels Sampling Modes? Quillez Nearest Neighbor, etc
   * Add Crop Shift X & Y?
   * Viewport orientation Debug
   * Add Cutout to STANDARD Preset?

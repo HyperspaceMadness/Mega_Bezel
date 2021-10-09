@@ -124,6 +124,7 @@ layout(push_constant) uniform Push
 #pragma parameter g_lum                             "          Brightness"           0.0 -0.5 1.0 0.01
 #pragma parameter g_cntrst                          "          Contrast"             0.0 -1.0 1.0 0.05
 #pragma parameter g_mid                             "          Contrast Pivot"       0.5  0.0 1.0 0.01
+#pragma parameter g_lift                            "          Black Level"         0.0 -0.5 0.5 0.01
 
 #pragma parameter DG_VIGNETTE_TITLE                 "[ VIGNETTE ]:" 0 0 0 1
 #pragma parameter g_vignette                        "          Use Vignette"          0.0  0.0 1.0 1.0
@@ -140,7 +141,6 @@ layout(push_constant) uniform Push
 #pragma parameter g_satr                            "          Hue vs Sat Red"                 0.0 -1.0 1.0 0.01
 #pragma parameter g_satg                            "          Hue vs Sat Green"    0.0 -1.0 1.0 0.01
 #pragma parameter g_satb                            "          Hue vs Sat Blue"     0.0 -1.0 1.0 0.01
-#pragma parameter g_lift                            "          Black Level"         0.0 -0.5 0.5 0.01
 
 #pragma parameter DG_BLACKTINT_TITLE                "[ BLACK TINT ]:" 0 0 0 1
 #pragma parameter blr                             "          Black-Red Tint"       0.0  0.0 1.0 0.01

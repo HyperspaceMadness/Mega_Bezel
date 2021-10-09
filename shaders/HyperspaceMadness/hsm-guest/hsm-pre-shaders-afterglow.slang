@@ -47,7 +47,7 @@ layout(push_constant) uniform Push
 #pragma parameter sat         "          Afterglow Saturation  -- sat" 0.33 0.0 1.0 0.01
 #define sat params.sat
 
-#pragma parameter BP          "          Brighten Black (For Scanlines on Black) -- BP" 0.0 0.0 100.0 1.0
+// #pragma parameter BP          "          Brighten Black (For Scanlines on Black) -- BP" 0.0 0.0 100.0 1.0
 
 #pragma parameter bogus_color "[ COLOR TWEAKS ]:" 0.0 0.0 1.0 1.0
 
@@ -81,7 +81,7 @@ layout(push_constant) uniform Push
 
 #define WP params.WP
 #define wp_saturation params.wp_saturation
-#define BP params.BP
+#define BP 0
 
 layout(std140, set = 0, binding = 0) uniform UBO
 {

@@ -47,37 +47,38 @@ shader11 = ../../shaders/HyperspaceMadness/hsm-sgenpt-mix/hsm-sgenpt-mix.slang
 
 shader12 = ../../shaders/HyperspaceMadness/hsm-ps1dither/hsm-PS1-Undither-BoxBlur.slang
 
-// Color Correction with Dogway's awesome Grade shader
-shader13 = ../../shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
-
 // GTU TV Processing
-shader14 = ../../shaders/HyperspaceMadness/hsm-gtu/hsm-gtu-pass1.slang
-scale_type14 = source
-scale14 = 1.0
+shader13 = ../../shaders/HyperspaceMadness/hsm-gtu/hsm-gtu-pass1.slang
+scale_type13 = source
+scale13 = 1.0
+float_framebuffer13 = true
+
+shader14 = ../../shaders/HyperspaceMadness/hsm-gtu/hsm-gtu-pass2.slang
+scale_type_x14 = source
+scale_x14 = 1.0
+scale_type_y14 = source
+scale_y14 = 1.0
+filter_linear14 = false
 float_framebuffer14 = true
 
-shader15 = ../../shaders/HyperspaceMadness/hsm-gtu/hsm-gtu-pass2.slang
-scale_type_x15 = source
-scale_x15 = 1.0
-scale_type_y15 = source
-scale_y15 = 1.0
-filter_linear15 = false
-float_framebuffer15 = true
+shader15 = ../../../../stock.slang
+alias15 = "PreCRTPass"
 
-shader16 = ../../../../stock.slang
-alias16 = "PreCRTPass"
+shader16 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-afterglow0.slang
+filter_linear16 = false
+scale_type16 = source
+scale16 = 1.0
+alias16 = "AfterglowPass"
 
-shader17 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-afterglow0.slang
+shader17 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-pre-shaders-afterglow.slang
 filter_linear17 = false
 scale_type17 = source
+mipmap_input17 = true
 scale17 = 1.0
-alias17 = "AfterglowPass"
 
-shader18 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-pre-shaders-afterglow.slang
-filter_linear18 = false
-scale_type18 = source
-mipmap_input18 = true
-scale18 = 1.0
+// Color Correction with Dogway's awesome Grade shader
+// Grade is after Afterglow so that brightening the black level does not break the afterglow
+shader18 = ../../shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
 alias18 = "PrePass"
 
 shader19 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-avg-lum.slang
@@ -92,8 +93,8 @@ shader20 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-interlace-and-linearize
 filter_linear20 = true
 scale_type20 = source
 scale20 = 1.0
-alias20 = "LinearizePass"
 float_framebuffer20 = true
+alias20 = "LinearizePass"
 
 shader21 = ../../shaders/HyperspaceMadness/hsm/hsm-delinearize.slang
 

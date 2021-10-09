@@ -52,68 +52,69 @@ shader13 =  ../../shaders/HyperspaceMadness/hsm-guest/hsm-custom-fast-sharpen.sl
 filter_linear13 = false
 srgb_framebuffer13 = true
 
-// Color Correction with Dogway's awesome Grade shader
-shader14 = ../../shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
+shader14 = ../../../../stock.slang
+alias14 = refpass
 
-shader15 = ../../../../stock.slang
-alias15 = refpass
+shader15 = ../../shaders/HyperspaceMadness/hsm-scalefx/hsm-scalefx-pass0.slang
+filter_linear15 = false
+scale_type15 = source
+scale15 = 1.0
+float_framebuffer15 = true
+alias15 = scalefx_pass0
 
-shader16 = ../../shaders/HyperspaceMadness/hsm-scalefx/hsm-scalefx-pass0.slang
+shader16 = ../../shaders/HyperspaceMadness/hsm-scalefx/hsm-scalefx-pass1.slang
 filter_linear16 = false
 scale_type16 = source
 scale16 = 1.0
-float_framebuffer16 = true
-alias16 = scalefx_pass0
+float_framebuffer12 = true
 
-shader17 = ../../shaders/HyperspaceMadness/hsm-scalefx/hsm-scalefx-pass1.slang
+shader17 = ../../shaders/HyperspaceMadness/hsm-scalefx/hsm-scalefx-pass2.slang
 filter_linear17 = false
 scale_type17 = source
 scale17 = 1.0
-float_framebuffer12 = true
 
-shader18 = ../../shaders/HyperspaceMadness/hsm-scalefx/hsm-scalefx-pass2.slang
+shader18 = ../../shaders/HyperspaceMadness/hsm-scalefx/hsm-scalefx-pass3.slang
 filter_linear18 = false
 scale_type18 = source
 scale18 = 1.0
 
-shader19 = ../../shaders/HyperspaceMadness/hsm-scalefx/hsm-scalefx-pass3.slang
+shader19 = ../../shaders/HyperspaceMadness/hsm-scalefx/hsm-scalefx-pass4.slang
 filter_linear19 = false
 scale_type19 = source
-scale19 = 1.0
-
-shader20 = ../../shaders/HyperspaceMadness/hsm-scalefx/hsm-scalefx-pass4.slang
-filter_linear20 = false
-scale_type20 = source
-scale20 = 3
+scale19 = 3
 
 // GTU TV Processing
-shader21 = ../../shaders/HyperspaceMadness/hsm-gtu/hsm-gtu-pass1.slang
-scale_type21 = source
-scale21 = 1.0
+shader20 = ../../shaders/HyperspaceMadness/hsm-gtu/hsm-gtu-pass1.slang
+scale_type20 = source
+scale20 = 1.0
+float_framebuffer20 = true
+
+shader21 = ../../shaders/HyperspaceMadness/hsm-gtu/hsm-gtu-pass2.slang
+scale_type_x21 = source
+scale_x21 = 1.0
+scale_type_y21 = source
+scale_y21 = 1.0
+filter_linear21 = false
 float_framebuffer21 = true
 
-shader22 = ../../shaders/HyperspaceMadness/hsm-gtu/hsm-gtu-pass2.slang
-scale_type_x22 = source
-scale_x22 = 1.0
-scale_type_y22 = source
-scale_y22 = 1.0
-filter_linear22 = false
-float_framebuffer22 = true
+shader22 = ../../../../stock.slang
+alias22 = "PreCRTPass"
 
-shader23 = ../../../../stock.slang
-alias23 = "PreCRTPass"
+shader23 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-afterglow0.slang
+filter_linear23 = false
+scale_type23 = source
+scale23 = 1.0
+alias23 = "AfterglowPass"
 
-shader24 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-afterglow0.slang
+shader24 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-pre-shaders-afterglow.slang
 filter_linear24 = false
 scale_type24 = source
+mipmap_input24 = true
 scale24 = 1.0
-alias24 = "AfterglowPass"
 
-shader25 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-pre-shaders-afterglow.slang
-filter_linear25 = false
-scale_type25 = source
-mipmap_input25 = true
-scale25 = 1.0
+// Color Correction with Dogway's awesome Grade shader
+// Grade is after Afterglow so that brightening the black level does not break the afterglow
+shader25 = ../../shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
 alias25 = "PrePass"
 
 shader26 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-avg-lum.slang
@@ -128,8 +129,8 @@ shader27 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-interlace-and-linearize
 filter_linear27 = true
 scale_type27 = source
 scale27 = 1.0
-alias27 = "LinearizePass"
 float_framebuffer27 = true
+alias27 = "LinearizePass"
 
 shader28 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-gaussian_horizontal.slang
 filter_linear28 = true
