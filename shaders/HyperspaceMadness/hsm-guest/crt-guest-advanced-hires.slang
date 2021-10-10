@@ -164,14 +164,14 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter bogus_masks "[ CRT MASK OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-#pragma parameter shadowMask "          CRT Mask: 0:CGWG, 1-4:Lottes, 5-7:'Trinitron'" 0.0 -1.0 9.0 1.0
+#pragma parameter shadowMask "          CRT Mask: 0:CGWG, 1-4:Lottes, 5-9:'Trinitron'" 0.0 -1.0 11.0 1.0
 #define shadowMask   params.shadowMask     // Mask Style
 
-#pragma parameter maskstr "          Mask Strength (0, 5-8)" 0.3 -0.5 1.0 0.05
+#pragma parameter maskstr "          Mask Strength (0, 5-11)" 0.3 -0.5 1.0 0.05
 #define maskstr         params.maskstr      // maskstr Mask Strength
 
-#pragma parameter mcut "          Mask 5-7 Low Strength" 1.10 0.0 2.0 0.05
-#define mcut         params.mcut      // Mask 5-7 dark color strength
+#pragma parameter mcut "          Mask 5-9 Low Strength" 1.10 0.0 2.0 0.05
+#define mcut         params.mcut      // Mask 5-9 dark color strength
 
 #pragma parameter masksize "          CRT Mask Size (2.0 is nice in 4k)" 1.0 1.0 4.0 1.0
 #define masksize     params.masksize     // Mask Size
@@ -364,17 +364,19 @@ vec3 Mask(vec2 pos, float mx)
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
 	}
 	
-	// BW Trinitron mask 7
-	else if (shadowMask == 7.0)
+	// BW Trinitron mask 7 - 9
+	else if (shadowMask > 6.5 && shadowMask < 9.5)
 	{
+		float fdivid = 0.49; if (shadowMask == 9.0) fdivid = 0.70;
+		float mdivid = 2.00; if (shadowMask >  7.5) mdivid = 3.00;		
 		float maskTmp = clamp(mix( mix(1.0, 0.0, mcut), mix(1.0, 0.0, maskstr), mx), 0.0, 1.0) * dark_compensate;
 		mask = vec3(maskTmp);
-		pos.x = fract(pos.x/2.0);
-		if  (pos.x < 0.49) mask = vec3(1.0);
+		pos.x = fract(pos.x/mdivid);
+		if  (pos.x < fdivid) mask = vec3(1.0);
 	}    
 
 	// 4k mask
-	else if (shadowMask == 8.0)
+	else if (shadowMask == 10.0)
 	{
 		mask = vec3(mc);
 		pos.x = fract(pos.x * 0.25);

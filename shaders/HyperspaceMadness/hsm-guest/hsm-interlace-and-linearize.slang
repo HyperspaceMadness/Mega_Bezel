@@ -236,8 +236,8 @@ void main()
 			if (interm == 3.0) c = (1.0-0.5*iscan)*mix(c2, c1, ii);
 			intera = 0.0;
 		}
-		if (interm == 4.0) c = plant(mix(c, c*c, 0.5*iscans), max(max(c.r,c.g),c.b));
-		if (interm == 5.0) { c = mix(c2, c1, 0.5); c = plant(mix(c, c*c, 0.5*iscans), max(max(c.r,c.g),c.b));}
+		if (interm == 4.0) { c = plant(mix(c, c*c, 0.5*iscans), max(max(c.r,c.g),c.b)); intera = 0.45; }
+		if (interm == 5.0) { c = mix(c2, c1, 0.5); c = plant(mix(c, c*c, 0.5*iscans), max(max(c.r,c.g),c.b)); intera = 0.45; }
 	}
 	c = pow(c, vec3(gamma_in));
 	
