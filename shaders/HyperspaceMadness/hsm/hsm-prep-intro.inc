@@ -16,7 +16,7 @@ void main()
 #pragma stage fragment
 layout(location = 0) in vec2 VIEWPORT_COORD;
 layout(location = 0) out vec4 FragColor;
-layout(set = 0, binding = 2) uniform sampler2D DerezedPass;
+layout(set = 0, binding = 2) uniform sampler2D NegativeCropAddedPass;
 
 #ifndef IS_POTATO_PRESET
 layout(set = 0, binding = 3) uniform sampler2D OriginalHistory1;
@@ -38,16 +38,17 @@ vec4 AddText(vec2 in_coord, vec4 in_color)
    vec2 screen_scale = SCREEN_SCALE;
    vec2 screen_size = HSM_GetScreenSize(screen_scale);
    vec2 int_scale_mult = HSM_GetIntegerScaleMult(screen_size, SCREEN_INDEX);
-   vec2 original_size = HSM_GetRotatedScreenDerezedSize(SCREEN_INDEX);
-   vec2 cropped_original_size = HSM_GetCroppedRotatedDerezedSize(SCREEN_INDEX);
+   vec2 negative_crop_added_size = HSM_GetRotatedScreenNegativeCropAddedSize(SCREEN_INDEX);
+   vec2 derezed_size = HSM_GetRotatedScreenDerezedSize(SCREEN_INDEX);
+   vec2 cropped_original_size = HSM_GetCroppedRotatedNegativeCropAddedSize(SCREEN_INDEX);
    vec2 cropped_original_size_with_core_res_mult = CROPPED_ROTATED_ORIGINAL_SIZE_WITH_CORE_RES_MULT;
    
    vec4 out_color = in_color;
-   out_color = mix(out_color, vec4(0, 0, 0, 1), GetTextMask(in_coord + 2 * vec2(1/global.OutputSize.x, 0), global.FinalViewportSize.xy, screen_size, original_size, cropped_original_size, cropped_original_size_with_core_res_mult, int_scale_mult, global.OutputSize.xy));
-   out_color = mix(out_color, vec4(0, 0, 0, 1), GetTextMask(in_coord - 2 * vec2(1/global.OutputSize.x, 0), global.FinalViewportSize.xy, screen_size, original_size, cropped_original_size, cropped_original_size_with_core_res_mult, int_scale_mult, global.OutputSize.xy));
-   out_color = mix(out_color, vec4(0, 0, 0, 1), GetTextMask(in_coord + 1 * vec2(0, 1/global.OutputSize.y), global.FinalViewportSize.xy, screen_size, original_size, cropped_original_size, cropped_original_size_with_core_res_mult, int_scale_mult, global.OutputSize.xy));
-   out_color = mix(out_color, vec4(0, 0, 0, 1), GetTextMask(in_coord - 1 * vec2(0, 1/global.OutputSize.y), global.FinalViewportSize.xy, screen_size, original_size, cropped_original_size, cropped_original_size_with_core_res_mult, int_scale_mult, global.OutputSize.xy));
-   out_color = mix(out_color, vec4(1, 1, 0, 1), GetTextMask(in_coord,                                      global.FinalViewportSize.xy, screen_size, original_size, cropped_original_size, cropped_original_size_with_core_res_mult, int_scale_mult, global.OutputSize.xy));
+   out_color = mix(out_color, vec4(0, 0, 0, 1), GetTextMask(in_coord + 2 * vec2(1/global.OutputSize.x, 0), global.FinalViewportSize.xy, screen_size, derezed_size, negative_crop_added_size, cropped_original_size, cropped_original_size_with_core_res_mult, int_scale_mult, global.OutputSize.xy));
+   out_color = mix(out_color, vec4(0, 0, 0, 1), GetTextMask(in_coord - 2 * vec2(1/global.OutputSize.x, 0), global.FinalViewportSize.xy, screen_size, derezed_size, negative_crop_added_size, cropped_original_size, cropped_original_size_with_core_res_mult, int_scale_mult, global.OutputSize.xy));
+   out_color = mix(out_color, vec4(0, 0, 0, 1), GetTextMask(in_coord + 1 * vec2(0, 1/global.OutputSize.y), global.FinalViewportSize.xy, screen_size, derezed_size, negative_crop_added_size, cropped_original_size, cropped_original_size_with_core_res_mult, int_scale_mult, global.OutputSize.xy));
+   out_color = mix(out_color, vec4(0, 0, 0, 1), GetTextMask(in_coord - 1 * vec2(0, 1/global.OutputSize.y), global.FinalViewportSize.xy, screen_size, derezed_size, negative_crop_added_size, cropped_original_size, cropped_original_size_with_core_res_mult, int_scale_mult, global.OutputSize.xy));
+   out_color = mix(out_color, vec4(1, 1, 0, 1), GetTextMask(in_coord,                                      global.FinalViewportSize.xy, screen_size, derezed_size, negative_crop_added_size, cropped_original_size, cropped_original_size_with_core_res_mult, int_scale_mult, global.OutputSize.xy));
    return clamp(out_color, 0, 1);
 }
 
@@ -220,7 +221,7 @@ void main()
 	viewport_coord_adjusted.x = abs(HSM_FLIP_VIEWPORT_HORIZONTAL - HSM_FLIP_CORE_HORIZONTAL) * (1 - viewport_coord_adjusted.x) + (1 - abs(HSM_FLIP_VIEWPORT_HORIZONTAL - HSM_FLIP_CORE_HORIZONTAL)) * viewport_coord_adjusted.x;
 	viewport_coord_adjusted.y = abs(HSM_FLIP_VIEWPORT_VERTICAL - HSM_FLIP_CORE_VERTICAL) * (1 - viewport_coord_adjusted.y) + (1 - abs(HSM_FLIP_VIEWPORT_VERTICAL - HSM_FLIP_CORE_VERTICAL)) * viewport_coord_adjusted.y;
 
-   FragColor = texture(DerezedPass, viewport_coord_adjusted);
+   FragColor = texture(NegativeCropAddedPass, viewport_coord_adjusted);
 
 #ifndef IS_POTATO_PRESET
    if (HSM_ANTI_FLICKER_ON == 1)
@@ -249,6 +250,6 @@ void main()
    
    //////// Draw text to show out_colorolutions ////////// 
    if (HSM_RESOLUTION_DEBUG_ON == 1)
-      FragColor = AddText(viewport_coord_adjusted, FragColor);
+      FragColor = AddText(viewport_coord_adjusted - vec2(0.1, -0.1), FragColor);
 
 }

@@ -11,7 +11,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	vec4 OriginalSize;
 	vec4 OutputSize;
 	vec4 FinalViewportSize;
-	vec4 internal1Size;
+	vec4 NegativeCropAddedPassSize;
 	vec4 DerezedPassSize;
 	uint FrameCount;
 

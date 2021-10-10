@@ -7,3 +7,4 @@ srgb_framebuffer0 = true
 scale_type1 = source
 scale_x0 = 0.2
 scale_y0 = 0.2
+alias0 = "DerezedPass"
