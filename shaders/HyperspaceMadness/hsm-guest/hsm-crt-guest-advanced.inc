@@ -549,6 +549,8 @@ void main()
 	// HSM Added
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 
+// If it's the potato preset render the whole frame
+#ifndef IS_POTATO_PRESET
 	if (HSM_CACHE_OUTSIDE_FRAME > 0.5)
 	{
 		// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
@@ -569,6 +571,7 @@ void main()
 				return;
 		}
 	}
+#endif
 
 	float TATE = USE_VERTICAL_SCANLINES;
 
@@ -890,6 +893,11 @@ if (!interb)
 	
 	float smask = SlotMask(maskcoord, mx);	
 	cmask*= Mask(maskcoord, mx);
+
+	// HSM Added
+	// Outside the screen don't apply the mask because it causes color shifts when blurring
+	if (screen_curved_coord.x < -0.01 || screen_curved_coord.x > 1.01 || screen_curved_coord.y < -0.01 || screen_curved_coord.y > 1.01)
+		cmask = vec3(1.0);
 	
 	color = pow(color, vec3(mask_gamma/gamma_in));
 	color = color*cmask;
@@ -898,6 +906,7 @@ if (!interb)
 	color = pow(color, vec3(gamma_in/mask_gamma));
 
 	cmask = min(cmask*smask, 1.0);
+
 
 	if (interb) ctmp = color;
 	float colmx = pow( max( max(ctmp.r, ctmp.g), ctmp.b), 1.40/gamma_out);

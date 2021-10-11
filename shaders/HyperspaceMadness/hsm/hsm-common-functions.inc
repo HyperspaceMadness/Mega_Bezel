@@ -1587,11 +1587,21 @@ vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_CO
 	
 	out_color *= HSM_POST_CRT_BRIGHTNESS;
 
-	if (HSM_SCREEN_VIGNETTE_ON > 0.5)
-		out_color *= HSM_GetScreenVignetteFactor(screen_curved_coord);
-
+	vec2 mirrored_screen_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
 	float screen_mask = HSM_GetCornerMask((screen_curved_coord - 0.5) * 0.999 + 0.5, SCREEN_ASPECT, HSM_SCREEN_CORNER_RADIUS, 0.9);
-	out_color *= screen_mask;
+
+	if (HSM_SCREEN_VIGNETTE_ON > 0.5)
+	{
+		// out_color *= HSM_GetScreenVignetteFactor(screen_curved_coord);
+
+		float vignette_factor = HSM_GetScreenVignetteFactor(mirrored_screen_coord);
+
+		// float vignette_factor_outside_screen = HSM_SCREEN_VIGNETTE_IN_REFLECTION * vignette_factor + (1 - HSM_SCREEN_VIGNETTE_IN_REFLECTION) * 1;
+		if (HSM_SCREEN_VIGNETTE_IN_REFLECTION < 0.5)
+			vignette_factor = screen_mask * vignette_factor + (1 - screen_mask);
+
+		out_color *= vignette_factor;
+	}
 
 	if (HSM_BG_OPACITY > 0)
 	{
@@ -1631,8 +1641,20 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	vec4 out_color = HSM_Linearize(in_color_with_gamma, HSM_DEFAULT_SRGB_GAMMA);
 	out_color *= HSM_POST_CRT_BRIGHTNESS;
 
+	vec2 mirrored_screen_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
+	float screen_mask = HSM_GetCornerMask((screen_curved_coord - 0.5) * 0.999 + 0.5, SCREEN_ASPECT, HSM_SCREEN_CORNER_RADIUS, 0.9);
+
 	if (HSM_SCREEN_VIGNETTE_ON > 0.5)
-		out_color *= HSM_GetScreenVignetteFactor(screen_curved_coord);
+	{
+		// out_color *= HSM_GetScreenVignetteFactor(screen_curved_coord);
+
+		float vignette_factor = HSM_GetScreenVignetteFactor(mirrored_screen_coord);
+
+		float vignette_factor_outside_screen = HSM_SCREEN_VIGNETTE_IN_REFLECTION * vignette_factor + (1 - HSM_SCREEN_VIGNETTE_IN_REFLECTION) * 1;
+		vignette_factor = screen_mask * vignette_factor + (1 - screen_mask) * vignette_factor_outside_screen;
+
+		out_color *= vignette_factor;
+	}
 
 	vec4 night_lighting_image = HSM_GetNightLightingMultiplyColor( VIEWPORT_COORD, NightLightingImage );
 
@@ -1641,7 +1663,6 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 
 	// out_color *= screen_edge_mask;
 
-	vec2 mirrored_screen_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
 
 	if (HSM_CRT_ORIGINAL_AB_COMPARE_ON == 1)
 	{
@@ -1653,15 +1674,6 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 
 		out_color = mix(out_color, source_color, mirrored_screen_coord.x < HSM_CRT_ORIGINAL_AB_COMPARE_SPLIT_POSITION ? 1 : 0);
 	}
-
-/*
-	float vignette_factor = HSM_GetScreenVignetteFactor(mirrored_screen_coord, HSM_SCREEN_VIGNETTE);
-
-	float vignette_factor_outside_screen = HSM_SCREEN_VIGNETTE_IN_REFLECTION * vignette_factor + (1 - HSM_SCREEN_VIGNETTE_IN_REFLECTION) * 1;
-	vignette_factor = screen_mask * vignette_factor + (1 - screen_mask) * vignette_factor_outside_screen;
-
-	out_color *= vignette_factor;
-*/
 
 	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(SCREEN_COORD, 1, SCREEN_SCALE, TUBE_SCALE, SCREEN_ASPECT, 1);
 	vec2 mirrored_tube_coord = HSM_GetMirrorWrappedCoord(tube_curved_coord);

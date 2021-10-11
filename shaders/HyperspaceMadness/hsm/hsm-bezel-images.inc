@@ -173,7 +173,7 @@ void main()
 	VIEWPORT_COORD = vTexCoord;
 
 	vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
-	if (HSM_LIVE_UPDATE_ON < 0.5 && feedback_color_test.a > 10)
+	if (HSM_LIVE_UPDATE_ON < 0.5 && feedback_color_test.a < 0)
 	{
 		FragColor = texture(PassFeedback, UNFLIPPED_VIEWPORT_COORD);
 		return;
@@ -916,8 +916,23 @@ void main()
 
 	FragColor = frag_color_linear;
 
+	// // Add Flashing Dot which will appear when this is being generated
+	// float final_aspect = SCREEN_ASPECT;
+	// vec2 corner_offset = vec2(0.18, 0.2);
+	// vec2 center_coord = vec2(1 - corner_offset.x * final_aspect, 1 - corner_offset.y);
+	// vec2 test_coord = vec2(1 - (1 - VIEWPORT_COORD.x) * final_aspect, VIEWPORT_COORD.y);
+	// float distance =  length(test_coord - center_coord);
+
+	// if (distance < 0.04)
+	// {
+	// 	float modulation = clamp(0.4 + abs(mod(global.FrameCount, 10) / 10 - 0.5) * 1.2, 0, 1);
+	// 	modulation = HHLP_EasePowerInOut(modulation, 2);
+	// 	FragColor *= 1 - modulation;
+	// 	FragColor += modulation * vec4(1, 0, 0, 1);
+	// }
+
 	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
-		FragColor = vec4(0.01, 0.01, 0.01, 11);
+		FragColor = vec4(0.01, 0.01, 0.01, -1);
 
 	//-----------------------------------------------------------------------------------------
 	// END OF MAIN IMAGE LAYERING

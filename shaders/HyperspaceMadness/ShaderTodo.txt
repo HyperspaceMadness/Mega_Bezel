@@ -11,6 +11,7 @@ Changes:
   * Put Vignette in Post-CRT pass, Turn off Grade Vignette by default
   * Updated Guest to crt-guest-advanced-2021-09-07-release1
   * Put Grade after afterglow, remove brighten black from afterglow
+  * Added STD-GLASS preset
 
   * BIG Changes to what each preset level does
     * ADV
@@ -18,7 +19,7 @@ Changes:
       * Image Layering
       * Reflection
     * STD
-      * Minimal Pre-CRT Passes (Still includes Grade)
+      * Minimal Pre-CRT Passes (No ScaleFX Upscaling)
       * Image Layering
       * Reflection
     * STD-NO-REFLECT - (Closest Preset we had to this was BASIC)

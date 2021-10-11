@@ -16,8 +16,9 @@ float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
 #pragma parameter HSM_LIVE_UPDATE_ON								"          Live Update Graphic/Bezel: OFF | ON | ON NO INDICATOR" 0 0 2 1
 float HSM_LIVE_UPDATE_ON = global.HSM_LIVE_UPDATE_ON;
 
-#pragma parameter HSM_CACHE_OUTSIDE_FRAME							"          Cache Outside Frame: OFF | ON" 1 0 1 1
-float HSM_CACHE_OUTSIDE_FRAME = global.HSM_CACHE_OUTSIDE_FRAME;
+// #pragma parameter HSM_CACHE_OUTSIDE_FRAME							"          Cache Outside Frame: OFF | ON" 1 0 1 1
+// float HSM_CACHE_OUTSIDE_FRAME = global.HSM_CACHE_OUTSIDE_FRAME;
+float HSM_CACHE_OUTSIDE_FRAME = 1;
 
 // //---------------------------------------------------------------------------------------------------
 // //    Zoom & Pan
@@ -374,6 +375,9 @@ float HSM_CRT_SCREEN_BLEND_MODE = global.HSM_CRT_SCREEN_BLEND_MODE;
 
 #pragma parameter HSM_SCREEN_VIGNETTE_POWER                			"          Corner Amount (Power)" 26 0 200 2
 #define HSM_SCREEN_VIGNETTE_POWER global.HSM_SCREEN_VIGNETTE_POWER / 100
+
+#pragma parameter HSM_SCREEN_VIGNETTE_IN_REFLECTION                	"          Show Vignette in Reflection" 1 0 1 1
+#define HSM_SCREEN_VIGNETTE_IN_REFLECTION global.HSM_SCREEN_VIGNETTE_IN_REFLECTION
 
 
 #pragma parameter HSM_MONOCHROME_TITLE 								"[ MONOCHROME ]:" 0 0 0.01 0.01
