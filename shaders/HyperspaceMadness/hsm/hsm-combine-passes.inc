@@ -65,16 +65,17 @@ void main()
 	UNFLIPPED_VIEWPORT_COORD = vTexCoord;
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, UNFLIPPED_VIEWPORT_COORD);
 
-	vec2 frame_outside_curved_coord = vec2(0.5, 0.5);
+
 	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
 	HSM_GetBezelCoords(SCREEN_COORD, 
 						SCREEN_SCALE, 
 						TUBE_SCALE, 
-						SCREEN_ASPECT, 
+						SCREEN_ASPECT,
+						false, 
 						BEZEL_OUTSIDE_SCALE,
 						BEZEL_OUTSIDE_COORD, 
 						BEZEL_OUTSIDE_CURVED_COORD, 
-						frame_outside_curved_coord);
+						FRAME_OUTSIDE_CURVED_COORD);
 
 	if (BEZEL_OUTSIDE_COORD.x < -0.01 || BEZEL_OUTSIDE_COORD.x > 1.01 || BEZEL_OUTSIDE_COORD.y < -0.01 || BEZEL_OUTSIDE_COORD.y > 1.01)
 	{

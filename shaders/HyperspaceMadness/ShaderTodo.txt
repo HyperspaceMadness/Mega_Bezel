@@ -49,9 +49,6 @@ Changes:
 Mega Bezel Still to Come:
 
 V1 TODO
-  * Add Negative-Crop size to chain for resolution debug
-  * Optimize GDV out of frame?, Potato & Other?
-  * Check out 3D Cores
   * Good Preset for FBNeo & Instructions
   * Catch 320x480 as Horizontal Aspect
   * Add Death to Pixels

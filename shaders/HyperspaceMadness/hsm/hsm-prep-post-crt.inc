@@ -1,3 +1,6 @@
+#include "../hsm/hsm-params-2-bezel.inc"
+#include "../hsm/hsm-common-functions-bezel.inc"
+
 #pragma stage vertex
 
 layout(location = 0) in vec4 Position;
@@ -44,9 +47,31 @@ layout(set = 0, binding = 8) uniform sampler2D IntroPass;
 #endif
 
 
+
 void main()
 {
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+
+	// if (HSM_CACHE_OUTSIDE_FRAME > 0.5)
+	// {
+	// 	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
+	// 	HSM_GetBezelCoords(SCREEN_COORD, 
+	// 						SCREEN_SCALE, 
+	// 						TUBE_SCALE, 
+	// 						SCREEN_ASPECT, 
+	// 						false,
+	// 						BEZEL_OUTSIDE_SCALE,
+	// 						BEZEL_OUTSIDE_COORD, 
+	// 						BEZEL_OUTSIDE_CURVED_COORD, 
+	// 						FRAME_OUTSIDE_CURVED_COORD);
+
+	// 	FRAME_OUTSIDE_CURVED_COORD = (FRAME_OUTSIDE_CURVED_COORD - 0.5) * 0.9 + 0.5;
+	// 	if (FRAME_OUTSIDE_CURVED_COORD.x < -0.01 || FRAME_OUTSIDE_CURVED_COORD.x > 1.01 || FRAME_OUTSIDE_CURVED_COORD.y < -0.01 || FRAME_OUTSIDE_CURVED_COORD.y > 1.01)
+	// 	{
+	// 			FragColor = vec4(0);
+	// 			return;
+	// 	}
+	// }
 
 	vec2 screen_curved_coord = HSM_GetCurvedCoord(SCREEN_COORD, 1, SCREEN_ASPECT);
 

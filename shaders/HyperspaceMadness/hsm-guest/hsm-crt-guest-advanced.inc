@@ -21,6 +21,8 @@
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
    
 */
+#include "../hsm/hsm-params-2-bezel.inc"
+#include "../hsm/hsm-common-functions-bezel.inc"
 
 layout(push_constant) uniform Push
 {
@@ -546,6 +548,28 @@ void main()
 {
 	// HSM Added
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+
+	if (HSM_CACHE_OUTSIDE_FRAME > 0.5)
+	{
+		// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
+		HSM_GetBezelCoords(SCREEN_COORD, 
+							SCREEN_SCALE, 
+							TUBE_SCALE, 
+							SCREEN_ASPECT, 
+							false,
+							BEZEL_OUTSIDE_SCALE,
+							BEZEL_OUTSIDE_COORD, 
+							BEZEL_OUTSIDE_CURVED_COORD, 
+							FRAME_OUTSIDE_CURVED_COORD);
+
+		FRAME_OUTSIDE_CURVED_COORD = (FRAME_OUTSIDE_CURVED_COORD - 0.5) * 0.9 + 0.5;
+		if (FRAME_OUTSIDE_CURVED_COORD.x < -0.01 || FRAME_OUTSIDE_CURVED_COORD.x > 1.01 || FRAME_OUTSIDE_CURVED_COORD.y < -0.01 || FRAME_OUTSIDE_CURVED_COORD.y > 1.01)
+		{
+				FragColor = vec4(0);
+				return;
+		}
+	}
+
 	float TATE = USE_VERTICAL_SCANLINES;
 
 	/* HSM Removed

@@ -16,6 +16,9 @@ float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
 #pragma parameter HSM_LIVE_UPDATE_ON								"          Live Update Graphic/Bezel: OFF | ON | ON NO INDICATOR" 0 0 2 1
 float HSM_LIVE_UPDATE_ON = global.HSM_LIVE_UPDATE_ON;
 
+#pragma parameter HSM_CACHE_OUTSIDE_FRAME							"          Cache Outside Frame: OFF | ON" 1 0 1 1
+float HSM_CACHE_OUTSIDE_FRAME = global.HSM_CACHE_OUTSIDE_FRAME;
+
 // //---------------------------------------------------------------------------------------------------
 // //    Zoom & Pan
 // //---------------------------------------------------------------------------------------------------
@@ -511,6 +514,18 @@ float HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE = global.HSM_TUBE_STATIC_REFLECTION
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_BEZEL_GENERAL_TITLE							"[ BEZEL GENERAL ]:" 0 0 0.01 0.01 
 
+#pragma parameter HSM_BZL_OPACITY                       "          Opacity" 100 0 100 5
+float HSM_BZL_OPACITY = global.HSM_BZL_OPACITY / 100;
+
+#pragma parameter HSM_BZL_BLEND_MODE                    "          Blend Mode - Off | Normal | Add | Mult"  1 0 3 1
+float HSM_BZL_BLEND_MODE = global.HSM_BZL_BLEND_MODE;
+
+#pragma parameter HSM_BZL_WIDTH 						"          Width - Def 125" 125 -250 5000 1
+float HSM_BZL_WIDTH = global.HSM_BZL_WIDTH * 0.0008624;
+
+#pragma parameter HSM_BZL_HEIGHT 					    "          Height" 100 -250 5000 1
+float HSM_BZL_HEIGHT = global.HSM_BZL_HEIGHT * 0.0008732;
+
 #pragma parameter HSM_BZL_SCALE_OFFSET 								"          Scale Offset" 100 1 200 0.1
 #define HSM_BZL_SCALE_OFFSET global.HSM_BZL_SCALE_OFFSET / 100
 
@@ -519,6 +534,8 @@ float HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE = global.HSM_TUBE_STATIC_REFLECTION
 
 #pragma parameter HSM_BZL_INNER_CORNER_RADIUS_SCALE	    			"          Inner Corner Radius Scale - Def 50" 50 0 8000 1
 float HSM_BZL_INNER_CORNER_RADIUS_SCALE = global.HSM_BZL_INNER_CORNER_RADIUS_SCALE / 100;
+
+
 
 #ifndef HSM_FAKE_SCANLINE_RES
 	#define HSM_FAKE_SCANLINE_RES 240

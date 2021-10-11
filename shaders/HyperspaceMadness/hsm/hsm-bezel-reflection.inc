@@ -106,16 +106,17 @@ void main()
 	VIEWPORT_COORD = vTexCoord;
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, VIEWPORT_COORD);
 
-	vec2 frame_outside_curved_coord = vec2(0.5, 0.5);
+
 	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
 	HSM_GetBezelCoords(SCREEN_COORD, 
 						SCREEN_SCALE, 
 						TUBE_SCALE, 
 						SCREEN_ASPECT, 
+						true,
 						BEZEL_OUTSIDE_SCALE,
 						BEZEL_OUTSIDE_COORD, 
 						BEZEL_OUTSIDE_CURVED_COORD, 
-						frame_outside_curved_coord);
+						FRAME_OUTSIDE_CURVED_COORD);
 
 	if (BEZEL_OUTSIDE_COORD.x < -0.01 || BEZEL_OUTSIDE_COORD.x > 1.01 || BEZEL_OUTSIDE_COORD.y < -0.01 || BEZEL_OUTSIDE_COORD.y > 1.01)
 	{
@@ -252,7 +253,7 @@ void main()
 	crt_linear.rgb *= tube_edge_shadow_mult * (1 - outside_tube_mask_wider);
 	crt_linear.a = TUBE_MASK;
 
-	vec2 frame_outside_coord_ctr = frame_outside_curved_coord - 0.5;
+	vec2 frame_outside_coord_ctr = FRAME_OUTSIDE_CURVED_COORD - 0.5;
 	float SHADOW_OUTSIDE_FRAME_MASK = 1 - HSM_GetCornerMask(frame_outside_coord_ctr * 1.01 + 0.5, SCREEN_ASPECT, HSM_FRM_OUTER_CORNER_RADIUS, 1);
 	OUTSIDE_FRAME_MASK = 1 - HSM_GetCornerMask(frame_outside_coord_ctr + 0.5, SCREEN_ASPECT, HSM_FRM_OUTER_CORNER_RADIUS, 1);
 	OUTSIDE_FRAME_MASK_FOR_IMAGE = 1 - HSM_GetCornerMask(frame_outside_coord_ctr * 0.999 + 0.5, SCREEN_ASPECT, HSM_FRM_OUTER_CORNER_RADIUS, 1);

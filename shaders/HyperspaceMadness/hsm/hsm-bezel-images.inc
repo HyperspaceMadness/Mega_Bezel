@@ -233,22 +233,23 @@ void main()
 	// Get a coordinate offset so it is centered around the corner
 	vec2 outermap_coord_warped_ctr_at_screen_corner = abs(tube_curved_coord_ctr) - vec2(0.5);
 
-	vec2 frame_outside_curved_coord = vec2(0.5, 0.5);
+
 
 	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
 	HSM_GetBezelCoords(SCREEN_COORD, 
 						SCREEN_SCALE, 
 						TUBE_SCALE, 
 						SCREEN_ASPECT, 
+						true,
 						BEZEL_OUTSIDE_SCALE,
 						BEZEL_OUTSIDE_COORD, 
 						BEZEL_OUTSIDE_CURVED_COORD, 
-						frame_outside_curved_coord);
+						FRAME_OUTSIDE_CURVED_COORD);
 
 	OUTSIDE_BEZEL_MASK = 1 - HSM_GetCornerMask(BEZEL_OUTSIDE_CURVED_COORD, SCREEN_ASPECT, bezel_corner_radius * HSM_BZL_OUTER_CORNER_RADIUS_SCALE, 0.9);
 
 	// Get color for the frame area outside of the bezel
-	vec2 frame_outside_coord_ctr = frame_outside_curved_coord - 0.5;
+	vec2 frame_outside_coord_ctr = FRAME_OUTSIDE_CURVED_COORD - 0.5;
 	float SHADOW_OUTSIDE_FRAME_MASK = 1 - HSM_GetCornerMask(frame_outside_coord_ctr * 1.01 + 0.5, SCREEN_ASPECT, HSM_FRM_OUTER_CORNER_RADIUS, 1);
 	OUTSIDE_FRAME_MASK = 1 - HSM_GetCornerMask(frame_outside_coord_ctr + 0.5, SCREEN_ASPECT, HSM_FRM_OUTER_CORNER_RADIUS, 1);
 	OUTSIDE_FRAME_MASK_FOR_IMAGE = 1 - HSM_GetCornerMask(frame_outside_coord_ctr * 0.999 + 0.5, SCREEN_ASPECT, HSM_FRM_OUTER_CORNER_RADIUS, 1);
@@ -403,7 +404,7 @@ void main()
 
 	if (HSM_FRM_TEXTURE_OPACITY > 0)
 	{
-		vec4 frame_texture_color = HSM_Linearize(texture(FrameTextureImage, frame_outside_curved_coord), HSM_DEFAULT_SRGB_GAMMA);
+		vec4 frame_texture_color = HSM_Linearize(texture(FrameTextureImage, FRAME_OUTSIDE_CURVED_COORD), HSM_DEFAULT_SRGB_GAMMA);
 		frame_diffuse_color = HSM_BlendModeLayerMix(vec4(frame_diffuse_color, 1), frame_texture_color, HSM_FRM_TEXTURE_BLEND_MODE, HSM_FRM_TEXTURE_OPACITY).rgb;
 	}
 

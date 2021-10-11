@@ -6,18 +6,6 @@
 //---------------------------------------------------------------------------------------------------
 // #pragma parameter HSM_BZL_TITLE "-----[ GENERATED BEZEL & FRAME ]-------------------------------" 0 0 0 1
 
-#pragma parameter HSM_BZL_OPACITY                       "          Opacity" 100 0 100 5
-float HSM_BZL_OPACITY = global.HSM_BZL_OPACITY / 100;
-
-#pragma parameter HSM_BZL_BLEND_MODE                    "          Blend Mode - Off | Normal | Add | Mult"  1 0 3 1
-float HSM_BZL_BLEND_MODE = global.HSM_BZL_BLEND_MODE;
-
-#pragma parameter HSM_BZL_WIDTH 						"          Width - Def 125" 125 -250 5000 1
-float HSM_BZL_WIDTH = global.HSM_BZL_WIDTH * 0.0008624;
-
-#pragma parameter HSM_BZL_HEIGHT 					    "          Height" 100 -250 5000 1
-float HSM_BZL_HEIGHT = global.HSM_BZL_HEIGHT * 0.0008732;
-
 #pragma parameter HSM_BZL_INNER_EDGE_THICKNESS		    "          Inner Edge Thickness" 100 0 700 10
 float HSM_BZL_INNER_EDGE_THICKNESS = global.HSM_BZL_INNER_EDGE_THICKNESS  * 0.000112;
 
