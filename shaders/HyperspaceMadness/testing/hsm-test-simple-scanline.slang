@@ -49,7 +49,7 @@ layout(set = 0, binding = 2) uniform sampler2D Source;
 void main()
 {
     vec2 screen_coord = HSM_GetScreenVTexCoord(vTexCoord);
-    vec2 tex_size = HSM_GetCroppedRotatedOriginalSizeWithCoreResMult();
+    vec2 tex_size = HSM_GetCroppedRotatedSizeWithResMult();
 
     vec2 screen_curved_coord = HSM_GetCurvedCoord(screenCoord, 1);
     vec2 mirror_screen_curved_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);

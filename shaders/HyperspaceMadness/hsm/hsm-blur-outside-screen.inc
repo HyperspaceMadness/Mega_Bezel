@@ -25,7 +25,9 @@ layout(location = 0) out vec4 FragColor;
 
 layout(set = 0, binding = 2) uniform sampler2D Source;
 layout(set = 0, binding = 3) uniform sampler2D BR_MirrorLowResPass;
+
 layout(set = 0, binding = 4) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 5) uniform sampler2D InfoCachePassFeedback;
 
 float clamp_0_1(float in_value)
 {
@@ -36,7 +38,7 @@ void main()
 {
 	if (HSM_REFLECT_BLUR_NUM_SAMPLES > 0)
 	{
-		HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, VIEWPORT_COORD);
+		HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, VIEWPORT_COORD);
 
 		vec2 tube_curved_coord_ctr = HSM_GetTubeCurvedCoord(SCREEN_COORD, 1, SCREEN_SCALE, TUBE_SCALE, SCREEN_ASPECT, 1) - 0.5;
 

@@ -64,7 +64,7 @@ layout(push_constant) uniform Push
 //                                                                       //
 ///////////////////////////////////////////////////////////////////////////
 
-vec2 MY_CROPPED_ORIGINAL_SIZE = HSM_GetCroppedRotatedOriginalSizeWithCoreResMult();
+vec2 MY_CROPPED_ORIGINAL_SIZE = HSM_GetCroppedRotatedSizeWithResMult();
 float MY_SCREEN_ASPECT = HSM_GetScreenAspect();
 vec2 MY_SCREEN_SCALE = HSM_GetScreenScale(MY_SCREEN_ASPECT, 0.83);
 

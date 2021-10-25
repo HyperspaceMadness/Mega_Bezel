@@ -95,8 +95,10 @@ layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 
 layout(set = 0, binding = 2) uniform sampler2D InfoCachePass;
-layout(set = 0, binding = 3) uniform sampler2D accum1;
-layout(set = 0, binding = 4) uniform sampler2D blur2;
+layout(set = 0, binding = 3) uniform sampler2D InfoCachePassFeedback;
+
+layout(set = 0, binding = 4) uniform sampler2D accum1;
+layout(set = 0, binding = 5) uniform sampler2D blur2;
 
 vec3 tsample( sampler2D samp, vec2 tc, float offs, vec2 resolution )
     {
@@ -144,7 +146,7 @@ float rand(vec2 co)
 
 void main()
 {
-    HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+    HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
    // stop time variable so the screen doesn't wiggle
     float time = 1.0;
@@ -220,7 +222,7 @@ void main()
     // HSM Added
     vec2 mixed_uv_for_scanline = mix( curved_uv, uv, 0.4 );
     mixed_uv_for_scanline.y = 1 - mixed_uv_for_scanline.y;
-    float scans = clamp( 0.35 + 0.18 * sin(6.0 * time - mixed_uv_for_scanline.y * CROPPED_ROTATED_ORIGINAL_SIZE_WITH_CORE_RES_MULT.y * 8), 0.0, 1.0);
+    float scans = clamp( 0.35 + 0.18 * sin(6.0 * time - mixed_uv_for_scanline.y * CROPPED_ROTATED_SIZE_WITH_RES_MULT.y * 8), 0.0, 1.0);
 
     float s = pow(scans,0.9);
 

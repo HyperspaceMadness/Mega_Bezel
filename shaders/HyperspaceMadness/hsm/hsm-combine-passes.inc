@@ -12,6 +12,7 @@ License: GPL
 
 
 vec2 UNFLIPPED_VIEWPORT_COORD = vec2(0.5);
+vec2 FLIPPED_VIEWPORT_COORD = vec2(0.5);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma stage vertex
@@ -28,7 +29,7 @@ void main()
 	gl_Position = global.MVP * Position;
 	vTexCoord = TexCoord;
 
-	UNFLIPPED_VIEWPORT_COORD = vTexCoord * 1.0001;
+
 
 	// Not sure why we need linearize this but it seems to have a smoother range this way
 	BEZEL_FRAME_ORIGINAL_COLOR_RGB = HSM_Linearize(vec4(HSM_HSVtoRGB(vec3(HSM_BZL_COLOR_HUE, HSM_BZL_COLOR_SATURATION, HSM_BZL_COLOR_VALUE)), 1), HSM_DEFAULT_SRGB_GAMMA).rgb;
@@ -43,27 +44,37 @@ layout(location = 0) out vec4 FragColor;
 
 // Pass Framebuffer Textures
 layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
-layout(set = 0, binding = 2) uniform sampler2D BR_LayersUnderCRTPass;
+layout(set = 0, binding = 2) uniform sampler2D InfoCachePassFeedback;
+
+layout(set = 0, binding = 3) uniform sampler2D BR_LayersUnderCRTPass;
 
 #ifdef IS_NO_REFLECT_PRESET
-layout(set = 0, binding = 3) uniform sampler2D MBZ_PostCRTPass;
+layout(set = 0, binding = 4) uniform sampler2D MBZ_PostCRTPass;
 #define MiddlePass MBZ_PostCRTPass
 #else
-layout(set = 0, binding = 3) uniform sampler2D BR_CRTAndReflectionPass;
+layout(set = 0, binding = 4) uniform sampler2D BR_CRTAndReflectionPass;
 #define MiddlePass BR_CRTAndReflectionPass
 #endif
 
-layout(set = 0, binding = 4) uniform sampler2D BR_LayersOverCRTPass;
+layout(set = 0, binding = 5) uniform sampler2D BR_LayersOverCRTPass;
 
-layout(set = 0, binding = 5) uniform sampler2D CombinePassFeedback;
+layout(set = 0, binding = 6) uniform sampler2D CombinePassFeedback;
 #define PassFeedback CombinePassFeedback
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
 {
-	UNFLIPPED_VIEWPORT_COORD = vTexCoord;
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, UNFLIPPED_VIEWPORT_COORD);
+	UNFLIPPED_VIEWPORT_COORD = vTexCoord * 1.0001;
+	FLIPPED_VIEWPORT_COORD = UNFLIPPED_VIEWPORT_COORD;
+
+	if (HSM_FLIP_VIEWPORT_VERTICAL > 0.5)
+		FLIPPED_VIEWPORT_COORD.y =  1 - vTexCoord.y;
+
+	if (HSM_FLIP_VIEWPORT_HORIZONTAL > 0.5)
+		FLIPPED_VIEWPORT_COORD.x =  1 - vTexCoord.x;
+
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, FLIPPED_VIEWPORT_COORD);
 
 
 	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
@@ -80,7 +91,7 @@ void main()
 	if (BEZEL_OUTSIDE_COORD.x < -0.01 || BEZEL_OUTSIDE_COORD.x > 1.01 || BEZEL_OUTSIDE_COORD.y < -0.01 || BEZEL_OUTSIDE_COORD.y > 1.01)
 	{
 		vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
-		if (HSM_LIVE_UPDATE_ON < 0.5 && feedback_color_test.a < 0)
+		if (HSM_LIVE_UPDATE_ON < 0.5 && feedback_color_test.a < 0 && !HSM_CheckCacheInfoChanged())
 		{
 			FragColor = texture(PassFeedback, UNFLIPPED_VIEWPORT_COORD);
 			return;
@@ -111,6 +122,8 @@ void main()
 	else if (HSM_CRT_SCREEN_BLEND_MODE > 0.5)
 		out_color = HSM_PreMultAlphaBlend(out_color, crt_layer);
 
+
+
 #ifndef IS_NO_REFLECT_PRESET
 	float outside_tube_mask_smaller = 1 - HSM_GetCornerMask((tube_curved_coord - 0.5) * 1.01 + 0.5, SCREEN_ASPECT, bezel_corner_radius, 0.99);
 	reflection_layer *= 1 - TUBE_MASK_TRIM;
@@ -136,6 +149,9 @@ void main()
 	// 	FragColor *= 1 - modulation;
 	// 	FragColor += modulation * vec4(1, 0, 0, 1);
 	// }
+
+	// if (CORE_SIZE.x != CORE_FEEDBACK_SIZE.x)
+	// 	FragColor = vec4(FragColor.r + 0.2, FragColor.g, FragColor.b, 1);
 
 	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
 		FragColor = vec4(0.01, 0.01, 0.01, -1);

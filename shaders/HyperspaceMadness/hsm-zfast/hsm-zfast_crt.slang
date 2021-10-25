@@ -85,20 +85,22 @@ layout(location = 0) in vec2 vTexCoord;
 layout(location = 1) in float maskFade;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 1) uniform sampler2D Source;
+
 layout(set = 0, binding = 2) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 3) uniform sampler2D InfoCachePassFeedback;
 
 void main()
 {
     // HSM Added
-    HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+    HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 	
-	vec2 invDims = 1.0 / CROPPED_ROTATED_ORIGINAL_SIZE_WITH_CORE_RES_MULT;
+	vec2 invDims = 1.0 / CROPPED_ROTATED_SIZE_WITH_RES_MULT;
 
     vec2 screen_curved_coord = HSM_GetCurvedCoord(SCREEN_COORD, 1, SCREEN_ASPECT);
 	screen_curved_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
 
 	//This is just like "Quilez Scaling" but sharper
-	vec2 p = screen_curved_coord * CROPPED_ROTATED_ORIGINAL_SIZE_WITH_CORE_RES_MULT;
+	vec2 p = screen_curved_coord * CROPPED_ROTATED_SIZE_WITH_RES_MULT;
 	vec2 i = floor(p) + 0.50;
 	vec2 f = p - i;
 	p = (i + 4.0*f*f*f)*invDims;

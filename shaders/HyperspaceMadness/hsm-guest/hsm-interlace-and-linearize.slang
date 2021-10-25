@@ -107,8 +107,11 @@ void main()
 #pragma stage fragment
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
+
 layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
-layout(set = 0, binding = 2) uniform sampler2D PrePass;
+layout(set = 0, binding = 2) uniform sampler2D InfoCachePassFeedback;
+
+layout(set = 0, binding = 3) uniform sampler2D PrePass;
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
 
@@ -160,7 +163,7 @@ void main()
 	vec3  c2 = vec3(0);
 	
 	// HSM Added
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
 	use_vert_scanlines_bool = (USE_VERTICAL_SCANLINES > 0.5);
 
@@ -170,10 +173,10 @@ void main()
 		use_vert_scanlines_bool = !use_vert_scanlines_bool;
 	}
 
-	float orig_opposite_dir_res = use_vert_scanlines_bool ? ROTATED_RAW_ORIGINAL_SIZE.x : ROTATED_RAW_ORIGINAL_SIZE.y;
+	float orig_opposite_dir_res = use_vert_scanlines_bool ? ROTATED_CORE_PREPPED_SIZE.x : ROTATED_CORE_PREPPED_SIZE.y;
 	float scaled_opposite_dir_res = orig_opposite_dir_res * HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR;
 
-	float orig_scanline_dir_res = use_vert_scanlines_bool ? ROTATED_RAW_ORIGINAL_SIZE.y : ROTATED_RAW_ORIGINAL_SIZE.x;
+	float orig_scanline_dir_res = use_vert_scanlines_bool ? ROTATED_CORE_PREPPED_SIZE.y : ROTATED_CORE_PREPPED_SIZE.x;
 	float scaled_scanline_dir_res = orig_scanline_dir_res * HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR;
 
 	float tex_coord_scan_dir = use_vert_scanlines_bool ? vTexCoord.x : vTexCoord.y;

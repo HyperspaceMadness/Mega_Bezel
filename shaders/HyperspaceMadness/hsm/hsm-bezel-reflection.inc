@@ -80,9 +80,10 @@ layout(location = 0) out vec4 FragColor;
 
 // Pass Framebuffer Textures
 layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 2) uniform sampler2D InfoCachePassFeedback;
 
-layout(set = 0, binding = 2) uniform sampler2D BackgroundImage;
-layout(set = 0, binding = 3) uniform sampler2D ReflectionMaskImage;
+layout(set = 0, binding = 3) uniform sampler2D BackgroundImage;
+layout(set = 0, binding = 4) uniform sampler2D ReflectionMaskImage;
 
 // #ifndef IS_GLASS_PRESET
 // layout(set = 0, binding = 4) uniform sampler2D BR_LayersUnderCRTPass;
@@ -104,7 +105,7 @@ layout(set = 0, binding = 12) uniform sampler2D BR_CRTAndReflectionPassFeedback;
 void main()
 {
 	VIEWPORT_COORD = vTexCoord;
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, VIEWPORT_COORD);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, VIEWPORT_COORD);
 
 
 	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 

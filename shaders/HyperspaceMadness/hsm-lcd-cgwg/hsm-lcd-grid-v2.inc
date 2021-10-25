@@ -61,16 +61,18 @@ layout(location = 0) in vec2 vTexCoord;
 
 layout(set = 0, binding = 1) uniform sampler2D IntroPass;
 layout(set = 0, binding = 2) uniform sampler2D Source;
+
 layout(set = 0, binding = 3) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 4) uniform sampler2D InfoCachePassFeedback;
 
 layout(location = 0) out vec4 FragColor;
 
 vec3 fetch_offset(sampler2D in_sampler, vec2 coord, vec2 offset) 
 {
     offset = vec2(0);
-    vec2 texel_size = 1 / CROPPED_ROTATED_ORIGINAL_SIZE;
-    vec2 pixel_coord = SAMPLE_AREA_START_RAW_PIXEL_COORD + coord * CROPPED_ROTATED_ORIGINAL_SIZE + offset;
-    vec2 raw_coord = pixel_coord / ROTATED_RAW_ORIGINAL_SIZE;
+    vec2 texel_size = 1 / CROPPED_ROTATED_SIZE;
+    vec2 pixel_coord = SAMPLE_AREA_START_PIXEL_COORD + coord * CROPPED_ROTATED_SIZE + offset;
+    vec2 raw_coord = pixel_coord / ROTATED_CORE_PREPPED_SIZE;
 
 
     vec3 out_rgb = HSM_GetCroppedTexSample(in_sampler, coord + offset * texel_size).rgb;
@@ -106,11 +108,11 @@ float intsmear(float x, float dx, float d, float coeffs[7])
 void main()
 {
     // HSM Added
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
 	vec2 screen_curved_coord = HSM_GetCurvedCoord(SCREEN_COORD, 1, SCREEN_ASPECT);
     vec2 curved_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
-    vec2 texelSize = 1 / CROPPED_ROTATED_ORIGINAL_SIZE_WITH_CORE_RES_MULT;
+    vec2 texelSize = 1 / CROPPED_ROTATED_SIZE_WITH_RES_MULT;
     // End Addition
 
     vec2 range = global.OutputSize.zw / SCREEN_SCALE;

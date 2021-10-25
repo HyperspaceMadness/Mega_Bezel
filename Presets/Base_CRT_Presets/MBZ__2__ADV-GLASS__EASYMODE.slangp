@@ -1,6 +1,7 @@
 shaders = 40
 
 shader0 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-add-params-glass.slang
+alias0 = "CorePass"
 
 shader1 =  ../../../../stock.slang // ../../shaders/HyperspaceMadness/hsm-guest/g-sharp_resampler.slang
 filter_linear1 = false
@@ -17,7 +18,7 @@ srgb_framebuffer2 = true
 scale_type2 = source
 scale_x2 = 1.25
 scale_y2 = 1.25
-alias2 = "NegativeCropAddedPass"
+alias2 = "CorePreppedPass"
 
 shader3 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-info-cache.slang
 filter_linear3 = true

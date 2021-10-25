@@ -168,8 +168,11 @@ layout(location = 0) in vec2 vTexCoord;
 
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 1) uniform sampler2D Source;
+
 layout(set = 0, binding = 2) uniform sampler2D InfoCachePass;
-layout(set = 0, binding = 3) uniform sampler2D LinearizePass;
+layout(set = 0, binding = 3) uniform sampler2D InfoCachePassFeedback;
+
+layout(set = 0, binding = 4) uniform sampler2D LinearizePass;
 
 void main()
 {
@@ -179,8 +182,8 @@ void main()
 
     // TODO implement Cropping
     // HSM Added
-    HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
-    vec2 tex_size = CROPPED_ROTATED_ORIGINAL_SIZE_WITH_CORE_RES_MULT;
+    HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+    vec2 tex_size = CROPPED_ROTATED_SIZE_WITH_RES_MULT;
     // End Addition
 
     vec2 midpoint = vec2(0.5, 0.5);

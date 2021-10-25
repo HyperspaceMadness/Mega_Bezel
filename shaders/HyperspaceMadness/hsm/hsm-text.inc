@@ -436,7 +436,7 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
     col += GetChar(ch_spc, uv);
     col += print_integer(derezed_size.y,0, uv);
 
-    //NegativeCropAdded Resolution
+    //CorePrepped Resolution
     current_line_index -= 1;
     printPos = vec2(2, 2.0 + STRHEIGHT(current_line_index));
     
@@ -458,11 +458,11 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
     col += GetChar(ch_dsh, uv);
 
     col += GetChar(ch_spc, uv);
-    col += print_integer(ROTATED_RAW_ORIGINAL_SIZE.x,0, uv);
+    col += print_integer(ROTATED_CORE_PREPPED_SIZE.x,0, uv);
     col += GetChar(ch_spc, uv);
     col += GetChar(ch_x, uv);
     col += GetChar(ch_spc, uv);
-    col += print_integer(ROTATED_RAW_ORIGINAL_SIZE.y,0, uv);
+    col += print_integer(ROTATED_CORE_PREPPED_SIZE.y,0, uv);
 
     //Core Resolution Cropped
     current_line_index -= 1;

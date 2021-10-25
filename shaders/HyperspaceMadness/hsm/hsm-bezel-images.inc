@@ -146,24 +146,25 @@ layout(location = 0) out vec4 FragColor;
 
 // Pass Framebuffer Textures
 layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 2) uniform sampler2D InfoCachePassFeedback;
 
-layout(set = 0, binding = 2) uniform sampler2D BackgroundImage;
-layout(set = 0, binding = 3) uniform sampler2D BackgroundVertImage;
-layout(set = 0, binding = 4) uniform sampler2D NightLightingImage;
+layout(set = 0, binding = 3) uniform sampler2D BackgroundImage;
+layout(set = 0, binding = 4) uniform sampler2D BackgroundVertImage;
+layout(set = 0, binding = 5) uniform sampler2D NightLightingImage;
 
-layout(set = 0, binding = 5) uniform sampler2D LEDImage;
-layout(set = 0, binding = 6) uniform sampler2D FrameTextureImage;
-layout(set = 0, binding = 7) uniform sampler2D DeviceImage;
-layout(set = 0, binding = 8) uniform sampler2D DeviceVertImage;
-layout(set = 0, binding = 9) uniform sampler2D DecalImage;
-layout(set = 0, binding = 10) uniform sampler2D CabinetGlassImage;
-layout(set = 0, binding = 11) uniform sampler2D TopLayerImage;
+layout(set = 0, binding = 6) uniform sampler2D LEDImage;
+layout(set = 0, binding = 7) uniform sampler2D FrameTextureImage;
+layout(set = 0, binding = 8) uniform sampler2D DeviceImage;
+layout(set = 0, binding = 9) uniform sampler2D DeviceVertImage;
+layout(set = 0, binding = 10) uniform sampler2D DecalImage;
+layout(set = 0, binding = 11) uniform sampler2D CabinetGlassImage;
+layout(set = 0, binding = 12) uniform sampler2D TopLayerImage;
 
 #ifdef LAYERS_OVER_CRT
-layout(set = 0, binding = 12) uniform sampler2D BR_LayersOverCRTPassFeedback;
+layout(set = 0, binding = 13) uniform sampler2D BR_LayersOverCRTPassFeedback;
 #define PassFeedback BR_LayersOverCRTPassFeedback
 #else
-layout(set = 0, binding = 12) uniform sampler2D BR_LayersUnderCRTPassFeedback;
+layout(set = 0, binding = 13) uniform sampler2D BR_LayersUnderCRTPassFeedback;
 #define PassFeedback BR_LayersUnderCRTPassFeedback
 #endif
 
@@ -172,8 +173,10 @@ void main()
 {
 	VIEWPORT_COORD = vTexCoord;
 
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, VIEWPORT_COORD);
+
 	vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
-	if (HSM_LIVE_UPDATE_ON < 0.5 && feedback_color_test.a < 0)
+	if (HSM_LIVE_UPDATE_ON < 0.5 && feedback_color_test.a < 0 && !HSM_CheckCacheInfoChanged())
 	{
 		FragColor = texture(PassFeedback, UNFLIPPED_VIEWPORT_COORD);
 		return;
@@ -187,8 +190,6 @@ void main()
 	vec4 night_lighting_image = vec4(1);
 	if (HSM_NIGHT_OPACITY > 0)
 		night_lighting_image = HSM_GetNightLightingMultiplyColor( VIEWPORT_COORD, NightLightingImage );
-
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, VIEWPORT_COORD);
 
 	SCREEN_BLACK_EDGE_CURVED_COORD = HSM_GetCurvedCoord(SCREEN_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, SCREEN_ASPECT);
 
@@ -939,35 +940,3 @@ void main()
 	//-----------------------------------------------------------------------------------------
 	return;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

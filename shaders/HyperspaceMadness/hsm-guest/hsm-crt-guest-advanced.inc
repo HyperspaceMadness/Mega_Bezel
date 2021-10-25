@@ -269,10 +269,12 @@ layout(location = 0) out vec4 FragColor;
 
 // HSM Added
 layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
-layout(set = 0, binding = 2) uniform sampler2D LinearizePass;
-layout(set = 0, binding = 3) uniform sampler2D AvgLumPass;
-layout(set = 0, binding = 4) uniform sampler2D GlowPass;
-layout(set = 0, binding = 5) uniform sampler2D BloomPass;
+layout(set = 0, binding = 2) uniform sampler2D InfoCachePassFeedback;
+
+layout(set = 0, binding = 3) uniform sampler2D LinearizePass;
+layout(set = 0, binding = 4) uniform sampler2D AvgLumPass;
+layout(set = 0, binding = 5) uniform sampler2D GlowPass;
+layout(set = 0, binding = 6) uniform sampler2D BloomPass;
 
 /* HSM Removed - Seemingly only used for vignette
 layout(set = 0, binding = 11) uniform sampler2D PrePass;
@@ -547,7 +549,7 @@ vec3 plant (vec3 tar, float r)
 void main()
 {
 	// HSM Added
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
 // If it's the potato preset render the whole frame
 #ifndef IS_POTATO_PRESET
@@ -580,7 +582,7 @@ void main()
 	*/
 
 	// HSM Added
-	vec2 SourceSize = CROPPED_ROTATED_ORIGINAL_SIZE_WITH_CORE_RES_MULT;
+	vec2 SourceSize = CROPPED_ROTATED_SIZE_WITH_RES_MULT;
 	
 	float lum = COMPAT_TEXTURE(AvgLumPass, vec2(0.5,0.5)).a;
 	

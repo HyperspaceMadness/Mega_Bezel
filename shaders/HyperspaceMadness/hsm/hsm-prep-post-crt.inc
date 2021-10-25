@@ -31,26 +31,28 @@ layout(location = 7) in vec2 UNFLIPPED_VIEWPORT_COORD;
 layout(location = 0) out vec4 FragColor;
 
 layout(set = 0, binding = 1) uniform sampler2D Source;
+
 layout(set = 0, binding = 2) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 3) uniform sampler2D InfoCachePassFeedback;
 
 #ifndef IS_POTATO_PRESET
-layout(set = 0, binding = 3) uniform sampler2D ColoredGelImage;
-layout(set = 0, binding = 4) uniform sampler2D TubeStaticReflectionImage;
+layout(set = 0, binding = 4) uniform sampler2D ColoredGelImage;
+layout(set = 0, binding = 5) uniform sampler2D TubeStaticReflectionImage;
 #endif
 
-layout(set = 0, binding = 5) uniform sampler2D BackgroundImage;
-layout(set = 0, binding = 6) uniform sampler2D BackgroundVertImage;
+layout(set = 0, binding = 6) uniform sampler2D BackgroundImage;
+layout(set = 0, binding = 7) uniform sampler2D BackgroundVertImage;
 
 #ifndef IS_POTATO_PRESET
-layout(set = 0, binding = 7) uniform sampler2D NightLightingImage;
-layout(set = 0, binding = 8) uniform sampler2D IntroPass;
+layout(set = 0, binding = 8) uniform sampler2D NightLightingImage;
+layout(set = 0, binding = 9) uniform sampler2D IntroPass;
 #endif
 
 
 
 void main()
 {
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
 	// if (HSM_CACHE_OUTSIDE_FRAME > 0.5)
 	// {
