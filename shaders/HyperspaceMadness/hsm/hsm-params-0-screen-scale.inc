@@ -498,11 +498,14 @@ float HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE = global.HSM_TUBE_STATIC_REFLECTION
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_SCREEN_EDGE_TITLE								"[ SCREEN BLACK EDGE ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_SCREEN_CORNER_RADIUS 							"          Black Edge Corner Radius - Def 10" 10 4 500 2
+#pragma parameter HSM_SCREEN_CORNER_RADIUS 							"          Global Corner Radius - Def 10" 10 4 500 2
 #define HSM_SCREEN_CORNER_RADIUS global.HSM_SCREEN_CORNER_RADIUS
 
-#pragma parameter HSM_SCREEN_EDGE_SHARPNESS 						"          Black Edge Sharpness - Def 40" 40 0 90 1
-#define HSM_SCREEN_EDGE_SHARPNESS global.HSM_SCREEN_EDGE_SHARPNESS / 100
+#pragma parameter HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE 				"          Black Edge Corner Radius Scale" 100 100 8000 10
+#define HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE global.HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE / 100
+
+#pragma parameter HSM_TUBE_BLACK_EDGE_SHARPNESS 						"          Black Edge Sharpness - Def 40" 40 0 90 1
+#define HSM_TUBE_BLACK_EDGE_SHARPNESS global.HSM_TUBE_BLACK_EDGE_SHARPNESS / 100
 
 #pragma parameter HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE 				"          Black Edge Curvature Scale Multiplier" 100 100 8000 10
 #define HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE global.HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE / 100

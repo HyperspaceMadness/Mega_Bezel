@@ -13,6 +13,7 @@ Changes:
   * Put Grade after afterglow, remove brighten black from afterglow
   * Added STD-GLASS preset
   * Catch 320x480 as Horizontal Aspect
+  * Independent Black Edge Corner scaling
 
   * BIG Changes to what each preset level does
     * ADV
