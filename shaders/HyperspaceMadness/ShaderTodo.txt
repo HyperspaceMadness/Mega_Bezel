@@ -53,8 +53,8 @@ Mega Bezel Still to Come:
 
 V1 TODO
   
-  * Zoom Crop should go on top of the black crop
-  * Add option for core res fake scanlines
+  * The frame outer edge still has a faint line, so the masking could maybe be tweaked. (Or if it is a drop shadow issue maybe it needs a different method?)
+  * The Frame inner edge is still a static color and needs to respond to HSV.
   * Fix Color Tweaks, last option is out of range
   * Viewport Zoom & Position
   * Add option for Black and White placement image for briball
@@ -70,6 +70,7 @@ V1 TODO
   * Get Intro to play on shader Load?
   * Split Libraries, so minimum can be loaded
   * Do some more OrionsAngel Presets with new Mega_Bezel
+  * Add option for core res fake scanlines
 
   * Add Rewind Effect?
   * Black Edges should be driven by bezel not screen? (Right now bezel overlaps the screen with no black line)

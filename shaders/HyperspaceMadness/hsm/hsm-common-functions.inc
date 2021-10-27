@@ -496,10 +496,10 @@ void HSM_GetCroppedRotatedSizeAndPixelSampleAreaStart(float screen_index, sample
 	}
  
 	// Make sure we don't actually negatively crop
-	final_crop_top_px = clamp(final_crop_top_px, 0, 1000);
-	final_crop_bottom_px = clamp(final_crop_bottom_px, 0, 1000);
-	final_crop_left_px = clamp(final_crop_left_px, 0, 1000);
-	final_crop_right_px = clamp(final_crop_right_px, 0, 1000);
+	final_crop_top_px = clamp(final_crop_top_px, 0, 20000);
+	final_crop_bottom_px = clamp(final_crop_bottom_px, 0, 20000);
+	final_crop_left_px = clamp(final_crop_left_px, 0, 20000);
+	final_crop_right_px = clamp(final_crop_right_px, 0, 20000);
 
 	cropped_rotated_size = rotated_core_prepped_size - vec2(final_crop_left_px + final_crop_right_px, final_crop_top_px + final_crop_bottom_px);
 	cropped_sample_area_start = vec2(final_crop_left_px, final_crop_top_px);

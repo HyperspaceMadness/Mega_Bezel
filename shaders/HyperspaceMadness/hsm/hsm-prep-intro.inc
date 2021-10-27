@@ -225,10 +225,35 @@ vec4 GetColorWithIntro(vec4 in_color, vec2 in_coord)
 }
 #endif
 
+// vec4 GetCropOverlay(vec2 viewport_coord)
+// {
+//    vec4 out_color = vec4(0);
+//    vec4 screen_color = vec4(1, 0, 0, 1);
+   
+//    for (int i=1; i < 3; i++)
+//    {
+//       vec2 cropped_rotated_size = vec2(0);
+//       vec2 cropped_rotated_size_with_res_mult = vec2(0);
+//       vec2 cropped_sample_area_start_pixel_coord = vec2(0);
+//       HSM_GetCroppedRotatedSizeAndPixelSampleAreaStart(i, CorePreppedPass, cropped_rotated_size, cropped_rotated_size_with_res_mult, cropped_sample_area_start_pixel_coord);
+
+//       vec2 crop_scale = cropped_rotated_size / ROTATED_CORE_PREPPED_SIZE;
+//       vec2 mask_coord = viewport_coord - cropped_sample_area_start_pixel_coord / ROTATED_CORE_PREPPED_SIZE;
+//       mask_coord = mask_coord / crop_scale;
+      
+//       if (i == 2)
+//          screen_color = vec4(0, 1, 0, 1);
+
+//       out_color += screen_color * HSM_GetCornerMask(mask_coord, cropped_rotated_size.x/cropped_rotated_size.y, 0, 0.90);
+//    }
+
+//    return clamp(out_color, 0, 1);
+// }
+
 void main()
 {
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, VIEWPORT_COORD);
-   
+
 	// Flip the coordinate vertically if desired
    vec2 viewport_coord_adjusted = VIEWPORT_COORD;
 	viewport_coord_adjusted.x = abs(HSM_FLIP_VIEWPORT_HORIZONTAL - HSM_FLIP_CORE_HORIZONTAL) * (1 - viewport_coord_adjusted.x) + (1 - abs(HSM_FLIP_VIEWPORT_HORIZONTAL - HSM_FLIP_CORE_HORIZONTAL)) * viewport_coord_adjusted.x;
@@ -263,6 +288,10 @@ void main()
 		}
 	}
    
+   // vec4 overlay_color = GetCropOverlay(VIEWPORT_COORD);
+   // FragColor *= 1 - 0.7 * overlay_color.a;
+   // FragColor += 1 * 0.7 * overlay_color;
+
    //////// Draw text to show out_colorolutions ////////// 
    if (HSM_RESOLUTION_DEBUG_ON == 1)
       FragColor = AddText(viewport_coord_adjusted - vec2(0.1, -0.1), FragColor);
