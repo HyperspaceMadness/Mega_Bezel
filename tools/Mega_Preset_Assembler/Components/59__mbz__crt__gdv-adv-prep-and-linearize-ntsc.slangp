@@ -1,0 +1,75 @@
+shaders = 11
+
+shader0 = :/shaders/shaders_slang/stock.slang
+alias0 = "PreCRTPass"
+
+shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-afterglow0.slang
+filter_linear1 = true
+scale_type1 = source
+scale1 = 1.0
+alias1 = "AfterglowPass"
+
+shader2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-pre-shaders-afterglow.slang
+filter_linear2 = true
+scale_type2 = source
+mipmap_input2 = true
+scale2 = 1.0
+
+// Color Correction with Dogway's awesome Grade shader
+// Grade is after Afterglow so that brightening the black level does not break the afterglow
+shader3 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
+filter_linear3 = true
+scale_type3 = source
+scale3 = 1.0
+alias3 = "PrePass0"
+
+shader4 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/ntsc/hsm-ntsc-pass1.slang
+filter_linear4 = false
+scale_type_x4 = source
+scale_type_y4 = source
+scale_x4 = 4.0
+scale_y4 = 1.0
+frame_count_mod4 = 2
+float_framebuffer4 = true
+
+shader5 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/ntsc/hsm-ntsc-pass2.slang
+filter_linear5 = false
+scale_type5 = source
+scale_x5 = 0.5
+scale_y5 = 1.0
+
+shader6 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-custom-fast-sharpen.slang
+filter_linear6 = true
+scale_type6 = source
+scale_x6 = 1.0
+scale_y6 = 1.0
+alias6 = NtscPass
+
+shader7 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-convert-ntsc.slang
+filter_linear7 = true
+scale_type7 = source
+scale_x7 = 0.5
+scale_y7 = 1.0
+
+shader8 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/stock.slang
+filter_linear8 = true
+scale_type8 = source
+scale_x8 = 1.0
+scale_y8 = 1.0
+alias8 = PrePass 
+mipmap_input8 = true
+
+shader9 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-avg-lum.slang
+filter_linear9 = true
+scale_type9 = source
+scale9 = 1.0
+mipmap_input9 = true
+alias9 = "AvgLumPass"
+
+// Pass referenced by subsequent blurring passes and crt pass
+shader10 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-interlace-and-linearize.slang
+filter_linear10 = true
+scale_type10 = source
+scale10 = 1.0
+float_framebuffer10 = true
+alias10 = "LinearizePass"

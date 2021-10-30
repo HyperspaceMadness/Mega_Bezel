@@ -246,9 +246,19 @@ layout(set = 0, binding = 2) uniform sampler2D LinearizePass;
 layout(set = 0, binding = 3) uniform sampler2D AvgLumPass;
 layout(set = 0, binding = 4) uniform sampler2D GlowPass;
 layout(set = 0, binding = 5) uniform sampler2D BloomPass;
-layout(set = 0, binding = 6) uniform sampler2D PrePass;
 
+#ifdef IS_NTSC_PRESET
+layout(set = 0, binding = 7) uniform sampler2D NtscPass;
+#else
+layout(set = 0, binding = 6) uniform sampler2D PrePass0;
+layout(set = 0, binding = 6) uniform sampler2D PrePass;
+#endif
+
+#ifdef IS_NTSC_PRESET
+#define eps 1e-8
+#else
 #define eps 1e-10 
+#endif
 
 float st(float x)
 {
@@ -416,7 +426,19 @@ vec3 Mask(vec2 pos, float mx)
 
 float SlotMask(vec2 pos, float m)
 {
+#ifdef IS_NTSC_PRESET
+bool slot_mask_off = slotmask == 0.0;
+#else
+bool slot_mask_off = (slotmask + slotmask1) == 0.0;
+#endif
+
+/* HSM Removed
 	if ((slotmask + slotmask1) == 0.0) return 1.0;
+*/
+// HSM Added
+	if (slot_mask_off)
+		return 1.0;
+// End Addition
 	else
 	{
 	pos = floor(pos/slotms);

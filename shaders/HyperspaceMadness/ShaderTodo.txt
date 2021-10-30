@@ -14,6 +14,7 @@ Changes:
   * Added STD-GLASS preset
   * Catch 320x480 as Horizontal Aspect
   * Independent Black Edge Corner scaling
+  * Fix Color Tweaks, Display Gamut last option is now in range
 
   * BIG Changes to what each preset level does
     * ADV
@@ -53,9 +54,12 @@ Mega Bezel Still to Come:
 
 V1 TODO
   
+  * Fix Pink Mask Modes
+  * Add Color Control on all Layers
+  * Independent Inside/Outside Bezel
   * The frame outer edge still has a faint line, so the masking could maybe be tweaked. (Or if it is a drop shadow issue maybe it needs a different method?)
   * The Frame inner edge is still a static color and needs to respond to HSV.
-  * Fix Color Tweaks, last option is out of range
+  * Add Tube Color & Vignette (Should take night lighting)
   * Viewport Zoom & Position
   * Add option for Black and White placement image for briball
   * Good Preset for FBNeo & Instructions

@@ -1,7 +1,5 @@
-#version 450
-
 /*
-   CRT - Guest - Advanced - NTSC
+   CRT - Guest - Advanced
    
    Copyright (C) 2018-2021 guest(r) - guest.r@gmail.com
 
@@ -23,25 +21,26 @@
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
    
 */
+#include "../hsm/hsm-params-2-bezel.inc"
+#include "../hsm/hsm-common-functions-bezel.inc"
 
 layout(push_constant) uniform Push
 {
-	float TATE, IOS, OS, BLOOM, brightboost, brightboost1, gsl, scanline1, scanline2, beam_min, beam_max, beam_size,
-	h_sharp, s_sharp, csize, bsize, warpX, warpY, glow, shadowMask, masksize, vertmask,
-	slotmask, slotmask1, slotwidth, double_slot, mcut, maskDark, maskLight, maskstr, spike;
-} params;
-
-layout(std140, set = 0, binding = 0) uniform UBO
-{
-	mat4 MVP;
-	vec4 SourceSize;
-	vec4 OriginalSize;
-	vec4 OutputSize;
-	uint FrameCount;
+	float brightboost;
+	float brightboost1;
+	float glow;
+	float gsl;
+	float scanline1;
+	float scanline2;
+	float beam_min;
+	float beam_max;
+	float beam_size;
+    float h_sharp;
+	float s_sharp;
 	float bloom;
 	float halation;
 	float scans;
-	float scansub;
+	// float scansub;
 	float slotms;
 	float mclip;
 	float gamma_c;
@@ -49,74 +48,87 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float smart_ei;
 	float ei_limit;
 	float sth;
-	float gamma_out;
-	float overscanX;
-	float overscanY;
-	float intres;
-	float prescalex;
-	float c_shape;
-	float barspeed;
-	float barintensity;
-	float bardir;
-	float blendMode; 
-	float scangamma; 
-} global;
+	// float gamma_out;
+	// float overscanY;
+	// float intres;
+	// float prescalex;
+	// float c_shape;
+	float shadowMask;
+	float masksize;
+	float mcut;
+	float maskDark;
+	float maskLight;
+	float maskstr;
+	float vertmask;
+	float slotwidth;
+	float double_slot;
+	float spike;
 
+	// HSM Removed because over push constant limit
+	// float barspeed;
+	// float barintensity;
+	// float bardir;
+} params;
+
+
+// TODO need to add global variables
+	// float blendMode; 
+	// float scangamma; 
 
 #pragma parameter bogus_brightness "[ BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
 #pragma parameter blendMode "NTSC Blend Mode (Main Mode Control)" 1.0 0.0 2.0 1.0
 
-#pragma parameter glow "          Glow Strength" 0.08 -2.0 2.0 0.01
+#pragma parameter glow "          Strength -- glow" 0.08 -2.0 2.0 0.01
 #define glow         params.glow     // Glow Strength
 
-#pragma parameter bloom "          Bloom Strength" 0.0 0.0 2.0 0.05
-#define bloom         global.bloom     // bloom effect
+#pragma parameter bloom "          Bloom Strength -- bloom" 0.0 0.0 2.0 0.05
+#define bloom         params.bloom     // bloom effect
 
-#pragma parameter halation "          Halation Strength" 0.0 0.0 2.0 0.025
-#define halation         global.halation     // halation effect
+#pragma parameter halation "          Halation Strength -- halation" 0.0 0.0 2.0 0.025
+#define halation         params.halation     // halation effect
 
-#pragma parameter gamma_c "          Gamma correct" 1.0 0.50 2.0 0.02
-#define gamma_c   global.gamma_c     // adjust brightness
+#pragma parameter gamma_c "          Gamma Correct -- gamma_c" 1.0 0.50 2.0 0.02
+#define gamma_c   params.gamma_c     // adjust brightness
 
-#pragma parameter brightboost "          Bright Boost Dark Pixels" 1.25 0.25 10.0 0.05
+#pragma parameter brightboost "          Bright Boost Dark Pixels -- brightboost" 1.25 0.25 10.0 0.05
 #define brightboost  params.brightboost     // adjust brightness
 
-#pragma parameter brightboost1 "          Bright Boost Bright Pixels" 1.10 0.25 3.00 0.025
+#pragma parameter brightboost1 "          Bright Boost Bright Pixels -- brightboost1" 1.10 0.25 3.00 0.025
 #define brightboost1  params.brightboost1     // adjust brightness
 
 #pragma parameter bogus_scanline "[ SCANLINE OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-#pragma parameter gsl "          Scanline Type" 0.0 -1.0 2.0 1.0
+#pragma parameter gsl "          Scanline Type -- gsl" 0.0 -1.0 2.0 1.0
 #define gsl          params.gsl      // Alternate scanlines
 
-#pragma parameter scanline1 "          Scanline Beam Shape Center" 6.0 0.0 20.0 0.5
+#pragma parameter scanline1 "          Scanline Beam Shape Center -- scanline1" 6.0 0.0 20.0 0.5
 #define scanline1    params.scanline1      // scanline param, vertical sharpness
 
-#pragma parameter scanline2 "          Scanline Beam Shape Edges" 8.0 0.0 40.0 1.0 
+#pragma parameter scanline2 "          Scanline Beam Shape Edges -- scanline2" 8.0 0.0 40.0 1.0 
 #define scanline2    params.scanline2      // scanline param, vertical sharpness
 
-#pragma parameter beam_min "          Scanline Shape Dark Pixels" 1.30 0.25 3.5 0.05
+#pragma parameter beam_min "          Scanline Shape Dark Pixels -- beam_min" 1.30 0.25 3.5 0.05
 #define beam_min     params.beam_min     // dark area beam min - narrow
 
-#pragma parameter beam_max "          Scanline Shape Bright Pixels" 1.00 0.4 2.5 0.05
+#pragma parameter beam_max "          Scanline Shape Bright Pixels -- beam_max" 1.00 0.4 2.5 0.05
 #define beam_max     params.beam_max     // bright area beam max - wide
 
-#pragma parameter beam_size "          Increased Bright Scanline Beam" 0.60 0.0 1.0 0.05
+#pragma parameter beam_size "          Increased Bright Scanline Beam -- beam_size" 0.60 0.0 1.0 0.05
 #define beam_size    params.beam_size     // increased max. beam size
 
-#pragma parameter vertmask "          Scanline Color Deconvergence" 0.0 -1.0 1.0 0.1
+#pragma parameter vertmask "          Scanline Color Deconvergence -- vertmask" 0.0 -1.0 1.0 0.1
 #define vertmask     params.vertmask     // Scanline deconvergence colors
 
-#pragma parameter scans "          Scanline Saturation" 0.65 0.0 1.0 0.05
-#define scans        global.scans     // scanline saturation
+#pragma parameter scans "          Scanline Saturation -- scans" 0.65 0.0 1.0 0.05
+#define scans        params.scans     // scanline saturation
 
 // Scanline darken 'edges' effect - need to uncomment it.
 	
 // #pragma parameter scansub "          Scanline darken 'edges'" 0.0 0.0 0.30 0.005
-// #define scansub      global.scansub   // scanline substraction
+// #define scansub      params.scansub   // scanline substraction
 
-#pragma parameter spike "          Scanline Spike Removal" 0.7 0.0 2.0 0.10
+#pragma parameter spike "          Scanline Spike Removal -- spike" 0.7 0.0 2.0 0.10
 #define spike params.spike
 
 #pragma parameter scangamma "          Scanline Gamma" 2.40 0.5 5.0 0.05
@@ -124,79 +136,76 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter bogus_filtering "[ FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-#pragma parameter h_sharp "          Horizontal sharpness" 3.70 0.10 15.0 0.10
+#pragma parameter h_sharp "          Horizontal sharpness -- h_sharp" 3.70 0.10 15.0 0.10
 #define h_sharp      params.h_sharp     // pixel sharpness
 
-#pragma parameter s_sharp "          Substractive sharpness (1.0 recommended)" 0.20 0.0 1.5 0.10
+#pragma parameter s_sharp "          Substractive sharpness (1.0 recommended) -- s_sharp" 0.20 0.0 1.5 0.10
 #define s_sharp      params.s_sharp     // substractive sharpness
 
-#pragma parameter smart_ei "          Smart Edges Effect Strength" 0.0 0.0 0.75 0.01
-#define smart_ei      global.smart_ei     // smart edge handling
+#pragma parameter smart_ei "          Smart Edges Effect Strength -- smart_ei" 0.0 0.0 0.75 0.01
+#define smart_ei      params.smart_ei     // smart edge handling
 
-#pragma parameter ei_limit "          Smart Edges Effect Strength Limit" 0.25 0.0 0.75 0.01
-#define ei_limit      global.ei_limit     // smart edge handling
+#pragma parameter ei_limit "          Smart Edges Effect Strength Limit -- ei_limit" 0.25 0.0 0.75 0.01
+#define ei_limit      params.ei_limit     // smart edge handling
 
-#pragma parameter sth     "          Smart Edges Smoothing Threshold" 0.23 0.0 1.0 0.01
-#define sth        global.sth     // corner size
+#pragma parameter sth     "          Smart Edges Smoothing Threshold -- sth" 0.23 0.0 1.0 0.01
+#define sth        params.sth     // corner size
 
-#pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
+// #pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-#pragma parameter intres "          Internal Resolution Y: 224p/240p, 1.5...y-dowsample" 0.0 0.0 6.0 0.5 // Joint parameter with linearize pass, values must match
+// #pragma parameter intres "          Internal Resolution Y: 224p/240p, 1.5...y-dowsample" 0.0 0.0 6.0 0.5 // Joint parameter with linearize pass, values must match
 
-#pragma parameter TATE "          TATE Mode" 0.0 0.0 1.0 1.0
-#define TATE         params.TATE     // Screen orientation
+// #pragma parameter TATE "          TATE Mode" 0.0 0.0 1.0 1.0
+// #define TATE         params.TATE     // Screen orientation
 
-#pragma parameter IOS "          Integer Scaling: Odd:Y, Even:'X'+Y" 0.0 0.0 4.0 1.0
-#define IOS          params.IOS     // Smart Integer Scaling
+// #pragma parameter IOS "          Integer Scaling: Odd:Y, Even:'X'+Y" 0.0 0.0 4.0 1.0
+// #define IOS          params.IOS     // Smart Integer Scaling
 
-#pragma parameter OS "          R. Bloom Overscan Mode" 1.0 0.0 2.0 1.0
-#define OS           params.OS     // Do overscan
+// #pragma parameter OS "          R. Bloom Overscan Mode" 1.0 0.0 2.0 1.0
+// #define OS           params.OS     // Do overscan
 
-#pragma parameter BLOOM "          Raster bloom %" 0.0 0.0 20.0 1.0
-#define BLOOM        params.BLOOM     // Bloom overscan percentage
+// #pragma parameter BLOOM "          Raster bloom %" 0.0 0.0 20.0 1.0
+// #define BLOOM        params.BLOOM     // Bloom overscan percentage
 
-#pragma parameter csize "          Corner size" 0.0 0.0 0.25 0.01
-#define csize        params.csize     // corner size
+// #pragma parameter csize "          Corner size" 0.0 0.0 0.25 0.01
+// #define csize        params.csize     // corner size
 
-#pragma parameter bsize "          Border smoothness" 600.0 100.0 700.0 10.0
-#define bsize        params.bsize     // border smoothness
+// #pragma parameter bsize "          Border smoothness" 600.0 100.0 700.0 10.0
+// #define bsize        params.bsize     // border smoothness
 
-#pragma parameter barspeed "          Hum Bar Speed" 50.0 5.0 200.0 1.0
+// #pragma parameter barspeed "          Hum Bar Speed" 50.0 5.0 200.0 1.0
 
-#pragma parameter barintensity "          Hum Bar Intensity" 0.0 -1.0 1.0 0.01
+// #pragma parameter barintensity "          Hum Bar Intensity" 0.0 -1.0 1.0 0.01
 
-#pragma parameter bardir "          Hum Bar Direction" 0.0 0.0 1.0 1.0
+// #pragma parameter bardir "          Hum Bar Direction" 0.0 0.0 1.0 1.0
 
-#pragma parameter warpX "          CurvatureX (default 0.03)" 0.0 0.0 0.25 0.01
-#define warpX        params.warpX     // Curvature X
+// #pragma parameter warpX "          CurvatureX (default 0.03)" 0.0 0.0 0.25 0.01
+// #define warpX        params.warpX     // Curvature X
 
-#pragma parameter warpY "          CurvatureY (default 0.04)" 0.0 0.0 0.25 0.01
-#define warpY        params.warpY     // Curvature Y
+// #pragma parameter warpY "          CurvatureY (default 0.04)" 0.0 0.0 0.25 0.01
+// #define warpY        params.warpY     // Curvature Y
 
-#pragma parameter c_shape "          Curvature Shape" 0.25 0.05 0.60 0.05
-#define c_shape        global.c_shape     // curvature shape
+// #pragma parameter c_shape "          Curvature Shape" 0.25 0.05 0.60 0.05
+// #define c_shape        global.c_shape     // curvature shape
 
-#pragma parameter overscanX "          Overscan X original pixels" 0.0 -100.0 100.0 1.0
-#define overscanX        global.overscanX     // OverscanX pixels
+// #pragma parameter overscanY "          Overscan Y original pixels" 0.0 -50.0 50.0 1.0
+// #define overscanY        global.overscanY     // OverscanY pixels
 
-#pragma parameter overscanY "          Overscan Y original pixels" 0.0 -100.0 100.0 1.0
-#define overscanY        global.overscanY     // OverscanY pixels
-
-#pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader)" 1.0 1.0 4.0 1.0
-#define prescalex        global.prescalex     // prescale-x factor
+// #pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader)" 1.0 1.0 4.0 1.0
+// #define prescalex        global.prescalex     // prescale-x factor
 
 #pragma parameter bogus_masks "[ CRT MASK OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-#pragma parameter shadowMask "          CRT Mask: 0:CGWG, 1-4:Lottes, 5-9:'Trinitron'" 0.0 -1.0 11.0 1.0
+#pragma parameter shadowMask "     CRT Mask: -1:None|0:CGWG|1-4:Lottes|5-9:Trin -- shadowMask" 0.0 -1.0 11.0 1.0
 #define shadowMask   params.shadowMask     // Mask Style
 
-#pragma parameter maskstr "          Mask Strength (0, 5-11)" 0.3 -0.5 1.0 0.05
+#pragma parameter maskstr "          Mask Strength (0, 5-11) -- maskstr" 0.3 -0.5 1.0 0.05
 #define maskstr         params.maskstr      // CGWG Mask Strength
 
-#pragma parameter mcut "          Mask 5-9 Low Strength" 1.10 0.0 2.0 0.05
-#define mcut         params.mcut      // Mask 5-9 dark color strength
+#pragma parameter mcut "          Mask 5-9 Trinitron Low Strength -- mcut" 1.10 0.0 2.0 0.05
+#define mcut         params.mcut      // Mask 5-9 cutoff
 
-#pragma parameter masksize "          CRT Mask Size (2.0 is nice in 4k)" 1.0 1.0 4.0 1.0
+#pragma parameter masksize "          CRT Mask Size - 0:Auto | 2K | 4k -- masksize" 0 0 4 1
 #define masksize     params.masksize     // Mask Size
 
 #pragma parameter maskDark "          Lottes maskDark" 0.5 0.0 2.0 0.05
@@ -205,31 +214,42 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter maskLight "          Lottes maskLight" 1.5 0.0 2.0 0.05
 #define maskLight    params.maskLight     // Light "Phosphor"
 
-#pragma parameter mask_gamma "          Mask gamma" 2.40 1.0 5.0 0.025
-#define mask_gamma   global.mask_gamma     // Mask application gamma
+#pragma parameter mask_gamma "          Mask gamma -- mask_gamma" 2.40 1.0 5.0 0.025
+#define mask_gamma   params.mask_gamma     // Mask application gamma
 
-#pragma parameter slotmask "          Slot Mask Strength Bright Pixels" 0.0 0.0 1.0 0.05
-#define slotmask     params.slotmask
+#pragma parameter slotmask "          Slot Mask Strength Bright Pixels -- slotmask" 0.0 0.0 1.0 0.05
+#define slotmask     global.slotmask     // Slot Mask ON/OFF
 
-#pragma parameter slotmask1 "          Slot Mask Strength Dark Pixels" 0.0 0.0 1.0 0.05
-#define slotmask1     params.slotmask1
+#pragma parameter slotmask1 "          Slot Mask Strength Dark Pixels -- slotmask1" 0.0 0.0 1.0 0.05
+#define slotmask1     global.slotmask1
 
-#pragma parameter slotwidth "          Slot Mask Width" 2.0 1.0 6.0 0.5
+#pragma parameter slotwidth "          Slot Mask Width -- slotwidth" 2.0 1.0 6.0 0.5
 #define slotwidth    params.slotwidth     // Slot Mask Width
 
-#pragma parameter double_slot "          Slot Mask Height: 2x1 or 4x1" 1.0 1.0 2.0 1.0
+#pragma parameter double_slot "          Slot Mask Height: 2x1 or 4x1 -- double_slot" 1.0 1.0 2.0 1.0
 #define double_slot  params.double_slot     // Slot Mask Height
 
-#pragma parameter slotms "          Slot Mask Size" 1.0 1.0 4.0 1.0
-#define slotms  global.slotms     // Slot Mask Size
+#pragma parameter slotms "          Slot Mask Size - Auto | 2K | 4k -- slotms" 0 1 4 1
+#define slotms  params.slotms     // Slot Mask Size
 
-#pragma parameter mclip "          Keep Mask effect with clipping" 0.50 0.0 1.0 0.05
-#define mclip  global.mclip     // Slot Mask Size
+#pragma parameter mclip "          Keep Mask effect with clipping -- mclip" 0.50 0.0 1.0 0.05
+#define mclip  params.mclip     // Slot Mask Size
 
-#pragma parameter gamma_out "Gamma out" 2.0 1.0 5.0 0.05
-#define gamma_out    global.gamma_out     // output gamma
+// TODO NTSC Gamma was 2.0 add param value to preset
+// #pragma parameter gamma_out "Gamma out" 2.4 1.0 5.0 0.05
+#define gamma_out    HSM_GAMMA_OUT_CRT     // output gamma
 
-#define COMPAT_TEXTURE(c,d) texture(c,d)
+// #pragma parameter HSM_INTERLACE_EFFECT_SMOOTHNESS_INTERS "          Interlacing Effect Smoothness" 0.0 0.0 0.5 0.05 // Joint parameter with linearize pass, values must match
+#define inters  HSM_INTERLACE_EFFECT_SMOOTHNESS_INTERS     // interlacing effect smoothing
+
+/* HSM Removed
+ #define COMPAT_TEXTURE(c,d) texture(c,d)
+*/
+
+// HSM Added
+#define COMPAT_TEXTURE(c,d) HSM_GetCroppedTexSample(c,d)
+// End Addition
+
 #define TEX0 vTexCoord
 
 #define OutputSize global.OutputSize
@@ -244,6 +264,13 @@ void main()
 {
    gl_Position = global.MVP * Position;
    vTexCoord = TexCoord * 1.0001;
+   
+   // HSM Added
+	if (HSM_FLIP_VIEWPORT_VERTICAL == 1)
+		vTexCoord.y = 1 - vTexCoord.y;
+		
+	if (HSM_FLIP_VIEWPORT_HORIZONTAL > 0.5)
+		vTexCoord.x =  1 - vTexCoord.x;
 }
 
 #pragma stage fragment
@@ -253,14 +280,20 @@ layout(set = 0, binding = 2) uniform sampler2D LinearizePass;
 layout(set = 0, binding = 3) uniform sampler2D AvgLumPass;
 layout(set = 0, binding = 4) uniform sampler2D GlowPass;
 layout(set = 0, binding = 5) uniform sampler2D BloomPass;
+
+/* HSM Removed - Seemingly only used for vignette
+layout(set = 0, binding = 11) uniform sampler2D PrePass;
+*/
+
 layout(set = 0, binding = 6) uniform sampler2D PrePass0;
 layout(set = 0, binding = 7) uniform sampler2D NtscPass;
 
-#ifdef IS_NTSC_PRESET
+// HSM Added
+layout(set = 0, binding = 8) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 9) uniform sampler2D InfoCachePassFeedback;
+
+
 #define eps 1e-8
-#else
-#define eps 1e-10 
-#endif
 
 float st(float x)
 {
@@ -289,13 +322,26 @@ float sw2(float x, float color, float scanline)
 	tmp = mix(beam_max, tmp, pow(x, color+0.3));
 	float ex = x*tmp;
 	return exp2(-scanline*ex*ex);
-}  
+}   
 
 // Shadow mask (1-4 from PD CRT Lottes shader).
 
 vec3 Mask(vec2 pos, float mx)
 {
+	/* HSM Removed
 	pos = floor(pos/masksize);
+	*/
+
+	// HSM Added
+	float final_mask_size = masksize;
+	// If using automatic Mask Size
+	if (masksize < 0.5)
+	{
+		final_mask_size = (global.FinalViewportSize.x + global.FinalViewportSize.y) / 3 > 1900 ? 2 : 1;
+	}
+	pos = floor(pos/final_mask_size);
+	// End HSM Added
+
 	vec3 mask = vec3(maskDark, maskDark, maskDark);
 	vec3 one = vec3(1.0);
 	float dark_compensate  = mix(max( clamp( mix (mcut, maskstr, mx),0.0, 1.0) - 0.3, 0.0) + 1.0, 1.0, mx);
@@ -428,10 +474,22 @@ vec3 Mask(vec2 pos, float mx)
 
 float SlotMask(vec2 pos, float m)
 {
-	if (slotmask == 0.0) return 1.0;
+	if ((slotmask) == 0.0) return 1.0;
 	else
 	{
+	// HSM Added
+	float final_mask_size = slotms;
+	// If using automatic Mask Size
+	if (slotms < 0.5)
+	{
+		final_mask_size = (global.FinalViewportSize.x + global.FinalViewportSize.y) / 3 > 1900 ? 2 : 1;
+	}
+	pos = floor(pos/final_mask_size);
+	// End HSM Added
+
+	/* HSM Removed
 	pos = floor(pos/slotms);
+	*/
 	float mlen = slotwidth*2.0;
 	float px = fract(pos.x/mlen);
 	float py = floor(fract(pos.y/(2.0*double_slot))*2.0*double_slot);
@@ -444,6 +502,7 @@ float SlotMask(vec2 pos, float m)
 	}
 }   
  
+/* HSM Removed
 vec2 Warp(vec2 pos)
 {
 	pos  = pos*2.0-1.0;    
@@ -478,6 +537,7 @@ float corner(vec2 coord)
 	float dist = sqrt(dot(coord,coord));
 	return clamp((cdist.x-dist)*bsize,0.0, 1.0);
 }
+*/
 
 vec3 declip(vec3 c, float b)
 {
@@ -501,13 +561,51 @@ vec3 plant (vec3 tar, float r)
 
 void main()
 {
+	// HSM Added
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+
+// If it's the potato preset render the whole frame
+#ifndef IS_POTATO_PRESET
+	if (HSM_CACHE_OUTSIDE_FRAME > 0.5)
+	{
+		// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
+		HSM_GetBezelCoords(SCREEN_COORD, 
+							SCREEN_SCALE, 
+							TUBE_SCALE, 
+							SCREEN_ASPECT, 
+							false,
+							BEZEL_OUTSIDE_SCALE,
+							BEZEL_OUTSIDE_COORD, 
+							BEZEL_OUTSIDE_CURVED_COORD, 
+							FRAME_OUTSIDE_CURVED_COORD);
+
+		FRAME_OUTSIDE_CURVED_COORD = (FRAME_OUTSIDE_CURVED_COORD - 0.5) * 0.9 + 0.5;
+		if (FRAME_OUTSIDE_CURVED_COORD.x < -0.01 || FRAME_OUTSIDE_CURVED_COORD.x > 1.01 || FRAME_OUTSIDE_CURVED_COORD.y < -0.01 || FRAME_OUTSIDE_CURVED_COORD.y > 1.01)
+		{
+				FragColor = vec4(0);
+				return;
+		}
+	}
+#endif
+
+	float TATE = USE_VERTICAL_SCANLINES;
+
+	/* HSM Removed
 	vec4 SourceSize = global.OriginalSize * vec4(prescalex, 1.0, 1.0/prescalex, 1.0);
+	*/
+
+	// HSM Added
+	vec2 SourceSize = CROPPED_ROTATED_SIZE_WITH_RES_MULT;
 	
 	bool nmode1 = (global.blendMode == 1.0);
 	bool nmode2 = (global.blendMode >  1.5);
 	
+	/* HSM Removed
 	if (nmode2) SourceSize*= vec4(2.0, 1.0, 0.5, 1.0);
-	
+	*/
+
+	if (nmode2) SourceSize*= vec2(2.0, 1.0);
+
 	float lum = COMPAT_TEXTURE(AvgLumPass, vec2(0.5,0.5)).a;
 	
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
@@ -515,13 +613,17 @@ void main()
 	bool interb  = (intera < 0.5);
 	bool notate  = (TATE < 0.5);
 
+	if (USE_VERTICAL_SCANLINES > 0.5 && interb)
+		notate = true;
+
+	/* HSM Removed
 	float SourceY = mix(SourceSize.y, SourceSize.x, TATE);
 	float sy = 1.0;
 	if (global.intres == 0.5) sy = SourceY/224.0; else
 	if (global.intres == 1.0) sy = SourceY/240.0; else
 	if (global.intres > 1.25) sy = global.intres;
 	if (notate) SourceSize*=vec4(1.0, 1.0/sy, 1.0, sy); else SourceSize*=vec4(1.0/sy, 1.0, sy, 1.0);
-	
+
 	// Calculating texel coordinates
    
 	vec2 texcoord = TEX0.xy;
@@ -537,16 +639,27 @@ void main()
 	float factor  = 1.00 + (1.0-0.5*OS)*BLOOM/100.0 - lum*BLOOM/100.0;
 	texcoord  = Overscan(texcoord, factor, factor);
 
-	texcoord = Overscan(texcoord, (SourceSize.x - overscanX)/SourceSize.x, (SourceSize.y - overscanY)/SourceSize.y);
+	texcoord = Overscan(texcoord, 1.0, (SourceSize.y - overscanY)/SourceSize.y);
 
 	vec2 pos  = Warp(texcoord);
 	vec2 pos0 = Warp(TEX0.xy);
-   
-	bool smarte  = (smart_ei > 0.01 && notate); // smart edge interpolation on / off
+	*/
+
+	// HSM Added
+	vec2 screen_curved_coord = HSM_GetCurvedCoord(SCREEN_COORD, 1, SCREEN_ASPECT);
+	vec2 pos = HSM_GetMirrorWrappedCoord(screen_curved_coord);
+
+	bool smarte  = (smart_ei > 0.01); // smart edge interpolation on / off
 
 	vec2 coffset = vec2(0.5, 0.5);
 	
+	/* HSM Removed
 	vec2 ps = SourceSize.zw;
+	*/
+
+	// HSM Added
+	vec2 ps = 1 / SourceSize.xy;
+
 	vec2 OGL2Pos = pos * SourceSize.xy - coffset;
 	vec2 fp = fract(OGL2Pos);
 	
@@ -579,8 +692,18 @@ void main()
 	float zero = exp2(-h_sharp);
 	float sharp1 = s_sharp * zero;
 	
-	float fdivider = min(prescalex + 0.325*float(nmode2), 2.0);
+	/* HSM Removed
+	 float fdivider = min(prescalex, 2.0);
+	*/
 	
+	// HSM Added
+	float fdivider = min((1 - USE_VERTICAL_SCANLINES) * HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR + 
+			   				USE_VERTICAL_SCANLINES *  HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR
+							+ 0.325*float(nmode2), 
+			   				2.0);
+
+	// End Addition
+
 	float wl3 = (2.0 + fpx)/fdivider;
 	float wl2 = (1.0 + fpx)/fdivider;
 	float wl1 = (      fpx)/fdivider;
@@ -616,8 +739,9 @@ void main()
 		c1 = max(c1 - sth, 0.0);
 		c2 = max(c2 - sth, 0.0);
 	}
-	
-	vec3 cc, l3, l2, l1, r1, r2, r3, sl2, sl1, sr1, sr2, color1, color2, colmin, colmax;
+
+	vec3 l3, l2, l1, r1, r2, r3, sl2, sl1, sr1, sr2, color1, color2, colmin, colmax;
+	vec3 cc;
 
 if (nmode2)
 {
@@ -649,8 +773,9 @@ else
 		twl1 = max(wl1-pc, 0.01*wl1); twr1 = max(wr1-pc, 0.01*wr1);
 		twl2 = max(wl2-pl, 0.01*wl2); twr2 = max(wr2-pr, 0.01*wr2);
 	}
-	
+
 	color1 = (l3*twl3 + l2*twl2 + l1*twl1 + r1*twr1 + r2*twr2 + r3*twr3)/(twl3+twl2+twl1+twr1+twr2+twr3);
+
 	if (sharp) color1 = clamp(color1, colmin, colmax);
 	if (nmode1 && !interb) color1 = min(normalize (color1+eps) * length(sqrt(color1 * cc)) ,1.0);
 	
@@ -673,7 +798,7 @@ if (ntscbm)
 	float lm1 = max(max(l1.r,l1.g),l1.b);
 	float rm1 = max(max(r1.r,r1.g),r1.b);
 	float rm2 = max(max(r2.r,r2.g),r2.b);	
-
+	
 if (ntscbm)
 {	
 	lm2 = pow(lm2, gamma_in);
@@ -690,7 +815,7 @@ if (ntscbm)
 	float fscolor1 = (lm2*swl2 + lm1*swl1 + rm1*swr1 + rm2*swr2)/(swl2+swl1+swr1+swr2);
 	vec3 mcolor1 = vec3(fscolor1);	
 	vec3 scolor1 = vec3(clamp(mix(max(max(color1.r,color1.g),color1.b), fscolor1, spike), 0.0, 1.0));
-
+	
 	vec3 scolor2, mcolor2;
 	
 	if (!interb)
@@ -717,7 +842,6 @@ else
 	r3 = COMPAT_TEXTURE(LinearizePass, pC4 +offx+off2).rgb;
 	cc = pow(COMPAT_TEXTURE(NtscPass, pC5).rgb, gamma_in.xxx);	
 }
-
 	colmin = min(min(l1,r1), min(l2,r2));
 	colmax = max(max(l1,r1), max(l2,r2));
 	
@@ -729,8 +853,9 @@ else
 		twl1 = max(wl1-pc, 0.01*wl1); twr1 = max(wr1-pc, 0.01*wr1);
 		twl2 = max(wl2-pl, 0.01*wl2); twr2 = max(wr2-pr, 0.01*wr2);
 	}
-	
+
 	color2 = (l3*twl3 + l2*twl2 + l1*twl1 + r1*twr1 + r2*twr2 + r3*twr3)/(twl3+twl2+twl1+twr1+twr2+twr3);
+	
 	if (sharp) color2 = clamp(color2, colmin, colmax);
 	if (nmode1 && !interb) color2 = min(normalize (color2+eps) * length(sqrt(color2 * cc)) ,1.0);	
 	
@@ -862,6 +987,11 @@ if (!interb)
 	
 	float smask = SlotMask(maskcoord, mx);	
 	cmask*= Mask(maskcoord, mx);
+
+	// HSM Added
+	// Outside the screen don't apply the mask because it causes color shifts when blurring
+	if (screen_curved_coord.x < -0.01 || screen_curved_coord.x > 1.01 || screen_curved_coord.y < -0.01 || screen_curved_coord.y > 1.01)
+		cmask = vec3(1.0);
 	
 	color = pow(color, vec3(mask_gamma/gamma_in));
 	color = color*cmask;
@@ -870,6 +1000,7 @@ if (!interb)
 	color = pow(color, vec3(gamma_in/mask_gamma));
 
 	cmask = min(cmask*smask, 1.0);
+
 
 	if (interb) ctmp = color;
 	float colmx = pow( max( max(ctmp.r, ctmp.g), ctmp.b), 1.40/gamma_out);
@@ -880,7 +1011,10 @@ if (!interb)
 	vec3  Glow = COMPAT_TEXTURE(GlowPass, pos).rgb;
 	vec3  Bloom = COMPAT_TEXTURE(BloomPass, pos).rgb;
 	float maxb = COMPAT_TEXTURE(BloomPass, pos).a;
+
+	/* HSM Removed
 	float vig  = COMPAT_TEXTURE(PrePass0, clamp(pos, 0.0+0.5*global.OriginalSize.zw, 1.0-0.5*global.OriginalSize.zw)).a;
+	*/
 
 	vec3 Bloom1 = min(Bloom*(orig1+color), max(0.5*(colmx + orig1 - color),0.0));
 	color = color + bloom*Bloom1;
@@ -901,5 +1035,12 @@ if (!interb)
 	
 	color = pow(color, vec3(1.0/gamma_out));
 	
+	/* HSM Removed
 	FragColor = vec4(color*vig*humbar(mix(pos.y, pos.x, global.bardir)), corner(pos0));
+	*/
+
+	// HSM Added - Prep and add output gamma
+	// color = pow(color * humbar(mix(pos.y, pos.x, params.bardir)), vec3(1.0/HSM_GAMMA_OUT_CRT));
+	FragColor = vec4(color, 1);
+	// End Addition
 }

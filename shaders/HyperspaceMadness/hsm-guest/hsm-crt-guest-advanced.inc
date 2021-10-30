@@ -71,6 +71,8 @@ layout(push_constant) uniform Push
 } params;
 
 
+#pragma parameter blendMode         "          NTSC Blend Mode (Main Mode Control)" 1.0 0.0 2.0 1.0
+
 #pragma parameter bogus_brightness "[ BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
 #pragma parameter glow "          Strength -- glow" 0.08 -2.0 2.0 0.01
@@ -113,6 +115,9 @@ layout(push_constant) uniform Push
 
 #pragma parameter vertmask "          Scanline Color Deconvergence -- vertmask" 0.0 -1.0 1.0 0.1
 #define vertmask     params.vertmask     // Scanline deconvergence colors
+
+#pragma parameter scangamma "          Scanline Gamma" 2.40 0.5 5.0 0.05
+#define scangamma global.scangamma
 
 #pragma parameter scans "          Scanline Saturation -- scans" 0.60 0.0 1.0 0.05
 #define scans        params.scans     // scanline saturation
@@ -266,21 +271,30 @@ void main()
 #pragma stage fragment
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
-
-// HSM Added
-layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
-layout(set = 0, binding = 2) uniform sampler2D InfoCachePassFeedback;
-
-layout(set = 0, binding = 3) uniform sampler2D LinearizePass;
-layout(set = 0, binding = 4) uniform sampler2D AvgLumPass;
-layout(set = 0, binding = 5) uniform sampler2D GlowPass;
-layout(set = 0, binding = 6) uniform sampler2D BloomPass;
+layout(set = 0, binding = 2) uniform sampler2D LinearizePass;
+layout(set = 0, binding = 3) uniform sampler2D AvgLumPass;
+layout(set = 0, binding = 4) uniform sampler2D GlowPass;
+layout(set = 0, binding = 5) uniform sampler2D BloomPass;
 
 /* HSM Removed - Seemingly only used for vignette
 layout(set = 0, binding = 11) uniform sampler2D PrePass;
 */
 
+#ifdef IS_NTSC_PRESET
+layout(set = 0, binding = 6) uniform sampler2D PrePass0;
+layout(set = 0, binding = 7) uniform sampler2D NtscPass;
+#endif
+
+// HSM Added
+layout(set = 0, binding = 8) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 9) uniform sampler2D InfoCachePassFeedback;
+
+
+#ifdef IS_NTSC_PRESET
+#define eps 1e-8
+#else
 #define eps 1e-10 
+#endif
 
 float st(float x)
 {
@@ -461,7 +475,19 @@ vec3 Mask(vec2 pos, float mx)
 
 float SlotMask(vec2 pos, float m)
 {
+#ifdef IS_NTSC_PRESET
+bool slot_mask_off = slotmask == 0.0;
+#else
+bool slot_mask_off = (slotmask + slotmask1) == 0.0;
+#endif
+
+/* HSM Removed
 	if ((slotmask + slotmask1) == 0.0) return 1.0;
+*/
+// HSM Added
+	if (slot_mask_off)
+		return 1.0;
+// End Addition	
 	else
 	{
 	// HSM Added
@@ -551,6 +577,11 @@ void main()
 	// HSM Added
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
+	bool ntsc_processing_on = false;
+	#ifdef IS_NTSC
+		ntsc_processing_on = true;
+	#endif
+
 // If it's the potato preset render the whole frame
 #ifndef IS_POTATO_PRESET
 	if (HSM_CACHE_OUTSIDE_FRAME > 0.5)
@@ -584,6 +615,16 @@ void main()
 	// HSM Added
 	vec2 SourceSize = CROPPED_ROTATED_SIZE_WITH_RES_MULT;
 	
+	bool nmode1 = (ntsc_processing_on && global.blendMode == 1.0);
+	bool nmode2 = (ntsc_processing_on && global.blendMode >  1.5);
+
+	/* HSM Removed NTSC
+	if (nmode2) SourceSize*= vec4(2.0, 1.0, 0.5, 1.0);
+	*/
+
+	if (nmode2) 
+		SourceSize*= vec2(2.0, 1.0);
+		
 	float lum = COMPAT_TEXTURE(AvgLumPass, vec2(0.5,0.5)).a;
 	
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
@@ -662,7 +703,18 @@ void main()
 	float  f = (notate) ? fp.y : fp.x;
 	
 	vec2 pC4 = floor(OGL2Pos) * ps + 0.5*ps; 
-	
+
+	/* HSM Removed NTSC
+	vec2 pC5 = mix(vec2(pos.x, pC4.y), vec2(pC4.x, pos.y), float(!notate));
+	*/
+
+	// HSM Added - Only used in NTSC Processing
+	vec2 pC5 = vec2(0);
+
+	if (ntsc_processing_on)
+		pC5 = mix(vec2(pos.x, pC4.y), vec2(pC4.x, pos.y), float(!notate));
+	// End Addition
+
 	if (interb)  pC4.y = pos.y;
 	
 	float zero = exp2(-h_sharp);
@@ -673,10 +725,15 @@ void main()
 	*/
 	
 	// HSM Added
-	float fdivider = min((1 - USE_VERTICAL_SCANLINES) * HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR + 
-			   				USE_VERTICAL_SCANLINES *  HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR, 
-			   				2.0);
+	float opposite_dir_divide_add = 0;
 
+	if (ntsc_processing_on)
+		opposite_dir_divide_add = 0.325 * float(nmode2);
+
+	float fdivider = min((1 - USE_VERTICAL_SCANLINES) * HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR + 
+			   				USE_VERTICAL_SCANLINES *  HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR
+							+ opposite_dir_divide_add, 
+			   				2.0);
 	// End Addition
 
 	float wl3 = (2.0 + fpx)/fdivider;
@@ -696,10 +753,10 @@ void main()
 	float fp1 = 1.-fpx;
 
 	float twl3 = max(wl3 - sharp1, 0.0);
-	float twl2 = max(wl2 - sharp1, mix(-0.12, 0.0, 1.0-fp1*fp1)); float scl2 = max(twl2, 0.0);
+	float twl2 = max(wl2 - sharp1, mix(-0.12, 0.0, 1.0-fp1*fp1));
 	float twl1 = max(wl1 - sharp1, 0.0);
 	float twr1 = max(wr1 - sharp1, 0.0);
-	float twr2 = max(wr2 - sharp1, mix(-0.12, 0.0, 1.0-fpx*fpx)); float scr2 = max(twr2, 0.0);
+	float twr2 = max(wr2 - sharp1, mix(-0.12, 0.0, 1.0-fpx*fpx));
 	float twr3 = max(wr3 - sharp1, 0.0);
 	
 	bool sharp = (sharp1 > 0.0);
@@ -716,13 +773,66 @@ void main()
 	}
 
 	vec3 l3, l2, l1, r1, r2, r3, sl2, sl1, sr1, sr2, color1, color2, colmin, colmax;
+	// HSM Added NTSC
+	vec3 cc;
+	// End Addition
 
+	// HSM Added NTSC
+	if (nmode2)
+	{
+#ifdef IS_NTSC_PRESET 
+		l3 = pow(COMPAT_TEXTURE(NtscPass, pC4 -off2).rgb, gamma_in.xxx);
+		l2 = pow(COMPAT_TEXTURE(NtscPass, pC4 -offx).rgb, gamma_in.xxx);
+		l1 = pow(COMPAT_TEXTURE(NtscPass, pC4      ).rgb, gamma_in.xxx);
+		r1 = pow(COMPAT_TEXTURE(NtscPass, pC4 +offx).rgb, gamma_in.xxx);
+		r2 = pow(COMPAT_TEXTURE(NtscPass, pC4 +off2).rgb, gamma_in.xxx);
+		r3 = pow(COMPAT_TEXTURE(NtscPass, pC4 +offx+off2).rgb, gamma_in.xxx);
+#endif
+	}
+	else
+	{
+		l3 = COMPAT_TEXTURE(LinearizePass, pC4 -off2).rgb;
+		l2 = COMPAT_TEXTURE(LinearizePass, pC4 -offx).rgb;
+		l1 = COMPAT_TEXTURE(LinearizePass, pC4      ).rgb;
+		r1 = COMPAT_TEXTURE(LinearizePass, pC4 +offx).rgb;
+		r2 = COMPAT_TEXTURE(LinearizePass, pC4 +off2).rgb;
+		r3 = COMPAT_TEXTURE(LinearizePass, pC4 +offx+off2).rgb;
+#ifdef IS_NTSC_PRESET 
+		if (ntsc_processing_on)
+			cc = pow(COMPAT_TEXTURE(NtscPass, pC5).rgb, gamma_in.xxx);
+#endif
+	}
+
+	/* HSM Removed NTSC
+//if (nmode2)
+{
+	l3 = pow(COMPAT_TEXTURE(NtscPass, pC4 -off2).rgb, gamma_in.xxx);
+	l2 = pow(COMPAT_TEXTURE(NtscPass, pC4 -offx).rgb, gamma_in.xxx);
+	l1 = pow(COMPAT_TEXTURE(NtscPass, pC4      ).rgb, gamma_in.xxx);
+	r1 = pow(COMPAT_TEXTURE(NtscPass, pC4 +offx).rgb, gamma_in.xxx);
+	r2 = pow(COMPAT_TEXTURE(NtscPass, pC4 +off2).rgb, gamma_in.xxx);
+	r3 = pow(COMPAT_TEXTURE(NtscPass, pC4 +offx+off2).rgb, gamma_in.xxx);
+}
+else
+{
 	l3 = COMPAT_TEXTURE(LinearizePass, pC4 -off2).rgb;
 	l2 = COMPAT_TEXTURE(LinearizePass, pC4 -offx).rgb;
 	l1 = COMPAT_TEXTURE(LinearizePass, pC4      ).rgb;
 	r1 = COMPAT_TEXTURE(LinearizePass, pC4 +offx).rgb;
 	r2 = COMPAT_TEXTURE(LinearizePass, pC4 +off2).rgb;
 	r3 = COMPAT_TEXTURE(LinearizePass, pC4 +offx+off2).rgb;
+	cc = pow(COMPAT_TEXTURE(NtscPass, pC5).rgb, gamma_in.xxx);
+}
+*/
+
+/* HSM Removed default GDV
+	l3 = COMPAT_TEXTURE(LinearizePass, pC4 -off2).rgb;
+	l2 = COMPAT_TEXTURE(LinearizePass, pC4 -offx).rgb;
+	l1 = COMPAT_TEXTURE(LinearizePass, pC4      ).rgb;
+	r1 = COMPAT_TEXTURE(LinearizePass, pC4 +offx).rgb;
+	r2 = COMPAT_TEXTURE(LinearizePass, pC4 +off2).rgb;
+	r3 = COMPAT_TEXTURE(LinearizePass, pC4 +offx+off2).rgb;
+*/
 
 	colmin = min(min(l1,r1), min(l2,r2));
 	colmax = max(max(l1,r1), max(l2,r2));
@@ -739,13 +849,40 @@ void main()
 	color1 = (l3*twl3 + l2*twl2 + l1*twl1 + r1*twr1 + r2*twr2 + r3*twr3)/(twl3+twl2+twl1+twr1+twr2+twr3);
 
 	if (sharp) color1 = clamp(color1, colmin, colmax);
+	
+	if (nmode1 && !interb) 
+		color1 = min(normalize (color1+eps) * length(sqrt(color1 * cc)) ,1.0);
+
+	if (ntsc_processing_on)
+		color1 = pow(color1, vec3(scangamma/gamma_in));
+
 	float ts = 0.025;
 	vec3 luma = vec3(0.2126, 0.7152, 0.0722);
+	
+	bool ntscbm = ntsc_processing_on && (global.blendMode == 0.0);
+
+if (ntscbm)
+{
+#ifdef IS_NTSC_PRESET 
+	l2 = COMPAT_TEXTURE(PrePass0, pC4 -offx).rgb;
+	l1 = COMPAT_TEXTURE(PrePass0, pC4      ).rgb;
+	r1 = COMPAT_TEXTURE(PrePass0, pC4 +offx).rgb;
+	r2 = COMPAT_TEXTURE(PrePass0, pC4 +off2).rgb;
+#endif
+}
 	
 	float lm2 = max(max(l2.r,l2.g),l2.b);
 	float lm1 = max(max(l1.r,l1.g),l1.b);
 	float rm1 = max(max(r1.r,r1.g),r1.b);
 	float rm2 = max(max(r2.r,r2.g),r2.b);	
+
+if (ntscbm)
+{	
+	lm2 = pow(lm2, gamma_in);
+	lm1 = pow(lm1, gamma_in);
+	rm1 = pow(rm1, gamma_in);
+	rm2 = pow(rm2, gamma_in);
+}
 	
 	float swl2 = max(twl2, 0.0) * (dot(l2,luma) + ts);
 	float swl1 = twl1 * (dot(l1,luma) + ts);
@@ -761,13 +898,32 @@ void main()
 	if (!interb)
 {	
 	pC4+=offy;
+	pC5+=offy;
 	
+if (ntsc_processing_on && nmode2)
+{
+#ifdef IS_NTSC_PRESET 
+	l3 = pow(COMPAT_TEXTURE(NtscPass, pC4 -off2).rgb, gamma_in.xxx);
+	l2 = pow(COMPAT_TEXTURE(NtscPass, pC4 -offx).rgb, gamma_in.xxx);
+	l1 = pow(COMPAT_TEXTURE(NtscPass, pC4      ).rgb, gamma_in.xxx);
+	r1 = pow(COMPAT_TEXTURE(NtscPass, pC4 +offx).rgb, gamma_in.xxx);
+	r2 = pow(COMPAT_TEXTURE(NtscPass, pC4 +off2).rgb, gamma_in.xxx);
+	r3 = pow(COMPAT_TEXTURE(NtscPass, pC4 +offx+off2).rgb, gamma_in.xxx);
+#endif
+}
+else
+{
 	l3 = COMPAT_TEXTURE(LinearizePass, pC4 -off2).rgb;
 	l2 = COMPAT_TEXTURE(LinearizePass, pC4 -offx).rgb;
 	l1 = COMPAT_TEXTURE(LinearizePass, pC4      ).rgb;
 	r1 = COMPAT_TEXTURE(LinearizePass, pC4 +offx).rgb;
 	r2 = COMPAT_TEXTURE(LinearizePass, pC4 +off2).rgb;
 	r3 = COMPAT_TEXTURE(LinearizePass, pC4 +offx+off2).rgb;
+#ifdef IS_NTSC_PRESET 
+	if (ntsc_processing_on)
+		cc = pow(COMPAT_TEXTURE(NtscPass, pC5).rgb, gamma_in.xxx);	
+#endif
+}
 
 	colmin = min(min(l1,r1), min(l2,r2));
 	colmax = max(max(l1,r1), max(l2,r2));
@@ -785,11 +941,36 @@ void main()
 	
 	if (sharp) color2 = clamp(color2, colmin, colmax);
 
+	
+	if (nmode1 && !interb) 
+		color2 = min(normalize (color2+eps) * length(sqrt(color2 * cc)) ,1.0);	
+		
+	if (ntsc_processing_on)
+		color2 = pow(color2, vec3(scangamma/gamma_in));	
+
+	if (ntscbm)
+	{
+#ifdef IS_NTSC_PRESET 
+		l2 = COMPAT_TEXTURE(PrePass0, pC4 -offx).rgb;
+		l1 = COMPAT_TEXTURE(PrePass0, pC4      ).rgb;
+		r1 = COMPAT_TEXTURE(PrePass0, pC4 +offx).rgb;
+		r2 = COMPAT_TEXTURE(PrePass0, pC4 +off2).rgb;
+#endif
+	}
+
 	lm2 = max(max(l2.r,l2.g),l2.b);
 	lm1 = max(max(l1.r,l1.g),l1.b);
 	rm1 = max(max(r1.r,r1.g),r1.b);
 	rm2 = max(max(r2.r,r2.g),r2.b);
-	
+
+if (ntscbm)
+{
+	lm2 = pow(lm2, gamma_in);
+	lm1 = pow(lm1, gamma_in);
+	rm1 = pow(rm1, gamma_in);
+	rm2 = pow(rm2, gamma_in);
+}
+
 	swl2 = max(twl2, 0.0) * (dot(l2,luma) + ts);
 	swl1 = twl1 * (dot(l1,luma) + ts);
 	swr1 = twr1 * (dot(r1,luma) + ts);
@@ -819,8 +1000,11 @@ if (!interb)
 	
 	ctmp = color00/(wt1+wt2);
 	vec3 sctmp = scolor0/(wt1+wt2);
-	mcolor = clamp(mix(ctmp, mcolor, 1.25), 0.0, 1.0);
-	
+	if (!ntsc_processing_on)
+		mcolor = clamp(mix(ctmp, mcolor, 1.25), 0.0, 1.0);
+	else
+		mcolor = clamp(mix(ctmp, mcolor, 1.5), 0.0, 1.0);
+
 	float wf1, wf2;
 	
 	vec3 cref1 = mix(sctmp, scolor1, beam_size); float creff1 = max(max(cref1.r,cref1.g),cref1.b);
@@ -933,6 +1117,9 @@ if (!interb)
 	if (halation > 0.025) {
 		Bloom = mix(0.5*(Bloom + Bloom*Bloom), Bloom*Bloom, colmx);	
 		color = color + (1.1-0.25*colmx)*(0.75+maxb)*Bloom*(0.75 + 0.70*pow(colmx,0.33333))*mix(1.0,w3,0.5*colmx)*mix(one,cmask,0.35 + 0.4*maxb)*halation; }
+
+	if (ntsc_processing_on)
+		color = pow(color, vec3(gamma_in/scangamma));
 
 	Glow = mix(Glow, 0.25*color, 0.7*colmx);
 	if (glow >= 0.0) color = color + 0.5*Glow*glow; else { cmask*=cmask; cmask*=cmask; color = color + (-glow)*cmask*Glow; }
