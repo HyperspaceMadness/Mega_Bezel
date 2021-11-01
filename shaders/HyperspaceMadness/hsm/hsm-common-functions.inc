@@ -1089,7 +1089,7 @@ vec2 HSM_GetTubeCurvedCoord(vec2 screen_coord, float curvature_scale, vec2 scree
 	}
 	else
 	{
-		tube_curved_coord = HSM_GetCurvedCoord(screen_coord, curvature_scale * HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE * HSM_BZL_INNER_CURVATURE_SCALE, screen_aspect);
+		tube_curved_coord = HSM_GetCurvedCoord(screen_coord, curvature_scale * HSM_BZL_INNER_CURVATURE_SCALE, screen_aspect);
 	}
 	if (apply_black_edge_offset == 1)
 		tube_curved_coord = HSM_GetInverseScaledCoord(tube_curved_coord, black_edge_scale_offset);
@@ -1625,7 +1625,7 @@ float HSM_Get_Screen_Black_Edge_Mask(vec2 screen_coord, bool apply_to_mirror)
 		screen_coord = HSM_GetMirrorWrappedCoord(screen_coord);
 
 	SCREEN_BLACK_EDGE_CURVED_COORD = HSM_GetCurvedCoord(screen_coord, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, SCREEN_ASPECT);
-	SCREEN_MASK = HSM_GetCornerMask(((SCREEN_BLACK_EDGE_CURVED_COORD - 0.5) * 1.001) + 0.5, SCREEN_ASPECT, HSM_SCREEN_CORNER_RADIUS * HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE, HSM_TUBE_BLACK_EDGE_SHARPNESS);
+	SCREEN_MASK = HSM_GetCornerMask(((SCREEN_BLACK_EDGE_CURVED_COORD - 0.5) * 1.001) + 0.5, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS * HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE, HSM_TUBE_BLACK_EDGE_SHARPNESS);
 
 	return SCREEN_MASK;
 }
@@ -1638,7 +1638,7 @@ vec4 HSM_Get_Tube_Highlight(vec2 tube_curved_coord, bool apply_to_mirror, in sam
 	if (apply_to_mirror)
 		mirrored_tube_coord = HSM_GetMirrorWrappedCoord(tube_curved_coord);
 
-	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_SCREEN_CORNER_RADIUS;
+	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
 	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
 		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
 
@@ -1659,7 +1659,7 @@ vec4 HSM_Get_Tube_Highlight(vec2 tube_curved_coord, bool apply_to_mirror, in sam
 		vec4 tube_highlight_image = HSM_GetStoichaicBlurredSample(TubeStaticReflectionImage, tube_highlight_coord, HSM_TUBE_STATIC_REFLECTION_IMAGE_DITHERING_SAMPLES, blur_max_size, blur_amount);
 */
 		// Mask the very outer edge of the tube for a very small shadowing effect
-		float tube_highlight_mask = HSM_GetCornerMask((tube_curved_coord - 0.5) * 0.995 + 0.5 , SCREEN_ASPECT, HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_SCREEN_CORNER_RADIUS, 0.05);
+		float tube_highlight_mask = HSM_GetCornerMask((tube_curved_coord - 0.5) * 0.995 + 0.5 , SCREEN_ASPECT, HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS, 0.05);
 
 		vec4 tube_highlight_image = texture(TubeStaticReflectionImage, tube_highlight_coord);
 		tube_highlight_image = HSM_Linearize(tube_highlight_image, HSM_DEFAULT_SRGB_GAMMA) * tube_highlight_mask;
@@ -1680,7 +1680,7 @@ vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_CO
 	out_color *= HSM_POST_CRT_BRIGHTNESS;
 
 	vec2 mirrored_screen_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
-	float screen_mask = HSM_GetCornerMask((screen_curved_coord - 0.5) * 0.999 + 0.5, SCREEN_ASPECT, HSM_SCREEN_CORNER_RADIUS, 0.9);
+	float screen_mask = HSM_GetCornerMask((screen_curved_coord - 0.5) * 0.999 + 0.5, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS, 0.9);
 
 	if (HSM_SCREEN_VIGNETTE_ON > 0.5)
 	{
@@ -1734,7 +1734,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	out_color *= HSM_POST_CRT_BRIGHTNESS;
 
 	vec2 mirrored_screen_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
-	float screen_mask = HSM_GetCornerMask((screen_curved_coord - 0.5) * 0.999 + 0.5, SCREEN_ASPECT, HSM_SCREEN_CORNER_RADIUS, 0.9);
+	float screen_mask = HSM_GetCornerMask((screen_curved_coord - 0.5) * 0.999 + 0.5, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS, 0.9);
 
 	if (HSM_SCREEN_VIGNETTE_ON > 0.5)
 	{
@@ -1750,7 +1750,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 
 	vec4 night_lighting_image = HSM_GetNightLightingMultiplyColor( VIEWPORT_COORD, NightLightingImage );
 
-	// float screen_edge_mask = HSM_GetCornerMask(screen_curved_coord, SCREEN_ASPECT, HSM_SCREEN_CORNER_RADIUS, HSM_TUBE_BLACK_EDGE_SHARPNESS);
+	// float screen_edge_mask = HSM_GetCornerMask(screen_curved_coord, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS, HSM_TUBE_BLACK_EDGE_SHARPNESS);
 	// screen_edge_mask = 1 - ((1 - screen_edge_mask) * screen_mask);
 
 	// out_color *= screen_edge_mask;
@@ -1778,7 +1778,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 		out_color = mix(out_color, out_color * 0.9, HSM_FAKE_SCANLINE_OPACITY);
 
 		// Show scanlines only in the tube area
-		float tube_highlight_mask = HSM_GetCornerMask((tube_curved_coord - 0.5) * 0.995 + 0.5 , SCREEN_ASPECT, HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_SCREEN_CORNER_RADIUS, 0.05);
+		float tube_highlight_mask = HSM_GetCornerMask((tube_curved_coord - 0.5) * 0.995 + 0.5 , SCREEN_ASPECT, HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS, 0.05);
 		out_color = mix(out_color, scanline_masked_color, tube_highlight_mask);
 	}
 
@@ -1816,9 +1816,8 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	out_color.rgb *= HSM_Get_Screen_Black_Edge_Mask(SCREEN_COORD, false);
 
 	// TUBE HIGHLIGHT
-	if (HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_NONE)
-		if (HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY > 0)
-			out_color += HSM_Get_Tube_Highlight(tube_curved_coord, false, TubeStaticReflectionImage);
+	if (HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY > 0)
+		out_color += HSM_Get_Tube_Highlight(tube_curved_coord, false, TubeStaticReflectionImage);
 	#endif
 
 	#ifndef IS_NOREFLECT_PRESET
@@ -1826,17 +1825,11 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	out_color = HSM_Delinearize(out_color, HSM_DEFAULT_SRGB_GAMMA);
 	#endif
 
-	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_SCREEN_CORNER_RADIUS;
+	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
 	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
 		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
 
 	TUBE_MASK = HSM_GetCornerMask(tube_curved_coord, SCREEN_ASPECT, bezel_corner_radius, 0.99);
-
-	if ( HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_BLACK_TUBE )
-		out_color = HSM_PreMultAlphaBlend(out_color, vec4(0, 0, 0, 1) * (1 - TUBE_MASK));
-
-	if ( HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_PINK_TUBE || HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_PINK_SCREEN )
-		out_color = HSM_PreMultAlphaBlend(out_color, vec4(1, 0, 1, 1) * (1 - TUBE_MASK));
 
 	return out_color;
 }

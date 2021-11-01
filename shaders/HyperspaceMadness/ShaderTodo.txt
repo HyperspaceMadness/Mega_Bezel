@@ -15,6 +15,7 @@ Changes:
   * Catch 320x480 as Horizontal Aspect
   * Independent Black Edge Corner scaling
   * Fix Color Tweaks, Display Gamut last option is now in range
+  * Corner radius' for are now independent, Black Edge, Bezel inside, Bezel Outside
 
   * BIG Changes to what each preset level does
     * ADV
@@ -63,6 +64,7 @@ V1 TODO
   * Viewport Zoom & Position
   * Add option for Black and White placement image for briball
   * Good Preset for FBNeo & Instructions
+  * 512x480 - PS1 Strider Cine
   * Add Death to Pixels
   * Add Split for Gel
   * Add GDV-NTSC presets

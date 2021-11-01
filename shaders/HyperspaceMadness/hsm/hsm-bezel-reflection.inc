@@ -142,9 +142,9 @@ void main()
 	vec2 tube_curved_coord_ctr = tube_curved_coord - 0.5;
 	vec2 edge_mask_coord = tube_curved_coord_ctr * (1 - (HSM_BZL_INNER_EDGE_THICKNESS / vec2(SCREEN_ASPECT, 1))) + 0.5;
 
-	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_SCREEN_CORNER_RADIUS;
+	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
 	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
-		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
+		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
 
 	float edge_mask =  HSM_GetCornerMask(edge_mask_coord, SCREEN_ASPECT, bezel_corner_radius, HSM_BZL_INNER_EDGE_SHARPNESS);
 
@@ -154,7 +154,7 @@ void main()
 	// Shrink the mask by 0.001 to clip off outer edge
 	SCREEN_MASK = HSM_Get_Screen_Black_Edge_Mask(SCREEN_COORD, false);
 
-	OUTSIDE_BEZEL_MASK = 1 - HSM_GetCornerMask(BEZEL_OUTSIDE_CURVED_COORD, SCREEN_ASPECT, bezel_corner_radius * HSM_BZL_OUTER_CORNER_RADIUS_SCALE, 0.9);
+	OUTSIDE_BEZEL_MASK = 1 - HSM_GetCornerMask(BEZEL_OUTSIDE_CURVED_COORD, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS * HSM_BZL_OUTER_CORNER_RADIUS_SCALE, 0.9);
 
 	//----------------------------------------------------
 	//  Calculate Outside mapping Coords
@@ -217,7 +217,7 @@ void main()
 	float fade_out_to_corner = HHLP_QuadraticBezier(clamp(length(outermap_warped_outside_screen_vector) / (corner_crease_length * 2), 0, 1), vec2(0.5, HSM_REFLECT_CORNER_SPREAD_FALLOFF / 100));
 
 	float corner_fade_width_inner = HSM_REFLECT_CORNER_INNER_SPREAD * (SCREEN_SCALE.x + SCREEN_SCALE.y) * bezel_corner_radius / 10 / 250 * 1.2;
-	float corner_fade_width_outer = HSM_REFLECT_CORNER_OUTER_SPREAD * (SCREEN_SCALE.x + SCREEN_SCALE.y) * HSM_BZL_OUTER_CORNER_RADIUS_SCALE * bezel_corner_radius / 10 / 250 * 1.6;
+	float corner_fade_width_outer = HSM_REFLECT_CORNER_OUTER_SPREAD * (SCREEN_SCALE.x + SCREEN_SCALE.y) * HSM_GLOBAL_CORNER_RADIUS * HSM_BZL_OUTER_CORNER_RADIUS_SCALE / 10 / 250 * 1.6;
 	float corner_fade_width = (corner_fade_width_inner + fade_out_to_corner * (corner_fade_width_outer - corner_fade_width_inner));
 
 	// Get a vector perpendicular to the crease that we can shift the crease to blend between bottom/top and sides
@@ -245,7 +245,7 @@ void main()
 
 	float frame_inner_edge_mask = (HSM_FRM_INNER_EDGE_THICKNESS == 0) ? 0 : 1 - HSM_GetCornerMask(	(BEZEL_OUTSIDE_CURVED_COORD - 0.5) * (1 + (HSM_FRM_INNER_EDGE_THICKNESS / vec2(SCREEN_ASPECT, 1))) + 0.5, 
 																										SCREEN_ASPECT, 
-																										HSM_BZL_OUTER_CORNER_RADIUS_SCALE * bezel_corner_radius, 
+																										HSM_GLOBAL_CORNER_RADIUS * HSM_BZL_OUTER_CORNER_RADIUS_SCALE, 
 																										0.9);
 	float outside_tube_mask_wider = 1 - HSM_GetCornerMask(tube_curved_coord_ctr * 0.996 + 0.5, SCREEN_ASPECT, bezel_corner_radius, 0.9);
 	float tube_shadow_mask = HSM_GetCornerMask(tube_curved_coord_ctr + 0.5, SCREEN_ASPECT, bezel_corner_radius, 0);
@@ -410,11 +410,8 @@ void main()
 		// Modulate amount of refleciton on frame inner edge
 		reflection_color.rgb *= (1 - HSM_REFLECT_FRAME_INNER_EDGE_AMOUNT) * (1 - frame_inner_edge_mask) + HSM_REFLECT_FRAME_INNER_EDGE_AMOUNT;
 
-		if ( HSM_RENDER_SIMPLE_MODE != RENDER_SIMPLE_MODE_NONE )
-			reflection_color = vec4(0, 0, 0, 1);
-
 		#ifndef IS_ADV_PRESET
-			float bezel_mask = HSM_GetCornerMask(BEZEL_OUTSIDE_CURVED_COORD, SCREEN_ASPECT, HSM_BZL_OUTER_CORNER_RADIUS_SCALE * bezel_corner_radius, 0.9);
+			float bezel_mask = HSM_GetCornerMask(BEZEL_OUTSIDE_CURVED_COORD, SCREEN_ASPECT, HSM_BZL_OUTER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS, 0.9);
 			reflection_color *= bezel_mask;
 		#endif
 
@@ -429,35 +426,30 @@ void main()
 		}
 	}
 
-	if (HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_NONE || HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_PINK_SCREEN)
-		crt_linear.rgb *= SCREEN_MASK;
-	else
-		crt_linear.rgb *= TUBE_MASK;
-
+	crt_linear.rgb *= SCREEN_MASK;
+	
 	// Put the frame and bezel over top a black tube
 	// It must be a little wider than the inside of the bezel so we don't see a gap
 	crt_linear = HSM_PreMultAlphaBlend(vec4(0, 0, 0, 1 - outside_tube_mask_wider), crt_linear);
 
 	// Add a Colored Gel image on top of the screen, this is what colors games like space invaders or battlezone
-	if (HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_NONE)
-		if (HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT > 0)
-		{
-			float black_edge_mask = TUBE_MASK * (1 - SCREEN_MASK);
-			
-			vec4 gel_image = texture(ColoredGelImage, tube_curved_coord);
-			gel_image = HSM_Linearize(gel_image, HSM_DEFAULT_SRGB_GAMMA);
-			gel_image *= black_edge_mask;
+	if (HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT > 0)
+	{
+		float black_edge_mask = TUBE_MASK * (1 - SCREEN_MASK);
+		
+		vec4 gel_image = texture(ColoredGelImage, tube_curved_coord);
+		gel_image = HSM_Linearize(gel_image, HSM_DEFAULT_SRGB_GAMMA);
+		gel_image *= black_edge_mask;
 
-			if (HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT > 0)
-				crt_linear += gel_image * gel_image.a * HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT;
-		}
+		if (HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT > 0)
+			crt_linear += gel_image * gel_image.a * HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT;
+	}
 
 	// TUBE HIGHLIGHT
-	if (HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_NONE)
-		if (HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY > 0)
-		{
-			crt_linear += HSM_Get_Tube_Highlight(tube_curved_coord, false, TubeStaticReflectionImage);
-		}
+	if (HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY > 0)
+	{
+		crt_linear += HSM_Get_Tube_Highlight(tube_curved_coord, false, TubeStaticReflectionImage);
+	}
 
 	// Clamp otherwise we get artifacts (blue overlays of brighter parts of image)
 	crt_linear = clamp(crt_linear, 0, 1);

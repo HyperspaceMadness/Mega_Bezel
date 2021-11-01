@@ -360,12 +360,6 @@ float HSM_CRT_ORIGINAL_AB_COMPARE_ON = global.HSM_CRT_ORIGINAL_AB_COMPARE_ON;
 #pragma parameter HSM_CRT_ORIGINAL_AB_COMPARE_SPLIT_POSITION   		"          Splitscreen Position" 50 0 100 0.2
 float HSM_CRT_ORIGINAL_AB_COMPARE_SPLIT_POSITION = global.HSM_CRT_ORIGINAL_AB_COMPARE_SPLIT_POSITION / 100;
 
-#pragma parameter HSM_RENDER_FOR_SIMPLIFIED_TITLE       "[ Render for Simplified Presets ]:" 1 0 1 1
-
-#pragma parameter HSM_RENDER_SIMPLE_MODE                   "   Output Mode:  NORMAL | BLACK | PINK-S | PINK-T | MSK1 | MSK2" 0 0 5 1
-float HSM_RENDER_SIMPLE_MODE = global.HSM_RENDER_SIMPLE_MODE;
-
-
 //---------------------------------------------------------------------------------------------------
 //    CRT Layer
 //---------------------------------------------------------------------------------------------------
@@ -498,8 +492,8 @@ float HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE = global.HSM_TUBE_STATIC_REFLECTION
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_SCREEN_EDGE_TITLE								"[ SCREEN BLACK EDGE ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_SCREEN_CORNER_RADIUS 							"          Global Corner Radius - Def 10" 10 4 500 2
-#define HSM_SCREEN_CORNER_RADIUS global.HSM_SCREEN_CORNER_RADIUS
+#pragma parameter HSM_GLOBAL_CORNER_RADIUS 							"          Global Corner Radius - Def 10" 10 4 500 2
+#define HSM_GLOBAL_CORNER_RADIUS global.HSM_GLOBAL_CORNER_RADIUS
 
 #pragma parameter HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE 				"          Black Edge Corner Radius Scale" 100 100 8000 10
 #define HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE global.HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE / 100

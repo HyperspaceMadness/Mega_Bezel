@@ -7,7 +7,7 @@
 // #pragma parameter HSM_BZL_TITLE "-----[ GENERATED BEZEL & FRAME ]-------------------------------" 0 0 0 1
 
 #pragma parameter HSM_BZL_INNER_EDGE_THICKNESS		    "          Inner Edge Thickness" 100 0 700 10
-float HSM_BZL_INNER_EDGE_THICKNESS = global.HSM_BZL_INNER_EDGE_THICKNESS  * 0.000112;
+float HSM_BZL_INNER_EDGE_THICKNESS = global.HSM_BZL_INNER_EDGE_THICKNESS  * 0.00007;
 
 #pragma parameter HSM_BZL_INNER_EDGE_SHARPNESS		    "          Inner Edge Sharpness - Def 95" 95 0 90 5
 float HSM_BZL_INNER_EDGE_SHARPNESS = global.HSM_BZL_INNER_EDGE_SHARPNESS  / 100;
@@ -96,6 +96,15 @@ float HSM_FRM_SHADOW_OPACITY = global.HSM_FRM_SHADOW_OPACITY / 100;
 
 #pragma parameter HSM_FRM_SHADOW_WIDTH                  "          Shadow Width" 100 0 500 1
 float HSM_FRM_SHADOW_WIDTH = global.HSM_FRM_SHADOW_WIDTH / 1000;
+
+#pragma parameter HSM_REFLECT_CORNER_TITLE			            "[ CORNER CREASE - ALSO CONTROLS REFLECTION]:" 0 0 0.01 0.01
+
+// TODO how this is being used is strange
+#pragma parameter HSM_REFLECT_CORNER_FADE 						"          Corner Fade" 10 1 100 0.5
+float HSM_REFLECT_CORNER_FADE = global.HSM_REFLECT_CORNER_FADE / 100;
+
+#pragma parameter HSM_REFLECT_CORNER_FADE_DISTANCE 				"          Corner Fade Distance" 100 1 100 1
+float HSM_REFLECT_CORNER_FADE_DISTANCE = global.HSM_REFLECT_CORNER_FADE_DISTANCE / 100;
 
 #pragma parameter HSM_REFLECT_CORNER_INNER_SPREAD 	            "          Corner Inner Spread" 500 0 1000 10
 float HSM_REFLECT_CORNER_INNER_SPREAD = global.HSM_REFLECT_CORNER_INNER_SPREAD / 100;

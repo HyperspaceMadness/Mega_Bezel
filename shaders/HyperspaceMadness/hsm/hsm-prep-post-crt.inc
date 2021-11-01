@@ -1,5 +1,4 @@
-#include "../hsm/hsm-params-2-bezel.inc"
-#include "../hsm/hsm-common-functions-bezel.inc"
+// #include "../hsm/hsm-common-functions-bezel.inc"
 
 #pragma stage vertex
 
