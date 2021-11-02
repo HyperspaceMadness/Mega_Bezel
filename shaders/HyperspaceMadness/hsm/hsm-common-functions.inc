@@ -1672,6 +1672,10 @@ vec4 HSM_Get_Tube_Highlight(vec2 tube_curved_coord, bool apply_to_mirror, in sam
 #ifdef IS_POTATO_PRESET
 vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, vec2 screen_curved_coord, in sampler2D BackgroundImage, in sampler2D BackgroundVertImage)
 { 
+	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(SCREEN_COORD, 1, SCREEN_SCALE, TUBE_SCALE, SCREEN_ASPECT, 1);
+	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
+	TUBE_MASK = HSM_GetCornerMask(tube_curved_coord, SCREEN_ASPECT, bezel_corner_radius, 0.99);
+
 	if (HSM_MONOCHROME_MODE > 0.5)
 		in_color_with_gamma = HSM_ApplyMonochrome(in_color_with_gamma);
 
@@ -1694,6 +1698,9 @@ vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_CO
 
 		out_color *= vignette_factor;
 	}
+
+	out_color.rgb *= screen_mask;
+	out_color *= TUBE_MASK;
 
 	if (HSM_BG_OPACITY > 0)
 	{
