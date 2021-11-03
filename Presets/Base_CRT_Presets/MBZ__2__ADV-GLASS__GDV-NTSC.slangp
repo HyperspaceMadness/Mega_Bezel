@@ -1,6 +1,6 @@
-shaders = 40
+shaders = 37
 
-shader0 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-add-params-all.slang
+shader0 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-add-params-glass.slang
 alias0 = "CorePass"
 
 shader1 =  ../../../../stock.slang // ../../shaders/HyperspaceMadness/hsm-guest/g-sharp_resampler.slang
@@ -27,7 +27,7 @@ scale_type3 = source
 scale3 = 1.0
 alias3 = "InfoCachePass"
 
-shader4 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-intro-adv.slang
+shader4 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-intro-adv-glass.slang
 filter_linear4 = false
 float_framebuffer4 = true
 scale_type4 = source
@@ -221,30 +221,10 @@ scale_y35 = 12
 alias35 = "BR_MirrorFullscreenGlowPass"
 
 // Bezel Reflection ----------------------------------------------------------------
-shader36 = ../../shaders/HyperspaceMadness/hsm/hsm-bezel-reflection.slang
+shader36 = ../../shaders/HyperspaceMadness/hsm/hsm-bezel-reflection-glass.slang
 scale_type36 = viewport
 float_framebuffer36 = true
 alias36 = "BR_CRTAndReflectionPass"
-
-// Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
-
-shader37 = ../../shaders/HyperspaceMadness/hsm/hsm-bezel-images-under-crt.slang
-filter_linear37 = true
-scale_type37 = viewport
-float_framebuffer37 = true
-alias37 = "BR_LayersUnderCRTPass"
-
-shader38 = ../../shaders/HyperspaceMadness/hsm/hsm-bezel-images-over-crt.slang
-filter_linear38 = true
-scale_type38 = viewport
-float_framebuffer38 = true
-alias38 = "BR_LayersOverCRTPass"
-
-// Combine Passes ----------------------------------------------------------------
-shader39 = ../../shaders/HyperspaceMadness/hsm/hsm-combine-passes.slang
-scale_type39 = viewport
-float_framebuffer39 = true
-alias39 = "CombinePass"
 // Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;ColoredGelImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;LEDImage;TopLayerImage;"
 
@@ -275,10 +255,10 @@ ReflectionMaskImage_linear = true
 FrameTextureImage = ../../shaders/HyperspaceMadness/textures/FrameTexture_2800x2120.png
 FrameTextureImage_linear = true
 
-BackgroundImage = ../../shaders/HyperspaceMadness/textures/BackgroundImage_Carbon_3840x2160.png
+BackgroundImage = ../../shaders/HyperspaceMadness/textures/TopLayerImageGradient_3840x2160.png
 BackgroundImage_linear = true
 
-BackgroundVertImage = ../../shaders/HyperspaceMadness/textures/BackgroundImage_Carbon_3840x2160.png
+BackgroundVertImage = ../../shaders/HyperspaceMadness/textures/TopLayerImageGradient_3840x2160.png
 BackgroundVertImage_linear = true
 
 CabinetGlassImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
@@ -305,6 +285,43 @@ TopLayerImage_linear = true
 // Use for matching vanilla GDV-Advanced
 // HSM_ASPECT_RATIO_MODE = 6
 // HSM_CURVATURE_MODE = -1
+
+// Parameters
+HSM_TUBE_BLACK_EDGE_SHARPNESS = "90.0000"
+HSM_TUBE_BLACK_EDGE_THICKNESS = -7
+HSM_BG_OPACITY = "1.000000"
+HSM_GLASS_BORDER_ON = "1.000000"
+HSM_BZL_WIDTH = 3000
+HSM_BZL_HEIGHT = 3000
+HSM_BZL_INNER_EDGE_THICKNESS = 350
+HSM_BZL_INNER_EDGE_SHARPNESS = 30
+HSM_BZL_INNER_CORNER_RADIUS_SCALE = "100.000000"
+HSM_BZL_INNER_EDGE_SHADOW = "0.000000"
+HSM_FRM_OPACITY = "100.000000"
+HSM_REFLECT_GLOBAL_AMOUNT = "35.00000"
+HSM_REFLECT_GLOBAL_GAMMA_ADJUST = "0.900000"
+HSM_REFLECT_BEZEL_INNER_EDGE_AMOUNT = "60.0000"
+HSM_REFLECT_BEZEL_INNER_EDGE_FULLSCREEN_GLOW = "40.0000"
+HSM_REFLECT_FULLSCREEN_GLOW = "30.000000"
+HSM_REFLECT_FULLSCREEN_GLOW_GAMMA = "1.500000"
+HSM_REFLECT_FADE_AMOUNT = "20.0000"
+HSM_REFLECT_RADIAL_FADE_WIDTH = "500.000000"
+HSM_REFLECT_RADIAL_FADE_HEIGHT = "300.000000"
+HSM_REFLECT_LATERAL_OUTER_FADE_POSITION = "500.000000"
+HSM_REFLECT_CORNER_FADE = "0.000000"
+HSM_REFLECT_BLUR_MIN = "30.0000"
+HSM_REFLECT_BLUR_MAX = "60.0000"
+HSM_REFLECT_NOISE_AMOUNT = "100.000000"
+HSM_REFLECT_NOISE_SAMPLES = "4.000000"
+HSM_REFLECT_NOISE_SAMPLE_DISTANCE = "15.0000"
+HSM_REFLECT_NOISE_SAMPLE_DISTANCE = "15.0000"
+HSM_REFLECT_IS_LAST_PASS = "1.000000"
+HSM_BG_BRIGHTNESS = "0.000000"
+HSM_SCREEN_VIGNETTE_STRENGTH = "20.000000"
+HSM_SCREEN_VIGNETTE_POWER = "4.000000"
+HSM_SCREEN_VIGNETTE_IN_REFLECTION = "0.000000"
+
+g_vignette = "0.0"
 
 // Easymode Parameters
 HSM_GAMMA_IN_LINEARIZE = 2.0

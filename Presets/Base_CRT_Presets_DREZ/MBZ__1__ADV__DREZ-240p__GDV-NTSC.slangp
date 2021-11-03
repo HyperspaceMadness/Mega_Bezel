@@ -4,11 +4,12 @@ shader0 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-add-params-all.slang
 alias0 = "CorePass"
 
 shader1 =  ../../../../stock.slang // ../../shaders/HyperspaceMadness/hsm-guest/g-sharp_resampler.slang
-filter_linear1 = false
+filter_linear1 = true
+mipmap_input1 = true
 srgb_framebuffer1 = true
-scale_type1 = source
-scale_x1 = 1
-scale_y1 = 1
+scale_type1 = absolute
+scale_x1 = 320
+scale_y1 = 240
 alias1 = "DerezedPass"
 
 shader2 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-add-negative-crop-area.slang
@@ -27,7 +28,7 @@ scale_type3 = source
 scale3 = 1.0
 alias3 = "InfoCachePass"
 
-shader4 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-intro-adv.slang
+shader4 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-intro-std.slang
 filter_linear4 = false
 float_framebuffer4 = true
 scale_type4 = source
