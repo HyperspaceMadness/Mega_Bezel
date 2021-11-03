@@ -7,15 +7,20 @@ Changes:
       * Passes which do not change dynamically every frame
       * Portions of the viewport which do not change dynamically every frame (E.G. Outside the Bezel)
     * Blinking red visual Live mode indicator when live mode is on
+  * Added Negative Cropping
+  * New Guest-DrVenom NTSC preset added
+  * Updated Guest shaders to crt-guest-advanced-2021-10-10-release1
   * Fixed ZFast Cropping
   * Put Vignette in Post-CRT pass, Turn off Grade Vignette by default
-  * Updated Guest to crt-guest-advanced-2021-09-07-release1
   * Put Grade after afterglow, remove brighten black from afterglow
   * Added STD-GLASS preset
-  * Catch 320x480 as Horizontal Aspect
+  * Auto Aspect Ratio
+    * Catch sony fmv res 320x480 as Horizontal Aspect
+    * Catch sony fmv res 512x480 is now caught as 4:3 and Horizontal
   * Independent Black Edge Corner scaling
   * Fix Color Tweaks, Display Gamut last option is now in range
   * Corner radius' for are now independent, Black Edge, Bezel inside, Bezel Outside
+
 
   * BIG Changes to what each preset level does
     * ADV
@@ -33,7 +38,7 @@ Changes:
       * Minimal Pre-CRT Passes (No Grade)
       * Background Image
 
-  * Added Negative Cropping
+      
 
 *  Performance of Base presets at 3840x2160 on Nvidia RTX2060:
   *  ADVANCED -                      78 FPS  -  No comparable old preset
@@ -55,16 +60,15 @@ Mega Bezel Still to Come:
 
 V1 TODO
   
-  * Fix Pink Mask Modes
+  * Fill in other NTSC presets
   * Add Color Control on all Layers
-  * Independent Inside/Outside Bezel
   * The frame outer edge still has a faint line, so the masking could maybe be tweaked. (Or if it is a drop shadow issue maybe it needs a different method?)
   * The Frame inner edge is still a static color and needs to respond to HSV.
-  * Add Tube Color & Vignette (Should take night lighting)
   * Viewport Zoom & Position
+  * Add Tube Color & Vignette (Should take night lighting)
   * Add option for Black and White placement image for briball
   * Good Preset for FBNeo & Instructions
-  * 512x480 - PS1 Strider Cine
+  * Swap option for Blurry and Sharp Tube Reflection
   * Add Death to Pixels
   * Add Split for Gel
   * Add GDV-NTSC presets

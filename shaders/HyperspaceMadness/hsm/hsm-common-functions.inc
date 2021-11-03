@@ -162,8 +162,9 @@ float HSM_GetScreenAspect(float screen_index, vec2 cropped_size)
 	float core_aspect_horizontal = (core_aspect_ratio < 1) ? 1 / core_aspect_ratio : core_aspect_ratio;
 	float horizontal_aspect = 0;
 
-	vec2 sony_psp = 						vec2(480, 272);
-	vec2 sony_ps_fmv_res = 					vec2(320, 480);
+	vec2 atari_lynx_res = 					vec2(160, 102);
+	vec2 atari_2600_res = 					vec2(160, 228);
+	vec2 atari_2600_crop_res = 				vec2(152, 228);
 	vec2 nintendo_gameboy_advance_res = 	vec2(240, 160);
 	vec2 nintendo_gameboy_res = 			vec2(160, 144);
 	vec2 nintendo_ds_res = 					vec2(256, 192);
@@ -174,9 +175,9 @@ float HSM_GetScreenAspect(float screen_index, vec2 cropped_size)
 	vec2 nintendo_3ds_top_bottom_res = 		vec2(400, 480);
 	vec2 nintendo_3ds_side_by_side_res = 	vec2(720, 240);
 	vec2 sega_saturn_fmv_res = 				vec2(352, 480);
-	vec2 atari_lynx_res = 					vec2(160, 102);
-	vec2 atari_2600_res = 					vec2(160, 228);
-	vec2 atari_2600_crop_res = 				vec2(152, 228);
+	vec2 sony_psp = 						vec2(480, 272);
+	vec2 sony_ps_fmv_res = 					vec2(320, 480);
+	vec2 sony_ps_fmv_res_2 = 				vec2(512, 480);
 	
 	if (HSM_ASPECT_RATIO_MODE == 0)
 	{
@@ -197,6 +198,7 @@ float HSM_GetScreenAspect(float screen_index, vec2 cropped_size)
 		else if (HSM_ResolutionIsEqual(atari_2600_res, 					original_size)) horizontal_aspect = 1.333;
 		else if (HSM_ResolutionIsEqual(atari_2600_crop_res, 			original_size)) horizontal_aspect = 1.333;
 		else if (HSM_ResolutionIsEqual(sony_ps_fmv_res, 				original_size)) horizontal_aspect = 1.333;
+		else if (HSM_ResolutionIsEqual(sony_ps_fmv_res_2, 				original_size)) horizontal_aspect = 1.333;
 		// Fall back to the explicit ratio
 		else horizontal_aspect = HSM_ASPECT_RATIO_EXPLICIT;
 	}
@@ -221,7 +223,8 @@ float HSM_GetScreenAspect(float screen_index, vec2 cropped_size)
 				HSM_ResolutionIsEqual(atari_2600_res, original_size) || 
 		   		HSM_ResolutionIsEqual(atari_2600_crop_res, original_size) ||
 		   		HSM_ResolutionIsEqual(sega_saturn_fmv_res, original_size) ||
-				HSM_ResolutionIsEqual(sony_ps_fmv_res, original_size)
+				HSM_ResolutionIsEqual(sony_ps_fmv_res, original_size) ||
+				HSM_ResolutionIsEqual(sony_ps_fmv_res_2, original_size)
 		   ) 
 		{
 		   final_orientation = 1;

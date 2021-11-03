@@ -56,7 +56,7 @@ filter_linear8 = true
 scale_type8 = source
 scale_x8 = 1.0
 scale_y8 = 1.0
-alias8 = PrePass 
+alias8 = "PrePass"
 mipmap_input8 = true
 
 shader9 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-avg-lum.slang
