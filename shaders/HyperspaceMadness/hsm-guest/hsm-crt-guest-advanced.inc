@@ -853,8 +853,8 @@ else
 	if (nmode1 && !interb) 
 		color1 = min(normalize (color1+eps) * length(sqrt(color1 * cc)) ,1.0);
 
-	if (ntsc_processing_on)
-		color1 = pow(color1, vec3(scangamma/gamma_in));
+	// HSM Added From NTSC
+	color1 = pow(color1, vec3(scangamma/gamma_in));
 
 	float ts = 0.025;
 	vec3 luma = vec3(0.2126, 0.7152, 0.0722);
@@ -945,8 +945,8 @@ else
 	if (nmode1 && !interb) 
 		color2 = min(normalize (color2+eps) * length(sqrt(color2 * cc)) ,1.0);	
 		
-	if (ntsc_processing_on)
-		color2 = pow(color2, vec3(scangamma/gamma_in));	
+	// HSM Added From NTSC
+	color2 = pow(color2, vec3(scangamma/gamma_in));	
 
 	if (ntscbm)
 	{
@@ -1118,8 +1118,8 @@ if (!interb)
 		Bloom = mix(0.5*(Bloom + Bloom*Bloom), Bloom*Bloom, colmx);	
 		color = color + (1.1-0.25*colmx)*(0.75+maxb)*Bloom*(0.75 + 0.70*pow(colmx,0.33333))*mix(1.0,w3,0.5*colmx)*mix(one,cmask,0.35 + 0.4*maxb)*halation; }
 
-	if (ntsc_processing_on)
-		color = pow(color, vec3(gamma_in/scangamma));
+	// HSM Added From NTSC
+	color = pow(color, vec3(gamma_in/scangamma));
 
 	Glow = mix(Glow, 0.25*color, 0.7*colmx);
 	if (glow >= 0.0) color = color + 0.5*Glow*glow; else { cmask*=cmask; cmask*=cmask; color = color + (-glow)*cmask*Glow; }
