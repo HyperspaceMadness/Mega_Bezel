@@ -20,6 +20,7 @@ Changes:
   * Independent Black Edge Corner scaling
   * Fix Color Tweaks, Display Gamut last option is now in range
   * Corner radius' for are now independent, Black Edge, Bezel inside, Bezel Outside
+  * Added Color Control on all Layers
 
 
   * BIG Changes to what each preset level does
@@ -60,8 +61,6 @@ Mega Bezel Still to Come:
 
 V1 TODO
   
-  * Fill in other NTSC presets
-  * Add Color Control on all Layers
   * The frame outer edge still has a faint line, so the masking could maybe be tweaked. (Or if it is a drop shadow issue maybe it needs a different method?)
   * The Frame inner edge is still a static color and needs to respond to HSV.
   * Viewport Zoom & Position

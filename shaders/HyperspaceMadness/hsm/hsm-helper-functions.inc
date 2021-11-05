@@ -12,6 +12,24 @@ Description:
 	Expects the texture to be using linear filtering
 */
 
+vec4 HSM_ApplyGamma(vec4 in_color, float in_gamma)
+{
+	vec3 out_color = pow(in_color.rgb, vec3(1 / in_gamma));
+	return vec4(out_color, in_color.a);
+}
+
+// 'Removes' encoded gamma from color to put the color in linear space
+vec4 HSM_Linearize(vec4 in_color, float encoded_gamma)
+{
+	return HSM_ApplyGamma(in_color, 1 / encoded_gamma);
+}
+
+// Adds gamma onto color in linear space to get a color with encoded gamma
+vec4 HSM_Delinearize(vec4 in_color, float in_gamma)
+{
+	return HSM_ApplyGamma(in_color, in_gamma);
+}
+
 vec3 HSM_RGBtoHSV(vec3 c)
 {
     vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
@@ -30,8 +48,11 @@ vec3 HSM_HSVtoRGB(vec3 c)
     return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
 }
 
-vec3 HSM_ApplyHSVAdjustment(vec3 in_color_rgb, float in_hue, float in_saturation, float in_brightness, float in_colorize_on)
+vec3 HSM_ApplyHSVAdjustment(vec3 in_color_rgb, float in_hue, float in_saturation, float in_brightness, float in_colorize_on, float in_gamma_adjust)
 {
+	if (!(in_colorize_on == 1 || in_hue != 0 || in_saturation != 1 || in_brightness != 1 || in_gamma_adjust != 1))
+		return in_color_rgb;
+	
 	vec3 color_hsv = HSM_RGBtoHSV(in_color_rgb);
 
 	if (in_colorize_on > 0.5)
@@ -49,25 +70,10 @@ vec3 HSM_ApplyHSVAdjustment(vec3 in_color_rgb, float in_hue, float in_saturation
 
 	vec3 color_rgb = HSM_HSVtoRGB(color_hsv);
 
+	if (in_gamma_adjust != 1)
+		color_rgb = HSM_ApplyGamma(vec4(color_rgb.r, color_rgb.g, color_rgb.b, 1), in_gamma_adjust).rgb;
+
 	return color_rgb;
-}
-
-vec4 HSM_ApplyGamma(vec4 in_color, float in_gamma)
-{
-	vec3 out_color = pow(in_color.rgb, vec3(1 / in_gamma));
-	return vec4(out_color, in_color.a);
-}
-
-// 'Removes' encoded gamma from color to put the color in linear space
-vec4 HSM_Linearize(vec4 in_color, float encoded_gamma)
-{
-	return HSM_ApplyGamma(in_color, 1 / encoded_gamma);
-}
-
-// Adds gamma onto color in linear space to get a color with encoded gamma
-vec4 HSM_Delinearize(vec4 in_color, float in_gamma)
-{
-	return HSM_ApplyGamma(in_color, in_gamma);
 }
 
 vec4 HSM_GetPreMultipliedColorLinear(vec4 in_color, float matte_type, float encoded_gamma)

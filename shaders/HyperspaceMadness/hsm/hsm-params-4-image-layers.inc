@@ -90,9 +90,6 @@ float HSM_LAYERING_DEBUG_MASK_MODE = global.HSM_LAYERING_DEBUG_MASK_MODE;
 #pragma parameter HSM_BG_OPACITY                  "          Opacity" 100 0 100 0.1
 float HSM_BG_OPACITY = global.HSM_BG_OPACITY / 100;
 
-#pragma parameter HSM_BG_BLEND_MODE               "          Blend Mode - OFF | NORMAL | ADD | MULTIPLY"  1 -1 3 1
-float HSM_BG_BLEND_MODE = global.HSM_BG_BLEND_MODE;
-
 #pragma parameter HSM_BG_COLORIZE_ON              "          Colorize On" 0 0 1 1
 float HSM_BG_COLORIZE_ON = global.HSM_BG_COLORIZE_ON;
 
@@ -107,6 +104,9 @@ float HSM_BG_BRIGHTNESS = global.HSM_BG_BRIGHTNESS / 100;
 
 #pragma parameter HSM_BG_GAMMA                     "          Gamma Adjust" 1 0 5 0.01
 float HSM_BG_GAMMA = global.HSM_BG_GAMMA;
+
+#pragma parameter HSM_BG_BLEND_MODE               "          Blend Mode - OFF | NORMAL | ADD | MULTIPLY"  1 -1 3 1
+float HSM_BG_BLEND_MODE = global.HSM_BG_BLEND_MODE;
 
 #pragma parameter HSM_BG_SOURCE_MATTE_TYPE        "          Source Matte Color - BLACK | WHITE | NONE"  0 0 2 1
 float HSM_BG_SOURCE_MATTE_TYPE = global.HSM_BG_SOURCE_MATTE_TYPE;
@@ -192,6 +192,21 @@ float HSM_VIEWPORT_VIGNETTE_POS_Y = global.HSM_VIEWPORT_VIGNETTE_POS_Y / 100;
 
 #pragma parameter HSM_LED_OPACITY                       "          Opacity"  100 0 100 1
 float HSM_LED_OPACITY = global.HSM_LED_OPACITY / 100;
+
+#pragma parameter HSM_LED_COLORIZE_ON               "          Colorize" 0 0 1 1
+float HSM_LED_COLORIZE_ON = global.HSM_LED_COLORIZE_ON;
+
+#pragma parameter HSM_LED_HUE                       "          Hue Offset" 0 0 360 1
+float HSM_LED_HUE = global.HSM_LED_HUE / 360;
+
+#pragma parameter HSM_LED_SATURATION                "          Saturation" 100 0 200 1
+float HSM_LED_SATURATION = global.HSM_LED_SATURATION / 100;
+
+#pragma parameter HSM_LED_BRIGHTNESS                "          Brightness" 100 0 200 1
+float HSM_LED_BRIGHTNESS = global.HSM_LED_BRIGHTNESS / 100;
+
+#pragma parameter HSM_LED_GAMMA                     "          Gamma Adjust" 1 0 5 0.01
+float HSM_LED_GAMMA = global.HSM_LED_GAMMA;
 
 #pragma parameter HSM_LED_BLEND_MODE                    "          Blend Mode - OFF | NORMAL | ADD | MULTIPLY"  2 0 3 1
 float HSM_LED_BLEND_MODE = global.HSM_LED_BLEND_MODE;
@@ -326,6 +341,9 @@ float HSM_DECAL_SATURATION = global.HSM_DECAL_SATURATION / 100;
 #pragma parameter HSM_DECAL_BRIGHTNESS                "          Brightness" 100 0 200 1
 float HSM_DECAL_BRIGHTNESS = global.HSM_DECAL_BRIGHTNESS / 100;
 
+#pragma parameter HSM_DECAL_GAMMA               "          Gamma Adjust" 1 0 5 0.01
+float HSM_DECAL_GAMMA = global.HSM_DECAL_GAMMA;
+
 #pragma parameter HSM_DECAL_BLEND_MODE                  "          Blend Mode -  OFF | NORMAL | ADD | MULTIPLY"  1 0 3 1
 float HSM_DECAL_BLEND_MODE = global.HSM_DECAL_BLEND_MODE;
 
@@ -377,8 +395,20 @@ float HSM_DECAL_POS_Y = global.HSM_DECAL_POS_Y / 100;
 #pragma parameter HSM_CAB_GLASS_OPACITY                     "          Opacity" 100 0 100 1
 float HSM_CAB_GLASS_OPACITY = global.HSM_CAB_GLASS_OPACITY / 100;
 
+#pragma parameter HSM_CAB_GLASS_COLORIZE_ON               "          Colorize" 0 0 1 1
+float HSM_CAB_GLASS_COLORIZE_ON = global.HSM_CAB_GLASS_COLORIZE_ON;
+
+#pragma parameter HSM_CAB_GLASS_HUE                       "          Hue Offset" 0 0 360 1
+float HSM_CAB_GLASS_HUE = global.HSM_CAB_GLASS_HUE / 360;
+
+#pragma parameter HSM_CAB_GLASS_SATURATION                "          Saturation" 100 0 200 1
+float HSM_CAB_GLASS_SATURATION = global.HSM_CAB_GLASS_SATURATION / 100;
+
 #pragma parameter HSM_CAB_GLASS_BRIGHTNESS                  "          Brightness" 100 0 400 1
 float HSM_CAB_GLASS_BRIGHTNESS = global.HSM_CAB_GLASS_BRIGHTNESS / 100;
+
+#pragma parameter HSM_CAB_GLASS_GAMMA                     "          Gamma Adjust" 1 0 5 0.01
+float HSM_CAB_GLASS_GAMMA = global.HSM_CAB_GLASS_GAMMA;
 
 #pragma parameter HSM_CAB_GLASS_BLEND_MODE                  "          Blend Mode - OFF | NORMAL | ADD | MULTIPLY"  1 0 3 1
 float HSM_CAB_GLASS_BLEND_MODE = global.HSM_CAB_GLASS_BLEND_MODE;
@@ -433,6 +463,21 @@ float HSM_CAB_GLASS_POS_Y = global.HSM_CAB_GLASS_POS_Y / 100;
 
 #pragma parameter HSM_TOP_OPACITY                       "          Opacity"  100 0 100 0.1
 float HSM_TOP_OPACITY = global.HSM_TOP_OPACITY / 100;
+
+#pragma parameter HSM_TOP_COLORIZE_ON               "          Colorize" 0 0 1 1
+float HSM_TOP_COLORIZE_ON = global.HSM_TOP_COLORIZE_ON;
+
+#pragma parameter HSM_TOP_HUE                       "          Hue Offset" 0 0 360 1
+float HSM_TOP_HUE = global.HSM_TOP_HUE / 360;
+
+#pragma parameter HSM_TOP_SATURATION                "          Saturation" 100 0 200 1
+float HSM_TOP_SATURATION = global.HSM_TOP_SATURATION / 100;
+
+#pragma parameter HSM_TOP_BRIGHTNESS                "          Brightness" 100 0 200 1
+float HSM_TOP_BRIGHTNESS = global.HSM_TOP_BRIGHTNESS / 100;
+
+#pragma parameter HSM_TOP_GAMMA                     "          Gamma Adjust" 1 0 5 0.01
+float HSM_TOP_GAMMA = global.HSM_TOP_GAMMA;
 
 #pragma parameter HSM_TOP_BLEND_MODE                    "          Blend Mode - OFF | NORMAL | ADD | MULTIPLY"  1 0 3 1
 float HSM_TOP_BLEND_MODE = global.HSM_TOP_BLEND_MODE;

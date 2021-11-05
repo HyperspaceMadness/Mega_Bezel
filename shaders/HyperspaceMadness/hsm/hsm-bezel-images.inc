@@ -498,11 +498,7 @@ void main()
 		bg_image = HSM_GetPreMultipliedColorLinear(bg_image, HSM_BG_SOURCE_MATTE_TYPE, HSM_DEFAULT_SRGB_GAMMA);
 
 		// HSV Adjustments
-		if (HSM_BG_COLORIZE_ON > 0.5 || HSM_BG_HUE != 0 || HSM_BG_SATURATION != 1 || HSM_BG_BRIGHTNESS != 1)
-			bg_image.rgb = HSM_ApplyHSVAdjustment(bg_image.rgb, HSM_BG_HUE, HSM_BG_SATURATION, HSM_BG_BRIGHTNESS, HSM_BG_COLORIZE_ON);
-		
-		if (HSM_BG_GAMMA != 1)
-			bg_image = HSM_ApplyGamma(bg_image, HSM_BG_GAMMA);
+		bg_image.rgb = HSM_ApplyHSVAdjustment(bg_image.rgb, HSM_BG_HUE, HSM_BG_SATURATION, HSM_BG_BRIGHTNESS, HSM_BG_COLORIZE_ON, HSM_BG_GAMMA);
 
 		if (HSM_BG_APPLY_ADJUSTMENT == 1)
 			if (HSM_STATIC_LAYERS_GAMMA != 1)
@@ -541,11 +537,7 @@ void main()
 		device_image = HSM_GetPreMultipliedColorLinear(device_image, HSM_DEVICE_SOURCE_MATTE_TYPE, HSM_DEFAULT_SRGB_GAMMA);
 
 		// HSV Adjustments
-		// if (HSM_DEVICE_COLORIZE_ON == 1 || HSM_DEVICE_HUE != 0 || HSM_DEVICE_SATURATION != 1 || HSM_DEVICE_BRIGHTNESS != 1)
-		device_image.rgb = HSM_ApplyHSVAdjustment(device_image.rgb, HSM_DEVICE_HUE, HSM_DEVICE_SATURATION, HSM_DEVICE_BRIGHTNESS, HSM_DEVICE_COLORIZE_ON);
-
-		if (HSM_DEVICE_GAMMA != 1)
-			device_image = HSM_ApplyGamma(device_image, HSM_DEVICE_GAMMA);
+		device_image.rgb = HSM_ApplyHSVAdjustment(device_image.rgb, HSM_DEVICE_HUE, HSM_DEVICE_SATURATION, HSM_DEVICE_BRIGHTNESS, HSM_DEVICE_COLORIZE_ON, HSM_DEVICE_GAMMA);
 
 		if (HSM_STATIC_LAYERS_GAMMA != 1)
 			device_image = HSM_ApplyGamma(device_image, HSM_STATIC_LAYERS_GAMMA);
@@ -580,6 +572,9 @@ void main()
 		// Premultiply Alpha
 		led_image = HSM_GetPreMultipliedColorLinear(led_image, HSM_LED_SOURCE_MATTE_TYPE, HSM_DEFAULT_SRGB_GAMMA);
 
+		// HSV Adjustments
+		led_image.rgb = HSM_ApplyHSVAdjustment(led_image.rgb, HSM_LED_HUE, HSM_LED_SATURATION, HSM_LED_BRIGHTNESS, HSM_LED_COLORIZE_ON, HSM_LED_GAMMA);
+
 		// STATIC GAMMA
 		if (HSM_STATIC_LAYERS_GAMMA != 1)
 			led_image = HSM_ApplyGamma(led_image, HSM_STATIC_LAYERS_GAMMA);
@@ -613,9 +608,8 @@ void main()
 		// Premultiply Alpha
 		decal_image = HSM_GetPreMultipliedColorLinear(decal_image, HSM_DECAL_SOURCE_MATTE_TYPE, HSM_DEFAULT_SRGB_GAMMA);
 
-		// Do HSV alterations
-		if (HSM_DECAL_COLORIZE_ON == 1 || HSM_DECAL_HUE != 0 || HSM_DECAL_SATURATION != 1 || HSM_DECAL_BRIGHTNESS != 1)
-			decal_image.rgb = HSM_ApplyHSVAdjustment(decal_image.rgb, HSM_DECAL_HUE, HSM_DECAL_SATURATION, HSM_DECAL_BRIGHTNESS, HSM_DECAL_COLORIZE_ON);
+		// HSV Adjustments
+		decal_image.rgb = HSM_ApplyHSVAdjustment(decal_image.rgb, HSM_DECAL_HUE, HSM_DECAL_SATURATION, HSM_DECAL_BRIGHTNESS, HSM_DECAL_COLORIZE_ON, HSM_DECAL_GAMMA);
 
 		// STATIC GAMMA
 		if (HSM_STATIC_LAYERS_GAMMA != 1)
@@ -656,6 +650,9 @@ void main()
 		// Premultiply Alpha
 		top_image = HSM_GetPreMultipliedColorLinear(top_image, HSM_TOP_SOURCE_MATTE_TYPE, HSM_DEFAULT_SRGB_GAMMA);
 
+		// HSV Adjustments
+		top_image.rgb = HSM_ApplyHSVAdjustment(top_image.rgb, HSM_TOP_HUE, HSM_TOP_SATURATION, HSM_TOP_BRIGHTNESS, HSM_TOP_COLORIZE_ON, HSM_TOP_GAMMA);
+
 		// STATIC GAMMA
 		if (HSM_STATIC_LAYERS_GAMMA != 1)
 			top_image = HSM_ApplyGamma(top_image, HSM_STATIC_LAYERS_GAMMA);
@@ -694,8 +691,8 @@ void main()
 		// Premultiply Alpha
 		cab_glass_image = HSM_GetPreMultipliedColorLinear(cab_glass_image, HSM_CAB_GLASS_SOURCE_MATTE_TYPE, HSM_DEFAULT_SRGB_GAMMA);
 
-		// Adjust Brightness
-		cab_glass_image.rgb *= HSM_CAB_GLASS_BRIGHTNESS;
+		// HSV Adjustments
+		cab_glass_image.rgb = HSM_ApplyHSVAdjustment(cab_glass_image.rgb, HSM_CAB_GLASS_HUE, HSM_CAB_GLASS_SATURATION, HSM_CAB_GLASS_BRIGHTNESS, HSM_CAB_GLASS_COLORIZE_ON, HSM_CAB_GLASS_GAMMA);
 
 		// STATIC GAMMA
 		if (HSM_STATIC_LAYERS_GAMMA != 1)
