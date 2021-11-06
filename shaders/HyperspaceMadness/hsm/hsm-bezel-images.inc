@@ -392,11 +392,13 @@ void main()
 
 	// Combine all the individual highlights into one mask
 	float combined_highlight_mask = (1 + 2.5 * HSM_BZL_NOISE) * (1 - noise_mask * 2.5 * HSM_BZL_NOISE) * (top_center_highlight_mask + bottom_center_highlight_mask + sides_highlight_mask);
-	vec3 bezel_color = bezel_diffuse_color + HSM_BZL_HIGHLIGHT * combined_highlight_mask;
-	bezel_color += HSM_BZL_HIGHLIGHT * edge_highlight_mask;
+	float bezel_highlight_multiplier = HSM_BZL_HIGHLIGHT * combined_highlight_mask + HSM_BZL_HIGHLIGHT * edge_highlight_mask;
+	vec3 bezel_color = bezel_diffuse_color * (1 + 15 * bezel_highlight_multiplier) + 1 * bezel_highlight_multiplier;
 
 	// Add the inner edge highlight on top of the bezel color which has it's own highlight
-	vec3 frame_inner_edge_color = bezel_color + hmbz_bezel_brightness_frame_inner_edge + HSM_BZL_HIGHLIGHT * 10 * hmbz_bezel_brightness_frame_inner_edge;
+	float inner_edge_highlight_multiplier = hmbz_bezel_brightness_frame_inner_edge + HSM_BZL_HIGHLIGHT * 10 * hmbz_bezel_brightness_frame_inner_edge;
+	vec3 frame_inner_edge_color = base_color * (1 + 15 * inner_edge_highlight_multiplier) +	0.5 * inner_edge_highlight_multiplier;
+
 	bezel_color = mix(bezel_color, frame_inner_edge_color, frame_inner_edge_mask);
 
 	float dist_inside_outer_edge = min(0.5 - abs(frame_outside_coord_ctr.x), 0.5 - abs(frame_outside_coord_ctr.y));

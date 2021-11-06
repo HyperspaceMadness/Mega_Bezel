@@ -144,7 +144,7 @@ vec4 GetColorWithIntro(vec4 in_color, vec2 in_coord)
 
 	if (frame_count <= full_seq_length)
 	{
-		vec2 noise_res = global.OriginalSize.xy;
+		vec2 noise_res = global.SourceSize.xy;
       noise_res = min(noise_res, vec2(640, 480));
 		vec2 quantized_coord = vec2(floor((in_coord.x + 0.01) * noise_res.x) / noise_res.x, floor((in_coord.y + 0.01) * noise_res.y) / noise_res.y);
 
