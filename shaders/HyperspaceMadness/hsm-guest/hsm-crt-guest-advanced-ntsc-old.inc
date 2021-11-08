@@ -264,13 +264,6 @@ void main()
 {
    gl_Position = global.MVP * Position;
    vTexCoord = TexCoord * 1.0001;
-   
-   // HSM Added
-	if (HSM_FLIP_VIEWPORT_VERTICAL == 1)
-		vTexCoord.y = 1 - vTexCoord.y;
-		
-	if (HSM_FLIP_VIEWPORT_HORIZONTAL > 0.5)
-		vTexCoord.x =  1 - vTexCoord.x;
 }
 
 #pragma stage fragment
@@ -562,6 +555,7 @@ vec3 plant (vec3 tar, float r)
 void main()
 {
 	// HSM Added
+	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
 // If it's the potato preset render the whole frame

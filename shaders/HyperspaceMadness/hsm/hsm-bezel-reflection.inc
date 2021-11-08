@@ -56,14 +56,7 @@ void main()
 	vTexCoord = TexCoord;
 
 	UNFLIPPED_VIEWPORT_COORD = vTexCoord * 1.0001;
-
-	if (HSM_FLIP_VIEWPORT_VERTICAL > 0.5)
-		vTexCoord.y =  1 - vTexCoord.y;
-
-	if (HSM_FLIP_VIEWPORT_HORIZONTAL > 0.5)
-		vTexCoord.x =  1 - vTexCoord.x;
-
-	VIEWPORT_COORD = vTexCoord * 1.0001;
+	vTexCoord * 1.0001;
 
 	// Not sure why we need linearize this but it seems to have a smoother range this way
 	BEZEL_FRAME_ORIGINAL_COLOR_RGB = HSM_Linearize(vec4(HSM_HSVtoRGB(vec3(HSM_BZL_COLOR_HUE, HSM_BZL_COLOR_SATURATION, HSM_BZL_COLOR_VALUE)), 1), HSM_DEFAULT_SRGB_GAMMA).rgb;
@@ -104,8 +97,8 @@ layout(set = 0, binding = 12) uniform sampler2D BR_CRTAndReflectionPassFeedback;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
 {
-	VIEWPORT_COORD = vTexCoord;
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, VIEWPORT_COORD);
+	VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
 
 	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 

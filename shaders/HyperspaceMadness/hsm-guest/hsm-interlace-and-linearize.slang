@@ -163,6 +163,7 @@ void main()
 	vec3  c2 = vec3(0);
 	
 	// HSM Added
+	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
 	use_vert_scanlines_bool = (USE_VERTICAL_SCANLINES > 0.5);

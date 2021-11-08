@@ -154,7 +154,8 @@ layout(set = 0, binding = 15) uniform sampler2D InfoCachePassFeedback;
 void main()
 {
     // HSM Added
-    HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
     vec4 bg_color = vec4(0, 0, 0, 1);
     if (params.gameboy_color_palette == 0)

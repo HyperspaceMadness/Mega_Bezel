@@ -126,12 +126,6 @@ void main()
 
 	UNFLIPPED_VIEWPORT_COORD = vTexCoord;
 
-	if (HSM_FLIP_VIEWPORT_VERTICAL > 0.5)
-		vTexCoord.y =  1 - vTexCoord.y;
-
-	if (HSM_FLIP_VIEWPORT_HORIZONTAL > 0.5)
-		vTexCoord.x =  1 - vTexCoord.x;
-
 	VIEWPORT_COORD = vTexCoord * 1.0001;
 }
 
@@ -172,8 +166,9 @@ layout(set = 0, binding = 13) uniform sampler2D BR_LayersUnderCRTPassFeedback;
 void main()
 {
 	VIEWPORT_COORD = vTexCoord;
+	vec2 VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, VIEWPORT_COORD);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
 	vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
 	if (HSM_LIVE_UPDATE_ON < 0.5 && feedback_color_test.a < 0 && !HSM_CheckCacheInfoChanged())

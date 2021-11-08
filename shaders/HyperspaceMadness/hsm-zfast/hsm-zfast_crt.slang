@@ -69,12 +69,6 @@ void main()
 {
 	gl_Position = global.MVP * Position;
 	vTexCoord = TexCoord * 1.0001;
-	
-	if (HSM_FLIP_VIEWPORT_VERTICAL == 1)
-		vTexCoord.y = 1 - vTexCoord.y;
-		
-	if (HSM_FLIP_VIEWPORT_HORIZONTAL > 0.5)
-		vTexCoord.x =  1 - vTexCoord.x;
 
 	maskFade = 0.3333 * MASK_FADE;
 	
@@ -92,7 +86,8 @@ layout(set = 0, binding = 3) uniform sampler2D InfoCachePassFeedback;
 void main()
 {
     // HSM Added
-    HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 	
 	vec2 invDims = 1.0 / CROPPED_ROTATED_SIZE_WITH_RES_MULT;
 

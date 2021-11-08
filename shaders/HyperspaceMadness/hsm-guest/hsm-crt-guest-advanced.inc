@@ -245,7 +245,7 @@ layout(push_constant) uniform Push
 #define COMPAT_TEXTURE(c,d) HSM_GetCroppedTexSample(c,d)
 // End Addition
 
-#define TEX0 vTexCoord
+// #define TEX0 vTexCoord
 
 #define OutputSize global.OutputSize
 #define gl_FragCoord (vTexCoord * OutputSize.xy)
@@ -257,15 +257,8 @@ layout(location = 0) out vec2 vTexCoord;
 
 void main()
 {
-   gl_Position = global.MVP * Position;
-   vTexCoord = TexCoord * 1.0001;
-   
-   // HSM Added
-	if (HSM_FLIP_VIEWPORT_VERTICAL == 1)
-		vTexCoord.y = 1 - vTexCoord.y;
-		
-	if (HSM_FLIP_VIEWPORT_HORIZONTAL > 0.5)
-		vTexCoord.x =  1 - vTexCoord.x;
+	gl_Position = global.MVP * Position;
+	vTexCoord = TexCoord * 1.0001;
 }
 
 #pragma stage fragment
@@ -575,6 +568,7 @@ vec3 plant (vec3 tar, float r)
 void main()
 {
 	// HSM Added
+	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
 	bool ntsc_processing_on = false;

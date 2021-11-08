@@ -48,12 +48,6 @@ void main()
 {
     gl_Position = global.MVP * Position;
     vTexCoord = TexCoord;
-
-	if (HSM_FLIP_VIEWPORT_VERTICAL == 1)
-		vTexCoord.y = 1 - vTexCoord.y;
-		
-	if (HSM_FLIP_VIEWPORT_HORIZONTAL > 0.5)
-		vTexCoord.x =  1 - vTexCoord.x;
 }
 
 #pragma stage fragment
@@ -108,6 +102,7 @@ float intsmear(float x, float dx, float d, float coeffs[7])
 void main()
 {
     // HSM Added
+	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
 	vec2 screen_curved_coord = HSM_GetCurvedCoord(SCREEN_COORD, 1, SCREEN_ASPECT);

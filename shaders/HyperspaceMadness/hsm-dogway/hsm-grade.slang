@@ -880,6 +880,7 @@ vec3 vcolor = adj;
 */
 
     // HSM Added
+	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
     vec2 derezed_size = HSM_GetCorePreppedSize();
     vec2 cur_pixel_pos = vTexCoord * derezed_size;

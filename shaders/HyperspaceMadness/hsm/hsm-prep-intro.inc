@@ -5,16 +5,16 @@
 #pragma stage vertex
 layout(location = 0) in vec4 Position;
 layout(location = 1) in vec2 TexCoord;
-layout(location = 0) out vec2 VIEWPORT_COORD;
+layout(location = 0) out vec2 vTexCoord;
 
 void main()
 {
    gl_Position = global.MVP * Position;
-   VIEWPORT_COORD = TexCoord * 1.00001;
+   vTexCoord = TexCoord * 1.00001;
 }
 
 #pragma stage fragment
-layout(location = 0) in vec2 VIEWPORT_COORD;
+layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 2) uniform sampler2D CorePreppedPass;
 
@@ -252,10 +252,11 @@ vec4 GetColorWithIntro(vec4 in_color, vec2 in_coord)
 
 void main()
 {
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, VIEWPORT_COORD);
+	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
 	// Flip the coordinate vertically if desired
-   vec2 viewport_coord_adjusted = VIEWPORT_COORD;
+   vec2 viewport_coord_adjusted = vTexCoord;
 	viewport_coord_adjusted.x = abs(HSM_FLIP_VIEWPORT_HORIZONTAL - HSM_FLIP_CORE_HORIZONTAL) * (1 - viewport_coord_adjusted.x) + (1 - abs(HSM_FLIP_VIEWPORT_HORIZONTAL - HSM_FLIP_CORE_HORIZONTAL)) * viewport_coord_adjusted.x;
 	viewport_coord_adjusted.y = abs(HSM_FLIP_VIEWPORT_VERTICAL - HSM_FLIP_CORE_VERTICAL) * (1 - viewport_coord_adjusted.y) + (1 - abs(HSM_FLIP_VIEWPORT_VERTICAL - HSM_FLIP_CORE_VERTICAL)) * viewport_coord_adjusted.y;
 
@@ -288,7 +289,7 @@ void main()
 		}
 	}
    
-   // vec4 overlay_color = GetCropOverlay(VIEWPORT_COORD);
+   // vec4 overlay_color = GetCropOverlay(vTexCoord);
    // FragColor *= 1 - 0.7 * overlay_color.a;
    // FragColor += 1 * 0.7 * overlay_color;
 

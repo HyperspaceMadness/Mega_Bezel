@@ -116,6 +116,7 @@ void main()
 		return;
 	}
 
+	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 	float TATE = USE_VERTICAL_SCANLINES;
 

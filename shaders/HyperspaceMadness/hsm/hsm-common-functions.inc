@@ -13,14 +13,21 @@ Description:
 #include "hsm-royale-geometry-functions.inc"
 #endif
 
-// vec2 HSM_GetViewportCoordWithZoomAndPan(vec2 viewport_coord)
-// {
-// 	vec2 out_coord = viewport_coord;
-// 	out_coord.x += HSM_VIEWPORT_POSITION_X; 
-// 	out_coord.y -= HSM_VIEWPORT_POSITION_Y; 
-// 	out_coord = (out_coord - 0.5) / HSM_VIEWPORT_ZOOM + 0.5;
-// 	return out_coord;
-// }
+vec2 HSM_GetViewportCoordWithZoomAndPan(vec2 viewport_coord)
+{
+	vec2 out_coord = viewport_coord;
+
+	if (HSM_FLIP_VIEWPORT_VERTICAL == 1)
+		out_coord.y = 1 - out_coord.y;
+		
+	if (HSM_FLIP_VIEWPORT_HORIZONTAL > 0.5)
+		out_coord.x =  1 - out_coord.x;
+
+	out_coord = (out_coord - 0.5) / HSM_VIEWPORT_ZOOM + 0.5;
+	out_coord.x += HSM_VIEWPORT_POSITION_X;
+	out_coord.y -= HSM_VIEWPORT_POSITION_Y; 
+	return out_coord;
+}
 
 float HSM_GetAspectRatioFromMode(float in_aspect_ratio_mode, float in_explicit_aspect)
 {
@@ -1311,17 +1318,28 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D original_pass
 
 	// 10th Sample
 	// rg CORE_SIZE
-	sample_2d_range = vec4(0.250, 0.5, 0.5, 0.75);
+	sample_2d_range = vec4(0.25, 0.5, 0.5, 0.75);
 	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
 	{
 		out_color.rg = global.CorePassSize.xy;
 	}
 
+	// 11th Sample
+	// rg VIEWPORT_SCALE
+	// ba VIEWPORT_POS
+	sample_2d_range = vec4(0.5, 0.5, 0.75, 0.75);
+	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
+	{
+		out_color.rg = vec2(HSM_VIEWPORT_ZOOM, HSM_VIEWPORT_ZOOM);
+		out_color.ba = vec2(HSM_VIEWPORT_POSITION_X, HSM_VIEWPORT_POSITION_Y);
+	}
+
 	return out_color;
 }
 
-vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in_cache_feedback_pass, vec2 flipped_viewport_coord)
+vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in_cache_feedback_pass, vec2 vTexCoord)
 {
+	vec2 flipped_viewport_coord = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	SCREEN_INDEX = HSM_GetScreenIndex(flipped_viewport_coord);
 	CORE_SIZE = global.CorePassSize.xy;
 	CORE_FEEDBACK_SIZE = global.CorePassFeedbackSize.xy;
@@ -1359,12 +1377,12 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 		TUBE_SCALE = texture_sample.rg;
 		SCREEN_POS_OFFSET = texture_sample.ba;
 
-		// // 3rd Sample  Feedback
-		// // rg TUBE_SCALE_FEEDBACK
-		// // ba SCREEN_POS_OFFSET_FEEDBACK
-		// texture_sample = texture(in_cache_feedback_pass, sample_coord);
-		// TUBE_SCALE_FEEDBACK = texture_sample.rg;
-		// SCREEN_POS_OFFSET_FEEDBACK = texture_sample.ba;
+		// 3rd Sample  Feedback
+		// rg TUBE_SCALE_FEEDBACK
+		// ba SCREEN_POS_OFFSET_FEEDBACK
+		texture_sample = texture(in_cache_feedback_pass, sample_coord);
+		TUBE_SCALE_FEEDBACK = texture_sample.rg;
+		SCREEN_POS_OFFSET_FEEDBACK = texture_sample.ba;
 
 
 		// 4th Sample 
@@ -1429,6 +1447,21 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 	texture_sample = texture(in_cache_feedback_pass, sample_coord);
 	CORE_FEEDBACK_SIZE = texture_sample.rg;
 
+	// 11th Sample
+	// rg VIEWPORT_SCALE
+	// ba VIEWPORT_POS
+	sample_coord = vec2(0.675, 0.675);
+	texture_sample = texture(in_cache_pass, sample_coord);
+	VIEWPORT_SCALE = texture_sample.rg;
+	VIEWPORT_POS = texture_sample.ba;
+
+	// 11th Sample Feedback
+	// rg VIEWPORT_SCALE
+	// ba VIEWPORT_POS
+	texture_sample = texture(in_cache_feedback_pass, sample_coord);
+	VIEWPORT_SCALE_FEEDBACK = texture_sample.rg;
+	VIEWPORT_POS_FEEDBACK = texture_sample.ba;
+
 	USE_VERTICAL_SCANLINES = HSM_GetUseVerticalScanlines(SCREEN_ASPECT);
 	SCREEN_COORD = HSM_GetVTexCoordWithArgs(flipped_viewport_coord, SCREEN_SCALE, SCREEN_POS_OFFSET);
 
@@ -1438,14 +1471,17 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 bool HSM_CheckCacheInfoChanged()
 {
 	float epsilon = 0.0001;
-	return !(CORE_SIZE.x == CORE_FEEDBACK_SIZE.x &&
-			CORE_SIZE.y == CORE_FEEDBACK_SIZE.y &&
-			abs(SCREEN_SCALE.x - SCREEN_SCALE_FEEDBACK.x) < epsilon &&
-			abs(SCREEN_SCALE.y - SCREEN_SCALE_FEEDBACK.y) < epsilon
-			// abs(TUBE_SCALE.x - TUBE_SCALE_FEEDBACK.x) < epsilon &&
-			// abs(TUBE_SCALE.y - TUBE_SCALE_FEEDBACK.y) < epsilon &&
-			// abs(SCREEN_POS_OFFSET.x - SCREEN_POS_OFFSET_FEEDBACK.x) < epsilon &&
-			// abs(SCREEN_POS_OFFSET.y - SCREEN_POS_OFFSET_FEEDBACK.y) < epsilon
+	return (CORE_SIZE.x != CORE_FEEDBACK_SIZE.x
+			|| CORE_SIZE.y != CORE_FEEDBACK_SIZE.y
+			|| abs(SCREEN_SCALE.x - SCREEN_SCALE_FEEDBACK.x) > epsilon
+			|| abs(SCREEN_SCALE.y - SCREEN_SCALE_FEEDBACK.y) > epsilon
+			|| abs(SCREEN_POS_OFFSET.x - SCREEN_POS_OFFSET_FEEDBACK.x) > epsilon
+			|| abs(SCREEN_POS_OFFSET.y - SCREEN_POS_OFFSET_FEEDBACK.y) > epsilon
+			|| abs(TUBE_SCALE.x - TUBE_SCALE_FEEDBACK.x) > epsilon
+			|| abs(TUBE_SCALE.y - TUBE_SCALE_FEEDBACK.y) > epsilon
+			|| abs(VIEWPORT_SCALE.y - VIEWPORT_SCALE_FEEDBACK.x) > epsilon
+			|| abs(VIEWPORT_POS.x - VIEWPORT_POS_FEEDBACK.x) > epsilon
+			|| abs(VIEWPORT_POS.y - VIEWPORT_POS_FEEDBACK.y) > epsilon
 			);
 }
 
@@ -1501,8 +1537,6 @@ float HSM_GetScreenVignetteFactor(vec2 in_coord)
 	return vig;
 }
 
-
-// TODO need to remove calls to Get RotatedOriginalSize etc
 // Torridgristle - ScanlineSimple pass - Public domain
 vec4 HSM_ApplyScanlineMask(vec4 in_color, vec2 screen_scale, vec2 in_coord, vec2 in_curved_coord)
 {

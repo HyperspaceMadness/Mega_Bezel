@@ -27,9 +27,7 @@ layout(location = 8) out vec3 BEZEL_FRAME_ORIGINAL_COLOR_RGB;
 void main()
 {
 	gl_Position = global.MVP * Position;
-	vTexCoord = TexCoord;
-
-
+	vTexCoord = TexCoord * 1.0001;
 
 	// Not sure why we need linearize this but it seems to have a smoother range this way
 	BEZEL_FRAME_ORIGINAL_COLOR_RGB = HSM_Linearize(vec4(HSM_HSVtoRGB(vec3(HSM_BZL_COLOR_HUE, HSM_BZL_COLOR_SATURATION, HSM_BZL_COLOR_VALUE)), 1), HSM_DEFAULT_SRGB_GAMMA).rgb;
@@ -65,16 +63,9 @@ layout(set = 0, binding = 6) uniform sampler2D CombinePassFeedback;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
 {
-	UNFLIPPED_VIEWPORT_COORD = vTexCoord * 1.0001;
-	FLIPPED_VIEWPORT_COORD = UNFLIPPED_VIEWPORT_COORD;
-
-	if (HSM_FLIP_VIEWPORT_VERTICAL > 0.5)
-		FLIPPED_VIEWPORT_COORD.y =  1 - vTexCoord.y;
-
-	if (HSM_FLIP_VIEWPORT_HORIZONTAL > 0.5)
-		FLIPPED_VIEWPORT_COORD.x =  1 - vTexCoord.x;
-
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, FLIPPED_VIEWPORT_COORD);
+	UNFLIPPED_VIEWPORT_COORD = vTexCoord;
+	vec2 VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
 
 	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 

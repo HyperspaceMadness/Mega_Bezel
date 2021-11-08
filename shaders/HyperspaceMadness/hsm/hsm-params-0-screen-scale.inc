@@ -16,26 +16,26 @@ float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
 #pragma parameter HSM_LIVE_UPDATE_ON								"          Live Update Graphic/Bezel: OFF | ON | ON NO INDICATOR" 0 0 2 1
 float HSM_LIVE_UPDATE_ON = global.HSM_LIVE_UPDATE_ON;
 
-#pragma parameter HSM_SHOW_AUTO_UPDATE_INDICATOR								"          Show Indicator on Auto Cache Update" 0 0 1 1
+#pragma parameter HSM_SHOW_AUTO_UPDATE_INDICATOR					"          Show Indicator on Auto Cache Update" 0 0 1 1
 float HSM_SHOW_AUTO_UPDATE_INDICATOR = global.HSM_SHOW_AUTO_UPDATE_INDICATOR;
 
-// #pragma parameter HSM_CACHE_OUTSIDE_FRAME							"          Cache Outside Frame: OFF | ON" 1 0 1 1
+// #pragma parameter HSM_CACHE_OUTSIDE_FRAME						"          Cache Outside Frame: OFF | ON" 1 0 1 1
 // float HSM_CACHE_OUTSIDE_FRAME = global.HSM_CACHE_OUTSIDE_FRAME;
 float HSM_CACHE_OUTSIDE_FRAME = 1;
 
-// //---------------------------------------------------------------------------------------------------
-// //    Zoom & Pan
-// //---------------------------------------------------------------------------------------------------
-// #pragma parameter HSM_VIEWPORT_ZOOM_TITLE							"[ Viewport Zoom ]:" 0 0 0.01 0.01
+//---------------------------------------------------------------------------------------------------
+//    Zoom & Pan
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_VIEWPORT_ZOOM_TITLE							"[ Viewport Zoom ]:" 0 0 0.01 0.01
 
-// #pragma parameter HSM_VIEWPORT_ZOOM									"          Viewport Zoom"  100 10 1000 100
-// float HSM_VIEWPORT_ZOOM = global.HSM_VIEWPORT_ZOOM / 100;
+#pragma parameter HSM_VIEWPORT_ZOOM									"          Viewport Zoom"  100 10 1000 0.2
+float HSM_VIEWPORT_ZOOM = global.HSM_VIEWPORT_ZOOM / 100;
 
-// #pragma parameter HSM_VIEWPORT_POSITION_X							"          Viewport Position X"  0 -100 100 0
-// float HSM_VIEWPORT_POSITION_X = global.HSM_VIEWPORT_POSITION_X / 100;
+#pragma parameter HSM_VIEWPORT_POSITION_X							"          Viewport Position X"  0 -500 500 1
+float HSM_VIEWPORT_POSITION_X = -1 * global.HSM_VIEWPORT_POSITION_X / 1000;
 
-// #pragma parameter HSM_VIEWPORT_POSITION_y							"          Viewport Position Y"  0 -100 100 0
-// float HSM_VIEWPORT_POSITION_y = global.HSM_VIEWPORT_POSITION_Y / 100;
+#pragma parameter HSM_VIEWPORT_POSITION_Y							"          Viewport Position Y"  0 -500 500 1
+float HSM_VIEWPORT_POSITION_Y = -1 * global.HSM_VIEWPORT_POSITION_Y / 1000;
 
 //---------------------------------------------------------------------------------------------------
 //    FLIP & ROTATE

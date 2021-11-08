@@ -51,6 +51,7 @@ layout(set = 0, binding = 9) uniform sampler2D IntroPass;
 
 void main()
 {
+	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
 	// if (HSM_CACHE_OUTSIDE_FRAME > 0.5)

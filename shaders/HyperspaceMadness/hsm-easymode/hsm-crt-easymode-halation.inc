@@ -155,12 +155,6 @@ void main()
 {
    gl_Position = global.MVP * Position;
    vTexCoord = TexCoord;
-
-	if (HSM_FLIP_VIEWPORT_VERTICAL == 1)
-		vTexCoord.y = 1 - vTexCoord.y;
-		
-	if (HSM_FLIP_VIEWPORT_HORIZONTAL > 0.5)
-		vTexCoord.x =  1 - vTexCoord.x;
 }
 
 #pragma stage fragment
@@ -182,7 +176,8 @@ void main()
 
     // TODO implement Cropping
     // HSM Added
-    HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
     vec2 tex_size = CROPPED_ROTATED_SIZE_WITH_RES_MULT;
     // End Addition
 
