@@ -28,7 +28,7 @@ float HSM_CACHE_OUTSIDE_FRAME = 1;
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_VIEWPORT_ZOOM_TITLE							"[ Viewport Zoom ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_VIEWPORT_ZOOM									"          Viewport Zoom"  100 10 1000 0.2
+#pragma parameter HSM_VIEWPORT_ZOOM									"          Viewport Zoom"  100 10 500 0.2
 float HSM_VIEWPORT_ZOOM = global.HSM_VIEWPORT_ZOOM / 100;
 
 #pragma parameter HSM_VIEWPORT_POSITION_X							"          Viewport Position X"  0 -500 500 1
@@ -105,6 +105,9 @@ float HSM_NON_INTEGER_SCALE = global.HSM_NON_INTEGER_SCALE - (HSM_VERTICAL_PRESE
 
 #pragma parameter USE_IMAGE_FOR_PLACEMENT 							"          Use Image For Placement (Scale & Y Pos)" 0 0 1 1
 float USE_IMAGE_FOR_PLACEMENT = global.USE_IMAGE_FOR_PLACEMENT;
+
+#pragma parameter PLACEMENT_IMAGE_MODE 						"          Placement Image Mode: TRANSPARENCY : WHITE ON BLACK" 0 0 1 1
+float PLACEMENT_IMAGE_MODE = global.PLACEMENT_IMAGE_MODE;
 
 #pragma parameter HSM_NON_INTEGER_SCALE_OFFSET 						"          Non-Integer Scale Offset" 100 5 400 0.1
 float HSM_NON_INTEGER_SCALE_OFFSET = global.HSM_NON_INTEGER_SCALE_OFFSET / 100;

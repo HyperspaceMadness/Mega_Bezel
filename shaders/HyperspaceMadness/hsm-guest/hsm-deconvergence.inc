@@ -154,6 +154,9 @@ void main()
 		vec2 dx = (TATE < 0.5) ? vec2(step, 0.0) :  vec2(0.0, step);
 		vec2 dy = (TATE > 0.5) ? vec2(stepy, 0.0) :  vec2(0.0, stepy);		
 		
+		dx *= VIEWPORT_SCALE.x;
+		dy *= VIEWPORT_SCALE.y;
+
 		float posx = 2.0*vTexCoord.x - 1.0;
 		float posy = 2.0*vTexCoord.y - 1.0;
 		

@@ -327,12 +327,16 @@ vec3 Mask(vec2 pos, float mx)
 	*/
 
 	// HSM Added
+	
 	float final_mask_size = masksize;
 	// If using automatic Mask Size
 	if (masksize < 0.5)
 	{
 		final_mask_size = (global.FinalViewportSize.x + global.FinalViewportSize.y) / 3 > 1900 ? 2 : 1;
 	}
+
+	final_mask_size = max(1, floor(VIEWPORT_SCALE.y * final_mask_size + 0.2));
+
 	pos = floor(pos/final_mask_size);
 	// End HSM Added
 
@@ -490,6 +494,9 @@ bool slot_mask_off = (slotmask + slotmask1) == 0.0;
 	{
 		final_mask_size = (global.FinalViewportSize.x + global.FinalViewportSize.y) / 3 > 1900 ? 2 : 1;
 	}
+
+	final_mask_size = max(1, floor(VIEWPORT_SCALE.y * final_mask_size + 0.2));
+
 	pos = floor(pos/final_mask_size);
 	// End HSM Added
 

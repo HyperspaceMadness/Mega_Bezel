@@ -21,6 +21,8 @@ Changes:
   * Fix Color Tweaks, Display Gamut last option is now in range
   * Corner radius' for are now independent, Black Edge, Bezel inside, Bezel Outside
   * Added Color Control on all Layers
+  * Viewport Zoom & Position
+  * Add option for Black and White placement image requested by @briball
 
 
   * BIG Changes to what each preset level does
@@ -61,16 +63,15 @@ Mega Bezel Still to Come:
 
 V1 TODO
   
+  * Add Nightlighting Opacity to Auto-Cache Update
+  * Nightlighting params At top?
+  * ZFast Curvature
   * The frame outer edge still has a faint line, so the masking could maybe be tweaked. (Or if it is a drop shadow issue maybe it needs a different method?)
-  * The Frame inner edge is still a static color and needs to respond to HSV.
-  * Viewport Zoom & Position
   * Add Tube Color & Vignette (Should take night lighting)
-  * Add option for Black and White placement image for briball
   * Good Preset for FBNeo & Instructions
   * Swap option for Blurry and Sharp Tube Reflection
   * Add Death to Pixels
   * Add Split for Gel
-  * Add GDV-NTSC presets
   * MrRetrolust Presets with new Mega_Bezel
   * Add NTSC Adaptive Preset?
   * Add Variations CRT Royale Glass & Advanced

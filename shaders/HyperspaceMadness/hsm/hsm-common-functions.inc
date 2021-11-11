@@ -806,13 +806,18 @@ vec2 HSM_GetScreenPlacementYPosAndHeight(sampler2D in_sampler_2D, float num_samp
 	for (int i=0; i < num_samples; i++)
 	{
 		float y_pos = i * 1 / num_samples;
-		float image_alpha = texture(in_sampler_2D, vec2(0.5, y_pos)).a;
-		if (image_alpha < 0.5)
+		vec4 sample_color = texture(in_sampler_2D, vec2(0.5, y_pos));
+		float test_value = 0;
+		if (PLACEMENT_IMAGE_MODE == 1)
+			test_value = (sample_color.r + sample_color.b + sample_color.g) / 3;
+		else
+			test_value = 1 - sample_color.a;
+
+		if (test_value > 0.5)
 		{
 			screen_top_y_pos = min(screen_top_y_pos, y_pos);
 			screen_bottom_y_pos = max(screen_bottom_y_pos, y_pos);
 		}
-		
 	}
    return vec2((screen_top_y_pos + screen_bottom_y_pos) / 2, screen_bottom_y_pos - screen_top_y_pos);
 }
