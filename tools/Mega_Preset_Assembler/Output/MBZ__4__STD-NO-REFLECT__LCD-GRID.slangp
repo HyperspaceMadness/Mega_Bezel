@@ -1,0 +1,170 @@
+shaders = 19
+
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm/hsm-prep-add-params-no-reflect.slang
+alias0 = "CorePass"
+
+shader1 =  :/shaders/shaders_slang/stock.slang // :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/g-sharp_resampler.slang
+filter_linear1 = false
+srgb_framebuffer1 = true
+scale_type1 = source
+scale_x1 = 1
+scale_y1 = 1
+alias1 = "DerezedPass"
+
+shader2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm/hsm-prep-add-negative-crop-area.slang
+filter_linear2 = false
+mipmap_input2 = false
+srgb_framebuffer2 = true
+scale_type2 = source
+scale_x2 = 1.25
+scale_y2 = 1.25
+alias2 = "CorePreppedPass"
+
+shader3 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm/hsm-prep-info-cache-no-reflect-params.slang
+filter_linear3 = true
+float_framebuffer3 = true
+scale_type3 = source
+scale3 = 1.0
+alias3 = "InfoCachePass"
+
+shader4 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm/hsm-prep-intro-std-no-reflect.slang
+filter_linear4 = false
+float_framebuffer4 = true
+scale_type4 = source
+scale4 = 1.0
+alias4 = "IntroPass"
+
+shader5 =  :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-custom-fast-sharpen.slang // :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/g-sharp_resampler.slang
+filter_linear5 = false
+srgb_framebuffer5 = true
+
+shader6 = :/shaders/shaders_slang/stock.slang
+alias6 = "PreCRTPass"
+
+shader7 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-afterglow0.slang
+filter_linear7 = false
+scale_type7 = source
+scale7 = 1.0
+alias7 = "AfterglowPass"
+
+shader8 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-pre-shaders-afterglow.slang
+filter_linear8 = false
+scale_type8 = source
+mipmap_input8 = true
+scale8 = 1.0
+
+// Color Correction with Dogway's awesome Grade shader
+// Grade is after Afterglow so that brightening the black level does not break the afterglow
+shader9 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
+alias9 = "PrePass"
+
+shader10 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-avg-lum.slang
+filter_linear10 = true
+scale_type10 = source
+scale10 = 1.0
+mipmap_input10 = true
+alias10 = "AvgLumPass"
+
+// Pass referenced by subsequent blurring passes and crt pass
+shader11 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-interlace-and-linearize.slang
+filter_linear11 = true
+scale_type11 = source
+scale11 = 1.0
+float_framebuffer11 = true
+alias11 = "LinearizePass"
+
+shader12 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm/hsm-delinearize.slang
+
+shader13 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-lcd-cgwg/hsm-lcd-grid-v2.slang
+filter_linear13 = "false"
+scale_type13 = "viewport"
+scale13 = "1.0"
+
+shader14 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-deconvergence.slang
+filter_linear14 = true
+scale_type14 = viewport
+scale_x14 = 1.0
+scale_y14 = 1.0
+
+shader15 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm/hsm-prep-post-crt-bezel-images.slang
+alias15 = "MBZ_PostCRTPass"
+
+// Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
+
+shader16 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm/hsm-bezel-images-under-crt.slang
+filter_linear16 = true
+scale_type16 = viewport
+float_framebuffer16 = true
+alias16 = "BR_LayersUnderCRTPass"
+
+shader17 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm/hsm-bezel-images-over-crt.slang
+filter_linear17 = true
+scale_type17 = viewport
+float_framebuffer17 = true
+alias17 = "BR_LayersOverCRTPass"
+
+// Combine Passes ----------------------------------------------------------------
+shader18 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm/hsm-combine-passes-no-reflect.slang
+scale_type18 = viewport
+float_framebuffer18 = true
+alias18 = "CombinePass"
+// Define textures to be used by the different passes
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;ColoredGelImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;LEDImage;TopLayerImage;"
+
+SamplerLUT1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/lut/trinitron-lut.png
+SamplerLUT1_linear = true 
+SamplerLUT2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/lut/inv-trinitron-lut.png
+SamplerLUT2_linear = true 
+SamplerLUT3 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/lut/nec-lut.png
+SamplerLUT3_linear = true
+SamplerLUT4 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/lut/ntsc-lut.png
+SamplerLUT4_linear = true
+
+IntroImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/IntroImage_MegaBezelLogo.png
+IntroImage_linear = true
+
+ScreenPlacementImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+ScreenPlacementImage_linear = false
+
+ColoredGelImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+ColoredGelImage_linear = true
+
+TubeStaticReflectionImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/TubeGlassOverlayImage_3840x2160.png
+TubeStaticReflectionImage_linear = true
+
+ReflectionMaskImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_White_16x16.png
+ReflectionMaskImage_linear = true
+
+FrameTextureImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/FrameTexture_2800x2120.png
+FrameTextureImage_linear = true
+
+BackgroundImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/BackgroundImage_Carbon_3840x2160.png
+BackgroundImage_linear = true
+
+BackgroundVertImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/BackgroundImage_Carbon_3840x2160.png
+BackgroundVertImage_linear = true
+
+CabinetGlassImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+CabinetGlassImage_linear = true
+
+DeviceImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+DeviceImage_linear = true
+
+DeviceVertImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+DeviceVertImage_linear = true
+
+DecalImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+DecalImage_linear = true
+
+NightLightingImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/NightLighting_3840x2160.jpg
+NightLightingImage_linear = true
+
+LEDImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+LEDImage_linear = true
+
+TopLayerImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+TopLayerImage_linear = true
+
+// Use for matching vanilla GDV-Advanced
+// HSM_ASPECT_RATIO_MODE = 6
+// HSM_CURVATURE_MODE = -1

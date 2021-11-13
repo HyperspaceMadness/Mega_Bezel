@@ -23,7 +23,7 @@ Changes:
   * Added Color Control on all Layers
   * Viewport Zoom & Position
   * Add option for Black and White placement image requested by @briball
-
+  * Parameter USE_IMAGE_FOR_PLACEMENT renamed to HSM_USE_IMAGE_FOR_PLACEMENT
 
   * BIG Changes to what each preset level does
     * ADV
@@ -63,6 +63,7 @@ Mega Bezel Still to Come:
 
 V1 TODO
   
+  * 2D Cylindrical Curvature Mode
   * Add Nightlighting Opacity to Auto-Cache Update
   * Nightlighting params At top?
   * ZFast Curvature

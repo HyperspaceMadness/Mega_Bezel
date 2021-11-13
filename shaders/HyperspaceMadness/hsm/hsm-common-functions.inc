@@ -577,7 +577,7 @@ vec2 HSM_GetScreenScale(float screen_aspect, float screen_height_from_image, vec
 				screen_height = (diagonal_length * 1) / sqrt(screen_aspect * screen_aspect + 1 * 1);
 			}
 
-			if (USE_IMAGE_FOR_PLACEMENT == 1)
+			if (HSM_USE_IMAGE_FOR_PLACEMENT == 1)
 				screen_height = screen_height_from_image;
 
 			screen_height *= HSM_NON_INTEGER_SCALE_OFFSET;
@@ -695,7 +695,7 @@ vec2 HSM_GetTubeScale(vec2 screen_scale, float image_placement_screen_height)
 	// Add switch for independent scale
 	if (HSM_BZL_USE_INDEPENDENT_SCALE == 1)
 	{
-		if (USE_IMAGE_FOR_PLACEMENT == 0)
+		if (HSM_USE_IMAGE_FOR_PLACEMENT == 0)
 			screen_scale = screen_scale / screen_scale.y * HSM_BZL_INDEPENDENT_SCALE;
 		else
 			screen_scale = screen_scale / screen_scale.y * image_placement_screen_height;
@@ -731,7 +731,7 @@ vec2 HSM_GetPositionOffset(vec2 placement_image_pos, vec2 screen_scale )
 
 	vec2 center_offset = screen_center_pos - vec2(0.5, 0.5);
 
-	if (USE_IMAGE_FOR_PLACEMENT == 0)
+	if (HSM_USE_IMAGE_FOR_PLACEMENT == 0)
 		placement_image_pos = vec2(0.5);
 
 	float output_aspect_ratio = global.FinalViewportSize.x / global.FinalViewportSize.y;
@@ -808,7 +808,7 @@ vec2 HSM_GetScreenPlacementYPosAndHeight(sampler2D in_sampler_2D, float num_samp
 		float y_pos = i * 1 / num_samples;
 		vec4 sample_color = texture(in_sampler_2D, vec2(0.5, y_pos));
 		float test_value = 0;
-		if (PLACEMENT_IMAGE_MODE == 1)
+		if (HSM_PLACEMENT_IMAGE_MODE == 1)
 			test_value = (sample_color.r + sample_color.b + sample_color.g) / 3;
 		else
 			test_value = 1 - sample_color.a;
@@ -1130,30 +1130,6 @@ vec2 HSM_GetTubeCurvedCoord(vec2 screen_coord, float curvature_scale, vec2 scree
 //     return max(0.0,dot(normal,Lnorm)) * evaluateLight(pos);
 // }
 
-// vec4 HSM_ApplyBlackLevel(vec4 in_color, float color_is_linear)
-// {
-// 	vec4 out_color = in_color;
-
-// 	// Linearize if color isn't linear
-// 	if (color_is_linear == 0)
-// 		out_color = HSM_Linearize(out_color, HSM_DEFAULT_CRT_GAMMA);
-
-// 	// Black Level
-// 	out_color += HSM_BRIGHTEN_BLACK / 100;
-// 	out_color *= 1 / vec4(1.0 + HSM_BRIGHTEN_BLACK / 100);
-// 	out_color = clamp(out_color, 0, 2);
-
-// 	// If color isn't linear put default gamma back on
-// 	if (color_is_linear == 0)
-// 		out_color = HSM_Delinearize(out_color, HSM_DEFAULT_CRT_GAMMA);
-
-// 	out_color.w = in_color.w;
-
-// 	return clamp(out_color, 0, 1);
-// }
-
-
-
 vec2 HSM_GetMirrorWrapCoord(vec2 in_coord)
 {
 	vec2 ctr_coord = in_coord - 0.5;
@@ -1197,6 +1173,326 @@ vec4 HSM_GetStoichaicBlurredSample(sampler2D in_sampler, vec2 in_coord, float nu
 		blurred_color += texture(in_sampler, sample_coord) / num_samples;
 	}
 	return blurred_color;
+}
+
+float HSM_GetParameterSum()
+{
+	// Each value should be multipled so that it becomes an integer if possible
+	float out_sum = 0
+					// Night Lighting
+					+ HSM_NIGHT_OPACITY * 200
+					+ HSM_NIGHT_HUE * 720
+					+ HSM_NIGHT_SATURATION * 200
+					+ HSM_NIGHT_VALUE * 200
+					+ HSM_NIGHT_SCALE * 200
+					+ HSM_NIGHT_MIRROR_HORZ * 2
+					+ HSM_NIGHT_DITHERING_SAMPLES * 2
+
+					//    Zoom & Pan
+					// + HSM_VIEWPORT_ZOOM * 2000
+					// + HSM_VIEWPORT_POSITION_X * 2000
+					// + HSM_VIEWPORT_POSITION_Y * 2000
+
+					// //    FLIP & ROTATE
+					+ HSM_FLIP_VIEWPORT_VERTICAL * 2
+					+ HSM_FLIP_VIEWPORT_HORIZONTAL * 2
+					// + HSM_FLIP_CORE_VERTICAL * 2
+					// + HSM_FLIP_CORE_HORIZONTAL * 2
+					// + HSM_ROTATE_CORE_IMAGE * 2
+
+					// //    ASPECT RATIO
+					// + HSM_ASPECT_RATIO_ORIENTATION
+					// + HSM_ASPECT_RATIO_MODE
+					// + HSM_ASPECT_RATIO_EXPLICIT
+
+					// //    SCALING
+					// + HSM_INT_SCALE_MODE
+					// + HSM_INT_SCALE_MULTIPLE_OFFSET
+					// + HSM_INT_SCALE_MULTIPLE_OFFSET_LONG
+					// + HSM_INT_SCALE_BORDER_MIN_HEIGHT
+					// + HSM_VERTICAL_PRESET
+					// + HSM_NON_INTEGER_SCALE
+
+					// //    Extended Scale
+					// + HSM_USE_IMAGE_FOR_PLACEMENT
+					// + HSM_PLACEMENT_IMAGE_MODE
+					// + HSM_NON_INTEGER_SCALE_OFFSET * 100
+					// + HSM_SNAP_TO_INT_SCALE_TOLERANCE
+
+					// //    Position
+					// + HSM_SCREEN_POSITION_X * 1000
+					// + HSM_SCREEN_POSITION_Y * 1000
+
+					// //    CROPPING
+					// + HSM_CROP_MODE
+					// + HSM_CROP_PERCENT_ZOOM / 100
+					// + HSM_CROP_PERCENT_TOP * 100
+					// + HSM_CROP_PERCENT_BOTTOM * 100
+					// + HSM_CROP_PERCENT_LEFT * 100
+					// + HSM_CROP_PERCENT_RIGHT * 100
+					// + HSM_CROP_BLACK_THRESHOLD * 100
+
+					// //    DUAL SCREEN
+					+ HSM_DUALSCREEN_MODE * 2
+					+ HSM_DUALSCREEN_CORE_IMAGE_SPLIT_MODE * 2
+					+ HSM_DUALSCREEN_CORE_IMAGE_SWAP_SCREENS * 2
+					+ HSM_DUALSCREEN_CORE_IMAGE_SPLIT_OFFSET * 200
+					+ HSM_DUALSCREEN_VIEWPORT_SPLIT_LOCATION * 2000
+					+ HSM_DUALSCREEN_SHIFT_POSITION_WITH_SCALE * 2
+					+ HSM_DUALSCREEN_POSITION_OFFSET_BETWEEN_SCREENS * 4000
+					// + HSM_2ND_SCREEN_ASPECT_RATIO_MODE * 2
+					// + HSM_2ND_SCREEN_INDEPENDENT_SCALE * 2
+					// + HSM_2ND_SCREEN_SCALE_OFFSET * 200
+					// + HSM_2ND_SCREEN_POS_X * 2000
+					// + HSM_2ND_SCREEN_POS_Y * 2000
+					// + HSM_2ND_SCREEN_CROP_PERCENT_ZOOM * 200
+					// + HSM_2ND_SCREEN_CROP_PERCENT_TOP * 200
+					// + HSM_2ND_SCREEN_CROP_PERCENT_BOTTOM * 200
+					// + HSM_2ND_SCREEN_CROP_PERCENT_LEFT * 200
+					// + HSM_2ND_SCREEN_CROP_PERCENT_RIGHT * 200
+
+					// //    CURVATURE
+					+ HSM_CURVATURE_MODE
+					+ HSM_CURVATURE_2D_SCALE_LONG_AXIS * 100
+					+ HSM_CURVATURE_2D_SCALE_SHORT_AXIS * 100
+					+ HSM_CURVATURE_3D_RADIUS * 100
+					+ HSM_CURVATURE_3D_VIEW_DIST * 100
+					+ HSM_CURVATURE_3D_TILT_ANGLE_X * 100
+					+ HSM_CURVATURE_3D_TILT_ANGLE_Y * 100
+
+					// //    SCREEN BLACK EDGE
+					+ HSM_GLOBAL_CORNER_RADIUS
+					+ HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE * 100
+					+ HSM_TUBE_BLACK_EDGE_SHARPNESS * 100
+					+ HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE * 100
+					+ HSM_TUBE_BLACK_EDGE_THICKNESS * 100
+
+					// //    BEZEL INDEPENDENT SCALE
+					// + HSM_BZL_USE_INDEPENDENT_SCALE
+					// + HSM_BZL_INDEPENDENT_SCALE * 100
+					// + HSM_BZL_USE_INDEPENDENT_CURVATURE
+					// + HSM_BZL_INDEPENDENT_CURVATURE_SCALE_LONG_AXIS * 100
+					// + HSM_BZL_INDEPENDENT_CURVATURE_SCALE_SHORT_AXIS * 100
+
+					// //    BEZEL GENERAL
+					+ HSM_BZL_OPACITY * 100
+					+ HSM_BZL_BLEND_MODE
+					+ HSM_BZL_WIDTH /  0.0008624
+					+ HSM_BZL_HEIGHT / 0.0008732
+					+ HSM_BZL_SCALE_OFFSET * 100
+					+ HSM_BZL_INNER_CURVATURE_SCALE * 100
+					+ HSM_BZL_INNER_CORNER_RADIUS_SCALE * 100
+
+#ifdef HAS_BEZEL_PARAMS
+					// //	Bezel Params not in Screen Scale
+					+ HSM_BZL_INNER_EDGE_THICKNESS / 0.00007
+					+ HSM_BZL_INNER_EDGE_SHARPNESS * 100
+					+ HSM_BZL_OUTER_CORNER_RADIUS_SCALE * 100
+					+ HSM_BZL_OUTER_CURVATURE_SCALE * 100
+					+ HSM_BZL_OUTER_POSITION_Y * 100
+					+ HSM_BZL_BRIGHTNESS * 1000
+					+ HSM_BZL_HIGHLIGHT * 100
+					+ HSM_BZL_INNER_EDGE_SHADOW * 100
+
+					// // Generated Bezel
+					+ HSM_BZL_COLOR_HUE * 360
+					+ HSM_BZL_COLOR_SATURATION * 100
+					+ HSM_BZL_COLOR_VALUE * 100
+					+ HSM_BZL_NOISE * 100
+
+					// // Generated Frame
+					+ HSM_FRM_OPACITY * 100
+					+ HSM_FRM_BLEND_MODE * 2
+					+ HSM_FRM_TEXTURE_OPACITY * 1000
+					+ HSM_FRM_TEXTURE_BLEND_MODE * 2
+					+ HSM_FRM_INNER_EDGE_THICKNESS / 0.00003
+					+ HSM_FRM_THICKNESS / 0.0007
+					+ HSM_FRM_THICKNESS_SCALE_X * 100
+					+ HSM_FRM_OUTER_POS_Y * 1000
+					+ HSM_FRM_OUTER_CURVATURE_SCALE * 100
+					+ HSM_FRM_OUTER_CORNER_RADIUS * 100
+					+ HSM_FRM_OUTER_EDGE_THICKNESS / 0.00006
+					+ HSM_FRM_OUTER_EDGE_SHADING * 100
+					+ HSM_FRM_SHADOW_OPACITY * 100
+					+ HSM_FRM_SHADOW_WIDTH * 1000
+#endif
+
+#ifdef HAS_IMAGE_LAYER_PARAMS
+					// + HSM_STATIC_LAYERS_GAMMA
+
+					// // Layer Order
+					// + HSM_BG_LAYER_ORDER
+					// + HSM_VIEWPORT_VIGNETTE_LAYER_ORDER
+					// + HSM_CRT_LAYER_ORDER
+					// + HSM_DEVICE_LAYER_ORDER
+					// + HSM_CAB_GLASS_LAYER_ORDER
+					// + HSM_DECAL_LAYER_ORDER
+					// + HSM_LED_LAYER_ORDER
+					// + HSM_TOP_LAYER_ORDER
+
+					// // Background
+					// + HSM_BG_OPACITY
+					// + HSM_BG_HUE
+					// + HSM_BG_COLORIZE_ON
+					// + HSM_BG_SATURATION
+					// + HSM_BG_BRIGHTNESS
+					// + HSM_BG_GAMMA
+					// + HSM_BG_APPLY_ADJUSTMENT
+					// + HSM_BG_BLEND_MODE
+					// + HSM_BG_SOURCE_MATTE_TYPE
+					// + HSM_BG_MASK_MODE
+					// + HSM_BG_CUTOUT_MODE
+					// + HSM_BG_DUALSCREEN_VIS_MODE
+					// + HSM_BG_TEXTURE_ASPECT_MODE
+					// + HSM_BG_EXPLICIT_TEXTURE_ASPECT
+					// + HSM_BG_SCALE_MODE
+					// + HSM_BG_FILL_MODE
+					// + HSM_BG_SCALE_KEEP_ASPECT
+					// + HSM_BG_SCALE
+					// + HSM_BG_SCALE_X
+					// + HSM_BG_POS_X
+					// + HSM_BG_POS_Y
+					// + HSM_BG_MIRROR_WRAP
+
+					// // Background Vignette
+					// + HSM_VIEWPORT_VIGNETTE_OPACITY
+					// + HSM_VIEWPORT_VIGNETTE_MASK_MODE
+					// + HSM_VIEWPORT_VIGNETTE_CUTOUT_MODE
+					// + HSM_VIEWPORT_VIGNETTE_SCALE_MODE
+					// + HSM_VIEWPORT_VIGNETTE_SCALE
+					// + HSM_VIEWPORT_VIGNETTE_SCALE_X
+					// + HSM_VIEWPORT_VIGNETTE_POS_X
+					// + HSM_VIEWPORT_VIGNETTE_POS_Y
+
+					// // LED
+					// + HSM_LED_OPACITY
+					// + HSM_LED_HUE
+					// + HSM_LED_COLORIZE_ON
+					// + HSM_LED_SATURATION
+					// + HSM_LED_BRIGHTNESS
+					// + HSM_LED_GAMMA
+					// + HSM_LED_BLEND_MODE
+					// + HSM_LED_SOURCE_MATTE_TYPE
+					// + HSM_LED_MASK_MODE
+					// + HSM_LED_CUTOUT_MODE
+					// + HSM_LED_DUALSCREEN_VIS_MODE
+					// + HSM_LED_TEXTURE_ASPECT_MODE
+					// + HSM_LED_EXPLICIT_TEXTURE_ASPECT
+					// + HSM_LED_SCALE_MODE
+					// + HSM_LED_SCALE_KEEP_ASPECT
+					// + HSM_LED_FILL_MODE
+					// + HSM_LED_SCALE
+					// + HSM_LED_SCALE_X
+					// + HSM_LED_POS_X
+					// + HSM_LED_POS_Y
+
+					// // Device
+					// + HSM_DEVICE_OPACITY
+					// + HSM_DEVICE_HUE
+					// + HSM_DEVICE_COLORIZE_ON
+					// + HSM_DEVICE_SATURATION
+					// + HSM_DEVICE_BRIGHTNESS
+					// + HSM_DEVICE_GAMMA
+					// + HSM_DEVICE_BLEND_MODE
+					// + HSM_DEVICE_SOURCE_MATTE_TYPE
+					// + HSM_DEVICE_MASK_MODE
+					// + HSM_DEVICE_CUTOUT_MODE
+					// + HSM_DEVICE_DUALSCREEN_VIS_MODE
+					// + HSM_DEVICE_TEXTURE_ASPECT_MODE
+					// + HSM_DEVICE_EXPLICIT_TEXTURE_ASPECT
+					// + HSM_DEVICE_SCALE_MODE
+					// + HSM_DEVICE_SCALE_KEEP_ASPECT
+					// + HSM_DEVICE_FILL_MODE
+					// + HSM_DEVICE_SCALE
+					// + HSM_DEVICE_SCALE_X
+					// + HSM_DEVICE_POS_X
+					// + HSM_DEVICE_POS_Y
+					// + HSM_DEVICE_COPY_INHERITED_COORD
+
+					// // Decal
+					// + HSM_DECAL_OPACITY
+					// + HSM_DECAL_HUE
+					// + HSM_DECAL_COLORIZE_ON
+					// + HSM_DECAL_SATURATION
+					// + HSM_DECAL_BRIGHTNESS
+					// + HSM_DECAL_GAMMA
+					// + HSM_DECAL_BLEND_MODE
+					// + HSM_DECAL_SOURCE_MATTE_TYPE
+					// + HSM_DECAL_MASK_MODE
+					// + HSM_DECAL_TEXTURE_ASPECT_MODE
+					// + HSM_DECAL_EXPLICIT_TEXTURE_ASPECT
+					// + HSM_DECAL_SCALE_MODE
+					// + HSM_DECAL_SCALE_KEEP_ASPECT
+					// + HSM_DECAL_FILL_MODE
+					// + HSM_DECAL_SCALE
+					// + HSM_DECAL_SCALE_X
+					// + HSM_DECAL_POS_X
+					// + HSM_DECAL_POS_Y
+					// + HSM_DECAL_CUTOUT_MODE
+					// + HSM_DECAL_DUALSCREEN_VIS_MODE
+
+					// // Cab Glass
+					// + HSM_CAB_GLASS_OPACITY
+					// + HSM_CAB_GLASS_HUE
+					// + HSM_CAB_GLASS_COLORIZE_ON
+					// + HSM_CAB_GLASS_SATURATION
+					// + HSM_CAB_GLASS_BRIGHTNESS
+					// + HSM_CAB_GLASS_GAMMA
+					// + HSM_CAB_GLASS_BLEND_MODE
+					// + HSM_CAB_GLASS_SOURCE_MATTE_TYPE
+					// + HSM_CAB_GLASS_MASK_MODE
+					// + HSM_CAB_GLASS_CUTOUT_MODE
+					// + HSM_CAB_GLASS_DUALSCREEN_VIS_MODE
+					// + HSM_CAB_GLASS_APPLY_NIGHTLIGHTING
+					// + HSM_CAB_GLASS_TEXTURE_ASPECT_MODE
+					// + HSM_CAB_GLASS_EXPLICIT_TEXTURE_ASPECT
+					// + HSM_CAB_GLASS_SCALE_MODE
+					// + HSM_CAB_GLASS_SCALE_KEEP_ASPECT
+					// + HSM_CAB_GLASS_FILL_MODE
+					// + HSM_CAB_GLASS_SCALE
+					// + HSM_CAB_GLASS_SCALE_X
+					// + HSM_CAB_GLASS_POS_X
+					// + HSM_CAB_GLASS_POS_Y
+
+					// // Cutout
+					// + HSM_CUTOUT_ASPECT_MODE
+					// + HSM_CUTOUT_EXPLICIT_ASPECT
+					// + HSM_CUTOUT_SCALE_MODE
+					// + HSM_CUTOUT_KEEP_ASPECT
+					// + HSM_CUTOUT_SCALE
+					// + HSM_CUTOUT_SCALE_X
+					// + HSM_CUTOUT_CORNER_RADIUS
+					// + HSM_CUTOUT_POS_X
+					// + HSM_CUTOUT_POS_Y
+
+					// // Top Image
+					// + HSM_TOP_OPACITY
+					// + HSM_TOP_HUE
+					// + HSM_TOP_COLORIZE_ON
+					// + HSM_TOP_SATURATION
+					// + HSM_TOP_BRIGHTNESS
+					// + HSM_TOP_GAMMA
+					// + HSM_TOP_BLEND_MODE
+					// + HSM_TOP_SOURCE_MATTE_TYPE
+					// + HSM_TOP_MASK_MODE
+					// + HSM_TOP_CUTOUT_MODE
+					// + HSM_TOP_DUALSCREEN_VIS_MODE
+
+					// + HSM_TOP_TEXTURE_ASPECT_MODE
+					// + HSM_TOP_EXPLICIT_TEXTURE_ASPECT
+					// + HSM_TOP_SCALE_MODE
+					// + HSM_TOP_SCALE_KEEP_ASPECT
+					// + HSM_TOP_FILL_MODE
+					// + HSM_TOP_SCALE
+					// + HSM_TOP_SCALE_X
+					// + HSM_TOP_POS_X
+					// + HSM_TOP_POS_Y	
+					// + HSM_TOP_MIRROR_WRAP
+					// + HSM_RENDER_SIMPLE_MODE
+					// + HSM_LAYERING_DEBUG_MASK_MODE
+#endif
+					;
+	return out_sum;
 }
 
 int HSM_IsCoordIn2DRange(vec2 in_coord, vec4 in_2d_range)
@@ -1284,12 +1580,14 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D original_pass
 	}
 
 	// 6th Sample - 2nd Screen
-	// r SCREEN_ASPECT
-	// ba SCREEN_SCALE
+	// r SCREEN_ASPECT_2ND_SCREEN
+	// g PARAMETER_SUM
+	// ba SCREEN_SCALE_2ND_SCREEN
 	sample_2d_range = vec4(0.25, 0.25, 0.5, 0.5);
 	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
 	{
 		out_color.r = screen_aspect_2nd_screen;
+		out_color.g = HSM_GetParameterSum();
 		out_color.ba = screen_scale_2nd_screen;
 	}
 
@@ -1339,6 +1637,24 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D original_pass
 		out_color.ba = vec2(HSM_VIEWPORT_POSITION_X, HSM_VIEWPORT_POSITION_Y);
 	}
 
+	// 12th Sample
+	// rg SCREEN_SCALE_2ND_SCREEN
+	// ba SCREEN_POS_OFFSET_2ND_SCREEN
+	sample_2d_range = vec4(0.75, 0.5, 1, 0.75);
+	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
+	{
+		out_color.rg = screen_scale_2nd_screen;
+		out_color.ba = pos_offset_2nd_screen;
+	}
+
+	// 13th Sample
+	// r PARAMETER_SUM
+	sample_2d_range = vec4(0.0, 0.75, 0.25, 1);
+	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
+	{
+		out_color.r = HSM_GetParameterSum();
+	}
+
 	return out_color;
 }
 
@@ -1362,17 +1678,20 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 	{
 		// 2nd Sample
 		// r SCREEN_ASPECT
+		// g PARAMETER_SUM
 		// ba SCREEN_SCALE
 		sample_coord = vec2(0.375, 0.125);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		SCREEN_ASPECT = texture_sample.r;
+		// PARAMETER_SUM = texture_sample.g;
 		SCREEN_SCALE = texture_sample.ba;
 
 		// 2nd Sample Feedback
+		// g PARAMETER_SUM_FEEDBACK
 		// ba SCREEN_SCALE_FEEDBACK
 		texture_sample = texture(in_cache_feedback_pass, sample_coord);
+		// PARAMETER_SUM_FEEDBACK = texture_sample.g;
 		SCREEN_SCALE_FEEDBACK = texture_sample.ba;
-
 
 		// 3rd Sample 
 		// rg TUBE_SCALE 
@@ -1413,11 +1732,13 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 		sample_coord = vec2(0.375, 0.375);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		SCREEN_ASPECT = texture_sample.r;
+		// PARAMETER_SUM = texture_sample.g;
 		SCREEN_SCALE = texture_sample.ba;
 
 		// ba SCREEN_SCALE_FEEDBACK
 		texture_sample = texture(in_cache_feedback_pass, sample_coord);
 		SCREEN_SCALE_FEEDBACK = texture_sample.ba;
+		// PARAMETER_SUM_FEEDBACK = texture_sample.g;
 
 		// 7th Sample - 2nd Screen
 		// rg TUBE_SCALE
@@ -1467,6 +1788,35 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 	VIEWPORT_SCALE_FEEDBACK = texture_sample.rg;
 	VIEWPORT_POS_FEEDBACK = texture_sample.ba;
 
+	// 12th Sample
+	// rg SCREEN_SCALE_2ND_SCREEN
+	// ba SCREEN_POS_OFFSET_2ND_SCREEN
+	sample_coord = vec2(0.875, 0.675);
+	texture_sample = texture(in_cache_pass, sample_coord);
+	SCREEN_SCALE_2ND_SCREEN = texture_sample.rg;
+	PARAMETER_SUM = texture_sample.b;
+	SCREEN_POS_OFFSET_2ND_SCREEN = texture_sample.ba;
+
+	// 12th Sample Feedback
+	// rg SCREEN_SCALE_2ND_SCREEN_FEEDBACK
+	// ba SCREEN_POS_2ND_SCREEN_OFFSET_FEEDBACK
+	texture_sample = texture(in_cache_feedback_pass, sample_coord);
+	SCREEN_SCALE_2ND_SCREEN_FEEDBACK = texture_sample.rg;
+	SCREEN_POS_OFFSET_2ND_SCREEN_FEEDBACK = texture_sample.ba;
+
+
+	// 13th Sample
+	// r PARAMETER_SUM
+	sample_coord = vec2(0.125, 0.875);
+	texture_sample = texture(in_cache_pass, sample_coord);
+	PARAMETER_SUM = texture_sample.r;
+
+	// 13th Sample Feedback
+	// r PARAMETER_SUM_FEEDBACK
+	texture_sample = texture(in_cache_feedback_pass, sample_coord);
+	PARAMETER_SUM_FEEDBACK = texture_sample.r;
+
+
 	USE_VERTICAL_SCANLINES = HSM_GetUseVerticalScanlines(SCREEN_ASPECT);
 	SCREEN_COORD = HSM_GetVTexCoordWithArgs(flipped_viewport_coord, SCREEN_SCALE, SCREEN_POS_OFFSET);
 
@@ -1476,17 +1826,29 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 bool HSM_CheckCacheInfoChanged()
 {
 	float epsilon = 0.0001;
+	float param_sum_epsilon = 0.05;
 	return (CORE_SIZE.x != CORE_FEEDBACK_SIZE.x
 			|| CORE_SIZE.y != CORE_FEEDBACK_SIZE.y
-			|| abs(SCREEN_SCALE.x - SCREEN_SCALE_FEEDBACK.x) > epsilon
-			|| abs(SCREEN_SCALE.y - SCREEN_SCALE_FEEDBACK.y) > epsilon
-			|| abs(SCREEN_POS_OFFSET.x - SCREEN_POS_OFFSET_FEEDBACK.x) > epsilon
-			|| abs(SCREEN_POS_OFFSET.y - SCREEN_POS_OFFSET_FEEDBACK.y) > epsilon
-			|| abs(TUBE_SCALE.x - TUBE_SCALE_FEEDBACK.x) > epsilon
-			|| abs(TUBE_SCALE.y - TUBE_SCALE_FEEDBACK.y) > epsilon
+			|| (
+					HSM_DUALSCREEN_MODE < 0.5 && 
+					(
+						abs(SCREEN_SCALE.x - SCREEN_SCALE_FEEDBACK.x) > epsilon 
+						|| abs(SCREEN_SCALE.y - SCREEN_SCALE_FEEDBACK.y) > epsilon
+						|| abs(SCREEN_POS_OFFSET.x - SCREEN_POS_OFFSET_FEEDBACK.x) > epsilon
+						|| abs(SCREEN_POS_OFFSET.y - SCREEN_POS_OFFSET_FEEDBACK.y) > epsilon
+					)
+				)
+			|| abs(SCREEN_SCALE_2ND_SCREEN.x - SCREEN_SCALE_2ND_SCREEN_FEEDBACK.x) > epsilon 
+			|| abs(SCREEN_SCALE_2ND_SCREEN.y - SCREEN_SCALE_2ND_SCREEN_FEEDBACK.y) > epsilon
+			|| abs(SCREEN_POS_OFFSET_2ND_SCREEN.x - SCREEN_POS_OFFSET_2ND_SCREEN_FEEDBACK.x) > epsilon
+			|| abs(SCREEN_POS_OFFSET_2ND_SCREEN.y - SCREEN_POS_OFFSET_2ND_SCREEN_FEEDBACK.y) > epsilon
+			// || abs(TUBE_SCALE.x - TUBE_SCALE_FEEDBACK.x) > epsilon
+			// || abs(TUBE_SCALE.y - TUBE_SCALE_FEEDBACK.y) > epsilon
 			|| abs(VIEWPORT_SCALE.y - VIEWPORT_SCALE_FEEDBACK.x) > epsilon
 			|| abs(VIEWPORT_POS.x - VIEWPORT_POS_FEEDBACK.x) > epsilon
 			|| abs(VIEWPORT_POS.y - VIEWPORT_POS_FEEDBACK.y) > epsilon
+			|| abs(PARAMETER_SUM - PARAMETER_SUM_FEEDBACK) > param_sum_epsilon
+
 			);
 }
 

@@ -6,6 +6,8 @@
 //---------------------------------------------------------------------------------------------------
 // #pragma parameter HSM_BZL_TITLE "-----[ GENERATED BEZEL & FRAME ]-------------------------------" 0 0 0 1
 
+#define HAS_BEZEL_PARAMS
+
 #pragma parameter HSM_BZL_INNER_EDGE_THICKNESS		    "          Inner Edge Thickness" 100 0 700 10
 float HSM_BZL_INNER_EDGE_THICKNESS = global.HSM_BZL_INNER_EDGE_THICKNESS  * 0.00007;
 
@@ -13,7 +15,7 @@ float HSM_BZL_INNER_EDGE_THICKNESS = global.HSM_BZL_INNER_EDGE_THICKNESS  * 0.00
 float HSM_BZL_INNER_EDGE_SHARPNESS = global.HSM_BZL_INNER_EDGE_SHARPNESS  / 100;
 
 #pragma parameter HSM_BZL_OUTER_CORNER_RADIUS_SCALE 	"          Outer Corner Radius Scale" 100 0 4000 1
-float HSM_BZL_OUTER_CORNER_RADIUS_SCALE = 2 * global.HSM_BZL_OUTER_CORNER_RADIUS_SCALE / 100;
+float HSM_BZL_OUTER_CORNER_RADIUS_SCALE = 0.9 * global.HSM_BZL_OUTER_CORNER_RADIUS_SCALE / 100;
 
 #pragma parameter HSM_BZL_OUTER_CURVATURE_SCALE 		"          Outer Curvature Scale" 0 0 500 5
 float HSM_BZL_OUTER_CURVATURE_SCALE = global.HSM_BZL_OUTER_CURVATURE_SCALE / 100;

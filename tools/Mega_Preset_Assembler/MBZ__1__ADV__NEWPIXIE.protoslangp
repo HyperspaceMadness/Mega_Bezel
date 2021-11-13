@@ -1,7 +1,7 @@
 #reference "Components/00__mbz__add-params__all.slangp"
 #reference "Components/01__downrez__none.slangp"
 #reference "Components/01__mbz__add-negative-crop-area.slangp"
-#reference "Components/10__mbz__info-cache.slangp"
+#reference "Components/10__mbz__info-cache-all-params.slangp"
 #reference "Components/10__mbz__intro__adv.slangp"
 #reference "Components/30__dedithering__0-mdapt.slangp"
 #reference "Components/30__dedithering__1-sgenpt-mix.slangp"

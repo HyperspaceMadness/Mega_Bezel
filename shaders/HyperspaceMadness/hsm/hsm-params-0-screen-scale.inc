@@ -24,6 +24,35 @@ float HSM_SHOW_AUTO_UPDATE_INDICATOR = global.HSM_SHOW_AUTO_UPDATE_INDICATOR;
 float HSM_CACHE_OUTSIDE_FRAME = 1;
 
 //---------------------------------------------------------------------------------------------------
+//    NIGHT LIGHTING
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_NIGHT_LIGHTING_TITLE          "[ NIGHT LIGHTING ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_NIGHT_OPACITY                 "          Opacity"  0 0 100 1
+float HSM_NIGHT_OPACITY = global.HSM_NIGHT_OPACITY / 100;
+
+#pragma parameter HSM_NIGHT_HUE                 	"          Hue"  0 -180 180 1
+float HSM_NIGHT_HUE = global.HSM_NIGHT_HUE / 360;
+
+#pragma parameter HSM_NIGHT_SATURATION          	"          Saturation"  100 0 300 1
+float HSM_NIGHT_SATURATION = global.HSM_NIGHT_SATURATION / 100;
+
+#pragma parameter HSM_NIGHT_VALUE               	"          Value"  100 0 400 1
+float HSM_NIGHT_VALUE = global.HSM_NIGHT_VALUE / 100;
+
+#pragma parameter HSM_NIGHT_SCALE             		"          Scale"  100 10 1000 1
+float HSM_NIGHT_SCALE = global.HSM_NIGHT_SCALE / 100;
+
+#pragma parameter HSM_NIGHT_MIRROR_HORZ         	"          Mirror Horizontal"  0 0 1 1
+float HSM_NIGHT_MIRROR_HORZ = global.HSM_NIGHT_MIRROR_HORZ;
+
+// Commented out because I don't think anyone is using this
+// #pragma parameter HSM_NIGHT_DITHERING_SAMPLES   "          Dithering Noise Samples (Reduces Banding)" 0 0 10 1
+// float HSM_NIGHT_DITHERING_SAMPLES = global.HSM_NIGHT_DITHERING_SAMPLES;
+float HSM_NIGHT_DITHERING_SAMPLES = 0;
+
+
+//---------------------------------------------------------------------------------------------------
 //    Zoom & Pan
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_VIEWPORT_ZOOM_TITLE							"[ Viewport Zoom ]:" 0 0 0.01 0.01
@@ -103,11 +132,11 @@ float HSM_NON_INTEGER_SCALE = global.HSM_NON_INTEGER_SCALE - (HSM_VERTICAL_PRESE
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_SCREEN_EXTENDED_SCALE_TITLE					"[ EXTENDED SCALING ]:" 0 0 0.01 0.01
 
-#pragma parameter USE_IMAGE_FOR_PLACEMENT 							"          Use Image For Placement (Scale & Y Pos)" 0 0 1 1
-float USE_IMAGE_FOR_PLACEMENT = global.USE_IMAGE_FOR_PLACEMENT;
+#pragma parameter HSM_USE_IMAGE_FOR_PLACEMENT 							"          Use Image For Placement (Scale & Y Pos)" 0 0 1 1
+float HSM_USE_IMAGE_FOR_PLACEMENT = global.HSM_USE_IMAGE_FOR_PLACEMENT;
 
-#pragma parameter PLACEMENT_IMAGE_MODE 						"          Placement Image Mode: TRANSPARENCY : WHITE ON BLACK" 0 0 1 1
-float PLACEMENT_IMAGE_MODE = global.PLACEMENT_IMAGE_MODE;
+#pragma parameter HSM_PLACEMENT_IMAGE_MODE 						"          Placement Image Mode: TRANSPARENCY : WHITE ON BLACK" 0 0 1 1
+float HSM_PLACEMENT_IMAGE_MODE = global.HSM_PLACEMENT_IMAGE_MODE;
 
 #pragma parameter HSM_NON_INTEGER_SCALE_OFFSET 						"          Non-Integer Scale Offset" 100 5 400 0.1
 float HSM_NON_INTEGER_SCALE_OFFSET = global.HSM_NON_INTEGER_SCALE_OFFSET / 100;
@@ -381,6 +410,9 @@ float HSM_CRT_ORIGINAL_AB_COMPARE_SPLIT_POSITION = global.HSM_CRT_ORIGINAL_AB_CO
 float HSM_CRT_SCREEN_BLEND_MODE = global.HSM_CRT_SCREEN_BLEND_MODE;
 
 
+//---------------------------------------------------------------------------------------------------
+//    Screen Vignette
+//---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_SCREEN_VIGNETTE_TITLE							"[ SCREEN VIGNETTE ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_SCREEN_VIGNETTE_ON                			"          Use Vignette" 1 0 1 1
@@ -396,6 +428,9 @@ float HSM_CRT_SCREEN_BLEND_MODE = global.HSM_CRT_SCREEN_BLEND_MODE;
 #define HSM_SCREEN_VIGNETTE_IN_REFLECTION global.HSM_SCREEN_VIGNETTE_IN_REFLECTION
 
 
+//---------------------------------------------------------------------------------------------------
+//    Monochrome
+//---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_MONOCHROME_TITLE 								"[ MONOCHROME ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_MONOCHROME_MODE  								"          Monochrome Color: OFF | BW | Amber | Green" 0.0 0.0 3.0 1.0
@@ -411,6 +446,9 @@ float HSM_CRT_SCREEN_BLEND_MODE = global.HSM_CRT_SCREEN_BLEND_MODE;
 #define HSM_MONOCHROME_SATURATION (global.HSM_MONOCHROME_SATURATION / 100)
 
 
+//---------------------------------------------------------------------------------------------------
+//    Reflection Transform
+//---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_REFLECTIONAPPEARANCE_TITLE					"[ REFLECTION TRANSFORM ]:" 0 0 0.01 0.01
 
 // #pragma parameter HSM_SCREEN_VIGNETTE_IN_REFLECTION     			"          Screen Vignette Opacity in Reflection" 100 0 100 1
@@ -425,34 +463,9 @@ float HSM_SCREEN_REFLECTION_POS_X = global.HSM_SCREEN_REFLECTION_POS_X / 600;
 #pragma parameter HSM_SCREEN_REFLECTION_POS_Y     					"          Screen Reflection Pos Y" 0 -100 100 1
 float HSM_SCREEN_REFLECTION_POS_Y = global.HSM_SCREEN_REFLECTION_POS_Y / 600;
 
-//---------------------------------------------------------------------------------------------------
-//    NIGHT LIGHTING IMAGE
-//---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_NIGHT_LIGHTING_TITLE          "[ NIGHT LIGHTING ]:" 0 0 0.01 0.01
-
-#pragma parameter HSM_NIGHT_OPACITY                 "          Opacity"  0 0 100 1
-float HSM_NIGHT_OPACITY = global.HSM_NIGHT_OPACITY / 100;
-
-#pragma parameter HSM_NIGHT_SCALE             "          Scale"  100 10 1000 1
-float HSM_NIGHT_SCALE = global.HSM_NIGHT_SCALE / 100;
-
-#pragma parameter HSM_NIGHT_MIRROR_HORZ         "          Mirror Horizontal"  0 0 1 1
-float HSM_NIGHT_MIRROR_HORZ = global.HSM_NIGHT_MIRROR_HORZ;
-
-#pragma parameter HSM_NIGHT_SATURATION          "          Saturation"  100 0 300 1
-float HSM_NIGHT_SATURATION = global.HSM_NIGHT_SATURATION / 100;
-
-#pragma parameter HSM_NIGHT_HUE                 "          Hue"  0 -180 180 1
-float HSM_NIGHT_HUE = global.HSM_NIGHT_HUE / 360;
-
-#pragma parameter HSM_NIGHT_VALUE               "          Value"  100 0 400 1
-float HSM_NIGHT_VALUE = global.HSM_NIGHT_VALUE / 100;
-
-#pragma parameter HSM_NIGHT_DITHERING_SAMPLES   "          Dithering Noise Samples (Reduces Banding)" 0 0 10 1
-float HSM_NIGHT_DITHERING_SAMPLES = global.HSM_NIGHT_DITHERING_SAMPLES;
 
 //---------------------------------------------------------------------------------------------------
-//    TUBE IMAGES
+//    TUBE COLORED GEL
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_TUBE_IMAGES_TITLE								"[ COLORED GEL IMAGE ]:" 0 0 0.01 0.01
 
@@ -476,7 +489,7 @@ float HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL = global.HSM_SHOW_CRT_ON_TOP_OF_COLORED
 
 
 //---------------------------------------------------------------------------------------------------
-//    TUBE IMAGES
+//    TUBE STATIC REFLECTION
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_TITLE			"[ TUBE STATIC REFLECTION IMAGE ]:" 0 0 0.01 0.01
 
@@ -512,7 +525,7 @@ float HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE = global.HSM_TUBE_STATIC_REFLECTION
 
 
 //---------------------------------------------------------------------------------------------------
-//    Bezel Independent Scale
+//    BEZEL INDEPENDENT SCALE
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_BEZEL_INDEPENDENT_TITLE						"[ BEZEL INDEPENDENT SCALE & CURVATURE ]:" 0 0 0.01 0.01
 
@@ -533,7 +546,7 @@ float HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE = global.HSM_TUBE_STATIC_REFLECTION
 
 
 //---------------------------------------------------------------------------------------------------
-//    Bezel General
+//    BEZEL GENERAL
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_BEZEL_GENERAL_TITLE							"[ BEZEL GENERAL ]:" 0 0 0.01 0.01 
 
@@ -557,12 +570,6 @@ float HSM_BZL_HEIGHT = global.HSM_BZL_HEIGHT * 0.0008732;
 
 #pragma parameter HSM_BZL_INNER_CORNER_RADIUS_SCALE	    			"          Inner Corner Radius Scale - Def 50" 50 0 8000 1
 float HSM_BZL_INNER_CORNER_RADIUS_SCALE = global.HSM_BZL_INNER_CORNER_RADIUS_SCALE / 100;
-
-
-
-#ifndef HSM_FAKE_SCANLINE_RES
-	#define HSM_FAKE_SCANLINE_RES 240
-#endif
 
 #ifndef HSM_DEFAULT_CRT_GAMMA
 	#define HSM_DEFAULT_CRT_GAMMA 2.4

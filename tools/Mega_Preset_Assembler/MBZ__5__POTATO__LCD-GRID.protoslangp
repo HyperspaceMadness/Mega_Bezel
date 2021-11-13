@@ -1,7 +1,7 @@
 #reference "Components/00__mbz__add-params__potato.slangp"
 #reference "Components/01__downrez__none.slangp"
 #reference "Components/01__mbz__add-negative-crop-area.slangp"
-#reference "Components/10__mbz__info-cache.slangp"
+#reference "Components/10__mbz__info-cache-screen-scale-params.slangp"
 #reference "Components/10__mbz__intro__potato.slangp"
 #reference "Components/35__fast-sharpen.slangp"
 #reference "Components/59__mbz__crt__gdv-adv-prep-and-linearize.slangp"

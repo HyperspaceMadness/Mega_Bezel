@@ -1,0 +1,69 @@
+shaders = 9
+
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm/hsm-prep-add-params-potato.slang
+alias0 = "CorePass"
+
+shader1 =  :/shaders/shaders_slang/stock.slang // :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/g-sharp_resampler.slang
+filter_linear1 = false
+srgb_framebuffer1 = true
+scale_type1 = source
+scale_x1 = 1
+scale_y1 = 1
+alias1 = "DerezedPass"
+
+shader2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm/hsm-prep-add-negative-crop-area.slang
+filter_linear2 = false
+mipmap_input2 = false
+srgb_framebuffer2 = true
+scale_type2 = source
+scale_x2 = 1.25
+scale_y2 = 1.25
+alias2 = "CorePreppedPass"
+
+shader3 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm/hsm-prep-info-cache-screen-scale-params.slang
+filter_linear3 = true
+float_framebuffer3 = true
+scale_type3 = source
+scale3 = 1.0
+alias3 = "InfoCachePass"
+
+shader4 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm/hsm-prep-intro-potato.slang
+filter_linear4 = false
+float_framebuffer4 = true
+scale_type4 = source
+scale4 = 1.0
+alias4 = "IntroPass"
+
+shader5 =  :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-custom-fast-sharpen.slang // :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/g-sharp_resampler.slang
+filter_linear5 = false
+srgb_framebuffer5 = true
+
+// Color Correction with Dogway's awesome Grade shader
+shader6 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
+
+shader7 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-zfast/hsm-zfast_crt.slang
+scale_type7 = viewport
+scale_x7 = 1.0
+scale_y7 = 1.0
+filter_linear7 = true
+
+shader8 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm/hsm-prep-post-crt-potato.slang
+alias8 = "MBZ_PostCRTPass"
+// Define textures to be used by the different passes
+textures = "ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
+
+ScreenPlacementImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+ScreenPlacementImage_linear = false
+
+BackgroundImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Baked_Frame_Carbonfiber_Background.png
+BackgroundImage_linear = true
+
+BackgroundVertImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Baked_Frame_Carbonfiber_Background_Vert.png
+BackgroundVertImage_linear = true
+
+// Parameters
+HSM_ASPECT_RATIO_MODE = 1
+
+// Use for matching vanilla GDV-Advanced
+// HSM_ASPECT_RATIO_MODE = 6
+// HSM_CURVATURE_MODE = -1
