@@ -270,9 +270,9 @@ void main()
       FragColor = GetColorWithIntro(FragColor, viewport_coord_adjusted);
 #endif
 
-   bool show_auto_update_indicator = HSM_SHOW_AUTO_UPDATE_INDICATOR > 0.5 && HSM_CheckCacheInfoChanged();
+   bool show_update_indicator = HSM_LIVE_UPDATE_ON == 1 || HSM_SHOW_AUTO_UPDATE_INDICATOR > 0.5 && (HSM_CheckCacheInfoChanged() || HSM_CheckCacheInfoParamSumChanged());
 
-	if (HSM_LIVE_UPDATE_ON == 1  || show_auto_update_indicator)
+	if (show_update_indicator)
 	{
 		float final_aspect = SCREEN_ASPECT;
 		vec2 corner_offset = vec2(0.18, 0.2);

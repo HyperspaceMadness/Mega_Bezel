@@ -12,9 +12,6 @@ float HSM_STATIC_LAYERS_GAMMA = global.HSM_STATIC_LAYERS_GAMMA;
 //---------------------------------------------------------------------------------------------------
 //    IMAGE LAYERING START
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_LAYERING_TITLE     "[ IMAGE LAYERS ]:" 0 0 0.01 0.01
-
-
 #pragma parameter HSM_LAYER_ORDER_TITLE			  "[ LAYER ORDER ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_BG_LAYER_ORDER              "          Background Image"  0 0 12 1

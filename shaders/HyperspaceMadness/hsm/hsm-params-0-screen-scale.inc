@@ -13,7 +13,7 @@ Description:
 #pragma parameter HSM_RESOLUTION_DEBUG_ON							"          Show Resolution Info" 0 0 1 1
 float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
 
-#pragma parameter HSM_LIVE_UPDATE_ON								"          Live Update Graphic/Bezel: OFF | ON | ON NO INDICATOR" 0 0 2 1
+#pragma parameter HSM_LIVE_UPDATE_ON								"          Live Update Image Layers: OFF | ON | ON NO INDICATOR" 0 0 2 1
 float HSM_LIVE_UPDATE_ON = global.HSM_LIVE_UPDATE_ON;
 
 #pragma parameter HSM_SHOW_AUTO_UPDATE_INDICATOR					"          Show Indicator on Auto Cache Update" 0 0 1 1
