@@ -56,11 +56,16 @@ float HSM_BZL_NOISE = global.HSM_BZL_NOISE / 100;
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_FRAME_TITLE			            "[ FRAME ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_FRM_OPACITY                       "          Opacity" 100 0 100 5
-float HSM_FRM_OPACITY = global.HSM_FRM_OPACITY / 100;
+// #pragma parameter HSM_FRM_OPACITY                       "          Opacity" 100 0 100 5
+// float HSM_FRM_OPACITY = global.HSM_FRM_OPACITY / 100;
 
-#pragma parameter HSM_FRM_BLEND_MODE                    "          Blend Mode - Off | Normal | Add | Mult"  1 0 3 1
-float HSM_FRM_BLEND_MODE = global.HSM_FRM_BLEND_MODE;
+float HSM_FRM_OPACITY = 1;
+
+// #pragma parameter HSM_FRM_BLEND_MODE                    "          Blend Mode - Off | Normal | Add | Mult"  1 0 3 1
+// float HSM_FRM_BLEND_MODE = global.HSM_FRM_BLEND_MODE;
+
+float HSM_FRM_BLEND_MODE = 1;
+
 
 #pragma parameter HSM_FRM_TEXTURE_OPACITY               "          Texture Overlay Opacity (Highlight)" 1.5 0 100 0.1
 float HSM_FRM_TEXTURE_OPACITY = global.HSM_FRM_TEXTURE_OPACITY / 100;

@@ -396,7 +396,7 @@ void main()
 
 	bezel_color = mix(bezel_color, frame_inner_edge_color, frame_inner_edge_mask);
 
-	float dist_inside_outer_edge = min(0.5 - abs(frame_outside_coord_ctr.x), 0.5 - abs(frame_outside_coord_ctr.y));
+	float dist_inside_outer_edge = min(0.50 - abs(frame_outside_coord_ctr.x), 0.50 - abs(frame_outside_coord_ctr.y));
 	float frame_outer_edge_width = HSM_FRM_OUTER_EDGE_THICKNESS;
 	vec3 frame_diffuse_color = mix(frame_color, 0.2 * frame_color, HSM_FRM_OUTER_EDGE_SHADING * smoothstep(frame_outer_edge_width, 0, dist_inside_outer_edge));
 
@@ -406,10 +406,12 @@ void main()
 		frame_diffuse_color = HSM_BlendModeLayerMix(vec4(frame_diffuse_color, 1), frame_texture_color, HSM_FRM_TEXTURE_BLEND_MODE, HSM_FRM_TEXTURE_OPACITY).rgb;
 	}
 
-	frame_diffuse_color = mix(frame_diffuse_color, outside_frame_color, OUTSIDE_FRAME_MASK);
+	// frame_diffuse_color = mix(frame_diffuse_color, outside_frame_color, OUTSIDE_FRAME_MASK);
+
 
 	// Composite in color from outside the bezel
 	vec3 bezel_and_frame_rgb = mix(bezel_color, frame_diffuse_color, OUTSIDE_BEZEL_MASK);
+
 
 	float frame_edge = 0.495;
 
@@ -430,8 +432,11 @@ void main()
 
 	if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
 	{
+
+
 		// Create image of bezel & frame with outside of frame transparent
-		vec4 bezel_and_frame_rgba = vec4(bezel_and_frame_rgb * (1 - OUTSIDE_FRAME_MASK), (1 - OUTSIDE_FRAME_MASK));
+		// vec4 bezel_and_frame_rgba = (1 - OUTSIDE_FRAME_MASK) * vec4(bezel_and_frame_rgb, 1);
+		vec4 bezel_and_frame_rgba = vec4(bezel_and_frame_rgb, 1);
 
 		// Cut out Tube Area
 		// bezel_and_frame_rgba *= 1 - TUBE_MASK;
@@ -449,16 +454,14 @@ void main()
 
 		float FRAME_AND_BEZEL_MASK = outside_tube_mask * (1 - OUTSIDE_FRAME_MASK);
 
-		if (HSM_BZL_OPACITY > 0 )
+		if (HSM_BZL_OPACITY > 0)
 			if (HSM_FRM_OPACITY > 0)
 				bezel_layer = clamp(bezel_and_frame_rgba * FRAME_AND_BEZEL_MASK, 0, 1);
 			else
 				bezel_layer = clamp(bezel_and_frame_rgba * BEZEL_MASK, 0, 1);
-
-		// bezel_layer = clamp(bezel_and_frame_rgba, 0, 1);
-
-		if (HSM_FRM_OPACITY > 0 )
-			frame_layer = clamp(bezel_and_frame_rgba * FRAME_MASK, 0, 1);
+		else
+			if (HSM_FRM_OPACITY > 0)
+				bezel_layer = clamp(bezel_and_frame_rgba * FRAME_MASK, 0, 1);
 	}
 
 // end of ifndef LAYERS_UNDER_CRT
@@ -852,18 +855,9 @@ void main()
 	}
 
 #ifdef LAYERS_UNDER_CRT
-	// BEZEL
-	// GENERATED BEZEL LAYER
-	if (HSM_BZL_OPACITY > 0)
-		frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
-												bezel_layer, 
-												HSM_BZL_BLEND_MODE, 
-												MASK_MODE_ALL, 
-												0, 
-												IMAGE_DUALSCREEN_MODE_BOTH,
-												HSM_BZL_OPACITY);
-	if (HSM_FRM_OPACITY > 0)
-	{
+
+	// if (HSM_FRM_OPACITY > 0)
+	// {
 		if (HSM_FRM_SHADOW_OPACITY > 0)
 			frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
 													frame_shadow_layer, 
@@ -873,15 +867,26 @@ void main()
 													IMAGE_DUALSCREEN_MODE_BOTH,
 													HSM_FRM_OPACITY * HSM_FRM_SHADOW_OPACITY);
 
-		// GENERATED FRAME LAYER
+	// BEZEL
+	// GENERATED BEZEL LAYER
+	if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
 		frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
-												frame_layer, 
-												HSM_FRM_BLEND_MODE, 
+												bezel_layer, 
+												HSM_BZL_BLEND_MODE, 
 												MASK_MODE_ALL, 
 												0, 
 												IMAGE_DUALSCREEN_MODE_BOTH,
-												HSM_FRM_OPACITY);
-	}
+												HSM_BZL_OPACITY);
+
+	// 	// GENERATED FRAME LAYER
+	// 	frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+	// 											frame_layer, 
+	// 											HSM_FRM_BLEND_MODE, 
+	// 											MASK_MODE_ALL, 
+	// 											0, 
+	// 											IMAGE_DUALSCREEN_MODE_BOTH,
+	// 											HSM_FRM_OPACITY);
+	// }
 
 // end #ifdef LAYERS_UNDER_CRT
 #endif
