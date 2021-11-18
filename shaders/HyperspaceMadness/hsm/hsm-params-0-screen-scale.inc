@@ -568,7 +568,7 @@ float HSM_BZL_HEIGHT = global.HSM_BZL_HEIGHT * 0.0008732;
 #pragma parameter HSM_BZL_INNER_CURVATURE_SCALE 					"          Inner Curvature Scale Multiplier" 100 0 8000 10
 #define HSM_BZL_INNER_CURVATURE_SCALE global.HSM_BZL_INNER_CURVATURE_SCALE / 100
 
-#pragma parameter HSM_BZL_INNER_CORNER_RADIUS_SCALE	    			"          Inner Corner Radius Scale - Def 50" 50 0 8000 1
+#pragma parameter HSM_BZL_INNER_CORNER_RADIUS_SCALE	    			"          Inner Corner Radius Scale - Def 80" 80 0 8000 1
 float HSM_BZL_INNER_CORNER_RADIUS_SCALE = global.HSM_BZL_INNER_CORNER_RADIUS_SCALE / 100;
 
 #ifndef HSM_DEFAULT_CRT_GAMMA

@@ -62,12 +62,9 @@ Changes:
 Mega Bezel Still to Come:
 
 V1 TODO
-  
+  * Fix Corner Shading
   * 2D Cylindrical Curvature Mode
-  * Add Nightlighting Opacity to Auto-Cache Update
-  * Nightlighting params At top?
   * ZFast Curvature
-  * The frame outer edge still has a faint line, so the masking could maybe be tweaked. (Or if it is a drop shadow issue maybe it needs a different method?)
   * Add Tube Color & Vignette (Should take night lighting)
   * Good Preset for FBNeo & Instructions
   * Swap option for Blurry and Sharp Tube Reflection
@@ -77,12 +74,11 @@ V1 TODO
   * Add NTSC Adaptive Preset?
   * Add Variations CRT Royale Glass & Advanced
   * Add vscode link in readme [![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/organization/repository)
-  * Add Pixel Shifting for Burn-in Mitigation
   * Get Intro to play on shader Load?
-  * Split Libraries, so minimum can be loaded
   * Do some more OrionsAngel Presets with new Mega_Bezel
   * Add option for core res fake scanlines
 
+  * Add Pixel Shifting for Burn-in Mitigation
   * Add Rewind Effect?
   * Black Edges should be driven by bezel not screen? (Right now bezel overlaps the screen with no black line)
   * When in interlacing mode for vertical opposite mult should do something
