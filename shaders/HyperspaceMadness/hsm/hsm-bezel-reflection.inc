@@ -84,7 +84,7 @@ layout(set = 0, binding = 4) uniform sampler2D ReflectionMaskImage;
 // #endif
 
 layout(set = 0, binding = 6) uniform sampler2D TubeStaticReflectionImage;
-layout(set = 0, binding = 7) uniform sampler2D ColoredGelImage;
+layout(set = 0, binding = 7) uniform sampler2D TubeColoredGelImage;
 
 layout(set = 0, binding = 8) uniform sampler2D MBZ_PostCRTPass;
 layout(set = 0, binding = 9) uniform sampler2D BR_MirrorBlurredPass;
@@ -430,7 +430,7 @@ void main()
 	{
 		float black_edge_mask = TUBE_MASK * (1 - SCREEN_MASK);
 		
-		vec4 gel_image = texture(ColoredGelImage, tube_curved_coord);
+		vec4 gel_image = texture(TubeColoredGelImage, tube_curved_coord);
 		gel_image = HSM_Linearize(gel_image, HSM_DEFAULT_SRGB_GAMMA);
 		gel_image *= black_edge_mask;
 

@@ -2185,7 +2185,7 @@ vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_CO
 }
 #endif
 
-vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, vec2 screen_curved_coord, in sampler2D source_pass, bool source_is_linear, in sampler2D ColoredGelImage, in sampler2D TubeStaticReflectionImage, in sampler2D BackgroundImage, in sampler2D BackgroundVertImage, in sampler2D NightLightingImage)
+vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, vec2 screen_curved_coord, in sampler2D source_pass, bool source_is_linear, in sampler2D TubeDiffuseImage, in sampler2D TubeColoredGelImage, in sampler2D TubeStaticReflectionImage, in sampler2D BackgroundImage, in sampler2D BackgroundVertImage, in sampler2D NightLightingImage)
 {
 	if (HSM_MONOCHROME_MODE > 0.5)
 		in_color_with_gamma = HSM_ApplyMonochrome(in_color_with_gamma);
@@ -2247,7 +2247,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	{
 		// TODO need to update this for flip horizontal
 		vec2 gel_coord = mix( mirrored_tube_coord, -1 * (mirrored_tube_coord - 0.5) + 0.5 , HSM_FLIP_VIEWPORT_VERTICAL);
-		vec4 gel_image = texture(ColoredGelImage, mirrored_tube_coord);
+		vec4 gel_image = texture(TubeColoredGelImage, mirrored_tube_coord);
 		gel_image = HSM_Linearize(gel_image, HSM_DEFAULT_SRGB_GAMMA);
 
 		if (HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT > 0)
@@ -2270,10 +2270,27 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 			}
 	}
 
+	
+	// TubeDiffuseImage
+	vec4 tube_diffuse = vec4(0, 0, 0, 1);
+	if (HSM_TUBE_DIFFUSE_BRIGHTNESS > 0)
+	{
+		tube_diffuse = texture(TubeDiffuseImage, mirrored_tube_coord);
+		tube_diffuse = HSM_GetPreMultipliedColorLinear(tube_diffuse, SOURCE_MATTE_PREMULTIPLIED, HSM_DEFAULT_SRGB_GAMMA);
+		tube_diffuse.rgb = HSM_ApplyHSVAdjustment(tube_diffuse.rgb, HSM_TUBE_DIFFUSE_HUE, HSM_TUBE_DIFFUSE_SATURATION, HSM_TUBE_DIFFUSE_BRIGHTNESS, HSM_TUBE_DIFFUSE_COLORIZE_ON, HSM_TUBE_DIFFUSE_GAMMA);
+	}
+	tube_diffuse *= HSM_TUBE_DIFFUSE_OPACITY;
+	tube_diffuse.rgb *= night_lighting_image.rgb;
+	
+
+
+	// Apply the CRT image additively to the tube diffuse color
 	out_color.a = in_color_with_gamma.a;
+	out_color = HSM_BlendModeLayerMix(tube_diffuse, out_color, BLEND_MODE_ADD, 1);
 
 	#ifdef IS_NOREFLECT_PRESET
 	out_color.rgb *= HSM_Get_Screen_Black_Edge_Mask(SCREEN_COORD, false);
+
 
 	// TUBE HIGHLIGHT
 	if (HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY > 0)

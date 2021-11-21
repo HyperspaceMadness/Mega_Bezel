@@ -62,10 +62,12 @@ Changes:
 Mega Bezel Still to Come:
 
 V1 TODO
-  * Fix Corner Shading
-  * 2D Cylindrical Curvature Mode
-  * ZFast Curvature
+  * Rename NightLighting to Ambient Lighting
+  * Fix Pink Render Mode
   * Add Tube Color & Vignette (Should take night lighting)
+  * 2D Cylindrical Curvature Mode
+  * Fix Corner Shading
+  * ZFast Curvature
   * Good Preset for FBNeo & Instructions
   * Swap option for Blurry and Sharp Tube Reflection
   * Add Death to Pixels

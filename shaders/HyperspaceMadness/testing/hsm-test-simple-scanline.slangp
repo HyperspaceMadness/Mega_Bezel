@@ -85,12 +85,12 @@ float_framebuffer18 = true
 shaders = 19
 
 // Define textures to be used by the different passes
-textures = "SamplerLUT3;IntroImage;ScreenPlacementImage;ColoredGelImage;TubeStaticReflectionImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;LEDImage;TopLayerImage;"
+textures = "SamplerLUT3;IntroImage;ScreenPlacementImage;TubeColoredGelImage;TubeStaticReflectionImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;LEDImage;TopLayerImage;"
 SamplerLUT3 = shaders/HyperspaceMadness/textures/lut/other1_32.png
 SamplerLUT3_linear = true
 
 BackgroundImage = shaders/HyperspaceMadness/textures/BackgroundImage_Carbon_3840x2160.png
-ColoredGelImage = shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+TubeColoredGelImage = shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 TubeStaticReflectionImage = shaders/HyperspaceMadness/textures/TubeGlassOverlayImage_3840x2160.png
 DeviceImage = shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 DeviceVertImage = shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png

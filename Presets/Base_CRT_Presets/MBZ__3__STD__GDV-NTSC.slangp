@@ -231,7 +231,7 @@ scale_type31 = viewport
 float_framebuffer31 = true
 alias31 = "CombinePass"
 // Define textures to be used by the different passes
-textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;ColoredGelImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;LEDImage;TopLayerImage;"
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;LEDImage;TopLayerImage;"
 
 SamplerLUT1 = ../../shaders/HyperspaceMadness/hsm-guest/lut/trinitron-lut.png
 SamplerLUT1_linear = true 
@@ -248,8 +248,11 @@ IntroImage_linear = true
 ScreenPlacementImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 ScreenPlacementImage_linear = false
 
-ColoredGelImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
-ColoredGelImage_linear = true
+TubeDiffuseImage = ../../shaders/HyperspaceMadness/textures/Tube_Diffuse_2390x1792.png
+TubeDiffuseImage_linear = true
+
+TubeColoredGelImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+TubeColoredGelImage_linear = true
 
 TubeStaticReflectionImage = ../../shaders/HyperspaceMadness/textures/TubeGlassOverlayImage_3840x2160.png
 TubeStaticReflectionImage_linear = true

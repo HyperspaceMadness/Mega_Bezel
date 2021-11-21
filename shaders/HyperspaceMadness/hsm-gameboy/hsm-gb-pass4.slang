@@ -130,7 +130,7 @@ layout(set = 0, binding = 8) uniform sampler2D CustomColorPaletteImage;
 layout(set = 0, binding = 9) uniform sampler2D LCDBackgroundImage;
 layout(set = 0, binding = 10) uniform sampler2D BackgroundImage;
 layout(set = 0, binding = 11) uniform sampler2D BackgroundVertImage;
-layout(set = 0, binding = 12) uniform sampler2D ColoredGelImage;
+layout(set = 0, binding = 12) uniform sampler2D TubeColoredGelImage;
 layout(set = 0, binding = 13) uniform sampler2D TubeStaticReflectionImage;
 
 layout(set = 0, binding = 14) uniform sampler2D InfoCachePass;
@@ -214,6 +214,6 @@ void main()
     FragColor = HSM_Linearize(out_color, HSM_DEFAULT_CRT_GAMMA);
 
     // Prep and add output gamma
-	FragColor = HSM_GetPostCrtPreppedColor(FragColor, vTexCoord, screen_curved_coord, LinearizePass, true, ColoredGelImage, TubeStaticReflectionImage, BackgroundImage, BackgroundVertImage);
+	FragColor = HSM_GetPostCrtPreppedColor(FragColor, vTexCoord, screen_curved_coord, LinearizePass, true, TubeColoredGelImage, TubeStaticReflectionImage, BackgroundImage, BackgroundVertImage);
 	// End Addition
 }

@@ -35,16 +35,17 @@ layout(set = 0, binding = 2) uniform sampler2D InfoCachePass;
 layout(set = 0, binding = 3) uniform sampler2D InfoCachePassFeedback;
 
 #ifndef IS_POTATO_PRESET
-layout(set = 0, binding = 4) uniform sampler2D ColoredGelImage;
-layout(set = 0, binding = 5) uniform sampler2D TubeStaticReflectionImage;
+layout(set = 0, binding = 4) uniform sampler2D TubeDiffuseImage;
+layout(set = 0, binding = 5) uniform sampler2D TubeColoredGelImage;
+layout(set = 0, binding = 6) uniform sampler2D TubeStaticReflectionImage;
 #endif
 
-layout(set = 0, binding = 6) uniform sampler2D BackgroundImage;
-layout(set = 0, binding = 7) uniform sampler2D BackgroundVertImage;
+layout(set = 0, binding = 7) uniform sampler2D BackgroundImage;
+layout(set = 0, binding = 8) uniform sampler2D BackgroundVertImage;
 
 #ifndef IS_POTATO_PRESET
-layout(set = 0, binding = 8) uniform sampler2D NightLightingImage;
-layout(set = 0, binding = 9) uniform sampler2D IntroPass;
+layout(set = 0, binding = 9) uniform sampler2D NightLightingImage;
+layout(set = 0, binding = 10) uniform sampler2D IntroPass;
 #endif
 
 
@@ -82,7 +83,7 @@ void main()
 #ifdef IS_POTATO_PRESET
 	FragColor = HSM_GetPostCrtPreppedColorPotato(FragColor, vTexCoord, screen_curved_coord, BackgroundImage, BackgroundVertImage);
 #else
-	FragColor = HSM_GetPostCrtPreppedColor(FragColor, vTexCoord, screen_curved_coord, IntroPass, false, ColoredGelImage, TubeStaticReflectionImage, BackgroundImage, BackgroundVertImage, NightLightingImage);
+	FragColor = HSM_GetPostCrtPreppedColor(FragColor, vTexCoord, screen_curved_coord, IntroPass, false, TubeDiffuseImage, TubeColoredGelImage, TubeStaticReflectionImage, BackgroundImage, BackgroundVertImage, NightLightingImage);
 #endif
 
 }

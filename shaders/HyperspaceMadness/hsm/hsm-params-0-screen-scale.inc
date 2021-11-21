@@ -465,6 +465,30 @@ float HSM_SCREEN_REFLECTION_POS_Y = global.HSM_SCREEN_REFLECTION_POS_Y / 600;
 
 
 //---------------------------------------------------------------------------------------------------
+//    TUBE DIFFUSE COLOR
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_TUBE_DIFFUSE_TITLE								"[ TUBE DIFFUSE IMAGE ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_TUBE_DIFFUSE_OPACITY                  "          Opacity" 100 0 100 0.1
+float HSM_TUBE_DIFFUSE_OPACITY = global.HSM_TUBE_DIFFUSE_OPACITY / 100;
+
+#pragma parameter HSM_TUBE_DIFFUSE_COLORIZE_ON              "          Colorize On" 0 0 1 1
+float HSM_TUBE_DIFFUSE_COLORIZE_ON = global.HSM_TUBE_DIFFUSE_COLORIZE_ON;
+
+#pragma parameter HSM_TUBE_DIFFUSE_HUE                       "          Hue Offset" 0 0 360 1
+float HSM_TUBE_DIFFUSE_HUE = global.HSM_TUBE_DIFFUSE_HUE / 360;
+
+#pragma parameter HSM_TUBE_DIFFUSE_SATURATION                "          Saturation" 100 0 200 1
+float HSM_TUBE_DIFFUSE_SATURATION = global.HSM_TUBE_DIFFUSE_SATURATION / 100;
+
+#pragma parameter HSM_TUBE_DIFFUSE_BRIGHTNESS                "          Brightness" 0 0 200 1
+float HSM_TUBE_DIFFUSE_BRIGHTNESS = global.HSM_TUBE_DIFFUSE_BRIGHTNESS / 100;
+
+#pragma parameter HSM_TUBE_DIFFUSE_GAMMA                     "          Gamma Adjust" 1 0 5 0.01
+float HSM_TUBE_DIFFUSE_GAMMA = global.HSM_TUBE_DIFFUSE_GAMMA;
+
+
+//---------------------------------------------------------------------------------------------------
 //    TUBE COLORED GEL
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_TUBE_IMAGES_TITLE								"[ COLORED GEL IMAGE ]:" 0 0 0.01 0.01

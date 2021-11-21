@@ -107,13 +107,19 @@ void main()
 	float TUBE_MASK_TRIM = HSM_GetCornerMask((tube_curved_coord - 0.5) * 1.003 + 0.5, SCREEN_ASPECT, bezel_corner_radius, 0.99);
 	crt_layer.rgb *= TUBE_MASK_TRIM;
 
-	if (HSM_CRT_SCREEN_BLEND_MODE > 1.5)
-	{
-		crt_layer.rgb *= crt_layer.a;
-		out_color.rgb += crt_layer.rgb;
-	}
-	else if (HSM_CRT_SCREEN_BLEND_MODE > 0.5)
-		out_color = HSM_PreMultAlphaBlend(out_color, crt_layer);
+	// If the tube is opaque apply it on top of the under CRT layers
+	vec4 tube_background = vec4(0, 0, 0, TUBE_MASK_EXPAND) * HSM_TUBE_DIFFUSE_OPACITY;
+	out_color = HSM_PreMultAlphaBlend(out_color, tube_background);
+
+	out_color.rgb += crt_layer.rgb;
+
+	// if (HSM_CRT_SCREEN_BLEND_MODE > 1.5)
+	// {
+	// 	crt_layer.rgb *= crt_layer.a;
+	// 	out_color.rgb += crt_layer.rgb;
+	// }
+	// else if (HSM_CRT_SCREEN_BLEND_MODE > 0.5)
+	// 	out_color = HSM_PreMultAlphaBlend(out_color, crt_layer);
 
 #ifndef IS_NO_REFLECT_PRESET
 	float outside_tube_mask_smaller = 1 - HSM_GetCornerMask((tube_curved_coord - 0.5) * 1.01 + 0.5, SCREEN_ASPECT, bezel_corner_radius, 0.99);
