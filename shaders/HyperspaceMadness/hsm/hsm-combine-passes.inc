@@ -59,7 +59,6 @@ layout(set = 0, binding = 5) uniform sampler2D BR_LayersOverCRTPass;
 layout(set = 0, binding = 6) uniform sampler2D CombinePassFeedback;
 #define PassFeedback CombinePassFeedback
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
 {

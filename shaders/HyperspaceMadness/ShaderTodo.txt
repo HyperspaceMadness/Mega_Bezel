@@ -24,6 +24,11 @@ Changes:
   * Viewport Zoom & Position
   * Add option for Black and White placement image requested by @briball
   * Parameter USE_IMAGE_FOR_PLACEMENT renamed to HSM_USE_IMAGE_FOR_PLACEMENT
+  * NIGHT renamed to AMBIENT
+  * Tube Diffuse image added, so you can show the phosphor surface if desired
+  * Noise can now be turned on/off separately from deconvergence
+
+
 
   * BIG Changes to what each preset level does
     * ADV
@@ -62,8 +67,8 @@ Changes:
 Mega Bezel Still to Come:
 
 V1 TODO
-  * Rename NightLighting to Ambient Lighting
-  * Fix Pink Render Mode
+  * Fix Parameters for PostCRTPrep
+  * Fix Pink Render Mode has small black edge
   * Add Tube Color & Vignette (Should take night lighting)
   * 2D Cylindrical Curvature Mode
   * Fix Corner Shading

@@ -26,25 +26,25 @@ float HSM_CACHE_OUTSIDE_FRAME = 1;
 //---------------------------------------------------------------------------------------------------
 //    NIGHT LIGHTING
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_NIGHT_LIGHTING_TITLE          "[ NIGHT LIGHTING ]:" 0 0 0.01 0.01
+#pragma parameter HSM_AMBIENT_LIGHTING_TITLE          "[ AMBIENT LIGHTING ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_NIGHT_OPACITY                 "          Opacity"  0 0 100 1
-float HSM_NIGHT_OPACITY = global.HSM_NIGHT_OPACITY / 100;
+#pragma parameter HSM_AMBIENT_LIGHTING_OPACITY                 "          Opacity"  0 0 100 1
+float HSM_AMBIENT_LIGHTING_OPACITY = global.HSM_AMBIENT_LIGHTING_OPACITY / 100;
 
-#pragma parameter HSM_NIGHT_HUE                 	"          Hue"  0 -180 180 1
-float HSM_NIGHT_HUE = global.HSM_NIGHT_HUE / 360;
+#pragma parameter HSM_AMBIENT_LIGHTING_HUE                 	"          Hue"  0 -180 180 1
+float HSM_AMBIENT_LIGHTING_HUE = global.HSM_AMBIENT_LIGHTING_HUE / 360;
 
-#pragma parameter HSM_NIGHT_SATURATION          	"          Saturation"  100 0 300 1
-float HSM_NIGHT_SATURATION = global.HSM_NIGHT_SATURATION / 100;
+#pragma parameter HSM_AMBIENT_LIGHTING_SATURATION          	"          Saturation"  100 0 300 1
+float HSM_AMBIENT_LIGHTING_SATURATION = global.HSM_AMBIENT_LIGHTING_SATURATION / 100;
 
-#pragma parameter HSM_NIGHT_VALUE               	"          Value"  100 0 400 1
-float HSM_NIGHT_VALUE = global.HSM_NIGHT_VALUE / 100;
+#pragma parameter HSM_AMBIENT_LIGHTING_VALUE               	"          Value"  100 0 400 1
+float HSM_AMBIENT_LIGHTING_VALUE = global.HSM_AMBIENT_LIGHTING_VALUE / 100;
 
-#pragma parameter HSM_NIGHT_SCALE             		"          Scale"  100 10 1000 1
-float HSM_NIGHT_SCALE = global.HSM_NIGHT_SCALE / 100;
+#pragma parameter HSM_AMBIENT_LIGHTING_SCALE             		"          Scale"  100 10 1000 1
+float HSM_AMBIENT_LIGHTING_SCALE = global.HSM_AMBIENT_LIGHTING_SCALE / 100;
 
-#pragma parameter HSM_NIGHT_MIRROR_HORZ         	"          Mirror Horizontal"  0 0 1 1
-float HSM_NIGHT_MIRROR_HORZ = global.HSM_NIGHT_MIRROR_HORZ;
+#pragma parameter HSM_AMBIENT_LIGHTING_MIRROR_HORZ         	"          Mirror Horizontal"  0 0 1 1
+float HSM_AMBIENT_LIGHTING_MIRROR_HORZ = global.HSM_AMBIENT_LIGHTING_MIRROR_HORZ;
 
 // Commented out because I don't think anyone is using this
 // #pragma parameter HSM_NIGHT_DITHERING_SAMPLES   "          Dithering Noise Samples (Reduces Banding)" 0 0 10 1
@@ -395,7 +395,7 @@ float HSM_CRT_ORIGINAL_AB_COMPARE_SPLIT_POSITION = global.HSM_CRT_ORIGINAL_AB_CO
 //---------------------------------------------------------------------------------------------------
 //    CRT Layer
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_CRT_TITLE			             "[ CRT SCREEN LAYER ]:" 0 0 0.01 0.01
+#pragma parameter HSM_CRT_TITLE			             				"[ CRT SCREEN LAYER ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_GAMMA_IN_LINEARIZE   							"          CRT Gamma In (Gamma to Linear Space Decode) Def 2.4" 2.4 0.1 5 0.05
 #define HSM_GAMMA_IN_LINEARIZE global.HSM_GAMMA_IN_LINEARIZE
@@ -594,6 +594,24 @@ float HSM_BZL_HEIGHT = global.HSM_BZL_HEIGHT * 0.0008732;
 
 #pragma parameter HSM_BZL_INNER_CORNER_RADIUS_SCALE	    			"          Inner Corner Radius Scale - Def 80" 80 0 8000 1
 float HSM_BZL_INNER_CORNER_RADIUS_SCALE = global.HSM_BZL_INNER_CORNER_RADIUS_SCALE / 100;
+
+#pragma parameter HSM_BZL_OUTER_POSITION_Y 			    "          Outer Edge Position Y" 0 -500 500 1
+float HSM_BZL_OUTER_POSITION_Y = global.HSM_BZL_OUTER_POSITION_Y / 2000;
+
+#pragma parameter HSM_BZL_OUTER_CURVATURE_SCALE 		"          Outer Curvature Scale" 0 0 500 5
+float HSM_BZL_OUTER_CURVATURE_SCALE = global.HSM_BZL_OUTER_CURVATURE_SCALE / 100;
+
+#pragma parameter HSM_FRM_OUTER_POS_Y 			        "          Frame Outer Pos Y" 0 -100 100 0.05
+float HSM_FRM_OUTER_POS_Y = global.HSM_FRM_OUTER_POS_Y / 100;
+
+#pragma parameter HSM_FRM_THICKNESS 					"          Frame Thickness" 100 0 2000 5
+float HSM_FRM_THICKNESS = global.HSM_FRM_THICKNESS * 0.0007;
+
+#pragma parameter HSM_FRM_THICKNESS_SCALE_X 			"          Frame Thickness Scale X" 100 0 1000 2
+float HSM_FRM_THICKNESS_SCALE_X = global.HSM_FRM_THICKNESS_SCALE_X / 100;
+
+#pragma parameter HSM_FRM_OUTER_CURVATURE_SCALE 		"          Frame Outer Curvature Scale" 0 0 500 5
+float HSM_FRM_OUTER_CURVATURE_SCALE = global.HSM_FRM_OUTER_CURVATURE_SCALE / 100;
 
 #ifndef HSM_DEFAULT_CRT_GAMMA
 	#define HSM_DEFAULT_CRT_GAMMA 2.4

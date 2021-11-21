@@ -4,7 +4,7 @@ BackgroundImage = ../../shaders/HyperspaceMadness/textures/HSM_Duimon_Super_Fami
 
 HSM_VIEWPORT_VIGNETTE_OPACITY = 0
 HSM_BZL_COLOR_VALUE = 30
-HSM_NIGHT_OPACITY = 98
+HSM_AMBIENT_LIGHTING_OPACITY = 98
 
 bloom = "0.500000"
 halation = "0.200000"

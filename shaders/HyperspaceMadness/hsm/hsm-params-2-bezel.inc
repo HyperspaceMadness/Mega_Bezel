@@ -17,12 +17,6 @@ float HSM_BZL_INNER_EDGE_SHARPNESS = global.HSM_BZL_INNER_EDGE_SHARPNESS  / 100;
 #pragma parameter HSM_BZL_OUTER_CORNER_RADIUS_SCALE 	"          Outer Corner Radius Scale - Def 60" 60 0 4000 1
 float HSM_BZL_OUTER_CORNER_RADIUS_SCALE = 0.9 * global.HSM_BZL_OUTER_CORNER_RADIUS_SCALE / 100;
 
-#pragma parameter HSM_BZL_OUTER_CURVATURE_SCALE 		"          Outer Curvature Scale" 0 0 500 5
-float HSM_BZL_OUTER_CURVATURE_SCALE = global.HSM_BZL_OUTER_CURVATURE_SCALE / 100;
-
-#pragma parameter HSM_BZL_OUTER_POSITION_Y 			    "          Outer Edge Position Y" 0 -500 500 1
-float HSM_BZL_OUTER_POSITION_Y = global.HSM_BZL_OUTER_POSITION_Y / 2000;
-
 #pragma parameter HSM_BZL_BRIGHTNESS 				    "          Brightness - Def 30" 30 0 300 2
 float HSM_BZL_BRIGHTNESS = global.HSM_BZL_BRIGHTNESS / 100;
 
@@ -75,18 +69,6 @@ float HSM_FRM_TEXTURE_BLEND_MODE = global.HSM_FRM_TEXTURE_BLEND_MODE;
 
 #pragma parameter HSM_FRM_INNER_EDGE_THICKNESS 		    "          Inner Edge Thickness" 100 0 5000 5
 float HSM_FRM_INNER_EDGE_THICKNESS = global.HSM_FRM_INNER_EDGE_THICKNESS * 0.00003;
-
-#pragma parameter HSM_FRM_THICKNESS 					"          Thickness" 100 0 2000 5
-float HSM_FRM_THICKNESS = global.HSM_FRM_THICKNESS * 0.0007;
-
-#pragma parameter HSM_FRM_THICKNESS_SCALE_X 			"          Thickness Scale X" 100 0 1000 2
-float HSM_FRM_THICKNESS_SCALE_X = global.HSM_FRM_THICKNESS_SCALE_X / 100;
-
-#pragma parameter HSM_FRM_OUTER_POS_Y 			        "          Outer Pos Y" 0 -100 100 0.05
-float HSM_FRM_OUTER_POS_Y = global.HSM_FRM_OUTER_POS_Y / 100;
-
-#pragma parameter HSM_FRM_OUTER_CURVATURE_SCALE 		"          Outer Curvature Scale" 0 0 500 5
-float HSM_FRM_OUTER_CURVATURE_SCALE = global.HSM_FRM_OUTER_CURVATURE_SCALE / 100;
 
 // TODO how this is being used is strange
 #pragma parameter HSM_FRM_OUTER_CORNER_RADIUS 		    "          Outer Corner Radius" 5 0 70 0.05

@@ -184,7 +184,7 @@ void main()
 	// Add Multiplied Image for Darkening
 	// Sample the image and do some color correction
 	vec4 night_lighting_image = vec4(1);
-	if (HSM_NIGHT_OPACITY > 0)
+	if (HSM_AMBIENT_LIGHTING_OPACITY > 0)
 		night_lighting_image = HSM_GetNightLightingMultiplyColor( VIEWPORT_COORD, NightLightingImage );
 
 	SCREEN_BLACK_EDGE_CURVED_COORD = HSM_GetCurvedCoord(SCREEN_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, SCREEN_ASPECT);
@@ -449,7 +449,7 @@ void main()
 			bezel_and_frame_rgba = HSM_ApplyGamma(bezel_and_frame_rgba, HSM_STATIC_LAYERS_GAMMA);
 
 		// NIGHT LIGHTING
-		if (HSM_NIGHT_OPACITY > 0)
+		if (HSM_AMBIENT_LIGHTING_OPACITY > 0)
 			if (HSM_BZL_BLEND_MODE != BLEND_MODE_ADD)
 				bezel_and_frame_rgba.rgb *= night_lighting_image.rgb;
 
@@ -508,7 +508,7 @@ void main()
 
 		// NIGHT LIGHTING
 		if (HSM_BG_APPLY_ADJUSTMENT == 1)
-			if (HSM_NIGHT_OPACITY > 0)
+			if (HSM_AMBIENT_LIGHTING_OPACITY > 0)
 				bg_image.rgb *= night_lighting_image.rgb;
 	}
 
@@ -545,7 +545,7 @@ void main()
 			device_image = HSM_ApplyGamma(device_image, HSM_STATIC_LAYERS_GAMMA);
 
 		// NIGHT LIGHTING
-		if (HSM_NIGHT_OPACITY > 0)
+		if (HSM_AMBIENT_LIGHTING_OPACITY > 0)
 			if (HSM_DEVICE_BLEND_MODE != BLEND_MODE_ADD)
 				device_image.rgb *= night_lighting_image.rgb;
 	}
@@ -582,7 +582,7 @@ void main()
 			led_image = HSM_ApplyGamma(led_image, HSM_STATIC_LAYERS_GAMMA);
 
 		// NIGHT LIGHTING
-		if (HSM_NIGHT_OPACITY > 0)
+		if (HSM_AMBIENT_LIGHTING_OPACITY > 0)
 			if (HSM_LED_BLEND_MODE != BLEND_MODE_ADD)
 				led_image.rgb *= night_lighting_image.rgb;
 	}
@@ -618,7 +618,7 @@ void main()
 			decal_image = HSM_ApplyGamma(decal_image, HSM_STATIC_LAYERS_GAMMA);
 
 		// NIGHT LIGHTING
-		if (HSM_NIGHT_OPACITY > 0)
+		if (HSM_AMBIENT_LIGHTING_OPACITY > 0)
 			if (HSM_DECAL_BLEND_MODE != BLEND_MODE_ADD)
 				decal_image.rgb *= night_lighting_image.rgb;
 	}
@@ -660,7 +660,7 @@ void main()
 			top_image = HSM_ApplyGamma(top_image, HSM_STATIC_LAYERS_GAMMA);
 
 		// NIGHT LIGHTING
-		if (HSM_NIGHT_OPACITY > 0)
+		if (HSM_AMBIENT_LIGHTING_OPACITY > 0)
 				if (HSM_TOP_BLEND_MODE != BLEND_MODE_ADD)
 					top_image.rgb *= night_lighting_image.rgb;
 	}
@@ -701,7 +701,7 @@ void main()
 			cab_glass_image = HSM_ApplyGamma(cab_glass_image, HSM_STATIC_LAYERS_GAMMA);
 
 		// NIGHT LIGHTING
-		if (HSM_NIGHT_OPACITY > 0)
+		if (HSM_AMBIENT_LIGHTING_OPACITY > 0)
 			if (HSM_CAB_GLASS_APPLY_NIGHTLIGHTING > 0.5)
 				if (HSM_CAB_GLASS_BLEND_MODE != BLEND_MODE_ADD)
 					cab_glass_image.rgb *= night_lighting_image.rgb;
