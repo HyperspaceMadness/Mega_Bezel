@@ -101,38 +101,10 @@ void main()
 	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(SCREEN_COORD, 1, SCREEN_SCALE, TUBE_SCALE, SCREEN_ASPECT, 1);
 
 	TUBE_MASK =  HSM_GetCornerMask(tube_curved_coord, SCREEN_ASPECT, bezel_corner_radius, 0.99);
-	// crt_layer *= TUBE_MASK;
-
-	// float TUBE_MASK_EXPAND = HSM_GetCornerMask((tube_curved_coord - 0.5) * 0.997 + 0.5, SCREEN_ASPECT, bezel_corner_radius, 0.99);
-	// crt_layer *= TUBE_MASK_EXPAND;
-
 	float TUBE_MASK_TRIM = HSM_GetCornerMask((tube_curved_coord - 0.5) * 1.003 + 0.5, SCREEN_ASPECT, bezel_corner_radius, 0.99);
-	// crt_layer.rgb *= TUBE_MASK_TRIM;
 
-	// // If the tube is opaque apply it on top of the under CRT layers
-	// vec4 tube_background = vec4(0, 0, 0, TUBE_MASK_EXPAND) * HSM_TUBE_DIFFUSE_IMAGE_OPACITY;
-	// out_color = HSM_PreMultAlphaBlend(out_color, tube_background);
-
-	// out_color.rgb += crt_layer.rgb;
 	if (HSM_RENDER_SIMPLE_MODE < 0.5)
 		out_color.rgb += crt_layer.rgb;
-
-	// if (HSM_CRT_SCREEN_BLEND_MODE > 1.5)
-	// {
-	// 	crt_layer.rgb *= crt_layer.a;
-	// 	out_color.rgb += crt_layer.rgb;
-	// }
-	// else if (HSM_CRT_SCREEN_BLEND_MODE > 0.5)
-	// 	out_color = HSM_PreMultAlphaBlend(out_color, crt_layer);
-
-// #ifndef IS_NO_REFLECT_PRESET
-// 	float outside_tube_mask_smaller = 1 - HSM_GetCornerMask((tube_curved_coord - 0.5) * 1.01 + 0.5, SCREEN_ASPECT, bezel_corner_radius, 0.99);
-// 	if (HSM_RENDER_SIMPLE_MODE < 0.5)
-// 	{
-// 		reflection_layer *= 1 - TUBE_MASK_TRIM;
-// 		out_color.rgb += reflection_layer.rgb;
-// 	}
-// #endif
 
 	vec4 over_layer = texture(BR_LayersOverCRTPass, vTexCoord);
 	out_color = HSM_PreMultAlphaBlend(out_color, over_layer);

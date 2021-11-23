@@ -327,9 +327,6 @@ void main()
 	float tube_shadow_mask = HSM_GetCornerMask(tube_curved_coord_ctr + 0.5, SCREEN_ASPECT, bezel_corner_radius, 0);
 	float tube_edge_shadow_mult = HSM_BZL_INNER_EDGE_SHADOW * (tube_shadow_mask) + (1 - HSM_BZL_INNER_EDGE_SHADOW);
 
-	// crt_linear.rgb *= tube_edge_shadow_mult * (1 - outside_tube_mask_wider);
-	// crt_linear.a = (1 - outside_tube_mask_wider);
-
 	float edge_highlight_mask = 0;
 
 	// ----------------------------------------------------
@@ -407,17 +404,12 @@ void main()
 		frame_diffuse_color = HSM_BlendModeLayerMix(vec4(frame_diffuse_color, 1), frame_texture_color, HSM_FRM_TEXTURE_BLEND_MODE, HSM_FRM_TEXTURE_OPACITY).rgb;
 	}
 
-	// frame_diffuse_color = mix(frame_diffuse_color, outside_frame_color, OUTSIDE_FRAME_MASK);
-
-
 	// Composite in color from outside the bezel
 	vec3 bezel_and_frame_rgb = mix(bezel_color, frame_diffuse_color, OUTSIDE_BEZEL_MASK);
 
-
-	float frame_edge = 0.495;
-
 	// Get masks on side of frame to multiply together to get a shadow around the frame
 	// Get vector from the screen edge outward
+	float frame_edge = 0.495;
 	float dist_outside_frame = length(clamp(abs(frame_outside_coord_ctr * 1.01) - frame_edge, 0, 1) * vec2(SCREEN_ASPECT, 1));
 
 	vec4 frame_shadow_layer = vec4(0);
@@ -433,18 +425,10 @@ void main()
 
 	if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
 	{
-
-
 		// Create image of bezel & frame with outside of frame transparent
-		// vec4 bezel_and_frame_rgba = (1 - OUTSIDE_FRAME_MASK) * vec4(bezel_and_frame_rgb, 1);
 		vec4 bezel_and_frame_rgba = vec4(bezel_and_frame_rgb, 1);
 
 		// Cut out Tube Area
-		// bezel_and_frame_rgba *= 1 - TUBE_MASK;
-
-		// // Put the frame and bezel over top a black tube
-		// bezel_and_frame_rgba = HSM_PreMultAlphaBlend(vec4(0, 0, 0, 1 - outside_tube_mask_wider), bezel_and_frame_rgba);
-
 		if (HSM_STATIC_LAYERS_GAMMA != 1)
 			bezel_and_frame_rgba = HSM_ApplyGamma(bezel_and_frame_rgba, HSM_STATIC_LAYERS_GAMMA);
 
@@ -860,22 +844,18 @@ void main()
 	}
 
 #ifdef LAYERS_UNDER_CRT
-
-	// if (HSM_FRM_OPACITY > 0)
-	// {
-		if (HSM_FRM_SHADOW_OPACITY > 0)
-			frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
-													frame_shadow_layer, 
-													BLEND_MODE_NORMAL, 
-													MASK_MODE_OUTSIDE_BEZEL,
-													0, 
-													IMAGE_DUALSCREEN_MODE_BOTH,
-													HSM_FRM_OPACITY * HSM_FRM_SHADOW_OPACITY);
+	if (HSM_FRM_SHADOW_OPACITY > 0)
+		frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+												frame_shadow_layer, 
+												BLEND_MODE_NORMAL, 
+												MASK_MODE_OUTSIDE_BEZEL,
+												0, 
+												IMAGE_DUALSCREEN_MODE_BOTH,
+												HSM_FRM_OPACITY * HSM_FRM_SHADOW_OPACITY);
 
 	// Add background behind tube
 	frag_color_linear = HSM_PreMultAlphaBlend(frag_color_linear, tube_bg_layer);
 
-	// BEZEL
 	// GENERATED BEZEL LAYER
 	if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
 		frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
@@ -885,18 +865,6 @@ void main()
 												0, 
 												IMAGE_DUALSCREEN_MODE_BOTH,
 												HSM_BZL_OPACITY);
-
-	// 	// GENERATED FRAME LAYER
-	// 	frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
-	// 											frame_layer, 
-	// 											HSM_FRM_BLEND_MODE, 
-	// 											MASK_MODE_ALL, 
-	// 											0, 
-	// 											IMAGE_DUALSCREEN_MODE_BOTH,
-	// 											HSM_FRM_OPACITY);
-	// }
-
-// end #ifdef LAYERS_UNDER_CRT
 #endif
 
 	//-----------------------------------------------------------------------------------------
@@ -918,26 +886,8 @@ void main()
 
 	FragColor = frag_color_linear;
 
-	// // Add Flashing Dot which will appear when this is being generated
-	// float final_aspect = SCREEN_ASPECT;
-	// vec2 corner_offset = vec2(0.18, 0.2);
-	// vec2 center_coord = vec2(1 - corner_offset.x * final_aspect, 1 - corner_offset.y);
-	// vec2 test_coord = vec2(1 - (1 - VIEWPORT_COORD.x) * final_aspect, VIEWPORT_COORD.y);
-	// float distance =  length(test_coord - center_coord);
-
-	// if (distance < 0.04)
-	// {
-	// 	float modulation = clamp(0.4 + abs(mod(global.FrameCount, 10) / 10 - 0.5) * 1.2, 0, 1);
-	// 	modulation = HHLP_EasePowerInOut(modulation, 2);
-	// 	FragColor *= 1 - modulation;
-	// 	FragColor += modulation * vec4(1, 0, 0, 1);
-	// }
-
 	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
 		FragColor = vec4(0.01, 0.01, 0.01, -1);
 
-	//-----------------------------------------------------------------------------------------
-	// END OF MAIN IMAGE LAYERING
-	//-----------------------------------------------------------------------------------------
 	return;
 }

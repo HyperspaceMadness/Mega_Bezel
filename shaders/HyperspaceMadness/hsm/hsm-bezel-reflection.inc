@@ -254,7 +254,6 @@ void main()
 
 	float edge_highlight_mask = 0;
 
-
 	// ----------------------------------------------------
 	// Generated Bezel
 	// ----------------------------------------------------
@@ -399,11 +398,6 @@ void main()
 		// Modulate amount of refleciton on frame inner edge
 		reflection_color.rgb *= (1 - HSM_REFLECT_FRAME_INNER_EDGE_AMOUNT) * (1 - frame_inner_edge_mask) + HSM_REFLECT_FRAME_INNER_EDGE_AMOUNT;
 
-		// #ifndef IS_ADV_PRESET
-		// float bezel_mask = HSM_GetCornerMask(BEZEL_OUTSIDE_CURVED_COORD, SCREEN_ASPECT, HSM_BZL_OUTER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS, 0.9);
-		// reflection_color *= bezel_mask;
-		// #endif
-
 		// Apply the mask image on the reflection, usually used to show the uneven brightness of a bumpy surface
 		if (HSM_REFLECT_MASK_IMG_AMOUNT > 0)
 		{
@@ -454,8 +448,6 @@ void main()
 
 	bg_image.a *= outside_tube_mask_wider * (1 - edge_mask);
 
-	// if (HSM_STANDARD_BG_SHOW_OVER_SCREEN == 1) 
-	// 	bg_image *= outside_tube_mask_wider;
 	vec4 frag_color_linear = crt_linear;
 	frag_color_linear = HSM_BlendModeLayerMix(frag_color_linear, bg_image, HSM_BG_BLEND_MODE, HSM_BG_OPACITY);
 	frag_color_linear += reflection_color;
@@ -471,29 +463,5 @@ crt_and_reflect_layer *= 1 - OUTSIDE_BEZEL_MASK;
 
 FragColor = crt_and_reflect_layer;
 return;
-
-	// Markup to Draw Found Top and Bottom of tube area in the image
-	// // Need to add this above layout(set = 0, binding = 14) uniform sampler2D ScreenPlacementImage;
-	// float num_samples = 60;
-	// float screen_top_y_pos = 1;
-	// float screen_bottom_y_pos = 0;
-
-	// for (int i=0; i < num_samples; i++)
-	// {
-	// 	float y_pos = i * 1 / num_samples;
-	// 	float image_alpha = texture(ScreenPlacementImage, vec2(0.5, y_pos)).a;
-	// 	if (image_alpha < 0.5)
-	// 	{
-	// 		screen_top_y_pos = min(screen_top_y_pos, y_pos);
-	// 		screen_bottom_y_pos = max(screen_bottom_y_pos, y_pos);
-	// 	}
-		
-	// }
-
-	// if (VIEWPORT_COORD.y < screen_top_y_pos + 0.001 && VIEWPORT_COORD.y > screen_top_y_pos - 0.001)
-	// 	FragColor = vec4(1, 0, 0, 1);
-
-	// if (VIEWPORT_COORD.y < screen_bottom_y_pos + 0.001 && VIEWPORT_COORD.y > screen_bottom_y_pos - 0.001)
-	// 	FragColor = vec4(0, 1, 0, 1);
 
 }
