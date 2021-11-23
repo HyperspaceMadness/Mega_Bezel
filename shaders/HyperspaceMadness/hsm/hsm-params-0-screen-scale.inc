@@ -467,45 +467,45 @@ float HSM_SCREEN_REFLECTION_POS_Y = global.HSM_SCREEN_REFLECTION_POS_Y / 600;
 //---------------------------------------------------------------------------------------------------
 //    TUBE DIFFUSE COLOR
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_TUBE_DIFFUSE_TITLE								"[ TUBE DIFFUSE IMAGE ]:" 0 0 0.01 0.01
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_TITLE								"[ TUBE DIFFUSE IMAGE ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_TUBE_DIFFUSE_OPACITY                  "          Opacity" 100 0 100 0.1
-float HSM_TUBE_DIFFUSE_OPACITY = global.HSM_TUBE_DIFFUSE_OPACITY / 100;
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_OPACITY                  "          Opacity" 100 0 100 0.1
+float HSM_TUBE_DIFFUSE_IMAGE_OPACITY = global.HSM_TUBE_DIFFUSE_IMAGE_OPACITY / 100;
 
-#pragma parameter HSM_TUBE_DIFFUSE_COLORIZE_ON              "          Colorize On" 0 0 1 1
-float HSM_TUBE_DIFFUSE_COLORIZE_ON = global.HSM_TUBE_DIFFUSE_COLORIZE_ON;
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON              "          Colorize On" 0 0 1 1
+float HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON = global.HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON;
 
-#pragma parameter HSM_TUBE_DIFFUSE_HUE                       "          Hue Offset" 0 0 360 1
-float HSM_TUBE_DIFFUSE_HUE = global.HSM_TUBE_DIFFUSE_HUE / 360;
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_HUE                       "          Hue Offset" 0 0 360 1
+float HSM_TUBE_DIFFUSE_IMAGE_HUE = global.HSM_TUBE_DIFFUSE_IMAGE_HUE / 360;
 
-#pragma parameter HSM_TUBE_DIFFUSE_SATURATION                "          Saturation" 100 0 200 1
-float HSM_TUBE_DIFFUSE_SATURATION = global.HSM_TUBE_DIFFUSE_SATURATION / 100;
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_SATURATION                "          Saturation" 100 0 200 1
+float HSM_TUBE_DIFFUSE_IMAGE_SATURATION = global.HSM_TUBE_DIFFUSE_IMAGE_SATURATION / 100;
 
-#pragma parameter HSM_TUBE_DIFFUSE_BRIGHTNESS                "          Brightness" 0 0 200 1
-float HSM_TUBE_DIFFUSE_BRIGHTNESS = global.HSM_TUBE_DIFFUSE_BRIGHTNESS / 100;
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS                "          Brightness (Suggested 20)" 0 0 200 1
+float HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS = global.HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS / 100;
 
-#pragma parameter HSM_TUBE_DIFFUSE_GAMMA                     "          Gamma Adjust" 1 0 5 0.01
-float HSM_TUBE_DIFFUSE_GAMMA = global.HSM_TUBE_DIFFUSE_GAMMA;
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_GAMMA                     "          Gamma Adjust" 1 0 5 0.01
+float HSM_TUBE_DIFFUSE_IMAGE_GAMMA = global.HSM_TUBE_DIFFUSE_IMAGE_GAMMA;
 
 
 //---------------------------------------------------------------------------------------------------
 //    TUBE COLORED GEL
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_TUBE_IMAGES_TITLE								"[ COLORED GEL IMAGE ]:" 0 0 0.01 0.01
+#pragma parameter HSM_TUBE_IMAGES_TITLE								"[ TUBE COLORED GEL IMAGE ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT  		"          Colored Gel Multiply Amount" 0 0 100 1
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT  		"          Multiply Blend Amount" 0 0 100 1
 float HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT = global.HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT / 100;
 
-#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT  		"          Colored Gel Additive Amount" 0 0 100 0.05
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT  		"          Additive Blend Amount" 0 0 100 0.05
 float HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT = global.HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT / 100;
 
-#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT  		"          Colored Gel Normal Amount" 0 0 100 1
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT  		"          Normal Blend Amount" 0 0 100 1
 float HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT = global.HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT / 100;
 
-#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_BRIGHTNESS  	"          Colored Gel Normal Brightness" 100 0 200 1
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_BRIGHTNESS  	"          Normal Blend Brightness" 100 0 200 1
 float HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_BRIGHTNESS = global.HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_BRIGHTNESS / 100;
 
-#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD "          Colored Gel Normal Transparency Threshold" 23 0 100 1
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD "          Normal Blend Transparency Threshold" 23 0 100 1
 float HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD = global.HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD / 100;
 
 #pragma parameter HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL				"          Show CRT on Top of Colored Gel Normal" 0 0 1 1
@@ -517,10 +517,13 @@ float HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL = global.HSM_SHOW_CRT_ON_TOP_OF_COLORED
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_TITLE			"[ TUBE STATIC REFLECTION IMAGE ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY  		"          Tube Static Reflection Opacity" 0 0 100 0.1
+#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY  		"          Opacity" 0 0 100 0.1
 float HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY / 100;
 
-#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE  			"          Tube Static Reflection Scale" 110 0 1000 1
+#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING  "          Ambient Lighting" 100 0 100 1
+float HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING / 100;
+
+#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE  			"          Scale" 110 0 1000 1
 float HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE / 100;
 
 // #pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_DITHERING_SAMPLES  "[ TUBE IMAGES ]   Tube Static Reflection Noise Samples (Reduces Banding)" 0 0 10 1

@@ -24,7 +24,8 @@ Changes:
   * Viewport Zoom & Position
   * Add option for Black and White placement image requested by @briball
   * Parameter USE_IMAGE_FOR_PLACEMENT renamed to HSM_USE_IMAGE_FOR_PLACEMENT
-  * NIGHT renamed to AMBIENT
+  * NIGHT LIGHTING renamed to AMBIENT LIGHTING
+  * AMBIENT LIGHTING now affects tube static reflection
   * Tube Diffuse image added, so you can show the phosphor surface if desired
   * Noise can now be turned on/off separately from deconvergence
 
@@ -67,12 +68,16 @@ Changes:
 Mega Bezel Still to Come:
 
 V1 TODO
+  * Missing inner Edge static shading?
   * Fix Parameters for PostCRTPrep
-  * Fix Pink Render Mode has small black edge
-  * Add Tube Color & Vignette (Should take night lighting)
+  * Adjust GDV so Scanline Gamma is a multiplier
   * 2D Cylindrical Curvature Mode
-  * Fix Corner Shading
+  * Pink outside frame options
+  * Ambient Lighting for Static Tube Reflection
+
   * ZFast Curvature
+  
+  * Fix Corner Shading
   * Good Preset for FBNeo & Instructions
   * Swap option for Blurry and Sharp Tube Reflection
   * Add Death to Pixels

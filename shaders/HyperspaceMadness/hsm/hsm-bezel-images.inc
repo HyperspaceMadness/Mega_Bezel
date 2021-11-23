@@ -465,6 +465,9 @@ void main()
 				bezel_layer = clamp(bezel_and_frame_rgba * FRAME_MASK, 0, 1);
 	}
 
+	float TUBE_MASK_EXPAND = HSM_GetCornerMask((tube_curved_coord - 0.5) * 0.997 + 0.5, SCREEN_ASPECT, bezel_corner_radius, 0.99);
+	// Tube BG is black and possibly semi-transparent
+	vec4 tube_bg_layer = vec4(0, 0, 0, TUBE_MASK_EXPAND * HSM_TUBE_DIFFUSE_IMAGE_OPACITY);
 
 // end of ifndef LAYERS_UNDER_CRT
 #endif
@@ -868,6 +871,9 @@ void main()
 													0, 
 													IMAGE_DUALSCREEN_MODE_BOTH,
 													HSM_FRM_OPACITY * HSM_FRM_SHADOW_OPACITY);
+
+	// Add background behind tube
+	frag_color_linear = HSM_PreMultAlphaBlend(frag_color_linear, tube_bg_layer);
 
 	// BEZEL
 	// GENERATED BEZEL LAYER

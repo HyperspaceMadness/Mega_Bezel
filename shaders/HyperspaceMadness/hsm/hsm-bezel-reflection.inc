@@ -75,13 +75,9 @@ layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
 layout(set = 0, binding = 2) uniform sampler2D InfoCachePassFeedback;
 
-layout(set = 0, binding = 3) uniform sampler2D BackgroundImage;
-layout(set = 0, binding = 4) uniform sampler2D ReflectionMaskImage;
-
-// #ifndef IS_GLASS_PRESET
-// layout(set = 0, binding = 4) uniform sampler2D BR_LayersUnderCRTPass;
-// layout(set = 0, binding = 5) uniform sampler2D BR_LayersOverCRTPass;
-// #endif
+layout(set = 0, binding = 3) uniform sampler2D NightLightingImage;
+layout(set = 0, binding = 4) uniform sampler2D BackgroundImage;
+layout(set = 0, binding = 5) uniform sampler2D ReflectionMaskImage;
 
 layout(set = 0, binding = 6) uniform sampler2D TubeStaticReflectionImage;
 layout(set = 0, binding = 7) uniform sampler2D TubeColoredGelImage;
@@ -403,10 +399,10 @@ void main()
 		// Modulate amount of refleciton on frame inner edge
 		reflection_color.rgb *= (1 - HSM_REFLECT_FRAME_INNER_EDGE_AMOUNT) * (1 - frame_inner_edge_mask) + HSM_REFLECT_FRAME_INNER_EDGE_AMOUNT;
 
-		#ifndef IS_ADV_PRESET
-			float bezel_mask = HSM_GetCornerMask(BEZEL_OUTSIDE_CURVED_COORD, SCREEN_ASPECT, HSM_BZL_OUTER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS, 0.9);
-			reflection_color *= bezel_mask;
-		#endif
+		// #ifndef IS_ADV_PRESET
+		// float bezel_mask = HSM_GetCornerMask(BEZEL_OUTSIDE_CURVED_COORD, SCREEN_ASPECT, HSM_BZL_OUTER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS, 0.9);
+		// reflection_color *= bezel_mask;
+		// #endif
 
 		// Apply the mask image on the reflection, usually used to show the uneven brightness of a bumpy surface
 		if (HSM_REFLECT_MASK_IMG_AMOUNT > 0)
@@ -441,7 +437,10 @@ void main()
 	// TUBE HIGHLIGHT
 	if (HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY > 0)
 	{
-		crt_linear += HSM_Get_Tube_Highlight(tube_curved_coord, false, TubeStaticReflectionImage);
+		vec4 night_lighting_image = vec4(1);
+		if (HSM_AMBIENT_LIGHTING_OPACITY > 0)
+			night_lighting_image = HSM_GetNightLightingMultiplyColor( VIEWPORT_COORD, NightLightingImage );
+		crt_linear += HSM_Get_Tube_Highlight(tube_curved_coord, false, TubeStaticReflectionImage, night_lighting_image);
 	}
 
 	// Clamp otherwise we get artifacts (blue overlays of brighter parts of image)

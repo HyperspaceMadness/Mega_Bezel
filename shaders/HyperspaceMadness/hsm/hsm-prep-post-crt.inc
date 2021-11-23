@@ -48,6 +48,9 @@ layout(set = 0, binding = 9) uniform sampler2D NightLightingImage;
 layout(set = 0, binding = 10) uniform sampler2D IntroPass;
 #endif
 
+layout(set = 0, binding = 11) uniform sampler2D MBZ_PostCRTPassFeedback;
+#define PassFeedback MBZ_PostCRTPassFeedback
+
 #ifdef IS_POTATO_PRESET
 vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, vec2 screen_curved_coord, in sampler2D BackgroundImage, in sampler2D BackgroundVertImage)
 { 
@@ -199,13 +202,13 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	
 	// TubeDiffuseImage
 	vec4 tube_diffuse = vec4(0, 0, 0, 1);
-	if (HSM_TUBE_DIFFUSE_BRIGHTNESS > 0)
+	if (HSM_TUBE_DIFFUSE_IMAGE_OPACITY > 0.5 && HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS > 0)
 	{
 		tube_diffuse = texture(TubeDiffuseImage, mirrored_tube_coord);
 		tube_diffuse = HSM_GetPreMultipliedColorLinear(tube_diffuse, SOURCE_MATTE_PREMULTIPLIED, HSM_DEFAULT_SRGB_GAMMA);
-		tube_diffuse.rgb = HSM_ApplyHSVAdjustment(tube_diffuse.rgb, HSM_TUBE_DIFFUSE_HUE, HSM_TUBE_DIFFUSE_SATURATION, HSM_TUBE_DIFFUSE_BRIGHTNESS, HSM_TUBE_DIFFUSE_COLORIZE_ON, HSM_TUBE_DIFFUSE_GAMMA);
+		tube_diffuse.rgb = HSM_ApplyHSVAdjustment(tube_diffuse.rgb, HSM_TUBE_DIFFUSE_IMAGE_HUE, HSM_TUBE_DIFFUSE_IMAGE_SATURATION, HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS, HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON, HSM_TUBE_DIFFUSE_IMAGE_GAMMA);
 	}
-	tube_diffuse *= HSM_TUBE_DIFFUSE_OPACITY;
+	tube_diffuse *= HSM_TUBE_DIFFUSE_IMAGE_OPACITY;
 	tube_diffuse.rgb *= night_lighting_image.rgb;
 
 
@@ -218,7 +221,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 
 	// TUBE HIGHLIGHT
 	if (HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY > 0)
-		out_color += HSM_Get_Tube_Highlight(tube_curved_coord, false, TubeStaticReflectionImage);
+		out_color += HSM_Get_Tube_Highlight(tube_curved_coord, false, TubeStaticReflectionImage, night_lighting_image);
 	#endif
 
 	#ifndef IS_NOREFLECT_PRESET
@@ -240,6 +243,7 @@ void main()
 	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
+	#ifndef IS_POTATO_PRESET
 	if (HSM_CACHE_OUTSIDE_FRAME > 0.5)
 	{
 		// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
@@ -256,10 +260,20 @@ void main()
 		FRAME_OUTSIDE_CURVED_COORD = (FRAME_OUTSIDE_CURVED_COORD - 0.5) * 0.9 + 0.5;
 		if (FRAME_OUTSIDE_CURVED_COORD.x < -0.01 || FRAME_OUTSIDE_CURVED_COORD.x > 1.01 || FRAME_OUTSIDE_CURVED_COORD.y < -0.01 || FRAME_OUTSIDE_CURVED_COORD.y > 1.01)
 		{
-				FragColor = vec4(0);
+#ifdef IS_POTATO_PRESET
+			vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
+			if (HSM_LIVE_UPDATE_ON < 0.5 && feedback_color_test.a < 0 && !HSM_CheckCacheInfoChanged())
+			{
+				FragColor = texture(PassFeedback, UNFLIPPED_VIEWPORT_COORD);
 				return;
+			}
+#else
+			FragColor = vec4(0);
+			return;
+#endif
 		}
 	}
+	#endif
 
 	vec2 screen_curved_coord = HSM_GetCurvedCoord(SCREEN_COORD, 1, SCREEN_ASPECT);
 
@@ -270,5 +284,8 @@ void main()
 #else
 	FragColor = HSM_GetPostCrtPreppedColor(FragColor, vTexCoord, screen_curved_coord, IntroPass, false, TubeDiffuseImage, TubeColoredGelImage, TubeStaticReflectionImage, BackgroundImage, BackgroundVertImage, NightLightingImage);
 #endif
+
+if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
+	FragColor = vec4(0.01, 0.01, 0.01, -1);
 
 }

@@ -93,24 +93,29 @@ void main()
 	if (HSM_RENDER_SIMPLE_MODE > 0.5)
 		crt_layer.rgb = vec3(0);
 
-	vec4 reflection_layer = crt_layer;
+	// vec4 reflection_layer = crt_layer;
 
 	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
 	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
 		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
 	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(SCREEN_COORD, 1, SCREEN_SCALE, TUBE_SCALE, SCREEN_ASPECT, 1);
 
-	float TUBE_MASK_EXPAND = HSM_GetCornerMask((tube_curved_coord - 0.5) * 0.997 + 0.5, SCREEN_ASPECT, bezel_corner_radius, 0.99);
-	crt_layer *= TUBE_MASK_EXPAND;
+	TUBE_MASK =  HSM_GetCornerMask(tube_curved_coord, SCREEN_ASPECT, bezel_corner_radius, 0.99);
+	// crt_layer *= TUBE_MASK;
+
+	// float TUBE_MASK_EXPAND = HSM_GetCornerMask((tube_curved_coord - 0.5) * 0.997 + 0.5, SCREEN_ASPECT, bezel_corner_radius, 0.99);
+	// crt_layer *= TUBE_MASK_EXPAND;
 
 	float TUBE_MASK_TRIM = HSM_GetCornerMask((tube_curved_coord - 0.5) * 1.003 + 0.5, SCREEN_ASPECT, bezel_corner_radius, 0.99);
-	crt_layer.rgb *= TUBE_MASK_TRIM;
+	// crt_layer.rgb *= TUBE_MASK_TRIM;
 
-	// If the tube is opaque apply it on top of the under CRT layers
-	vec4 tube_background = vec4(0, 0, 0, TUBE_MASK_EXPAND) * HSM_TUBE_DIFFUSE_OPACITY;
-	out_color = HSM_PreMultAlphaBlend(out_color, tube_background);
+	// // If the tube is opaque apply it on top of the under CRT layers
+	// vec4 tube_background = vec4(0, 0, 0, TUBE_MASK_EXPAND) * HSM_TUBE_DIFFUSE_IMAGE_OPACITY;
+	// out_color = HSM_PreMultAlphaBlend(out_color, tube_background);
 
-	out_color.rgb += crt_layer.rgb;
+	// out_color.rgb += crt_layer.rgb;
+	if (HSM_RENDER_SIMPLE_MODE < 0.5)
+		out_color.rgb += crt_layer.rgb;
 
 	// if (HSM_CRT_SCREEN_BLEND_MODE > 1.5)
 	// {
@@ -120,42 +125,22 @@ void main()
 	// else if (HSM_CRT_SCREEN_BLEND_MODE > 0.5)
 	// 	out_color = HSM_PreMultAlphaBlend(out_color, crt_layer);
 
-#ifndef IS_NO_REFLECT_PRESET
-	float outside_tube_mask_smaller = 1 - HSM_GetCornerMask((tube_curved_coord - 0.5) * 1.01 + 0.5, SCREEN_ASPECT, bezel_corner_radius, 0.99);
-	if (HSM_RENDER_SIMPLE_MODE < 0.5)
-	{
-		reflection_layer *= 1 - TUBE_MASK_TRIM;
-		out_color.rgb += reflection_layer.rgb;
-	}
-#endif
+// #ifndef IS_NO_REFLECT_PRESET
+// 	float outside_tube_mask_smaller = 1 - HSM_GetCornerMask((tube_curved_coord - 0.5) * 1.01 + 0.5, SCREEN_ASPECT, bezel_corner_radius, 0.99);
+// 	if (HSM_RENDER_SIMPLE_MODE < 0.5)
+// 	{
+// 		reflection_layer *= 1 - TUBE_MASK_TRIM;
+// 		out_color.rgb += reflection_layer.rgb;
+// 	}
+// #endif
 
 	vec4 over_layer = texture(BR_LayersOverCRTPass, vTexCoord);
 	out_color = HSM_PreMultAlphaBlend(out_color, over_layer);
 
 	FragColor = HSM_ApplyGamma(clamp(out_color, 0, 1), HSM_DEFAULT_SRGB_GAMMA);
 
-	// // Add Flashing Dot which will appear when this is being generated
-	// float final_aspect = SCREEN_ASPECT;
-	// vec2 corner_offset = vec2(0.18, 0.2);
-	// vec2 center_coord = vec2(1 - corner_offset.x * final_aspect, 1 - corner_offset.y);
-	// vec2 test_coord = vec2(1 - (1 - vTexCoord.x) * final_aspect, vTexCoord.y);
-	// float distance =  length(test_coord - center_coord);
-
-	// if (distance < 0.04)
-	// {
-	// 	float modulation = clamp(0.4 + abs(mod(global.FrameCount, 10) / 10 - 0.5) * 1.2, 0, 1);
-	// 	modulation = HHLP_EasePowerInOut(modulation, 2);
-	// 	FragColor *= 1 - modulation;
-	// 	FragColor += modulation * vec4(1, 0, 0, 1);
-	// }
-
-	// if (CORE_SIZE.x != CORE_FEEDBACK_SIZE.x)
-	// 	FragColor = vec4(FragColor.r + 0.2, FragColor.g, FragColor.b, 1);
-
 	if (HSM_RENDER_SIMPLE_MODE > 0.5)
 	{
-		TUBE_MASK = TUBE_MASK_TRIM;
-
 		SCREEN_BLACK_EDGE_CURVED_COORD = HSM_GetCurvedCoord(SCREEN_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, SCREEN_ASPECT);
 		SCREEN_MASK = HSM_GetCornerMask(((SCREEN_BLACK_EDGE_CURVED_COORD - 0.5) * 1.001) + 0.5, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS * HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE, HSM_TUBE_BLACK_EDGE_SHARPNESS);
 
@@ -174,8 +159,9 @@ void main()
 		if ( HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_OUTSIDE_SCREEN_MASK )
 			FragColor = vec4(1 - SCREEN_MASK);
 	}
-		if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
-			FragColor = vec4(0.01, 0.01, 0.01, -1);
+	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
+		FragColor = vec4(0.01, 0.01, 0.01, -1);
+		
 	return;
 }
 

@@ -2083,7 +2083,7 @@ float HSM_Get_Screen_Black_Edge_Mask(vec2 screen_coord, bool apply_to_mirror)
 	return SCREEN_MASK;
 }
 
-vec4 HSM_Get_Tube_Highlight(vec2 tube_curved_coord, bool apply_to_mirror, in sampler2D TubeStaticReflectionImage)
+vec4 HSM_Get_Tube_Highlight(vec2 tube_curved_coord, bool apply_to_mirror, in sampler2D TubeStaticReflectionImage, vec4 ambient_lighting_image)
 {
 	vec4 out_color = vec4(0);
 	
@@ -2094,10 +2094,6 @@ vec4 HSM_Get_Tube_Highlight(vec2 tube_curved_coord, bool apply_to_mirror, in sam
 	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
 	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
 		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
-
-	// float outside_tube_mask = 1 - HSM_GetCornerMask(tube_curved_coord, SCREEN_ASPECT, bezel_corner_radius, 0.99);
-	// TUBE_MASK = 1 - outside_tube_mask;
-	// out_color *= TUBE_MASK;
 
 	if (HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY > 0)
 	{
@@ -2116,6 +2112,12 @@ vec4 HSM_Get_Tube_Highlight(vec2 tube_curved_coord, bool apply_to_mirror, in sam
 
 		vec4 tube_highlight_image = texture(TubeStaticReflectionImage, tube_highlight_coord);
 		tube_highlight_image = HSM_Linearize(tube_highlight_image, HSM_DEFAULT_SRGB_GAMMA) * tube_highlight_mask;
+
+		if (HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING > 0)
+		{
+			ambient_lighting_image.rgb = (1 - HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING) * vec3(1) + HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING * ambient_lighting_image.rgb;
+			tube_highlight_image.rgb *= ambient_lighting_image.rgb;
+		}
 
 		out_color = HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY * tube_highlight_image * tube_highlight_image.a;
 	}
