@@ -8,6 +8,24 @@
 
 #define HAS_BEZEL_PARAMS
 
+#pragma parameter HSM_BZL_OUTER_POSITION_Y 			    "          Outer Edge Position Y" 0 -500 500 1
+float HSM_BZL_OUTER_POSITION_Y = global.HSM_BZL_OUTER_POSITION_Y / 2000;
+
+#pragma parameter HSM_BZL_OUTER_CURVATURE_SCALE 		"          Outer Curvature Scale" 0 0 500 5
+float HSM_BZL_OUTER_CURVATURE_SCALE = global.HSM_BZL_OUTER_CURVATURE_SCALE / 100;
+
+#pragma parameter HSM_FRM_OUTER_POS_Y 			        "          Frame Outer Pos Y" 0 -100 100 0.05
+float HSM_FRM_OUTER_POS_Y = global.HSM_FRM_OUTER_POS_Y / 100;
+
+#pragma parameter HSM_FRM_THICKNESS 					"          Frame Thickness" 100 0 2000 5
+float HSM_FRM_THICKNESS = global.HSM_FRM_THICKNESS * 0.0007;
+
+#pragma parameter HSM_FRM_THICKNESS_SCALE_X 			"          Frame Thickness Scale X" 100 0 1000 2
+float HSM_FRM_THICKNESS_SCALE_X = global.HSM_FRM_THICKNESS_SCALE_X / 100;
+
+#pragma parameter HSM_FRM_OUTER_CURVATURE_SCALE 		"          Frame Outer Curvature Scale" 0 0 500 5
+float HSM_FRM_OUTER_CURVATURE_SCALE = global.HSM_FRM_OUTER_CURVATURE_SCALE / 100;
+
 #pragma parameter HSM_BZL_INNER_EDGE_THICKNESS		    "          Inner Edge Thickness" 100 0 700 10
 float HSM_BZL_INNER_EDGE_THICKNESS = global.HSM_BZL_INNER_EDGE_THICKNESS  * 0.00007;
 

@@ -12,7 +12,7 @@ Description:
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_BASIC_BG_IMG_TITLE	                    "[ BASIC BACKGROUND IMAGE LAYER ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_BG_OPACITY 	                    "          Opacity" 100 0 100 0.1
+#pragma parameter HSM_BG_OPACITY                  "          Opacity" 100 0 100 0.1
 float HSM_BG_OPACITY = global.HSM_BG_OPACITY / 100;
 
 #pragma parameter HSM_BG_BLEND_MODE               "          Blend Mode - OFF | NORMAL | ADD | MULTIPLY"  1 -1 3 1

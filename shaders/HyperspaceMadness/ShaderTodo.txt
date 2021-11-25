@@ -68,6 +68,7 @@ Changes:
 Mega Bezel Still to Come:
 
 V1 TODO
+  * Scale Mode to Match Scaled Viewport vs Final Viewport
   * Missing inner Edge static shading?
   * Fix Parameters for PostCRTPrep
   * Adjust GDV so Scanline Gamma is a multiplier

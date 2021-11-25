@@ -1,5 +1,123 @@
 #version 450
 
 #include "hsm-globals-and-potato-params.inc"
-// #include "hsm-globals-and-no-reflect-params.inc"
-#include "hsm-prep-post-crt.inc"
+
+#pragma stage vertex
+
+layout(location = 0) in vec4 Position;
+layout(location = 1) in vec2 TexCoord;
+
+layout(location = 0) out vec2 vTexCoord;
+layout(location = 7) out vec2 UNFLIPPED_VIEWPORT_COORD;
+
+void main()
+{
+	gl_Position = global.MVP * Position;
+	vTexCoord = TexCoord * 1.00001;
+
+	UNFLIPPED_VIEWPORT_COORD = vTexCoord;
+}
+
+#pragma stage fragment
+
+layout(location = 0) in vec2 vTexCoord;
+layout(location = 7) in vec2 UNFLIPPED_VIEWPORT_COORD;
+
+layout(location = 0) out vec4 FragColor;
+
+layout(set = 0, binding = 1) uniform sampler2D Source;
+
+layout(set = 0, binding = 2) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 3) uniform sampler2D InfoCachePassFeedback;
+
+layout(set = 0, binding = 7) uniform sampler2D BackgroundImage;
+layout(set = 0, binding = 8) uniform sampler2D BackgroundVertImage;
+
+layout(set = 0, binding = 11) uniform sampler2D MBZ_PostCRTPassFeedback;
+#define PassFeedback MBZ_PostCRTPassFeedback
+
+vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, vec2 screen_curved_coord, in sampler2D BackgroundImage, in sampler2D BackgroundVertImage)
+{ 
+	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(SCREEN_COORD, 1, SCREEN_SCALE, TUBE_SCALE, SCREEN_ASPECT, 1);
+	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
+	TUBE_MASK = HSM_GetCornerMask(tube_curved_coord, SCREEN_ASPECT, bezel_corner_radius, 0.99);
+
+	if (HSM_MONOCHROME_MODE > 0.5)
+		in_color_with_gamma = HSM_ApplyMonochrome(in_color_with_gamma);
+
+	vec4 out_color = HSM_Linearize(in_color_with_gamma, HSM_DEFAULT_SRGB_GAMMA);
+	
+	out_color *= HSM_POST_CRT_BRIGHTNESS;
+
+	vec2 mirrored_screen_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
+	float screen_mask = HSM_GetCornerMask((screen_curved_coord - 0.5) * 0.999 + 0.5, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS, 0.9);
+
+	if (HSM_SCREEN_VIGNETTE_ON > 0.5)
+	{
+		// out_color *= HSM_GetScreenVignetteFactor(screen_curved_coord);
+
+		float vignette_factor = HSM_GetScreenVignetteFactor(mirrored_screen_coord);
+
+		// float vignette_factor_outside_screen = HSM_SCREEN_VIGNETTE_IN_REFLECTION * vignette_factor + (1 - HSM_SCREEN_VIGNETTE_IN_REFLECTION) * 1;
+		if (HSM_SCREEN_VIGNETTE_IN_REFLECTION < 0.5)
+			vignette_factor = screen_mask * vignette_factor + (1 - screen_mask);
+
+		out_color *= vignette_factor;
+	}
+
+	out_color.rgb *= screen_mask;
+	out_color *= TUBE_MASK;
+
+	if (HSM_BG_OPACITY > 0)
+	{
+		//-----------------------------------------------------------------------------------------
+		// Background
+		//-----------------------------------------------------------------------------------------
+		BACKGROUND_CURVED_COORD = VIEWPORT_COORD;
+		// Correct image coordinate for image aspect ratio
+		BACKGROUND_CURVED_COORD.x = (BACKGROUND_CURVED_COORD.x - 0.5) / (HSM_GetAspectRatioFromMode(HSM_BG_TEXTURE_ASPECT_MODE, HSM_BG_EXPLICIT_TEXTURE_ASPECT) / (global.FinalViewportSize.x/global.FinalViewportSize.y)) + 0.5;
+
+		vec4 bg_layer = vec4(0);
+		if (SCREEN_ASPECT > 1) 
+			bg_layer = texture(BackgroundImage, BACKGROUND_CURVED_COORD);
+		else
+			bg_layer = texture(BackgroundVertImage, BACKGROUND_CURVED_COORD);
+		bg_layer = HSM_Linearize(bg_layer, HSM_DEFAULT_SRGB_GAMMA);
+
+		bg_layer.rgb *= HSM_BG_BRIGHTNESS;
+
+		if (HSM_STANDARD_BG_SHOW_OVER_SCREEN == 1)
+			out_color = HSM_BlendModeLayerMix(out_color, bg_layer, HSM_BG_BLEND_MODE, HSM_BG_OPACITY);
+		else
+			out_color = HSM_BlendModeLayerMix(bg_layer, out_color, HSM_CRT_SCREEN_BLEND_MODE, 1);
+	}
+
+	// Apply the final Gamma
+	out_color = HSM_Delinearize(out_color, HSM_DEFAULT_SRGB_GAMMA);
+	return out_color;
+}
+
+void main()
+{
+	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+
+	vec2 screen_curved_coord = HSM_GetCurvedCoord(SCREEN_COORD, 1, SCREEN_ASPECT);
+	vec2 screen_curved_coord_expanded  = (screen_curved_coord - 0.5) * 0.9 + 0.5;
+	if (screen_curved_coord_expanded.x < -0.01 || screen_curved_coord_expanded.x > 1.01 || screen_curved_coord_expanded.y < -0.01 || screen_curved_coord_expanded.y > 1.01)
+	{
+		vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
+		if (HSM_LIVE_UPDATE_ON < 0.5 && feedback_color_test.a < 0 && !HSM_CheckCacheInfoChanged())
+		{
+			FragColor = texture(PassFeedback, UNFLIPPED_VIEWPORT_COORD);
+			return;
+		}
+	}
+
+	FragColor = texture(Source, UNFLIPPED_VIEWPORT_COORD);
+
+	FragColor = HSM_GetPostCrtPreppedColorPotato(FragColor, vTexCoord, screen_curved_coord, BackgroundImage, BackgroundVertImage);
+
+if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
+	FragColor = vec4(0.01, 0.01, 0.01, -1);
+}
