@@ -118,7 +118,7 @@ filter_linear25 = true
 scale_type25 = viewport
 float_framebuffer25 = true
 
-shader26 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-post-crt.slang
+shader26 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-post-crt-image-layers.slang
 alias26 = "MBZ_PostCRTPass"
 
 // Reduce Resolution  ----------------------------------------------------------------

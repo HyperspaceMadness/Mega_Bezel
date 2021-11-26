@@ -143,7 +143,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	out_color.a = in_color_with_gamma.a;
 	out_color = HSM_BlendModeLayerMix(tube_diffuse, out_color, BLEND_MODE_ADD, 1);
 
-	#ifdef IS_NOREFLECT_PRESET
+	#ifdef IS_NO_REFLECT_PRESET
 	out_color.rgb *= HSM_Get_Screen_Black_Edge_Mask(SCREEN_COORD, false);
 
 	// TUBE HIGHLIGHT
@@ -151,12 +151,12 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 		out_color += HSM_Get_Tube_Highlight(tube_curved_coord, false, TubeStaticReflectionImage, night_lighting_image);
 	#endif
 
-	#ifndef IS_NOREFLECT_PRESET
+	#ifndef IS_NO_REFLECT_PRESET
 	// Apply the final Gamma
 	out_color = HSM_Delinearize(out_color, HSM_DEFAULT_SRGB_GAMMA);
 	#endif
-
-	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
+	
+		float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
 	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
 		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
 

@@ -7,7 +7,7 @@ License: GPL
 */
 
 /////////////// IMPORTS ///////////////
-#include "hsm-globals-and-no-reflect-params.inc"
+#include "hsm-globals-and-image-layers-params.inc"
 #include "hsm-common-functions-bezel.inc"
 
 
@@ -90,6 +90,7 @@ void main()
 
 	vec4 out_color = texture(BR_LayersUnderCRTPass, vTexCoord);
 	vec4 crt_layer = texture(MiddlePass, vTexCoord);
+
 	if (HSM_RENDER_SIMPLE_MODE > 0.5)
 		crt_layer.rgb = vec3(0);
 

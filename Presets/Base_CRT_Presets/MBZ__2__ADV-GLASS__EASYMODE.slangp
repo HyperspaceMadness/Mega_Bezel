@@ -157,7 +157,7 @@ scale_type32 = viewport
 scale_x32 = 1.0
 scale_y32 = 1.0
 
-shader33 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-post-crt.slang
+shader33 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-post-crt-image-layers.slang
 alias33 = "MBZ_PostCRTPass"
 
 // Reduce Resolution  ----------------------------------------------------------------

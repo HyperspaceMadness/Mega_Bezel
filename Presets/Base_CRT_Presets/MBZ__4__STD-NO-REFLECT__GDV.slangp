@@ -119,7 +119,7 @@ scale_type17 = viewport
 scale_x17 = 1.0
 scale_y17 = 1.0
 
-shader18 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-post-crt-bezel-images.slang
+shader18 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-post-crt-no-reflect.slang
 alias18 = "MBZ_PostCRTPass"
 
 // Bezel Generation & Composite of Image Layers ----------------------------------------------------------------

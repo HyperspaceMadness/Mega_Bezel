@@ -1,4 +1,6 @@
 #version 450
 
-#include "hsm-globals-and-no-reflect-params.inc"
+#define IS_NO_REFLECT_PRESET
+
+#include "hsm-globals-and-image-layers-params.inc"
 #include "hsm-stock.inc"

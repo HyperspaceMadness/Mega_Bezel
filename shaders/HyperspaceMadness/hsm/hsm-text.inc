@@ -357,7 +357,7 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
     col += GetChar(ch_S, uv);
 #endif
 
-#ifdef IS_NOREFLECT_PRESET
+#ifdef IS_NO_REFLECT_PRESET
     col += GetChar(ch_spc, uv);
     col += GetChar(ch_N, uv);
     col += GetChar(ch_O, uv);
