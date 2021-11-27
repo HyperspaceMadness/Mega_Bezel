@@ -28,8 +28,9 @@ Changes:
   * AMBIENT LIGHTING now affects tube static reflection
   * Tube Diffuse image added, so you can show the phosphor surface if desired
   * Noise can now be turned on/off separately from deconvergence
-
-
+  * Added 2D Curvature mode, 
+    * This makes the indexes change so they now start at 0 and end at 5.
+    * 3D mode is now 3 and 3D cylinder mode is 5
 
   * BIG Changes to what each preset level does
     * ADV
@@ -69,12 +70,11 @@ Mega Bezel Still to Come:
 
 V1 TODO
   * Scale Mode to Match Scaled Viewport vs Final Viewport
+  * Fix Potato?
   * Missing inner Edge static shading?
-  * Fix Parameters for PostCRTPrep
   * Adjust GDV so Scanline Gamma is a multiplier
   * 2D Cylindrical Curvature Mode
-  * Pink outside frame options
-  * Ambient Lighting for Static Tube Reflection
+  * Pink outside frame options?
 
   * ZFast Curvature
   
@@ -208,6 +208,7 @@ Moire
 Old Megabezel https://github.com/HyperspaceMadness/shaders_slang/tree/adf6dc3c0f09db11ebf4fbcf85098ac8232acfcc
 
 Retroarch Features
+  * Dropdowns for indexed parameters
   * Fix edit shader in UI
   * Fix saving with same name with different capitalization creates self reference
   * Add "Timer" uniform variable vec4(total-count, count-since-shader-load, oscillator[1,0,1,0,1,...], [unknown/undefined])

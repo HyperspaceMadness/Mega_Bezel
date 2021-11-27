@@ -13,6 +13,13 @@ Description:
 #include "hsm-royale-geometry-functions.inc"
 #endif
 
+float CURVATURE_MODE_OFF = 0;
+float CURVATURE_MODE_2D = 1;
+float CURVATURE_MODE_2D_CYLINDER = 2;
+float CURVATURE_MODE_3D_1 = 3;
+float CURVATURE_MODE_3D_2 = 4;
+float CURVATURE_MODE_3D_CYLINDER = 5;
+
 vec2 HSM_GetViewportCoordWithFlip(vec2 viewport_coord)
 {
 	vec2 out_coord = viewport_coord;
@@ -377,6 +384,8 @@ vec2 HSM_GetCurvatureValues(float screen_aspect)
 	vec2 curvature_values = screen_aspect < 1 ? vec2(2 * HSM_CURVATURE_2D_SCALE_SHORT_AXIS * 2 / 100, HSM_CURVATURE_2D_SCALE_LONG_AXIS * 3 / 100)
 											  : vec2(HSM_CURVATURE_2D_SCALE_LONG_AXIS * 3 / 100, 2 * HSM_CURVATURE_2D_SCALE_SHORT_AXIS * 2 / 100);
 
+	curvature_values.x *= HSM_CURVATURE_MODE == CURVATURE_MODE_2D_CYLINDER ? 0 : 1;
+
 	return curvature_values;
 }
 
@@ -528,7 +537,7 @@ vec2 HSM_Get2DCurvedCoord(vec2 in_coord, vec2 curvature_values)
 
 vec2 HSM_GetCurvedCoord(vec2 in_coord, float curvature_multiplier, float screen_aspect)
 {
-	if (HSM_CURVATURE_MODE == -1)
+	if (HSM_CURVATURE_MODE == CURVATURE_MODE_OFF)
 		return in_coord;
 	
 	float epsilon = 0.002;
@@ -542,21 +551,24 @@ vec2 HSM_GetCurvedCoord(vec2 in_coord, float curvature_multiplier, float screen_
 	vec2 curved_coord = vec2(0);
 
 #ifndef IS_POTATO_PRESET
-	if (HSM_CURVATURE_MODE > 0.5)
+	if (HSM_CURVATURE_MODE > CURVATURE_MODE_2D_CYLINDER)
 	{
 		// if (HSM_USE_GEOM > 0.5)
 		// 	curved_coord = HSM_GetGeomCurvedCoord(in_coord, HSM_CURVATURE_3D_TILT_ANGLE_X, HSM_CURVATURE_3D_TILT_ANGLE_Y, HSM_CURVATURE_3D_RADIUS, HSM_CURVATURE_3D_VIEW_DIST, screen_aspect);
 		// else
 		// {
 			float geom_radius_with_mult = HSM_CURVATURE_3D_RADIUS;
-			if (HSM_CURVATURE_MODE == 1) geom_radius_with_mult -= 0.40;
-			if (HSM_CURVATURE_MODE == 3) geom_radius_with_mult -= 1;
+			// Adjust curvature so 3D mode 1 looks similar to 3D mode 2
+			if (HSM_CURVATURE_MODE == CURVATURE_MODE_3D_1) geom_radius_with_mult -= 0.40;
+			if (HSM_CURVATURE_MODE == CURVATURE_MODE_3D_CYLINDER) geom_radius_with_mult -= 1;
 			geom_radius_with_mult *= (1 / (curvature_multiplier + epsilon));
 			vec2 extra_curvature_mult = HSM_GetCurvatureScales(screen_aspect);
 			mat2x2 pixel_to_video_uv;
-			
+
+			float geom_mode = HSM_CURVATURE_MODE - 2;
+
 			curved_coord = HRG_GetGeomCurvedCoord(	adjusted_coord, 
-													HSM_CURVATURE_MODE, 
+													geom_mode, 
 													geom_radius_with_mult,
 													HSM_CURVATURE_3D_VIEW_DIST,
 													tilt_angle_x,
