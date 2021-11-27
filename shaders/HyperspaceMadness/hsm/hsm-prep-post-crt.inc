@@ -41,6 +41,74 @@ layout(set = 0, binding = 10) uniform sampler2D IntroPass;
 layout(set = 0, binding = 11) uniform sampler2D MBZ_PostCRTPassFeedback;
 #define PassFeedback MBZ_PostCRTPassFeedback
 
+// Torridgristle - ScanlineSimple pass - Public domain
+vec4 HSM_ApplyScanlineMask(vec4 in_color, vec2 screen_scale, vec2 in_coord, vec2 in_curved_coord)
+{
+	//   Stuff to try implementing
+    //   Option to try to match a integer division of the core resolution
+    //   Curvature Multiplier
+    //   Try mame hlsl darkening
+    //   Check Lottes tone mapping
+    //   Crawl
+
+	in_coord = mix(in_coord, in_curved_coord, HSM_FAKE_SCANLINE_CURVATURE);
+
+    /* Scanlines */
+	float scanline_roll_offset = float(mod(global.FrameCount, 1280)) / 1280 * HSM_FAKE_SCANLINE_ROLL; 
+
+    // float scans = clamp( 0.35+0.18*sin(6.0*time-curved_uv.y*resolution.y*1.5), 0.0, 1.0);
+    // float s = pow(scans,0.9);
+    // col = col * vec3(s);
+
+	vec2 core_prepped_size = HSM_GetRotatedScreenCorePreppedSize(SCREEN_INDEX);
+	float use_vert_scanlines = HSM_GetUseVerticalScanlines(core_prepped_size.x / core_prepped_size.y);
+	vec2 sampling_res = HSM_GetRotatedCorePreppedSizeWithResMult(SCREEN_INDEX);
+	float scan_axis_res = use_vert_scanlines * sampling_res.x + (1 - use_vert_scanlines) * sampling_res.y;
+	float scan_axis_pos = use_vert_scanlines * in_coord.x + (1 - use_vert_scanlines) * in_coord.y;
+	scan_axis_pos += scanline_roll_offset;
+
+	bool apply_scanlines = HSM_FAKE_SCANLINE_OPACITY > 0.001 && (HSM_FAKE_SCANLINE_MODE == 1 || (HSM_FAKE_SCANLINE_MODE == 2 && scan_axis_res > HSM_INTERLACE_TRIGGER_RES));
+
+	if (!apply_scanlines)
+		return in_color;
+
+	float pi = 3.141592654;
+
+	vec2 screen_size = global.OutputSize.xy * screen_scale;
+	float scan_axis_screen_scale_res = use_vert_scanlines * screen_size.x + (1 - use_vert_scanlines) * screen_size.y;
+	
+	float simulated_scanline_res = HSM_FAKE_SCANLINE_RES;
+
+	float scanline_size = scan_axis_screen_scale_res / simulated_scanline_res;
+
+	if (HSM_FAKE_SCANLINE_INT_SCALE == 1)
+		scanline_size = ceil(scanline_size);
+
+	float scan = mod(scan_axis_pos * scan_axis_screen_scale_res, scanline_size) / scanline_size;
+
+	// Alternate, modulating the scanline width depending on brightness
+	//float scanline_mask = HHLP_EasePowerOut(1 - abs(scan - 0.5) * 2, 0.5 + 2 * smoothstep(0.4, 0.9, (in_color.r + in_color.g +  in_color.b) / 3));
+	float color_brightness_modulation = HHLP_EasePowerOut(smoothstep(0.4, 0.99, (in_color.r + in_color.g +  in_color.b) / 3), 2);
+
+	float scanline_mask = 1 - abs(scan - 0.5) * 2;
+	scanline_mask = pow(1 - scanline_mask, 1);
+
+	float final_scanline_mask = clamp(1 * scanline_mask, 0, 1);
+
+	color_brightness_modulation = HHLP_EasePowerOut(smoothstep(0.4, HSM_FAKE_SCANLINE_BRIGHTNESS_CUTOFF + 1.5, (in_color.r + in_color.g +  in_color.b) / 3), 2);
+	final_scanline_mask = clamp(mix(1, mix(final_scanline_mask, 1, color_brightness_modulation), HSM_FAKE_SCANLINE_OPACITY), 0, 1);
+
+	vec4 masked_color = in_color;
+	masked_color *= 1 + 0.5 * HSM_FAKE_SCANLINE_OPACITY;
+	masked_color = clamp(final_scanline_mask * masked_color, 0, 1);
+	masked_color.w = in_color.w;
+
+	// Split Screen for debugging
+	// masked_color = scan_opposite_axis_pos > 0.7 ? in_color : masked_color;
+
+	return clamp(masked_color, 0, 1);
+}
+
 vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, vec2 screen_curved_coord, in sampler2D source_pass, bool source_is_linear, in sampler2D TubeDiffuseImage, in sampler2D TubeColoredGelImage, in sampler2D TubeStaticReflectionImage, in sampler2D BackgroundImage, in sampler2D BackgroundVertImage, in sampler2D NightLightingImage)
 {
 	if (HSM_MONOCHROME_MODE > 0.5)
