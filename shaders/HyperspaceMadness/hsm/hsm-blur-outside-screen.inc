@@ -1,5 +1,13 @@
+/*   
+hsm-blur-outside-screen
 
-//#define ShowPlacementGuide
+Author: HyperspaceMadness - remimcgill@hotmail.com
+License: GPL
+
+Thanks to:
+	Hunkerk who sparked this idea with his Bezel Reflection Test  
+	Everyone on the libretro forum for helpful suggestions
+*/
 
 #include "hsm-globals-and-reflection-params.inc"
 #include "hsm-common-functions-bezel.inc"

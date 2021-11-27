@@ -1,20 +1,7 @@
 /*   
-hsm-image-layers
-
+hsm-bezel-images
 Author: HyperspaceMadness - remimcgill@hotmail.com
 License: GPL
-Description:
-	-Adds a reflection effect around the screen to imitate the reflection on the bezel of a real CRT
-	-Must be used with a crt shader which integrates the hsm-mega-bezel-include.inc scaling so 
-		the crt screen and reflection scale and position are synchronized
-
-	-Retroarch Video Settings:
-		-Aspect Ratio should be set to Full
-		-Integer Scale should be set to OFF
-
-Thanks to:
-	Hunkerk who sparked this idea with his Bezel Reflection Test  
-	Everyone on the libretro forum for helpful suggestions
 */
 
 /////////////// IMPORTS ///////////////

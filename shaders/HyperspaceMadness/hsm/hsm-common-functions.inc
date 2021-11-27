@@ -169,7 +169,6 @@ float HSM_GetUseVerticalScanlines(float screen_aspect)
 	return scanline_direction;
 }
 
-
 vec2 HSM_GetResMult()
 {
 	// TODO when using target resolution
@@ -1023,9 +1022,3 @@ float HSM_Get_Screen_Black_Edge_Mask(vec2 screen_coord, bool apply_to_mirror)
 
 	return SCREEN_MASK;
 }
-
-
-
-
-
-

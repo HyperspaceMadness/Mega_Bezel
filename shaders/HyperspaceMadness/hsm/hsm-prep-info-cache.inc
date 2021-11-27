@@ -160,7 +160,7 @@ bool HSM_ResolutionIsEqual(vec2 in_res, vec2 match_res)
 float HSM_GetScreenAspect(float screen_index, vec2 cropped_size)
 {
 	float epsilon = 0.002;
-	vec2 original_size = global.OutputSize.xy;
+	vec2 original_size = HSM_GetRotatedCoreOriginalSize();
 	vec2 rotated_original_size = HSM_GetRotatedCoreOriginalSize();
 	float core_aspect_ratio = rotated_original_size.x / rotated_original_size.y;
 	float core_aspect_horizontal = (core_aspect_ratio < 1) ? 1 / core_aspect_ratio : core_aspect_ratio;
@@ -187,7 +187,7 @@ float HSM_GetScreenAspect(float screen_index, vec2 cropped_size)
 	{
 		// If the vertical res is larger than 580 is is probably a modern square pixel resolution
 		// 576 seems to be PAL vertical resolution used sometimes
-		if (original_size.y > 580) horizontal_aspect = core_aspect_horizontal;
+ 		if (original_size.y > 580) horizontal_aspect = core_aspect_horizontal;
 		else if (HSM_ResolutionIsEqual(sony_psp, 						original_size)) horizontal_aspect = core_aspect_horizontal;
 		else if (HSM_ResolutionIsEqual(nintendo_gameboy_advance_res, 	original_size)) horizontal_aspect = core_aspect_horizontal;
 		else if (HSM_ResolutionIsEqual(nintendo_gameboy_res, 			original_size)) horizontal_aspect = core_aspect_horizontal;
@@ -401,9 +401,7 @@ float HSM_GetParameterSum_Bezel()
 					+ HSM_REFLECT_CORNER_ROTATION_OFFSET_TOP * 4
 					+ HSM_REFLECT_CORNER_ROTATION_OFFSET_BOTTOM * 4
 					+ HSM_REFLECT_CORNER_SPREAD_FALLOFF * 2
-
 #endif
-
 					);
 	return out_sum;
 }

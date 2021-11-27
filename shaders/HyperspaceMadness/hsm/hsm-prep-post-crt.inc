@@ -61,7 +61,7 @@ vec4 HSM_ApplyScanlineMask(vec4 in_color, vec2 screen_scale, vec2 in_coord, vec2
     // col = col * vec3(s);
 
 	vec2 core_prepped_size = HSM_GetRotatedScreenCorePreppedSize(SCREEN_INDEX);
-	float use_vert_scanlines = HSM_GetUseVerticalScanlines(core_prepped_size.x / core_prepped_size.y);
+	float use_vert_scanlines = USE_VERTICAL_SCANLINES;
 	vec2 sampling_res = HSM_GetRotatedCorePreppedSizeWithResMult(SCREEN_INDEX);
 	float scan_axis_res = use_vert_scanlines * sampling_res.x + (1 - use_vert_scanlines) * sampling_res.y;
 	float scan_axis_pos = use_vert_scanlines * in_coord.x + (1 - use_vert_scanlines) * in_coord.y;

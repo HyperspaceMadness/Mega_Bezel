@@ -1,5 +1,5 @@
 /*   
-hsm-image-layers
+hsm-combine-passes
 
 Author: HyperspaceMadness - remimcgill@hotmail.com
 License: GPL
