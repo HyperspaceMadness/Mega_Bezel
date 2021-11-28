@@ -90,6 +90,139 @@ vec4 BlendModeMaskLayerMix(vec4 color_under, vec4 color_over, float blend_mode, 
 	return out_color;
 }
 
+// Takes a viewport coordinate and gives a new coordinate scaled by the specific scale mode
+// Takes into account the default sizes of each scale mode
+vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
+						vec2 in_viewport_coord_unscaled,
+						float texture_aspect_mode, 
+						float explicit_texture_aspect, 
+						vec2 offset_pos,
+						vec2 offset_scale,
+						float inherited_scale_mode, 
+						float image_aspect_mode,
+						float image_fill_mode,
+						bool apply_default_scale_offset,
+						float use_inherited_curved_coord,
+						inout vec2 out_placement_coord,
+						inout vec2 out_placement_scale)
+{
+	explicit_texture_aspect = HSM_GetAspectRatioFromMode(texture_aspect_mode, explicit_texture_aspect);
+
+	vec2 inherited_coord = in_viewport_coord / 0.5;
+	vec2 inherited_placement_coord = in_viewport_coord / 0.5;
+	vec2 inherited_scale = vec2(0.5);
+	vec2 default_offset_scale = vec2(0.5);
+
+	if (inherited_scale_mode == INHERITED_SCALE_MODE_VIEWPORT)
+	{
+		inherited_coord = in_viewport_coord;
+		inherited_placement_coord = in_viewport_coord;
+		inherited_scale = vec2(1, 1);
+		default_offset_scale = vec2(1);
+	}
+	if (inherited_scale_mode == INHERITED_SCALE_MODE_VIEWPORT_UNSCALED)
+	{
+		inherited_coord = in_viewport_coord_unscaled;
+		inherited_placement_coord = in_viewport_coord_unscaled;
+		inherited_scale = vec2(1, 1);
+		default_offset_scale = vec2(1);
+	}
+	else if (inherited_scale_mode == INHERITED_SCALE_MODE_SCREEN)
+	{
+		inherited_scale = SCREEN_SCALE;
+		inherited_coord = use_inherited_curved_coord == 1 ? SCREEN_BLACK_EDGE_CURVED_COORD : SCREEN_COORD;
+		inherited_placement_coord = SCREEN_COORD;
+
+		default_offset_scale = vec2(1) / DEFAULT_UNCORRECTED_SCREEN_SCALE.y;
+		default_offset_scale.x *= explicit_texture_aspect / DEFAULT_SCREEN_ASPECT;
+
+	}
+	else if (inherited_scale_mode == INHERITED_SCALE_MODE_BEZEL_OUTSIDE)
+	{
+		inherited_scale = BEZEL_OUTSIDE_SCALE;
+		inherited_coord = use_inherited_curved_coord == 1 ? BEZEL_OUTSIDE_CURVED_COORD : BEZEL_OUTSIDE_COORD;
+		inherited_placement_coord = BEZEL_OUTSIDE_COORD;
+
+		default_offset_scale = vec2(1) / DEFAULT_UNCORRECTED_BEZEL_SCALE.y;
+		default_offset_scale.x *= explicit_texture_aspect / DEFAULT_BEZEL_ASPECT;
+	}
+	else if (inherited_scale_mode == INHERITED_SCALE_MODE_BG)
+	{
+		inherited_coord = use_inherited_curved_coord == 1 ? BACKGROUND_CURVED_COORD : BACKGROUND_COORD;
+		inherited_placement_coord = BACKGROUND_COORD;
+		inherited_scale = BACKGROUND_SCALE;
+		default_offset_scale = vec2(1);
+	}
+	else if (inherited_scale_mode == INHERITED_SCALE_MODE_DEVICE)
+	{
+		inherited_coord = use_inherited_curved_coord == 1 ? DEVICE_CURVED_COORD : DEVICE_COORD;
+		inherited_placement_coord = DEVICE_COORD;
+		inherited_scale = DEVICE_SCALE;
+		default_offset_scale = vec2(1);
+	}
+	else if (inherited_scale_mode == INHERITED_SCALE_MODE_DECAL)
+	{
+		inherited_coord = use_inherited_curved_coord == 1 ? DECAL_CURVED_COORD : DECAL_COORD;
+		inherited_placement_coord = DECAL_COORD;
+		inherited_scale = DECAL_SCALE;
+		default_offset_scale = vec2(1);
+	}
+
+	if (apply_default_scale_offset)
+	{
+		offset_scale *= default_offset_scale;
+	}
+
+	float output_aspect = global.OutputSize.x / global.OutputSize.y;
+	float inherited_aspect = (inherited_scale.x / inherited_scale.y) * (default_offset_scale.x / default_offset_scale.y) * output_aspect;
+	
+	// Find the aspect difference so the image can be shown without distortion
+	// This is before the user edited scale offset
+	float inherited_aspect_difference = explicit_texture_aspect / inherited_aspect;
+
+	// Get the overall scale for the placement of the texture (No Split/Fill Yet)
+	out_placement_scale = inherited_scale;
+	if ( image_aspect_mode == IMAGE_ASPECT_MODE_KEEP_ASPECT )
+		out_placement_scale.x *= inherited_aspect_difference;
+	out_placement_scale = out_placement_scale * offset_scale;
+
+	out_placement_coord = HSM_AddPosScaleToCoord(inherited_placement_coord, inherited_scale, offset_pos, out_placement_scale / inherited_scale);
+
+	vec2 out_coord = vec2(0.5);
+
+	if (use_inherited_curved_coord == 1)
+	{
+		out_coord = HSM_AddPosScaleToCoord(inherited_coord, inherited_scale, offset_pos, offset_scale);
+	}
+	else
+	{
+		vec2 drawing_scale = out_placement_scale;
+		float slide_x = 0;
+
+		if ( image_fill_mode == FILL_MODE_SPLIT_FILL_HORIZONTAL )
+		{
+			// Correct the aspect so it matches the texture and is never stretched
+			float placement_aspect = out_placement_scale.x / out_placement_scale.y * output_aspect;
+			float placement_aspect_difference = explicit_texture_aspect / placement_aspect;
+			drawing_scale.x *= placement_aspect_difference;
+
+			slide_x = (out_placement_scale.x - drawing_scale.x) / 2;// * out_placement_scale.x; 
+
+			if ( out_placement_coord.x < 0.5 )
+				slide_x *= -1;
+
+			inherited_coord.x -= slide_x;
+		}
+
+		// The inherited_coord is already the coord from the inherited space
+		// We only need to apply an offset from this
+		out_coord = HSM_AddPosScaleToCoord(inherited_coord, inherited_scale, offset_pos, drawing_scale / inherited_scale);
+		// out_coord.x -= slide_x;
+	}
+
+	return out_coord;
+}
+
 //TODO remove this and replace with simpler calls
 float GetFade(float current_position, float corner_position, float fade_distance)
 {
@@ -153,8 +286,8 @@ layout(set = 0, binding = 14) uniform sampler2D BR_LayersUnderCRTPassFeedback;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
 {
-	VIEWPORT_COORD = vTexCoord;
-	vec2 VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
+	VIEWPORT_UNSCALED_COORD = HSM_GetViewportCoordWithFlip(vTexCoord);
+	VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
@@ -172,7 +305,7 @@ void main()
 	// Sample the image and do some color correction
 	vec4 night_lighting_image = vec4(1);
 	if (HSM_AMBIENT_LIGHTING_OPACITY > 0)
-		night_lighting_image = HSM_GetNightLightingMultiplyColor( VIEWPORT_COORD, NightLightingImage );
+		night_lighting_image = HSM_GetNightLightingMultiplyColor( HSM_AMBIENT_LIGHTING_SCALE_MODE > 0.5 ? VIEWPORT_UNSCALED_COORD : VIEWPORT_COORD, NightLightingImage );
 
 	SCREEN_BLACK_EDGE_CURVED_COORD = HSM_GetCurvedCoord(SCREEN_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, SCREEN_ASPECT);
 
@@ -447,17 +580,18 @@ void main()
 	// Background
 	//-----------------------------------------------------------------------------------------
 	BACKGROUND_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
-										HSM_BG_TEXTURE_ASPECT_MODE,
-										HSM_BG_EXPLICIT_TEXTURE_ASPECT,
-										vec2(HSM_BG_POS_X, HSM_BG_POS_Y),
-										vec2(HSM_BG_SCALE * HSM_BG_SCALE_X, HSM_BG_SCALE),
-										HSM_BG_SCALE_MODE,
-										HSM_BG_SCALE_KEEP_ASPECT,
-										HSM_BG_FILL_MODE,
-										true,
-										USE_INHERITED_COORD_OFF,
-										BACKGROUND_COORD,
-										BACKGROUND_SCALE);
+												VIEWPORT_UNSCALED_COORD,
+												HSM_BG_TEXTURE_ASPECT_MODE,
+												HSM_BG_EXPLICIT_TEXTURE_ASPECT,
+												vec2(HSM_BG_POS_X, HSM_BG_POS_Y),
+												vec2(HSM_BG_SCALE * HSM_BG_SCALE_X, HSM_BG_SCALE),
+												HSM_BG_SCALE_MODE,
+												HSM_BG_SCALE_KEEP_ASPECT,
+												HSM_BG_FILL_MODE,
+												true,
+												USE_INHERITED_COORD_OFF,
+												BACKGROUND_COORD,
+												BACKGROUND_SCALE);
 
 	if (HSM_BG_MIRROR_WRAP == 1)
 		BACKGROUND_CURVED_COORD = HSM_GetMirrorWrapCoord(BACKGROUND_CURVED_COORD);
@@ -491,6 +625,7 @@ void main()
 	//----------------------------------------------------
 
 	DEVICE_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
+											VIEWPORT_UNSCALED_COORD,
 											HSM_DEVICE_TEXTURE_ASPECT_MODE,
 											HSM_DEVICE_EXPLICIT_TEXTURE_ASPECT,
 											vec2(HSM_DEVICE_POS_X, HSM_DEVICE_POS_Y),
@@ -531,6 +666,7 @@ void main()
 	if (HSM_LED_OPACITY > 0)
 	{
 		LED_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
+											VIEWPORT_UNSCALED_COORD,
 											HSM_LED_TEXTURE_ASPECT_MODE, 
 											HSM_LED_EXPLICIT_TEXTURE_ASPECT, 
 											vec2(HSM_LED_POS_X, HSM_LED_POS_Y), 
@@ -566,17 +702,18 @@ void main()
 	//----------------------------------------------------
 	vec4 decal_image = vec4(0);
 	DECAL_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
-									HSM_DECAL_TEXTURE_ASPECT_MODE, 
-									HSM_DECAL_EXPLICIT_TEXTURE_ASPECT, 
-									vec2(HSM_DECAL_POS_X, HSM_DECAL_POS_Y), 
-									vec2(HSM_DECAL_SCALE * HSM_DECAL_SCALE_X, HSM_DECAL_SCALE),
-									HSM_DECAL_SCALE_MODE,
-									HSM_DECAL_SCALE_KEEP_ASPECT, 
-									HSM_DECAL_FILL_MODE,
-									true,
-									USE_INHERITED_COORD_OFF,
-									DECAL_COORD,
-									DECAL_SCALE);
+											VIEWPORT_UNSCALED_COORD,
+											HSM_DECAL_TEXTURE_ASPECT_MODE, 
+											HSM_DECAL_EXPLICIT_TEXTURE_ASPECT, 
+											vec2(HSM_DECAL_POS_X, HSM_DECAL_POS_Y), 
+											vec2(HSM_DECAL_SCALE * HSM_DECAL_SCALE_X, HSM_DECAL_SCALE),
+											HSM_DECAL_SCALE_MODE,
+											HSM_DECAL_SCALE_KEEP_ASPECT, 
+											HSM_DECAL_FILL_MODE,
+											true,
+											USE_INHERITED_COORD_OFF,
+											DECAL_COORD,
+											DECAL_SCALE);
 	if (HSM_DECAL_OPACITY > 0)
 	{
 		decal_image = texture(DecalImage, DECAL_CURVED_COORD);
@@ -603,17 +740,18 @@ void main()
 // #ifdef IS_ADV_PRESET
 	vec4 top_image = vec4(0);
 	TOP_IMAGE_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
-										HSM_TOP_TEXTURE_ASPECT_MODE, 
-										HSM_TOP_EXPLICIT_TEXTURE_ASPECT, 
-										vec2(HSM_TOP_POS_X, HSM_TOP_POS_Y), 
-										vec2(HSM_TOP_SCALE * HSM_TOP_SCALE_X, HSM_TOP_SCALE),
-										HSM_TOP_SCALE_MODE, 
-										HSM_TOP_SCALE_KEEP_ASPECT, 
-										HSM_TOP_FILL_MODE,
-										true,
-										USE_INHERITED_COORD_OFF,
-										TOP_IMAGE_COORD,
-										TOP_IMAGE_SCALE);
+												VIEWPORT_UNSCALED_COORD,
+												HSM_TOP_TEXTURE_ASPECT_MODE, 
+												HSM_TOP_EXPLICIT_TEXTURE_ASPECT, 
+												vec2(HSM_TOP_POS_X, HSM_TOP_POS_Y), 
+												vec2(HSM_TOP_SCALE * HSM_TOP_SCALE_X, HSM_TOP_SCALE),
+												HSM_TOP_SCALE_MODE, 
+												HSM_TOP_SCALE_KEEP_ASPECT, 
+												HSM_TOP_FILL_MODE,
+												true,
+												USE_INHERITED_COORD_OFF,
+												TOP_IMAGE_COORD,
+												TOP_IMAGE_SCALE);
 
 	if (HSM_TOP_MIRROR_WRAP == 1)
 		TOP_IMAGE_CURVED_COORD = HSM_GetMirrorWrapCoord(TOP_IMAGE_CURVED_COORD);
@@ -646,6 +784,7 @@ void main()
 	if (HSM_CAB_GLASS_OPACITY > 0)
 	{
 		CAB_GLASS_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
+											VIEWPORT_UNSCALED_COORD,
 											HSM_CAB_GLASS_TEXTURE_ASPECT_MODE, 
 											HSM_CAB_GLASS_EXPLICIT_TEXTURE_ASPECT, 
 											vec2(HSM_CAB_GLASS_POS_X, HSM_CAB_GLASS_POS_Y), 
@@ -696,6 +835,7 @@ void main()
 		cutout_base_scale_offset *= vec2(DEFAULT_UNCORRECTED_BEZEL_SCALE.y * SCREEN_ASPECT / output_aspect, DEFAULT_BEZEL_SCALE.y);
 
 	vec2 cutout_coord = HSM_GetScaledCoord(VIEWPORT_COORD,
+											VIEWPORT_UNSCALED_COORD,
 										  	HSM_CUTOUT_ASPECT_MODE,
 											HSM_CUTOUT_EXPLICIT_ASPECT,
 											vec2(HSM_CUTOUT_POS_X, HSM_CUTOUT_POS_Y),
@@ -717,6 +857,7 @@ void main()
 	if (HSM_VIEWPORT_VIGNETTE_OPACITY > 0)
 	{
 		vec2 vignette_coord = HSM_GetScaledCoord(VIEWPORT_COORD,
+												VIEWPORT_UNSCALED_COORD,
 												TEXTURE_ASPECT_MODE_VIEWPORT,
 												1,
 												vec2(HSM_VIEWPORT_VIGNETTE_POS_X, HSM_VIEWPORT_VIGNETTE_POS_Y), 

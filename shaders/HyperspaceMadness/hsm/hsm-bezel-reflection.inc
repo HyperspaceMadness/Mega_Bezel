@@ -85,7 +85,9 @@ layout(set = 0, binding = 12) uniform sampler2D BR_CRTAndReflectionPassFeedback;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
 {
+	VIEWPORT_UNSCALED_COORD = HSM_GetViewportCoordWithFlip(vTexCoord);
 	VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
+
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
 
@@ -425,7 +427,7 @@ void main()
 	{
 		vec4 night_lighting_image = vec4(1);
 		if (HSM_AMBIENT_LIGHTING_OPACITY > 0)
-			night_lighting_image = HSM_GetNightLightingMultiplyColor( VIEWPORT_COORD, NightLightingImage );
+			night_lighting_image = HSM_GetNightLightingMultiplyColor( HSM_AMBIENT_LIGHTING_SCALE_MODE > 0.5 ? VIEWPORT_UNSCALED_COORD : VIEWPORT_COORD, NightLightingImage );
 		crt_linear += HSM_Get_Tube_Highlight(tube_curved_coord, false, TubeStaticReflectionImage, night_lighting_image);
 	}
 

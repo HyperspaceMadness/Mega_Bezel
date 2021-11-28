@@ -46,10 +46,13 @@ float HSM_AMBIENT_LIGHTING_SCALE = global.HSM_AMBIENT_LIGHTING_SCALE / 100;
 #pragma parameter HSM_AMBIENT_LIGHTING_MIRROR_HORZ         	"          Mirror Horizontal"  0 0 1 1
 float HSM_AMBIENT_LIGHTING_MIRROR_HORZ = global.HSM_AMBIENT_LIGHTING_MIRROR_HORZ;
 
+#pragma parameter HSM_AMBIENT_LIGHTING_SCALE_MODE         	"          Scale Mode - VIEW | FULL"  1 0 1 1
+float HSM_AMBIENT_LIGHTING_SCALE_MODE = global.HSM_AMBIENT_LIGHTING_SCALE_MODE;
+
 // Commented out because I don't think anyone is using this
-// #pragma parameter HSM_NIGHT_DITHERING_SAMPLES   "          Dithering Noise Samples (Reduces Banding)" 0 0 10 1
-// float HSM_NIGHT_DITHERING_SAMPLES = global.HSM_NIGHT_DITHERING_SAMPLES;
-float HSM_NIGHT_DITHERING_SAMPLES = 0;
+// #pragma parameter HSM_AMBIENT_LIGHTING_DITHERING_SAMPLES   "          Dithering Noise Samples (Reduces Banding)" 0 0 10 1
+// float HSM_AMBIENT_LIGHTING_DITHERING_SAMPLES = global.HSM_AMBIENT_LIGHTING_DITHERING_SAMPLES;
+float HSM_AMBIENT_LIGHTING_DITHERING_SAMPLES = 0;
 
 
 //---------------------------------------------------------------------------------------------------

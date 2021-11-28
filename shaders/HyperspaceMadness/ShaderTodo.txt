@@ -28,9 +28,12 @@ Changes:
   * AMBIENT LIGHTING now affects tube static reflection
   * Tube Diffuse image added, so you can show the phosphor surface if desired
   * Noise can now be turned on/off separately from deconvergence
-  * Added 2D Curvature mode, 
+  * Added 2D Cylindrical Curvature mode, 
     * This makes the indexes change so they now start at 0 and end at 5.
     * 3D mode is now 3 and 3D cylinder mode is 5
+  * Added Viewport vs Full scaling mode for images
+    * Added Viewport and Full scaling mode for AmbientLightingImage
+
 
   * BIG Changes to what each preset level does
     * ADV
@@ -69,11 +72,11 @@ Changes:
 Mega Bezel Still to Come:
 
 V1 TODO
-  * Scale Mode to Match Scaled Viewport vs Final Viewport
-  * Fix Potato?
+  * More Cache Checking
+  * Night Lighting Full vs View
+  * Fix something wrong with Potato layering?
   * Missing inner Edge static shading?
   * Adjust GDV so Scanline Gamma is a multiplier
-  * 2D Cylindrical Curvature Mode
   * Pink outside frame options?
 
   * ZFast Curvature

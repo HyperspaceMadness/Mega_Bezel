@@ -50,7 +50,7 @@ float HSM_CUTOUT_ASPECT_MODE = global.HSM_CUTOUT_ASPECT_MODE;
 #pragma parameter HSM_CUTOUT_EXPLICIT_ASPECT  "          Explicit Aspect" 1.33333 0.01 3 0.01
 float HSM_CUTOUT_EXPLICIT_ASPECT = global.HSM_CUTOUT_EXPLICIT_ASPECT;
 
-#pragma parameter HSM_CUTOUT_SCALE_MODE         "       Inherit Scale - FULL | TUBE | BZL | BG | DEVICE | DECAL"  0 0 5 1
+#pragma parameter HSM_CUTOUT_SCALE_MODE         " Inherit Scale - VIEW | FULL | TUBE | BZL | BG | DEVICE | DECAL"  0 0 5 1
 float HSM_CUTOUT_SCALE_MODE = global.HSM_CUTOUT_SCALE_MODE;
 
 #pragma parameter HSM_CUTOUT_KEEP_ASPECT        "        Scale Aspect - INHERIT FROM SCALE MODE | KEEP ASPECT"  1 0 1 1
@@ -128,7 +128,7 @@ float HSM_BG_TEXTURE_ASPECT_MODE = global.HSM_BG_TEXTURE_ASPECT_MODE;
 #pragma parameter HSM_BG_EXPLICIT_TEXTURE_ASPECT  "          Explicit Texture Aspect" 1.33333 0.01 3 0.01
 float HSM_BG_EXPLICIT_TEXTURE_ASPECT = global.HSM_BG_EXPLICIT_TEXTURE_ASPECT;
 
-#pragma parameter HSM_BG_SCALE_MODE               "          Inherit Scale - FULL | TUBE | BEZEL" 0 0 2 1
+#pragma parameter HSM_BG_SCALE_MODE               "          Inherit Scale - VIEW | FULL | TUBE | BEZEL" 0 0 2 1
 float HSM_BG_SCALE_MODE = global.HSM_BG_SCALE_MODE;
 
 #pragma parameter HSM_BG_SCALE_KEEP_ASPECT        "        Scale Aspect - INHERIT FROM SCALE MODE | USE TEX ASPECT"  1 0 1 1
@@ -168,7 +168,7 @@ float HSM_VIEWPORT_VIGNETTE_MASK_MODE = global.HSM_VIEWPORT_VIGNETTE_MASK_MODE;
 #pragma parameter HSM_VIEWPORT_VIGNETTE_CUTOUT_MODE  "          Cutout Mask - OFF | ON | INVERT" 0 0 2 1
 float HSM_VIEWPORT_VIGNETTE_CUTOUT_MODE = global.HSM_VIEWPORT_VIGNETTE_CUTOUT_MODE;
 
-#pragma parameter HSM_VIEWPORT_VIGNETTE_SCALE_MODE   "         Inherit Scale- FULL | BG | TUBE | BZL" 0 0 5 1
+#pragma parameter HSM_VIEWPORT_VIGNETTE_SCALE_MODE   "          Inherit Scale- FULL | BG | TUBE | BZL" 0 0 5 1
 float HSM_VIEWPORT_VIGNETTE_SCALE_MODE = global.HSM_VIEWPORT_VIGNETTE_SCALE_MODE;
 
 #pragma parameter HSM_VIEWPORT_VIGNETTE_SCALE        "          Scale" 100 0 1000 0.1
@@ -228,7 +228,7 @@ float HSM_LED_TEXTURE_ASPECT_MODE = global.HSM_LED_TEXTURE_ASPECT_MODE;
 #pragma parameter HSM_LED_EXPLICIT_TEXTURE_ASPECT       "          Explicit Texture Aspect" 1.33333 0.01 3 0.01
 float HSM_LED_EXPLICIT_TEXTURE_ASPECT = global.HSM_LED_EXPLICIT_TEXTURE_ASPECT;
 
-#pragma parameter HSM_LED_SCALE_MODE                    "      Inherit Scale - FULL | TUBE | BEZEL | BG | DEVICE"  3 0 4 1
+#pragma parameter HSM_LED_SCALE_MODE                    "       Inherit Scale - VIEW | FULL | TUBE | BEZEL | BG | DEVICE"  3 0 4 1
 float HSM_LED_SCALE_MODE = global.HSM_LED_SCALE_MODE;
 
 #pragma parameter HSM_LED_SCALE_KEEP_ASPECT             "        Scale Aspect - INHERIT FROM SCALE MODE | USE TEX ASPECT"  1 0 1 1
@@ -294,7 +294,7 @@ float HSM_DEVICE_TEXTURE_ASPECT_MODE = global.HSM_DEVICE_TEXTURE_ASPECT_MODE;
 #pragma parameter HSM_DEVICE_EXPLICIT_TEXTURE_ASPECT   "          Explicit Texture Aspect" 1.33333 0.01 3 0.01
 float HSM_DEVICE_EXPLICIT_TEXTURE_ASPECT = global.HSM_DEVICE_EXPLICIT_TEXTURE_ASPECT;
 
-#pragma parameter HSM_DEVICE_SCALE_MODE                "          Inherit Scale - FULL | TUBE | BEZEL | BG"  1 0 3 1
+#pragma parameter HSM_DEVICE_SCALE_MODE                "          Inherit Scale - VIEW | FULL | TUBE | BEZEL | BG"  1 0 3 1
 float HSM_DEVICE_SCALE_MODE = global.HSM_DEVICE_SCALE_MODE;
 
 #pragma parameter HSM_DEVICE_COPY_INHERITED_COORD      "      Copy Inherited Coord (Keeps Curvature, No Aspect or Fill)"  0 0 1 1
@@ -364,7 +364,7 @@ float HSM_DECAL_TEXTURE_ASPECT_MODE = global.HSM_DECAL_TEXTURE_ASPECT_MODE;
 #pragma parameter HSM_DECAL_EXPLICIT_TEXTURE_ASPECT     "          Explicit Texture Aspect" 1.33333 0.01 3 0.01
 float HSM_DECAL_EXPLICIT_TEXTURE_ASPECT = global.HSM_DECAL_EXPLICIT_TEXTURE_ASPECT;
 
-#pragma parameter HSM_DECAL_SCALE_MODE                  "          Inherit Scale - FULL | TUBE | BEZEL | BG | DEVICE"  0 0 4 1
+#pragma parameter HSM_DECAL_SCALE_MODE                  "       Inherit Scale - VIEW | FULL | TUBE | BEZEL | BG | DEVICE"  0 0 4 1
 float HSM_DECAL_SCALE_MODE = global.HSM_DECAL_SCALE_MODE;
 
 #pragma parameter HSM_DECAL_SCALE_KEEP_ASPECT           "        Scale Aspect - INHERIT FROM SCALE MODE | USE TEX ASPECT"  1 0 1 1
@@ -433,7 +433,7 @@ float HSM_CAB_GLASS_TEXTURE_ASPECT_MODE = global.HSM_CAB_GLASS_TEXTURE_ASPECT_MO
 #pragma parameter HSM_CAB_GLASS_EXPLICIT_TEXTURE_ASPECT     "          Explicit Texture Aspect" 1.33333 0.01 3 0.01
 float HSM_CAB_GLASS_EXPLICIT_TEXTURE_ASPECT = global.HSM_CAB_GLASS_EXPLICIT_TEXTURE_ASPECT;
 
-#pragma parameter HSM_CAB_GLASS_SCALE_MODE                  "      Inherit Scale - FULL | TUBE | BEZEL | BG | DEVICE | DECAL" 0 0 5 1
+#pragma parameter HSM_CAB_GLASS_SCALE_MODE                  "Inherit Scale- VIEW | FULL | TUBE | BEZEL | BG | DEVICE | DECAL" 0 0 5 1
 float HSM_CAB_GLASS_SCALE_MODE = global.HSM_CAB_GLASS_SCALE_MODE;
 
 #pragma parameter HSM_CAB_GLASS_SCALE_KEEP_ASPECT           "        Scale Aspect - INHERIT FROM SCALE MODE | USE TEX ASPECT"  1 0 1 1
@@ -500,7 +500,7 @@ float HSM_TOP_TEXTURE_ASPECT_MODE = global.HSM_TOP_TEXTURE_ASPECT_MODE;
 #pragma parameter HSM_TOP_EXPLICIT_TEXTURE_ASPECT       "          Explicit Texture Aspect" 1.33333 0.01 3 0.01
 float HSM_TOP_EXPLICIT_TEXTURE_ASPECT = global.HSM_TOP_EXPLICIT_TEXTURE_ASPECT;
 
-#pragma parameter HSM_TOP_SCALE_MODE                    "      Inherit Scale - FULL | TUBE | BEZEL | BG | DEVICE | DECAL" 0 0 5 1
+#pragma parameter HSM_TOP_SCALE_MODE                    "Inherit Scale- VIEW | FULL | TUBE | BEZEL | BG | DEVICE | DECAL" 0 0 5 1
 float HSM_TOP_SCALE_MODE = global.HSM_TOP_SCALE_MODE;
 
 #pragma parameter HSM_TOP_SCALE_KEEP_ASPECT             "        Scale Aspect - INHERIT FROM SCALE MODE | USE TEX ASPECT"  1 0 1 1

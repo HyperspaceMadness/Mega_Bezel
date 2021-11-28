@@ -973,9 +973,9 @@ float HSM_GetScreenVignetteFactor(vec2 in_coord)
 	return vig;
 }
 
-vec4 HSM_GetNightLightingMultiplyColor( vec2 VIEWPORT_COORD, in sampler2D NightLightingImage )
+vec4 HSM_GetNightLightingMultiplyColor( vec2 viewport_coord, in sampler2D NightLightingImage )
 {
-	vec2 night_lighting_coord = VIEWPORT_COORD;
+	vec2 night_lighting_coord = HSM_GetMirrorWrapCoord(viewport_coord);
 	
 	night_lighting_coord = (night_lighting_coord - 0.5) / HSM_AMBIENT_LIGHTING_SCALE + 0.5;
 
@@ -986,7 +986,7 @@ vec4 HSM_GetNightLightingMultiplyColor( vec2 VIEWPORT_COORD, in sampler2D NightL
 	float blur_max_size = 1;
 	float blur_amount = 0.2;
 	
-	vec4 night_lighting_image = HSM_GetStoichaicBlurredSample(NightLightingImage, night_lighting_coord.xy, HSM_NIGHT_DITHERING_SAMPLES, blur_max_size, blur_amount);
+	vec4 night_lighting_image = HSM_GetStoichaicBlurredSample(NightLightingImage, night_lighting_coord.xy, HSM_AMBIENT_LIGHTING_DITHERING_SAMPLES, blur_max_size, blur_amount);
 	night_lighting_image = HSM_Linearize(night_lighting_image, HSM_DEFAULT_SRGB_GAMMA);
 
 	// Do HSV alterations on the night lighting image
