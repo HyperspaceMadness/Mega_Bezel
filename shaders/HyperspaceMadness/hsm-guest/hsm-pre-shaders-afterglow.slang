@@ -49,7 +49,7 @@ layout(push_constant) uniform Push
 
 // #pragma parameter BP          "          Brighten Black (For Scanlines on Black) -- BP" 0.0 0.0 100.0 1.0
 
-#pragma parameter bogus_color "[ GUEST-DRVENOM COLOR TWEAKS ]:" 0.0 0.0 1.0 1.0
+#pragma parameter bogus_color "[ GDV - COLOR TWEAKS ]:" 0.0 0.0 1.0 1.0
 
 #pragma parameter CS          "       Display Gamut: sRGB, Modern, DCI, Adobe, Rec.2020 -- CS" 0.0 0.0 4.0 1.0 
 #pragma parameter CP          "       CRT Profile: EBU | P22 | SMPTE-C | Philips | Trin. -- CP" 0.0 -1.0 5.0 1.0 

@@ -70,10 +70,10 @@ layout(push_constant) uniform Push
 	// float bardir;
 } params;
 
+#pragma parameter ntsc_title 	   "[ GDV - NTSC ]:" 0.0 0.0 1.0 1.0
+#pragma parameter blendMode        "          NTSC Blend Mode (Main Mode Control)" 1.0 0.0 2.0 1.0
 
-#pragma parameter blendMode         "          NTSC Blend Mode (Main Mode Control)" 1.0 0.0 2.0 1.0
-
-#pragma parameter bogus_brightness "[ BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
+#pragma parameter bogus_brightness "[ GDV - BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
 #pragma parameter glow "          Strength -- glow" 0.08 -2.0 2.0 0.01
 #define glow         params.glow     // Glow Strength
@@ -93,7 +93,7 @@ layout(push_constant) uniform Push
 #pragma parameter brightboost1 "          Bright Boost Bright Pixels -- brightboost1" 1.10 0.25 3.00 0.025
 #define brightboost1  params.brightboost1     // adjust brightness
 
-#pragma parameter bogus_scanline "[ SCANLINE OPTIONS ]: " 0.0 0.0 1.0 1.0
+#pragma parameter bogus_scanline "[ GDV - SCANLINE OPTIONS ]: " 0.0 0.0 1.0 1.0
 
 #pragma parameter gsl "          Scanline Type -- gsl" 0.0 -1.0 2.0 1.0
 #define gsl          params.gsl      // Alternate scanlines
@@ -130,7 +130,7 @@ layout(push_constant) uniform Push
 #pragma parameter spike "          Scanline Spike Removal -- spike" 1.0 0.0 2.0 0.10
 #define spike params.spike
 
-#pragma parameter bogus_filtering "[ FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
+#pragma parameter bogus_filtering "[ GDV - FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
 
 #pragma parameter h_sharp "          Horizontal sharpness -- h_sharp" 5.20 0.20 15.0 0.10
 #define h_sharp      params.h_sharp     // pixel sharpness
@@ -190,7 +190,7 @@ layout(push_constant) uniform Push
 // #pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader)" 1.0 1.0 4.0 1.0
 // #define prescalex        global.prescalex     // prescale-x factor
 
-#pragma parameter bogus_masks "[ CRT MASK OPTIONS ]: " 0.0 0.0 1.0 1.0
+#pragma parameter bogus_masks "[ GDV - CRT MASK OPTIONS ]: " 0.0 0.0 1.0 1.0
 
 #pragma parameter shadowMask "     CRT Mask: -1:None|0:CGWG|1-4:Lottes|5-9:Trin -- shadowMask" 0.0 -1.0 11.0 1.0
 #define shadowMask   params.shadowMask     // Mask Style

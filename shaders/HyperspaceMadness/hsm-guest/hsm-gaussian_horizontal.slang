@@ -32,7 +32,7 @@ layout(push_constant) uniform Push
 	float SIGMA_H;
 } params;
 
-#pragma parameter bogus_glow "[ GLOW ]:" 0.0 0.0 1.0 1.0
+#pragma parameter bogus_glow "[ GDV - GLOW ]:" 0.0 0.0 1.0 1.0
 
 #pragma parameter glow "          Strength -- glow" 0.08 -2.0 2.0 0.01
 #define glow         params.glow     // Glow Strength

@@ -31,7 +31,7 @@ layout(push_constant) uniform Push
 	float SIGMA_HB;
 } params;
 
-#pragma parameter bogus_bloom "[ BLOOM & HALATION ]:" 0.0 0.0 1.0 1.0
+#pragma parameter bogus_bloom "[ GDV - BLOOM & HALATION ]:" 0.0 0.0 1.0 1.0
 
 #pragma parameter bloom "          Bloom Strength -- bloom" 0.0 0.0 2.0 0.05
 #define bloom         params.bloom     // bloom effect

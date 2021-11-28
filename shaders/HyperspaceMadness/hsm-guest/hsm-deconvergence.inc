@@ -44,7 +44,7 @@ layout(push_constant) uniform Push
 // #pragma parameter TATE "          TATE Mode" 0.0 0.0 1.0 1.0
 // #define TATE         params.TATE     // Screen orientation
 
-#pragma parameter bogus_deconvergence11 "[ DECONVERGENCE ]: " 0.0 0.0 1.0 1.0
+#pragma parameter bogus_deconvergence11 "[ GDV - DECONVERGENCE ]: " 0.0 0.0 1.0 1.0
 
 #pragma parameter GDV_DECONVERGENCE_ON "          ON" 0 0 1 1
 #define GDV_DECONVERGENCE_ON params.GDV_DECONVERGENCE_ON
@@ -71,7 +71,7 @@ layout(push_constant) uniform Push
 
 #pragma parameter deconsmooth	"          Smoothing -- deconsmooth" 0.0 0.0 1.0 0.10
 
-#pragma parameter noise_title "[ NOISE ]: " 0.0 0.0 1.0 1.0
+#pragma parameter noise_title "[ GDV - NOISE ]: " 0.0 0.0 1.0 1.0
 
 #pragma parameter GDV_NOISE_ON 	"          Noise ON" 0 0 1 1
 #define GDV_NOISE_ON       params.GDV_NOISE_ON
