@@ -867,7 +867,8 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D original_pass
 	vec2 pos_offset_2nd_screen = HSM_GetPositionOffsetFor2ndScreen(screen_scale_2nd_screen);
 
 	vec4 sample_2d_range = vec4(0);
-	sample_2d_range = vec4(0, 0, 0.25, 0.25);
+	sample_2d_range = HSM_GetCacheSampleRange(1, 1);
+	// sample_2d_range = vec4(0, 0, 0.25, 0.25);
 
 	// 1st Sample
 	// r AVERAGE_LUMA
@@ -879,7 +880,8 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D original_pass
 	// 2nd Sample
 	// r SCREEN_ASPECT
 	// ba SCREEN_SCALE
-	sample_2d_range = vec4(0.25, 0, 0.5, 0.25);
+	sample_2d_range = HSM_GetCacheSampleRange(2, 1);
+	// sample_2d_range = vec4(0.25, 0, 0.5, 0.25);
 	// sample_2d_range = HSM_GetInfoSampleRange(2);
 	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
 	{ 
@@ -890,7 +892,8 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D original_pass
 	// 3rd Sample
 	// rg TUBE_SCALE 
 	// ba SCREEN_POS_OFFSET
-	sample_2d_range = vec4(0.5, 0, 0.75, 0.25);
+	sample_2d_range = HSM_GetCacheSampleRange(3, 1);
+	// sample_2d_range = vec4(0.5, 0, 0.75, 0.25);
 	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
 	{
 		out_color.rg = tube_scale;
@@ -899,7 +902,8 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D original_pass
 
 	// 4th Sample CROPPED_ROTATED_SIZE_WITH_RES_MULT
 	// rg CROPPED_ROTATED_SIZE_WITH_RES_MULT
-	sample_2d_range = vec4(0.75, 0, 1, 0.25);
+	sample_2d_range = HSM_GetCacheSampleRange(4, 1);
+	// sample_2d_range = vec4(0.75, 0, 1, 0.25);
 	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
 	{
 		out_color.rg = cropped_rotated_size_with_res_mult;
@@ -908,7 +912,8 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D original_pass
 	// 5th Sample - 2nd Screen
 	// rg CROPPED_ROTATED_SIZE
 	// ba SAMPLE_AREA_START_PIXEL_COORD
-	sample_2d_range = vec4(0, 0.25, 0.25, 0.5);
+	sample_2d_range = HSM_GetCacheSampleRange(1, 2);
+	// sample_2d_range = vec4(0, 0.25, 0.25, 0.5);
 	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
 	{
 		out_color.rg = cropped_rotated_size;
@@ -919,7 +924,8 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D original_pass
 	// r SCREEN_ASPECT_2ND_SCREEN
 	// g PARAMETER_SUM_SCREEN_SCALE
 	// ba SCREEN_SCALE_2ND_SCREEN
-	sample_2d_range = vec4(0.25, 0.25, 0.5, 0.5);
+	sample_2d_range = HSM_GetCacheSampleRange(2, 2);
+	// sample_2d_range = vec4(0.25, 0.25, 0.5, 0.5);
 	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
 	{
 		out_color.r = screen_aspect_2nd_screen;
@@ -930,7 +936,8 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D original_pass
 	// 7th Sample - 2nd Screen
 	// rg TUBE_SCALE
 	// ba SCREEN_POS_OFFSET
-	sample_2d_range = vec4(0.5, 0.25, 0.75, 0.5);
+	sample_2d_range = HSM_GetCacheSampleRange(3, 2);
+	// sample_2d_range = vec4(0.5, 0.25, 0.75, 0.5);
 	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
 	{
 		out_color.rg = tube_scale_2nd_screen;
@@ -939,7 +946,8 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D original_pass
 
 	// 8th Sample - 2nd Screen
 	// rg CROPPED_ROTATED_SIZE_WITH_RES_MULT 2nd screen
-	sample_2d_range = vec4(0.75, 0.25, 1, 0.5);
+	sample_2d_range = HSM_GetCacheSampleRange(4, 2);
+	// sample_2d_range = vec4(0.75, 0.25, 1, 0.5);
 	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
 	{
 		out_color.rg = cropped_size_with_res_mult_2nd_screen;
@@ -948,7 +956,8 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D original_pass
 	// 9th Sample
 	// rg CROPPED_ROTATED_SIZE 2nd screen
 	// ba SAMPLE_AREA_START_PIXEL_COORD 2nd screen
-	sample_2d_range = vec4(0, 0.5, 0.25, 0.75);
+	sample_2d_range = HSM_GetCacheSampleRange(1, 3);
+	// sample_2d_range = vec4(0, 0.5, 0.25, 0.75);
 	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
 	{
 		out_color.rg = cropped_size_2nd_screen;
@@ -957,7 +966,8 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D original_pass
 
 	// 10th Sample
 	// rg CORE_SIZE
-	sample_2d_range = vec4(0.25, 0.5, 0.5, 0.75);
+	sample_2d_range = HSM_GetCacheSampleRange(2, 3);
+	// sample_2d_range = vec4(0.25, 0.5, 0.5, 0.75);
 	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
 	{
 		out_color.rg = global.CorePassSize.xy;
@@ -966,7 +976,8 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D original_pass
 	// 11th Sample
 	// rg VIEWPORT_SCALE
 	// ba VIEWPORT_POS
-	sample_2d_range = vec4(0.5, 0.5, 0.75, 0.75);
+	sample_2d_range = HSM_GetCacheSampleRange(3, 3);
+	// sample_2d_range = vec4(0.5, 0.5, 0.75, 0.75);
 	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
 	{
 		out_color.rg = vec2(HSM_VIEWPORT_ZOOM, HSM_VIEWPORT_ZOOM);
@@ -976,7 +987,8 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D original_pass
 	// 12th Sample
 	// rg SCREEN_SCALE_2ND_SCREEN
 	// ba SCREEN_POS_OFFSET_2ND_SCREEN
-	sample_2d_range = vec4(0.75, 0.5, 1, 0.75);
+	sample_2d_range = HSM_GetCacheSampleRange(4, 3);
+	// sample_2d_range = vec4(0.75, 0.5, 1, 0.75);
 	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
 	{
 		out_color.rg = screen_scale_2nd_screen;
@@ -985,7 +997,8 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D original_pass
 
 	// 13th Sample
 	// r PARAMETER_SUM_SCREEN_SCALE
-	sample_2d_range = vec4(0.0, 0.75, 0.25, 1);
+	sample_2d_range = HSM_GetCacheSampleRange(1, 4);
+	// sample_2d_range = vec4(0.0, 0.75, 0.25, 1);
 	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
 	{
 		out_color.r = HSM_GetParameterSum_ScreenScale();

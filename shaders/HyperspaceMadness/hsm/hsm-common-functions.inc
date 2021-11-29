@@ -176,6 +176,40 @@ float HSM_GetUseVerticalScanlines(float screen_aspect)
 	return scanline_direction;
 }
 
+// Rows and Columns are 1 based
+vec4 HSM_GetCacheSampleRange(float column_index, float row_index)
+{
+	float num_rows = 4;
+	float num_columns = 4;
+
+	float range_width = 1 / num_columns;
+	float range_height = 1 / num_rows;
+
+	float zero_based_row_index = row_index - 1;
+	float zero_based_column_index = column_index - 1;
+
+	vec4 out_sample_range = vec4(0);
+
+	out_sample_range.x = zero_based_column_index * range_width;
+	out_sample_range.y = zero_based_row_index * range_height;
+	out_sample_range.z = (zero_based_column_index + 1) * range_width;
+	out_sample_range.w = (zero_based_row_index + 1) * range_height;
+	
+	return out_sample_range;
+}
+
+vec2 HSM_GetCacheSampleCoord(float column_index, float row_index)
+{
+	float num_rows = 4;
+	float num_columns = 4;
+
+	float range_width = 1 / num_columns;
+	float range_height = 1 / num_rows;
+
+	vec4 sample_range = HSM_GetCacheSampleRange(column_index, row_index);
+	return vec2(sample_range.x + range_width/2, sample_range.w + range_height/2);
+}
+
 vec2 HSM_GetResMult()
 {
 	// TODO when using target resolution
@@ -744,7 +778,8 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 	vec4 texture_sample = vec4(0);
 
 	// 1st Sample
-	sample_coord = vec2(0.125, 0.125);
+	// sample_coord = vec2(0.125, 0.125);
+	sample_coord = HSM_GetCacheSampleCoord(1, 1);
 	texture_sample = texture(in_cache_pass, sample_coord);
 	AVERAGE_LUMA = texture_sample.a;
 
@@ -753,7 +788,8 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 		// 2nd Sample
 		// r SCREEN_ASPECT
 		// ba SCREEN_SCALE
-		sample_coord = vec2(0.375, 0.125);
+		// sample_coord = vec2(0.375, 0.125);
+		sample_coord = HSM_GetCacheSampleCoord(2, 1);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		SCREEN_ASPECT = texture_sample.r;
 		SCREEN_SCALE = texture_sample.ba;
@@ -766,7 +802,8 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 		// 3rd Sample 
 		// rg TUBE_SCALE 
 		// ba SCREEN_POS_OFFSET
-		sample_coord = vec2(0.675, 0.125);
+		// sample_coord = vec2(0.675, 0.125);
+		sample_coord = HSM_GetCacheSampleCoord(3, 1);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		TUBE_SCALE = texture_sample.rg;
 		SCREEN_POS_OFFSET = texture_sample.ba;
@@ -781,14 +818,16 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 
 		// 4th Sample 
 		// rg CROPPED_ROTATED_SIZE_WITH_RES_MULT
-		sample_coord = vec2(0.875, 0.125);
+		// sample_coord = vec2(0.875, 0.125);
+		sample_coord = HSM_GetCacheSampleCoord(4, 1);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		CROPPED_ROTATED_SIZE_WITH_RES_MULT = texture_sample.rg;
 
 		// 5th Sample 
 		// rg CROPPED_ROTATED_SIZE
 		// ba SAMPLE_AREA_START_PIXEL_COORD
-		sample_coord = vec2(0.125, 0.375);
+		// sample_coord = vec2(0.125, 0.375);
+		sample_coord = HSM_GetCacheSampleCoord(1, 2);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		CROPPED_ROTATED_SIZE = texture_sample.rg;
 		SAMPLE_AREA_START_PIXEL_COORD = texture_sample.ba;
@@ -799,7 +838,8 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 		// 6th Sample - 2nd Screen
 		// r SCREEN_ASPECT
 		// ba SCREEN_SCALE
-		sample_coord = vec2(0.375, 0.375);
+		// sample_coord = vec2(0.375, 0.375);
+		sample_coord = HSM_GetCacheSampleCoord(2, 2);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		SCREEN_ASPECT = texture_sample.r;
 		SCREEN_SCALE = texture_sample.ba;
@@ -811,21 +851,24 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 		// 7th Sample - 2nd Screen
 		// rg TUBE_SCALE
 		// ba SCREEN_POS_OFFSET
-		sample_coord = vec2(0.675, 0.375);
+		// sample_coord = vec2(0.675, 0.375);
+		sample_coord = HSM_GetCacheSampleCoord(3, 2);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		TUBE_SCALE = 		texture_sample.rg;
 		SCREEN_POS_OFFSET = texture_sample.ba;
 
 		// 8th Sample - 2nd Screen
 		// rg CROPPED_ROTATED_SIZE_WITH_RES_MULT
-		sample_coord = vec2(0.875, 0.375);
+		// sample_coord = vec2(0.875, 0.375);
+		sample_coord = HSM_GetCacheSampleCoord(4, 2);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		CROPPED_ROTATED_SIZE_WITH_RES_MULT = texture_sample.rg;
 
 		// 9th Sample - 2nd Screen
 		// rg CROPPED_ROTATED_SIZE
 		// ba SAMPLE_AREA_START_PIXEL_COORD
-		sample_coord = vec2(0.125, 0.675);
+		// sample_coord = vec2(0.125, 0.675);
+		sample_coord = HSM_GetCacheSampleCoord(1, 3);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		CROPPED_ROTATED_SIZE = texture_sample.rg;
 		SAMPLE_AREA_START_PIXEL_COORD = texture_sample.ba;
@@ -833,7 +876,8 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 
 	// 10th Sample
 	// rg CORE_SIZE
-	sample_coord = vec2(0.375, 0.675);
+	// sample_coord = vec2(0.375, 0.675);
+	sample_coord = HSM_GetCacheSampleCoord(2, 3);
 	texture_sample = texture(in_cache_pass, sample_coord);
 	CORE_SIZE = texture_sample.rg;
 
@@ -844,7 +888,8 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 	// 11th Sample
 	// rg VIEWPORT_SCALE
 	// ba VIEWPORT_POS
-	sample_coord = vec2(0.675, 0.675);
+	// sample_coord = vec2(0.675, 0.675);
+	sample_coord = HSM_GetCacheSampleCoord(3, 3);
 	texture_sample = texture(in_cache_pass, sample_coord);
 	VIEWPORT_SCALE = texture_sample.rg;
 	VIEWPORT_POS = texture_sample.ba;
@@ -859,7 +904,8 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 	// 12th Sample
 	// rg SCREEN_SCALE_2ND_SCREEN
 	// ba SCREEN_POS_OFFSET_2ND_SCREEN
-	sample_coord = vec2(0.875, 0.675);
+	// sample_coord = vec2(0.875, 0.675);
+	sample_coord = HSM_GetCacheSampleCoord(4, 3);
 	texture_sample = texture(in_cache_pass, sample_coord);
 	SCREEN_SCALE_2ND_SCREEN = texture_sample.rg;
 	SCREEN_POS_OFFSET_2ND_SCREEN = texture_sample.ba;
@@ -874,7 +920,8 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 
 	// 13th Sample
 	// r PARAMETER_SUM_SCREEN_SCALE
-	sample_coord = vec2(0.125, 0.875);
+	// sample_coord = vec2(0.125, 0.875);
+	sample_coord = HSM_GetCacheSampleCoord(1, 4);
 	texture_sample = texture(in_cache_pass, sample_coord);
 	PARAMETER_SUM_SCREEN_SCALE = texture_sample.r;
 	PARAMETER_SUM_BEZEL = texture_sample.g;

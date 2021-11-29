@@ -73,7 +73,6 @@ Mega Bezel Still to Come:
 
 V1 TODO
   * More Cache Checking
-  * Night Lighting Full vs View
   * Fix something wrong with Potato layering?
   * Missing inner Edge static shading?
   * Adjust GDV so Scanline Gamma is a multiplier
