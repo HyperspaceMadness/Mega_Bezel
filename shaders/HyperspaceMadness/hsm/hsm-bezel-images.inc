@@ -559,14 +559,25 @@ void main()
 
 		float FRAME_AND_BEZEL_MASK = outside_tube_mask * (1 - OUTSIDE_FRAME_MASK);
 
-		if (HSM_BZL_OPACITY > 0)
-			if (HSM_FRM_OPACITY > 0)
-				bezel_layer = clamp(bezel_and_frame_rgba * FRAME_AND_BEZEL_MASK, 0, 1);
-			else
-				bezel_layer = clamp(bezel_and_frame_rgba * BEZEL_MASK, 0, 1);
-		else
-			if (HSM_FRM_OPACITY > 0)
-				bezel_layer = clamp(bezel_and_frame_rgba * FRAME_MASK, 0, 1);
+		if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
+			bezel_layer = clamp(bezel_and_frame_rgba * FRAME_AND_BEZEL_MASK, 0, 1);
+
+		frame_shadow_layer *= HSM_FRM_SHADOW_OPACITY;
+
+		if (HSM_FRM_SHADOW_OPACITY > 0)
+			bezel_layer = BlendModeMaskLayerMix(frame_shadow_layer,
+													bezel_layer, 
+													BLEND_MODE_NORMAL, 
+													MASK_MODE_ALL,
+													0, 
+													IMAGE_DUALSCREEN_MODE_BOTH,
+													1);
+
+
+		float bezel_opacity_mult = HSM_BZL_OPACITY + OUTSIDE_BEZEL_MASK * (1 - HSM_BZL_OPACITY);
+		float frame_opacity_mult = HSM_FRM_OPACITY + (1 - OUTSIDE_BEZEL_MASK) * (1 - HSM_FRM_OPACITY);
+
+		bezel_layer *= bezel_opacity_mult * frame_opacity_mult;
 	}
 
 	float TUBE_MASK_EXPAND = HSM_GetCornerMask((tube_curved_coord - 0.5) * 0.997 + 0.5, SCREEN_ASPECT, bezel_corner_radius, 0.99);
@@ -737,7 +748,6 @@ void main()
 //----------------------------------------------------
 //  ADV Get Additional Layers and Composite 
 //----------------------------------------------------
-// #ifdef IS_ADV_PRESET
 	vec4 top_image = vec4(0);
 	TOP_IMAGE_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
 												VIEWPORT_UNSCALED_COORD,
@@ -972,14 +982,6 @@ void main()
 	}
 
 #ifdef LAYERS_UNDER_CRT
-	if (HSM_FRM_SHADOW_OPACITY > 0)
-		frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
-												frame_shadow_layer, 
-												BLEND_MODE_NORMAL, 
-												MASK_MODE_OUTSIDE_BEZEL,
-												0, 
-												IMAGE_DUALSCREEN_MODE_BOTH,
-												HSM_FRM_OPACITY * HSM_FRM_SHADOW_OPACITY);
 
 	// Add background behind tube
 	frag_color_linear = HSM_PreMultAlphaBlend(frag_color_linear, tube_bg_layer);
@@ -992,7 +994,7 @@ void main()
 												MASK_MODE_ALL, 
 												0, 
 												IMAGE_DUALSCREEN_MODE_BOTH,
-												HSM_BZL_OPACITY);
+												1);
 #endif
 
 	//-----------------------------------------------------------------------------------------
