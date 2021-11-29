@@ -458,7 +458,17 @@ float HSM_GetParameterSum_ImageLayers1()
 					+ HSM_BG_POS_X * 400
 					+ HSM_BG_POS_Y * 400
 					+ HSM_BG_MIRROR_WRAP
+#endif
 
+					);
+	return out_sum;
+}
+
+float HSM_GetParameterSum_ImageLayers2()
+{
+	float out_sum = (0
+
+#ifdef HAS_IMAGE_LAYER_PARAMS
 					// Background Vignette
 					+ HSM_VIEWPORT_VIGNETTE_OPACITY * 100
 					+ HSM_VIEWPORT_VIGNETTE_MASK_MODE
@@ -496,7 +506,7 @@ float HSM_GetParameterSum_ImageLayers1()
 	return out_sum;
 }
 
-float HSM_GetParameterSum_ImageLayers2()
+float HSM_GetParameterSum_ImageLayers3()
 {
 	float out_sum = (0
 
@@ -545,6 +555,17 @@ float HSM_GetParameterSum_ImageLayers2()
 					+ HSM_DECAL_POS_Y * 100
 					+ HSM_DECAL_CUTOUT_MODE
 					+ HSM_DECAL_DUALSCREEN_VIS_MODE
+#endif
+
+					);
+	return out_sum;
+}
+
+float HSM_GetParameterSum_ImageLayers4()
+{
+	float out_sum = (0
+
+#ifdef HAS_IMAGE_LAYER_PARAMS
 
 					// // Cab Glass
 					+ HSM_CAB_GLASS_OPACITY * 100
@@ -997,14 +1018,27 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D original_pass
 
 	// 13th Sample
 	// r PARAMETER_SUM_SCREEN_SCALE
+	// g PARAMETER_SUM_BEZEL
+	// b PARAMETER_SUM_IMAGE_LAYERS_1
+	// a PARAMETER_SUM_IMAGE_LAYERS_2
 	sample_2d_range = HSM_GetCacheSampleRange(1, 4);
 	// sample_2d_range = vec4(0.0, 0.75, 0.25, 1);
 	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
 	{
 		out_color.r = HSM_GetParameterSum_ScreenScale();
 		out_color.g = HSM_GetParameterSum_Bezel();
-		// out_color.b = HSM_GetParameterSum_ImageLayers1();
-		// out_color.a = HSM_GetParameterSum_ImageLayers2();
+		out_color.b = HSM_GetParameterSum_ImageLayers1();
+		out_color.a = HSM_GetParameterSum_ImageLayers2();
+	}
+
+	// 14th Sample
+	// r PARAMETER_SUM_IMAGE_LAYERS_3
+	// g PARAMETER_SUM_IMAGE_LAYERS_4
+	sample_2d_range = HSM_GetCacheSampleRange(2, 4);
+	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
+	{
+		out_color.r = HSM_GetParameterSum_ImageLayers3();
+		out_color.g = HSM_GetParameterSum_ImageLayers4();
 	}
 
 	return out_color;
