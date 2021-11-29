@@ -192,8 +192,8 @@ vec4 HSM_GetCacheSampleRange(float column_index, float row_index)
 
 	out_sample_range.x = zero_based_column_index * range_width;
 	out_sample_range.y = zero_based_row_index * range_height;
-	out_sample_range.z = (zero_based_column_index + 1) * range_width;
-	out_sample_range.w = (zero_based_row_index + 1) * range_height;
+	out_sample_range.z = out_sample_range.x + range_width;
+	out_sample_range.w = out_sample_range.y + range_height;
 	
 	return out_sample_range;
 }
@@ -207,7 +207,7 @@ vec2 HSM_GetCacheSampleCoord(float column_index, float row_index)
 	float range_height = 1 / num_rows;
 
 	vec4 sample_range = HSM_GetCacheSampleRange(column_index, row_index);
-	return vec2(sample_range.x + range_width/2, sample_range.w + range_height/2);
+	return vec2(sample_range.x + range_width/2, sample_range.y + range_height/2);
 }
 
 vec2 HSM_GetResMult()
