@@ -777,38 +777,35 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 	vec2 sample_coord = vec2(0);
 	vec4 texture_sample = vec4(0);
 
-	// 1st Sample
-	// sample_coord = vec2(0.125, 0.125);
+	// Sample 1, 1
 	sample_coord = HSM_GetCacheSampleCoord(1, 1);
 	texture_sample = texture(in_cache_pass, sample_coord);
 	AVERAGE_LUMA = texture_sample.a;
 
 	if (SCREEN_INDEX == 1)
 	{
-		// 2nd Sample
+		// Sample 2, 1
 		// r SCREEN_ASPECT
 		// ba SCREEN_SCALE
-		// sample_coord = vec2(0.375, 0.125);
 		sample_coord = HSM_GetCacheSampleCoord(2, 1);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		SCREEN_ASPECT = texture_sample.r;
 		SCREEN_SCALE = texture_sample.ba;
 
-		// 2nd Sample Feedback
+		// Sample 2, 1 Feedback
 		// ba SCREEN_SCALE_FEEDBACK
 		texture_sample = texture(in_cache_feedback_pass, sample_coord);
 		SCREEN_SCALE_FEEDBACK = texture_sample.ba;
 
-		// 3rd Sample 
+		// Sample 3, 1
 		// rg TUBE_SCALE 
 		// ba SCREEN_POS_OFFSET
-		// sample_coord = vec2(0.675, 0.125);
 		sample_coord = HSM_GetCacheSampleCoord(3, 1);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		TUBE_SCALE = texture_sample.rg;
 		SCREEN_POS_OFFSET = texture_sample.ba;
 
-		// 3rd Sample  Feedback
+		// Sample 3, 1 Feedback
 		// rg TUBE_SCALE_FEEDBACK
 		// ba SCREEN_POS_OFFSET_FEEDBACK
 		texture_sample = texture(in_cache_feedback_pass, sample_coord);
@@ -816,17 +813,15 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 		SCREEN_POS_OFFSET_FEEDBACK = texture_sample.ba;
 
 
-		// 4th Sample 
+		// Sample 4, 1
 		// rg CROPPED_ROTATED_SIZE_WITH_RES_MULT
-		// sample_coord = vec2(0.875, 0.125);
 		sample_coord = HSM_GetCacheSampleCoord(4, 1);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		CROPPED_ROTATED_SIZE_WITH_RES_MULT = texture_sample.rg;
 
-		// 5th Sample 
+		// Sample 1, 2
 		// rg CROPPED_ROTATED_SIZE
 		// ba SAMPLE_AREA_START_PIXEL_COORD
-		// sample_coord = vec2(0.125, 0.375);
 		sample_coord = HSM_GetCacheSampleCoord(1, 2);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		CROPPED_ROTATED_SIZE = texture_sample.rg;
@@ -835,23 +830,22 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 	// If we are in the section of the viewport which is the second screen
 	if (SCREEN_INDEX == 2)
 	{
-		// 6th Sample - 2nd Screen
+		// Sample 2, 1 Sample - 2nd Screen
 		// r SCREEN_ASPECT
 		// ba SCREEN_SCALE
-		// sample_coord = vec2(0.375, 0.375);
 		sample_coord = HSM_GetCacheSampleCoord(2, 2);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		SCREEN_ASPECT = texture_sample.r;
 		SCREEN_SCALE = texture_sample.ba;
 
+		// Sample 2, 1 Sample Feedback
 		// ba SCREEN_SCALE_FEEDBACK
 		texture_sample = texture(in_cache_feedback_pass, sample_coord);
 		SCREEN_SCALE_FEEDBACK = texture_sample.ba;
 
-		// 7th Sample - 2nd Screen
+		// Sample 3, 2 - 2nd Screen
 		// rg TUBE_SCALE
 		// ba SCREEN_POS_OFFSET
-		// sample_coord = vec2(0.675, 0.375);
 		sample_coord = HSM_GetCacheSampleCoord(3, 2);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		TUBE_SCALE = 		texture_sample.rg;
@@ -874,43 +868,41 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 		SAMPLE_AREA_START_PIXEL_COORD = texture_sample.ba;
 	}
 
-	// 10th Sample
+	// Sample 2, 3 Sample
 	// rg CORE_SIZE
-	// sample_coord = vec2(0.375, 0.675);
 	sample_coord = HSM_GetCacheSampleCoord(2, 3);
 	texture_sample = texture(in_cache_pass, sample_coord);
 	CORE_SIZE = texture_sample.rg;
 
+	// Sample 2, 3 Sample Feedback
 	// rg CORE_FEEDBACK_SIZE
 	texture_sample = texture(in_cache_feedback_pass, sample_coord);
 	CORE_FEEDBACK_SIZE = texture_sample.rg;
 
-	// 11th Sample
+	// Sample 3, 3
 	// rg VIEWPORT_SCALE
 	// ba VIEWPORT_POS
-	// sample_coord = vec2(0.675, 0.675);
 	sample_coord = HSM_GetCacheSampleCoord(3, 3);
 	texture_sample = texture(in_cache_pass, sample_coord);
 	VIEWPORT_SCALE = texture_sample.rg;
 	VIEWPORT_POS = texture_sample.ba;
 
-	// 11th Sample Feedback
+	// Sample 3, 3 Feedback
 	// rg VIEWPORT_SCALE
 	// ba VIEWPORT_POS
 	texture_sample = texture(in_cache_feedback_pass, sample_coord);
 	VIEWPORT_SCALE_FEEDBACK = texture_sample.rg;
 	VIEWPORT_POS_FEEDBACK = texture_sample.ba;
 
-	// 12th Sample
+	// Sample 4, 3
 	// rg SCREEN_SCALE_2ND_SCREEN
 	// ba SCREEN_POS_OFFSET_2ND_SCREEN
-	// sample_coord = vec2(0.875, 0.675);
 	sample_coord = HSM_GetCacheSampleCoord(4, 3);
 	texture_sample = texture(in_cache_pass, sample_coord);
 	SCREEN_SCALE_2ND_SCREEN = texture_sample.rg;
 	SCREEN_POS_OFFSET_2ND_SCREEN = texture_sample.ba;
 
-	// 12th Sample Feedback
+	// Sample 4, 3  Feedback
 	// rg SCREEN_SCALE_2ND_SCREEN_FEEDBACK
 	// ba SCREEN_POS_2ND_SCREEN_OFFSET_FEEDBACK
 	texture_sample = texture(in_cache_feedback_pass, sample_coord);
@@ -918,68 +910,87 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 	SCREEN_POS_OFFSET_2ND_SCREEN_FEEDBACK = texture_sample.ba;
 
 
-	// 13th Sample
-	// r PARAMETER_SUM_SCREEN_SCALE
-	// g PARAMETER_SUM_BEZEL
-	// b PARAMETER_SUM_IMAGE_LAYERS_1
-	// a PARAMETER_SUM_IMAGE_LAYERS_2
+	// Sample 1, 4 
+	// r parameter_sum_01
+	// g parameter_sum_02
+	// b parameter_sum_03
+	// a parameter_sum_04
 	// sample_coord = vec2(0.125, 0.875);
 	sample_coord = HSM_GetCacheSampleCoord(1, 4);
 	texture_sample = texture(in_cache_pass, sample_coord);
-	PARAMETER_SUM_SCREEN_SCALE = texture_sample.r;
-	PARAMETER_SUM_BEZEL = texture_sample.g;
-	PARAMETER_SUM_IMAGE_LAYERS_1 = texture_sample.b;
-	PARAMETER_SUM_IMAGE_LAYERS_2 = texture_sample.a;
+	float parameter_sum_01 = texture_sample.r;
+	float parameter_sum_02 = texture_sample.g;
+	float parameter_sum_03 = texture_sample.b;
+	float parameter_sum_04 = texture_sample.a;
 
-	// 13th Sample Feedback
-	// r PARAMETER_SUM_SCREEN_SCALE_FEEDBACK
-	// g PARAMETER_SUM_BEZEL_FEEDBACK
-	// b PARAMETER_SUM_IMAGE_LAYERS_1_FEEDBACK
-	// a PARAMETER_SUM_IMAGE_LAYERS_2_FEEDBACK
+	// Sample 1, 4  Feedback
+	// r parameter_sum_01_feedback
+	// g parameter_sum_02_feedback
+	// b parameter_sum_03_feedback
+	// a parameter_sum_04_feedback
 	texture_sample = texture(in_cache_feedback_pass, sample_coord);
-	PARAMETER_SUM_SCREEN_SCALE_FEEDBACK = texture_sample.r;
-	PARAMETER_SUM_BEZEL_FEEDBACK = texture_sample.g;
-	PARAMETER_SUM_IMAGE_LAYERS_1_FEEDBACK = texture_sample.b;
-	PARAMETER_SUM_IMAGE_LAYERS_2_FEEDBACK = texture_sample.a;
+	float parameter_sum_01_feedback = texture_sample.r;
+	float parameter_sum_02_feedback = texture_sample.g;
+	float parameter_sum_03_feedback = texture_sample.b;
+	float parameter_sum_04_feedback = texture_sample.a;
 
-	// 14th Sample
-	// r PARAMETER_SUM_IMAGE_LAYERS_3
-	// g PARAMETER_SUM_IMAGE_LAYERS_4
+	// Sample 2, 4 
+	// r parameter_sum_05
+	// g parameter_sum_06
+	// b parameter_sum_07
+	// a parameter_sum_08
 	sample_coord = HSM_GetCacheSampleCoord(2, 4);
 	texture_sample = texture(in_cache_pass, sample_coord);
-	PARAMETER_SUM_IMAGE_LAYERS_3 = texture_sample.r;
-	PARAMETER_SUM_IMAGE_LAYERS_4 = texture_sample.g;
+	float parameter_sum_05 = texture_sample.r;
+	float parameter_sum_06 = texture_sample.g;
+	float parameter_sum_07 = texture_sample.b;
+	float parameter_sum_08 = texture_sample.a;
 
-	// 14th Sample Feedback
-	// r PARAMETER_SUM_IMAGE_LAYERS_3_FEEDBACK
-	// g PARAMETER_SUM_IMAGE_LAYERS_4_FEEDBACK
+	// Sample 2, 4 Feedback
+	// r parameter_sum_05_feedback
+	// g parameter_sum_06_feedback
+	// b parameter_sum_07_feedback
+	// a parameter_sum_08_feedback
 	texture_sample = texture(in_cache_feedback_pass, sample_coord);
-	PARAMETER_SUM_IMAGE_LAYERS_3_FEEDBACK = texture_sample.r;
-	PARAMETER_SUM_IMAGE_LAYERS_4_FEEDBACK = texture_sample.g;
+	float parameter_sum_05_feedback = texture_sample.r;
+	float parameter_sum_06_feedback = texture_sample.g;
+	float parameter_sum_07_feedback = texture_sample.b;
+	float parameter_sum_08_feedback = texture_sample.a;
+
+	// Sample 2, 4 
+	// r parameter_sum_09
+	sample_coord = HSM_GetCacheSampleCoord(3, 4);
+	texture_sample = texture(in_cache_pass, sample_coord);
+	float parameter_sum_09 = texture_sample.r;
+
+	// Sample 2, 4 Feedback
+	// r parameter_sum_09_feedback
+	texture_sample = texture(in_cache_feedback_pass, sample_coord);
+	float parameter_sum_09_feedback = texture_sample.r;
+
 
 	USE_VERTICAL_SCANLINES = HSM_GetUseVerticalScanlines(SCREEN_ASPECT);
 	SCREEN_COORD = HSM_GetVTexCoordWithArgs(flipped_viewport_coord, SCREEN_SCALE, SCREEN_POS_OFFSET);
 
-	return vec4(0);
-}
+	float param_sum_epsilon = 0.000001;
+	CACHE_INFO_PARAM_SUM_CHANGED = (
+										   abs(parameter_sum_01 - parameter_sum_01_feedback) > param_sum_epsilon
+										|| abs(parameter_sum_02 - parameter_sum_02_feedback) > param_sum_epsilon
+										|| abs(parameter_sum_03 - parameter_sum_03_feedback) > param_sum_epsilon
+										|| abs(parameter_sum_04 - parameter_sum_04_feedback) > param_sum_epsilon
+										|| abs(parameter_sum_05 - parameter_sum_05_feedback) > param_sum_epsilon
+										|| abs(parameter_sum_06 - parameter_sum_06_feedback) > param_sum_epsilon
+										|| abs(parameter_sum_07 - parameter_sum_07_feedback) > param_sum_epsilon
+										|| abs(parameter_sum_08 - parameter_sum_08_feedback) > param_sum_epsilon
+										|| abs(parameter_sum_09 - parameter_sum_09_feedback) > param_sum_epsilon
+									);
 
-bool HSM_CheckCacheInfoParamSumChanged()
-{
-	float param_sum_epsilon = 0.001;
-	return (
-				abs(PARAMETER_SUM_SCREEN_SCALE - PARAMETER_SUM_SCREEN_SCALE_FEEDBACK) > param_sum_epsilon
-				|| abs(PARAMETER_SUM_BEZEL - PARAMETER_SUM_BEZEL_FEEDBACK) > param_sum_epsilon
-				|| abs(PARAMETER_SUM_IMAGE_LAYERS_1 - PARAMETER_SUM_IMAGE_LAYERS_1_FEEDBACK) > param_sum_epsilon
-				|| abs(PARAMETER_SUM_IMAGE_LAYERS_2 - PARAMETER_SUM_IMAGE_LAYERS_2_FEEDBACK) > param_sum_epsilon
-				|| abs(PARAMETER_SUM_IMAGE_LAYERS_3 - PARAMETER_SUM_IMAGE_LAYERS_3_FEEDBACK) > param_sum_epsilon
-				|| abs(PARAMETER_SUM_IMAGE_LAYERS_4 - PARAMETER_SUM_IMAGE_LAYERS_4_FEEDBACK) > param_sum_epsilon
-			);
+	return vec4(0);
 }
 
 bool HSM_CheckCacheInfoChanged()
 {
 	float epsilon = 0.0001;
-	float param_sum_epsilon = 0.05;
 	return (CORE_SIZE.x != CORE_FEEDBACK_SIZE.x
 			|| CORE_SIZE.y != CORE_FEEDBACK_SIZE.y
 			|| (
@@ -1000,8 +1011,7 @@ bool HSM_CheckCacheInfoChanged()
 			|| abs(VIEWPORT_SCALE.y - VIEWPORT_SCALE_FEEDBACK.x) > epsilon
 			|| abs(VIEWPORT_POS.x - VIEWPORT_POS_FEEDBACK.x) > epsilon
 			|| abs(VIEWPORT_POS.y - VIEWPORT_POS_FEEDBACK.y) > epsilon
-			|| HSM_CheckCacheInfoParamSumChanged()
-
+			|| CACHE_INFO_PARAM_SUM_CHANGED
 			);
 }
 
