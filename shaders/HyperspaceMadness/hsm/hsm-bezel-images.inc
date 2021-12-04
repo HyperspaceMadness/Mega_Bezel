@@ -99,6 +99,7 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 						vec2 offset_pos,
 						vec2 offset_scale,
 						float inherited_scale_mode, 
+						float scale_full_with_zoom, 
 						float image_aspect_mode,
 						float image_fill_mode,
 						bool apply_default_scale_offset,
@@ -115,15 +116,17 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 
 	if (inherited_scale_mode == INHERITED_SCALE_MODE_VIEWPORT)
 	{
-		inherited_coord = in_viewport_coord;
-		inherited_placement_coord = in_viewport_coord;
-		inherited_scale = vec2(1, 1);
-		default_offset_scale = vec2(1);
-	}
-	if (inherited_scale_mode == INHERITED_SCALE_MODE_VIEWPORT_UNSCALED)
-	{
-		inherited_coord = in_viewport_coord_unscaled;
-		inherited_placement_coord = in_viewport_coord_unscaled;
+		if (scale_full_with_zoom > 0.5)	
+		{
+			inherited_coord = in_viewport_coord;
+			inherited_placement_coord = in_viewport_coord;
+		}
+		else
+		{
+			inherited_coord = in_viewport_coord_unscaled;
+			inherited_placement_coord = in_viewport_coord_unscaled;
+		}
+
 		inherited_scale = vec2(1, 1);
 		default_offset_scale = vec2(1);
 	}
@@ -597,6 +600,7 @@ void main()
 												vec2(HSM_BG_POS_X, HSM_BG_POS_Y),
 												vec2(HSM_BG_SCALE * HSM_BG_SCALE_X, HSM_BG_SCALE),
 												HSM_BG_SCALE_MODE,
+												HSM_BG_SCALE_FULL_WITH_ZOOM,
 												HSM_BG_SCALE_KEEP_ASPECT,
 												HSM_BG_FILL_MODE,
 												true,
@@ -642,6 +646,7 @@ void main()
 											vec2(HSM_DEVICE_POS_X, HSM_DEVICE_POS_Y),
 											vec2(HSM_DEVICE_SCALE * HSM_DEVICE_SCALE_X, HSM_DEVICE_SCALE),
 											HSM_DEVICE_SCALE_MODE,
+											HSM_DEVICE_SCALE_FULL_WITH_ZOOM,
 											HSM_DEVICE_SCALE_KEEP_ASPECT,
 											HSM_DEVICE_FILL_MODE,
 											true,
@@ -682,7 +687,8 @@ void main()
 											HSM_LED_EXPLICIT_TEXTURE_ASPECT, 
 											vec2(HSM_LED_POS_X, HSM_LED_POS_Y), 
 											vec2(HSM_LED_SCALE * HSM_LED_SCALE_X, HSM_LED_SCALE),
-											HSM_LED_SCALE_MODE, 
+											HSM_LED_SCALE_MODE,
+											HSM_LED_SCALE_FULL_WITH_ZOOM,
 											HSM_LED_SCALE_KEEP_ASPECT, 
 											HSM_LED_FILL_MODE,
 											true,
@@ -719,6 +725,7 @@ void main()
 											vec2(HSM_DECAL_POS_X, HSM_DECAL_POS_Y), 
 											vec2(HSM_DECAL_SCALE * HSM_DECAL_SCALE_X, HSM_DECAL_SCALE),
 											HSM_DECAL_SCALE_MODE,
+											HSM_DECAL_SCALE_FULL_WITH_ZOOM,
 											HSM_DECAL_SCALE_KEEP_ASPECT, 
 											HSM_DECAL_FILL_MODE,
 											true,
@@ -755,7 +762,8 @@ void main()
 												HSM_TOP_EXPLICIT_TEXTURE_ASPECT, 
 												vec2(HSM_TOP_POS_X, HSM_TOP_POS_Y), 
 												vec2(HSM_TOP_SCALE * HSM_TOP_SCALE_X, HSM_TOP_SCALE),
-												HSM_TOP_SCALE_MODE, 
+												HSM_TOP_SCALE_MODE,
+												HSM_TOP_SCALE_FULL_WITH_ZOOM,
 												HSM_TOP_SCALE_KEEP_ASPECT, 
 												HSM_TOP_FILL_MODE,
 												true,
@@ -799,7 +807,8 @@ void main()
 											HSM_CAB_GLASS_EXPLICIT_TEXTURE_ASPECT, 
 											vec2(HSM_CAB_GLASS_POS_X, HSM_CAB_GLASS_POS_Y), 
 											vec2(HSM_CAB_GLASS_SCALE * HSM_CAB_GLASS_SCALE_X, HSM_CAB_GLASS_SCALE),
-											HSM_CAB_GLASS_SCALE_MODE, 
+											HSM_CAB_GLASS_SCALE_MODE,
+											HSM_CAB_GLASS_SCALE_FULL_WITH_ZOOM,
 											HSM_CAB_GLASS_SCALE_KEEP_ASPECT, 
 											HSM_CAB_GLASS_FILL_MODE,
 											true,
@@ -851,6 +860,7 @@ void main()
 											vec2(HSM_CUTOUT_POS_X, HSM_CUTOUT_POS_Y),
 											vec2(vec2(HSM_CUTOUT_SCALE * HSM_CUTOUT_SCALE_X, HSM_CUTOUT_SCALE) * cutout_base_scale_offset),
 											HSM_CUTOUT_SCALE_MODE,
+											HSM_CUTOUT_SCALE_FULL_WITH_ZOOM,
 											HSM_CUTOUT_KEEP_ASPECT,
 											FILL_MODE_STRETCH,
 											false,
@@ -874,6 +884,7 @@ void main()
 												vec2(vec2(HSM_VIEWPORT_VIGNETTE_SCALE * HSM_VIEWPORT_VIGNETTE_SCALE_X, HSM_VIEWPORT_VIGNETTE_SCALE)), 
 												HSM_VIEWPORT_VIGNETTE_SCALE_MODE,
 												INHERITED_SCALE_MODE_VIEWPORT,
+												0,
 												FILL_MODE_STRETCH,
 												false,
 												USE_INHERITED_COORD_OFF,
