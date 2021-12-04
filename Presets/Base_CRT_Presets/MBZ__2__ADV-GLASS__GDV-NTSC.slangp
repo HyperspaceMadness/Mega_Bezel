@@ -20,7 +20,7 @@ scale_x2 = 1.25
 scale_y2 = 1.25
 alias2 = "CorePreppedPass"
 
-shader3 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-info-cache-screen-scale-params.slang
+shader3 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-cache-info-screen-scale-params.slang
 filter_linear3 = false
 scale_type3 = source
 scale3 = 1.0
@@ -220,7 +220,7 @@ scale_y35 = 12
 alias35 = "BR_MirrorFullscreenGlowPass"
 
 // Bezel Reflection ----------------------------------------------------------------
-shader36 = ../../shaders/HyperspaceMadness/hsm/hsm-bezel-reflection-glass.slang
+shader36 = ../../shaders/HyperspaceMadness/hsm/hsm-reflection-glass.slang
 scale_type36 = viewport
 float_framebuffer36 = true
 alias36 = "BR_CRTAndReflectionPass"

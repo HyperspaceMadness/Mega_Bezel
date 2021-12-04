@@ -1,5 +1,5 @@
 /*   
-hsm-bezel-reflection
+hsm-reflection
 
 Author: HyperspaceMadness - remimcgill@hotmail.com
 License: GPL
