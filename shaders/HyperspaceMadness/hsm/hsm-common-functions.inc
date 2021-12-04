@@ -910,80 +910,24 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 	SCREEN_POS_OFFSET_2ND_SCREEN_FEEDBACK = texture_sample.ba;
 
 
+
 	// Sample 1, 4 
-	// r parameter_sum_01
-	// g parameter_sum_02
-	// b parameter_sum_03
-	// a parameter_sum_04
-	// sample_coord = vec2(0.125, 0.875);
+	// r parameter_sum
 	sample_coord = HSM_GetCacheSampleCoord(1, 4);
 	texture_sample = texture(in_cache_pass, sample_coord);
-	float parameter_sum_01 = texture_sample.r;
-	float parameter_sum_02 = texture_sample.g;
-	float parameter_sum_03 = texture_sample.b;
-	float parameter_sum_04 = texture_sample.a;
+	float parameter_sum = texture_sample.r;
 
-	// Sample 1, 4  Feedback
-	// r parameter_sum_01_feedback
-	// g parameter_sum_02_feedback
-	// b parameter_sum_03_feedback
-	// a parameter_sum_04_feedback
+	// Sample 1, 4 Feedback
+	// r parameter_sum_feedback
 	texture_sample = texture(in_cache_feedback_pass, sample_coord);
-	float parameter_sum_01_feedback = texture_sample.r;
-	float parameter_sum_02_feedback = texture_sample.g;
-	float parameter_sum_03_feedback = texture_sample.b;
-	float parameter_sum_04_feedback = texture_sample.a;
-
-	// Sample 2, 4 
-	// r parameter_sum_05
-	// g parameter_sum_06
-	// b parameter_sum_07
-	// a parameter_sum_08
-	sample_coord = HSM_GetCacheSampleCoord(2, 4);
-	texture_sample = texture(in_cache_pass, sample_coord);
-	float parameter_sum_05 = texture_sample.r;
-	float parameter_sum_06 = texture_sample.g;
-	float parameter_sum_07 = texture_sample.b;
-	float parameter_sum_08 = texture_sample.a;
-
-	// Sample 2, 4 Feedback
-	// r parameter_sum_05_feedback
-	// g parameter_sum_06_feedback
-	// b parameter_sum_07_feedback
-	// a parameter_sum_08_feedback
-	texture_sample = texture(in_cache_feedback_pass, sample_coord);
-	float parameter_sum_05_feedback = texture_sample.r;
-	float parameter_sum_06_feedback = texture_sample.g;
-	float parameter_sum_07_feedback = texture_sample.b;
-	float parameter_sum_08_feedback = texture_sample.a;
-
-	// Sample 2, 4 
-	// r parameter_sum_09
-	sample_coord = HSM_GetCacheSampleCoord(3, 4);
-	texture_sample = texture(in_cache_pass, sample_coord);
-	float parameter_sum_09 = texture_sample.r;
-
-	// Sample 2, 4 Feedback
-	// r parameter_sum_09_feedback
-	texture_sample = texture(in_cache_feedback_pass, sample_coord);
-	float parameter_sum_09_feedback = texture_sample.r;
+	float parameter_sum_feedback = texture_sample.r;
 
 
 	USE_VERTICAL_SCANLINES = HSM_GetUseVerticalScanlines(SCREEN_ASPECT);
 	SCREEN_COORD = HSM_GetVTexCoordWithArgs(flipped_viewport_coord, SCREEN_SCALE, SCREEN_POS_OFFSET);
 
-	float param_sum_epsilon = 0.000001;
-	CACHE_INFO_PARAM_SUM_CHANGED = (
-										   abs(parameter_sum_01 - parameter_sum_01_feedback) > param_sum_epsilon
-										|| abs(parameter_sum_02 - parameter_sum_02_feedback) > param_sum_epsilon
-										|| abs(parameter_sum_03 - parameter_sum_03_feedback) > param_sum_epsilon
-										|| abs(parameter_sum_04 - parameter_sum_04_feedback) > param_sum_epsilon
-										|| abs(parameter_sum_05 - parameter_sum_05_feedback) > param_sum_epsilon
-										|| abs(parameter_sum_06 - parameter_sum_06_feedback) > param_sum_epsilon
-										|| abs(parameter_sum_07 - parameter_sum_07_feedback) > param_sum_epsilon
-										|| abs(parameter_sum_08 - parameter_sum_08_feedback) > param_sum_epsilon
-										|| abs(parameter_sum_09 - parameter_sum_09_feedback) > param_sum_epsilon
-									);
+	float param_sum_epsilon = 0.0000001;
+	CACHE_INFO_PARAM_SUM_CHANGED = (abs(parameter_sum - parameter_sum_feedback) > param_sum_epsilon);
 
 	return vec4(0);
 }

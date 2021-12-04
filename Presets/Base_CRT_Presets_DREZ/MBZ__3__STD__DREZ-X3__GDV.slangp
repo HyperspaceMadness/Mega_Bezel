@@ -22,8 +22,7 @@ scale_y2 = 1.25
 alias2 = "CorePreppedPass"
 
 shader3 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-info-cache-all-params.slang
-filter_linear3 = true
-float_framebuffer3 = true
+filter_linear3 = false
 scale_type3 = source
 scale3 = 1.0
 alias3 = "InfoCachePass"
