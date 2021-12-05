@@ -116,9 +116,6 @@ layout(push_constant) uniform Push
 #pragma parameter vertmask "          Scanline Color Deconvergence -- vertmask" 0.0 -1.0 1.0 0.1
 #define vertmask     params.vertmask     // Scanline deconvergence colors
 
-#pragma parameter scangamma "          Scanline Gamma" 2.40 0.5 5.0 0.05
-#define scangamma global.scangamma
-
 #pragma parameter scans "          Scanline Saturation -- scans" 0.60 0.0 1.0 0.05
 #define scans        params.scans     // scanline saturation
 
@@ -129,6 +126,9 @@ layout(push_constant) uniform Push
 
 #pragma parameter spike "          Scanline Spike Removal -- spike" 1.0 0.0 2.0 0.10
 #define spike params.spike
+
+#pragma parameter scangammaoffset "          Scanline Gamma Offset" 1 0.15 5.0 0.05
+#define scangammaoffset global.scangammaoffset
 
 #pragma parameter bogus_filtering "[ GDV - FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
 
@@ -855,7 +855,7 @@ else
 		color1 = min(normalize (color1+eps) * length(sqrt(color1 * cc)) ,1.0);
 
 	// HSM Added From NTSC
-	color1 = pow(color1, vec3(scangamma/gamma_in));
+	color1 = pow(color1, vec3(scangammaoffset));
 
 	float ts = 0.025;
 	vec3 luma = vec3(0.2126, 0.7152, 0.0722);
@@ -947,7 +947,7 @@ else
 		color2 = min(normalize (color2+eps) * length(sqrt(color2 * cc)) ,1.0);	
 		
 	// HSM Added From NTSC
-	color2 = pow(color2, vec3(scangamma/gamma_in));	
+	color2 = pow(color2, vec3(scangammaoffset));	
 
 	if (ntscbm)
 	{
@@ -1120,7 +1120,7 @@ if (!interb)
 		color = color + (1.1-0.25*colmx)*(0.75+maxb)*Bloom*(0.75 + 0.70*pow(colmx,0.33333))*mix(1.0,w3,0.5*colmx)*mix(one,cmask,0.35 + 0.4*maxb)*halation; }
 
 	// HSM Added From NTSC
-	color = pow(color, vec3(gamma_in/scangamma));
+	color = pow(color, vec3(1/scangammaoffset));
 
 	Glow = mix(Glow, 0.25*color, 0.7*colmx);
 	if (glow >= 0.0) color = color + 0.5*Glow*glow; else { cmask*=cmask; cmask*=cmask; color = color + (-glow)*cmask*Glow; }

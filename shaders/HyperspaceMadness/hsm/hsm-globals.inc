@@ -504,7 +504,7 @@ float HSM_AMBIENT_LIGHTING_SCALE_MODE;
 
 	// Guest-Dr-Venom Params
 	float blendMode;
-	float scangamma;
+	float scangammaoffset;
 	float slotmask;
 	float slotmask1;
 
