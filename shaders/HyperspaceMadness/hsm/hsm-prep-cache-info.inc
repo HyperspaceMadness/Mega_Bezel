@@ -244,8 +244,6 @@ float HSM_GetScreenAspect(float screen_index, vec2 cropped_size)
 	return final_aspect_ratio;
 }
 
-
-
 int HSM_IsCoordIn2DRange(vec2 in_coord, vec4 in_2d_range)
 {
 	return (in_coord.x > in_2d_range.x && 
@@ -813,7 +811,7 @@ float HSM_GetParameterSum()
 	return out_sum;
 }
 
-vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D original_pass, sampler2D screen_placement_image)
+vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass, sampler2D original_pass, sampler2D screen_placement_image)
 {
 	vec4 out_color = vec4(0);
 
@@ -971,6 +969,12 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D original_pass
 	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
 	{
 		out_color.r = HSM_GetParameterSum();
+
+		vec2 sample_coord = HSM_GetCacheSampleCoord(1, 4);
+		vec4 texture_sample = texture(feedback_pass, sample_coord);
+
+		float last_frame = floor(texture_sample.g);
+		out_color.g = last_frame + global.FrameDirection * 1;
 	}
 
 	return out_color;
@@ -993,9 +997,10 @@ void main()
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 1) uniform sampler2D Source;
+layout(set = 0, binding = 2) uniform sampler2D InfoCachePassFeedback;
 layout(set = 0, binding = 3) uniform sampler2D ScreenPlacementImage;
 
 void main()
 {
-   FragColor = HSM_GetColorForScreenInfoCache(vTexCoord, Source, ScreenPlacementImage);
+   FragColor = HSM_GetColorForScreenInfoCache(vTexCoord, InfoCachePassFeedback, Source, ScreenPlacementImage);
 }

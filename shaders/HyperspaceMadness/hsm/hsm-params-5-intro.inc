@@ -10,7 +10,7 @@ License: GPL
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_INTRO_IMAGE_TITLE							"[ INTRO SEQUENCE ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_INTRO_WHEN_TO_SHOW     					"          Show Intro - OFF | When Content Loads | Repeat"  1 0 2 1
+#pragma parameter HSM_INTRO_WHEN_TO_SHOW     					"        Show Intro- OFF|Game Load|Shader Load & Settings|Repeat"  1 0 3 1
 #define HSM_INTRO_WHEN_TO_SHOW global.HSM_INTRO_WHEN_TO_SHOW
 
 #pragma parameter HSM_INTRO_SPEED     							"          Speed"  100 1 500 5

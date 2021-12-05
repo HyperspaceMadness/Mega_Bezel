@@ -107,7 +107,7 @@ vec4 GetColorWithIntro(vec4 in_color, vec2 in_coord)
    in_coord.y = abs(HSM_FLIP_VIEWPORT_VERTICAL - HSM_FLIP_CORE_VERTICAL) > 0.5 ? 1 - in_coord.y : in_coord.y;
    in_coord.x = abs(HSM_FLIP_VIEWPORT_HORIZONTAL - HSM_FLIP_CORE_HORIZONTAL) > 0.5 ? 1 - in_coord.x : in_coord.x;
 
-   float frame_count = global.FrameCount;
+   float frame_count = HSM_INTRO_WHEN_TO_SHOW == 2 ? CURRENT_FRAME_FROM_CACHE_INFO : global.FrameCount;
 
    float mask_wait = 20 / HSM_INTRO_SPEED;
    
@@ -139,7 +139,7 @@ vec4 GetColorWithIntro(vec4 in_color, vec2 in_coord)
    float full_seq_length     = max(power_on_seq_length + noise_hold + fade_out_seq_length, logo_seq_length);
 
    // Loop the animation so we can see the results
-   if (HSM_INTRO_WHEN_TO_SHOW == 2)
+   if (HSM_INTRO_WHEN_TO_SHOW == 3)
       frame_count = mod(frame_count, full_seq_length + 15);
 
 	if (frame_count <= full_seq_length)

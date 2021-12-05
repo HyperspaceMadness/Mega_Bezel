@@ -15,6 +15,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	vec4 FinalViewportSize;
 	vec4 CorePreppedPassSize;
 	vec4 DerezedPassSize;
+	int FrameDirection;
 	uint FrameCount;
 
 	float HSM_RESOLUTION_DEBUG_ON;
@@ -569,6 +570,7 @@ float FILL_MODE_SPLIT_FILL_VERTICAL = 2;
 #define RENDER_SIMPLE_MODE_OUTSIDE_TUBE_MASK 5
 
 bool CACHE_INFO_PARAM_SUM_CHANGED = false;
+float CURRENT_FRAME_FROM_CACHE_INFO = 0;
 
 float PARAMETER_SUM_SCREEN_SCALE = 0;
 float PARAMETER_SUM_SCREEN_SCALE_FEEDBACK = 0;

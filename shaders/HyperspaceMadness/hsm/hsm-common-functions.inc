@@ -916,6 +916,7 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 	sample_coord = HSM_GetCacheSampleCoord(1, 4);
 	texture_sample = texture(in_cache_pass, sample_coord);
 	float parameter_sum = texture_sample.r;
+	CURRENT_FRAME_FROM_CACHE_INFO = texture_sample.g;
 
 	// Sample 1, 4 Feedback
 	// r parameter_sum_feedback
