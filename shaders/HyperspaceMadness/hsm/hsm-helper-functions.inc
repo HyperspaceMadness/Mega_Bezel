@@ -1,15 +1,26 @@
-/*   
-
-Author: HyperspaceMadness - remimcgill@hotmail.com
-License: GPL
-Description:
-
-*/
-
 /*
+    Mega Bezel - Creates a graphic treatment for the game play area to give a retro feel
+    Copyright (C) 2019-2021 HyperspaceMadness - HyperspaceMadness@outlook.com
+
 	Texture interpolation based on "Improved texture interpolation" by Inigo Quilez
 	Original description: http://www.iquilezles.org/www/articles/texture/texture.htm
 	Expects the texture to be using linear filtering
+
+    See more at the libretro forum
+    https://forums.libretro.com/t/hsm-mega-bezel-reflection-shader-feedback-and-updates
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 vec4 HSM_ApplyGamma(vec4 in_color, float in_gamma)
