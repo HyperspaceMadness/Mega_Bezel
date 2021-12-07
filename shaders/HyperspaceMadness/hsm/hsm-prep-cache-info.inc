@@ -928,7 +928,6 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	{
 		out_color.r = screen_aspect_2nd_screen;
 		out_color.gb = screen_scale_2nd_screen;
-		out_color.a = HSM_GetParameterSum();
 	}
 
 	// Sample 3, 2

@@ -8,8 +8,10 @@ Changes:
       * Portions of the viewport which do not change dynamically every frame (E.G. Outside the Bezel)
     * Blinking red visual Live mode indicator when live mode is on
   * Added Negative Cropping
-  * New Guest-DrVenom NTSC preset added
-  * Updated Guest shaders to crt-guest-advanced-2021-10-10-release1
+  * Guest DrVenom
+    * New Guest-DrVenom NTSC preset added
+    * Updated Guest shaders to crt-guest-advanced-2021-10-10-release1
+    * Scanline Gamma is on all GDV presets and is a 1 based gamma adjustment
   * Fixed ZFast Cropping
   * Put Vignette in Post-CRT pass, Turn off Grade Vignette by default
   * Put Grade after afterglow, remove brighten black from afterglow
@@ -72,11 +74,11 @@ Changes:
 Mega Bezel Still to Come:
 
 V1 TODO
-  * More Cache Checking
-  * Adjust FULL Scaling Mode, add parameter to zoom or not
+  * Fix Dual Screen
+  * Fix Size of Mega Bezel Logo in Vertical Aspect Screen
   * Fix something wrong with Potato layering?
+  * Add Web Link in Debug Info
   * Missing inner Edge static shading?
-  * Adjust GDV so Scanline Gamma is a multiplier
   * Pink outside frame options?
 
   * ZFast Curvature

@@ -851,7 +851,7 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 		sample_coord = HSM_GetCacheSampleCoord(2, 2);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		SCREEN_ASPECT = texture_sample.r;
-		SCREEN_SCALE = texture_sample.ba;
+		SCREEN_SCALE = texture_sample.gb;
 
 		// Sample 2, 1 Sample Feedback
 		// ba SCREEN_SCALE_FEEDBACK

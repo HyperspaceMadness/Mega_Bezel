@@ -207,7 +207,22 @@ vec4 GetColorWithIntro(vec4 in_color, vec2 in_coord)
       if (intro_logo_height == 0)
          intro_logo_height = intro_image_res.y / global.OriginalSize.y;
 
-      vec2 intro_image_scale = vec2(intro_logo_height * intro_image_aspect / SCREEN_ASPECT, intro_logo_height);
+      vec2 intro_image_scale = vec2(intro_logo_height * intro_image_aspect / SCREEN_ASPECT, intro_logo_height) * min(SCREEN_ASPECT * 0.9, 1);
+      intro_image_scale = floor(intro_image_scale * global.SourceSize.xy) / global.SourceSize.xy;
+
+      if (HSM_DUALSCREEN_MODE > 0.5)
+      {
+         if (HSM_GetCoreImageSplitDirection() == 1)
+         {
+            // intro_image_scale.y *= 0.5;
+            in_coord.y = in_coord.y * 2 - 0.1;
+         }
+         if (HSM_GetCoreImageSplitDirection() == 2)
+         {
+            // intro_image_scale.x *= 0.5;
+            in_coord.x = in_coord.x * 2 - 0.1;
+         }
+      }
 
       // Center
       vec2 coord_in_intro_image = (in_coord - 0.5) / intro_image_scale + 0.5;
