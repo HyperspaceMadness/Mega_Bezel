@@ -106,6 +106,9 @@ void main()
 
 	vec4 out_color = texture(BR_LayersUnderCRTPass, vTexCoord);
 	vec4 crt_layer = texture(MiddlePass, vTexCoord);
+	#ifdef IS_NO_REFLECT_PRESET
+		crt_layer = HSM_Linearize(crt_layer, HSM_DEFAULT_SRGB_GAMMA);
+	#endif
 
 	if (HSM_RENDER_SIMPLE_MODE > 0.5)
 		crt_layer.rgb = vec3(0);

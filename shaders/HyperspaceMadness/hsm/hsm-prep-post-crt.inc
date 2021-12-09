@@ -190,8 +190,25 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 		out_color = mix(out_color, scanline_masked_color, tube_highlight_mask);
 	}
 
+
+	
+	// TubeDiffuseImage
+	vec4 tube_diffuse = vec4(0, 0, 0, 1);
+	if (HSM_TUBE_DIFFUSE_IMAGE_OPACITY > 0.5 && HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS > 0)
+	{
+		tube_diffuse = texture(TubeDiffuseImage, mirrored_tube_coord);
+		tube_diffuse = HSM_GetPreMultipliedColorLinear(tube_diffuse, SOURCE_MATTE_PREMULTIPLIED, HSM_DEFAULT_SRGB_GAMMA);
+		tube_diffuse.rgb = HSM_ApplyHSVAdjustment(tube_diffuse.rgb, HSM_TUBE_DIFFUSE_IMAGE_HUE, HSM_TUBE_DIFFUSE_IMAGE_SATURATION, HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS, HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON, HSM_TUBE_DIFFUSE_IMAGE_GAMMA);
+	}
+	tube_diffuse *= HSM_TUBE_DIFFUSE_IMAGE_OPACITY;
+	tube_diffuse.rgb *= night_lighting_image.rgb;
+
+	// Apply the CRT image additively to the tube diffuse color
+	out_color.a = in_color_with_gamma.a;
+	out_color = HSM_BlendModeLayerMix(tube_diffuse, out_color, BLEND_MODE_ADD, 1);
+
 	// Add a Colored Gel image on top of the screen, this is what colors games like space invaders or battlezone
-	if (HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT > 0 || HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT > 0 || HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT > 0)
+	if (HSM_TUBE_COLORED_GEL_IMAGE_ON > 0.5 && (HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT > 0 || HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT > 0 || HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT > 0))
 	{
 		// TODO need to update this for flip horizontal
 		vec2 gel_coord = mix( mirrored_tube_coord, -1 * (mirrored_tube_coord - 0.5) + 0.5 , HSM_FLIP_VIEWPORT_VERTICAL);
@@ -218,23 +235,6 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 			}
 	}
 
-	
-	// TubeDiffuseImage
-	vec4 tube_diffuse = vec4(0, 0, 0, 1);
-	if (HSM_TUBE_DIFFUSE_IMAGE_OPACITY > 0.5 && HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS > 0)
-	{
-		tube_diffuse = texture(TubeDiffuseImage, mirrored_tube_coord);
-		tube_diffuse = HSM_GetPreMultipliedColorLinear(tube_diffuse, SOURCE_MATTE_PREMULTIPLIED, HSM_DEFAULT_SRGB_GAMMA);
-		tube_diffuse.rgb = HSM_ApplyHSVAdjustment(tube_diffuse.rgb, HSM_TUBE_DIFFUSE_IMAGE_HUE, HSM_TUBE_DIFFUSE_IMAGE_SATURATION, HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS, HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON, HSM_TUBE_DIFFUSE_IMAGE_GAMMA);
-	}
-	tube_diffuse *= HSM_TUBE_DIFFUSE_IMAGE_OPACITY;
-	tube_diffuse.rgb *= night_lighting_image.rgb;
-
-
-	// Apply the CRT image additively to the tube diffuse color
-	out_color.a = in_color_with_gamma.a;
-	out_color = HSM_BlendModeLayerMix(tube_diffuse, out_color, BLEND_MODE_ADD, 1);
-
 	#ifdef IS_NO_REFLECT_PRESET
 	out_color.rgb *= HSM_Get_Screen_Black_Edge_Mask(SCREEN_COORD, false);
 
@@ -243,10 +243,10 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 		out_color += HSM_Get_Tube_Highlight(tube_curved_coord, false, TubeStaticReflectionImage, night_lighting_image);
 	#endif
 
-	#ifndef IS_NO_REFLECT_PRESET
+	// #ifndef IS_NO_REFLECT_PRESET
 	// Apply the final Gamma
 	out_color = HSM_Delinearize(out_color, HSM_DEFAULT_SRGB_GAMMA);
-	#endif
+	// #endif
 	
 		float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
 	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)

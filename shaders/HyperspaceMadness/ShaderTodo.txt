@@ -36,7 +36,7 @@ Changes:
   * Added Viewport vs Full scaling mode for images
     * Added Viewport and Full scaling mode for AmbientLightingImage
   * Intro Logo is now scaled nicely in Vertical and Dual Screen
-
+  * ColoredGelImage renamed to TubeColoredGelImage for consistency
 
   * BIG Changes to what each preset level does
     * ADV
