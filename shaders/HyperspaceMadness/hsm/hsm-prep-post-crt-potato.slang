@@ -60,7 +60,7 @@ layout(set = 0, binding = 8) uniform sampler2D BackgroundVertImage;
 layout(set = 0, binding = 11) uniform sampler2D MBZ_PostCRTPassFeedback;
 #define PassFeedback MBZ_PostCRTPassFeedback
 
-vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, vec2 screen_curved_coord, in sampler2D BackgroundImage, in sampler2D BackgroundVertImage)
+vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, vec2 VIEWPORT_COORD_TRANSFORMED, vec2 screen_curved_coord, in sampler2D BackgroundImage, in sampler2D BackgroundVertImage)
 { 
 	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(SCREEN_COORD, 1, SCREEN_SCALE, TUBE_SCALE, SCREEN_ASPECT, 1);
 	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
@@ -89,23 +89,26 @@ vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_CO
 		out_color *= vignette_factor;
 	}
 
-	out_color.rgb *= screen_mask;
-	out_color *= TUBE_MASK;
+	// TODO TUBE_SCALE seems to not be set properly so has the default value of 0.5 
+	// out_color.rgb *= screen_mask;
+	// out_color *= TUBE_MASK;
+
+	out_color *= screen_mask;
 
 	if (HSM_BG_OPACITY > 0)
 	{
 		//-----------------------------------------------------------------------------------------
 		// Background
 		//-----------------------------------------------------------------------------------------
-		BACKGROUND_CURVED_COORD = VIEWPORT_COORD;
+		vec2 bg_coord = VIEWPORT_COORD_TRANSFORMED;
 		// Correct image coordinate for image aspect ratio
-		BACKGROUND_CURVED_COORD.x = (BACKGROUND_CURVED_COORD.x - 0.5) / (HSM_GetAspectRatioFromMode(HSM_BG_TEXTURE_ASPECT_MODE, HSM_BG_EXPLICIT_TEXTURE_ASPECT) / (global.FinalViewportSize.x/global.FinalViewportSize.y)) + 0.5;
+		bg_coord.x = (bg_coord.x - 0.5) / (HSM_GetAspectRatioFromMode(HSM_BG_TEXTURE_ASPECT_MODE, HSM_BG_EXPLICIT_TEXTURE_ASPECT) / (global.FinalViewportSize.x/global.FinalViewportSize.y)) + 0.5;
 
 		vec4 bg_layer = vec4(0);
 		if (SCREEN_ASPECT > 1) 
-			bg_layer = texture(BackgroundImage, BACKGROUND_CURVED_COORD);
+			bg_layer = texture(BackgroundImage, bg_coord);
 		else
-			bg_layer = texture(BackgroundVertImage, BACKGROUND_CURVED_COORD);
+			bg_layer = texture(BackgroundVertImage, bg_coord);
 		bg_layer = HSM_Linearize(bg_layer, HSM_DEFAULT_SRGB_GAMMA);
 
 		bg_layer.rgb *= HSM_BG_BRIGHTNESS;
@@ -125,10 +128,8 @@ void main()
 {
 	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
-
-	vec2 screen_curved_coord = HSM_GetCurvedCoord(SCREEN_COORD, 1, SCREEN_ASPECT);
-	vec2 screen_curved_coord_expanded  = (screen_curved_coord - 0.5) * 0.9 + 0.5;
-	if (screen_curved_coord_expanded.x < -0.01 || screen_curved_coord_expanded.x > 1.01 || screen_curved_coord_expanded.y < -0.01 || screen_curved_coord_expanded.y > 1.01)
+	
+	if (SCREEN_COORD.x < -0.01 || SCREEN_COORD.x > 1.01 || SCREEN_COORD.y < -0.01 || SCREEN_COORD.y > 1.01)
 	{
 		vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
 		if (HSM_LIVE_UPDATE_ON < 0.5 && feedback_color_test.a < 0 && !HSM_CheckCacheInfoChanged())
@@ -140,8 +141,9 @@ void main()
 
 	FragColor = texture(Source, UNFLIPPED_VIEWPORT_COORD);
 
-	FragColor = HSM_GetPostCrtPreppedColorPotato(FragColor, vTexCoord, screen_curved_coord, BackgroundImage, BackgroundVertImage);
+	vec2 screen_curved_coord = HSM_GetCurvedCoord(SCREEN_COORD, 1, SCREEN_ASPECT);
+	FragColor = HSM_GetPostCrtPreppedColorPotato(FragColor, vTexCoord, viewportCoordTransformed, screen_curved_coord, BackgroundImage, BackgroundVertImage);
 
-if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
-	FragColor = vec4(0.01, 0.01, 0.01, -1);
+	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
+		FragColor = vec4(0.01, 0.01, 0.01, -1);
 }

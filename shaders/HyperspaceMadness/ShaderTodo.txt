@@ -75,6 +75,7 @@ Changes:
 Mega Bezel Still to Come:
 
 V1 TODO
+  * Fix Tube size cache for glass preset
   * Fix something wrong with Potato?
   * Add Web Link in Debug Info
   * Missing inner Edge static shading?

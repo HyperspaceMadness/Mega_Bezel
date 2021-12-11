@@ -9,7 +9,7 @@ layout(push_constant) uniform Push
 	float blendMode;
 } params;
 
-#pragma parameter blendMode "NTSC Blend Mode (Main Mode Control)" 1.0 0.0 2.0 1.0
+#pragma parameter blendMode "          NTSC Blend Mode - 0:SHARP | 1:STANDARD | 2:ORIGINAL" 1.0 0.0 2.0 1.0
 
 layout(std140, set = 0, binding = 0) uniform UBO
 {

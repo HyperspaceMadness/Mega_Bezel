@@ -303,14 +303,14 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
 {
     float col = 0.0;
     
-    float current_line_index = 14;
+    float current_line_index = 15;
 
     //Resolution Text
     printPos = vec2(2, 2.0 + STRHEIGHT(current_line_index));
     
     TEXT_MODE = NORMAL;  
 
-    // Title and Version
+    // Title
     col += GetChar(ch_spc, uv);
     col += GetChar(ch_M, uv);
     col += GetChar(ch_E, uv);
@@ -323,6 +323,8 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
     col += GetChar(ch_E, uv);
     col += GetChar(ch_L, uv);
     col += GetChar(ch_spc, uv);
+
+    // Version
     col += GetChar(ch_0, uv);
     col += GetChar(ch_per, uv);
     col += GetChar(ch_9, uv);
@@ -331,6 +333,8 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
     col += GetChar(ch_X, uv);
     col += GetChar(ch_X, uv);
     col += GetChar(ch_spc, uv);
+
+    // Date
     col += GetChar(ch_2, uv);
     col += GetChar(ch_0, uv);
     col += GetChar(ch_2, uv);
@@ -696,6 +700,60 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
     col += GetChar(ch_x, uv);
     col += GetChar(ch_spc, uv);
     col += print_integer(viewport_size.y,0, uv); 
+
+    //Web Path
+    current_line_index -= 1;
+    printPos = vec2(2, 2.0 + STRHEIGHT(current_line_index));
+
+    TEXT_MODE = NORMAL;  
+
+    // https://forums.libretro.com/t/hsm-mega-bezel-reflection-shader-feedback-and-updates
+    // More Info Search: Mega Bezel Feedback
+    col += GetChar(ch_spc, uv);
+    col += GetChar(ch_M, uv);
+    col += GetChar(ch_o, uv);
+    col += GetChar(ch_r, uv);
+    col += GetChar(ch_e, uv);
+    col += GetChar(ch_spc, uv);
+
+    col += GetChar(ch_I, uv);
+    col += GetChar(ch_n, uv);
+    col += GetChar(ch_f, uv);
+    col += GetChar(ch_o, uv);
+    col += GetChar(ch_spc, uv);
+
+    col += GetChar(ch_S, uv);
+    col += GetChar(ch_e, uv);
+    col += GetChar(ch_a, uv);
+    col += GetChar(ch_r, uv);
+    col += GetChar(ch_c, uv);
+    col += GetChar(ch_h, uv);
+    col += GetChar(ch_usc, uv);
+    col += GetChar(ch_spc, uv);
+
+    col += GetChar(ch_M, uv);
+    col += GetChar(ch_e, uv);
+    col += GetChar(ch_g, uv);
+    col += GetChar(ch_a, uv);
+    col += GetChar(ch_spc, uv);
+
+    col += GetChar(ch_B, uv);
+    col += GetChar(ch_e, uv);
+    col += GetChar(ch_z, uv);
+    col += GetChar(ch_e, uv);
+    col += GetChar(ch_l, uv);
+    col += GetChar(ch_spc, uv);
+
+    col += GetChar(ch_F, uv);
+    col += GetChar(ch_e, uv);
+    col += GetChar(ch_e, uv);
+    col += GetChar(ch_d, uv);
+    col += GetChar(ch_b, uv);
+    col += GetChar(ch_a, uv);
+    col += GetChar(ch_c, uv);
+    col += GetChar(ch_k, uv);
+    
+    TEXT_MODE = NORMAL;  
 
     return col;
 }

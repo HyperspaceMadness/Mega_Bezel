@@ -141,7 +141,7 @@ scale_y19 = 1.0
 float_framebuffer19 = true
 alias19 = BloomPass
 
-shader20 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-crt-guest-advanced-ntsc.slang
+shader20 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-crt-guest-advanced-ntsc-potato.slang
 filter_linear20 = true
 scale_type20 = viewport
 scale_x20 = 1.0

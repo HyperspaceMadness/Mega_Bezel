@@ -583,29 +583,30 @@ void main()
 		ntsc_processing_on = true;
 	#endif
 
+vec2 cache_bounds_coord = SCREEN_COORD;
+
 // If it's the potato preset render the whole frame
 #ifndef IS_POTATO_PRESET
-	if (HSM_CACHE_OUTSIDE_FRAME > 0.5)
-	{
-		// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
-		HSM_GetBezelCoords(SCREEN_COORD, 
-							SCREEN_SCALE, 
-							TUBE_SCALE, 
-							SCREEN_ASPECT, 
-							false,
-							BEZEL_OUTSIDE_SCALE,
-							BEZEL_OUTSIDE_COORD, 
-							BEZEL_OUTSIDE_CURVED_COORD, 
-							FRAME_OUTSIDE_CURVED_COORD);
-
-		FRAME_OUTSIDE_CURVED_COORD = (FRAME_OUTSIDE_CURVED_COORD - 0.5) * 0.9 + 0.5;
-		if (FRAME_OUTSIDE_CURVED_COORD.x < -0.01 || FRAME_OUTSIDE_CURVED_COORD.x > 1.01 || FRAME_OUTSIDE_CURVED_COORD.y < -0.01 || FRAME_OUTSIDE_CURVED_COORD.y > 1.01)
-		{
-				FragColor = vec4(0);
-				return;
-		}
-	}
+#ifndef IS_NO_REFLECT_PRESET
+	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
+	HSM_GetBezelCoords(SCREEN_COORD, 
+						SCREEN_SCALE, 
+						TUBE_SCALE, 
+						SCREEN_ASPECT, 
+						false,
+						BEZEL_OUTSIDE_SCALE,
+						BEZEL_OUTSIDE_COORD, 
+						BEZEL_OUTSIDE_CURVED_COORD, 
+						FRAME_OUTSIDE_CURVED_COORD);
+	cache_bounds_coord = (FRAME_OUTSIDE_CURVED_COORD - 0.5) * 0.9 + 0.5;
 #endif
+#endif
+
+	if (cache_bounds_coord.x < -0.01 || cache_bounds_coord.x > 1.01 || cache_bounds_coord.y < -0.01 || cache_bounds_coord.y > 1.01)
+	{
+			FragColor = vec4(0);
+			return;
+	}
 
 	float TATE = USE_VERTICAL_SCANLINES;
 

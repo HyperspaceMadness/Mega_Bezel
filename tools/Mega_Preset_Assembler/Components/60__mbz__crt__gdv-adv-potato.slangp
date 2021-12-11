@@ -1,0 +1,41 @@
+shaders = 5
+
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-gaussian_horizontal.slang
+filter_linear0 = true
+scale_type_x0 = absolute
+scale_x0 = 800.0
+scale_type_y0 = source
+scale_y0 = 1.0 
+float_framebuffer0 = true
+
+shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-gaussian_vertical.slang
+filter_linear1 = true
+scale_type_x1 = absolute
+scale_x1 = 800.0
+scale_type_y1 = absolute
+scale_y1 = 600.0
+float_framebuffer1 = true
+alias1 = GlowPass
+
+shader2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-bloom_horizontal.slang
+filter_linear2 = true
+scale_type_x2 = absolute
+scale_x2 = 800.0
+scale_type_y2 = absolute
+scale_y2 = 600.0 
+float_framebuffer2 = true
+
+shader3 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-bloom_vertical.slang
+filter_linear3 = true
+scale_type_x3 = source
+scale_x3 = 1.0
+scale_type_y3 = source
+scale_y3 = 1.0
+float_framebuffer3 = true
+alias3 = BloomPass
+
+shader4 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-crt-guest-advanced-potato.slang
+filter_linear4 = true
+scale_type4 = viewport
+scale_x4 = 1.0
+scale_y4 = 1.0
