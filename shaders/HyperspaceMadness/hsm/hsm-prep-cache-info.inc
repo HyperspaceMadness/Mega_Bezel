@@ -849,10 +849,8 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	vec2 screen_scale = HSM_GetScreenScale(screen_aspect, screen_pos_and_height.y, cropped_rotated_size);
 	vec2 tube_scale = vec2(0.5);
 
-	#ifdef HAS_BEZEL_PARAMS
 	tube_scale = HSM_GetTubeScale(screen_scale, screen_pos_and_height.y);
-	#endif
-
+	
 	vec2 pos_offset = HSM_GetPositionOffset(vec2(0.5, screen_pos_and_height.x), screen_scale);
 
 	vec2 rotated_core_preppezd_size = HSM_GetRotatedScreenCorePreppedSize(1);

@@ -571,5 +571,5 @@ float HSM_TOP_MIRROR_WRAP = global.HSM_TOP_MIRROR_WRAP;
 
 #pragma parameter HSM_RENDER_FOR_SIMPLIFIED_TITLE       "[ Render for Simplified Presets ]:" 1 0 1 1
 
-#pragma parameter HSM_RENDER_SIMPLE_MODE                "   Output Mode:  NORMAL | BLACK | PINK-S | PINK-T | MSK1 | MSK2" 0 0 5 1
+#pragma parameter HSM_RENDER_SIMPLE_MODE                "       Mode:  NORM|BLK-1|BLK-2|PNK-1|PNK-2|PNK-3|BW-1|BW-2|BW-3" 0 0 8 1
 float HSM_RENDER_SIMPLE_MODE = global.HSM_RENDER_SIMPLE_MODE;

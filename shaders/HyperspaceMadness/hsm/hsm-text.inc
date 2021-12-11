@@ -707,54 +707,6 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
 
     TEXT_MODE = NORMAL;  
 
-    // https://forums.libretro.com/t/hsm-mega-bezel-reflection-shader-feedback-and-updates
-    // More Info Search: Mega Bezel Feedback
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_M, uv);
-    col += GetChar(ch_o, uv);
-    col += GetChar(ch_r, uv);
-    col += GetChar(ch_e, uv);
-    col += GetChar(ch_spc, uv);
-
-    col += GetChar(ch_I, uv);
-    col += GetChar(ch_n, uv);
-    col += GetChar(ch_f, uv);
-    col += GetChar(ch_o, uv);
-    col += GetChar(ch_spc, uv);
-
-    col += GetChar(ch_S, uv);
-    col += GetChar(ch_e, uv);
-    col += GetChar(ch_a, uv);
-    col += GetChar(ch_r, uv);
-    col += GetChar(ch_c, uv);
-    col += GetChar(ch_h, uv);
-    col += GetChar(ch_usc, uv);
-    col += GetChar(ch_spc, uv);
-
-    col += GetChar(ch_M, uv);
-    col += GetChar(ch_e, uv);
-    col += GetChar(ch_g, uv);
-    col += GetChar(ch_a, uv);
-    col += GetChar(ch_spc, uv);
-
-    col += GetChar(ch_B, uv);
-    col += GetChar(ch_e, uv);
-    col += GetChar(ch_z, uv);
-    col += GetChar(ch_e, uv);
-    col += GetChar(ch_l, uv);
-    col += GetChar(ch_spc, uv);
-
-    col += GetChar(ch_F, uv);
-    col += GetChar(ch_e, uv);
-    col += GetChar(ch_e, uv);
-    col += GetChar(ch_d, uv);
-    col += GetChar(ch_b, uv);
-    col += GetChar(ch_a, uv);
-    col += GetChar(ch_c, uv);
-    col += GetChar(ch_k, uv);
-    
-    TEXT_MODE = NORMAL;  
-
     return col;
 }
 

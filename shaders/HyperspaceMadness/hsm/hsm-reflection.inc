@@ -250,15 +250,6 @@ void main()
 	crt_linear.rgb *= tube_edge_shadow_mult * (1 - outside_tube_mask_wider);
 	crt_linear.a = TUBE_MASK;
 
-	vec2 frame_outside_coord_ctr = FRAME_OUTSIDE_CURVED_COORD - 0.5;
-	float SHADOW_OUTSIDE_FRAME_MASK = 1 - HSM_GetCornerMask(frame_outside_coord_ctr * 1.01 + 0.5, SCREEN_ASPECT, HSM_FRM_OUTER_CORNER_RADIUS, 1);
-	OUTSIDE_FRAME_MASK = 1 - HSM_GetCornerMask(frame_outside_coord_ctr + 0.5, SCREEN_ASPECT, HSM_FRM_OUTER_CORNER_RADIUS, 1);
-	OUTSIDE_FRAME_MASK_FOR_IMAGE = 1 - HSM_GetCornerMask(frame_outside_coord_ctr * 0.999 + 0.5, SCREEN_ASPECT, HSM_FRM_OUTER_CORNER_RADIUS, 1);
-	// Get masks for shadows, from frame as well as sides and top and bottom of viewport
-	INSIDE_BEZEL_MASK = 1 - OUTSIDE_BEZEL_MASK;
-	BEZEL_MASK = INSIDE_BEZEL_MASK * outside_tube_mask;
-	float FRAME_AND_BEZEL_MASK = outside_tube_mask * (1 - OUTSIDE_FRAME_MASK);
-
 	float edge_highlight_mask = 0;
 
 	// ----------------------------------------------------

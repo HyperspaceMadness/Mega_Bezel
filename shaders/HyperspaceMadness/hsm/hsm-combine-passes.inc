@@ -120,9 +120,6 @@ void main()
 		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
 	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(SCREEN_COORD, 1, SCREEN_SCALE, TUBE_SCALE, SCREEN_ASPECT, 1);
 
-	TUBE_MASK =  HSM_GetCornerMask(tube_curved_coord, SCREEN_ASPECT, bezel_corner_radius, 0.99);
-	float TUBE_MASK_TRIM = HSM_GetCornerMask((tube_curved_coord - 0.5) * 1.003 + 0.5, SCREEN_ASPECT, bezel_corner_radius, 0.99);
-
 	if (HSM_RENDER_SIMPLE_MODE < 0.5)
 		out_color.rgb += crt_layer.rgb;
 
@@ -136,8 +133,16 @@ void main()
 		SCREEN_BLACK_EDGE_CURVED_COORD = HSM_GetCurvedCoord(SCREEN_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, SCREEN_ASPECT);
 		SCREEN_MASK = HSM_GetCornerMask(((SCREEN_BLACK_EDGE_CURVED_COORD - 0.5) * 1.001) + 0.5, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS * HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE, HSM_TUBE_BLACK_EDGE_SHARPNESS);
 
+		TUBE_MASK =  HSM_GetCornerMask(tube_curved_coord, SCREEN_ASPECT, bezel_corner_radius, 0.99);
+		// float TUBE_MASK_TRIM = HSM_GetCornerMask((tube_curved_coord - 0.5) * 1.003 + 0.5, SCREEN_ASPECT, bezel_corner_radius, 0.99);
+
+		OUTSIDE_FRAME_MASK = 1 - HSM_GetCornerMask(FRAME_OUTSIDE_CURVED_COORD, SCREEN_ASPECT, HSM_FRM_OUTER_CORNER_RADIUS, 1);
+
 		if ( HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_BLACK_TUBE )
 			FragColor = HSM_PreMultAlphaBlend(FragColor, vec4(0, 0, 0, 1) * (TUBE_MASK));
+
+		if ( HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_BLACK_TUBE_AND_OUTSIDE_FRAME )
+			FragColor = HSM_PreMultAlphaBlend(FragColor, vec4(0, 0, 0, 1) * (TUBE_MASK + OUTSIDE_FRAME_MASK));
 
 		if ( HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_PINK_SCREEN )
 			FragColor = HSM_PreMultAlphaBlend(FragColor, vec4(1, 0, 1, 1) * (SCREEN_MASK));
@@ -145,12 +150,19 @@ void main()
 		if ( HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_PINK_TUBE )
 			FragColor = HSM_PreMultAlphaBlend(FragColor, vec4(1, 0, 1, 1) * (TUBE_MASK));
 
-		if ( HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_OUTSIDE_TUBE_MASK )
-			FragColor = vec4(1 - TUBE_MASK);
+		if ( HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_PINK_TUBE_AND_OUTSIDE_FRAME )
+			FragColor = HSM_PreMultAlphaBlend(FragColor, vec4(1, 0, 1, 1) * (TUBE_MASK + OUTSIDE_FRAME_MASK));
 
 		if ( HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_OUTSIDE_SCREEN_MASK )
 			FragColor = vec4(1 - SCREEN_MASK);
-	}
+
+		if ( HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_OUTSIDE_TUBE_MASK )
+			FragColor = vec4(1 - TUBE_MASK);
+
+		if ( HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_BEZEL_AND_FRAME_MASK )
+			FragColor = vec4(1 - TUBE_MASK) - OUTSIDE_FRAME_MASK;
+
+}
 	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
 		FragColor = vec4(0.01, 0.01, 0.01, -1);
 		

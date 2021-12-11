@@ -89,12 +89,9 @@ vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_CO
 		out_color *= vignette_factor;
 	}
 
-	// TODO TUBE_SCALE seems to not be set properly so has the default value of 0.5 
-	// out_color.rgb *= screen_mask;
-	// out_color *= TUBE_MASK;
-
-	out_color *= screen_mask;
-
+	out_color.rgb *= screen_mask;
+	out_color *= TUBE_MASK;
+	
 	if (HSM_BG_OPACITY > 0)
 	{
 		//-----------------------------------------------------------------------------------------
