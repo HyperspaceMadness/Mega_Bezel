@@ -130,6 +130,9 @@ layout(push_constant) uniform Push
 #pragma parameter scangammaoffset "          Scanline Gamma Offset" 1 0.15 5.0 0.05
 #define scangammaoffset global.scangammaoffset
 
+#pragma parameter rolling_scan "          Rolling Scanlines" 0.0 -1.0 1.0 0.05
+#define rolling_scan        global.rolling_scan     // rolling scanlines
+
 #pragma parameter bogus_filtering "[ GDV - FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
 
 #pragma parameter h_sharp "          Horizontal sharpness -- h_sharp" 5.20 0.20 15.0 0.10
@@ -282,17 +285,17 @@ layout(set = 0, binding = 7) uniform sampler2D NtscPass;
 layout(set = 0, binding = 8) uniform sampler2D InfoCachePass;
 layout(set = 0, binding = 9) uniform sampler2D InfoCachePassFeedback;
 
-
-#ifdef IS_NTSC_PRESET
 #define eps 1e-8
-#else
-#define eps 1e-10 
-#endif
 
 float st(float x)
 {
 	return exp2(-10.0*x*x);
 } 
+
+float st1(float x)
+{
+	return exp2(-7.0*x*x);
+}
    
 float sw0(float x, float color, float scanline)
 {
@@ -1014,6 +1017,15 @@ if (!interb)
 
 	float f1 = f; 
 	float f2 = 1.0-f;
+
+	// HSM Removed	
+	// float scanpix = mix(SourceSize.x/OutputSize.x, SourceSize.y/OutputSize.y, float(notate));
+
+	// HSM Added
+	float scanpix = mix(SourceSize.x/(SCREEN_SCALE.x * OutputSize.x), SourceSize.y/(SCREEN_SCALE.y * OutputSize.y), float(notate));
+
+	f1 = fract(f1 + rolling_scan*float(global.FrameCount)*scanpix);
+	f2 = 1.0 - f1;
 	
 	if (gsl <  0.5) { wf1 = sw0(f1,creff1,shape1); wf2 = sw0(f2,creff2,shape2);} else
 	if (gsl == 1.0) { wf1 = sw1(f1,creff1,shape1); wf2 = sw1(f2,creff2,shape2);} else
@@ -1058,6 +1070,14 @@ if (!interb)
 	}
 	
 	color = gc(color1)*w1*cd1 + gc(color2)*w2*cd2;
+
+	if (abs(rolling_scan) > 0.025) 
+	{ 
+		wt1 = st1(f);
+		wt2 = st1(1.0-f);
+	    color00 = (color1*wt1 + color2*wt2)/(wt1+wt2);
+		color = gc(color00) * (w1 + w2);
+	}
 	
 	color = min(color, 1.0);
 }

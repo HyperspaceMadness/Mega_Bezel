@@ -57,7 +57,8 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float c_shape;
 	float barspeed;
 	float barintensity;   
-	float bardir;	
+	float bardir;
+	float rolling_scan;
 } global;
 
 
@@ -114,6 +115,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter spike "          Scanline Spike Removal" 1.0 0.0 2.0 0.10
 #define spike params.spike
+
+#pragma parameter rolling_scan "          Rolling Scanlines" 0.0 -1.0 1.0 0.05
+#define rolling_scan        global.rolling_scan     // rolling scanlines
 
 #pragma parameter bogus_filtering "[ FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
 
@@ -246,24 +250,19 @@ layout(set = 0, binding = 2) uniform sampler2D LinearizePass;
 layout(set = 0, binding = 3) uniform sampler2D AvgLumPass;
 layout(set = 0, binding = 4) uniform sampler2D GlowPass;
 layout(set = 0, binding = 5) uniform sampler2D BloomPass;
-
-#ifdef IS_NTSC_PRESET
-layout(set = 0, binding = 7) uniform sampler2D NtscPass;
-#else
-layout(set = 0, binding = 6) uniform sampler2D PrePass0;
 layout(set = 0, binding = 6) uniform sampler2D PrePass;
-#endif
 
-#ifdef IS_NTSC_PRESET
-#define eps 1e-8
-#else
 #define eps 1e-10 
-#endif
 
 float st(float x)
 {
 	return exp2(-10.0*x*x);
 } 
+
+float st1(float x)
+{
+	return exp2(-7.0*x*x);
+}
    
 float sw0(float x, float color, float scanline)
 {
@@ -426,19 +425,7 @@ vec3 Mask(vec2 pos, float mx)
 
 float SlotMask(vec2 pos, float m)
 {
-#ifdef IS_NTSC_PRESET
-bool slot_mask_off = slotmask == 0.0;
-#else
-bool slot_mask_off = (slotmask + slotmask1) == 0.0;
-#endif
-
-/* HSM Removed
 	if ((slotmask + slotmask1) == 0.0) return 1.0;
-*/
-// HSM Added
-	if (slot_mask_off)
-		return 1.0;
-// End Addition
 	else
 	{
 	pos = floor(pos/slotms);
@@ -733,7 +720,12 @@ if (!interb)
 
 	float f1 = f; 
 	float f2 = 1.0-f;
-	
+
+	float scanpix = mix(SourceSize.x/OutputSize.x, SourceSize.y/OutputSize.y, float(notate));
+
+	f1 = fract(f1 + rolling_scan*float(global.FrameCount)*scanpix);
+	f2 = 1.0 - f1;
+
 	if (gsl <  0.5) { wf1 = sw0(f1,creff1,shape1); wf2 = sw0(f2,creff2,shape2);} else
 	if (gsl == 1.0) { wf1 = sw1(f1,creff1,shape1); wf2 = sw1(f2,creff2,shape2);} else
 	                { wf1 = sw2(f1,creff1,shape1); wf2 = sw2(f2,creff2,shape2);}
@@ -777,6 +769,14 @@ if (!interb)
 	}
 	
 	color = gc(color1)*w1*cd1 + gc(color2)*w2*cd2;
+
+	if (abs(rolling_scan) > 0.025) 
+	{ 
+		wt1 = st1(f);
+		wt2 = st1(1.0-f);
+	    color00 = (color1*wt1 + color2*wt2)/(wt1+wt2);
+		color = gc(color00) * (w1 + w2);
+	}
 	
 	color = min(color, 1.0);
 }

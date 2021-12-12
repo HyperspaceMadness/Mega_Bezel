@@ -10,7 +10,7 @@ Changes:
   * Added Negative Cropping
   * Guest DrVenom
     * New Guest-DrVenom NTSC preset added
-    * Updated Guest shaders to crt-guest-advanced-2021-10-10-release1
+    * Updated Guest shaders to crt-guest-advanced-2021-10-22-release1
     * Scanline Gamma is on all GDV presets and is a 1 based gamma adjustment
   * Fixed ZFast Cropping
   * Put Vignette in Post-CRT pass, Turn off Grade Vignette by default
@@ -75,9 +75,7 @@ Changes:
 Mega Bezel Still to Come:
 
 V1 TODO
-  * Fix Tube size cache for glass preset
-  * Fix something wrong with Potato?
-  * Add Web Link in Debug Info
+  * Add global Static Brightness
   * Missing inner Edge static shading?
   * Pink outside frame options?
 

@@ -524,6 +524,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	// Guest-Dr-Venom Params
 	float blendMode;
 	float scangammaoffset;
+	float rolling_scan;
 	float slotmask;
 	float slotmask1;
 
