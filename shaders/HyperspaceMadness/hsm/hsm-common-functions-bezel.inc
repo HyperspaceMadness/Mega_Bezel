@@ -168,7 +168,7 @@ vec4 HSM_Get_Tube_Highlight(vec2 tube_curved_coord, bool apply_to_mirror, in sam
 
 		out_color = HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY * tube_highlight_image * tube_highlight_image.a;
 	}
-	return out_color;
+	return HSM_GLOBAL_GRAPHICS_BRIGHTNESS * out_color;
 }
 
 

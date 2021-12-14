@@ -105,6 +105,8 @@ void main()
 	}
 
 	vec4 out_color = texture(BR_LayersUnderCRTPass, vTexCoord);
+	out_color.rgb *= HSM_GLOBAL_GRAPHICS_BRIGHTNESS;
+
 	vec4 crt_layer = texture(MiddlePass, vTexCoord);
 	#ifdef IS_NO_REFLECT_PRESET
 		crt_layer = HSM_Linearize(crt_layer, HSM_DEFAULT_SRGB_GAMMA);
@@ -124,6 +126,7 @@ void main()
 		out_color.rgb += crt_layer.rgb;
 
 	vec4 over_layer = texture(BR_LayersOverCRTPass, vTexCoord);
+	over_layer.rgb *= HSM_GLOBAL_GRAPHICS_BRIGHTNESS;
 	out_color = HSM_PreMultAlphaBlend(out_color, over_layer);
 
 	FragColor = HSM_ApplyGamma(clamp(out_color, 0, 1), HSM_DEFAULT_SRGB_GAMMA);
@@ -162,7 +165,7 @@ void main()
 		if ( HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_BEZEL_AND_FRAME_MASK )
 			FragColor = vec4(1 - TUBE_MASK) - OUTSIDE_FRAME_MASK;
 
-}
+	}
 	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
 		FragColor = vec4(0.01, 0.01, 0.01, -1);
 		

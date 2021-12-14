@@ -501,6 +501,8 @@ float HSM_GetParameterSum()
 {
 	float out_sum = (0
 
+					+ HSM_GLOBAL_GRAPHICS_BRIGHTNESS * 100
+					
 					// Night Lighting
 					+ HSM_AMBIENT_LIGHTING_OPACITY * 100
 					+ abs(HSM_AMBIENT_LIGHTING_HUE) * 360

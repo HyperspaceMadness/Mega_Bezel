@@ -39,6 +39,15 @@ float HSM_SHOW_AUTO_UPDATE_INDICATOR = global.HSM_SHOW_AUTO_UPDATE_INDICATOR;
 float HSM_CACHE_OUTSIDE_FRAME = 1;
 
 //---------------------------------------------------------------------------------------------------
+//    Global Graphics Brightness
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_GLOBAL_GRAPHICS_BRIGHTNESS_TITLE          "[ GLOBAL GRAPHICS BRIGHTNESS ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_GLOBAL_GRAPHICS_BRIGHTNESS               "          Graphics Brightness"  100 0 200 1
+float HSM_GLOBAL_GRAPHICS_BRIGHTNESS = global.HSM_GLOBAL_GRAPHICS_BRIGHTNESS / 100;
+
+
+//---------------------------------------------------------------------------------------------------
 //    NIGHT LIGHTING
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_AMBIENT_LIGHTING_TITLE          "[ AMBIENT LIGHTING ]:" 0 0 0.01 0.01
