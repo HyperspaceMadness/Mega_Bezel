@@ -25,15 +25,6 @@
 #define HAS_IMAGE_LAYER_PARAMS
 
 //---------------------------------------------------------------------------------------------------
-//    IMAGES GAMMA
-//---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_STATIC_GAMMA_TITLE        "[ IMAGE LAYER GAMMA ]:" 0 0 0.01 0.01
-
-#pragma parameter HSM_STATIC_LAYERS_GAMMA		"          Image Layers Gamma Adjust" 1 0.01 5 0.01
-float HSM_STATIC_LAYERS_GAMMA = global.HSM_STATIC_LAYERS_GAMMA;
-
-
-//---------------------------------------------------------------------------------------------------
 //    IMAGE LAYERING START
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_LAYER_ORDER_TITLE			  "[ LAYER ORDER ]:" 0 0 0.01 0.01

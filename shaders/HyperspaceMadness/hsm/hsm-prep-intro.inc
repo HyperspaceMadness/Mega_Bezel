@@ -309,7 +309,9 @@ void main()
       FragColor = GetColorWithIntro(FragColor, viewport_coord_adjusted);
 #endif
 
-   bool show_update_indicator = HSM_LIVE_UPDATE_ON == 1 || HSM_SHOW_AUTO_UPDATE_INDICATOR > 0.5 && HSM_CheckCacheInfoChanged();
+   bool cache_info_changed = HSM_CheckCacheInfoChanged();
+   bool cache_updated = cache_info_changed || HSM_CACHE_GRAPHICS_ON == 0;
+   bool show_update_indicator = (HSM_CACHE_UPDATE_INDICATOR_MODE == 2 && HSM_CACHE_GRAPHICS_ON == 0) || (HSM_CACHE_UPDATE_INDICATOR_MODE == 1 && cache_info_changed);
 
 	if (show_update_indicator)
 	{

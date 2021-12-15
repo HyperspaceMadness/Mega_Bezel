@@ -37,6 +37,7 @@ Changes:
     * Added Viewport and Full scaling mode for AmbientLightingImage
   * Intro Logo is now scaled nicely in Vertical and Dual Screen
   * ColoredGelImage renamed to TubeColoredGelImage for consistency
+  * Added graphics global brightness so Mega Bezel can be used with "Dark" presets which try to preserve phosphors and then user increases monitor brightness
 
   * BIG Changes to what each preset level does
     * ADV
@@ -75,9 +76,11 @@ Changes:
 Mega Bezel Still to Come:
 
 V1 TODO
-  * Add global Static Brightness
+
+  * Reorg Community CRT Presets
   * Missing inner Edge static shading?
   * Pink outside frame options?
+  * Guess White/Black Matting?
 
   * ZFast Curvature
   

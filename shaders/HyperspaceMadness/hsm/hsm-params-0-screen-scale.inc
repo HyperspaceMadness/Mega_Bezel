@@ -28,23 +28,29 @@
 #pragma parameter HSM_RESOLUTION_DEBUG_ON							"          Show Resolution Info" 0 0 1 1
 float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
 
-#pragma parameter HSM_LIVE_UPDATE_ON								"          Live Update Image Layers: OFF | ON | ON NO INDICATOR" 0 0 2 1
-float HSM_LIVE_UPDATE_ON = global.HSM_LIVE_UPDATE_ON;
-
-#pragma parameter HSM_SHOW_AUTO_UPDATE_INDICATOR					"          Show Indicator on Auto Cache Update" 0 0 1 1
-float HSM_SHOW_AUTO_UPDATE_INDICATOR = global.HSM_SHOW_AUTO_UPDATE_INDICATOR;
-
-// #pragma parameter HSM_CACHE_OUTSIDE_FRAME						"          Cache Outside Frame: OFF | ON" 1 0 1 1
-// float HSM_CACHE_OUTSIDE_FRAME = global.HSM_CACHE_OUTSIDE_FRAME;
-float HSM_CACHE_OUTSIDE_FRAME = 1;
 
 //---------------------------------------------------------------------------------------------------
 //    Global Graphics Brightness
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_GLOBAL_GRAPHICS_BRIGHTNESS_TITLE          "[ GLOBAL GRAPHICS BRIGHTNESS ]:" 0 0 0.01 0.01
+#pragma parameter HSM_GLOBAL_GRAPHICS_CACHE_TITLE                   "[ GRAPHICS CACHE ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_GLOBAL_GRAPHICS_BRIGHTNESS               "          Graphics Brightness"  100 0 200 1
+#pragma parameter HSM_CACHE_GRAPHICS_ON							    "          Cache Graphics: OFF | ON" 1 0 1 1
+float HSM_CACHE_GRAPHICS_ON = global.HSM_CACHE_GRAPHICS_ON;
+
+#pragma parameter HSM_CACHE_UPDATE_INDICATOR_MODE					"         Cache Update Indicator: OFF | ON | ONLY WHEN CACHE OFF" 2 0 2 1
+float HSM_CACHE_UPDATE_INDICATOR_MODE = global.HSM_CACHE_UPDATE_INDICATOR_MODE;
+
+
+//---------------------------------------------------------------------------------------------------
+//    Global Graphics Brightness
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_GLOBAL_GRAPHICS_BRIGHTNESS_TITLE          "[ GRAPHICS GLOBAL BRIGHTNESS ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_GLOBAL_GRAPHICS_BRIGHTNESS                "          Graphics Brightness"  100 0 200 1
 float HSM_GLOBAL_GRAPHICS_BRIGHTNESS = global.HSM_GLOBAL_GRAPHICS_BRIGHTNESS / 100;
+
+#pragma parameter HSM_STATIC_LAYERS_GAMMA		                "          Graphics Gamma Adjust" 1 0.01 5 0.01
+float HSM_STATIC_LAYERS_GAMMA = global.HSM_STATIC_LAYERS_GAMMA;
 
 
 //---------------------------------------------------------------------------------------------------

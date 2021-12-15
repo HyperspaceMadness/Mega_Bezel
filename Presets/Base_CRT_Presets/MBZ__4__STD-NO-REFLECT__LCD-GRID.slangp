@@ -158,7 +158,7 @@ DeviceVertImage_linear = true
 DecalImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 DecalImage_linear = true
 
-NightLightingImage = ../../shaders/HyperspaceMadness/textures/NightLighting_3840x2160.jpg
+NightLightingImage = ../../shaders/HyperspaceMadness/textures/NightLighting_1920x1080.png
 NightLightingImage_linear = true
 
 LEDImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png

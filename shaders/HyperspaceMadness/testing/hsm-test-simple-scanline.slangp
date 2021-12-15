@@ -95,6 +95,6 @@ TubeStaticReflectionImage = shaders/HyperspaceMadness/textures/TubeGlassOverlayI
 DeviceImage = shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 DeviceVertImage = shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 DecalImage = shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
-NightLightingImage = shaders/HyperspaceMadness/textures/NightLighting_3840x2160.jpg
+NightLightingImage = shaders/HyperspaceMadness/textures/NightLighting_1920x1080.png
 LEDImage = shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 TopLayerImage = shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
