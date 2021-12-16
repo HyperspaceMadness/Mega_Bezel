@@ -198,7 +198,7 @@ TubeStaticReflectionImage_linear = true
 TubeDiffuseImage = ../../shaders/HyperspaceMadness/textures/Tube_Diffuse_2390x1792.png
 TubeDiffuseImage_linear = true
 
-TubeColoredGelImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+TubeColoredGelImage = ../../shaders/HyperspaceMadness/textures/Colored_Gel_Rainbow.png
 TubeColoredGelImage_linear = true
 
 ReflectionMaskImage = ../../shaders/HyperspaceMadness/textures/Placeholder_White_16x16.png

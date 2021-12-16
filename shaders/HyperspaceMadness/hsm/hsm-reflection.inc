@@ -413,18 +413,18 @@ void main()
 	// It must be a little wider than the inside of the bezel so we don't see a gap
 	crt_linear = HSM_PreMultAlphaBlend(vec4(0, 0, 0, 1 - outside_tube_mask_wider), crt_linear);
 
-	// Add a Colored Gel image on top of the screen, this is what colors games like space invaders or battlezone
-	if (HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT > 0)
-	{
-		float black_edge_mask = TUBE_MASK * (1 - SCREEN_MASK);
+	// // Add a Colored Gel image on top of the screen, this is what colors games like space invaders or battlezone
+	// if (HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT > 0)
+	// {
+	// 	float black_edge_mask = TUBE_MASK * (1 - SCREEN_MASK);
 		
-		vec4 gel_image = texture(TubeColoredGelImage, tube_curved_coord);
-		gel_image = HSM_Linearize(gel_image, HSM_DEFAULT_SRGB_GAMMA);
-		gel_image *= black_edge_mask;
+	// 	vec4 gel_image = texture(TubeColoredGelImage, tube_curved_coord);
+	// 	gel_image = HSM_Linearize(gel_image, HSM_DEFAULT_SRGB_GAMMA);
+	// 	gel_image *= black_edge_mask;
 
-		if (HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT > 0)
-			crt_linear += gel_image * gel_image.a * HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT;
-	}
+	// 	if (HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT > 0)
+	// 		crt_linear += gel_image * gel_image.a * HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT;
+	// }
 
 	// TUBE HIGHLIGHT
 	if (HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY > 0)

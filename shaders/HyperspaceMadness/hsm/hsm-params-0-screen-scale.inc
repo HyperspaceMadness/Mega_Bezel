@@ -526,16 +526,16 @@ float HSM_TUBE_DIFFUSE_IMAGE_GAMMA = global.HSM_TUBE_DIFFUSE_IMAGE_GAMMA;
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_TUBE_IMAGES_TITLE								"[ TUBE COLORED GEL IMAGE ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_ON  					"          Use Tube Colored Gel - OFF | ON" 1 0 1 1
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_ON  					"          Use Tube Colored Gel - OFF | ON" 0 0 1 1
 float HSM_TUBE_COLORED_GEL_IMAGE_ON = global.HSM_TUBE_COLORED_GEL_IMAGE_ON;
 
-#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT  		"          Multiply Blend Amount" 0 0 100 1
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT  		"          Multiply Blend Amount" 90 0 100 1
 float HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT = global.HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT / 100;
 
 #pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT  		"          Additive Blend Amount" 0 0 100 0.05
 float HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT = global.HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT / 100;
 
-#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT  		"          Normal Blend Amount" 0 0 100 1
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT  		"          Normal Blend Amount" 15 0 100 1
 float HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT = global.HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT / 100;
 
 #pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_BRIGHTNESS  	"          Normal Blend Brightness" 100 0 200 1

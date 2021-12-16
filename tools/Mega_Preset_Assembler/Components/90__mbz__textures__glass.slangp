@@ -22,7 +22,7 @@ TubeStaticReflectionImage_linear = true
 TubeDiffuseImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Tube_Diffuse_2390x1792.png
 TubeDiffuseImage_linear = true
 
-TubeColoredGelImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+TubeColoredGelImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Colored_Gel_Rainbow.png
 TubeColoredGelImage_linear = true
 
 ReflectionMaskImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_White_16x16.png
