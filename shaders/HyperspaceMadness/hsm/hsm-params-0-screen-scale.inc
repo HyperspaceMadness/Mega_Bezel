@@ -311,6 +311,37 @@ float HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = global.HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR
 
 
 //---------------------------------------------------------------------------------------------------
+//    CURVATURE
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_CURVATURE_TITLE								"[ CURVATURE ]:" 0 0 0.01 0.01
+
+// #pragma parameter HSM_USE_GEOM 										"          Use Geom Curvature" 0 -1 3 1
+// float HSM_USE_GEOM = global.HSM_USE_GEOM;
+// float HSM_USE_GEOM = 0;
+
+#pragma parameter HSM_CURVATURE_MODE 								"       Curvature Mode  OFF | 2D | 2D-CYL | 3D-1 | 3D-2 | 3D CYL" 1 0 5 1
+float HSM_CURVATURE_MODE = global.HSM_CURVATURE_MODE;
+
+#pragma parameter HSM_CURVATURE_2D_SCALE_LONG_AXIS 					"          2D Curvature on Long Axis" 100 5 400 5
+#define HSM_CURVATURE_2D_SCALE_LONG_AXIS global.HSM_CURVATURE_2D_SCALE_LONG_AXIS / 100
+
+#pragma parameter HSM_CURVATURE_2D_SCALE_SHORT_AXIS 				"          2D Curvature on Short Axis" 100 5 400 5
+#define HSM_CURVATURE_2D_SCALE_SHORT_AXIS global.HSM_CURVATURE_2D_SCALE_SHORT_AXIS / 100
+
+#pragma parameter HSM_CURVATURE_3D_RADIUS 							"          3D Radius" 200 16 102400 1
+float HSM_CURVATURE_3D_RADIUS = global.HSM_CURVATURE_3D_RADIUS / 100;
+
+#pragma parameter HSM_CURVATURE_3D_VIEW_DIST 						"          3D View Distance - Def 150" 150 50 102400 5
+float HSM_CURVATURE_3D_VIEW_DIST = global.HSM_CURVATURE_3D_VIEW_DIST / 100;
+
+#pragma parameter HSM_CURVATURE_3D_TILT_ANGLE_X 					"          3D Tilt Angle X" 0 -120 120 1
+float HSM_CURVATURE_3D_TILT_ANGLE_X = global.HSM_CURVATURE_3D_TILT_ANGLE_X / 100;
+
+#pragma parameter HSM_CURVATURE_3D_TILT_ANGLE_Y 					"          3D Tilt Angle Y" 0 -120 120 1
+float HSM_CURVATURE_3D_TILT_ANGLE_Y = global.HSM_CURVATURE_3D_TILT_ANGLE_Y / 100;
+
+
+//---------------------------------------------------------------------------------------------------
 //    DUAL SCREEN
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_DUALSCREEN_TITLE								"[ DUAL SCREEN ]:" 0 0 0.01 0.01
@@ -369,37 +400,6 @@ float HSM_2ND_SCREEN_CROP_PERCENT_LEFT = global.HSM_2ND_SCREEN_CROP_PERCENT_LEFT
 #pragma parameter HSM_2ND_SCREEN_CROP_PERCENT_RIGHT 							"          2nd Screen Crop Right %" 0 -10 100 0.1
 float HSM_2ND_SCREEN_CROP_PERCENT_RIGHT = global.HSM_2ND_SCREEN_CROP_PERCENT_RIGHT / 100;
 
-
-
-//---------------------------------------------------------------------------------------------------
-//    CURVATURE
-//---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_CURVATURE_TITLE								"[ CURVATURE ]:" 0 0 0.01 0.01
-
-// #pragma parameter HSM_USE_GEOM 										"          Use Geom Curvature" 0 -1 3 1
-// float HSM_USE_GEOM = global.HSM_USE_GEOM;
-// float HSM_USE_GEOM = 0;
-
-#pragma parameter HSM_CURVATURE_MODE 								"       Curvature Mode  OFF | 2D | 2D-CYL | 3D-1 | 3D-2 | 3D CYL" 1 0 5 1
-float HSM_CURVATURE_MODE = global.HSM_CURVATURE_MODE;
-
-#pragma parameter HSM_CURVATURE_2D_SCALE_LONG_AXIS 					"          2D Curvature on Long Axis" 100 5 400 5
-#define HSM_CURVATURE_2D_SCALE_LONG_AXIS global.HSM_CURVATURE_2D_SCALE_LONG_AXIS / 100
-
-#pragma parameter HSM_CURVATURE_2D_SCALE_SHORT_AXIS 				"          2D Curvature on Short Axis" 100 5 400 5
-#define HSM_CURVATURE_2D_SCALE_SHORT_AXIS global.HSM_CURVATURE_2D_SCALE_SHORT_AXIS / 100
-
-#pragma parameter HSM_CURVATURE_3D_RADIUS 							"          3D Radius" 200 16 102400 1
-float HSM_CURVATURE_3D_RADIUS = global.HSM_CURVATURE_3D_RADIUS / 100;
-
-#pragma parameter HSM_CURVATURE_3D_VIEW_DIST 						"          3D View Distance - Def 150" 150 50 102400 5
-float HSM_CURVATURE_3D_VIEW_DIST = global.HSM_CURVATURE_3D_VIEW_DIST / 100;
-
-#pragma parameter HSM_CURVATURE_3D_TILT_ANGLE_X 					"          3D Tilt Angle X" 0 -120 120 1
-float HSM_CURVATURE_3D_TILT_ANGLE_X = global.HSM_CURVATURE_3D_TILT_ANGLE_X / 100;
-
-#pragma parameter HSM_CURVATURE_3D_TILT_ANGLE_Y 					"          3D Tilt Angle Y" 0 -120 120 1
-float HSM_CURVATURE_3D_TILT_ANGLE_Y = global.HSM_CURVATURE_3D_TILT_ANGLE_Y / 100;
 
 
 //---------------------------------------------------------------------------------------------------
@@ -500,10 +500,13 @@ float HSM_SCREEN_REFLECTION_POS_Y = global.HSM_SCREEN_REFLECTION_POS_Y / 600;
 //---------------------------------------------------------------------------------------------------
 //    TUBE DIFFUSE COLOR
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_TITLE								"[ TUBE DIFFUSE IMAGE ]:" 0 0 0.01 0.01
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_TITLE								"[ TUBE DIFFUSE COLOR ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_OPACITY                  "          Opacity" 100 0 100 0.1
 float HSM_TUBE_DIFFUSE_IMAGE_OPACITY = global.HSM_TUBE_DIFFUSE_IMAGE_OPACITY / 100;
+
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_ON  					  "          Use Tube Diffuse Image - OFF | ON" 0 0 1 1
+float HSM_TUBE_DIFFUSE_IMAGE_ON = global.HSM_TUBE_DIFFUSE_IMAGE_ON;
 
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON              "          Colorize On" 0 0 1 1
 float HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON = global.HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON;
@@ -514,7 +517,7 @@ float HSM_TUBE_DIFFUSE_IMAGE_HUE = global.HSM_TUBE_DIFFUSE_IMAGE_HUE / 360;
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_SATURATION                "          Saturation" 100 0 200 1
 float HSM_TUBE_DIFFUSE_IMAGE_SATURATION = global.HSM_TUBE_DIFFUSE_IMAGE_SATURATION / 100;
 
-#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS                "          Brightness (Suggested 20)" 0 0 200 1
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS                "          Brightness" 60 0 200 1
 float HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS = global.HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS / 100;
 
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_GAMMA                     "          Gamma Adjust" 1 0 5 0.01

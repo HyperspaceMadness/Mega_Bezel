@@ -194,7 +194,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	
 	// TubeDiffuseImage
 	vec4 tube_diffuse = vec4(0, 0, 0, 1);
-	if (HSM_TUBE_DIFFUSE_IMAGE_OPACITY > 0.5 && HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS > 0)
+	if (HSM_TUBE_DIFFUSE_IMAGE_ON > 0.5)
 	{
 		tube_diffuse = texture(TubeDiffuseImage, mirrored_tube_coord);
 		tube_diffuse = HSM_GLOBAL_GRAPHICS_BRIGHTNESS * HSM_GetPreMultipliedColorLinear(tube_diffuse, SOURCE_MATTE_PREMULTIPLIED, HSM_DEFAULT_SRGB_GAMMA);
