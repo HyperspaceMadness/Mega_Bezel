@@ -26,8 +26,9 @@ Changes:
   * Viewport Zoom & Position
   * Add option for Black and White placement image requested by @briball
   * Parameter USE_IMAGE_FOR_PLACEMENT renamed to HSM_USE_IMAGE_FOR_PLACEMENT
-  * NIGHT LIGHTING renamed to AMBIENT LIGHTING
-  * AMBIENT LIGHTING now affects tube static reflection
+  * Night Lighting / Ambient Lighting
+    * NIGHT LIGHTING renamed to AMBIENT LIGHTING
+    * AMBIENT LIGHTING now affects tube static reflection
   * Tube Diffuse image added, so you can show the phosphor surface if desired
   * Noise can now be turned on/off separately from deconvergence
   * Added 2D Cylindrical Curvature mode, 
@@ -38,6 +39,9 @@ Changes:
   * Intro Logo is now scaled nicely in Vertical and Dual Screen
   * ColoredGelImage renamed to TubeColoredGelImage for consistency
   * Added graphics global brightness so Mega Bezel can be used with "Dark" presets which try to preserve phosphors and then user increases monitor brightness
+  * Community_CRT_Variations presets added (Moved from Experimental) includes:
+    * BendBombBoom Presets
+    * NESGuy presets
 
   * BIG Changes to what each preset level does
     * ADV
@@ -77,7 +81,6 @@ Mega Bezel Still to Come:
 
 V1 TODO
 
-  * Reorg Community CRT Presets
   * Missing inner Edge static shading?
   * Pink outside frame options?
   * Guess White/Black Matting?
