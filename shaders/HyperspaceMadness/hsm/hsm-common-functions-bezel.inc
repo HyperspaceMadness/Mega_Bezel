@@ -142,7 +142,7 @@ vec4 HSM_Get_Tube_Highlight(vec2 tube_curved_coord, bool apply_to_mirror, in sam
 	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
 		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
 
-	if (HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY > 0)
+	if (HSM_TUBE_STATIC_REFLECTION_IMAGE_ON > 0.5)
 	{
 		vec2 tube_highlight_coord = (mirrored_tube_coord - 0.5) / HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE + 0.5;
 

@@ -425,6 +425,7 @@ float HSM_CRT_ORIGINAL_AB_COMPARE_ON = global.HSM_CRT_ORIGINAL_AB_COMPARE_ON;
 #pragma parameter HSM_CRT_ORIGINAL_AB_COMPARE_SPLIT_POSITION   		"          Splitscreen Position" 50 0 100 0.2
 float HSM_CRT_ORIGINAL_AB_COMPARE_SPLIT_POSITION = global.HSM_CRT_ORIGINAL_AB_COMPARE_SPLIT_POSITION / 100;
 
+
 //---------------------------------------------------------------------------------------------------
 //    CRT Layer
 //---------------------------------------------------------------------------------------------------
@@ -556,7 +557,10 @@ float HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL = global.HSM_SHOW_CRT_ON_TOP_OF_COLORED
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_TITLE			"[ TUBE STATIC REFLECTION IMAGE ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY  		"          Opacity" 0 0 100 0.1
+#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_ON  					"          Use Tube Static Reflection Image - OFF | ON" 0 0 1 1
+float HSM_TUBE_STATIC_REFLECTION_IMAGE_ON = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_ON;
+
+#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY  		"          Opacity" 10 0 100 0.1
 float HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY / 100;
 
 #pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING "          Ambient Lighting Multiplier" 100 0 100 1

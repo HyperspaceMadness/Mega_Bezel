@@ -427,7 +427,7 @@ void main()
 	// }
 
 	// TUBE HIGHLIGHT
-	if (HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY > 0)
+	if (HSM_TUBE_STATIC_REFLECTION_IMAGE_ON > 0.5)
 	{
 		vec4 night_lighting_image = vec4(1);
 		if (HSM_AMBIENT_LIGHTING_OPACITY > 0)

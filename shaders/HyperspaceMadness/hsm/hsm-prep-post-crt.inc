@@ -240,7 +240,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	out_color.rgb *= HSM_Get_Screen_Black_Edge_Mask(SCREEN_COORD, false);
 
 	// TUBE HIGHLIGHT
-	if (HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY > 0)
+	if (HSM_TUBE_STATIC_REFLECTION_IMAGE_ON > 0.5)
 		out_color += HSM_Get_Tube_Highlight(tube_curved_coord, false, TubeStaticReflectionImage, night_lighting_image);
 	#endif
 

@@ -1,0 +1,11 @@
+shaders = 2
+
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm/hsm-delinearize.slang
+
+shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-gdarius-gdv-mini.slang
+scale_type1 = viewport
+scale_x1 = 1.0
+scale_y1 = 1.0
+filter_linear1 = true
+
+g_sat = 0.15

@@ -42,6 +42,8 @@ Changes:
   * Community_CRT_Variations presets added (Moved from Experimental) includes:
     * BendBombBoom Presets
     * NESGuy presets
+  * On/Off for some effects, which will be off by default like Tube Static Reflection Image
+
 
   * BIG Changes to what each preset level does
     * ADV
@@ -87,8 +89,9 @@ V1 TODO
   * Check if Downsample range needs to be fixed to core res
   * Check on Tube Transparency
 
-  * ZFast Curvature
   
+  Post V1
+  * Mega Back Light ala philips Hue/Ambient
   * Fix Corner Shading
   * Good Preset for FBNeo & Instructions
   * Swap option for Blurry and Sharp Tube Reflection
@@ -98,7 +101,6 @@ V1 TODO
   * Add NTSC Adaptive Preset?
   * Add Variations CRT Royale Glass & Advanced
   * Add vscode link in readme [![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/organization/repository)
-  * Get Intro to play on shader Load?
   * Do some more OrionsAngel Presets with new Mega_Bezel
   * Add option for core res fake scanlines
 
