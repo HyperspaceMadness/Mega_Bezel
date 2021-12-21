@@ -315,4 +315,4 @@ g_vignette = "0.0"
 
 // Easymode Parameters
 HSM_GAMMA_OUT_CRT = 2.2
-HSM_POST_CRT_BRIGHTNESS = 90
+HSM_POST_CRT_BRIGHTNESS = 75

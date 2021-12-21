@@ -21,8 +21,6 @@
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
    
 */
-#include "../hsm/hsm-params-2-bezel.inc"
-#include "../hsm/hsm-common-functions-bezel.inc"
 
 layout(push_constant) uniform Push
 {
@@ -71,7 +69,7 @@ layout(push_constant) uniform Push
 } params;
 
 #pragma parameter ntsc_title 	   "[ GDV - NTSC ]:" 0.0 0.0 1.0 1.0
-#pragma parameter blendMode        "          NTSC Blend Mode (Main Mode Control)" 1.0 0.0 2.0 1.0
+#pragma parameter blendMode 		"          NTSC Blend Mode - 0:SHARP | 1:STANDARD | 2:ORIGINAL" 1.0 0.0 2.0 1.0
 
 #pragma parameter bogus_brightness "[ GDV - BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
@@ -586,7 +584,7 @@ void main()
 		ntsc_processing_on = true;
 	#endif
 
-vec2 cache_bounds_coord = SCREEN_COORD;
+	vec2 cache_bounds_coord = SCREEN_COORD;
 
 // If it's the potato preset render the whole frame
 #ifndef IS_POTATO_PRESET

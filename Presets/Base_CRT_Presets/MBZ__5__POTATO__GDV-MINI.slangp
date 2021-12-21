@@ -40,7 +40,7 @@ srgb_framebuffer5 = true
 // Color Correction with Dogway's awesome Grade shader
 shader6 = ../../shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
 
-shader7 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-gdarius-gdv-mini.slang
+shader7 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-gdarius-gdv-mini-potato.slang
 scale_type7 = viewport
 scale_x7 = 1.0
 scale_y7 = 1.0

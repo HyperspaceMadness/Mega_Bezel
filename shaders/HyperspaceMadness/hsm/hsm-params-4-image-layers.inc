@@ -140,12 +140,6 @@ float HSM_BG_DUALSCREEN_VIS_MODE = global.HSM_BG_DUALSCREEN_VIS_MODE;
 #pragma parameter HSM_BG_APPLY_ADJUSTMENT         "          Apply NightLight & Static Gamma (0 for Backdrop)"  1 0 1 1
 float HSM_BG_APPLY_ADJUSTMENT = global.HSM_BG_APPLY_ADJUSTMENT;
 
-#pragma parameter HSM_BG_TEXTURE_ASPECT_MODE      "         Texture Aspect- FULL | EXPL. | 4:3 | 3:4 | 16:9 | 9:16" 4 0 5 1
-float HSM_BG_TEXTURE_ASPECT_MODE = global.HSM_BG_TEXTURE_ASPECT_MODE;
-
-#pragma parameter HSM_BG_EXPLICIT_TEXTURE_ASPECT  "          Explicit Texture Aspect" 1.33333 0.01 3 0.01
-float HSM_BG_EXPLICIT_TEXTURE_ASPECT = global.HSM_BG_EXPLICIT_TEXTURE_ASPECT;
-
 #pragma parameter HSM_BG_SCALE_MODE               "          Inherit Scale - FULL | TUBE | BEZEL" 0 0 2 1
 float HSM_BG_SCALE_MODE = global.HSM_BG_SCALE_MODE;
 
@@ -243,12 +237,6 @@ float HSM_LED_CUTOUT_MODE = global.HSM_LED_CUTOUT_MODE;
 #pragma parameter HSM_LED_DUALSCREEN_VIS_MODE           "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
 float HSM_LED_DUALSCREEN_VIS_MODE = global.HSM_LED_DUALSCREEN_VIS_MODE;
 
-#pragma parameter HSM_LED_TEXTURE_ASPECT_MODE           "         Texture Aspect- FULL | EXPL. | 4:3 | 3:4 | 16:9 | 9:16" 4 0 5 1
-float HSM_LED_TEXTURE_ASPECT_MODE = global.HSM_LED_TEXTURE_ASPECT_MODE;
-
-#pragma parameter HSM_LED_EXPLICIT_TEXTURE_ASPECT       "          Explicit Texture Aspect" 1.33333 0.01 3 0.01
-float HSM_LED_EXPLICIT_TEXTURE_ASPECT = global.HSM_LED_EXPLICIT_TEXTURE_ASPECT;
-
 #pragma parameter HSM_LED_SCALE_MODE                    "       Inherit Scale - FULL | TUBE | BEZEL | BG | DEVICE"  3 0 4 1
 float HSM_LED_SCALE_MODE = global.HSM_LED_SCALE_MODE;
 
@@ -311,12 +299,6 @@ float HSM_DEVICE_CUTOUT_MODE = global.HSM_DEVICE_CUTOUT_MODE;
 
 #pragma parameter HSM_DEVICE_DUALSCREEN_VIS_MODE           "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
 float HSM_DEVICE_DUALSCREEN_VIS_MODE = global.HSM_DEVICE_DUALSCREEN_VIS_MODE;
-
-#pragma parameter HSM_DEVICE_TEXTURE_ASPECT_MODE       "         Texture Aspect- FULL | EXPL. | 4:3 | 3:4 | 16:9 | 9:16" 4 0 5 1
-float HSM_DEVICE_TEXTURE_ASPECT_MODE = global.HSM_DEVICE_TEXTURE_ASPECT_MODE;
-
-#pragma parameter HSM_DEVICE_EXPLICIT_TEXTURE_ASPECT   "          Explicit Texture Aspect" 1.33333 0.01 3 0.01
-float HSM_DEVICE_EXPLICIT_TEXTURE_ASPECT = global.HSM_DEVICE_EXPLICIT_TEXTURE_ASPECT;
 
 #pragma parameter HSM_DEVICE_SCALE_MODE                "          Inherit Scale - FULL | TUBE | BEZEL | BG"  1 0 3 1
 float HSM_DEVICE_SCALE_MODE = global.HSM_DEVICE_SCALE_MODE;
@@ -385,12 +367,6 @@ float HSM_DECAL_CUTOUT_MODE = global.HSM_DECAL_CUTOUT_MODE;
 #pragma parameter HSM_DECAL_DUALSCREEN_VIS_MODE         "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
 float HSM_DECAL_DUALSCREEN_VIS_MODE = global.HSM_DECAL_DUALSCREEN_VIS_MODE;
 
-#pragma parameter HSM_DECAL_TEXTURE_ASPECT_MODE         "         Texture Aspect- FULL | EXPL. | 4:3 | 3:4 | 16:9 | 9:16" 4 0 5 1
-float HSM_DECAL_TEXTURE_ASPECT_MODE = global.HSM_DECAL_TEXTURE_ASPECT_MODE;
-
-#pragma parameter HSM_DECAL_EXPLICIT_TEXTURE_ASPECT     "          Explicit Texture Aspect" 1.33333 0.01 3 0.01
-float HSM_DECAL_EXPLICIT_TEXTURE_ASPECT = global.HSM_DECAL_EXPLICIT_TEXTURE_ASPECT;
-
 #pragma parameter HSM_DECAL_SCALE_MODE                  "       Inherit Scale - FULL | TUBE | BEZEL | BG | DEVICE"  0 0 4 1
 float HSM_DECAL_SCALE_MODE = global.HSM_DECAL_SCALE_MODE;
 
@@ -457,12 +433,6 @@ float HSM_CAB_GLASS_DUALSCREEN_VIS_MODE = global.HSM_CAB_GLASS_DUALSCREEN_VIS_MO
 #pragma parameter HSM_CAB_GLASS_APPLY_NIGHTLIGHTING         "          Apply NightLighting"  1 0 1 1
 float HSM_CAB_GLASS_APPLY_NIGHTLIGHTING = global.HSM_CAB_GLASS_APPLY_NIGHTLIGHTING;
 
-#pragma parameter HSM_CAB_GLASS_TEXTURE_ASPECT_MODE         "         Texture Aspect- FULL | EXPL. | 4:3 | 3:4 | 16:9 | 9:16" 4 0 5 1
-float HSM_CAB_GLASS_TEXTURE_ASPECT_MODE = global.HSM_CAB_GLASS_TEXTURE_ASPECT_MODE;
-
-#pragma parameter HSM_CAB_GLASS_EXPLICIT_TEXTURE_ASPECT     "          Explicit Texture Aspect" 1.33333 0.01 3 0.01
-float HSM_CAB_GLASS_EXPLICIT_TEXTURE_ASPECT = global.HSM_CAB_GLASS_EXPLICIT_TEXTURE_ASPECT;
-
 #pragma parameter HSM_CAB_GLASS_SCALE_MODE                  "Inherit Scale- FULL | TUBE | BEZEL | BG | DEVICE | DECAL" 0 0 5 1
 float HSM_CAB_GLASS_SCALE_MODE = global.HSM_CAB_GLASS_SCALE_MODE;
 
@@ -525,13 +495,6 @@ float HSM_TOP_CUTOUT_MODE = global.HSM_TOP_CUTOUT_MODE;
 
 #pragma parameter HSM_TOP_DUALSCREEN_VIS_MODE           "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
 float HSM_TOP_DUALSCREEN_VIS_MODE = global.HSM_TOP_DUALSCREEN_VIS_MODE;
-
-// Texture Aspect
-#pragma parameter HSM_TOP_TEXTURE_ASPECT_MODE           "         Texture Aspect- FULL | EXPL. | 4:3 | 3:4 | 16:9 | 9:16" 4 0 5 1
-float HSM_TOP_TEXTURE_ASPECT_MODE = global.HSM_TOP_TEXTURE_ASPECT_MODE;
-
-#pragma parameter HSM_TOP_EXPLICIT_TEXTURE_ASPECT       "          Explicit Texture Aspect" 1.33333 0.01 3 0.01
-float HSM_TOP_EXPLICIT_TEXTURE_ASPECT = global.HSM_TOP_EXPLICIT_TEXTURE_ASPECT;
 
 #pragma parameter HSM_TOP_SCALE_MODE                    "Inherit Scale- FULL | TUBE | BEZEL | BG | DEVICE | DECAL" 0 0 5 1
 float HSM_TOP_SCALE_MODE = global.HSM_TOP_SCALE_MODE;

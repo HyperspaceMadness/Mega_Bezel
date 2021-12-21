@@ -1,5 +1,4 @@
 #version 450
 
 #include "../hsm/hsm-globals-and-potato-params.inc"
-#define IS_NTSC_PRESET
-#include "hsm-crt-guest-advanced.inc"
+#include "hsm-gdarius-gdv-mini.inc"

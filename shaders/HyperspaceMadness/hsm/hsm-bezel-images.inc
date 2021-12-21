@@ -611,10 +611,11 @@ void main()
 	//-----------------------------------------------------------------------------------------
 	// Background
 	//-----------------------------------------------------------------------------------------
+	vec2 bg_size = textureSize(BackgroundImage, 0);
 	BACKGROUND_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
 												VIEWPORT_UNSCALED_COORD,
-												HSM_BG_TEXTURE_ASPECT_MODE,
-												HSM_BG_EXPLICIT_TEXTURE_ASPECT,
+												TEXTURE_ASPECT_MODE_EXPLICIT,
+												bg_size.x / bg_size.y,
 												vec2(HSM_BG_POS_X, HSM_BG_POS_Y),
 												vec2(HSM_BG_SCALE * HSM_BG_SCALE_X, HSM_BG_SCALE),
 												HSM_BG_SCALE_MODE,
@@ -656,11 +657,11 @@ void main()
 	//----------------------------------------------------
 	// Device Image
 	//----------------------------------------------------
-
+	vec2 device_size = textureSize(DeviceImage, 0);
 	DEVICE_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
 											VIEWPORT_UNSCALED_COORD,
-											HSM_DEVICE_TEXTURE_ASPECT_MODE,
-											HSM_DEVICE_EXPLICIT_TEXTURE_ASPECT,
+											TEXTURE_ASPECT_MODE_EXPLICIT,
+											device_size.x / device_size.y,
 											vec2(HSM_DEVICE_POS_X, HSM_DEVICE_POS_Y),
 											vec2(HSM_DEVICE_SCALE * HSM_DEVICE_SCALE_X, HSM_DEVICE_SCALE),
 											HSM_DEVICE_SCALE_MODE,
@@ -699,10 +700,11 @@ void main()
 	vec4 led_image = vec4(0);
 	if (HSM_LED_OPACITY > 0)
 	{
+		vec2 led_size = textureSize(LEDImage, 0);
 		LED_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
 											VIEWPORT_UNSCALED_COORD,
-											HSM_LED_TEXTURE_ASPECT_MODE, 
-											HSM_LED_EXPLICIT_TEXTURE_ASPECT, 
+											TEXTURE_ASPECT_MODE_EXPLICIT,
+											led_size.x / led_size.y, 
 											vec2(HSM_LED_POS_X, HSM_LED_POS_Y), 
 											vec2(HSM_LED_SCALE * HSM_LED_SCALE_X, HSM_LED_SCALE),
 											HSM_LED_SCALE_MODE,
@@ -735,11 +737,11 @@ void main()
 	//----------------------------------------------------
 	// Decal Image
 	//----------------------------------------------------
-	vec4 decal_image = vec4(0);
+	vec2 decal_size = textureSize(DecalImage, 0);
 	DECAL_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
 											VIEWPORT_UNSCALED_COORD,
-											HSM_DECAL_TEXTURE_ASPECT_MODE, 
-											HSM_DECAL_EXPLICIT_TEXTURE_ASPECT, 
+											TEXTURE_ASPECT_MODE_EXPLICIT,
+											decal_size.x / decal_size.y,
 											vec2(HSM_DECAL_POS_X, HSM_DECAL_POS_Y), 
 											vec2(HSM_DECAL_SCALE * HSM_DECAL_SCALE_X, HSM_DECAL_SCALE),
 											HSM_DECAL_SCALE_MODE,
@@ -750,6 +752,7 @@ void main()
 											USE_INHERITED_COORD_OFF,
 											DECAL_COORD,
 											DECAL_SCALE);
+	vec4 decal_image = vec4(0);
 	if (HSM_DECAL_OPACITY > 0)
 	{
 		decal_image = texture(DecalImage, DECAL_CURVED_COORD);
@@ -773,11 +776,11 @@ void main()
 //----------------------------------------------------
 //  ADV Get Additional Layers and Composite 
 //----------------------------------------------------
-	vec4 top_image = vec4(0);
+	vec2 top_size = textureSize(TopLayerImage, 0);
 	TOP_IMAGE_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
 												VIEWPORT_UNSCALED_COORD,
-												HSM_TOP_TEXTURE_ASPECT_MODE, 
-												HSM_TOP_EXPLICIT_TEXTURE_ASPECT, 
+												TEXTURE_ASPECT_MODE_EXPLICIT,
+												top_size.x / top_size.y,
 												vec2(HSM_TOP_POS_X, HSM_TOP_POS_Y), 
 												vec2(HSM_TOP_SCALE * HSM_TOP_SCALE_X, HSM_TOP_SCALE),
 												HSM_TOP_SCALE_MODE,
@@ -792,6 +795,7 @@ void main()
 	if (HSM_TOP_MIRROR_WRAP == 1)
 		TOP_IMAGE_CURVED_COORD = HSM_GetMirrorWrapCoord(TOP_IMAGE_CURVED_COORD);
 
+	vec4 top_image = vec4(0);
 	if (HSM_TOP_OPACITY > 0)
 	{
 		// Get the top image color and masking values if needed
@@ -817,12 +821,14 @@ void main()
 	// Cabinet Glass Image
 	//----------------------------------------------------
 	vec4 cab_glass_image = vec4(0);
+
 	if (HSM_CAB_GLASS_OPACITY > 0)
 	{
+		vec2 cab_glass_size = textureSize(CabinetGlassImage, 0);
 		CAB_GLASS_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
 											VIEWPORT_UNSCALED_COORD,
-											HSM_CAB_GLASS_TEXTURE_ASPECT_MODE, 
-											HSM_CAB_GLASS_EXPLICIT_TEXTURE_ASPECT, 
+											TEXTURE_ASPECT_MODE_EXPLICIT,
+											cab_glass_size.x / cab_glass_size.y,
 											vec2(HSM_CAB_GLASS_POS_X, HSM_CAB_GLASS_POS_Y), 
 											vec2(HSM_CAB_GLASS_SCALE * HSM_CAB_GLASS_SCALE_X, HSM_CAB_GLASS_SCALE),
 											HSM_CAB_GLASS_SCALE_MODE,
