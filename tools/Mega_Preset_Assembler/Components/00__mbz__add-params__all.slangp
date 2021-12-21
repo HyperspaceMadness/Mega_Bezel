@@ -1,4 +1,4 @@
 shaders = 1
 
-shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm/hsm-prep-add-params-all.slang
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm/hsm-add-params-all.slang
 alias0 = "CorePass"

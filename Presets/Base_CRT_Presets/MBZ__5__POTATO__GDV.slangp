@@ -1,6 +1,6 @@
 shaders = 19
 
-shader0 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-add-params-potato.slang
+shader0 = ../../shaders/HyperspaceMadness/hsm/hsm-add-params-potato.slang
 alias0 = "CorePass"
 
 shader1 =  ../../../../stock.slang // ../../shaders/HyperspaceMadness/hsm-guest/g-sharp_resampler.slang
@@ -11,7 +11,7 @@ scale_x1 = 1
 scale_y1 = 1
 alias1 = "DerezedPass"
 
-shader2 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-add-negative-crop-area.slang
+shader2 = ../../shaders/HyperspaceMadness/hsm/hsm-add-negative-crop-area.slang
 filter_linear2 = false
 mipmap_input2 = false
 srgb_framebuffer2 = true
@@ -20,13 +20,13 @@ scale_x2 = 1.25
 scale_y2 = 1.25
 alias2 = "CorePreppedPass"
 
-shader3 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-cache-info-screen-scale-params.slang
+shader3 = ../../shaders/HyperspaceMadness/hsm/hsm-cache-info-screen-scale-params.slang
 filter_linear3 = false
 scale_type3 = source
 scale3 = 1.0
 alias3 = "InfoCachePass"
 
-shader4 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-intro-potato.slang
+shader4 = ../../shaders/HyperspaceMadness/hsm/hsm-intro-potato.slang
 filter_linear4 = false
 float_framebuffer4 = true
 scale_type4 = source
@@ -118,7 +118,7 @@ scale_type17 = viewport
 scale_x17 = 1.0
 scale_y17 = 1.0
 
-shader18 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-post-crt-potato.slang
+shader18 = ../../shaders/HyperspaceMadness/hsm/hsm-post-crt-prep-potato.slang
 alias18 = "MBZ_PostCRTPass"
 // Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;ScreenPlacementImage;BackgroundImage;BackgroundVertImage"

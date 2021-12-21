@@ -1,6 +1,6 @@
 shaders = 44
 
-shader0 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-add-params-all.slang
+shader0 = ../../shaders/HyperspaceMadness/hsm/hsm-add-params-all.slang
 alias0 = "CorePass"
 
 shader1 =  ../../../../stock.slang // ../../shaders/HyperspaceMadness/hsm-guest/g-sharp_resampler.slang
@@ -12,7 +12,7 @@ scale_x1 = 400
 scale_y1 = 480
 alias1 = "DerezedPass"
 
-shader2 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-add-negative-crop-area.slang
+shader2 = ../../shaders/HyperspaceMadness/hsm/hsm-add-negative-crop-area.slang
 filter_linear2 = false
 mipmap_input2 = false
 srgb_framebuffer2 = true
@@ -21,13 +21,13 @@ scale_x2 = 1.25
 scale_y2 = 1.25
 alias2 = "CorePreppedPass"
 
-shader3 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-cache-info-all-params.slang
+shader3 = ../../shaders/HyperspaceMadness/hsm/hsm-cache-info-all-params.slang
 filter_linear3 = false
 scale_type3 = source
 scale3 = 1.0
 alias3 = "InfoCachePass"
 
-shader4 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-intro-std.slang
+shader4 = ../../shaders/HyperspaceMadness/hsm/hsm-intro-std.slang
 filter_linear4 = false
 float_framebuffer4 = true
 scale_type4 = source
@@ -179,7 +179,7 @@ scale_type33 = viewport
 scale_x33 = 1.0
 scale_y33 = 1.0
 
-shader34 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-post-crt-image-layers.slang
+shader34 = ../../shaders/HyperspaceMadness/hsm/hsm-post-crt-prep-image-layers.slang
 alias34 = "MBZ_PostCRTPass"
 
 // Reduce Resolution  ----------------------------------------------------------------

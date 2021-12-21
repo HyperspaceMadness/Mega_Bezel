@@ -83,11 +83,11 @@ Mega Bezel Still to Come:
 
 V1 TODO
 
+  * Check on Tube Transparency - Tron Example?
   * Missing inner Edge static shading?
   * Pink outside frame options?
   * Guess White/Black Matting?
   * Check if Downsample range needs to be fixed to core res
-  * Check on Tube Transparency
 
   
   Post V1

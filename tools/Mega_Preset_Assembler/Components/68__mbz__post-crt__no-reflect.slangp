@@ -1,4 +1,4 @@
 shaders = 1
 
-shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm/hsm-prep-post-crt-no-reflect.slang
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm/hsm-post-crt-prep-no-reflect.slang
 alias0 = "MBZ_PostCRTPass"

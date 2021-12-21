@@ -1,14 +1,14 @@
 // Add Mega Bezel parameters at the beginning of the list for easy access
 // A very small pass at 1/8th scale to cache values which are consistent across the frame
 // Read back these values later for better performance
-shader0 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-cache-info.slang
+shader0 = ../../shaders/HyperspaceMadness/hsm/hsm-cache-info.slang
 float_framebuffer0 = true
 scale_type0 = source
 scale_y0 = 0.25
 alias0  = "InfoCachePass"
 
 // Add Intro Animation
-shader1 = ../../shaders/HyperspaceMadness/hsm/hsm-prep-intro.slang
+shader1 = ../../shaders/HyperspaceMadness/hsm/hsm-intro.slang
 float_framebuffer1 = true
 scale_type1 = source
 scale_y1 = 4

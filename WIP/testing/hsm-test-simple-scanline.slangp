@@ -3,7 +3,7 @@
 //      Add Color Correction
 //      Calculate Average Luminance and put in alpha channel
 //      Debug Drawing of the resolution & screen scaling info
-shader0 = shaders/HyperspaceMadness/hsm/hsm-prep-intro.slang
+shader0 = shaders/HyperspaceMadness/hsm/hsm-intro.slang
 float_framebuffer0 = true
 alias0  = "PreDeDitheringPass"
 
