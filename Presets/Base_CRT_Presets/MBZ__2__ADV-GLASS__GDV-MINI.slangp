@@ -218,51 +218,66 @@ SamplerLUT4_linear = true
 
 IntroImage = ../../shaders/HyperspaceMadness/textures/IntroImage_MegaBezelLogo.png
 IntroImage_linear = true
+IntroImage_mipmap = 1
 
 ScreenPlacementImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 ScreenPlacementImage_linear = false
 
 TubeStaticReflectionImage = ../../shaders/HyperspaceMadness/textures/TubeGlassOverlayImage_3840x2160.png
 TubeStaticReflectionImage_linear = true
+TubeStaticReflectionImage_mipmap = 1
 
 TubeDiffuseImage = ../../shaders/HyperspaceMadness/textures/Tube_Diffuse_2390x1792.png
 TubeDiffuseImage_linear = true
+TubeDiffuseImage_mipmap = 1
 
 TubeColoredGelImage = ../../shaders/HyperspaceMadness/textures/Colored_Gel_Rainbow.png
 TubeColoredGelImage_linear = true
+TubeColoredGelImage_mipmap = 1
 
 ReflectionMaskImage = ../../shaders/HyperspaceMadness/textures/Placeholder_White_16x16.png
 ReflectionMaskImage_linear = true
+ReflectionMaskImage_mipmap = 1
 
 FrameTextureImage = ../../shaders/HyperspaceMadness/textures/FrameTexture_2800x2120.png
 FrameTextureImage_linear = true
+FrameTextureImage_mipmap = 1
 
 BackgroundImage = ../../shaders/HyperspaceMadness/textures/TopLayerImageGradient_3840x2160.png
 BackgroundImage_linear = true
+BackgroundImage_mipmap = 1
 
 BackgroundVertImage = ../../shaders/HyperspaceMadness/textures/TopLayerImageGradient_3840x2160.png
 BackgroundVertImage_linear = true
+BackgroundVertImage_mipmap = 1
 
 CabinetGlassImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 CabinetGlassImage_linear = true
+CabinetGlassImage_mipmap = 1
 
 DeviceImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 DeviceImage_linear = true
+DeviceImage_mipmap = 1
 
 DeviceVertImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 DeviceVertImage_linear = true
+DeviceVertImage_mipmap = 1
 
 DecalImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 DecalImage_linear = true
+DecalImage_mipmap = 1
 
 NightLightingImage = ../../shaders/HyperspaceMadness/textures/NightLighting_1920x1080.png
 NightLightingImage_linear = true
+NightLightingImage_mipmap = 1
 
 LEDImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 LEDImage_linear = true
+LEDImage_mipmap = 1
 
 TopLayerImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 TopLayerImage_linear = true
+TopLayerImage_mipmap = 1
 
 // Use for matching vanilla GDV-Advanced
 // HSM_ASPECT_RATIO_MODE = 6

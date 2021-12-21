@@ -109,9 +109,11 @@ ScreenPlacementImage_linear = false
 
 BackgroundImage = ../../shaders/HyperspaceMadness/textures/Baked_Frame_Carbonfiber_Background.png
 BackgroundImage_linear = true
+BackgroundImage_mipmap = 1
 
 BackgroundVertImage = ../../shaders/HyperspaceMadness/textures/Baked_Frame_Carbonfiber_Background_Vert.png
 BackgroundVertImage_linear = true
+BackgroundVertImage_mipmap = 1
 
 // Parameters
 HSM_ASPECT_RATIO_MODE = 1

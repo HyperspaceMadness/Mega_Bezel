@@ -54,42 +54,55 @@ CustomColorPaletteImage_linear = false
 
 LCDBackgroundImage = ../shaders/HyperspaceMadness/hsm-gameboy/bg-gameboy-dmg.png
 LCDBackgroundImage_linear = true
+BackgroundImage_mipmap = 1
 
 IntroImage = ../shaders/HyperspaceMadness/textures/IntroImage_MegaBezelLogo.png
 IntroImage_linear = true
+IntroImage_mipmap = 1
 
 TubeColoredGelImage = ../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 TubeColoredGelImage_linear = true
+TubeColoredGelImage_mipmap = 1
 
 TubeStaticReflectionImage = ../shaders/HyperspaceMadness/textures/TubeGlassOverlayImage_3840x2160.png
 TubeStaticReflectionImage_linear = true
+TubeStaticReflectionImage_mipmap = 1
 
 BackgroundImage = ../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 BackgroundImage_linear = true
+BackgroundImage_mipmap = 1
 
 FrameTextureImage = ../shaders/HyperspaceMadness/textures/FrameTexture_2800x2120.png
 FrameTextureImage_linear = true
+FrameTextureImage_mipmap = 1
 
 CabinetGlassImage = ../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 CabinetGlassImage_linear = true
+CabinetGlassImage_mipmap = 1
 
 DeviceImage = ../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 DeviceImage_linear = true
+DeviceImage_mipmap = 1
 
 DeviceVertImage = ../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 DeviceVertImage_linear = true
+DeviceVertImage_mipmap = 1
 
 DecalImage = ../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 DecalImage_linear = true
+DecalImage_mipmap = 1
 
 NightLightingImage = ../shaders/HyperspaceMadness/textures/NightLighting_1920x1080.png
 NightLightingImage_linear = true
+NightLightingImage_mipmap = 1
 
 LEDImage = ../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 LEDImage_linear = true
+LEDImage_mipmap = 1
 
 TopLayerImage = ../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 TopLayerImage_linear = true
+TopLayerImage_mipmap = 1
 
 HSM_INT_SCALE_MODE = "2.000000"
 HSM_INT_SCALE_BORDER_MIN_HEIGHT = "7.00000"
