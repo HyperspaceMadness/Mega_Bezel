@@ -99,7 +99,8 @@ vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_CO
 		//-----------------------------------------------------------------------------------------
 		vec2 bg_coord = VIEWPORT_COORD_TRANSFORMED;
 		// Correct image coordinate for image aspect ratio
-		bg_coord.x = (bg_coord.x - 0.5) / (HSM_GetAspectRatioFromMode(HSM_BG_TEXTURE_ASPECT_MODE, HSM_BG_EXPLICIT_TEXTURE_ASPECT) / (global.FinalViewportSize.x/global.FinalViewportSize.y)) + 0.5;
+		vec2 bg_size = textureSize(BackgroundImage, 0);
+		bg_coord.x = (bg_coord.x - 0.5) / ((bg_size.x / bg_size.y) / (global.FinalViewportSize.x/global.FinalViewportSize.y)) + 0.5;
 
 		vec4 bg_layer = vec4(0);
 		if (SCREEN_ASPECT > 1) 

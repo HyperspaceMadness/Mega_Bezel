@@ -196,7 +196,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	vec4 tube_diffuse = vec4(0, 0, 0, 1);
 	if (HSM_TUBE_DIFFUSE_IMAGE_ON > 0.5)
 	{
-		tube_diffuse = texture(TubeDiffuseImage, mirrored_tube_coord);
+		tube_diffuse = HSM_GetMipmappedTexSample(TubeDiffuseImage, mirrored_tube_coord, TUBE_SCALE, 0);
 		tube_diffuse = HSM_GLOBAL_GRAPHICS_BRIGHTNESS * HSM_GetPreMultipliedColorLinear(tube_diffuse, SOURCE_MATTE_PREMULTIPLIED, HSM_DEFAULT_SRGB_GAMMA);
 		tube_diffuse.rgb = HSM_ApplyHSVAdjustment(tube_diffuse.rgb, HSM_TUBE_DIFFUSE_IMAGE_HUE, HSM_TUBE_DIFFUSE_IMAGE_SATURATION, HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS, HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON, HSM_TUBE_DIFFUSE_IMAGE_GAMMA);
 	}
@@ -211,7 +211,8 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	if (HSM_TUBE_COLORED_GEL_IMAGE_ON > 0.5 && (HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT > 0 || HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT > 0 || HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT > 0))
 	{
 		vec2 gel_coord = mix( mirrored_tube_coord, -1 * (mirrored_tube_coord - 0.5) + 0.5 , HSM_FLIP_VIEWPORT_VERTICAL);
-		vec4 gel_image = texture(TubeColoredGelImage, mirrored_tube_coord);
+		vec4 gel_image = HSM_GetMipmappedTexSample(TubeColoredGelImage, mirrored_tube_coord, TUBE_SCALE, 0);
+		
 		gel_image = HSM_GLOBAL_GRAPHICS_BRIGHTNESS * HSM_Linearize(gel_image, HSM_DEFAULT_SRGB_GAMMA);
 
 		if (HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT > 0)

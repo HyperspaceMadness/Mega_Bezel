@@ -43,7 +43,7 @@ Changes:
     * BendBombBoom Presets
     * NESGuy presets
   * On/Off for some effects, which will be off by default like Tube Static Reflection Image
-
+  * Added Mipmapping blend to avoiding the crunchy pixel look when graphics are scaled down, e.g. 4k background on 1080p monitor
 
   * BIG Changes to what each preset level does
     * ADV

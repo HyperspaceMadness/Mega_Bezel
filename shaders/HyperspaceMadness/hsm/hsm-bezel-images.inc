@@ -541,6 +541,7 @@ void main()
 
 	if (HSM_FRM_TEXTURE_OPACITY > 0)
 	{
+		// TODO need to do Mipmapping sample?
 		vec4 frame_texture_color = HSM_Linearize(texture(FrameTextureImage, FRAME_OUTSIDE_CURVED_COORD), HSM_DEFAULT_SRGB_GAMMA);
 		frame_diffuse_color = HSM_BlendModeLayerMix(vec4(frame_diffuse_color, 1), frame_texture_color, HSM_FRM_TEXTURE_BLEND_MODE, HSM_FRM_TEXTURE_OPACITY).rgb;
 	}
@@ -634,9 +635,9 @@ void main()
 	if (HSM_BG_OPACITY > 0)
 	{
 		if (SCREEN_ASPECT > 1) 
-			bg_image = texture(BackgroundImage, BACKGROUND_CURVED_COORD);
+			bg_image = HSM_GetMipmappedTexSample(BackgroundImage, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
 		else
-			bg_image = texture(BackgroundVertImage, BACKGROUND_CURVED_COORD);
+			bg_image = HSM_GetMipmappedTexSample(BackgroundVertImage, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
 
 		// Premultiply Alpha
 		bg_image = HSM_GetPreMultipliedColorLinear(bg_image, HSM_BG_SOURCE_MATTE_TYPE, HSM_DEFAULT_SRGB_GAMMA);
@@ -676,8 +677,8 @@ void main()
 	vec4 device_image = vec4(0);
 	if (HSM_DEVICE_OPACITY > 0)
 	{
-		device_image = SCREEN_ASPECT < 1 ? texture(DeviceVertImage, DEVICE_CURVED_COORD):
-										  texture(DeviceImage,     DEVICE_CURVED_COORD);
+		device_image = SCREEN_ASPECT < 1 ? 	HSM_GetMipmappedTexSample(DeviceVertImage, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS) :
+											HSM_GetMipmappedTexSample(DeviceImage, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS);
 
 		// Premultiply Alpha
 		device_image = HSM_GetPreMultipliedColorLinear(device_image, HSM_DEVICE_SOURCE_MATTE_TYPE, HSM_DEFAULT_SRGB_GAMMA);
@@ -716,7 +717,7 @@ void main()
 											LED_COORD,
 											LED_SCALE);
 
-		led_image = texture(LEDImage, LED_CURVED_COORD);
+		led_image = HSM_GetMipmappedTexSample(LEDImage, LED_CURVED_COORD, LED_SCALE, HSM_LED_MIPMAPPING_BLEND_BIAS);
 
 		// Premultiply Alpha
 		led_image = HSM_GetPreMultipliedColorLinear(led_image, HSM_LED_SOURCE_MATTE_TYPE, HSM_DEFAULT_SRGB_GAMMA);
@@ -755,7 +756,7 @@ void main()
 	vec4 decal_image = vec4(0);
 	if (HSM_DECAL_OPACITY > 0)
 	{
-		decal_image = texture(DecalImage, DECAL_CURVED_COORD);
+		decal_image = HSM_GetMipmappedTexSample(DecalImage, DECAL_COORD, DECAL_SCALE, HSM_DECAL_MIPMAPPING_BLEND_BIAS);
 		
 		// Premultiply Alpha
 		decal_image = HSM_GetPreMultipliedColorLinear(decal_image, HSM_DECAL_SOURCE_MATTE_TYPE, HSM_DEFAULT_SRGB_GAMMA);
@@ -799,7 +800,7 @@ void main()
 	if (HSM_TOP_OPACITY > 0)
 	{
 		// Get the top image color and masking values if needed
-		top_image = texture(TopLayerImage,     TOP_IMAGE_CURVED_COORD);
+		top_image = HSM_GetMipmappedTexSample(TopLayerImage, TOP_IMAGE_CURVED_COORD, TOP_IMAGE_SCALE, HSM_TOP_MIPMAPPING_BLEND_BIAS);
 
 		// Premultiply Alpha
 		top_image = HSM_GetPreMultipliedColorLinear(top_image, HSM_TOP_SOURCE_MATTE_TYPE, HSM_DEFAULT_SRGB_GAMMA);
@@ -844,7 +845,7 @@ void main()
 		CAB_GLASS_CURVED_COORD = (CAB_GLASS_CURVED_COORD - 0.5) * 1 / HSM_CAB_GLASS_SCALE + 0.5;
 
 		// Sample Texture
-		cab_glass_image = texture(CabinetGlassImage, CAB_GLASS_CURVED_COORD.xy);
+		cab_glass_image = HSM_GetMipmappedTexSample(CabinetGlassImage, CAB_GLASS_CURVED_COORD, CAB_GLASS_SCALE, HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS);
 
 		// Premultiply Alpha
 		cab_glass_image = HSM_GetPreMultipliedColorLinear(cab_glass_image, HSM_CAB_GLASS_SOURCE_MATTE_TYPE, HSM_DEFAULT_SRGB_GAMMA);

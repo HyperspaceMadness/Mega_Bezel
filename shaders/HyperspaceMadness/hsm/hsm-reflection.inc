@@ -396,15 +396,23 @@ void main()
 		// Modulate amount of refleciton on frame inner edge
 		reflection_color.rgb *= (1 - HSM_REFLECT_FRAME_INNER_EDGE_AMOUNT) * (1 - frame_inner_edge_mask) + HSM_REFLECT_FRAME_INNER_EDGE_AMOUNT;
 
-		// Apply the mask image on the reflection, usually used to show the uneven brightness of a bumpy surface
-		if (HSM_REFLECT_MASK_IMG_AMOUNT > 0)
-		{
-			vec2 reflection_image_coord = BACKGROUND_CURVED_COORD;
-			if (HSM_REFLECT_MASK_SCALE_MODE == 1)
-				reflection_image_coord = DEVICE_CURVED_COORD;
+		// TODO needs more work, needs Background Coord and Device Coord
+		// // Apply the mask image on the reflection, usually used to show the uneven brightness of a bumpy surface
+		// if (HSM_REFLECT_MASK_IMG_AMOUNT > 0)
+		// {
+		// 	vec2 reflection_image_coord = BACKGROUND_CURVED_COORD;
+		// 	vec2 reflection_image_scale = BACKGROUND_SCALE;
 
-			reflection_color *= HSM_REFLECT_MASK_IMG_AMOUNT * texture(ReflectionMaskImage, reflection_image_coord).r + (1 - HSM_REFLECT_MASK_IMG_AMOUNT);
-		}
+		// 	if (HSM_REFLECT_MASK_SCALE_MODE == 1)
+		// 	{
+		// 		reflection_image_coord = DEVICE_CURVED_COORD;
+		// 		reflection_image_scale = DEVICE_SCALE;
+		// 	}
+
+		// 	float reflection_image = HSM_GetMipmappedTexSample(TubeColoredGelImage, mirrored_tube_coord, TUBE_SCALE, 0);
+
+		// 	reflection_color *= HSM_REFLECT_MASK_IMG_AMOUNT * texture(ReflectionMaskImage, reflection_image_coord).r + (1 - HSM_REFLECT_MASK_IMG_AMOUNT);
+		// }
 	}
 
 	crt_linear.rgb *= SCREEN_MASK;
@@ -412,19 +420,6 @@ void main()
 	// Put the frame and bezel over top a black tube
 	// It must be a little wider than the inside of the bezel so we don't see a gap
 	crt_linear = HSM_PreMultAlphaBlend(vec4(0, 0, 0, 1 - outside_tube_mask_wider), crt_linear);
-
-	// // Add a Colored Gel image on top of the screen, this is what colors games like space invaders or battlezone
-	// if (HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT > 0)
-	// {
-	// 	float black_edge_mask = TUBE_MASK * (1 - SCREEN_MASK);
-		
-	// 	vec4 gel_image = texture(TubeColoredGelImage, tube_curved_coord);
-	// 	gel_image = HSM_Linearize(gel_image, HSM_DEFAULT_SRGB_GAMMA);
-	// 	gel_image *= black_edge_mask;
-
-	// 	if (HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT > 0)
-	// 		crt_linear += gel_image * gel_image.a * HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT;
-	// }
 
 	// TUBE HIGHLIGHT
 	if (HSM_TUBE_STATIC_REFLECTION_IMAGE_ON > 0.5)
@@ -441,7 +436,8 @@ void main()
 	FragColor = vec4(0);
 
 #ifdef IS_GLASS_PRESET
-	vec4 bg_image = texture(BackgroundImage, VIEWPORT_COORD);
+	vec4 bg_image = HSM_GetMipmappedTexSample(BackgroundImage, VIEWPORT_COORD, vec2(1), 0);
+	
 	bg_image = HSM_Linearize(bg_image, HSM_DEFAULT_SRGB_GAMMA);
 
 	bg_image.a *= outside_tube_mask_wider * (1 - edge_mask);

@@ -167,6 +167,9 @@ float HSM_BG_POS_Y = global.HSM_BG_POS_Y / 100;
 #pragma parameter HSM_BG_MIRROR_WRAP              "          Mirror Wrap" 1 0 1 1
 float HSM_BG_MIRROR_WRAP = global.HSM_BG_MIRROR_WRAP;
 
+#pragma parameter HSM_BG_MIPMAPPING_BLEND_BIAS    "          Mipmapping Blend Bias" 0 -5 5 0.1
+float HSM_BG_MIPMAPPING_BLEND_BIAS = global.HSM_BG_MIPMAPPING_BLEND_BIAS;
+
 
 
 //---------------------------------------------------------------------------------------------------
@@ -261,6 +264,9 @@ float HSM_LED_POS_X = global.HSM_LED_POS_X / -100;
 #pragma parameter HSM_LED_POS_Y                         "          Position Y"  0 -1000 1000 0.05
 float HSM_LED_POS_Y = global.HSM_LED_POS_Y / 100;
 
+#pragma parameter HSM_LED_MIPMAPPING_BLEND_BIAS          "          Mipmapping Blend Bias" 0 -5 5 0.1
+float HSM_LED_MIPMAPPING_BLEND_BIAS = global.HSM_LED_MIPMAPPING_BLEND_BIAS;
+
 
 //---------------------------------------------------------------------------------------------------
 //    DEVICE IMAGE
@@ -327,6 +333,9 @@ float HSM_DEVICE_POS_X = global.HSM_DEVICE_POS_X / -100;
 #pragma parameter HSM_DEVICE_POS_Y                     "          Position Y"  0 -1000 1000 0.05
 float HSM_DEVICE_POS_Y = global.HSM_DEVICE_POS_Y / 100;
 
+#pragma parameter HSM_DEVICE_MIPMAPPING_BLEND_BIAS          "          Mipmapping Blend Bias" 0 -5 5 0.1
+float HSM_DEVICE_MIPMAPPING_BLEND_BIAS = global.HSM_DEVICE_MIPMAPPING_BLEND_BIAS;
+
 
 
 //---------------------------------------------------------------------------------------------------
@@ -390,6 +399,9 @@ float HSM_DECAL_POS_X = global.HSM_DECAL_POS_X / -100;
 
 #pragma parameter HSM_DECAL_POS_Y                       "          Position Y"  0 -1000 1000 0.05
 float HSM_DECAL_POS_Y = global.HSM_DECAL_POS_Y / 100;
+
+#pragma parameter HSM_DECAL_MIPMAPPING_BLEND_BIAS       "          Mipmapping Blend Bias" 0 -5 5 0.1
+float HSM_DECAL_MIPMAPPING_BLEND_BIAS = global.HSM_DECAL_MIPMAPPING_BLEND_BIAS;
 
 
 //---------------------------------------------------------------------------------------------------
@@ -457,6 +469,9 @@ float HSM_CAB_GLASS_POS_X = global.HSM_CAB_GLASS_POS_X / -100;
 #pragma parameter HSM_CAB_GLASS_POS_Y                       "          Position Y"  0 -1000 1000 0.05
 float HSM_CAB_GLASS_POS_Y = global.HSM_CAB_GLASS_POS_Y / 100;
 
+#pragma parameter HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS          "          Mipmapping Blend Bias" 0 -5 5 0.1
+float HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS = global.HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS;
+
 
 //---------------------------------------------------------------------------------------------------
 //    TOP IMAGE
@@ -522,6 +537,9 @@ float HSM_TOP_POS_Y = global.HSM_TOP_POS_Y / 100;
 
 #pragma parameter HSM_TOP_MIRROR_WRAP                   "          Mirror Wrap" 1 0 1 1
 float HSM_TOP_MIRROR_WRAP = global.HSM_TOP_MIRROR_WRAP;
+
+#pragma parameter HSM_TOP_MIPMAPPING_BLEND_BIAS         "          Mipmapping Blend Bias" 0 -5 5 0.1
+float HSM_TOP_MIPMAPPING_BLEND_BIAS = global.HSM_TOP_MIPMAPPING_BLEND_BIAS;
 
 #pragma parameter HSM_RENDER_FOR_SIMPLIFIED_TITLE       "[ Render for Simplified Presets ]:" 1 0 1 1
 

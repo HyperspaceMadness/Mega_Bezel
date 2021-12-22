@@ -975,6 +975,14 @@ bool HSM_CheckCacheInfoChanged()
 			);
 }
 
+vec4 HSM_GetMipmappedTexSample(sampler2D in_sampler, vec2 in_coord, vec2 in_scale, float in_blend_bias)
+{
+	vec2 tex_size = textureSize(in_sampler, 0);
+	vec2 scaled_tex_size = in_scale * global.FinalViewportSize.xy;
+	float mipmap_lod = log2(tex_size.y / scaled_tex_size.y);
+	return textureLod(in_sampler, in_coord, mipmap_lod + in_blend_bias);
+}
+
 // Texture Sampler function which takes a coordinate in the cropped coordinate space
 vec4 HSM_GetCroppedTexSample(sampler2D in_sampler, vec2 in_screen_coord)
 {
@@ -1021,11 +1029,18 @@ vec4 HSM_GetNightLightingMultiplyColor( vec2 viewport_coord, in sampler2D NightL
 	if (HSM_AMBIENT_LIGHTING_MIRROR_HORZ == 1)
 		night_lighting_coord.x = (night_lighting_coord.x - 0.5) * -1 + 0.5;
 
-	// Dithering if needed to reduce banding
-	float blur_max_size = 1;
-	float blur_amount = 0.2;
 	
-	vec4 night_lighting_image = HSM_GetStoichaicBlurredSample(NightLightingImage, night_lighting_coord.xy, HSM_AMBIENT_LIGHTING_DITHERING_SAMPLES, blur_max_size, blur_amount);
+	vec4 night_lighting_image = vec4(0);
+	// if (HSM_AMBIENT_LIGHTING_DITHERING_SAMPLES > 0.5)
+	// {
+	// 	// Dithering if needed to reduce banding
+	// 	float blur_max_size = 1;
+	// 	float blur_amount = 0.2;
+	// 	night_lighting_image = HSM_GetStoichaicBlurredSample(NightLightingImage, night_lighting_coord.xy, HSM_AMBIENT_LIGHTING_DITHERING_SAMPLES, blur_max_size, blur_amount);
+	// }
+	// else
+	night_lighting_image = HSM_GetMipmappedTexSample(NightLightingImage, night_lighting_coord.xy, vec2(1), 0);
+	
 	night_lighting_image = HSM_Linearize(night_lighting_image, HSM_DEFAULT_SRGB_GAMMA);
 
 	// Do HSV alterations on the night lighting image
