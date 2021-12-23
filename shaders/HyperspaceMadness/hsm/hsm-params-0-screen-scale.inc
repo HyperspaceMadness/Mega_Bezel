@@ -70,14 +70,14 @@ float HSM_AMBIENT_LIGHTING_SATURATION = global.HSM_AMBIENT_LIGHTING_SATURATION /
 #pragma parameter HSM_AMBIENT_LIGHTING_VALUE               	"          Value"  100 0 400 1
 float HSM_AMBIENT_LIGHTING_VALUE = global.HSM_AMBIENT_LIGHTING_VALUE / 100;
 
-#pragma parameter HSM_AMBIENT_LIGHTING_SCALE             		"          Scale"  100 10 1000 1
+#pragma parameter HSM_AMBIENT_LIGHTING_SCALE_MODE         	"          Scale Mode - VIEW WITH ZOOM | FULL"  1 0 1 1
+float HSM_AMBIENT_LIGHTING_SCALE_MODE = global.HSM_AMBIENT_LIGHTING_SCALE_MODE;
+
+#pragma parameter HSM_AMBIENT_LIGHTING_SCALE             	"          Scale Offset"  100 10 1000 1
 float HSM_AMBIENT_LIGHTING_SCALE = global.HSM_AMBIENT_LIGHTING_SCALE / 100;
 
 #pragma parameter HSM_AMBIENT_LIGHTING_MIRROR_HORZ         	"          Mirror Horizontal"  0 0 1 1
 float HSM_AMBIENT_LIGHTING_MIRROR_HORZ = global.HSM_AMBIENT_LIGHTING_MIRROR_HORZ;
-
-#pragma parameter HSM_AMBIENT_LIGHTING_SCALE_MODE         	"          Scale Mode - VIEW | FULL"  1 0 1 1
-float HSM_AMBIENT_LIGHTING_SCALE_MODE = global.HSM_AMBIENT_LIGHTING_SCALE_MODE;
 
 // Commented out because I don't think anyone is using this
 // #pragma parameter HSM_AMBIENT_LIGHTING_DITHERING_SAMPLES   "          Dithering Noise Samples (Reduces Banding)" 0 0 10 1
@@ -88,7 +88,7 @@ float HSM_AMBIENT_LIGHTING_DITHERING_SAMPLES = 0;
 //---------------------------------------------------------------------------------------------------
 //    Zoom & Pan
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_VIEWPORT_ZOOM_TITLE							"[ Viewport Zoom ]:" 0 0 0.01 0.01
+#pragma parameter HSM_VIEWPORT_ZOOM_TITLE							"[ VIEWPORT ZOOM ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_VIEWPORT_ZOOM									"          Viewport Zoom"  100 10 500 0.2
 float HSM_VIEWPORT_ZOOM = global.HSM_VIEWPORT_ZOOM / 100;
@@ -138,7 +138,7 @@ float HSM_ASPECT_RATIO_EXPLICIT = global.HSM_ASPECT_RATIO_EXPLICIT;
 //---------------------------------------------------------------------------------------------------
 //    SCALING
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_SCALING_TITLE									"[ SCALING ]:" 0 0 0.01 0.01
+#pragma parameter HSM_SCALING_TITLE									"[ CRT SCREEN SCALING ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_INT_SCALE_MODE 								"          Int Scale Mode - OFF | ShortAxis | BothAxes" 0 0 2 1
 #define HSM_INT_SCALE_MODE global.HSM_INT_SCALE_MODE
@@ -163,12 +163,12 @@ float HSM_NON_INTEGER_SCALE = global.HSM_NON_INTEGER_SCALE - (HSM_VERTICAL_PRESE
 //---------------------------------------------------------------------------------------------------
 //    Extended Scale
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_SCREEN_EXTENDED_SCALE_TITLE					"[ EXTENDED SCALING ]:" 0 0 0.01 0.01
+#pragma parameter HSM_SCREEN_EXTENDED_SCALE_TITLE					"[ EXTENDED CRT SCREEN SCALING ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_USE_IMAGE_FOR_PLACEMENT 							"          Use Image For Placement (Scale & Y Pos)" 0 0 1 1
 float HSM_USE_IMAGE_FOR_PLACEMENT = global.HSM_USE_IMAGE_FOR_PLACEMENT;
 
-#pragma parameter HSM_PLACEMENT_IMAGE_MODE 						"          Placement Image Mode: TRANSPARENCY : WHITE ON BLACK" 0 0 1 1
+#pragma parameter HSM_PLACEMENT_IMAGE_MODE 						    "          Placement Image Mode: TRANSPARENCY : WHITE ON BLACK" 0 0 1 1
 float HSM_PLACEMENT_IMAGE_MODE = global.HSM_PLACEMENT_IMAGE_MODE;
 
 #pragma parameter HSM_NON_INTEGER_SCALE_OFFSET 						"          Non-Integer Scale Offset" 100 5 400 0.1
@@ -192,7 +192,7 @@ float HSM_SCREEN_POSITION_Y = -1 * global.HSM_SCREEN_POSITION_Y / 1000;
 //---------------------------------------------------------------------------------------------------
 //    CROPPING
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_CROPPING_TITLE								"[ CROPPING ]:" 0 0 0.01 0.01
+#pragma parameter HSM_CROPPING_TITLE								"[ CROPPING CORE IMAGE ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_CROP_MODE 									"          Crop Mode  -  OFF | CROP BLACK ONLY | CROP ANY" 2 0 2 1
 float HSM_CROP_MODE = global.HSM_CROP_MODE;
@@ -217,18 +217,9 @@ float HSM_CROP_BLACK_THRESHOLD = global.HSM_CROP_BLACK_THRESHOLD / 100;
 
 
 //---------------------------------------------------------------------------------------------------
-//    SCANLINES
-//---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_SCANLINE_TITLE								"[ SCANLINE DIRECTION ]:" 0 0 0.01 0.01
-
-#pragma parameter HSM_SCANLINE_DIRECTION 							"          Scanline Direction - Auto | Horiz | Vert"  0 0 2 1
-float HSM_SCANLINE_DIRECTION = global.HSM_SCANLINE_DIRECTION;
-
-
-//---------------------------------------------------------------------------------------------------
 //    SHARPEN
 //---------------------------------------------------------------------------------------------------
-#pragma parameter SHARPEN_TITLE  									"[ FAST SHARPEN - GUEST.R ]:"       			0.00 0.0 2.00 0.05
+#pragma parameter SHARPEN_TITLE  									"[ --- FAST SHARPEN - GUEST.R --- ]:"       			0.00 0.0 2.00 0.05
 #pragma parameter SHARPEN_ON  										"          Sharpen ON"       		0 0 1 1
 #pragma parameter SHARPEN  											"          Sharpen Strength"       	0.2 0.0 2.00 0.05
 #pragma parameter CONTR    											"          Amount of Sharpening"  	0.07 0.0 0.25 0.01
@@ -238,8 +229,17 @@ float HSM_SCANLINE_DIRECTION = global.HSM_SCANLINE_DIRECTION;
 //---------------------------------------------------------------------------------------------------
 //    SHADERFX
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_SCALEFX_TITLE	                        "[ --- SMOOTHING - SCALEFX - ADV Presets Only ---- ]:" 0 0 0.01 0.01
-#pragma parameter HSM_SCALEFX_ON 	                        "          ScaleFx ON - Must Increase Core Res Sampling" 0 0 1 1
+        #pragma parameter HSM_SCALEFX_TITLE	                        "[ --- SMOOTHING - SCALEFX - ADV Presets Only ---- ]:" 0 0 0.01 0.01
+        #pragma parameter HSM_SCALEFX_ON 	                        "          ScaleFx ON - Must Increase Core Res Sampling" 0 0 1 1
+
+
+//---------------------------------------------------------------------------------------------------
+//    SCANLINES
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_SCANLINE_TITLE								"[ SCANLINE DIRECTION ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_SCANLINE_DIRECTION 							"          Scanline Direction - Auto | Horiz | Vert"  0 0 2 1
+float HSM_SCANLINE_DIRECTION = global.HSM_SCANLINE_DIRECTION;
 
 
 //---------------------------------------------------------------------------------------------------

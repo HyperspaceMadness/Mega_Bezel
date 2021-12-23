@@ -1,6 +1,7 @@
 ------------------------------------------------------------------------------------------------------------
 HyperspaceMadness Mega Bezel Shader Readme
 ------------------------------------------------------------------------------------------------------------
+This file is best viewed in a markdown editor/viewer if possible.
 
 Find more conversation about the shader here:
 https://forums.libretro.com/t/hsm-mega-bezel-reflection-shader-feedback-and-updates
@@ -22,7 +23,7 @@ How does it work?
 ----------------------------------------
 
   * In general there is a background image which fills the screen, then the scaled down game screen with an automatically generated bezel image is drawn on top. 
-  * The bezel and frame you see around the screen auto generated and not part of the background image
+  * The bezel and frame you see around the screen is auto generated and not part of the background image
   * Additional Images can be layered on top to augment the look
   * Most things can be changed to your taste with adjustment of the parameters, so try them out!
 
@@ -34,20 +35,22 @@ Installation
 
 * **You MUST use Retroarch Version 1.9.8 or Later** (It will fail to load on earlier versions)
   * If you have previous versions of the Mega Bezel installed:
-  * Delete the old Mega Bezel stuff from shaders/shaders_slang/bezel
+    * Delete the old Mega Bezel stuff from shaders/shaders_slang/bezel
   * Inside the .zip is a bezel folder, copy the bezel folder into your Retroarch/shaders/shaders_slang folder
+    * The final path to the Mega bezel should be `Retroarch/shaders/shaders_slang/bezel/Mega_Bezel`
   * Set video driver to **Vulcan**
     * It will run in **GLCore** but seems faster in **Vulcan**
     * Some users have run it successfully in **D3D11** but with a slow load time
   * Set **Video / Scaling / Aspect Ratio** to **Full**
-  * This will match your monitor aspect aspect ratio
-  * Set **Video / Output / Rotation** to Normal
-  * Set **Integer scale** to **OFF**
+    * This will match your monitor aspect aspect ratio
+  * Set **Video / Scaling / Integer Scale** to **OFF**
+  * Set **Video / Output / Rotation** to **Normal**
+  * Set **Settings / Core / Allow Rotation** to **OFF** -- **Important for FB Neo**
   * Load a preset in the shaders menu, Mega Bezel shader presets are found in:
     * shaders/shaders_slang/bezel/Mega_Bezel/Presets
   * When you save a preset make sure you have the **Simple Presets** feature set to **ON**
-    * This will save a preset which has a reference to the preset you loaded plus whatever parameter changes you made
-    * This is what will keep your presets loading properly when the shader updates in the future
+    * This will save a preset with a reference to the preset you loaded plus whatever parameter changes you made
+    * This will keep your presets loading properly when the shader updates in the future
 
 
 
@@ -55,53 +58,62 @@ Installation
 Choosing a Preset
 ----------------------------------------
 
-Presets are named/sorted by performance
-The most flexible and most resource hungry are at the top starting with index 0
-As the name's index number increases the presets get faster but less flexible
+  * Presets are named/sorted by performance
+  * The most flexible and most resource hungry start with index 0.
+  * As the name's index number increases the performance of the preset improves but but flexibility decreases.
 
 **Presets in Mega_Bezel / Presets**
 
-- All of the presets in the root of the Presets folder use @guest.r's awesome Guest-DrVenom CRT shader except for POTATO Guest-DrVenom-Advanced preset is considered the default CRT shader for the Mega Bezel
+- All of the presets in the root of the Presets folder use @guest.r's awesome Guest-DrVenom-Advanced preset which is considered the default CRT shader for the Mega Bezel, the only exception to this is the POTATO preset which uses GDV-MINI for performance reasons.
 
-  * **MBZ______1______ADV**
-    * Reflection
-    * Multiple image layering
-    * Full Pre-CRT shader chain includes MDAPT, ScaleFX & GTU
-  * **MBZ______1______ADV-NO-REFLECT**
-    * Same as the previous but with no reflection
-  * **MBZ______2______ADV-GLASS** - Glass presets which show a blurry reflection in the area around the screen 
-    * Reflection is the last pass
-    * Has only one images for image layering used for the glass gradient highlight
-    * Full Pre-CRT shader chain includes MDAPT, ScaleFX & GTU
-  * **MBZ______3______STD**
-    * Reflection
-    * Multiple image layering
-    * Simple Pre-CRT shader chain with fewer passes
-      * Includes Grade
-      * No Upscaling in the chain so works better with higher res core output, e.g. 4x Internal Res
-  * **MBZ______4______STD-NO-REFLECT**
-    * Same as the previous but no reflection
-  * **MBZ______5______POTATO**
-    * For all your low spec "potato" computer needs
-    * Minimal Pre-CRT shader chain
-      * No Grade
-    * Uses ZFast as teh CRT shader because this is a simple but very fast shader
+|                       |Reflection  |Image Layering |Tube Effects  |Pre-CRT Chain
+|-----------------------|------------|---------------|--------------|----------------
+|MBZ__1__ADV            |✔           |✔             |✔             | FULL
+|MBZ__2__ADV__Glass     |✔           |               |✔             | FULL
+|MBZ__2__ADV-NO-REFLECT |            |✔              |✔             | FULL
+|MBZ__3__STD            |✔           |✔             |✔             | SIMPLIFIED
+|MBZ__3__STD__Glass     |✔           |               |✔             | SIMPLIFIED
+|MBZ__4__STD-NO-REFLECT |            |✔              |✔             | SIMPLIFIED
+|MBZ__5__POTATO         |            |BG ONLY        |              | MINIMAL
 
-**Presets in Mega_Bezel / Presets / Base_CRT_Presets**
+**Descriptions:**
 
-- Includes presets using different crt shaders for the screen
-- Look here for the LCD preset
+  * **Glass** 
+    * Presets which show a blurry reflection in the area around the screen
+  * **Image Layering**
+    * Layering of multiple images for background, crt housing, leds etc
+  * **Full Pre-CRT shader chain** 
+    * Includes Grade, MDAPT, ScaleFX & GTU
+    * Resolution is tripled in the middle of the chain for ScaleFX 
+  * **Simple Pre-CRT shader chain**
+    * Fewer passes
+    * Includes Grade
+    * No Upscaling in the chain so works better with higher res core output, e.g. 4x Internal Res
 
-**Presets in Mega_Bezel / Presets / Variations**
+**Preset Folders in Mega_Bezel / Presets**
 
-  * These presets are simple presets referencing one of the presets in the Mega_Bezel folder
-  * They reference the original preset then have adjusted parameters or texture paths
+  * **Base_CRT_Presets**
+    - Includes presets using different crt shaders for the screen
+    - Look here for the LCD preset
 
-**Presets in Mega_Bezel / Presets / Experimental**
+  * **Base_CRT_Presets_DREZ**
+    * Presets which set the resolution at the beginning of the shader chain
+    * Good for reducing the resolution from the core to native res to use with a crt shader
+    * Helps working with cores which are outputting at increased internal resolution, e.g. 2x, 4k this creates antialiasing at native res which comes from rendering at a higher resolution then reducing it 
 
-  * These presets are work in progress and therfore 
-  * Use at your own risk!
-  * These may disappear, be renamed, or change behavior at any future release
+  * **Community_CRT_Variations**
+    - Presets with crt settings created by community members
+
+  * **Variations**
+    * These presets are simple presets referencing one of the presets in the Mega_Bezel folder
+    * They reference the original preset then have adjusted parameters or texture paths
+
+  * **Experimental**
+    * These presets are work in progress and therfore 
+    * **Use at your own risk!**
+    * These may disappear, be renamed, or change behavior at any future release
+
+
 
 ----------------------------------------
 Troubleshooting
@@ -115,7 +127,7 @@ Troubleshooting
         * If the shader loads correctly then the shader is working.
         
      * When the shader works in imageviewer, but doesn’t work when using a core, it is probably related to the core, or the graphics card being overwhelmed by resource usage with both the core requirements and the shader requirements
-       
+     * If it is the resolution overwhelming the resources available you can try a STD preset, or a STD-DREZ preset to reduce the resolution used within the shader chain
      * If you still have difficulties loading the shader with a specific core update the core
      * If you still have difficulties download a new separate version of Retroarch and try it there. Sometimes problems lurk in a random config file which is very hard to track down
  * **To see errors** coming from Retroarch you need to set up your logging settings:
@@ -153,12 +165,14 @@ Bug Reporting
 ----------------------------------------
 
 - When reporting a bug, please post images of the issue if it is at all visual in nature. This often helps communicate the issue better & quicker, even if the issue seems simple.
-
 - Please make sure you are using the latest version of the shader when reporting bugs
-
 - If you are having any issues with the shader not loading or crashing please include a log (See above for turning on logs)
-
-  
+- Please include info about your setup
+  - Preset
+  - Core
+  - Core Internal Res 1x, 2x etc?
+  - Monitor resolution?
+  - GPU
 
 
 -----------------------------------------------------------------------------------------------------------------------------------
@@ -167,33 +181,72 @@ Parameter Descriptions
 
 **[ --- HSM MEGA BEZEL  20XX-XX-XX-0 --- ]:**
 
+  * **Show Resolution Info** --- Show Resolution info from different aspects of the shader chain with onscreen text
+
+**[ GRAPHICS CACHE ]:**
+
+  * **Cache Graphics**
+    * **0: OFF** - Graphics Layering and Bezel Generation are regenerated every frame
+    * **1: ON** - Graphics & Bezel are generated once and cached for subsequent frames
+  * **Cache Update Indicator** 
+    * **0: OFF** - Never show the red dot indicator on screen when the cache updates
+    * **1: ON** - Appears whenever the graphics are regenerated and cache is updated, when caching is off or if the cache is auto-updated
+    * **2: ONLY WHEN CACHE OFF** - Indicator does not appear on auto-update, It only appears when caching is off
+
+**[ GRAPHICS GLOBAL BRIGHTNESS ]:**
+  * **Graphics Brightness** - Brightness of all graphics and images which are not the CRT Shader
+  * **Graphics Gamma Adjust** - Apply a gamma adjustment on all graphics and images which are not the CRT Shader 
+
+**[ AMBIENT LIGHTING ]:** - Usually used to apply night lighting on all graphics
+- **Opacity**
+  - How much of the ambient lighting darkening effect is applied
+- **Hue**
+  - Shift the hue of the color of the image
+- **Value**
+  - How dark or bright the ambient lighting is
+- **Saturation**
+  - How saturated the night lighting is
+- **Scale Mode**
+  - **VIEW WITH ZOOM** Scale to the full view, but scale with the viewport Zoom
+  - **FULL** Scale the image to the full window
+- **Scale Offset**
+  - Scale the lighting image
+- **Mirror Horizontal**
+  - Mirror the ambient lighting image
+
+**[ VIEWPORT ZOOM ]:** 
+* **Viewport Zoom** --- Zoom in or out on all the graphics and screen
+* **Viewport Position X** 
+* **Viewport Position Y**
+
+
 **[ FLIP & ROTATE ]:**
 
-​		**Flip Viewport Vertical** --- Some cores flip the viewport (full monitor area), this flips it back
-
-​		**Flip Core Image Vertical** --- Some cores flip the core image, this flips it back
-
-​		**Rotate CRT Tube** --- Turns the tube 90 degrees counter counter-clockwise
+* **Flip Viewport Vertical** --- Some cores flip the viewport (full monitor area), this flips it back
+* **Flip Viewport Horizontal**
+* **Flip Core Image Vertical** --- Some cores flip the core image, this flips it back
+* **Flip Core Image Horizontal**
+* **Rotate CRT Tube** --- Turns the tube 90 degrees counter counter-clockwise
 
 **[ ASPECT RATIO ]:**
 
-​		**Orientation** --- Should the aspect be tall or wide? This does not rotate the image.
-​					**0 - Auto** - Chooses vertical vs horizontal based on the core resolution
-​					**1 - Horizontal** - uses horizontal aspect
-​					**2 - Vertical** - uses vertical aspect
+* **Orientation** --- Should the aspect be tall or wide? This does not rotate the image.
+  * **0 - Auto** - Chooses vertical vs horizontal based on the core resolution
+  * **1 - Horizontal** - uses horizontal aspect
+  * **2 - Vertical** - uses vertical aspect
 
-​		**Type** --- Choose type of aspect ratio
-​        			**0 - Auto** - Choose aspect ratio based on educated guesses about the core resolution
-​        			**1 - Explicit** - Use the aspect ratio from the [ASPECT]  Explicit Aspect Ratio parameter
-​        			**2 - 4:3** (Almost all arcade games are 4:3)
-​        			**3 - 3:2**
-​        			**4 - 16:9**
-​        			**5 - PAR** (The aspect ratio of the pixel resolution)
-​        			**6 - Full** (The screen will scale to the full viewport)
+* **Type**
+  * **0 - Auto** - Choose aspect ratio based on an educated guess about the core's resolution
+  * **1 - Explicit** - Use the aspect ratio from the **Explicit Aspect Ratio** parameter
+  * **2 - 4:3** - Almost all arcade games are 4:3
+  * **3 - 3:2**
+  * **4 - 16:9**
+  * **5 - PAR** - The aspect ratio of the core's pixel resolution
+  * **6 - Full** - The screen will scale to the full viewport
 
-​		**Explicit Aspect Ratio** --- Ratio used when [Aspect] Type is set to Explicit or if Auto is chosen and no matching resolution can be found
+  * **Explicit Aspect Ratio** - Ratio used when [Aspect Ratio] Type is set to Explicit or if Auto is chosen and no matching resolution can be found
 
-**[SCALING]:**
+**[ CRT SCREEN SCALING ]:**
 
 - **Show Resolution Info**
 - **Int Scale Mode**
@@ -207,23 +260,61 @@ Parameter Descriptions
   - Adds an additional multiple offset but for only the long axis, with a horizontal aspect ratio this is the horizontal axis
 - **Int Scale Border Min Height %**
   - The amount of vertical screen space reserved for the area around the screen when using integer scale
+- **Vertical Preset (E.G. 4K Vertical)**
+  - Turn on if this is a vertical monitor preset, E.G. if your physical monitor is turned vertical
 - **Non-Integer Scale %**
   - If integer scale isn't used, this sets the vertical size of the vertical percentage of the full viewport
+
+
+**[ EXTENDED CRT SCREEN SCALING ]:**
+
+- **Use Image For Placement (Scale & Y Pos)**
+  - TODO Description
+- **Placement Image Mode: TRANSPARENCY : WHITE ON BLACK**
+  - TODO Description
+- **Non-Integer Scale Offset**
+  - TODO Description
 - **Snap To Int-Scale Tolerance**
   - Snaps the non-integer scale to the closest integer scale within the tolerance. This allows you to set an approximate size for the screen and have it snap to an integer scale but not if it would be too much different
 
-**[POSITION]:**
+
+**[ POSITION OFFSET ]:**
 
 - **Position X** - Moves the entire screen and frame left and right
 - **Position Y** - Moves the entire screen and frame up and down
 
-**[CROPPING]:**
-    Cropping allows you to hide edges of the game image which were never meant to be seen
 
+**[ CROPPING CORE IMAGE ]:**
+    Cropping allows you to remove parts of the game image at the edges of the screen which were never meant to be seen
+
+- **Crop Mode  -  OFF | CROP BLACK ONLY | CROP ANY**
+- **Crop Zoom %**
 - **Crop Overscan Top**
 - **Crop Overscan Bottom**
 - **Crop Overscan Left**
 - **Crop Overscan Right**
+- **Black Threshold for 'CROP BLACK ONLY'**
+
+
+**[ --- FAST SHARPEN - GUEST.R --- ]:**
+
+- **Sharpen ON**
+- **Sharpen Strength**
+- **Amount of Sharpening**
+- **Details Sharpened**
+
+
+**[ --- SMOOTHING - SCALEFX - ADV Presets Only ---- ]:**
+
+- **ScaleFx ON - Must Increase Core Res Sampling**
+
+
+**[ SCANLINE DIRECTION ]:**
+
+- **Scanline Direction (GDV & Easymode)**
+  - **0 - Auto** --- Chooses horizontal or vertical scanline direction based on aspect ratio
+  - **1 - Horizontal** scanlines
+  - **2 - Vertical** scanlines
 
 **[CORE RES SAMPLING]:**
 
@@ -238,32 +329,91 @@ Parameter Descriptions
   - Adjust the sampling in direction opposite of the scanlines
   - E.G. if the scanlines are horizontal adjust sampling along the vertical axis
 
-**[ SCANLINES ]:**
+**[ INTERLACING From Guest.r :) ]:**
 
-- **Scanline Direction (GDV & Easymode)**
-  - **0 - Auto** --- Chooses horizontal or vertical scanline direction based on aspect ratio
-  - **1 - Horizontal** scanlines
-  - **2 - Vertical** scanlines
 - **Interlace and Fake Scanlines Trigger Res**
   - Resolution where the shader should switch into its interlace or high res content mode.
-- **Fake Scanline Opacity**
+- **Interlacing Mode: OFF | Normal 1-3 | Interpolation 4-5**
+- **Interlacing Effect Smoothness**
+- **Interlacing Scanline Effect**
+- **Interlacing (Scanline) Saturation**
+
+**[ FAKE SCANLINES ]:**
+
+- **Show Fake Scanlines - OFF | ON | USE TRIGGER RES**
+- **Opacity**
   - Opacity of scanlines added on top of the crt image.
   - These scanlines are not tied to the core image resolution
+- **Scan Resolution**
+- **Int Scale Scanlines**
+- **Rolling Scanlines**
+- **Scanline Curvature**
 
-**[CURVATURE]:**
+**[ CURVATURE ]:**
     Applies tube curvature
 
 - **CURVATURE MODE**
-  - **-1 - Turn Curvature Off**
-  - **0 - 2D** - Simplest and fastest curvature
-  - **1 - 3D Sphere**  -  Geometric projection from the surface of a sphere to the viewport - Same as CRT-Royale
-  - **2 - 3D Sphere with adjusted corner mapping** --- Very similar to #1
-  - **3 - 3D Cylindrical Mapping** --- Vertically flat curvature like a Trinitron, e.g. PVM or BVM
+  - **0 - Turn Curvature Off**
+  - **1 - 2D** - Simplest and fastest curvature
+  - **2 - 2D-CYL** - Simplest and fastest curvature but for a cylindrical tube like a Trinitron
+  - **3 - 3D Sphere**  -  Geometric projection from the surface of a sphere to the viewport - Same as CRT-Royale
+  - **4 - 3D Sphere with adjusted corner mapping** --- Very similar to #1
+  - **5 - 3D Cylindrical Mapping** --- Vertically flat curvature like a Trinitron, e.g. PVM or BVM
 - **2D Curvature on Long Axis** - Curvature multiple on long axis, for a horizontal aspect ratio this is the horizontal axis
 - **2D Curvature on Short Axis** - Curvature multiple on short axis, for a horizontal aspect ratio this is the vertical axis
 - **3D Radius** - Radius for the sphere the 3D projection is done on, values from 1-4 then to be useful
 - **3D View Distance** - This is the distance of the virtual camera from the Sphere
 - **3D Tilt Angle Y** - Vertical Tilt, with split screen this will tilt both screens towards or away from the center
+
+**[ DUAL SCREEN ]:**
+
+- **Dual Screen Mode**
+  - **0 - OFF** - Single Screen
+  - **1 - VERTICAL** - Split into 2 screens one on the top and one on the bottom
+  - **2 - HORIZONTAL** - Split into 2 screens one on the left and one on the right
+  
+- **Core Image Split Mode**
+  - **0 - AUTO**
+  - **1 - VERTICAL**
+  - **2 - HORIZONTAL**
+  
+- **Core Image Split Offset**
+  - Adjusts where we split the core image into two
+  - This is an offset in pixels from the center
+
+- **Crop Edges of 2nd Screen**
+  - This crops the edges perpendicular to split
+  - Useful in situations like  the 3DS where when in a top/bottom emulator layout the bottom area has black areas at left and right of the screen 
+  - Value in Pixels
+
+- **Viewport Split Offset**
+  - Sets where the viewport split placed. The split defines the area where one screen or the other appears
+  - Value is a percentage from the center of the screen
+
+- **Scale Screens from Center of Split**
+  - 0 - OFF - The screens will scale their center
+  - 1 - ON - The screens will scale from the split position rather than from their own centers
+
+- **Position Offset Between Screens**
+  - Positive values move screens apart
+  - Negative values move screens closer to each other
+
+- **2nd Screen Aspect Ratio Mode**
+  - 0 - Use the same Aspect ratio as the first Screen
+  - 1 - PAR (Uses the square pixel aspect of the bottom screen's resolution)
+
+- **2nd Screen Use Independent Scale**
+  - Don't affect the second screen with the scale of the first
+
+- **2nd Screen Scale Offset**
+  - Increase or Decrease scale of second screen
+
+- **2nd Screen Pos X**
+  - Move the second screen Horizontally
+
+- **2nd Screen Pos Y**
+  - Move the second screen Vertically
+
 
 **[ PHOSPHOR PERSISTENCE ]:**
 
@@ -272,13 +422,6 @@ Parameter Descriptions
 - **Red Persistence**
 - **Green Persistence**
 - **Blue Persistence**
-
-**[ SCANLINES ON BLACK ]:**
-
-- **Black Level**
-  * Positive values make darks darker
-  * Negative values make blacks more gray
-  * Defaults to -4 so that the black areas are not 100% black so you get very faint scanlines
 
 **[ CRT GAMMA ]:**
 
@@ -544,64 +687,6 @@ Parameter Descriptions
 - **Glass Border ON (Glass Preset Only)**
   - Changes the appearance of the reflection to look like the glass effect, this is here for technical reasons, not very useful to change interactively
 
-**[ DUAL SCREEN ]:**
-
-- **Dual Screen Mode**
-  - **0 - OFF** - Single Screen
-  - **1 - VERTICAL** - Split into 2 screens one on the top and one on the bottom
-  - **2 - HORIZONTAL** - Split into 2 screens one on the left and one on the right
-  
-- **Core Image Split Mode**
-  - **0 - AUTO**
-  - **1 - VERTICAL**
-  - **2 - HORIZONTAL**
-  
-- **Core Image Split Offset**
-
-  - Adjusts where we split the core image into two
-  - This is an offset in pixels from the center
-
-- **Crop Edges of 2nd Screen**
-
-  - This crops the edges perpendicular to split
-  - Useful in situations like  the 3DS where when in a top/bottom emulator layout the bottom area has black areas at left and right of the screen 
-  - Value in Pixels
-
-- **Viewport Split Offset**
-
-  - Sets where the viewport split placed. The split defines the area where one screen or the other appears
-  - Value is a percentage from the center of the screen
-
-- **Scale Screens from Center of Split**
-
-  - 0 - OFF - The screens will scale their center
-  - 1 - ON - The screens will scale from the split position rather than from their own centers
-
-- **Position Offset Between Screens**
-
-  - Positive values move screens apart
-  - Negative values move screens closer to each other
-
-- **2nd Screen Aspect Ratio Mode**
-
-  - 0 - Use the same Aspect ratio as the first Screen
-  - 1 - PAR (Uses the square pixel aspect of the bottom screen's resolution)
-
-- **2nd Screen Use Independent Scale**
-
-  - Don't affect the second screen with the scale of the first
-
-- **2nd Screen Scale Offset**
-
-  - Increase or Decrease scale of second screen
-
-- **2nd Screen Pos X**
-
-  - Move the second screen Horizontally
-
-- **2nd Screen Pos Y**
-
-  - Move the second screen Vertically
 
   
 
@@ -672,40 +757,6 @@ Parameter Descriptions
 - **Top Extra Image Opacity**
 - **Top Extra Image Blend Mode**
 
-**[ STATIC IMAGE LAYER GAMMA  ]:**
-
-- **Static Layers Gamma Adjust**
-  - Adjust the Gamma on all layers to brighten or darken all of them
-
-**[ NIGHT LIGHTING ]:**
-
-- **Opacity**
-
-  - How much of the night lighting darkening effect is applied
-
-  
-
-## **ADVANCED Presets Only**
-
-**[ NIGHT LIGHTING ]:**
-
-- **Opacity**
-  - How much of the night lighting darkening effect is applied
-- **Mirror Horizontal**
-  - Mirror the night lighting image
-- **Saturation**
-  - How saturated the night lighting is
-- **Hue**
-  - Shift the hue of the color of the image
-- **Value**
-  - How dark or bright the night lighting is
-- **Dithering Noise Samples**
-  - Reduces Banding
-
-**[ STATIC IMAGE LAYER GAMMA  ]:**
-
-- **Static Layers Gamma Adjust**
-  - Adjust the Gamma on all layers to brighten or darken all of them
 
 **[ LAYER ORDER ]:**
 
@@ -763,7 +814,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 
 ## ***Common Layer Parameters***
 
-​	*In the multiple image layers there are many parameters which are repeated from layer to layer, their description is shown here*
+	*In the multiple image layers there are many parameters which are repeated from layer to layer, their description is shown here*
 
 - ***Opacity***
 
@@ -1010,7 +1061,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
   - When drawing past the edges of the texture use mirror wrapping
 
 **[ INTRO SEQUENCE ]:**
-​	Animation sequence which plays when the content starts up, animation times are in frames. The frame rate for most games 60 fps
+	Animation sequence which plays when the content starts up, animation times are in frames. The frame rate for most games 60 fps
 
 - **Show Intro**
   - 0 - OFF
