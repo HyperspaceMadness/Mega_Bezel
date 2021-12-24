@@ -358,10 +358,10 @@ void HSM_GetCroppedRotatedSizeAndPixelSampleAreaStart(float screen_index, sample
 	vec2 rotated_core_prepped_size = HSM_GetRotatedCorePreppedSize();
 	float prepped_size_aspect = rotated_core_prepped_size.y / rotated_core_prepped_size.x;
 
-	float default_crop_left_px = floor(0.1 * rotated_core_prepped_size.x);
-	float default_crop_top_px = floor(0.1 * rotated_core_prepped_size.y);
-	float default_crop_right_px = floor(0.1 * rotated_core_prepped_size.x);
-	float default_crop_bottom_px = floor(0.1 * rotated_core_prepped_size.y);
+	float default_crop_left_px = floor(MAX_NEGATIVE_CROP * rotated_core_prepped_size.x);
+	float default_crop_top_px = floor(MAX_NEGATIVE_CROP * rotated_core_prepped_size.y);
+	float default_crop_right_px = floor(MAX_NEGATIVE_CROP * rotated_core_prepped_size.x);
+	float default_crop_bottom_px = floor(MAX_NEGATIVE_CROP * rotated_core_prepped_size.y);
 
 	float zoom_crop_left_px = floor(HSM_CROP_PERCENT_ZOOM * rotated_core_prepped_size.x);
 	float zoom_crop_top_px = floor(HSM_CROP_PERCENT_ZOOM * rotated_core_prepped_size.y);

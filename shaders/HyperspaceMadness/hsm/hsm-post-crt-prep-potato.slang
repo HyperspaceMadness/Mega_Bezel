@@ -69,7 +69,7 @@ vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_CO
 	if (HSM_MONOCHROME_MODE > 0.5)
 		in_color_with_gamma = HSM_ApplyMonochrome(in_color_with_gamma);
 
-	vec4 out_color = HSM_Linearize(in_color_with_gamma, HSM_DEFAULT_SRGB_GAMMA);
+	vec4 out_color = HSM_Linearize(in_color_with_gamma, DEFAULT_SRGB_GAMMA);
 	
 	out_color *= HSM_POST_CRT_BRIGHTNESS;
 
@@ -107,7 +107,7 @@ vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_CO
 			bg_layer = texture(BackgroundImage, bg_coord);
 		else
 			bg_layer = texture(BackgroundVertImage, bg_coord);
-		bg_layer = HSM_Linearize(bg_layer, HSM_DEFAULT_SRGB_GAMMA);
+		bg_layer = HSM_Linearize(bg_layer, DEFAULT_SRGB_GAMMA);
 
 		bg_layer.rgb *= HSM_BG_BRIGHTNESS;
 
@@ -118,7 +118,7 @@ vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_CO
 	}
 
 	// Apply the final Gamma
-	out_color = HSM_Delinearize(out_color, HSM_DEFAULT_SRGB_GAMMA);
+	out_color = HSM_Delinearize(out_color, DEFAULT_SRGB_GAMMA);
 	return out_color;
 }
 

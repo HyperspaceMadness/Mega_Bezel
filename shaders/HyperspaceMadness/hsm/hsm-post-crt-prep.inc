@@ -138,7 +138,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	if (HSM_MONOCHROME_MODE > 0.5)
 		in_color_with_gamma = HSM_ApplyMonochrome(in_color_with_gamma);
 
-	vec4 out_color = HSM_Linearize(in_color_with_gamma, HSM_DEFAULT_SRGB_GAMMA);
+	vec4 out_color = HSM_Linearize(in_color_with_gamma, DEFAULT_SRGB_GAMMA);
 	out_color *= HSM_POST_CRT_BRIGHTNESS;
 
 	vec2 mirrored_screen_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
@@ -170,7 +170,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 		if (!source_is_linear)
 			source_color = HSM_Linearize(source_color, HSM_GAMMA_IN_LINEARIZE);
 		source_color = HSM_Delinearize(source_color, HSM_GAMMA_OUT_CRT);
-		source_color = HSM_Linearize(source_color, HSM_DEFAULT_SRGB_GAMMA);
+		source_color = HSM_Linearize(source_color, DEFAULT_SRGB_GAMMA);
 
 		out_color = mix(out_color, source_color, mirrored_screen_coord.x < HSM_CRT_ORIGINAL_AB_COMPARE_SPLIT_POSITION ? 1 : 0);
 	}
@@ -197,7 +197,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	if (HSM_TUBE_DIFFUSE_IMAGE_ON > 0.5)
 	{
 		tube_diffuse = HSM_GetMipmappedTexSample(TubeDiffuseImage, mirrored_tube_coord, TUBE_SCALE, 0);
-		tube_diffuse = HSM_GLOBAL_GRAPHICS_BRIGHTNESS * HSM_GetPreMultipliedColorLinear(tube_diffuse, SOURCE_MATTE_PREMULTIPLIED, HSM_DEFAULT_SRGB_GAMMA);
+		tube_diffuse = HSM_GLOBAL_GRAPHICS_BRIGHTNESS * HSM_GetPreMultipliedColorLinear(tube_diffuse, SOURCE_MATTE_PREMULTIPLIED, DEFAULT_SRGB_GAMMA);
 		tube_diffuse.rgb = HSM_ApplyHSVAdjustment(tube_diffuse.rgb, HSM_TUBE_DIFFUSE_IMAGE_HUE, HSM_TUBE_DIFFUSE_IMAGE_SATURATION, HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS, HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON, HSM_TUBE_DIFFUSE_IMAGE_GAMMA);
 	}
 	tube_diffuse *= HSM_TUBE_DIFFUSE_IMAGE_OPACITY;
@@ -213,7 +213,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 		vec2 gel_coord = mix( mirrored_tube_coord, -1 * (mirrored_tube_coord - 0.5) + 0.5 , HSM_FLIP_VIEWPORT_VERTICAL);
 		vec4 gel_image = HSM_GetMipmappedTexSample(TubeColoredGelImage, mirrored_tube_coord, TUBE_SCALE, 0);
 		
-		gel_image = HSM_GLOBAL_GRAPHICS_BRIGHTNESS * HSM_Linearize(gel_image, HSM_DEFAULT_SRGB_GAMMA);
+		gel_image = HSM_GLOBAL_GRAPHICS_BRIGHTNESS * HSM_Linearize(gel_image, DEFAULT_SRGB_GAMMA);
 
 		if (HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT > 0)
 			out_color = mix(out_color, out_color * gel_image, HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT);
@@ -247,7 +247,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 
 	// #ifndef IS_NO_REFLECT_PRESET
 	// Apply the final Gamma
-	out_color = HSM_Delinearize(out_color, HSM_DEFAULT_SRGB_GAMMA);
+	out_color = HSM_Delinearize(out_color, DEFAULT_SRGB_GAMMA);
 	// #endif
 	
 	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;

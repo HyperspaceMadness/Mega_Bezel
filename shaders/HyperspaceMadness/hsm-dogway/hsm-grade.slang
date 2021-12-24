@@ -888,13 +888,13 @@ vec3 vcolor = adj;
     vec2 raw_size = HSM_ROTATE_CORE_IMAGE > 0.5 ? vec2(ROTATED_CORE_PREPPED_SIZE.y, ROTATED_CORE_PREPPED_SIZE.x) : ROTATED_CORE_PREPPED_SIZE;
     vec2 sample_start_area = HSM_ROTATE_CORE_IMAGE > 0.5 ? vec2(SAMPLE_AREA_START_PIXEL_COORD.y, SAMPLE_AREA_START_PIXEL_COORD.x) : SAMPLE_AREA_START_PIXEL_COORD;
     vec2 pos_in_cropped_coords = (cur_pixel_pos - sample_start_area) /  cropped_size;
-    pos_in_cropped_coords = (pos_in_cropped_coords - 0.5) * 0.8 + 0.5;
+    pos_in_cropped_coords = (pos_in_cropped_coords - 0.5) * (1 - 2 * MAX_NEGATIVE_CROP) + 0.5;
 
     vec2 vpos = pos_in_cropped_coords;
 
     if (vignette > 0.5)
     {
-        vpos = (vpos - 0.5) / 0.81 + 0.5;
+        vpos = (vpos - 0.5) / (1 - 2 * MAX_NEGATIVE_CROP + 0.01) + 0.5;
         vpos *= 1.0 - vpos.xy;
         float vig = vpos.x * vpos.y * vstr;
         vig = min(pow(vig, vpower), 1.0);

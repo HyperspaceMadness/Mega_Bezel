@@ -64,7 +64,7 @@ void main()
 	vTexCoord * 1.0001;
 
 	// Not sure why we need linearize this but it seems to have a smoother range this way
-	BEZEL_FRAME_ORIGINAL_COLOR_RGB = HSM_Linearize(vec4(HSM_HSVtoRGB(vec3(HSM_BZL_COLOR_HUE, HSM_BZL_COLOR_SATURATION, HSM_BZL_COLOR_VALUE)), 1), HSM_DEFAULT_SRGB_GAMMA).rgb;
+	BEZEL_FRAME_ORIGINAL_COLOR_RGB = HSM_Linearize(vec4(HSM_HSVtoRGB(vec3(HSM_BZL_COLOR_HUE, HSM_BZL_COLOR_SATURATION, HSM_BZL_COLOR_VALUE)), 1), DEFAULT_SRGB_GAMMA).rgb;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -127,8 +127,8 @@ void main()
 	// CRT Pass
 	//----------------------------------------------------
 	// Get the CRT pass and make it in linear space & mask the area outside the screen
-	vec4 crt_linear = HSM_Linearize(texture(MBZ_PostCRTPass, UNFLIPPED_VIEWPORT_COORD.xy), HSM_DEFAULT_CRT_GAMMA);
-	crt_linear = HSM_ApplyGamma(crt_linear, HSM_DEFAULT_CRT_GAMMA / HSM_DEFAULT_SRGB_GAMMA);
+	vec4 crt_linear = HSM_Linearize(texture(MBZ_PostCRTPass, UNFLIPPED_VIEWPORT_COORD.xy), DEFAULT_CRT_GAMMA);
+	crt_linear = HSM_ApplyGamma(crt_linear, DEFAULT_CRT_GAMMA / DEFAULT_SRGB_GAMMA);
 
 	vec4 blurred_reflection_color = HHLP_GetBilinearTextureSample(BR_MirrorBlurredPass, UNFLIPPED_VIEWPORT_COORD.xy, params.BR_MirrorBlurredPassSize);
 
@@ -438,14 +438,14 @@ void main()
 #ifdef IS_GLASS_PRESET
 	vec4 bg_image = HSM_GetMipmappedTexSample(BackgroundImage, VIEWPORT_COORD, vec2(1), 0);
 	
-	bg_image = HSM_Linearize(bg_image, HSM_DEFAULT_SRGB_GAMMA);
+	bg_image = HSM_Linearize(bg_image, DEFAULT_SRGB_GAMMA);
 
 	bg_image.a *= outside_tube_mask_wider * (1 - edge_mask);
 
 	vec4 frag_color_linear = crt_linear;
 	frag_color_linear = HSM_BlendModeLayerMix(frag_color_linear, bg_image, HSM_BG_BLEND_MODE, HSM_BG_OPACITY);
 	frag_color_linear += reflection_color;
-	FragColor = HSM_ApplyGamma(clamp(frag_color_linear, 0, 1), HSM_DEFAULT_SRGB_GAMMA);
+	FragColor = HSM_ApplyGamma(clamp(frag_color_linear, 0, 1), DEFAULT_SRGB_GAMMA);
 
 	return;
 #endif

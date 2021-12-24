@@ -176,12 +176,12 @@ void main()
 	
 
     // TODO Add adjust to take into acount Gamma IN
-    color = pow(color, vec3(1.0/(HSM_DEFAULT_SRGB_GAMMA * HSM_GAMMA_IN_LINEARIZE / (0.9 * HSM_GAMMA_OUT_CRT))));
+    color = pow(color, vec3(1.0/(DEFAULT_SRGB_GAMMA * HSM_GAMMA_IN_LINEARIZE / (0.9 * HSM_GAMMA_OUT_CRT))));
 
 	float l = length(color);
 	color = color * Mask(vTexCoord * global.OutputSize.xy);	
 
-    color = pow(color, vec3(HSM_DEFAULT_SRGB_GAMMA / (HSM_GAMMA_OUT_CRT * 0.8)));
+    color = pow(color, vec3(DEFAULT_SRGB_GAMMA / (HSM_GAMMA_OUT_CRT * 0.8)));
 	
     color *= 1.2;
 

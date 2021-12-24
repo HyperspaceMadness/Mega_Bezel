@@ -211,7 +211,7 @@ void main()
     out_color = (foreground * foreground.a * params.contrast) + (out_color * (params.screen_light - foreground.a * params.contrast * params.pixel_opacity));
     
     // Linearize so it is linear when it goes to the post prep
-    FragColor = HSM_Linearize(out_color, HSM_DEFAULT_CRT_GAMMA);
+    FragColor = HSM_Linearize(out_color, DEFAULT_CRT_GAMMA);
 
     // Prep and add output gamma
 	FragColor = HSM_GetPostCrtPreppedColor(FragColor, vTexCoord, screen_curved_coord, LinearizePass, true, TubeColoredGelImage, TubeStaticReflectionImage, BackgroundImage, BackgroundVertImage);

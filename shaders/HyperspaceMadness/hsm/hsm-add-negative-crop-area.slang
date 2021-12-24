@@ -44,5 +44,5 @@ layout(set = 0, binding = 2) uniform sampler2D Source;
 
 void main()
 {
-   FragColor = vec4(texture(Source, (vTexCoord - 0.5) / 0.8 + 0.5).rgb, 1.0);
+   FragColor = vec4(texture(Source, (vTexCoord - 0.5) / (1 - 2 * MAX_NEGATIVE_CROP) + 0.5).rgb, 1.0);
 }

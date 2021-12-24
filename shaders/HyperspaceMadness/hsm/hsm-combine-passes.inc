@@ -43,10 +43,10 @@ layout(location = 8) out vec3 BEZEL_FRAME_ORIGINAL_COLOR_RGB;
 void main()
 {
 	gl_Position = global.MVP * Position;
-	vTexCoord = TexCoord * 1.0001;
+	vTexCoord = TexCoord;
 
 	// Not sure why we need linearize this but it seems to have a smoother range this way
-	BEZEL_FRAME_ORIGINAL_COLOR_RGB = HSM_Linearize(vec4(HSM_HSVtoRGB(vec3(HSM_BZL_COLOR_HUE, HSM_BZL_COLOR_SATURATION, HSM_BZL_COLOR_VALUE)), 1), HSM_DEFAULT_SRGB_GAMMA).rgb;
+	BEZEL_FRAME_ORIGINAL_COLOR_RGB = HSM_Linearize(vec4(HSM_HSVtoRGB(vec3(HSM_BZL_COLOR_HUE, HSM_BZL_COLOR_SATURATION, HSM_BZL_COLOR_VALUE)), 1), DEFAULT_SRGB_GAMMA).rgb;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -109,7 +109,7 @@ void main()
 
 	vec4 crt_layer = texture(MiddlePass, vTexCoord);
 	#ifdef IS_NO_REFLECT_PRESET
-		crt_layer = HSM_Linearize(crt_layer, HSM_DEFAULT_SRGB_GAMMA);
+		crt_layer = HSM_Linearize(crt_layer, DEFAULT_SRGB_GAMMA);
 	#endif
 
 	if (HSM_RENDER_SIMPLE_MODE > 0.5)
@@ -129,7 +129,7 @@ void main()
 	over_layer.rgb *= HSM_GLOBAL_GRAPHICS_BRIGHTNESS;
 	out_color = HSM_PreMultAlphaBlend(out_color, over_layer);
 
-	FragColor = HSM_ApplyGamma(clamp(out_color, 0, 1), HSM_DEFAULT_SRGB_GAMMA);
+	FragColor = HSM_ApplyGamma(clamp(out_color, 0, 1), DEFAULT_SRGB_GAMMA);
 
 	if (HSM_RENDER_SIMPLE_MODE > 0.5)
 	{

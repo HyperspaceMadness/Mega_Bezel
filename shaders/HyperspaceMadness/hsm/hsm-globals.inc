@@ -536,6 +536,14 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 /////////////// DEFINES ///////////////
 
+// Maximum Negative cropping fron each edge
+// This means that the pass with the negative crop area 
+// added needs to have twice this much added in each direction 
+#define MAX_NEGATIVE_CROP 0.1
+
+#define DEFAULT_CRT_GAMMA 2.4
+#define DEFAULT_SRGB_GAMMA 2.2
+
 #define INHERITED_SCALE_MODE_VIEWPORT 0
 #define INHERITED_SCALE_MODE_SCREEN 1
 #define INHERITED_SCALE_MODE_BEZEL_OUTSIDE 2

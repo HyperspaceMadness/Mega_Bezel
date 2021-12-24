@@ -500,7 +500,7 @@ void main()
 	float hmbz_frame_brightness = 100;
 
 	// Not sure why we need linearize this but it seems to have a smoother range this way
-	vec3 base_color = HSM_Linearize(vec4(HSM_HSVtoRGB(vec3(HSM_BZL_COLOR_HUE, HSM_BZL_COLOR_SATURATION, HSM_BZL_COLOR_VALUE)), 1), HSM_DEFAULT_SRGB_GAMMA).rgb;
+	vec3 base_color = HSM_Linearize(vec4(HSM_HSVtoRGB(vec3(HSM_BZL_COLOR_HUE, HSM_BZL_COLOR_SATURATION, HSM_BZL_COLOR_VALUE)), 1), DEFAULT_SRGB_GAMMA).rgb;
 	float noise_mask = clamp(fract(sin(dot(tube_curved_coord_ctr + vec2(0.5, 0.5) + 1, vec2(12.9898, 78.233))) * 43758.5453), 0, 1);
 	vec3 base_color_with_noise = mix(base_color, 1.5 * base_color * noise_mask, HSM_BZL_NOISE);
 	vec3 top_color = hmbz_bezel_brightness_top * HSM_BZL_BRIGHTNESS * base_color_with_noise;
@@ -542,7 +542,7 @@ void main()
 	if (HSM_FRM_TEXTURE_OPACITY > 0)
 	{
 		// TODO need to do Mipmapping sample?
-		vec4 frame_texture_color = HSM_Linearize(texture(FrameTextureImage, FRAME_OUTSIDE_CURVED_COORD), HSM_DEFAULT_SRGB_GAMMA);
+		vec4 frame_texture_color = HSM_Linearize(texture(FrameTextureImage, FRAME_OUTSIDE_CURVED_COORD), DEFAULT_SRGB_GAMMA);
 		frame_diffuse_color = HSM_BlendModeLayerMix(vec4(frame_diffuse_color, 1), frame_texture_color, HSM_FRM_TEXTURE_BLEND_MODE, HSM_FRM_TEXTURE_OPACITY).rgb;
 	}
 
@@ -640,7 +640,7 @@ void main()
 			bg_image = HSM_GetMipmappedTexSample(BackgroundVertImage, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
 
 		// Premultiply Alpha
-		bg_image = HSM_GetPreMultipliedColorLinear(bg_image, HSM_BG_SOURCE_MATTE_TYPE, HSM_DEFAULT_SRGB_GAMMA);
+		bg_image = HSM_GetPreMultipliedColorLinear(bg_image, HSM_BG_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
 
 		// HSV Adjustments
 		bg_image.rgb = HSM_ApplyHSVAdjustment(bg_image.rgb, HSM_BG_HUE, HSM_BG_SATURATION, HSM_BG_BRIGHTNESS, HSM_BG_COLORIZE_ON, HSM_BG_GAMMA);
@@ -681,7 +681,7 @@ void main()
 											HSM_GetMipmappedTexSample(DeviceImage, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS);
 
 		// Premultiply Alpha
-		device_image = HSM_GetPreMultipliedColorLinear(device_image, HSM_DEVICE_SOURCE_MATTE_TYPE, HSM_DEFAULT_SRGB_GAMMA);
+		device_image = HSM_GetPreMultipliedColorLinear(device_image, HSM_DEVICE_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
 
 		// HSV Adjustments
 		device_image.rgb = HSM_ApplyHSVAdjustment(device_image.rgb, HSM_DEVICE_HUE, HSM_DEVICE_SATURATION, HSM_DEVICE_BRIGHTNESS, HSM_DEVICE_COLORIZE_ON, HSM_DEVICE_GAMMA);
@@ -720,7 +720,7 @@ void main()
 		led_image = HSM_GetMipmappedTexSample(LEDImage, LED_CURVED_COORD, LED_SCALE, HSM_LED_MIPMAPPING_BLEND_BIAS);
 
 		// Premultiply Alpha
-		led_image = HSM_GetPreMultipliedColorLinear(led_image, HSM_LED_SOURCE_MATTE_TYPE, HSM_DEFAULT_SRGB_GAMMA);
+		led_image = HSM_GetPreMultipliedColorLinear(led_image, HSM_LED_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
 
 		// HSV Adjustments
 		led_image.rgb = HSM_ApplyHSVAdjustment(led_image.rgb, HSM_LED_HUE, HSM_LED_SATURATION, HSM_LED_BRIGHTNESS, HSM_LED_COLORIZE_ON, HSM_LED_GAMMA);
@@ -759,7 +759,7 @@ void main()
 		decal_image = HSM_GetMipmappedTexSample(DecalImage, DECAL_COORD, DECAL_SCALE, HSM_DECAL_MIPMAPPING_BLEND_BIAS);
 		
 		// Premultiply Alpha
-		decal_image = HSM_GetPreMultipliedColorLinear(decal_image, HSM_DECAL_SOURCE_MATTE_TYPE, HSM_DEFAULT_SRGB_GAMMA);
+		decal_image = HSM_GetPreMultipliedColorLinear(decal_image, HSM_DECAL_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
 
 		// HSV Adjustments
 		decal_image.rgb = HSM_ApplyHSVAdjustment(decal_image.rgb, HSM_DECAL_HUE, HSM_DECAL_SATURATION, HSM_DECAL_BRIGHTNESS, HSM_DECAL_COLORIZE_ON, HSM_DECAL_GAMMA);
@@ -803,7 +803,7 @@ void main()
 		top_image = HSM_GetMipmappedTexSample(TopLayerImage, TOP_IMAGE_CURVED_COORD, TOP_IMAGE_SCALE, HSM_TOP_MIPMAPPING_BLEND_BIAS);
 
 		// Premultiply Alpha
-		top_image = HSM_GetPreMultipliedColorLinear(top_image, HSM_TOP_SOURCE_MATTE_TYPE, HSM_DEFAULT_SRGB_GAMMA);
+		top_image = HSM_GetPreMultipliedColorLinear(top_image, HSM_TOP_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
 
 		// HSV Adjustments
 		top_image.rgb = HSM_ApplyHSVAdjustment(top_image.rgb, HSM_TOP_HUE, HSM_TOP_SATURATION, HSM_TOP_BRIGHTNESS, HSM_TOP_COLORIZE_ON, HSM_TOP_GAMMA);
@@ -848,7 +848,7 @@ void main()
 		cab_glass_image = HSM_GetMipmappedTexSample(CabinetGlassImage, CAB_GLASS_CURVED_COORD, CAB_GLASS_SCALE, HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS);
 
 		// Premultiply Alpha
-		cab_glass_image = HSM_GetPreMultipliedColorLinear(cab_glass_image, HSM_CAB_GLASS_SOURCE_MATTE_TYPE, HSM_DEFAULT_SRGB_GAMMA);
+		cab_glass_image = HSM_GetPreMultipliedColorLinear(cab_glass_image, HSM_CAB_GLASS_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
 
 		// HSV Adjustments
 		cab_glass_image.rgb = HSM_ApplyHSVAdjustment(cab_glass_image.rgb, HSM_CAB_GLASS_HUE, HSM_CAB_GLASS_SATURATION, HSM_CAB_GLASS_BRIGHTNESS, HSM_CAB_GLASS_COLORIZE_ON, HSM_CAB_GLASS_GAMMA);

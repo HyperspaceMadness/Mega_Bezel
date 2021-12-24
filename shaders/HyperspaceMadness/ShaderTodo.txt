@@ -1,27 +1,7 @@
-Mega Bezel is updated to V 0.9.090 2021-12-24
+Mega Bezel is updated to V 0.9.092 2021-12-24 Rev 3
 
 Changes:
-  * The Headlines:
-    * Caching for Improved Performance
-    * Guest NTSC presets added
-    * Big rework on preset levels
-      * Different levels of presets are now relatively consistent and make more sense from a user perspective
-
-  * BIG Changes to the preset levels
-    * ADV
-      * All Pre-CRT Passes
-      * Image Layering
-      * Reflection
-    * STD
-      * Minimal Pre-CRT Passes (No ScaleFX Upscaling)
-      * Image Layering
-      * Reflection
-    * STD-NO-REFLECT - (Closest Preset we had to this was BASIC)
-      * Minimal Pre-CRT Passes (Still includes Grade)
-      * Image Layering
-    * POTATO
-      * Minimal Pre-CRT Passes (No Grade)
-      * Background Image
+  * Fix issue with cacing when bilinear filter is on
 
 Change Details:
   * Viewport Zoom & Position

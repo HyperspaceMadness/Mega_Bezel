@@ -159,7 +159,7 @@ vec4 HSM_Get_Tube_Highlight(vec2 tube_curved_coord, bool apply_to_mirror, in sam
 
 		vec4 tube_highlight_image = HSM_GetMipmappedTexSample(TubeStaticReflectionImage, tube_highlight_coord, TUBE_SCALE, 0);
 
-		tube_highlight_image = HSM_Linearize(tube_highlight_image, HSM_DEFAULT_SRGB_GAMMA) * tube_highlight_mask;
+		tube_highlight_image = HSM_Linearize(tube_highlight_image, DEFAULT_SRGB_GAMMA) * tube_highlight_mask;
 
 		if (HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING > 0)
 		{

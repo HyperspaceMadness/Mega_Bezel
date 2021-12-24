@@ -23,7 +23,7 @@
 */
 
 // Screen Scale Required Parameters
-#pragma parameter HSM_MEGA_BEZEL_TITLE								"[ --- HSM MEGA BEZEL 0.9.090 2021-12-24 --- ]" 0 0 0.01 0.01
+#pragma parameter HSM_MEGA_BEZEL_TITLE								"[ --- HSM MEGA BEZEL 0.9.092 2021-12-24 Rev 3--- ]" 0 0 0.01 0.01
 
 #pragma parameter HSM_RESOLUTION_DEBUG_ON							"          Show Resolution Info" 0 0 1 1
 float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
@@ -635,11 +635,3 @@ float HSM_BZL_HEIGHT = global.HSM_BZL_HEIGHT * 0.0008732;
 
 #pragma parameter HSM_BZL_INNER_CORNER_RADIUS_SCALE	    			"          Inner Corner Radius Scale - Def 80" 80 0 8000 1
 float HSM_BZL_INNER_CORNER_RADIUS_SCALE = global.HSM_BZL_INNER_CORNER_RADIUS_SCALE / 100;
-
-#ifndef HSM_DEFAULT_CRT_GAMMA
-	#define HSM_DEFAULT_CRT_GAMMA 2.4
-#endif
-
-#ifndef HSM_DEFAULT_SRGB_GAMMA
-	#define HSM_DEFAULT_SRGB_GAMMA 2.2
-#endif

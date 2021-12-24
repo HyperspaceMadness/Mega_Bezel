@@ -140,7 +140,7 @@ vec4 GetColorWithIntro(vec4 in_color, vec2 in_coord)
 	float mask_vert_wait = mask_fade_horizontal * 0.4;
 
    vec4 solid_color = vec4(HSM_HSVtoRGB(vec3(HSM_INTRO_SOLID_COLOR_HUE, HSM_INTRO_SOLID_COLOR_SAT, HSM_INTRO_SOLID_COLOR_VALUE)), 1);
-   // vec4 solid_color = HSM_Linearize(vec4(HSM_HSVtoRGB(vec3(HSM_BZL_COLOR_HUE, HSM_BZL_COLOR_SATURATION, HSM_BZL_COLOR_VALUE)), 1), HSM_DEFAULT_SRGB_GAMMA).rgb;
+   // vec4 solid_color = HSM_Linearize(vec4(HSM_HSVtoRGB(vec3(HSM_BZL_COLOR_HUE, HSM_BZL_COLOR_SATURATION, HSM_BZL_COLOR_VALUE)), 1), DEFAULT_SRGB_GAMMA).rgb;
 
 	float solid_color_hold = HSM_INTRO_SOLID_COLOR_HOLD / HSM_INTRO_SPEED;
 	float solid_color_fade_out = HSM_INTRO_SOLID_COLOR_FADE_OUT / HSM_INTRO_SPEED;
@@ -214,13 +214,11 @@ vec4 GetColorWithIntro(vec4 in_color, vec2 in_coord)
       {
          if (HSM_GetCoreImageSplitDirection() == 1)
          {
-            // intro_image_scale.y *= 0.5;
-            in_coord.y = in_coord.y * 2 - 0.1;
+            in_coord.y = in_coord.y * 2 - MAX_NEGATIVE_CROP;
          }
          if (HSM_GetCoreImageSplitDirection() == 2)
          {
-            // intro_image_scale.x *= 0.5;
-            in_coord.x = in_coord.x * 2 - 0.1;
+            in_coord.x = in_coord.x * 2 - MAX_NEGATIVE_CROP;
          }
       }
 
@@ -258,7 +256,7 @@ vec4 GetColorWithIntro(vec4 in_color, vec2 in_coord)
 
 		out_color *= mask;
 
-      HSM_Delinearize(out_color, HSM_DEFAULT_SRGB_GAMMA);
+      HSM_Delinearize(out_color, DEFAULT_SRGB_GAMMA);
 	}
    return out_color;
 }
@@ -316,7 +314,7 @@ void main()
 	if (show_update_indicator)
 	{
 		float final_aspect = SCREEN_ASPECT;
-		vec2 corner_offset = vec2(0.18, 0.2);
+		vec2 corner_offset = vec2(0.18, MAX_NEGATIVE_CROP * 2);
 		vec2 center_coord = vec2(1 - corner_offset.x * final_aspect, 1 - corner_offset.y);
 		vec2 test_coord = vec2(1 - (1 - viewport_coord_adjusted.x) * final_aspect, viewport_coord_adjusted.y);
 		float distance =  length(test_coord - center_coord);
@@ -336,6 +334,6 @@ void main()
 
    //////// Draw text to show out_colorolutions ////////// 
    if (HSM_RESOLUTION_DEBUG_ON == 1)
-      FragColor = AddText(viewport_coord_adjusted - vec2(0.1, -0.1), FragColor);
+      FragColor = AddText(viewport_coord_adjusted - vec2(MAX_NEGATIVE_CROP, -MAX_NEGATIVE_CROP), FragColor);
 
 }

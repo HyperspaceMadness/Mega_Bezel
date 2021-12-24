@@ -61,5 +61,5 @@ layout(set = 0, binding = 2) uniform sampler2D MBZ_PostCRTPass;
 
 void main()
 {
-   FragColor = HSM_Linearize(vec4(tex2Dblur9x9(MBZ_PostCRTPass, vTexCoord, blur_dxdy), 1), HSM_DEFAULT_CRT_GAMMA);
+   FragColor = HSM_Linearize(vec4(tex2Dblur9x9(MBZ_PostCRTPass, vTexCoord, blur_dxdy), 1), DEFAULT_CRT_GAMMA);
 }

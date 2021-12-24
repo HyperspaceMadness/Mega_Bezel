@@ -94,14 +94,14 @@ vec4 HSM_ApplyPhosphorPersistence(vec4 in_color, vec4 prev_color, vec2 in_coord)
 void main()
 {
    FragColor = texture(Source, vTexCoord);
-   FragColor = HSM_Linearize(FragColor, HSM_DEFAULT_SRGB_GAMMA);
+   FragColor = HSM_Linearize(FragColor, DEFAULT_SRGB_GAMMA);
 
 	vec4 prev_color = texture(previous_pass_feedback, vTexCoord);
-   prev_color = HSM_Linearize(prev_color, HSM_DEFAULT_SRGB_GAMMA);
+   prev_color = HSM_Linearize(prev_color, DEFAULT_SRGB_GAMMA);
 
    // Phosphor Persistence
    FragColor = HSM_ApplyPhosphorPersistence(FragColor, prev_color, vTexCoord);
 
    // FragColor = mix(texture(previous_pass_feedback, vTexCoord), texture(Source, vTexCoord), 0.5);
-   FragColor = HSM_Delinearize(FragColor, HSM_DEFAULT_SRGB_GAMMA);
+   FragColor = HSM_Delinearize(FragColor, DEFAULT_SRGB_GAMMA);
 }

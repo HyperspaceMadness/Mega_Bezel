@@ -260,14 +260,6 @@ vec4 HSM_GetTexSampleFromSampleStartAndSize(sampler2D in_sampler, vec2 in_screen
 	return out_color;
 }
 
-/*
-bool HSM_GetIsInterlaceModeActive()
-{
-	float scan_res = USE_VERTICAL_SCANLINES > 0.5 ? CROPPED_ROTATED_SIZE_WITH_RES_MULT.x : CROPPED_ROTATED_SIZE_WITH_RES_MULT.y;
-	return ( HSM_INTERLACE_MODE > 0.5 && HSM_INTERLACE_TRIGGER_RES < scan_res );
-}
-*/
-
 vec2 HSM_GetInverseScaledCoord(vec2 in_coord, vec2 in_scale)
 {
 	vec2 middle = vec2(0.49999, 0.49999);
@@ -1041,7 +1033,7 @@ vec4 HSM_GetNightLightingMultiplyColor( vec2 viewport_coord, in sampler2D NightL
 	// else
 	night_lighting_image = HSM_GetMipmappedTexSample(NightLightingImage, night_lighting_coord.xy, vec2(1), 0);
 	
-	night_lighting_image = HSM_Linearize(night_lighting_image, HSM_DEFAULT_SRGB_GAMMA);
+	night_lighting_image = HSM_Linearize(night_lighting_image, DEFAULT_SRGB_GAMMA);
 
 	// Do HSV alterations on the night lighting image
 	if (HSM_AMBIENT_LIGHTING_HUE != 0 || HSM_AMBIENT_LIGHTING_SATURATION != 1 || HSM_AMBIENT_LIGHTING_VALUE != 1)
