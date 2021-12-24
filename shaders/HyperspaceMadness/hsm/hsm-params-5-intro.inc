@@ -39,7 +39,7 @@
 #pragma parameter HSM_INTRO_LOGO_BLEND_MODE        				"          Logo Blend Mode - OFF | NORM | ADD | MULT"  1 0 3 1
 #define HSM_INTRO_LOGO_BLEND_MODE global.HSM_INTRO_LOGO_BLEND_MODE
 
-// #pragma parameter HSM_INTRO_LOGO_FLIP_VERTICAL        				"          Logo Flip Vertical"  0 0 1 1
+// #pragma parameter HSM_INTRO_LOGO_FLIP_VERTICAL        		"          Logo Flip Vertical"  0 0 1 1
 // #define HSM_INTRO_LOGO_FLIP_VERTICAL global.HSM_INTRO_LOGO_FLIP_VERTICAL
 
 #pragma parameter HSM_INTRO_LOGO_OVER_SOLID_COLOR       		"          Logo Over Solid Color - Off | ON"  1 0 1 1
@@ -57,15 +57,15 @@
 #pragma parameter HSM_INTRO_LOGO_PLACEMENT        				"          Logo Placement - Middle | TL | TR | BL | BR"  0 0 4 1
 #define HSM_INTRO_LOGO_PLACEMENT global.HSM_INTRO_LOGO_PLACEMENT
 
-// #pragma parameter HSM_INTRO_LOGO_WAIT     						"          Logo Wait Before Start Frames"  20 0 1200 5
+// #pragma parameter HSM_INTRO_LOGO_WAIT     					"          Logo Wait Before Start Frames"  20 0 1200 5
 // #define HSM_INTRO_LOGO_WAIT global.HSM_INTRO_LOGO_WAIT
 #define HSM_INTRO_LOGO_WAIT 20
 
-// #pragma parameter HSM_INTRO_LOGO_FADE_IN       					"          Logo Fade In Frames"  20 0 600 5
+// #pragma parameter HSM_INTRO_LOGO_FADE_IN       				"          Logo Fade In Frames"  20 0 600 5
 // #define HSM_INTRO_LOGO_FADE_IN global.HSM_INTRO_LOGO_FADE_IN
 #define HSM_INTRO_LOGO_FADE_IN 20
 
-// #pragma parameter HSM_INTRO_LOGO_HOLD     						"          Logo Hold Frames"  130 0 600 5
+// #pragma parameter HSM_INTRO_LOGO_HOLD     					"          Logo Hold Frames"  130 0 600 5
 // #define HSM_INTRO_LOGO_HOLD global.HSM_INTRO_LOGO_HOLD
 #define HSM_INTRO_LOGO_HOLD 130
 
@@ -88,7 +88,7 @@
 #pragma parameter HSM_INTRO_SOLID_COLOR_VALUE     				"          Solid Color Value"  100 0 100 5
 #define HSM_INTRO_SOLID_COLOR_VALUE (global.HSM_INTRO_SOLID_COLOR_VALUE / 100)
 
-// #pragma parameter HSM_INTRO_SOLID_COLOR_HOLD     				"          Solid Color Hold Frames"  40 0 600 5
+// #pragma parameter HSM_INTRO_SOLID_COLOR_HOLD     			"          Solid Color Hold Frames"  40 0 600 5
 // #define HSM_INTRO_SOLID_COLOR_HOLD global.HSM_INTRO_SOLID_COLOR_HOLD
 #define HSM_INTRO_SOLID_COLOR_HOLD 40
 
@@ -102,11 +102,11 @@
 #pragma parameter HSM_INTRO_NOISE_BLEND_MODE        			"          Static Noise Blend Mode - OFF | NORM | ADD | MULT"  1 0 3 1
 #define HSM_INTRO_NOISE_BLEND_MODE global.HSM_INTRO_NOISE_BLEND_MODE
 
-// #pragma parameter HSM_INTRO_NOISE_HOLD     						"          Static Noise Hold Frames"  80 0 600 5
+// #pragma parameter HSM_INTRO_NOISE_HOLD     					"          Static Noise Hold Frames"  80 0 600 5
 // #define HSM_INTRO_NOISE_HOLD global.HSM_INTRO_NOISE_HOLD
 #define HSM_INTRO_NOISE_HOLD 80
 
-// #pragma parameter HSM_INTRO_NOISE_FADE_OUT       				"          Static Noise Fade Out Frames"  120 0 600 5
+// #pragma parameter HSM_INTRO_NOISE_FADE_OUT       			"          Static Noise Fade Out Frames"  120 0 600 5
 // #define HSM_INTRO_NOISE_FADE_OUT global.HSM_INTRO_NOISE_FADE_OUT
 #define HSM_INTRO_NOISE_FADE_OUT 120
 
