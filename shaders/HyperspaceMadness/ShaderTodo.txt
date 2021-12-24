@@ -82,14 +82,13 @@ Mega Bezel Still to Come:
 
 V1 TODO
 
-  * Check on Tube Transparency - Tron Example?
+  * Potato Should use Global Brightness / Gamma?
   * Missing inner Edge static shading?
-  * Pink outside frame options?
-  * Guess White/Black Matting?
   * Check if Downsample range needs to be fixed to core res
 
   
   Post V1
+  * Guess White/Black Matting?
   * Mega Back Light ala philips Hue/Ambient
   * Fix Corner Shading
   * Good Preset for FBNeo & Instructions

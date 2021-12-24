@@ -112,6 +112,7 @@ layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
 layout(set = 0, binding = 2) uniform sampler2D InfoCachePassFeedback;
 
 layout(set = 0, binding = 3) uniform sampler2D PrePass;
+layout(set = 0, binding = 4) uniform sampler2D CorePreppedPass;
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
 
@@ -122,16 +123,18 @@ vec3 plant (vec3 tar, float r)
 	return tar * r / t;
 }
 
-
+// TODO need to adjust downsample
 vec3 fetch_pixel(vec2 coord)
 {
-	vec2 dx = vec2(global.SourceSize.z, 0.0) * HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR;
-	vec2 dy = vec2(0.0, global.SourceSize.w) * HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR;
+	vec2 prescale_tex_size = textureSize(CorePreppedPass, 0);
+
+	vec2 dx = vec2(1 / prescale_tex_size.x, 0.0) * HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR;
+	vec2 dy = vec2(0.0, 1 / prescale_tex_size.y) * HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR;
 
 	if (use_vert_scanlines_bool)
 	{
-		dx = vec2(global.SourceSize.z, 0.0) * HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR;
-		dy = vec2(0.0, global.SourceSize.w) * HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR;
+		dx = vec2(1 / prescale_tex_size.x, 0.0) * HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR;
+		dy = vec2(0.0, 1 / prescale_tex_size.y) * HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR;
 	}
 
 	vec2 d1 = dx + dy;
@@ -163,7 +166,6 @@ void main()
 	vec3  c2 = vec3(0);
 	
 	// HSM Added
-	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
 	use_vert_scanlines_bool = (USE_VERTICAL_SCANLINES > 0.5);

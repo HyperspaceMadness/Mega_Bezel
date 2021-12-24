@@ -303,7 +303,7 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
 {
     float col = 0.0;
     
-    float current_line_index = 15;
+    float current_line_index = 13;
 
     //Resolution Text
     printPos = vec2(2, 2.0 + STRHEIGHT(current_line_index));
