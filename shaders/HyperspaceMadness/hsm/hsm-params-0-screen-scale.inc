@@ -44,39 +44,39 @@ float HSM_CACHE_UPDATE_INDICATOR_MODE = global.HSM_CACHE_UPDATE_INDICATOR_MODE;
 //---------------------------------------------------------------------------------------------------
 //    Global Graphics Brightness
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_GLOBAL_GRAPHICS_BRIGHTNESS_TITLE          "[ GRAPHICS GLOBAL BRIGHTNESS ]:" 0 0 0.01 0.01
+#pragma parameter HSM_GLOBAL_GRAPHICS_BRIGHTNESS_TITLE              "[ GRAPHICS GLOBAL BRIGHTNESS ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_GLOBAL_GRAPHICS_BRIGHTNESS                "          Graphics Brightness"  100 0 200 1
+#pragma parameter HSM_GLOBAL_GRAPHICS_BRIGHTNESS                    "          Graphics Brightness"  100 0 200 1
 float HSM_GLOBAL_GRAPHICS_BRIGHTNESS = global.HSM_GLOBAL_GRAPHICS_BRIGHTNESS / 100;
 
-#pragma parameter HSM_STATIC_LAYERS_GAMMA		                "          Graphics Gamma Adjust" 1 0.01 5 0.01
+#pragma parameter HSM_STATIC_LAYERS_GAMMA		                    "          Graphics Gamma Adjust" 1 0.01 5 0.01
 float HSM_STATIC_LAYERS_GAMMA = global.HSM_STATIC_LAYERS_GAMMA;
 
 
 //---------------------------------------------------------------------------------------------------
 //    NIGHT LIGHTING
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_AMBIENT_LIGHTING_TITLE          "[ AMBIENT LIGHTING ]:" 0 0 0.01 0.01
+#pragma parameter HSM_AMBIENT_LIGHTING_TITLE                        "[ AMBIENT LIGHTING ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_AMBIENT_LIGHTING_OPACITY                 "          Opacity"  0 0 100 1
+#pragma parameter HSM_AMBIENT_LIGHTING_OPACITY                      "          Opacity"  0 0 100 1
 float HSM_AMBIENT_LIGHTING_OPACITY = global.HSM_AMBIENT_LIGHTING_OPACITY / 100;
 
-#pragma parameter HSM_AMBIENT_LIGHTING_HUE                 	"          Hue"  0 -180 180 1
+#pragma parameter HSM_AMBIENT_LIGHTING_HUE                 	        "          Hue"  0 -180 180 1
 float HSM_AMBIENT_LIGHTING_HUE = global.HSM_AMBIENT_LIGHTING_HUE / 360;
 
-#pragma parameter HSM_AMBIENT_LIGHTING_SATURATION          	"          Saturation"  100 0 300 1
+#pragma parameter HSM_AMBIENT_LIGHTING_SATURATION          	        "          Saturation"  100 0 300 1
 float HSM_AMBIENT_LIGHTING_SATURATION = global.HSM_AMBIENT_LIGHTING_SATURATION / 100;
 
-#pragma parameter HSM_AMBIENT_LIGHTING_VALUE               	"          Value"  100 0 400 1
+#pragma parameter HSM_AMBIENT_LIGHTING_VALUE               	        "          Value"  100 0 400 1
 float HSM_AMBIENT_LIGHTING_VALUE = global.HSM_AMBIENT_LIGHTING_VALUE / 100;
 
-#pragma parameter HSM_AMBIENT_LIGHTING_SCALE_MODE         	"          Scale Mode - VIEW WITH ZOOM | FULL"  1 0 1 1
+#pragma parameter HSM_AMBIENT_LIGHTING_SCALE_MODE         	        "          Scale Mode - VIEW WITH ZOOM | FULL"  1 0 1 1
 float HSM_AMBIENT_LIGHTING_SCALE_MODE = global.HSM_AMBIENT_LIGHTING_SCALE_MODE;
 
-#pragma parameter HSM_AMBIENT_LIGHTING_SCALE             	"          Scale Offset"  100 10 1000 1
+#pragma parameter HSM_AMBIENT_LIGHTING_SCALE             	        "          Scale Offset"  100 10 1000 1
 float HSM_AMBIENT_LIGHTING_SCALE = global.HSM_AMBIENT_LIGHTING_SCALE / 100;
 
-#pragma parameter HSM_AMBIENT_LIGHTING_MIRROR_HORZ         	"          Mirror Horizontal"  0 0 1 1
+#pragma parameter HSM_AMBIENT_LIGHTING_MIRROR_HORZ         	        "          Mirror Horizontal"  0 0 1 1
 float HSM_AMBIENT_LIGHTING_MIRROR_HORZ = global.HSM_AMBIENT_LIGHTING_MIRROR_HORZ;
 
 // Commented out because I don't think anyone is using this
@@ -165,7 +165,7 @@ float HSM_NON_INTEGER_SCALE = global.HSM_NON_INTEGER_SCALE - (HSM_VERTICAL_PRESE
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_SCREEN_EXTENDED_SCALE_TITLE					"[ EXTENDED CRT SCREEN SCALING ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_USE_IMAGE_FOR_PLACEMENT 							"          Use Image For Placement (Scale & Y Pos)" 0 0 1 1
+#pragma parameter HSM_USE_IMAGE_FOR_PLACEMENT 						"          Use Image For Placement (Scale & Y Pos)" 0 0 1 1
 float HSM_USE_IMAGE_FOR_PLACEMENT = global.HSM_USE_IMAGE_FOR_PLACEMENT;
 
 #pragma parameter HSM_PLACEMENT_IMAGE_MODE 						    "          Placement Image Mode: TRANSPARENCY : WHITE ON BLACK" 0 0 1 1
@@ -271,7 +271,7 @@ float HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = global.HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR
 #pragma parameter HSM_INTERLACE_MODE 								"         Interlacing Mode: OFF | Normal 1-3 | Interpolation 4-5" 4 0.0 5.0 1.0
 #define HSM_INTERLACE_MODE global.HSM_INTERLACE_MODE
 
-#pragma parameter HSM_INTERLACE_EFFECT_SMOOTHNESS_INTERS 					"          Interlacing Effect Smoothness" 0 0 100 10
+#pragma parameter HSM_INTERLACE_EFFECT_SMOOTHNESS_INTERS 			"          Interlacing Effect Smoothness" 0 0 100 10
 #define HSM_INTERLACE_EFFECT_SMOOTHNESS_INTERS global.HSM_INTERLACE_EFFECT_SMOOTHNESS_INTERS / 200
 
 #pragma parameter HSM_INTERLACE_SCANLINE_EFFECT 					"          Interlacing Scanline Effect" 20 0 100 5
@@ -315,7 +315,7 @@ float HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = global.HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_CURVATURE_TITLE								"[ CURVATURE ]:" 0 0 0.01 0.01
 
-// #pragma parameter HSM_USE_GEOM 										"          Use Geom Curvature" 0 -1 3 1
+// #pragma parameter HSM_USE_GEOM 									"          Use Geom Curvature" 0 -1 3 1
 // float HSM_USE_GEOM = global.HSM_USE_GEOM;
 // float HSM_USE_GEOM = 0;
 
@@ -370,34 +370,34 @@ float HSM_DUALSCREEN_SHIFT_POSITION_WITH_SCALE = global.HSM_DUALSCREEN_SHIFT_POS
 #pragma parameter HSM_DUALSCREEN_POSITION_OFFSET_BETWEEN_SCREENS	"          Position Offset Between Screens" 0 -250 250 0.2
 float HSM_DUALSCREEN_POSITION_OFFSET_BETWEEN_SCREENS = global.HSM_DUALSCREEN_POSITION_OFFSET_BETWEEN_SCREENS / 1000;
 
-#pragma parameter HSM_2ND_SCREEN_ASPECT_RATIO_MODE		"        2nd Screen Aspect Ratio Mode - Same as 1st Screen | PAR" 0 0 1 1
+#pragma parameter HSM_2ND_SCREEN_ASPECT_RATIO_MODE		            "        2nd Screen Aspect Ratio Mode - Same as 1st Screen | PAR" 0 0 1 1
 float HSM_2ND_SCREEN_ASPECT_RATIO_MODE = global.HSM_2ND_SCREEN_ASPECT_RATIO_MODE;
 
-#pragma parameter HSM_2ND_SCREEN_INDEPENDENT_SCALE		"          2nd Screen Use Independent Scale" 0 0 1 1
+#pragma parameter HSM_2ND_SCREEN_INDEPENDENT_SCALE		            "          2nd Screen Use Independent Scale" 0 0 1 1
 float HSM_2ND_SCREEN_INDEPENDENT_SCALE = global.HSM_2ND_SCREEN_INDEPENDENT_SCALE;
 
-#pragma parameter HSM_2ND_SCREEN_SCALE_OFFSET			"          2nd Screen Scale Offset" 100 1 500 0.5
+#pragma parameter HSM_2ND_SCREEN_SCALE_OFFSET			            "          2nd Screen Scale Offset" 100 1 500 0.5
 float HSM_2ND_SCREEN_SCALE_OFFSET = global.HSM_2ND_SCREEN_SCALE_OFFSET / 100;
 
-#pragma parameter HSM_2ND_SCREEN_POS_X					"          2nd Screen Pos X" 0 -500 500 1
+#pragma parameter HSM_2ND_SCREEN_POS_X					            "          2nd Screen Pos X" 0 -500 500 1
 float HSM_2ND_SCREEN_POS_X = global.HSM_2ND_SCREEN_POS_X / 1000;
 
-#pragma parameter HSM_2ND_SCREEN_POS_Y					"          2nd Screen Pos Y" 0 -500 500 1
+#pragma parameter HSM_2ND_SCREEN_POS_Y					            "          2nd Screen Pos Y" 0 -500 500 1
 float HSM_2ND_SCREEN_POS_Y = global.HSM_2ND_SCREEN_POS_Y / 1000;
 
-#pragma parameter HSM_2ND_SCREEN_CROP_PERCENT_ZOOM								"          2nd Screen Crop Zoom %" 0 -10 100 0.1
+#pragma parameter HSM_2ND_SCREEN_CROP_PERCENT_ZOOM					"          2nd Screen Crop Zoom %" 0 -10 100 0.1
 float HSM_2ND_SCREEN_CROP_PERCENT_ZOOM = global.HSM_2ND_SCREEN_CROP_PERCENT_ZOOM / 100;
 
-#pragma parameter HSM_2ND_SCREEN_CROP_PERCENT_TOP 								"          2nd Screen Crop Top %" 0 -10 100 0.1
+#pragma parameter HSM_2ND_SCREEN_CROP_PERCENT_TOP 					"          2nd Screen Crop Top %" 0 -10 100 0.1
 float HSM_2ND_SCREEN_CROP_PERCENT_TOP = global.HSM_2ND_SCREEN_CROP_PERCENT_TOP / 100;
 
-#pragma parameter HSM_2ND_SCREEN_CROP_PERCENT_BOTTOM 							"          2nd Screen Crop Bottom %" 0 -10 100 0.1
+#pragma parameter HSM_2ND_SCREEN_CROP_PERCENT_BOTTOM 				"          2nd Screen Crop Bottom %" 0 -10 100 0.1
 float HSM_2ND_SCREEN_CROP_PERCENT_BOTTOM = global.HSM_2ND_SCREEN_CROP_PERCENT_BOTTOM / 100;
 
-#pragma parameter HSM_2ND_SCREEN_CROP_PERCENT_LEFT 							"          2nd Screen Crop Left %" 0 -10 100 0.1
+#pragma parameter HSM_2ND_SCREEN_CROP_PERCENT_LEFT 					"          2nd Screen Crop Left %" 0 -10 100 0.1
 float HSM_2ND_SCREEN_CROP_PERCENT_LEFT = global.HSM_2ND_SCREEN_CROP_PERCENT_LEFT / 100;
 
-#pragma parameter HSM_2ND_SCREEN_CROP_PERCENT_RIGHT 							"          2nd Screen Crop Right %" 0 -10 100 0.1
+#pragma parameter HSM_2ND_SCREEN_CROP_PERCENT_RIGHT 				"          2nd Screen Crop Right %" 0 -10 100 0.1
 float HSM_2ND_SCREEN_CROP_PERCENT_RIGHT = global.HSM_2ND_SCREEN_CROP_PERCENT_RIGHT / 100;
 
 
@@ -429,7 +429,7 @@ float HSM_CRT_ORIGINAL_AB_COMPARE_SPLIT_POSITION = global.HSM_CRT_ORIGINAL_AB_CO
 //---------------------------------------------------------------------------------------------------
 //    CRT Layer
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_CRT_TITLE			             				"[ CRT SCREEN LAYER ]:" 0 0 0.01 0.01
+#pragma parameter HSM_CRT_TITLE                                     "[ CRT SCREEN LAYER ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_GAMMA_IN_LINEARIZE   							"          CRT Gamma In (Gamma to Linear Space Decode) Def 2.4" 2.4 0.1 5 0.05
 #define HSM_GAMMA_IN_LINEARIZE global.HSM_GAMMA_IN_LINEARIZE
@@ -437,11 +437,8 @@ float HSM_CRT_ORIGINAL_AB_COMPARE_SPLIT_POSITION = global.HSM_CRT_ORIGINAL_AB_CO
 #pragma parameter HSM_GAMMA_OUT_CRT   								"          CRT Gamma Out (Linear to Gamma Space Encode) Def 2.4" 2.4 0.1 5 0.05
 #define HSM_GAMMA_OUT_CRT global.HSM_GAMMA_OUT_CRT
 
-#pragma parameter HSM_POST_CRT_BRIGHTNESS  							"          Post CRT Brightness" 100 1 500 1
+#pragma parameter HSM_POST_CRT_BRIGHTNESS                           "          Post CRT Brightness" 100 1 500 1
 #define HSM_POST_CRT_BRIGHTNESS global.HSM_POST_CRT_BRIGHTNESS / 100
-
-#pragma parameter HSM_CRT_SCREEN_BLEND_MODE          "          Blend Mode - OFF | NORMAL | ADD (Backdrop)" 1 0 2 1
-float HSM_CRT_SCREEN_BLEND_MODE = global.HSM_CRT_SCREEN_BLEND_MODE;
 
 
 //---------------------------------------------------------------------------------------------------
@@ -467,13 +464,13 @@ float HSM_CRT_SCREEN_BLEND_MODE = global.HSM_CRT_SCREEN_BLEND_MODE;
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_MONOCHROME_TITLE 								"[ MONOCHROME ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_MONOCHROME_MODE  								"          Monochrome Color: OFF | BW | Amber | Green" 0.0 0.0 3.0 1.0
+#pragma parameter HSM_MONOCHROME_MODE  								"          Monochrome Color: OFF | BW | AMBER | GREEN" 0.0 0.0 3.0 1.0
 #define HSM_MONOCHROME_MODE global.HSM_MONOCHROME_MODE
 
 #pragma parameter HSM_MONOCHROME_GAMMA 								"          Monochrome Gamma" 1.0 1.0 2.4 0.1
 #define HSM_MONOCHROME_GAMMA global.HSM_MONOCHROME_GAMMA
 
-#pragma parameter HSM_MONOCHROME_HUE_OFFSET 								"          Monochrome Hue Offset" 0 -180 180 1
+#pragma parameter HSM_MONOCHROME_HUE_OFFSET 						"          Monochrome Hue Offset" 0 -180 180 1
 #define HSM_MONOCHROME_HUE_OFFSET (global.HSM_MONOCHROME_HUE_OFFSET / 360)
 
 #pragma parameter HSM_MONOCHROME_SATURATION 						"          Monochrome Saturation" 100 -100 200 1
@@ -481,47 +478,29 @@ float HSM_CRT_SCREEN_BLEND_MODE = global.HSM_CRT_SCREEN_BLEND_MODE;
 
 
 //---------------------------------------------------------------------------------------------------
-//    Reflection Transform
-//---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_REFLECTIONAPPEARANCE_TITLE					"[ REFLECTION TRANSFORM ]:" 0 0 0.01 0.01
-
-// #pragma parameter HSM_SCREEN_VIGNETTE_IN_REFLECTION     			"          Screen Vignette Opacity in Reflection" 100 0 100 1
-// float HSM_SCREEN_VIGNETTE_IN_REFLECTION = global.HSM_SCREEN_VIGNETTE_IN_REFLECTION / 100;
-
-#pragma parameter HSM_SCREEN_REFLECTION_SCALE     					"          Screen Reflection Scale" 100 1 300 1
-float HSM_SCREEN_REFLECTION_SCALE = global.HSM_SCREEN_REFLECTION_SCALE / 100;
-
-#pragma parameter HSM_SCREEN_REFLECTION_POS_X     					"          Screen Reflection Pos X" 0 -100 100 1
-float HSM_SCREEN_REFLECTION_POS_X = global.HSM_SCREEN_REFLECTION_POS_X / 600;
-
-#pragma parameter HSM_SCREEN_REFLECTION_POS_Y     					"          Screen Reflection Pos Y" 0 -100 100 1
-float HSM_SCREEN_REFLECTION_POS_Y = global.HSM_SCREEN_REFLECTION_POS_Y / 600;
-
-
-//---------------------------------------------------------------------------------------------------
 //    TUBE DIFFUSE COLOR
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_TITLE								"[ TUBE DIFFUSE COLOR ]:" 0 0 0.01 0.01
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_TITLE						"[ TUBE DIFFUSE COLOR ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_OPACITY                  "          Opacity" 100 0 100 0.1
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_OPACITY                    "          Opacity" 100 0 100 0.1
 float HSM_TUBE_DIFFUSE_IMAGE_OPACITY = global.HSM_TUBE_DIFFUSE_IMAGE_OPACITY / 100;
 
-#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_ON  					  "          Use Tube Diffuse Image - OFF | ON" 0 0 1 1
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_ON  					    "          Use Tube Diffuse Image - OFF | ON" 0 0 1 1
 float HSM_TUBE_DIFFUSE_IMAGE_ON = global.HSM_TUBE_DIFFUSE_IMAGE_ON;
 
-#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON              "          Colorize On" 0 0 1 1
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON                "          Colorize On" 0 0 1 1
 float HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON = global.HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON;
 
-#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_HUE                       "          Hue Offset" 0 0 360 1
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_HUE                        "          Hue Offset" 0 0 360 1
 float HSM_TUBE_DIFFUSE_IMAGE_HUE = global.HSM_TUBE_DIFFUSE_IMAGE_HUE / 360;
 
-#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_SATURATION                "          Saturation" 100 0 200 1
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_SATURATION                 "          Saturation" 100 0 200 1
 float HSM_TUBE_DIFFUSE_IMAGE_SATURATION = global.HSM_TUBE_DIFFUSE_IMAGE_SATURATION / 100;
 
-#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS                "          Brightness" 60 0 200 1
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS                 "          Brightness" 60 0 200 1
 float HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS = global.HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS / 100;
 
-#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_GAMMA                     "          Gamma Adjust" 1 0 5 0.01
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_GAMMA                      "          Gamma Adjust" 1 0 5 0.01
 float HSM_TUBE_DIFFUSE_IMAGE_GAMMA = global.HSM_TUBE_DIFFUSE_IMAGE_GAMMA;
 
 
@@ -557,7 +536,7 @@ float HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL = global.HSM_SHOW_CRT_ON_TOP_OF_COLORED
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_TITLE			"[ TUBE STATIC REFLECTION IMAGE ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_ON  					"          Use Tube Static Reflection Image - OFF | ON" 0 0 1 1
+#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_ON  				"          Use Tube Static Reflection Image - OFF | ON" 0 0 1 1
 float HSM_TUBE_STATIC_REFLECTION_IMAGE_ON = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_ON;
 
 #pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY  		"          Opacity" 10 0 100 0.1
@@ -581,10 +560,10 @@ float HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE = global.HSM_TUBE_STATIC_REFLECTION
 #pragma parameter HSM_GLOBAL_CORNER_RADIUS 							"          Global Corner Radius - Def 10" 10 4 500 2
 #define HSM_GLOBAL_CORNER_RADIUS global.HSM_GLOBAL_CORNER_RADIUS
 
-#pragma parameter HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE 				"          Black Edge Corner Radius Scale" 100 100 8000 10
+#pragma parameter HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE 			"          Black Edge Corner Radius Scale" 100 100 8000 10
 #define HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE global.HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE / 100
 
-#pragma parameter HSM_TUBE_BLACK_EDGE_SHARPNESS 						"          Black Edge Sharpness - Def 40" 40 0 90 1
+#pragma parameter HSM_TUBE_BLACK_EDGE_SHARPNESS 					"          Black Edge Sharpness - Def 40" 40 0 90 1
 #define HSM_TUBE_BLACK_EDGE_SHARPNESS global.HSM_TUBE_BLACK_EDGE_SHARPNESS / 100
 
 #pragma parameter HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE 				"          Black Edge Curvature Scale Multiplier" 100 100 8000 10
@@ -592,6 +571,22 @@ float HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE = global.HSM_TUBE_STATIC_REFLECTION
 
 #pragma parameter HSM_TUBE_BLACK_EDGE_THICKNESS 					"          Black Edge Thickness" 100 -800 800 5
 #define HSM_TUBE_BLACK_EDGE_THICKNESS (0.7 * global.HSM_TUBE_BLACK_EDGE_THICKNESS / 100)
+
+
+//---------------------------------------------------------------------------------------------------
+//    Reflection Transform
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_REFLECTIONAPPEARANCE_TITLE					"[ REFLECTION POSITION & SCALE ]:" 0 0 0.01 0.01
+
+
+#pragma parameter HSM_SCREEN_REFLECTION_SCALE     					"          Screen Reflection Scale" 100 1 300 1
+float HSM_SCREEN_REFLECTION_SCALE = global.HSM_SCREEN_REFLECTION_SCALE / 100;
+
+#pragma parameter HSM_SCREEN_REFLECTION_POS_X     					"          Screen Reflection Pos X" 0 -100 100 1
+float HSM_SCREEN_REFLECTION_POS_X = global.HSM_SCREEN_REFLECTION_POS_X / 600;
+
+#pragma parameter HSM_SCREEN_REFLECTION_POS_Y     					"          Screen Reflection Pos Y" 0 -100 100 1
+float HSM_SCREEN_REFLECTION_POS_Y = global.HSM_SCREEN_REFLECTION_POS_Y / 600;
 
 
 //---------------------------------------------------------------------------------------------------
@@ -620,16 +615,16 @@ float HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE = global.HSM_TUBE_STATIC_REFLECTION
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_BEZEL_GENERAL_TITLE							"[ BEZEL GENERAL ]:" 0 0 0.01 0.01 
 
-#pragma parameter HSM_BZL_OPACITY                       "          Opacity" 100 0 100 5
+#pragma parameter HSM_BZL_OPACITY                                   "          Opacity" 100 0 100 5
 float HSM_BZL_OPACITY = global.HSM_BZL_OPACITY / 100;
 
-#pragma parameter HSM_BZL_BLEND_MODE                    "          Blend Mode - Off | Normal | Add | Mult"  1 0 3 1
+#pragma parameter HSM_BZL_BLEND_MODE                                "          Blend Mode - Off | Normal | Add | Mult"  1 0 3 1
 float HSM_BZL_BLEND_MODE = global.HSM_BZL_BLEND_MODE;
 
-#pragma parameter HSM_BZL_WIDTH 						"          Width - Def 125" 125 -250 5000 1
+#pragma parameter HSM_BZL_WIDTH 						            "          Width - Def 125" 125 -250 5000 1
 float HSM_BZL_WIDTH = global.HSM_BZL_WIDTH * 0.0008624;
 
-#pragma parameter HSM_BZL_HEIGHT 					    "          Height" 100 -250 5000 1
+#pragma parameter HSM_BZL_HEIGHT 					                "          Height" 100 -250 5000 1
 float HSM_BZL_HEIGHT = global.HSM_BZL_HEIGHT * 0.0008732;
 
 #pragma parameter HSM_BZL_SCALE_OFFSET 								"          Scale Offset" 100 1 200 0.1

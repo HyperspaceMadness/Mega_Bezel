@@ -6,13 +6,12 @@ Changes:
     * Stuff that is cached:
       * Passes which do not change dynamically every frame
       * Portions of the viewport which do not change dynamically every frame (E.G. Outside the Bezel)
-    * Blinking red visual Live mode indicator when live mode is on
+    * Blinking red visual Live mode indicator when cache is updating
   * Added Negative Cropping
   * Guest DrVenom
     * New Guest-DrVenom NTSC preset added
     * Updated Guest shaders to crt-guest-advanced-2021-10-22-release1
     * Scanline Gamma is on all GDV presets and is a 1 based gamma adjustment
-  * Fixed ZFast Cropping
   * Put Vignette in Post-CRT pass, Turn off Grade Vignette by default
   * Put Grade after afterglow, remove brighten black from afterglow
   * Added STD-GLASS preset

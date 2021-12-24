@@ -75,7 +75,7 @@ alias11 = "LinearizePass"
 
 shader12 = ../../shaders/HyperspaceMadness/hsm/hsm-delinearize.slang
 
-shader13 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-gdarius-gdv-mini.slang
+shader13 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-crt-dariusg-gdv-mini.slang
 scale_type13 = viewport
 scale_x13 = 1.0
 scale_y13 = 1.0

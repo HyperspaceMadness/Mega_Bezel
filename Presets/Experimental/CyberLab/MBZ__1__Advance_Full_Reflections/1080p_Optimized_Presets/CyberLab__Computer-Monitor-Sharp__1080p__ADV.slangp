@@ -1,0 +1,8 @@
+#reference "../4K_Optimized_Presets/CyberLab__Computer-Monitor-Sharp__ADV.slangp"
+
+
+HSM_POST_CRT_BRIGHTNESS = "157.000000"
+signalResolution = "448.000000"
+g_sat = "0.100000"
+masksize = "0.000000"
+maskDark = "0.150000"

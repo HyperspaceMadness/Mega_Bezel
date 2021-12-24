@@ -1,0 +1,7 @@
+#reference "../4K_Optimized_Presets/CyberLab__Composite-Pure__ADV.slangp"
+
+signalResolution = "288.000000"
+halation = "0.150000"
+shadowMask = "6.000000"
+masksize = "0.000000"
+GDV_DECONVERGENCE_ON = "0.000000"

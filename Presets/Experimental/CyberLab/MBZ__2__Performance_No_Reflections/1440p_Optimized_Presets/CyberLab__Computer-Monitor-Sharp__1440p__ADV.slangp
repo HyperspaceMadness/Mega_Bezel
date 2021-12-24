@@ -1,0 +1,7 @@
+#reference "../1080p_Optimized_Presets/CyberLab__Computer-Monitor-Sharp__1080p__ADV.slangp"
+
+
+HSM_POST_CRT_BRIGHTNESS = "177.000000"
+signalResolution = "512.000000"
+g_sat = "0.080000"
+maskDark = "0.100000"

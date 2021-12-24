@@ -64,7 +64,7 @@ Choosing a Preset
 
 **Presets in Mega_Bezel / Presets**
 
-- All of the presets in the root of the Presets folder use @guest.r's awesome Guest-DrVenom-Advanced preset which is considered the default CRT shader for the Mega Bezel, the only exception to this is the POTATO preset which uses GDV-MINI for performance reasons.
+- All in the root of the Presets folder use @guest.r's awesome Guest-DrVenom-Advanced CRT shader which is considered the default CRT shader for the Mega Bezel, the only exception to this is the POTATO preset which uses GDV-MINI for performance reasons.
 
 |                       |Reflection  |Image Layering |Tube Effects  |Pre-CRT Chain
 |-----------------------|------------|---------------|--------------|----------------
@@ -118,6 +118,7 @@ Choosing a Preset
 ----------------------------------------
 Troubleshooting
 ----------------------------------------
+---
 
  * **If you have difficulties loading the shader** try loading it with the imageviewer core
     * **Steps**
@@ -127,8 +128,8 @@ Troubleshooting
         * If the shader loads correctly then the shader is working.
         
      * When the shader works in imageviewer, but doesn’t work when using a core, it is probably related to the core, or the graphics card being overwhelmed by resource usage with both the core requirements and the shader requirements
-     * If it is the resolution overwhelming the resources available you can try a STD preset, or a STD-DREZ preset to reduce the resolution used within the shader chain
-     * If you still have difficulties loading the shader with a specific core update the core
+     * If it is the core resolution overwhelming the resources, try a STD preset, or a STD-DREZ preset to reduce the resolution used within the shader chain
+     * If you still have difficulties loading the shader with a specific core, try updating the core
      * If you still have difficulties download a new separate version of Retroarch and try it there. Sometimes problems lurk in a random config file which is very hard to track down
  * **To see errors** coming from Retroarch you need to set up your logging settings:
     * **Logging - Logging Verbosity - ON**
@@ -160,11 +161,12 @@ Troubleshooting
     * Also in general moire artifacts are less of a problem when you are at an integer scale and using a higher resolution monitor.
 
 ----------------------------------------
+---
 
 Bug Reporting
 ----------------------------------------
 
-- When reporting a bug, please post images of the issue if it is at all visual in nature. This often helps communicate the issue better & quicker, even if the issue seems simple.
+- When reporting a bug, **please post images of the issue if it is at all visual in nature**. This often helps communicate the issue better & quicker, even if the issue seems simple.
 - Please make sure you are using the latest version of the shader when reporting bugs
 - If you are having any issues with the shader not loading or crashing please include a log (See above for turning on logs)
 - Please include info about your setup
@@ -175,28 +177,33 @@ Bug Reporting
   - GPU
 
 
------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+----
 Parameter Descriptions
------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
 
-**[ --- HSM MEGA BEZEL  20XX-XX-XX-0 --- ]:**
+-----------------------------------------------------------------------------------------------
+**[ --- HSM MEGA BEZEL X.X.XXX 20XX-XX-XX --- ]:** - Title, Version, Date
 
   * **Show Resolution Info** --- Show Resolution info from different aspects of the shader chain with onscreen text
 
+-----------------------------------------------------------------------------------------------
 **[ GRAPHICS CACHE ]:**
 
   * **Cache Graphics**
     * **0: OFF** - Graphics Layering and Bezel Generation are regenerated every frame
-    * **1: ON** - Graphics & Bezel are generated once and cached for subsequent frames
+    * **1: ON** - Graphics & Bezel are generated once and cached for subsequent frames. The cache auto updates when changes in parameters are detected
   * **Cache Update Indicator** 
     * **0: OFF** - Never show the red dot indicator on screen when the cache updates
     * **1: ON** - Appears whenever the graphics are regenerated and cache is updated, when caching is off or if the cache is auto-updated
     * **2: ONLY WHEN CACHE OFF** - Indicator does not appear on auto-update, It only appears when caching is off
 
+-----------------------------------------------------------------------------------------------
 **[ GRAPHICS GLOBAL BRIGHTNESS ]:**
   * **Graphics Brightness** - Brightness of all graphics and images which are not the CRT Shader
   * **Graphics Gamma Adjust** - Apply a gamma adjustment on all graphics and images which are not the CRT Shader 
 
+-----------------------------------------------------------------------------------------------
 **[ AMBIENT LIGHTING ]:** - Usually used to apply night lighting on all graphics
 - **Opacity**
   - How much of the ambient lighting darkening effect is applied
@@ -214,12 +221,13 @@ Parameter Descriptions
 - **Mirror Horizontal**
   - Mirror the ambient lighting image
 
+-----------------------------------------------------------------------------------------------
 **[ VIEWPORT ZOOM ]:** 
 * **Viewport Zoom** --- Zoom in or out on all the graphics and screen
 * **Viewport Position X** 
 * **Viewport Position Y**
 
-
+-----------------------------------------------------------------------------------------------
 **[ FLIP & ROTATE ]:**
 
 * **Flip Viewport Vertical** --- Some cores flip the viewport (full monitor area), this flips it back
@@ -228,6 +236,7 @@ Parameter Descriptions
 * **Flip Core Image Horizontal**
 * **Rotate CRT Tube** --- Turns the tube 90 degrees counter counter-clockwise
 
+-----------------------------------------------------------------------------------------------
 **[ ASPECT RATIO ]:**
 
 * **Orientation** --- Should the aspect be tall or wide? This does not rotate the image.
@@ -246,6 +255,7 @@ Parameter Descriptions
 
   * **Explicit Aspect Ratio** - Ratio used when [Aspect Ratio] Type is set to Explicit or if Auto is chosen and no matching resolution can be found
 
+-----------------------------------------------------------------------------------------------
 **[ CRT SCREEN SCALING ]:**
 
 - **Show Resolution Info**
@@ -266,6 +276,7 @@ Parameter Descriptions
   - If integer scale isn't used, this sets the vertical size of the vertical percentage of the full viewport
 
 
+-----------------------------------------------------------------------------------------------
 **[ EXTENDED CRT SCREEN SCALING ]:**
 
 - **Use Image For Placement (Scale & Y Pos)**
@@ -278,14 +289,16 @@ Parameter Descriptions
   - Snaps the non-integer scale to the closest integer scale within the tolerance. This allows you to set an approximate size for the screen and have it snap to an integer scale but not if it would be too much different
 
 
+-----------------------------------------------------------------------------------------------
 **[ POSITION OFFSET ]:**
 
 - **Position X** - Moves the entire screen and frame left and right
 - **Position Y** - Moves the entire screen and frame up and down
 
 
-**[ CROPPING CORE IMAGE ]:**
-    Cropping allows you to remove parts of the game image at the edges of the screen which were never meant to be seen
+-----------------------------------------------------------------------------------------------
+**[ CROPPING CORE IMAGE ]:** ---
+Cropping removes parts of the game image at the edges of the screen which were never meant to be seen. Negative values can add more black area at the edges of the screen
 
 - **Crop Mode  -  OFF | CROP BLACK ONLY | CROP ANY**
 - **Crop Zoom %**
@@ -296,19 +309,22 @@ Parameter Descriptions
 - **Black Threshold for 'CROP BLACK ONLY'**
 
 
+-----------------------------------------------------------------------------------------------
 **[ --- FAST SHARPEN - GUEST.R --- ]:**
-
 - **Sharpen ON**
 - **Sharpen Strength**
 - **Amount of Sharpening**
 - **Details Sharpened**
 
 
+-----------------------------------------------------------------------------------------------
 **[ --- SMOOTHING - SCALEFX - ADV Presets Only ---- ]:**
 
-- **ScaleFx ON - Must Increase Core Res Sampling**
+**ScaleFX** applies a shape smoothing on the core image and creates a higher resolution smoothed image
+  - **ScaleFx ON** - After you turn this on you must increase **Core Res Sampling**, or **Downsample Blur** in the next section to see a difference
 
 
+-----------------------------------------------------------------------------------------------
 **[ SCANLINE DIRECTION ]:**
 
 - **Scanline Direction (GDV & Easymode)**
@@ -316,19 +332,26 @@ Parameter Descriptions
   - **1 - Horizontal** scanlines
   - **2 - Vertical** scanlines
 
-**[CORE RES SAMPLING]:**
 
-- **Adjusting core res sampling changes how the CRT perceives the core resolution**
+-----------------------------------------------------------------------------------------------
+**[ CORE RES SAMPLING ]:**
+
+**Adjusting core res sampling changes how the CRT perceives the core resolution**
   e.g. If you use a core with 4X internal resolution you can set core res sampling to 0.25 it will appear if it was at 1x resolution
   To use **ScaleFX** to smooth the shapes in the core image you will need to set the core res sampling higher than 1, otherwise you will not see the increased smoothing coming from ScaleFX
 
-- **Scanline Direction Multiplier**
+- **Scanline Direction Multiplier (X-Prescale for H Scanline)**
   - Adjust the sampling in direction of the scanlines
   - E.G. if the scanlines are horizontal adjust sampling along the horizontal axis
-- **Opposite Direction Multiplier**
+- **Scanline Dir Downsample Blur**
+  - Add blur along the scanline direction
+- **Opposite Direction Multiplier (Y Downsample for H Scanline)**
   - Adjust the sampling in direction opposite of the scanlines
   - E.G. if the scanlines are horizontal adjust sampling along the vertical axis
+- **Opposite Dir Downsample Blur**
+  - Add blur along the opposite direction of the scanlines
 
+-----------------------------------------------------------------------------------------------
 **[ INTERLACING From Guest.r :) ]:**
 
 - **Interlace and Fake Scanlines Trigger Res**
@@ -338,6 +361,7 @@ Parameter Descriptions
 - **Interlacing Scanline Effect**
 - **Interlacing (Scanline) Saturation**
 
+-----------------------------------------------------------------------------------------------
 **[ FAKE SCANLINES ]:**
 
 - **Show Fake Scanlines - OFF | ON | USE TRIGGER RES**
@@ -349,6 +373,7 @@ Parameter Descriptions
 - **Rolling Scanlines**
 - **Scanline Curvature**
 
+-----------------------------------------------------------------------------------------------
 **[ CURVATURE ]:**
     Applies tube curvature
 
@@ -365,6 +390,7 @@ Parameter Descriptions
 - **3D View Distance** - This is the distance of the virtual camera from the Sphere
 - **3D Tilt Angle Y** - Vertical Tilt, with split screen this will tilt both screens towards or away from the center
 
+-----------------------------------------------------------------------------------------------
 **[ DUAL SCREEN ]:**
 
 - **Dual Screen Mode**
@@ -373,67 +399,145 @@ Parameter Descriptions
   - **2 - HORIZONTAL** - Split into 2 screens one on the left and one on the right
   
 - **Core Image Split Mode**
-  - **0 - AUTO**
+  - **0 - AUTO** - Split in the same direction as the dual screen mode
   - **1 - VERTICAL**
   - **2 - HORIZONTAL**
-  
 - **Core Image Split Offset**
   - Adjusts where we split the core image into two
   - This is an offset in pixels from the center
-
-- **Crop Edges of 2nd Screen**
-  - This crops the edges perpendicular to split
-  - Useful in situations like  the 3DS where when in a top/bottom emulator layout the bottom area has black areas at left and right of the screen 
+   the screen 
   - Value in Pixels
-
 - **Viewport Split Offset**
   - Sets where the viewport split placed. The split defines the area where one screen or the other appears
   - Value is a percentage from the center of the screen
-
 - **Scale Screens from Center of Split**
   - 0 - OFF - The screens will scale their center
   - 1 - ON - The screens will scale from the split position rather than from their own centers
-
 - **Position Offset Between Screens**
   - Positive values move screens apart
   - Negative values move screens closer to each other
-
 - **2nd Screen Aspect Ratio Mode**
   - 0 - Use the same Aspect ratio as the first Screen
   - 1 - PAR (Uses the square pixel aspect of the bottom screen's resolution)
-
 - **2nd Screen Use Independent Scale**
   - Don't affect the second screen with the scale of the first
-
 - **2nd Screen Scale Offset**
   - Increase or Decrease scale of second screen
-
 - **2nd Screen Pos X**
   - Move the second screen Horizontally
-
 - **2nd Screen Pos Y**
   - Move the second screen Vertically
+- **2nd Screen Crop Zoom %** 
+- **2nd Screen Crop Overscan Top**
+- **2nd Screen Crop Overscan Bottom**
+- **2nd Screen Crop Overscan Left**
+- **2nd Screen Crop Overscan Right**
 
 
-**[ PHOSPHOR PERSISTENCE ]:**
+-----------------------------------------------------------------------------------------------
+**[ ANTI-FLICKER ]:**
 
-- **Amount**
-  - How long the light trail behind the moving object, affects all colors, 0 is OFF
-- **Red Persistence**
-- **Green Persistence**
-- **Blue Persistence**
+Blend parts of the image which flicker on/off repeatedly between frames often used for Character's Shadow, giving a blended result.
 
-**[ CRT GAMMA ]:**
+- **Anti-Flicker ON** --- Turn the effect ON / OFF
+- **Luma Difference Threshold**
+  - Brightness difference required before the colors will be blended
 
-- **CRT Gamma** (Linear to Gamma Space Encode) Def 2.2
+-----------------------------------------------------------------------------------------------
+**[ CRT vs ORIGINAL A/B COMPARE ]:**
 
+- **Compare ON**
+  - Shows a split screen between the raw game image and the with processing by the crt shader and effects and 
+
+- **Splitscreen Position**
+  - Shift the split in the middle of the screen towards the left or right
+
+
+-----------------------------------------------------------------------------------------------
+**[ CRT SCREEN GAMMA & BRIGHTNESS ]:**
+
+- **CRT Gamma In** (Gamma to Linear Space Decode) Def 2.4
+
+- **CRT Gamma Out** (Linear to Gamma Space Encode) Def 2.4
+
+- **Post CRT Brightness** - Brightness adjustment after the CRT effect
+
+
+-----------------------------------------------------------------------------------------------
 **[ SCREEN VIGNETTE ]:**
 
-- **Screen Vignette Opacity** --- Fade out the game screen as we move away from the center of the screen
+- **Use Vignette** 
+  - Fade out the game screen as we move away from the center of the screen
+- **Amount (Strength)** - Overall Darkness
+- **Corner Amount (Power)** - Darkeness towards the edges
+- **Show Vignette in Reflection** - Darken the reflection or not
 
-**[ REFLECTION APPEARANCE ]:**__________________________________________
 
-- **Screen Vignette Opacity in Reflection** - How much vignette darkening we will see in the reflection
+-----------------------------------------------------------------------------------------------
+**[ MONOCHROME ]:** --- Have the screen act as if it is a monochrome CRT
+
+- **Monochrome Color:** 
+  - **0: OFF**
+  - **1: BLACK & WHITE**
+  - **1: AMBER**
+  - **1: GREEN**
+
+- **Monochrome Gamma** 
+- **Monochrome Hue Offset** 
+- **Monochrome Saturation** 
+
+-----------------------------------------------------------------------------------------------
+**[ TUBE DIFFUSE COLOR ]:**
+
+The color/texture of the tube which appears behind the CRT image
+- **Opacity** 
+  - Opacity of the tube background, With opacity of 0 you will see through to the background, good for things like Tron's Deadly Discs 
+- **Use Tube Diffuse Image** 
+  - If 0 black is used instead
+- **Colorize On** - Colorize the image
+- **Hue Offset**
+- **Saturation**
+- **Brightness**
+- **Gamma Adjust**
+
+
+-----------------------------------------------------------------------------------------------
+**[ TUBE COLORED GEL IMAGE ]:**
+    Colored effect added on top of the CRT image to tint it
+
+- **Use Tube Colored Gel** - Apply the image or not
+- **Multiply Blend Amount** - Image applied like a colored gel in photography
+  - Used to make vector games which output black and white colored, E.G Battlezone
+- **Additive Blend Amount** - Image applied as a brightening of the tube area
+  - Used to add color to the screen as if it was the gel being diffusely lit from outside the monitor
+- **Normal Blend Amount** - Used for the more opaque parts of a gel image like for the Vectrex
+- **Normal Blend Brightness** - Brightness for these more opaque parts
+- **Normal Blend Transparency Threshold** - Adjusts at what transparency of the image the area should be fully transparent
+- **Show CRT on Top of Colored Gel Normal** - Put the CRT image on top of the gel image so it is not color shifted or obscured.
+
+
+-----------------------------------------------------------------------------------------------
+**[ TUBE STATIC REFLECTION IMAGE  ]:**
+- **Use Tube Static Reflection Image** --- OFF/ON to apply the image
+- **Opacity** --- This is the shine on the tube which imitates reflection from the environment
+- **Ambient Lighting Multiplier** --- How much of the ambient lighting image to apply, default is 100
+- **Scale** --- Scales the tube reflection image from the center of the tube
+
+
+-----------------------------------------------------------------------------------------------
+**[ SCREEN BLACK EDGE ]:**
+
+- **Global Corner Radius** --- Global radius of all corners before their own multipliers are applied
+- **Black Edge Corner Radius Scale** --- the roundness of the corner of the screen area
+- **Black Edge Sharpness** --- Blends the edge of the game screen image to black, lower values will fade the edge
+- **Black Edge Curvature Scale Multiplier** --- How much the black edge will follow the screen curvature
+- **Black Edge Thickness** --- Distance between the illuminated game screen and the inner edge of the bezel
+  - Set this to 0 or less to remove the black edge
+
+
+-----------------------------------------------------------------------------------------------
+**[ REFLECTION POSITION & SCALE ]:**
+
 - **Screen Reflection Scale**
   - Scales the reflection from the center
   - With a larger scale, the image from the screen will appear without mirroring, like the Big Blur preset
@@ -442,64 +546,25 @@ Parameter Descriptions
 - **Screen Reflection Pos Y**
   - Shift the reflection up or down
 
-**[ SCREEN EDGE ]:**
 
-- **Corner Radius** --- the roundness of the corner of the tube area
-                                          The bezel corner radius follows this, and will match it by default
-- **Edge Sharpness** --- Blends the edge of the game screen image to black, lower values will fade the edge
-- **Black Edge Thickness** --- Distance between the illuminated game screen and the inner edge of the bezel
-  - Set this to 0 or less to remove the black edge
-
-**[ TUBE IMAGES ]:**
-    The tube is the area from the inner edge of the bezel inward
-
-- **Colored Gel Multiply Amount** - Image applied like a colored gel in photography
-  - Used to make vector games which output black and white colored, E.G Battlezone
-- **Colored Gel Additive Amount** - Image applied as a brightening of the tube area
-  - Used to add color to the screen as if it was the gel being diffusely lit from outside the monitor
-- **Tube Static Reflection Opacity**
-  - This is the shine on the tube which imitates reflection from the environment
-- **Tube Static Reflection Scale**
-  - Scales the tube reflection from the center
-
-**[ CRT IS LAST PASS ]:**
-
-- **CRT is Last Pass**
-  - Blacks out outside the screen, used for the scaling only presets
-
-**[ INTRO STATIC NOISE ]:**
-
-- **Static Noise Blend Mode**
-  - **0 - Off**
-  - **1 - Normal Blending**
-  - **2 - Additive Blending** - Added on as added with a projector
-  - **3 - Multiply Blending** - Image is applied by darkening the under layer
-- **Static Noise Hold Frames**
-  - How many frames to hold the static noise
-- **Static Noise Fade Out Frames**
-  - How many frames to fade out
-
-**[ INTRO SOLID BLACK ]:**
-
-- **Solid Black Hold Frames**
-  - How many frames to hold the solid black before the fade out starts
-- **Solid Black Fade Out Frames**
-  - How many frames to fade out
-
-**[ BEZEL ]:**
+-----------------------------------------------------------------------------------------------
+**[ BEZEL INDEPENDENT SCALE & CURVATURE ]:**
 
 - **Use Independent Scale & Curvature**
-  - Allows you to adjust the bezel scale independent of the screen
+  - Scale the bezel independent of the screen
 - **Independent Scale**
+  - Scale of the bezel when scale from image is not used
   - Base scale for the bezel default is 82.97 which is the same as the default screen size
-- **Independent Curvature X**
-  - Horizontal curvature for the bezel when in independent mode
-- **Independent Curvature Y**
-  - Vertical curvature for the bezel when in independent mode
+- **Use Independent Curvature** --- Define curvature separately from the screen
+- **Independent Curvature X** --- Horizontal curvature for the bezel when independent
+- **Independent Curvature Y** --- Vertical curvature for the bezel when independent
 - **Inner Curvature Scale Multiplier**
   - Multiplier the curvature of the inner edge of the bezel
   - Default is 100 which will match the tube curvature
   - Multiplies the curvature in normal and independent mode
+
+-----------------------------------------------------------------------------------------------
+**[ BEZEL GENERAL ]:**
 
 - **Opacity**
   - At 100 the bezel is fully visible
@@ -516,13 +581,22 @@ Parameter Descriptions
 - **Height**
   - Thickness of the bezel on the top and bottom of the tube, default is 100
 
+- **Scale Offset**
+  - Scale offset of the Bezel & Frame from its default position
+
+- **Inner Curvature Scale Multiplier**
+  - How much the bezel's curvature follows the screen curvature
+
+- **Inner Corner Radius Scale** - Def 50
+  - Roundness of the inner corner of the bezel, it is a multiplier of the roundness of the screen corner
+  - 100 gives you the same roundness as the screen corner
+
+// TODO review subsequent parameter help
+
 - **Inner Edge Thickness**
   - Thickness of edge of inner, default 100
 
 - **Inner Edge Sharpness** - Def 90
-- **Inner Corner Radius Scale** - Def 50
-  - Roundness of the inner corner of the bezel, it is a multiplier of the roundness of the screen corner
-  - 100 gives you the same roundness as the screen corner
 
 - **Outer Corner Radius Scale** - Def 100
   - Roundness of the inner corner of the bezel, it is a multiplier of the roundness of the screen corner
@@ -545,6 +619,7 @@ Parameter Descriptions
   - How much of a darkness from the bezel onto the illuminated screen
   - Only visible when the black ring around the screen is reduced so that the bezel is almost on top of the screen
 
+-----------------------------------------------------------------------------------------------
 **[ BEZEL & FRAME COLOR ]:**
 
 - **Hue**
@@ -556,6 +631,7 @@ Parameter Descriptions
 - **Noise**
   - Noise or speckles in the color, default is 30
 
+-----------------------------------------------------------------------------------------------
 **[ FRAME ]:**
 
 - **Opacity**
@@ -596,6 +672,7 @@ Parameter Descriptions
 - **Shadow Width**
   - Controls how wide the shadow is around the frame
 
+-----------------------------------------------------------------------------------------------
 **[ REFLECTION ]:**
 
 - **Blend Mode** - How the reflection is applied to the layer underneath Default is 2
@@ -632,6 +709,7 @@ Parameter Descriptions
 - **Frame Inner Edge Sharpness**
   - How soft or sharp the reflection is at the inner edge of the frame
 
+-----------------------------------------------------------------------------------------------
 **[ REFLECTION FADE ]:**
 
 - **Fade Amount**
@@ -647,6 +725,7 @@ Parameter Descriptions
 - **Viewport Vignette (For Glass Presets)**
   - Adds a vignette over the entire viewport to darken the areas as it goes towards the edges used to darken the reflection in the glass preset
 
+-----------------------------------------------------------------------------------------------
 **[ REFLECTION CORNER ]:**
 
 - **Corner Fade**
@@ -664,6 +743,7 @@ Parameter Descriptions
 - **Corner Spread Falloff**
   - Controls the profile of the falloff, small values make falloff faster near the center. 
 
+-----------------------------------------------------------------------------------------------
 **[ REFLECTION BLUR ]:**
 
 - **Blur Samples - 0 for OFF**
@@ -673,6 +753,7 @@ Parameter Descriptions
 - **Max Blur**
   - The highest amount of blur in the reflection, this is the farther away from the screen
 
+-----------------------------------------------------------------------------------------------
 **[ REFLECTION NOISE ]:**
 
 - **Noise Amount**
@@ -682,16 +763,18 @@ Parameter Descriptions
 - **Sample Distance**
   - What is the farthest distance away from the point being drawn where the scattered sample come from
 
+-----------------------------------------------------------------------------------------------
 **[ GLASS BORDER ]:**
 
 - **Glass Border ON (Glass Preset Only)**
   - Changes the appearance of the reflection to look like the glass effect, this is here for technical reasons, not very useful to change interactively
 
 
-  
+
 
 ## **BASIC-BORDER Presets Only**
 
+-----------------------------------------------------------------------------------------------
 **[ BASIC BACKGROUND IMAGE LAYER ]:**
 
 - **Aspect Ratio**
@@ -719,6 +802,7 @@ Parameter Descriptions
 
 ## **GLASS Presets Only**
 
+-----------------------------------------------------------------------------------------------
 **[ GLASS IMAGE LAYER ]:**
 
 - **Background Image Opacity**
@@ -737,6 +821,7 @@ Parameter Descriptions
 
 ## **STANDARD Presets Only**
 
+-----------------------------------------------------------------------------------------------
 **[ STANDARD IMAGE LAYERS ]:**
 
 - **Aspect Ratio**
@@ -758,6 +843,7 @@ Parameter Descriptions
 - **Top Extra Image Blend Mode**
 
 
+-----------------------------------------------------------------------------------------------
 **[ LAYER ORDER ]:**
 
 Layer order adjusts the order in which the layers are composited or "layered" on top of each other, the index 0 is the bottom or base layer. If two layers are given the same index they fall back to being composited in the order seen here.
@@ -774,6 +860,7 @@ Layer order adjusts the order in which the layers are composited or "layered" on
 - **LED Image**
 - **Top Image**
 
+-----------------------------------------------------------------------------------------------
 **[ CUTOUT ]:**
 
 Used to cut a rectangular area from the layers, for example cutting out the hole in the bezel art
@@ -795,6 +882,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Corner Radius - Def 0**
   - Rounds the corner of the cutout
 
+-----------------------------------------------------------------------------------------------
 **[ MASK DEBUG ]:**
 
 - **Mask** - Show the mask as a semi transparent color for the:
@@ -887,24 +975,17 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Keep Aspect**
 
   - *The Layer image should keep its original aspect ratio*
-  - *E.G. If the scale mode was **Tube** and **Keep Aspect** was on regardless of the aspect of the tube the layer's image would stay the aspect ratio set in **Texture Aspect**. If Keep Aspect is off the texture would react to the tube's changes in horizontal aspect.* 
+  - *E.G. If the scale mode was **Tube** and **Keep Aspect** was on regardless of the aspect of the tube the layer's image would stay the aspect ratio of the image. If Keep Aspect is off the texture would react to the tube's changes in horizontal aspect.* 
   - **0 - OFF**
   - **1 - ON**
 
-- **Scale**
-
-  - *Scales image layer equally in both directions*
-
-- **Scale X**
-
-  - *Scales image layer horizontally*
-
-- **Position Y**
-
-  - *Moves the image layer vertically*
+- **Scale** --- *Scales image layer equally in both directions*
+- **Scale X** --- *Scales image layer horizontally*
+- **Position Y** --- *Moves the image layer vertically*
 
     
 
+-----------------------------------------------------------------------------------------------
 **[ BACKGROUND LAYER ]:**
 
 - **Opacity**
@@ -916,8 +997,6 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Apply NightLight & Static Gamma (0 for Backdrop)**
   - Allows Night Lighting and Static gamma to be turned off
   - Can be used to simulate a backdrop which is self illuminated
-- **Texture Aspect**
-- **Explicit Texture Aspect**
 - **Scale Mode**
   - **0 - FullScreen**
   - **1 - Tube**
@@ -931,6 +1010,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
   - **0 - OFF**
   - **1 - ON**
 
+-----------------------------------------------------------------------------------------------
 **[ VIEWPORT VIGNETTE LAYER ]:**
 
 - **Opacity**
@@ -947,10 +1027,12 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Scale X**
 - **Position Y**
 
+-----------------------------------------------------------------------------------------------
 **[ CRT SCREEN LAYER ]:**
 
 - **Blend Mode**
 
+-----------------------------------------------------------------------------------------------
 **[ BEZEL IMAGE LAYER ]:**
 
 - **Opacity**
@@ -961,8 +1043,6 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Source Matte Color**
 - **Mask**
 - **Cutout Mask**
-- **Texture Aspect**
-- **Explicit Texture Aspect**
 - **Scale Mode**
   - **0 - FullScreen**
   - **1 - Tube**
@@ -975,6 +1055,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Use Curvature**
   - If Use Curvature is ON then the layer image will follow the screen curvature
 
+-----------------------------------------------------------------------------------------------
 **[ CABINET OR CABINET GLASS LAYER ]:**
 
 - **Opacity**
@@ -983,8 +1064,6 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Source Matte Color**
 - **Mask**
 - **Cutout Mask**
-- **Texture Aspect**
-- **Explicit Texture Aspect**
 - **Scale Mode**
   - **0 - FullScreen**
   - **1 - Tube**
@@ -996,6 +1075,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Scale X**
 - **Position Y**
 
+-----------------------------------------------------------------------------------------------
 **[ DECAL LAYER ]:**
 
 - **Opacity**
@@ -1003,8 +1083,6 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Source Matte Color**
 - **Mask**
 - **Cutout Mask**
-- **Texture Aspect**
-- **Explicit Texture Aspect**
 - **Scale Mode**
   - **0 - Full Screen**
   - **1 - Tube**
@@ -1016,6 +1094,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Scale X**
 - **Position Y**
 
+-----------------------------------------------------------------------------------------------
 **[ LED LAYER ]:**
 
 - **Opacity**
@@ -1023,8 +1102,6 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Source Matte Color**
 - **Mask**
 - **Cutout Mask**
-- **Texture Aspect**
-- **Explicit Texture Aspect**
 - **Scale Mode**
   - **0 - Full Screen**
   - **1 - Tube**
@@ -1037,6 +1114,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Scale X**
 - **Position Y**
 
+-----------------------------------------------------------------------------------------------
 **[ TOP EXTRA LAYER ]:**
 
 - **Opacity**
@@ -1044,8 +1122,6 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Source Matte Color**
 - **Mask**
 - **Cutout Mask**
-- **Texture Aspect**
-- **Explicit Texture Aspect**
 - **Scale Mode**
   - **0 - Full Screen**
   - **1 - Tube**
@@ -1060,6 +1136,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Mirror Wrap**
   - When drawing past the edges of the texture use mirror wrapping
 
+-----------------------------------------------------------------------------------------------
 **[ INTRO SEQUENCE ]:**
 	Animation sequence which plays when the content starts up, animation times are in frames. The frame rate for most games 60 fps
 
@@ -1070,6 +1147,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Speed**
   - Overall speed of the entire intro. 1 is full speed
 
+-----------------------------------------------------------------------------------------------
 **[ INTRO LOGO ]:**
 
 - **Logo Blend Mode**
@@ -1100,6 +1178,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Logo Fade Out Frames**
   - How many frames to fade out
 
+-----------------------------------------------------------------------------------------------
 **[ INTRO SOLID COLOR ]:**
 
 - **Solid Color Blend Mode**
@@ -1114,3 +1193,24 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
   - How many frames to hold the solid color
 - **Solid Color Fade Out Frames**
   - How many frames to fade out
+
+  **[ INTRO STATIC NOISE ]:**
+
+- **Static Noise Blend Mode**
+  - **0 - Off**
+  - **1 - Normal Blending**
+  - **2 - Additive Blending** - Added on as added with a projector
+  - **3 - Multiply Blending** - Image is applied by darkening the under layer
+- **Static Noise Hold Frames**
+  - How many frames to hold the static noise
+- **Static Noise Fade Out Frames**
+  - How many frames to fade out
+
+-----------------------------------------------------------------------------------------------
+**[ INTRO SOLID BLACK ]:**
+
+- **Solid Black Hold Frames**
+  - How many frames to hold the solid black before the fade out starts
+- **Solid Black Fade Out Frames**
+  - How many frames to fade out
+

@@ -22,6 +22,9 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#pragma parameter HSM_CRT_SCREEN_BLEND_MODE                         "          CRT POTATO Blend Mode - OFF | NORMAL | ADD (Backdrop)" 1 0 2 1
+float HSM_CRT_SCREEN_BLEND_MODE = global.HSM_CRT_SCREEN_BLEND_MODE;
+
 //---------------------------------------------------------------------------------------------------
 //    BASIC BACKGROUND IMAGE LAYER
 //---------------------------------------------------------------------------------------------------

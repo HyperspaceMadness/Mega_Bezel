@@ -612,7 +612,7 @@ void main()
 	//-----------------------------------------------------------------------------------------
 	// Background
 	//-----------------------------------------------------------------------------------------
-	vec2 bg_size = textureSize(BackgroundImage, 0);
+	vec2 bg_size = SCREEN_ASPECT < 1 ? textureSize(BackgroundVertImage, 0) : textureSize(BackgroundImage, 0);
 	BACKGROUND_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
 												VIEWPORT_UNSCALED_COORD,
 												TEXTURE_ASPECT_MODE_EXPLICIT,
@@ -658,7 +658,7 @@ void main()
 	//----------------------------------------------------
 	// Device Image
 	//----------------------------------------------------
-	vec2 device_size = textureSize(DeviceImage, 0);
+	vec2 device_size = SCREEN_ASPECT < 1 ? textureSize(DeviceVertImage, 0) : textureSize(DeviceImage, 0);
 	DEVICE_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
 											VIEWPORT_UNSCALED_COORD,
 											TEXTURE_ASPECT_MODE_EXPLICIT,

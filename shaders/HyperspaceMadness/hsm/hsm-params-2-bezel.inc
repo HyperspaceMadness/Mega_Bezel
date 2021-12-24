@@ -32,29 +32,17 @@
 
 #define HAS_BEZEL_PARAMS
 
-#pragma parameter HSM_BZL_OUTER_POSITION_Y 			    "          Outer Edge Position Y" 0 -500 500 1
-float HSM_BZL_OUTER_POSITION_Y = global.HSM_BZL_OUTER_POSITION_Y / 2000;
-
-#pragma parameter HSM_BZL_OUTER_CURVATURE_SCALE 		"          Outer Curvature Scale" 0 0 500 5
-float HSM_BZL_OUTER_CURVATURE_SCALE = global.HSM_BZL_OUTER_CURVATURE_SCALE / 100;
-
-#pragma parameter HSM_FRM_OUTER_POS_Y 			        "          Frame Outer Pos Y" 0 -100 100 0.05
-float HSM_FRM_OUTER_POS_Y = global.HSM_FRM_OUTER_POS_Y / 100;
-
-#pragma parameter HSM_FRM_THICKNESS 					"          Frame Thickness" 100 0 2000 5
-float HSM_FRM_THICKNESS = global.HSM_FRM_THICKNESS * 0.0007;
-
-#pragma parameter HSM_FRM_THICKNESS_SCALE_X 			"          Frame Thickness Scale X" 100 0 1000 2
-float HSM_FRM_THICKNESS_SCALE_X = global.HSM_FRM_THICKNESS_SCALE_X / 100;
-
-#pragma parameter HSM_FRM_OUTER_CURVATURE_SCALE 		"          Frame Outer Curvature Scale" 0 0 500 5
-float HSM_FRM_OUTER_CURVATURE_SCALE = global.HSM_FRM_OUTER_CURVATURE_SCALE / 100;
-
 #pragma parameter HSM_BZL_INNER_EDGE_THICKNESS		    "          Inner Edge Thickness" 100 0 700 10
 float HSM_BZL_INNER_EDGE_THICKNESS = global.HSM_BZL_INNER_EDGE_THICKNESS  * 0.00007;
 
 #pragma parameter HSM_BZL_INNER_EDGE_SHARPNESS		    "          Inner Edge Sharpness - Def 95" 95 0 90 5
 float HSM_BZL_INNER_EDGE_SHARPNESS = global.HSM_BZL_INNER_EDGE_SHARPNESS  / 100;
+
+#pragma parameter HSM_BZL_OUTER_POSITION_Y 			    "          Outer Edge Position Y" 0 -500 500 1
+float HSM_BZL_OUTER_POSITION_Y = global.HSM_BZL_OUTER_POSITION_Y / 2000;
+
+#pragma parameter HSM_BZL_OUTER_CURVATURE_SCALE 		"          Outer Curvature Scale" 0 0 500 5
+float HSM_BZL_OUTER_CURVATURE_SCALE = global.HSM_BZL_OUTER_CURVATURE_SCALE / 100;
 
 #pragma parameter HSM_BZL_OUTER_CORNER_RADIUS_SCALE 	"          Outer Corner Radius Scale - Def 60" 60 0 4000 1
 float HSM_BZL_OUTER_CORNER_RADIUS_SCALE = 0.9 * global.HSM_BZL_OUTER_CORNER_RADIUS_SCALE / 100;
@@ -107,6 +95,18 @@ float HSM_FRM_TEXTURE_OPACITY = global.HSM_FRM_TEXTURE_OPACITY / 100;
 #pragma parameter HSM_FRM_TEXTURE_BLEND_MODE            "         Texture Overlay Blend Mode - Off | Normal | Add | Mult"  2 0 3 1
 float HSM_FRM_TEXTURE_BLEND_MODE = global.HSM_FRM_TEXTURE_BLEND_MODE;
 
+#pragma parameter HSM_FRM_THICKNESS 					"          Frame Thickness" 100 0 2000 5
+float HSM_FRM_THICKNESS = global.HSM_FRM_THICKNESS * 0.0007;
+
+#pragma parameter HSM_FRM_THICKNESS_SCALE_X 			"          Frame Thickness Scale X" 100 0 1000 2
+float HSM_FRM_THICKNESS_SCALE_X = global.HSM_FRM_THICKNESS_SCALE_X / 100;
+
+#pragma parameter HSM_FRM_OUTER_POS_Y 			        "          Frame Outer Pos Y" 0 -100 100 0.05
+float HSM_FRM_OUTER_POS_Y = global.HSM_FRM_OUTER_POS_Y / 100;
+
+#pragma parameter HSM_FRM_OUTER_CURVATURE_SCALE 		"          Frame Outer Curvature Scale" 0 0 500 5
+float HSM_FRM_OUTER_CURVATURE_SCALE = global.HSM_FRM_OUTER_CURVATURE_SCALE / 100;
+
 #pragma parameter HSM_FRM_INNER_EDGE_THICKNESS 		    "          Inner Edge Thickness" 100 0 5000 5
 float HSM_FRM_INNER_EDGE_THICKNESS = global.HSM_FRM_INNER_EDGE_THICKNESS * 0.00003;
 
@@ -125,6 +125,7 @@ float HSM_FRM_SHADOW_OPACITY = global.HSM_FRM_SHADOW_OPACITY / 100;
 
 #pragma parameter HSM_FRM_SHADOW_WIDTH                  "          Shadow Width" 100 0 500 1
 float HSM_FRM_SHADOW_WIDTH = global.HSM_FRM_SHADOW_WIDTH / 1000;
+
 
 #pragma parameter HSM_REFLECT_CORNER_TITLE			            "[ CORNER CREASE - ALSO CONTROLS REFLECTION]:" 0 0 0.01 0.01
 

@@ -1,0 +1,3 @@
+#reference "../1080p_Optimized_Presets/CyberLab__Composite-Pure__1080p__ADV.slangp"
+
+addnoised = "0.160000"
