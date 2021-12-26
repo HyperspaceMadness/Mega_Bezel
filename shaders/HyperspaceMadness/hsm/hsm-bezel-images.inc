@@ -47,10 +47,6 @@
 #define CUTOUT_MODE_INSIDE 1
 #define CUTOUT_MODE_OUTSIDE 2
 
-#define IMAGE_DUALSCREEN_MODE_BOTH 0
-#define IMAGE_DUALSCREEN_MODE_SCREEN_1 1
-#define IMAGE_DUALSCREEN_MODE_SCREEN_2 2
-
 float USE_INHERITED_COORD_OFF = 0;
 float USE_INHERITED_COORD_ON = 1;
 
@@ -76,7 +72,7 @@ float GetMask(float mask_mode)
 // Assumes Opacity is already encoded in alpha
 vec4 BlendModeMaskLayerMix(vec4 color_under, vec4 color_over, float blend_mode, float mask_mode, float cutout_mode, float dualscreen_mode, float layer_opacity)
 {
-	if ( blend_mode == 0 || (dualscreen_mode != IMAGE_DUALSCREEN_MODE_BOTH && dualscreen_mode != SCREEN_INDEX) )
+	if ( blend_mode == 0 || (dualscreen_mode != SHOW_ON_DUALSCREEN_MODE_BOTH && dualscreen_mode != SCREEN_INDEX) )
 		return color_under;
 	
 	float cutout_mask = 1;
@@ -592,7 +588,7 @@ void main()
 													BLEND_MODE_NORMAL, 
 													MASK_MODE_ALL,
 													0, 
-													IMAGE_DUALSCREEN_MODE_BOTH,
+													SHOW_ON_DUALSCREEN_MODE_BOTH,
 													1);
 
 
@@ -958,7 +954,7 @@ void main()
 													BLEND_MODE_NORMAL, 
 													HSM_VIEWPORT_VIGNETTE_MASK_MODE, 
 													HSM_VIEWPORT_VIGNETTE_CUTOUT_MODE,
-													IMAGE_DUALSCREEN_MODE_BOTH,
+													SHOW_ON_DUALSCREEN_MODE_BOTH,
 													HSM_VIEWPORT_VIGNETTE_OPACITY);
 		// LED IMAGE
 		if (HSM_LED_LAYER_ORDER == i)
@@ -1029,7 +1025,7 @@ void main()
 												HSM_BZL_BLEND_MODE, 
 												MASK_MODE_ALL, 
 												0, 
-												IMAGE_DUALSCREEN_MODE_BOTH,
+												SHOW_ON_DUALSCREEN_MODE_BOTH,
 												1);
 #endif
 

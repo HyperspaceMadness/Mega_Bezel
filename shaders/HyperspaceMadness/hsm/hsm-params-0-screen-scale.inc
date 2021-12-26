@@ -452,6 +452,9 @@ float HSM_CRT_ORIGINAL_AB_COMPARE_SPLIT_POSITION = global.HSM_CRT_ORIGINAL_AB_CO
 #pragma parameter HSM_SCREEN_VIGNETTE_ON                			"          Use Vignette" 1 0 1 1
 #define HSM_SCREEN_VIGNETTE_ON global.HSM_SCREEN_VIGNETTE_ON
 
+#pragma parameter HSM_SCREEN_VIGNETTE_DUALSCREEN_VIS_MODE           "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
+float HSM_SCREEN_VIGNETTE_DUALSCREEN_VIS_MODE = global.HSM_SCREEN_VIGNETTE_DUALSCREEN_VIS_MODE;
+
 #pragma parameter HSM_SCREEN_VIGNETTE_STRENGTH                		"          Amount (Strength)" 40 0 98 2
 #define HSM_SCREEN_VIGNETTE_STRENGTH (1 - global.HSM_SCREEN_VIGNETTE_STRENGTH / 100) * 50
 
@@ -491,6 +494,9 @@ float HSM_TUBE_DIFFUSE_IMAGE_OPACITY = global.HSM_TUBE_DIFFUSE_IMAGE_OPACITY / 1
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_ON  					    "          Use Tube Diffuse Image - OFF | ON" 0 0 1 1
 float HSM_TUBE_DIFFUSE_IMAGE_ON = global.HSM_TUBE_DIFFUSE_IMAGE_ON;
 
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_DUALSCREEN_VIS_MODE        "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
+float HSM_TUBE_DIFFUSE_IMAGE_DUALSCREEN_VIS_MODE = global.HSM_TUBE_DIFFUSE_IMAGE_DUALSCREEN_VIS_MODE;
+
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON                "          Colorize On" 0 0 1 1
 float HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON = global.HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON;
 
@@ -515,6 +521,9 @@ float HSM_TUBE_DIFFUSE_IMAGE_GAMMA = global.HSM_TUBE_DIFFUSE_IMAGE_GAMMA;
 #pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_ON  					"          Use Tube Colored Gel - OFF | ON" 0 0 1 1
 float HSM_TUBE_COLORED_GEL_IMAGE_ON = global.HSM_TUBE_COLORED_GEL_IMAGE_ON;
 
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_DUALSCREEN_VIS_MODE    "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
+float HSM_TUBE_COLORED_GEL_IMAGE_DUALSCREEN_VIS_MODE = global.HSM_TUBE_COLORED_GEL_IMAGE_DUALSCREEN_VIS_MODE;
+
 #pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT  		"          Multiply Blend Amount" 90 0 100 1
 float HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT = global.HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT / 100;
 
@@ -533,7 +542,6 @@ float HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD = global.HSM_TUBE_COLORE
 #pragma parameter HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL				"          Show CRT on Top of Colored Gel Normal" 0 0 1 1
 float HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL = global.HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL;
 
-
 //---------------------------------------------------------------------------------------------------
 //    TUBE STATIC REFLECTION
 //---------------------------------------------------------------------------------------------------
@@ -541,6 +549,9 @@ float HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL = global.HSM_SHOW_CRT_ON_TOP_OF_COLORED
 
 #pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_ON  				"          Use Tube Static Reflection Image - OFF | ON" 0 0 1 1
 float HSM_TUBE_STATIC_REFLECTION_IMAGE_ON = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_ON;
+
+#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_DUALSCREEN_VIS_MODE    "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
+float HSM_TUBE_STATIC_REFLECTION_IMAGE_DUALSCREEN_VIS_MODE = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_DUALSCREEN_VIS_MODE;
 
 #pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY  		"          Opacity" 10 0 100 0.1
 float HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY / 100;

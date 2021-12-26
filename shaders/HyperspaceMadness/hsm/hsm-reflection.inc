@@ -422,12 +422,12 @@ void main()
 	crt_linear = HSM_PreMultAlphaBlend(vec4(0, 0, 0, 1 - outside_tube_mask_wider), crt_linear);
 
 	// TUBE HIGHLIGHT
-	if (HSM_TUBE_STATIC_REFLECTION_IMAGE_ON > 0.5)
+	if (HSM_GetUseTubeStaticReflection())
 	{
 		vec4 night_lighting_image = vec4(1);
 		if (HSM_AMBIENT_LIGHTING_OPACITY > 0)
 			night_lighting_image = HSM_GetNightLightingMultiplyColor( HSM_AMBIENT_LIGHTING_SCALE_MODE > 0.5 ? VIEWPORT_UNSCALED_COORD : VIEWPORT_COORD, NightLightingImage );
-		crt_linear += HSM_Get_Tube_Highlight(tube_curved_coord, false, TubeStaticReflectionImage, night_lighting_image);
+		crt_linear += HSM_GetTubeHighlight(tube_curved_coord, false, TubeStaticReflectionImage, night_lighting_image);
 	}
 
 	// Clamp otherwise we get artifacts (blue overlays of brighter parts of image)

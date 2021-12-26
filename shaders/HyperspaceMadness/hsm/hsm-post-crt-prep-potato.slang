@@ -76,7 +76,7 @@ vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_CO
 	vec2 mirrored_screen_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
 	float screen_mask = HSM_GetCornerMask((screen_curved_coord - 0.5) * 0.999 + 0.5, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS, 0.9);
 
-	if (HSM_SCREEN_VIGNETTE_ON > 0.5)
+	if (HSM_GetUseScreenVignette())
 	{
 		// out_color *= HSM_GetScreenVignetteFactor(screen_curved_coord);
 

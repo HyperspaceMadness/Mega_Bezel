@@ -1014,6 +1014,16 @@ float HSM_GetScreenVignetteFactor(vec2 in_coord)
 	return vig;
 }
 
+bool HSM_GetUseOnCurrentScreenIndex(float dual_screen_vis_mode)
+{
+	return dual_screen_vis_mode == SHOW_ON_DUALSCREEN_MODE_BOTH || dual_screen_vis_mode == SCREEN_INDEX;
+}
+
+bool HSM_GetUseScreenVignette()
+{
+	return HSM_SCREEN_VIGNETTE_ON > 0.5 && HSM_GetUseOnCurrentScreenIndex(HSM_SCREEN_VIGNETTE_DUALSCREEN_VIS_MODE);
+}
+
 vec4 HSM_GetNightLightingMultiplyColor( vec2 viewport_coord, in sampler2D NightLightingImage )
 {
 	vec2 night_lighting_coord = HSM_GetMirrorWrapCoord(viewport_coord);

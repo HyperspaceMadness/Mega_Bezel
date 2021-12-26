@@ -144,7 +144,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	vec2 mirrored_screen_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
 	float screen_mask = HSM_GetCornerMask((screen_curved_coord - 0.5) * 0.999 + 0.5, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS, 0.9);
 
-	if (HSM_SCREEN_VIGNETTE_ON > 0.5)
+	if (HSM_GetUseScreenVignette())
 	{
 		// out_color *= HSM_GetScreenVignetteFactor(screen_curved_coord);
 
@@ -194,7 +194,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	
 	// TubeDiffuseImage
 	vec4 tube_diffuse = vec4(0, 0, 0, 1);
-	if (HSM_TUBE_DIFFUSE_IMAGE_ON > 0.5)
+	if (HSM_GetUseTubeDiffuseImage())
 	{
 		tube_diffuse = HSM_GetMipmappedTexSample(TubeDiffuseImage, mirrored_tube_coord, TUBE_SCALE, 0);
 		tube_diffuse = HSM_GLOBAL_GRAPHICS_BRIGHTNESS * HSM_GetPreMultipliedColorLinear(tube_diffuse, SOURCE_MATTE_PREMULTIPLIED, DEFAULT_SRGB_GAMMA);
@@ -208,7 +208,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	out_color = HSM_BlendModeLayerMix(tube_diffuse, out_color, BLEND_MODE_ADD, 1);
 
 	// Add a Colored Gel image on top of the screen, this is what colors games like space invaders or battlezone
-	if (HSM_TUBE_COLORED_GEL_IMAGE_ON > 0.5 && (HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT > 0 || HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT > 0 || HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT > 0))
+	if (HSM_GetUseTubeColoredGelImage())
 	{
 		vec2 gel_coord = mix( mirrored_tube_coord, -1 * (mirrored_tube_coord - 0.5) + 0.5 , HSM_FLIP_VIEWPORT_VERTICAL);
 		vec4 gel_image = HSM_GetMipmappedTexSample(TubeColoredGelImage, mirrored_tube_coord, TUBE_SCALE, 0);
@@ -241,8 +241,8 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	out_color.rgb *= HSM_Get_Screen_Black_Edge_Mask(SCREEN_COORD, false);
 
 	// TUBE HIGHLIGHT
-	if (HSM_TUBE_STATIC_REFLECTION_IMAGE_ON > 0.5)
-		out_color += HSM_Get_Tube_Highlight(tube_curved_coord, false, TubeStaticReflectionImage, night_lighting_image);
+	if (HSM_GetUseTubeStaticReflection())
+		out_color += HSM_GetTubeHighlight(tube_curved_coord, false, TubeStaticReflectionImage, night_lighting_image);
 	#endif
 
 	// #ifndef IS_NO_REFLECT_PRESET

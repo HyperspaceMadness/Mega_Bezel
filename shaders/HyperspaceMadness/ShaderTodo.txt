@@ -25,11 +25,13 @@ Changes:
 Mega Bezel Still to Come:
 
 V1 TODO
-  * Compensate for crop in all passes
+  * Compensate for negative crop expand in all passes
   * Add Param to control gel appearance on dual screen
   * Masks for just bezel and just frame
   * Potato problems with Dual screen, fading into corners, missalignment
-  * Potato Should use Global Brightness / Gamma?
+  * Potato Should use Global Brightness / Gamma?  
+  * Colored Gel Over/Under Black Edge?
+  * Vertical Flip not flipping Tube Highlight
 
   
   Post V1
@@ -70,9 +72,6 @@ V1 TODO
   * Local vs FullScreen Blur on Corner reflection?
   * Shadow from Cutout?
   * Large Slotmask Bitmap Mask
-
-
-Post V1  
   * Do Hylian Sync Version
   * Night light single glow - Place Glows
 

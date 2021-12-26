@@ -129,11 +129,25 @@ vec2 HSM_AddPosScaleToCoord(vec2 in_base_coord, vec2 in_base_scale, vec2 in_pos,
 
 float MAX_LAYER_ORDER = 12;
 
+bool HSM_GetUseTubeStaticReflection()
+{
+	return HSM_TUBE_STATIC_REFLECTION_IMAGE_ON > 0.5 && HSM_GetUseOnCurrentScreenIndex(HSM_TUBE_STATIC_REFLECTION_IMAGE_DUALSCREEN_VIS_MODE);
+}
 
-vec4 HSM_Get_Tube_Highlight(vec2 tube_curved_coord, bool apply_to_mirror, in sampler2D TubeStaticReflectionImage, vec4 ambient_lighting_image)
+bool HSM_GetUseTubeDiffuseImage()
+{
+	return HSM_TUBE_DIFFUSE_IMAGE_ON > 0.5 && HSM_GetUseOnCurrentScreenIndex(HSM_TUBE_DIFFUSE_IMAGE_DUALSCREEN_VIS_MODE);
+}
+
+bool HSM_GetUseTubeColoredGelImage()
+{
+	return HSM_TUBE_COLORED_GEL_IMAGE_ON > 0.5 && HSM_GetUseOnCurrentScreenIndex(HSM_TUBE_COLORED_GEL_IMAGE_DUALSCREEN_VIS_MODE);
+}
+
+vec4 HSM_GetTubeHighlight(vec2 tube_curved_coord, bool apply_to_mirror, in sampler2D TubeStaticReflectionImage, vec4 ambient_lighting_image)
 {
 	vec4 out_color = vec4(0);
-	
+
 	vec2 mirrored_tube_coord = tube_curved_coord;
 	if (apply_to_mirror)
 		mirrored_tube_coord = HSM_GetMirrorWrappedCoord(tube_curved_coord);
@@ -142,34 +156,33 @@ vec4 HSM_Get_Tube_Highlight(vec2 tube_curved_coord, bool apply_to_mirror, in sam
 	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
 		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
 
-	if (HSM_TUBE_STATIC_REFLECTION_IMAGE_ON > 0.5)
-	{
-		vec2 tube_highlight_coord = (mirrored_tube_coord - 0.5) / HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE + 0.5;
+	vec2 tube_highlight_coord = (mirrored_tube_coord - 0.5) / HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE + 0.5;
 
-		// TODO need to update this for flip horizontal
-		tube_highlight_coord = mix( tube_highlight_coord, -1 * (tube_highlight_coord - 0.5) + 0.5 , HSM_FLIP_VIEWPORT_VERTICAL);
+	// TODO need to update this for flip horizontal
+	tube_highlight_coord = mix( tube_highlight_coord, -1 * (tube_highlight_coord - 0.5) + 0.5 , HSM_FLIP_VIEWPORT_VERTICAL);
 /*
-		// Dithering for the glass reflection if needed to reduce banding
-		float blur_max_size = 1;
-		float blur_amount = 0.2;
-		vec4 tube_highlight_image = HSM_GetStoichaicBlurredSample(TubeStaticReflectionImage, tube_highlight_coord, HSM_TUBE_STATIC_REFLECTION_IMAGE_DITHERING_SAMPLES, blur_max_size, blur_amount);
+	// Dithering for the glass reflection if needed to reduce banding
+	float blur_max_size = 1;
+	float blur_amount = 0.2;
+	vec4 tube_highlight_image = HSM_GetStoichaicBlurredSample(TubeStaticReflectionImage, tube_highlight_coord, HSM_TUBE_STATIC_REFLECTION_IMAGE_DITHERING_SAMPLES, blur_max_size, blur_amount);
 */
-		// Mask the very outer edge of the tube for a very small shadowing effect
-		float tube_highlight_mask = HSM_GetCornerMask((tube_curved_coord - 0.5) * 0.995 + 0.5 , SCREEN_ASPECT, HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS, 0.05);
+	// Mask the very outer edge of the tube for a very small shadowing effect
+	float tube_highlight_mask = HSM_GetCornerMask((tube_curved_coord - 0.5) * 0.995 + 0.5 , SCREEN_ASPECT, HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS, 0.05);
 
-		vec4 tube_highlight_image = HSM_GetMipmappedTexSample(TubeStaticReflectionImage, tube_highlight_coord, TUBE_SCALE, 0);
+	vec4 tube_highlight_image = HSM_GetMipmappedTexSample(TubeStaticReflectionImage, tube_highlight_coord, TUBE_SCALE, 0);
 
-		tube_highlight_image = HSM_Linearize(tube_highlight_image, DEFAULT_SRGB_GAMMA) * tube_highlight_mask;
+	tube_highlight_image = HSM_Linearize(tube_highlight_image, DEFAULT_SRGB_GAMMA) * tube_highlight_mask;
 
-		if (HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING > 0)
-		{
-			ambient_lighting_image.rgb = (1 - HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING) * vec3(1) + HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING * ambient_lighting_image.rgb;
-			tube_highlight_image.rgb *= ambient_lighting_image.rgb;
-		}
-
-		out_color = HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY * tube_highlight_image * tube_highlight_image.a;
+	if (HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING > 0)
+	{
+		ambient_lighting_image.rgb = (1 - HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING) * vec3(1) + HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING * ambient_lighting_image.rgb;
+		tube_highlight_image.rgb *= ambient_lighting_image.rgb;
 	}
-	return HSM_GLOBAL_GRAPHICS_BRIGHTNESS * out_color;
+
+	out_color = HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY * tube_highlight_image * tube_highlight_image.a;
+	out_color.rgb *= HSM_GLOBAL_GRAPHICS_BRIGHTNESS;
+
+	return out_color;
 }
 
 
