@@ -882,7 +882,7 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	sample_2d_range = HSM_GetCacheSampleRange(1, 1);
 	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
 	{
-		out_color.r = HSM_GetAverageLuma(original_pass, global.CorePreppedPassSize.xy);
+		out_color.r = HSM_GetAverageLuma(original_pass, global.NegativeCropAddedPassSize.xy);
 	}
 
 	// Sample 2, 1

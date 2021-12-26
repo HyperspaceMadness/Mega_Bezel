@@ -112,7 +112,7 @@ layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
 layout(set = 0, binding = 2) uniform sampler2D InfoCachePassFeedback;
 
 layout(set = 0, binding = 3) uniform sampler2D PrePass;
-layout(set = 0, binding = 4) uniform sampler2D CorePreppedPass;
+layout(set = 0, binding = 4) uniform sampler2D NegativeCropAddedPass;
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
 
@@ -126,7 +126,7 @@ vec3 plant (vec3 tar, float r)
 // TODO need to adjust downsample
 vec3 fetch_pixel(vec2 coord)
 {
-	vec2 prescale_tex_size = textureSize(CorePreppedPass, 0);
+	vec2 prescale_tex_size = textureSize(NegativeCropAddedPass, 0);
 
 	vec2 dx = vec2(1 / prescale_tex_size.x, 0.0) * HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR;
 	vec2 dy = vec2(0.0, 1 / prescale_tex_size.y) * HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR;

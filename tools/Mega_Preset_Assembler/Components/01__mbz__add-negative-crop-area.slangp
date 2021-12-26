@@ -7,4 +7,4 @@ srgb_framebuffer0 = true
 scale_type0 = source
 scale_x0 = 1
 scale_y0 = 1
-alias0 = "CorePreppedPass"
+alias0 = "NegativeCropAddedPass"

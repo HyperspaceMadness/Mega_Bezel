@@ -18,7 +18,7 @@ srgb_framebuffer2 = true
 scale_type2 = source
 scale_x2 = 1
 scale_y2 = 1
-alias2 = "CorePreppedPass"
+alias2 = "NegativeCropAddedPass"
 
 shader3 = ../../shaders/HyperspaceMadness/hsm/hsm-cache-info-screen-scale-params.slang
 filter_linear3 = false
@@ -148,4 +148,4 @@ HSM_ASPECT_RATIO_MODE = 1
 
 // Use for matching vanilla GDV-Advanced
 // HSM_ASPECT_RATIO_MODE = 6
-// HSM_CURVATURE_MODE = -1
+// HSM_CURVATURE_MODE = 0

@@ -40,7 +40,7 @@ void main()
 #pragma stage fragment
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
-layout(set = 0, binding = 2) uniform sampler2D CorePreppedPass;
+layout(set = 0, binding = 2) uniform sampler2D NegativeCropAddedPass;
 
 #ifndef IS_POTATO_PRESET
 layout(set = 0, binding = 3) uniform sampler2D OriginalHistory1;
@@ -271,7 +271,7 @@ vec4 GetColorWithIntro(vec4 in_color, vec2 in_coord)
 //       vec2 cropped_rotated_size = vec2(0);
 //       vec2 cropped_rotated_size_with_res_mult = vec2(0);
 //       vec2 cropped_sample_area_start_pixel_coord = vec2(0);
-//       HSM_GetCroppedRotatedSizeAndPixelSampleAreaStart(i, CorePreppedPass, cropped_rotated_size, cropped_rotated_size_with_res_mult, cropped_sample_area_start_pixel_coord);
+//       HSM_GetCroppedRotatedSizeAndPixelSampleAreaStart(i, NegativeCropAddedPass, cropped_rotated_size, cropped_rotated_size_with_res_mult, cropped_sample_area_start_pixel_coord);
 
 //       vec2 crop_scale = cropped_rotated_size / ROTATED_CORE_PREPPED_SIZE;
 //       vec2 mask_coord = viewport_coord - cropped_sample_area_start_pixel_coord / ROTATED_CORE_PREPPED_SIZE;
@@ -296,7 +296,7 @@ void main()
 	viewport_coord_adjusted.x = abs(HSM_FLIP_VIEWPORT_HORIZONTAL - HSM_FLIP_CORE_HORIZONTAL) * (1 - viewport_coord_adjusted.x) + (1 - abs(HSM_FLIP_VIEWPORT_HORIZONTAL - HSM_FLIP_CORE_HORIZONTAL)) * viewport_coord_adjusted.x;
 	viewport_coord_adjusted.y = abs(HSM_FLIP_VIEWPORT_VERTICAL - HSM_FLIP_CORE_VERTICAL) * (1 - viewport_coord_adjusted.y) + (1 - abs(HSM_FLIP_VIEWPORT_VERTICAL - HSM_FLIP_CORE_VERTICAL)) * viewport_coord_adjusted.y;
 
-   FragColor = texture(CorePreppedPass, viewport_coord_adjusted);
+   FragColor = texture(NegativeCropAddedPass, viewport_coord_adjusted);
 
 #ifndef IS_POTATO_PRESET
    if (HSM_ANTI_FLICKER_ON == 1)

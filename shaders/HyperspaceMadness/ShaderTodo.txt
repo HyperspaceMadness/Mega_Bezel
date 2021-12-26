@@ -1,10 +1,12 @@
 Mega Bezel is updated to V 0.9.093 2021-12-26 Rev 1
 
 Changes:
-  * Negative Crop removed temporarily
-    * I'm removing this temporarily while I add the compensation in the chain so it doesn't add blurring to the crt shader 
-
-      
+  * Add Dual Screen visibility param for tube effects
+    * Added for:
+      * Screen Vignette
+      * Colored Gel
+      * Tube Reflection
+      * Tube Diffuse
 
 *  Performance of Base presets at 3840x2160 on Nvidia RTX2060:
   *  ADVANCED -                      78 FPS  -  No comparable old preset
@@ -26,12 +28,13 @@ Mega Bezel Still to Come:
 
 V1 TODO
   * Compensate for negative crop expand in all passes
-  * Add Param to control gel appearance on dual screen
+  * Add Negative Crop back
   * Masks for just bezel and just frame
   * Potato problems with Dual screen, fading into corners, missalignment
   * Potato Should use Global Brightness / Gamma?  
   * Colored Gel Over/Under Black Edge?
   * Vertical Flip not flipping Tube Highlight
+  * Increase ranges of gamma control for monochrome
 
   
   Post V1

@@ -1,5 +1,5 @@
-#reference "../Base_CRT_Presets/MBZ__3__STD__LCD-GRID.slangp"
 
+// 3DS Parameters
 HSM_FLIP_VIEWPORT_VERTICAL = 1
 HSM_ASPECT_RATIO_MODE = 5
 HSM_INT_SCALE_MODE = 0

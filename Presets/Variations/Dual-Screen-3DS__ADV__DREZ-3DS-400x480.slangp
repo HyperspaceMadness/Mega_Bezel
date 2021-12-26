@@ -1,4 +1,4 @@
-#reference "../Base_CRT_Presets/MBZ__3__STD__LCD-GRID.slangp"
+#reference "../Base_CRT_Presets_DREZ/MBZ__1__ADV__DREZ-3DS-400x480__GDV.slangp"
 
 HSM_FLIP_VIEWPORT_VERTICAL = 1
 HSM_ASPECT_RATIO_MODE = 5

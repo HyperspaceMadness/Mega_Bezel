@@ -85,12 +85,12 @@ vec2 HSM_GetRotatedCoreOriginalSize()
 // Core Prepped Size is the size after DeRez and adding in the negative crop
 vec2 HSM_GetCorePreppedSize()
 {
-	return global.CorePreppedPassSize.xy;
+	return global.NegativeCropAddedPassSize.xy;
 }
 
 vec2 HSM_GetRotatedCorePreppedSize()
 {
-	return HSM_ROTATE_CORE_IMAGE * global.CorePreppedPassSize.yx + (1 - HSM_ROTATE_CORE_IMAGE) * global.CorePreppedPassSize.xy;
+	return HSM_ROTATE_CORE_IMAGE * global.NegativeCropAddedPassSize.yx + (1 - HSM_ROTATE_CORE_IMAGE) * global.NegativeCropAddedPassSize.xy;
 }
 
 // Returns 1 for vertical split, 2 for horizontal split
@@ -134,7 +134,7 @@ float HSM_GetSwappedScreenIndex(float screen_index)
 // Get the original size with split area added
 vec2 HSM_GetScreenCorePreppedSize(float screen_index)
 {
-	vec2 core_prepped_size = global.CorePreppedPassSize.xy;
+	vec2 core_prepped_size = global.NegativeCropAddedPassSize.xy;
 
 	if (HSM_DUALSCREEN_MODE > 0)
 		if (HSM_GetCoreImageSplitDirection() == 1)
