@@ -17,8 +17,8 @@ filter_linear2 = false
 mipmap_input2 = false
 srgb_framebuffer2 = true
 scale_type2 = source
-scale_x2 = 1.25
-scale_y2 = 1.25
+scale_x2 = 1
+scale_y2 = 1
 alias2 = "CorePreppedPass"
 
 shader3 = ../../shaders/HyperspaceMadness/hsm/hsm-cache-info-all-params.slang

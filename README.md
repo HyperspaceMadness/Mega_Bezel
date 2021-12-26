@@ -66,15 +66,15 @@ Choosing a Preset
 
 - All in the root of the Presets folder use @guest.r's awesome Guest-DrVenom-Advanced CRT shader which is considered the default CRT shader for the Mega Bezel, the only exception to this is the POTATO preset which uses GDV-MINI for performance reasons.
 
-|                       |Reflection  |Image Layering |Tube Effects  |Pre-CRT Chain
-|-----------------------|------------|---------------|--------------|----------------
-|MBZ__1__ADV            |✔           |✔             |✔             | FULL
-|MBZ__2__ADV__Glass     |✔           |               |✔             | FULL
-|MBZ__2__ADV-NO-REFLECT |            |✔              |✔             | FULL
-|MBZ__3__STD            |✔           |✔             |✔             | SIMPLIFIED
-|MBZ__3__STD__Glass     |✔           |               |✔             | SIMPLIFIED
-|MBZ__4__STD-NO-REFLECT |            |✔              |✔             | SIMPLIFIED
-|MBZ__5__POTATO         |            |BG ONLY        |              | MINIMAL
+|                       |Reflection  |Image Layering |Tube Effects  |Pre-CRT Chain  |Old Similar Preset
+|-----------------------|------------|---------------|--------------|---------------|----
+| MBZ__1__ADV            | ✔           | ✔           | ✔           | FULL           | MBZ__1__ADV
+| MBZ__2__ADV__Glass     | ✔           |              | ✔           | FULL          | MBZ__2__GLASS
+| MBZ__2__ADV-NO-REFLECT |              | ✔           | ✔           | FULL          | MBZ__3__BASIC-EXTRA-PASSES__GDV
+| MBZ__3__STD            | ✔           | ✔           | ✔            | SIMPLIFIED    | MBZ__3__BASIC-REFLECT
+| MBZ__3__STD__Glass     | ✔           |              | ✔           | SIMPLIFIED    | N/A
+| MBZ__4__STD-NO-REFLECT |            | ✔             | ✔           | SIMPLIFIED    | MBZ__4__BASIC
+| MBZ__5__POTATO         |            | BG ONLY       |              | MINIMAL       | MBZ__5__POTATO
 
 **Descriptions:**
 

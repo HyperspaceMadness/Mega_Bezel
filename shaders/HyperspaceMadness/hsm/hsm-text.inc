@@ -331,7 +331,7 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
     col += GetChar(ch_per, uv);
     col += GetChar(ch_0, uv);
     col += GetChar(ch_9, uv);
-    col += GetChar(ch_2, uv);
+    col += GetChar(ch_3, uv);
     col += GetChar(ch_spc, uv);
 
     // Date
@@ -344,14 +344,14 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
     col += GetChar(ch_2, uv);
     col += GetChar(ch_dsh, uv);
     col += GetChar(ch_2, uv);
-    col += GetChar(ch_4, uv);
+    col += GetChar(ch_6, uv);
 
     col += GetChar(ch_spc, uv);
     col += GetChar(ch_R, uv);
     col += GetChar(ch_e, uv);
     col += GetChar(ch_v, uv);
     col += GetChar(ch_spc, uv);
-    col += GetChar(ch_3, uv);
+    col += GetChar(ch_1, uv);
 
 
     //Preset Type

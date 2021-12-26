@@ -1,56 +1,8 @@
-Mega Bezel is updated to V 0.9.092 2021-12-24 Rev 3
+Mega Bezel is updated to V 0.9.093 2021-12-26 Rev 1
 
 Changes:
-  * Fix issue with cacing when bilinear filter is on
-
-Change Details:
-  * Viewport Zoom & Position
-  * Caching Added for much better Performance
-    * When caching is on (on by default) the performance will be much better
-    * Stuff that is cached:
-      * Passes which do not change dynamically every frame
-      * Portions of the viewport which do not change dynamically every frame (E.G. Outside the Bezel)
-    * Blinking red visual Live mode indicator when cache is updating
-  * Added Negative Cropping
-  * Guest DrVenom
-    * New Guest-DrVenom NTSC preset added, Thanks @guest.r!!!
-    * Updated Guest shaders to crt-guest-advanced-2021-10-22-release1
-    * Scanline Gamma is on all GDV presets and is a 1 based gamma adjustment
-    * Noise can now be turned on/off separately from deconvergence
-  * Cyber's Presets added to Experimental folder
-  * Put Vignette in Post-CRT pass, Turn off Grade Vignette by default
-  * Put Grade after afterglow, remove brighten black from afterglow
-  * Added STD-GLASS preset
-  * Auto Aspect Ratio
-    * Catch sony fmv res 320x480 as Horizontal Aspect
-    * Catch sony fmv res 512x480 is now caught as 4:3 and Horizontal
-  * Independent Black Edge Corner scaling
-  * Color Tweaks fixed, Display Gamut last option is now in range
-  * Image Layering
-    * Image aspect is now taken from the image resolution instead of setting extra parameters
-    * Added Mipmapping blend to avoiding the crunchy pixel look when graphics are scaled down, e.g. 4k background on 1080p monitor
-    * Added Color Control on all Layers
-    * Added Viewport and Full scaling mode for image layers and AmbientLightingImage
-  * Automatic screen placement
-    * Add option for Black and White placement image requested by @briball
-    * Parameter USE_IMAGE_FOR_PLACEMENT renamed to HSM_USE_IMAGE_FOR_PLACEMENT
-  * Night Lighting / Ambient Lighting
-    * NIGHT LIGHTING renamed to AMBIENT LIGHTING
-    * AMBIENT LIGHTING now affects tube static reflection & Tube diffuse image
-    * New great Night Lighting image by @Duimon
-  * Graphics global brightness added so Mega Bezel can be used with "Dark" presets which try to preserve phosphors and then user increases monitor brightness
-  * Screen Curvature: Added 2D Cylindrical Curvature mode requested by @syh
-    * This makes the indexes change so they now start at 0 and end at 5.
-    * 3D mode is now 3 and 3D cylinder mode is 5
-  * Intro Logo is now scaled nicely in Vertical and Dual Screen
-  * Tube Diffuse image added, so you can show the phosphor surface behind the CRT image if desired
-  * ColoredGelImage renamed to TubeColoredGelImage for consistency
-  * Corner radius' for are now independent, Black Edge, Bezel inside, Bezel Outside
-  * Community_CRT_Variations presets added (Moved from Experimental) includes:
-    * BendBombBoom Presets
-    * NESGuy presets
-  * On/Off for some effects, which will be off by default like Tube Static Reflection Image
-
+  * Negative Crop removed temporarily
+    * I'm removing this temporarily while I add the compensation in the chain so it doesn't add blurring to the crt shader 
 
       
 
@@ -73,6 +25,10 @@ Change Details:
 Mega Bezel Still to Come:
 
 V1 TODO
+  * Compensate for crop in all passes
+  * Add Param to control gel appearance on dual screen
+  * Masks for just bezel and just frame
+  * Potato problems with Dual screen, fading into corners, missalignment
   * Potato Should use Global Brightness / Gamma?
 
   

@@ -23,7 +23,7 @@
 */
 
 // Screen Scale Required Parameters
-#pragma parameter HSM_MEGA_BEZEL_TITLE								"[ --- HSM MEGA BEZEL 0.9.092 2021-12-24 Rev 3--- ]" 0 0 0.01 0.01
+#pragma parameter HSM_MEGA_BEZEL_TITLE								"[ --- HSM MEGA BEZEL 0.9.093 2021-12-26 Rev 1--- ]" 0 0 0.01 0.01
 
 #pragma parameter HSM_RESOLUTION_DEBUG_ON							"          Show Resolution Info" 0 0 1 1
 float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
@@ -160,6 +160,7 @@ float HSM_VERTICAL_PRESET = global.HSM_VERTICAL_PRESET;
 #pragma parameter HSM_NON_INTEGER_SCALE 							"          Non-Integer Scale %" 82.97 1 200 0.2
 float HSM_NON_INTEGER_SCALE = global.HSM_NON_INTEGER_SCALE - (HSM_VERTICAL_PRESET > 0.5 ? 47.92 : 0);
 
+
 //---------------------------------------------------------------------------------------------------
 //    Extended Scale
 //---------------------------------------------------------------------------------------------------
@@ -177,6 +178,7 @@ float HSM_NON_INTEGER_SCALE_OFFSET = global.HSM_NON_INTEGER_SCALE_OFFSET / 100;
 #pragma parameter HSM_SNAP_TO_INT_SCALE_TOLERANCE 					"          Snap To Int-Scale Tolerance - Suggested 0.1" 0 0 3 0.01
 float HSM_SNAP_TO_INT_SCALE_TOLERANCE = global.HSM_SNAP_TO_INT_SCALE_TOLERANCE;
 
+
 //---------------------------------------------------------------------------------------------------
 //    Position
 //---------------------------------------------------------------------------------------------------
@@ -193,23 +195,24 @@ float HSM_SCREEN_POSITION_Y = -1 * global.HSM_SCREEN_POSITION_Y / 1000;
 //    CROPPING
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_CROPPING_TITLE								"[ CROPPING CORE IMAGE ]:" 0 0 0.01 0.01
+#pragma parameter HSM_CROP_FYI 									"!!! FYI !!! Negative Crop is currently Disabled :(" 2 0 2 1
 
 #pragma parameter HSM_CROP_MODE 									"          Crop Mode  -  OFF | CROP BLACK ONLY | CROP ANY" 2 0 2 1
 float HSM_CROP_MODE = global.HSM_CROP_MODE;
 
-#pragma parameter HSM_CROP_PERCENT_ZOOM								"          Crop Zoom %" 0 -10 100 0.1
+#pragma parameter HSM_CROP_PERCENT_ZOOM								"          Crop Zoom %" 0 -50 100 0.1
 float HSM_CROP_PERCENT_ZOOM = global.HSM_CROP_PERCENT_ZOOM / 100;
 
-#pragma parameter HSM_CROP_PERCENT_TOP 								"          Crop Top %" 0 -10 100 0.1
+#pragma parameter HSM_CROP_PERCENT_TOP 								"          Crop Top %" 0 -50 100 0.1
 float HSM_CROP_PERCENT_TOP = global.HSM_CROP_PERCENT_TOP / 100;
 
-#pragma parameter HSM_CROP_PERCENT_BOTTOM 							"          Crop Bottom %" 0 -10 100 0.1
+#pragma parameter HSM_CROP_PERCENT_BOTTOM 							"          Crop Bottom %" 0 -50 100 0.1
 float HSM_CROP_PERCENT_BOTTOM = global.HSM_CROP_PERCENT_BOTTOM / 100;
 
-#pragma parameter HSM_CROP_PERCENT_LEFT 							"          Crop Left %" 0 -10 100 0.1
+#pragma parameter HSM_CROP_PERCENT_LEFT 							"          Crop Left %" 0 -50 100 0.1
 float HSM_CROP_PERCENT_LEFT = global.HSM_CROP_PERCENT_LEFT / 100;
 
-#pragma parameter HSM_CROP_PERCENT_RIGHT 							"          Crop Right %" 0 -10 100 0.1
+#pragma parameter HSM_CROP_PERCENT_RIGHT 							"          Crop Right %" 0 -50 100 0.1
 float HSM_CROP_PERCENT_RIGHT = global.HSM_CROP_PERCENT_RIGHT / 100;
 
 #pragma parameter HSM_CROP_BLACK_THRESHOLD 							"          Black Threshold for 'CROP BLACK ONLY'" 0 0 100 1

@@ -539,7 +539,8 @@ layout(std140, set = 0, binding = 0) uniform UBO
 // Maximum Negative cropping fron each edge
 // This means that the pass with the negative crop area 
 // added needs to have twice this much added in each direction 
-#define MAX_NEGATIVE_CROP 0.1
+#define NEGATIVE_CROP_EXPAND_MULTIPLIER 1
+#define MAX_NEGATIVE_CROP ((1 - (1 / NEGATIVE_CROP_EXPAND_MULTIPLIER)) / 2)
 
 #define DEFAULT_CRT_GAMMA 2.4
 #define DEFAULT_SRGB_GAMMA 2.2
@@ -662,6 +663,7 @@ vec2 CORE_FEEDBACK_SIZE = vec2(2);
 
 vec2 ROTATED_CORE_ORIGINAL_SIZE = vec2(1);
 vec2 ROTATED_CORE_PREPPED_SIZE = vec2(1);
+vec2 ROTATED_DEREZED_SIZE = vec2(1);
 
 vec2 CROPPED_ROTATED_SIZE_WITH_RES_MULT = vec2(1);
 vec2 CROPPED_ROTATED_SIZE = vec2(1);
