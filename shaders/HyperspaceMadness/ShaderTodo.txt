@@ -27,6 +27,7 @@ Changes:
 Mega Bezel Still to Come:
 
 V1 TODO
+  * Adjust Gamma on NTSC Preset, too bright now
   * Compensate for negative crop expand in all passes
   * Add Negative Crop back
   * Masks for just bezel and just frame

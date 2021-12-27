@@ -57,7 +57,7 @@ scale_x6 = 1.0
 scale_y6 = 1.0
 alias6 = NtscPass
 
-shader7 = ./hsm-convert-ntsc.slang
+shader7 = ./convert-ntsc.slang
 filter_linear7 = true
 scale_type7 = source
 scale_x7 = 0.5

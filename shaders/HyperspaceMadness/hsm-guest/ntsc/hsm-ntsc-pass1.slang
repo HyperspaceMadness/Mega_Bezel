@@ -13,8 +13,8 @@ layout(std140, set = 0, binding = 0) uniform UBO
    float quality, ntsc_sat, cust_fringing, cust_artifacting, ntsc_bright;
 } global;
 
-#pragma parameter NTSC_TITLE        "[ NTSC SIGNAL PROCESSING ]:" 0.0 -1.0 2.0 1.0
-#pragma parameter blendMode 		"          NTSC Blend Mode - 0:SHARP | 1:STANDARD | 2:ORIGINAL" 1.0 0.0 2.0 1.0
+#pragma parameter NTSC_TITLE        "[ GDV - NTSC SIGNAL PROCESSING ]:" 0.0 -1.0 2.0 1.0
+#pragma parameter blendMode 		   "          NTSC Blend Mode - 0:SHARP | 1:STANDARD | 2:ORIGINAL" 1.0 0.0 2.0 1.0
 #pragma parameter quality           "          Presets - Svideo:0 Composite:1 RF:2 Custom:-1" 0.0 -1.0 2.0 1.0
 #pragma parameter ntsc_sat          "          Color Saturation" 1.0 0.0 2.0 0.01
 #pragma parameter ntsc_bright       "          Brightness" 1.0 0.0 1.5 0.01
