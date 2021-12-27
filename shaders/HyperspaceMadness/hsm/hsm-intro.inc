@@ -24,7 +24,7 @@
 
 // Import so all the mega bezel parameters are the first in the parameter list
 
-#include "hsm-text.inc"
+#include "hsm-text-lib.inc"
 
 #pragma stage vertex
 layout(location = 0) in vec4 Position;
@@ -52,41 +52,9 @@ layout(set = 0, binding = 7) uniform sampler2D IntroImage;
 layout(set = 0, binding = 8) uniform sampler2D InfoCachePass;
 layout(set = 0, binding = 9) uniform sampler2D InfoCachePassFeedback;
 
+layout(set = 0, binding = 10) uniform sampler2D TextPass;
+
 #define eps 1e-3
-
-vec2 GetScreenSize(vec2 screen_scale)
-{
-	vec2 screen_size = global.FinalViewportSize.xy * screen_scale;
-	// Round this so we get proper integers
-	screen_size = vec2(ceil(screen_size.x), ceil(screen_size.y));
-	return screen_size;
-}
-
-vec2 GetIntegerScaleMult(vec2 screen_size, vec2 cropped_size)
-{
-	float epsilon = 0.002;
-	vec2 integer_scale = screen_size / cropped_size;
-	integer_scale = vec2(fract(integer_scale.x + 0.001) < epsilon ? round(integer_scale.x) : integer_scale.x,
-						 fract(integer_scale.y + 0.001) < epsilon ? round(integer_scale.y) : integer_scale.y);
-	return integer_scale;
-}
-
-vec4 AddText(vec2 in_coord, vec4 in_color)
-{
-   in_coord.y = abs(HSM_FLIP_VIEWPORT_VERTICAL - HSM_FLIP_CORE_VERTICAL) > 0.5 ? 1 - in_coord.y : in_coord.y;
-   in_coord.x = abs(HSM_FLIP_VIEWPORT_HORIZONTAL - HSM_FLIP_CORE_HORIZONTAL) > 0.5 ? 1 - in_coord.x : in_coord.x;
-
-   vec2 screen_size = GetScreenSize(SCREEN_SCALE);
-   vec2 int_scale_mult = GetIntegerScaleMult(screen_size, CROPPED_ROTATED_SIZE);
-
-   vec4 out_color = in_color;
-   out_color = mix(out_color, vec4(0, 0, 0, 1), GetTextMask(in_coord + 2 * vec2(1/global.OutputSize.x, 0), global.FinalViewportSize.xy, screen_size, ROTATED_DEREZED_SIZE, ROTATED_CORE_PREPPED_SIZE, CROPPED_ROTATED_SIZE, CROPPED_ROTATED_SIZE_WITH_RES_MULT, int_scale_mult, global.OutputSize.xy));
-   out_color = mix(out_color, vec4(0, 0, 0, 1), GetTextMask(in_coord - 2 * vec2(1/global.OutputSize.x, 0), global.FinalViewportSize.xy, screen_size, ROTATED_DEREZED_SIZE, ROTATED_CORE_PREPPED_SIZE, CROPPED_ROTATED_SIZE, CROPPED_ROTATED_SIZE_WITH_RES_MULT, int_scale_mult, global.OutputSize.xy));
-   out_color = mix(out_color, vec4(0, 0, 0, 1), GetTextMask(in_coord + 1 * vec2(0, 1/global.OutputSize.y), global.FinalViewportSize.xy, screen_size, ROTATED_DEREZED_SIZE, ROTATED_CORE_PREPPED_SIZE, CROPPED_ROTATED_SIZE, CROPPED_ROTATED_SIZE_WITH_RES_MULT, int_scale_mult, global.OutputSize.xy));
-   out_color = mix(out_color, vec4(0, 0, 0, 1), GetTextMask(in_coord - 1 * vec2(0, 1/global.OutputSize.y), global.FinalViewportSize.xy, screen_size, ROTATED_DEREZED_SIZE, ROTATED_CORE_PREPPED_SIZE, CROPPED_ROTATED_SIZE, CROPPED_ROTATED_SIZE_WITH_RES_MULT, int_scale_mult, global.OutputSize.xy));
-   out_color = mix(out_color, vec4(1, 1, 0, 1), GetTextMask(in_coord,                                      global.FinalViewportSize.xy, screen_size, ROTATED_DEREZED_SIZE, ROTATED_CORE_PREPPED_SIZE, CROPPED_ROTATED_SIZE, CROPPED_ROTATED_SIZE_WITH_RES_MULT, int_scale_mult, global.OutputSize.xy));
-   return clamp(out_color, 0, 1);
-}
 
 #ifndef IS_POTATO_PRESET
 vec4 AntiFlicker(vec2 in_coord, vec4 current)
@@ -313,7 +281,7 @@ void main()
 	if (show_update_indicator)
 	{
 		float final_aspect = SCREEN_ASPECT;
-		vec2 corner_offset = vec2(0.18, MAX_NEGATIVE_CROP * 2);
+		vec2 corner_offset = vec2(MAX_NEGATIVE_CROP * 2 * 0.8, MAX_NEGATIVE_CROP * 2 * 0.8);
 		vec2 center_coord = vec2(1 - corner_offset.x * final_aspect, 1 - corner_offset.y);
 		vec2 test_coord = vec2(1 - (1 - viewport_coord_adjusted.x) * final_aspect, viewport_coord_adjusted.y);
 		float distance =  length(test_coord - center_coord);
@@ -333,6 +301,5 @@ void main()
 
    //////// Draw text to show out_colorolutions ////////// 
    if (HSM_RESOLUTION_DEBUG_ON == 1)
-      FragColor = AddText(viewport_coord_adjusted - vec2(MAX_NEGATIVE_CROP, -MAX_NEGATIVE_CROP), FragColor);
-
+      FragColor = HSM_PreMultAlphaBlend(FragColor, texture(TextPass, vTexCoord));
 }

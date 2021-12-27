@@ -1,4 +1,6 @@
 #version 450
 
-#include "hsm-globals-and-potato-params.inc"
+#define IS_POTATO_PRESET
+
+#include "hsm-globals-and-screen-scale-params.inc"
 #include "hsm-intro.inc"

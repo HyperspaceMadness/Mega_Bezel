@@ -1,0 +1,8 @@
+shaders = 1
+
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm/hsm-text-adv-no-reflect.slang
+filter_linear0 = false
+float_framebuffer0 = true
+scale_type0 = source
+scale0 = 1.0
+alias0 = "TextPass"
