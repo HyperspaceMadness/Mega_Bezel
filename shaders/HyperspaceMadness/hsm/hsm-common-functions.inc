@@ -931,7 +931,13 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 	texture_sample = texture(in_cache_feedback_pass, sample_coord);
 	float parameter_sum_feedback = texture_sample.r;
 
-
+	// Sample 2, 4 
+	// r NEGATIVE_CROP_EXPAND_MULTIPLIER
+	// g MAX_NEGATIVE_CROP
+	sample_coord = HSM_GetCacheSampleCoord(2, 4);
+	texture_sample = texture(in_cache_pass, sample_coord);
+	NEGATIVE_CROP_EXPAND_MULTIPLIER = texture_sample.r;
+	MAX_NEGATIVE_CROP = texture_sample.g;
 
 	USE_VERTICAL_SCANLINES = HSM_GetUseVerticalScanlines(SCREEN_ASPECT);
 	SCREEN_COORD = HSM_GetVTexCoordWithArgs(flipped_viewport_coord, SCREEN_SCALE, SCREEN_POS_OFFSET);

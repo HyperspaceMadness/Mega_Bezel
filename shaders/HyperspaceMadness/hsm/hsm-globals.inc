@@ -543,9 +543,6 @@ layout(std140, set = 0, binding = 0) uniform UBO
 // Maximum Negative cropping fron each edge
 // This means that the pass with the negative crop area 
 // added needs to have twice this much added in each direction 
-#define NEGATIVE_CROP_EXPAND_MULTIPLIER 1
-#define MAX_NEGATIVE_CROP ((1 - (1 / NEGATIVE_CROP_EXPAND_MULTIPLIER)) / 2)
-
 #define DEFAULT_CRT_GAMMA 2.4
 #define DEFAULT_SRGB_GAMMA 2.2
 
@@ -566,6 +563,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #define TEXTURE_ASPECT_MODE_3_4 3
 #define TEXTURE_ASPECT_MODE_16_9 4
 #define TEXTURE_ASPECT_MODE_9_16 5
+
+float NEGATIVE_CROP_EXPAND_MULTIPLIER = 0.5;
+float MAX_NEGATIVE_CROP = 0.5;
 
 // In square coordinate space
 #define DEFAULT_UNCORRECTED_SCREEN_SCALE vec2(1.10585, 0.8296)

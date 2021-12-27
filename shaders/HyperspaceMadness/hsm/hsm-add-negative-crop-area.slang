@@ -24,7 +24,12 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "hsm-globals-and-screen-scale-params.inc"
+layout(std140, set = 0, binding = 0) uniform UBO
+{
+    mat4 MVP;
+    vec4 OutputSize;
+    vec4 SourceSize;
+} global;
 
 #pragma stage vertex
 layout(location = 0) in vec4 Position;
@@ -44,5 +49,8 @@ layout(set = 0, binding = 2) uniform sampler2D Source;
 
 void main()
 {
+   float NEGATIVE_CROP_EXPAND_MULTIPLIER = global.OutputSize.y / global.SourceSize.y;
+   float MAX_NEGATIVE_CROP = ((1 - (1 / NEGATIVE_CROP_EXPAND_MULTIPLIER)) / 2);
+
    FragColor = vec4(texture(Source, (vTexCoord - 0.5) / (1 - 2 * MAX_NEGATIVE_CROP) + 0.5).rgb, 1.0);
 }

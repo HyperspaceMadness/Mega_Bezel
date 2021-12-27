@@ -842,6 +842,9 @@ float HSM_GetParameterSum()
 
 vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass, sampler2D original_pass, sampler2D screen_placement_image)
 {
+	NEGATIVE_CROP_EXPAND_MULTIPLIER = global.NegativeCropAddedPassSize.y / global.DerezedPassSize.y;
+	MAX_NEGATIVE_CROP = ((1 - (1 / NEGATIVE_CROP_EXPAND_MULTIPLIER)) / 2);
+
 	vec4 out_color = vec4(0);
 	vec2 rotated_derezed_size = HSM_GetRotatedScreenDerezedSize();
 	vec2 cropped_rotated_size_with_res_mult = vec2(100);
@@ -1003,6 +1006,14 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 		out_color.g = last_frame + global.FrameDirection * 1;
 
 		out_color.ba = rotated_derezed_size;
+	}
+
+	// Sample 2, 4
+	sample_2d_range = HSM_GetCacheSampleRange(2, 4);
+	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
+	{
+		out_color.r = NEGATIVE_CROP_EXPAND_MULTIPLIER;
+		out_color.g = MAX_NEGATIVE_CROP;
 	}
 
 	return out_color;
