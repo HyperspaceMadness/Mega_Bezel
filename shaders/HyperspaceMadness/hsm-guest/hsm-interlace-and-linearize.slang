@@ -176,18 +176,23 @@ void main()
 		use_vert_scanlines_bool = !use_vert_scanlines_bool;
 	}
 
+
+	vec2 rotated_derezed_size = HSM_GetRotatedDerezedSize();
+
+	float derezed_opposite_dir_res = use_vert_scanlines_bool ? rotated_derezed_size.x : rotated_derezed_size.y;
+	float derezed_scaled_opposite_dir_res = derezed_opposite_dir_res * HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR;
+
 	float orig_opposite_dir_res = use_vert_scanlines_bool ? ROTATED_CORE_PREPPED_SIZE.x : ROTATED_CORE_PREPPED_SIZE.y;
 	float scaled_opposite_dir_res = orig_opposite_dir_res * HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR;
 
 	float orig_scanline_dir_res = use_vert_scanlines_bool ? ROTATED_CORE_PREPPED_SIZE.y : ROTATED_CORE_PREPPED_SIZE.x;
-	float scaled_scanline_dir_res = orig_scanline_dir_res * HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR;
 
 	float tex_coord_scan_dir = use_vert_scanlines_bool ? vTexCoord.x : vTexCoord.y;
 
-	vec2 downsample_offset = vec2(0, 1 / orig_opposite_dir_res );
+	vec2 downsample_offset = vec2(0, 1 / orig_opposite_dir_res / NEGATIVE_CROP_EXPAND_MULTIPLIER );
 
 	if (use_vert_scanlines_bool)
-		downsample_offset = vec2(1 / orig_opposite_dir_res, 0 );
+		downsample_offset = vec2(1 / orig_opposite_dir_res / NEGATIVE_CROP_EXPAND_MULTIPLIER, 0 );
 
 	if ((HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR + HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR) > 0.0)
 	{
@@ -220,7 +225,7 @@ void main()
 	*/
 
 	// HSM Added
-	if (HSM_INTERLACE_TRIGGER_RES <= scaled_opposite_dir_res && interm > 0.5) 
+	if (HSM_INTERLACE_TRIGGER_RES <= derezed_scaled_opposite_dir_res && interm > 0.5) 
 	{
 		intera = 0.25;
 

@@ -26,14 +26,6 @@
 
 #include "hsm-globals-and-screen-scale-params.inc"
 
-layout(push_constant) uniform Push
-{
-	vec4 SourceSize;
-	vec4 OriginalSize;
-	vec4 OutputSize;
-	uint FrameCount;
-} params;
-
 #pragma stage vertex
 layout(location = 0) in vec4 Position;
 layout(location = 1) in vec2 TexCoord;

@@ -82,15 +82,31 @@ vec2 HSM_GetRotatedCoreOriginalSize()
 	return HSM_ROTATE_CORE_IMAGE * global.OriginalSize.yx + (1 - HSM_ROTATE_CORE_IMAGE) * global.OriginalSize.xy;
 }
 
+vec2 HSM_GetDerezedSize()
+{
+	return global.DerezedPassSize.xy;
+}
+
+vec2 HSM_GetRotatedDerezedSize()
+{
+	return HSM_ROTATE_CORE_IMAGE * global.DerezedPassSize.yx + (1 - HSM_ROTATE_CORE_IMAGE) * global.DerezedPassSize.xy;
+}
+
+
 // Core Prepped Size is the size after DeRez and adding in the negative crop
-vec2 HSM_GetCorePreppedSize()
+vec2 HSM_GetNegativeCropAddedSize()
 {
 	return global.NegativeCropAddedPassSize.xy;
 }
 
-vec2 HSM_GetRotatedCorePreppedSize()
+vec2 HSM_GetRotatedNegativeCropAddedSize()
 {
 	return HSM_ROTATE_CORE_IMAGE * global.NegativeCropAddedPassSize.yx + (1 - HSM_ROTATE_CORE_IMAGE) * global.NegativeCropAddedPassSize.xy;
+}
+
+float HSM_GetNegativeCropExpandMultiplier()
+{
+	return HSM_GetNegativeCropAddedSize().y / HSM_GetDerezedSize().y;
 }
 
 // Returns 1 for vertical split, 2 for horizontal split
@@ -235,7 +251,7 @@ vec2 HSM_GetResMult()
 	// float int_multiple = floor(multiple + epsilon);
 	// float int_div_res_near_target_res = original_res / int_multiple;
 
-	vec2 original_size = HSM_GetRotatedCorePreppedSize();
+	vec2 original_size = HSM_GetRotatedNegativeCropAddedSize();
 	float use_vert_scanlines = HSM_GetUseVerticalScanlines(original_size.x/original_size.y);
 	vec2 sampling_mult = (1 - use_vert_scanlines) * vec2(HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR, HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR) + 
 							  use_vert_scanlines *  vec2(HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR, HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR);
@@ -245,7 +261,7 @@ vec2 HSM_GetResMult()
 // Texture Sampler function which takes a coordinate in the cropped coordinate space
 vec4 HSM_GetTexSampleFromSampleStartAndSize(sampler2D in_sampler, vec2 in_screen_coord, vec2 sample_start_pixel_coord, vec2 window_size)
 {
-	vec2 core_prepped_size = HSM_GetRotatedCorePreppedSize();
+	vec2 core_prepped_size = HSM_GetRotatedNegativeCropAddedSize();
 
 	if ( HSM_DUALSCREEN_MODE > 0 )
 		in_screen_coord.y = abs(HSM_FLIP_CORE_VERTICAL) * (1 - in_screen_coord.y) + (1 - abs(HSM_FLIP_CORE_VERTICAL)) * in_screen_coord.y;
@@ -582,7 +598,7 @@ vec2 HSM_GetCurvedCoord(vec2 in_coord, float curvature_multiplier, float screen_
 		return in_coord;
 	
 	float epsilon = 0.002;
-	vec2 original_size = HSM_GetRotatedCorePreppedSize();
+	vec2 original_size = HSM_GetRotatedNegativeCropAddedSize();
 
 	vec2 adjusted_coord = in_coord;
 	float tilt_angle_y = HSM_CURVATURE_3D_TILT_ANGLE_Y;
@@ -779,7 +795,7 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 	SCREEN_INDEX = HSM_GetScreenIndex(flipped_viewport_coord);
 	CORE_SIZE = global.CorePassSize.xy;
 	CORE_FEEDBACK_SIZE = global.CorePassFeedbackSize.xy;
-	ROTATED_CORE_PREPPED_SIZE = HSM_GetRotatedCorePreppedSize();
+	ROTATED_CORE_PREPPED_SIZE = HSM_GetRotatedNegativeCropAddedSize();
 	ROTATED_CORE_ORIGINAL_SIZE = HSM_GetRotatedCoreOriginalSize();
 	vec2 sample_coord = vec2(0);
 	vec4 texture_sample = vec4(0);
@@ -986,7 +1002,7 @@ vec4 HSM_GetMipmappedTexSample(sampler2D in_sampler, vec2 in_coord, vec2 in_scal
 // Texture Sampler function which takes a coordinate in the cropped coordinate space
 vec4 HSM_GetCroppedTexSample(sampler2D in_sampler, vec2 in_screen_coord)
 {
-	vec2 core_prepped_size = HSM_GetRotatedCorePreppedSize();
+	vec2 core_prepped_size = HSM_GetRotatedNegativeCropAddedSize();
 
 	vec4 out_color = HSM_GetTexSampleFromSampleStartAndSize(in_sampler, in_screen_coord, SAMPLE_AREA_START_PIXEL_COORD, CROPPED_ROTATED_SIZE);
 

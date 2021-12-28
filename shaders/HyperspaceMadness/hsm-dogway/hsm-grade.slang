@@ -882,7 +882,7 @@ vec3 vcolor = adj;
     // HSM Added
 	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
-    vec2 derezed_size = HSM_GetCorePreppedSize();
+    vec2 derezed_size = HSM_GetNegativeCropAddedSize();
     vec2 cur_pixel_pos = vTexCoord * derezed_size;
     vec2 cropped_size = HSM_ROTATE_CORE_IMAGE > 0.5 ? vec2(CROPPED_ROTATED_SIZE.y, CROPPED_ROTATED_SIZE.x) : CROPPED_ROTATED_SIZE;
     vec2 raw_size = HSM_ROTATE_CORE_IMAGE > 0.5 ? vec2(ROTATED_CORE_PREPPED_SIZE.y, ROTATED_CORE_PREPPED_SIZE.x) : ROTATED_CORE_PREPPED_SIZE;
