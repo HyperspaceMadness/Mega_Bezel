@@ -179,6 +179,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float HSM_MONOCHROME_GAMMA;
 	float HSM_MONOCHROME_HUE_OFFSET;
 	float HSM_MONOCHROME_SATURATION;
+	float HSM_MONOCHROME_DUALSCREEN_VIS_MODE;
 
 	//    Reflection Transform
 	float HSM_SCREEN_REFLECTION_SCALE;

@@ -473,7 +473,7 @@ float HSM_SCREEN_VIGNETTE_DUALSCREEN_VIS_MODE = global.HSM_SCREEN_VIGNETTE_DUALS
 #pragma parameter HSM_MONOCHROME_MODE  								"          Monochrome Color: OFF | BW | AMBER | GREEN" 0.0 0.0 3.0 1.0
 #define HSM_MONOCHROME_MODE global.HSM_MONOCHROME_MODE
 
-#pragma parameter HSM_MONOCHROME_GAMMA 								"          Monochrome Gamma" 1.0 1.0 2.4 0.1
+#pragma parameter HSM_MONOCHROME_GAMMA 								"          Monochrome Gamma" 1.0 0.1 5 0.1
 #define HSM_MONOCHROME_GAMMA global.HSM_MONOCHROME_GAMMA
 
 #pragma parameter HSM_MONOCHROME_HUE_OFFSET 						"          Monochrome Hue Offset" 0 -180 180 1
@@ -481,6 +481,9 @@ float HSM_SCREEN_VIGNETTE_DUALSCREEN_VIS_MODE = global.HSM_SCREEN_VIGNETTE_DUALS
 
 #pragma parameter HSM_MONOCHROME_SATURATION 						"          Monochrome Saturation" 100 -100 200 1
 #define HSM_MONOCHROME_SATURATION (global.HSM_MONOCHROME_SATURATION / 100)
+
+#pragma parameter HSM_MONOCHROME_DUALSCREEN_VIS_MODE                "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
+float HSM_MONOCHROME_DUALSCREEN_VIS_MODE = global.HSM_MONOCHROME_DUALSCREEN_VIS_MODE;
 
 
 //---------------------------------------------------------------------------------------------------

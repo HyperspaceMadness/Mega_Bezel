@@ -1,9 +1,10 @@
-Mega Bezel is updated to V 0.9.093 2021-12-26 Rev 1
+Mega Bezel is updated to V 0.9.094 2021-12-27 Rev 1
 
 Changes:
   * Add Dual Screen visibility param for tube effects
     * Added for:
       * Screen Vignette
+      * Monochrome
       * Colored Gel
       * Tube Reflection
       * Tube Diffuse

@@ -1090,6 +1090,7 @@ vec4 HSM_ApplyMonochrome(vec4 in_color)
 	out_color.rgb = pow(out_color.rgb, HSM_MONOCHROME_GAMMA.xxx);
 	float luma = dot(out_color.rgb, vec3(0.299, 0.587, 0.114));
 	vec3 mcolor = vec3(1.0);
+
 	if (HSM_MONOCHROME_MODE > 1.5) mcolor = (HSM_MONOCHROME_MODE > 2.5) ? vec3(0.2549, 1.0, 0.0) : vec3(1.0, 0.749, 0.0);
 
 	if (HSM_MONOCHROME_HUE_OFFSET != 0 || HSM_MONOCHROME_SATURATION != 0)
