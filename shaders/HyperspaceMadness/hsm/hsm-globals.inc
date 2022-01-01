@@ -530,6 +530,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float rolling_scan;
 	float slotmask;
 	float slotmask1;
+	float barspeed;
+	float barintensity;
+	float bardir;
 
 	// Grade Params
 	float g_grade_on;

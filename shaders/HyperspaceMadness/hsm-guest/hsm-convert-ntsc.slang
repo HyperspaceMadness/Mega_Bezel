@@ -7,7 +7,12 @@ layout(push_constant) uniform Push
 	vec4 OutputSize;
 	uint FrameCount;
 	float blendMode;
+	float ntsc_direction;
 } params;
+
+// #pragma parameter ntsc_direction "NTSC Scanline Direction - HORIZONTAL | VERTICAL" 0.0 0.0 1.0 1.0
+// #define ntsc_direction params.ntsc_direction
+#define ntsc_direction 0
 
 #pragma parameter blendMode 		"          NTSC Blend Mode - 0:SHARP | 1:STANDARD | 2:ORIGINAL" 1.0 0.0 2.0 1.0
 
@@ -48,9 +53,22 @@ vec3 declip(vec3 c, float b)
 
 void main()
 {
-	vec2 dx = vec2(params.SourceSize.z * 0.5, 0.0);
-	vec3 col1 = texture(Source, vTexCoord -dx).rgb;
-	vec3 col2 = texture(Source, vTexCoord +dx).rgb;
+	vec3 col1 = vec3(0);
+	vec3 col2 = vec3(0);
+
+	if (ntsc_direction > 0.5)
+	{
+		vec2 dy = vec2(0.0, params.SourceSize.w * 0.5);
+		col1 = texture(Source, vTexCoord -dy).rgb;
+		col2 = texture(Source, vTexCoord +dy).rgb;
+	}
+	else
+	{
+		vec2 dx = vec2(params.SourceSize.z * 0.5, 0.0);
+		col1 = texture(Source, vTexCoord -dx).rgb;
+		col2 = texture(Source, vTexCoord +dx).rgb;
+	}
+
 	vec3 colc = max(col1, col2);
 	vec3 col = plant(sqrt(col1*col2), max(max(colc.r, colc.g),colc.b));
 	

@@ -37,7 +37,7 @@ layout(push_constant) uniform Push
 } params;
 
 // Parameter lines go here:
-#pragma parameter ntsc_title 	    "[ GDV MINI - DariusG ]:" 0.0 0.0 1.0 1.0
+#pragma parameter gdv_mini_title 	"[ GDV MINI - DariusG ]:" 0.0 0.0 1.0 1.0
 
 #pragma parameter scanline          "          Scanline Adjust - scanline" 8 1 12 1
 #define scanline params.scanline

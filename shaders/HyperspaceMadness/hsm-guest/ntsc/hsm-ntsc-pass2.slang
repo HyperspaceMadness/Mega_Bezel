@@ -2,18 +2,24 @@
 
 // NTSC-Adaptive
 // based on Themaister's NTSC shader
+// Sone Adjustments for better sharpness by guest.r
 
 layout(std140, set = 0, binding = 0) uniform UBO
 {
    mat4 MVP;
+   vec4 DerezedPassSize;
    vec4 OutputSize;
    vec4 OriginalSize;
    vec4 SourceSize;
    float linearize;
+   float ntsc_scale;
+   float ntsc_phase;
+   float auto_res;
 } global;
 
-// #pragma parameter linearize "          Linearize Output Gamma" 0.0 0.0 1.0 1.0
-#define linearize 0
+#pragma parameter ntsc_scale        "          NTSC Resolution Scaling" 1.0 0.20 2.25 0.05
+#pragma parameter ntsc_phase        "          NTSC Phase: Auto | 2 phase | 3 phase" 1.0 1.0 3.0 1.0
+// #pragma parameter linearize         "          NTSC Linearize Output Gamma" 0.0 0.0 1.0 1.0 
 
 #pragma stage vertex
 layout(location = 0) in vec4 Position;
@@ -185,9 +191,11 @@ const float chroma_filter_3_phase[25] = float[25](
 
 void main()
 {
-   float phase = (global.OriginalSize.x > 300.0) ? 2.0 : 3.0;
-   float one_x = global.SourceSize.z;
+   float res = global.ntsc_scale;
+   float OriginalSize = global.DerezedPassSize.x; 
+   float one_x = global.SourceSize.z / res;
    vec3 signal = vec3(0.0);
+   float phase = (global.ntsc_phase < 1.5) ? ((OriginalSize > 300.0) ? 2.0 : 3.0) : ((global.ntsc_phase > 2.5) ? 3.0 : 2.0);
 
    if(phase < 2.5)
    {
@@ -275,6 +283,9 @@ void main()
 
    vec3 rgb = yiq2rgb(signal);
    FragColor = vec4(rgb, 1.0);
-   if(linearize < 0.5) return;
-   else FragColor = pow(FragColor, vec4(2.2));
-} 
+
+   // if(global.linearize < 0.5) return;
+   // else FragColor = pow(FragColor, vec4(2.2));
+
+   FragColor = pow(FragColor, vec4(2.2));
+}  

@@ -223,9 +223,9 @@ float HSM_CROP_BLACK_THRESHOLD = global.HSM_CROP_BLACK_THRESHOLD / 100;
 //    SHARPEN
 //---------------------------------------------------------------------------------------------------
 #pragma parameter SHARPEN_TITLE  									"[ --- FAST SHARPEN - GUEST.R --- ]:"       			0.00 0.0 2.00 0.05
-#pragma parameter SHARPEN_ON  										"          Sharpen ON"       		0 0 1 1
-#pragma parameter SHARPEN  											"          Sharpen Strength"       	0.2 0.0 2.00 0.05
-#pragma parameter CONTR    											"          Amount of Sharpening"  	0.07 0.0 0.25 0.01
+// #pragma parameter SHARPEN_ON  										"          Sharpen ON"       		0 0 1 1
+#pragma parameter SHARPEN  			"          Sharpen Strength"    0.00 0.0 4.00 0.10 
+#pragma parameter CONTR    											"          Amount of Sharpening"  	0.05 0.0 0.25 0.01
 #pragma parameter DETAILS  											"          Details Sharpened"     	1.00 0.0 1.00 0.05
 
 
@@ -420,7 +420,7 @@ float HSM_2ND_SCREEN_CROP_PERCENT_RIGHT = global.HSM_2ND_SCREEN_CROP_PERCENT_RIG
 //---------------------------------------------------------------------------------------------------
 //    CRT vs ORIGINAL A/B TESTING
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_CRTRAWABTEST_TITLE							"[ CRT vs ORIGINAL A/B COMPARE ]:" 0 0 0.01 0.01
+#pragma parameter HSM_CRT_AB_COMPARE_TITLE							"[ CRT vs ORIGINAL A/B COMPARE ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_CRT_ORIGINAL_AB_COMPARE_ON   					"          Compare ON" 0 0 1 1
 float HSM_CRT_ORIGINAL_AB_COMPARE_ON = global.HSM_CRT_ORIGINAL_AB_COMPARE_ON;

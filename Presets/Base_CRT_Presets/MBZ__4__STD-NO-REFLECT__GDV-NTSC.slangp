@@ -262,16 +262,11 @@ TopLayerImage_mipmap = 1
 // HSM_CURVATURE_MODE = 0
 
 // NTSC Parameters
-HSM_GAMMA_IN_LINEARIZE = 2.35
-
-SIZEHB = 6.0
-SIGMA_HB = 1.0
-SIZEVB = 6.0
-SIGMA_VB = 1.0
+HSM_GAMMA_IN_LINEARIZE = 2.0
+HSM_GAMMA_OUT_CRT = 2.0
 
 brightboost = 1.25
 scans = 0.65
 spike = 0.7
 h_sharp = 3.7
 s_sharp = 0.2
-gamma_out = 2.0

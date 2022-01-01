@@ -1,13 +1,14 @@
+![Mega_Bezel_Logo|512x256, 75%](upload://6PNkvcMF9Go9Wnk6OJXfYR1opXI.png) 
+
 Mega Bezel is updated to V 0.9.094 2021-12-27 Rev 1
 
 Changes:
-  * Add Dual Screen visibility param for tube effects
-    * Added for:
-      * Screen Vignette
-      * Monochrome
-      * Colored Gel
-      * Tube Reflection
-      * Tube Diffuse
+  * Added Guest's Humbar back to guest advanced
+  * Updated to use NTSC-Adaptive, less Blurry more correct results now
+  * Simple fixup to BendBombBoom Slotmask presets for slot width
+  * Sharpen On/Off removed so sharpen parameters would be automatically applied when copying from a community posted preset
+  * Added Sonkun's 32Bit and Arcade Presets to Experimental
+  * Updated Cyberlab presets
 
 *  Performance of Base presets at 3840x2160 on Nvidia RTX2060:
   *  ADVANCED -                      78 FPS  -  No comparable old preset
@@ -28,21 +29,18 @@ Changes:
 Mega Bezel Still to Come:
 
 V1 TODO
-  * Adjust Gamma on NTSC Preset, too bright now
-  * Compensate for negative crop expand in all passes
-  * Add Negative Crop back
   * Masks for just bezel and just frame
   * Potato problems with Dual screen, fading into corners, missalignment
   * Potato Should use Global Brightness / Gamma?  
   * Colored Gel Over/Under Black Edge?
   * Vertical Flip not flipping Tube Highlight
-  * Increase ranges of gamma control for monochrome
 
   
   Post V1
+  * Compensate for Negative Crop
   * Missing inner Edge static shading?
   * Guess White/Black Matting?
-  * Mega Back Light ala philips Hue/Ambient
+  * Mega Back Light a la philips Hue/Ambient
   * Fix Corner Shading
   * Good Preset for FBNeo & Instructions
   * Swap option for Blurry and Sharp Tube Reflection

@@ -68,7 +68,6 @@ layout(push_constant) uniform Push
 	// float bardir;
 } params;
 
-#pragma parameter ntsc_title 	   "[ GDV - NTSC ]:" 0.0 0.0 1.0 1.0
 #pragma parameter blendMode 		"          NTSC Blend Mode - 0:SHARP | 1:STANDARD | 2:ORIGINAL" 1.0 0.0 2.0 1.0
 
 #pragma parameter bogus_brightness "[ GDV - BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
@@ -170,11 +169,13 @@ layout(push_constant) uniform Push
 // #pragma parameter bsize "          Border smoothness" 600.0 100.0 700.0 10.0
 // #define bsize        params.bsize     // border smoothness
 
-// #pragma parameter barspeed "          Hum Bar Speed" 50.0 5.0 200.0 1.0
+#pragma parameter gdv_humbar_title "[ HUM BAR ]: " 0.0 0.0 0.1 0.1
 
-// #pragma parameter barintensity "          Hum Bar Intensity" 0.0 -1.0 1.0 0.01
+#pragma parameter barspeed "          Hum Bar Speed" 50.0 5.0 200.0 1.0
 
-// #pragma parameter bardir "          Hum Bar Direction" 0.0 0.0 1.0 1.0
+#pragma parameter barintensity "          Hum Bar Intensity" 0.0 -1.0 1.0 0.01
+
+#pragma parameter bardir "          Hum Bar Direction" 0.0 0.0 1.0 1.0
 
 // #pragma parameter warpX "          CurvatureX (default 0.03)" 0.0 0.0 0.25 0.01
 // #define warpX        params.warpX     // Curvature X
@@ -529,6 +530,7 @@ vec2 Overscan(vec2 pos, float dx, float dy){
 	pos*=vec2(dx,dy);
 	return pos*0.5+0.5;
 } 
+*/
 
 float humbar(float pos)
 {
@@ -541,6 +543,7 @@ float humbar(float pos)
 	}	
 }
 
+/*
 // Borrowed from cgwg's crt-geom, under GPL
 
 float corner(vec2 coord)
@@ -1153,7 +1156,6 @@ if (!interb)
 	*/
 
 	// HSM Added - Prep and add output gamma
-	// color = pow(color * humbar(mix(pos.y, pos.x, params.bardir)), vec3(1.0/HSM_GAMMA_OUT_CRT));
-	FragColor = vec4(color, 1);
+	FragColor = vec4(color * humbar(mix(pos.y, pos.x, global.bardir)), 1);
 	// End Addition
 }

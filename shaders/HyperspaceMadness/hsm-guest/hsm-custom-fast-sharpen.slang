@@ -31,11 +31,12 @@ layout(push_constant) uniform Push
 } params;
 
 #pragma parameter SHARPEN_TITLE  	"[ --- FAST SHARPEN - GUEST.R --- ]:"         			0.00 0.0 2.00 0.05
-#pragma parameter SHARPEN_ON  		"          Sharpen ON"       		0 0 1 1
-#define SHARPEN_ON params.SHARPEN_ON
+// #pragma parameter SHARPEN_ON  		"          Sharpen ON"       		0 0 1 1
+// #define SHARPEN_ON params.SHARPEN_ON
+#define SHARPEN_ON 1
 
-#pragma parameter SHARPEN  			"          Sharpen Strength"       	0.2 0.0 2.00 0.05
-#pragma parameter CONTR    			"          Amount of Sharpening"  	0.07 0.0 0.25 0.01
+#pragma parameter SHARPEN  			"          Sharpen Strength"    0.00 0.0 4.00 0.10 
+#pragma parameter CONTR    			"          Amount of Sharpening"  	0.05 0.0 0.25 0.01
 #pragma parameter DETAILS  			"          Details Sharpened"     	1.00 0.0 1.00 0.05
 
 #define SHARPEN params.SHARPEN

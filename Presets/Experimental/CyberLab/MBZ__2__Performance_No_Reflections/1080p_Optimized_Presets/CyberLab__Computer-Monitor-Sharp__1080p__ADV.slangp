@@ -1,5 +1,9 @@
 #reference "../4K_Optimized_Presets/CyberLab__Computer-Monitor-Sharp__ADV.slangp"
 
+g_hue_degrees = "-3.000000"
+wp_temperature = "7000.000000"
+gamma_c = "1.639999"
+
 
 HSM_POST_CRT_BRIGHTNESS = "157.000000"
 signalResolution = "448.000000"
