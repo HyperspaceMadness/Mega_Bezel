@@ -95,6 +95,9 @@ float HSM_FRM_TEXTURE_OPACITY = global.HSM_FRM_TEXTURE_OPACITY / 100;
 #pragma parameter HSM_FRM_TEXTURE_BLEND_MODE            "         Texture Overlay Blend Mode - Off | Normal | Add | Mult"  2 0 3 1
 float HSM_FRM_TEXTURE_BLEND_MODE = global.HSM_FRM_TEXTURE_BLEND_MODE;
 
+#pragma parameter HSM_FRM_INNER_EDGE_THICKNESS 		    "          Inner Edge Thickness" 100 0 5000 5
+float HSM_FRM_INNER_EDGE_THICKNESS = global.HSM_FRM_INNER_EDGE_THICKNESS * 0.00003;
+
 #pragma parameter HSM_FRM_THICKNESS 					"          Frame Thickness" 100 0 2000 5
 float HSM_FRM_THICKNESS = global.HSM_FRM_THICKNESS * 0.0007;
 
@@ -106,9 +109,6 @@ float HSM_FRM_OUTER_POS_Y = global.HSM_FRM_OUTER_POS_Y / 100;
 
 #pragma parameter HSM_FRM_OUTER_CURVATURE_SCALE 		"          Frame Outer Curvature Scale" 0 0 500 5
 float HSM_FRM_OUTER_CURVATURE_SCALE = global.HSM_FRM_OUTER_CURVATURE_SCALE / 100;
-
-#pragma parameter HSM_FRM_INNER_EDGE_THICKNESS 		    "          Inner Edge Thickness" 100 0 5000 5
-float HSM_FRM_INNER_EDGE_THICKNESS = global.HSM_FRM_INNER_EDGE_THICKNESS * 0.00003;
 
 // TODO how this is being used is strange
 #pragma parameter HSM_FRM_OUTER_CORNER_RADIUS 		    "          Outer Corner Radius" 5 0 70 0.05

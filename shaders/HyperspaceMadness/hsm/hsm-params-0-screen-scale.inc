@@ -99,6 +99,7 @@ float HSM_VIEWPORT_POSITION_X = -1 * global.HSM_VIEWPORT_POSITION_X / 1000;
 #pragma parameter HSM_VIEWPORT_POSITION_Y							"          Viewport Position Y"  0 -500 500 1
 float HSM_VIEWPORT_POSITION_Y = -1 * global.HSM_VIEWPORT_POSITION_Y / 1000;
 
+
 //---------------------------------------------------------------------------------------------------
 //    FLIP & ROTATE
 //---------------------------------------------------------------------------------------------------
@@ -232,8 +233,8 @@ float HSM_CROP_BLACK_THRESHOLD = global.HSM_CROP_BLACK_THRESHOLD / 100;
 //---------------------------------------------------------------------------------------------------
 //    SHADERFX
 //---------------------------------------------------------------------------------------------------
-        #pragma parameter HSM_SCALEFX_TITLE	                        "[ --- SMOOTHING - SCALEFX - ADV Presets Only ---- ]:" 0 0 0.01 0.01
-        #pragma parameter HSM_SCALEFX_ON 	                        "          ScaleFx ON - Must Increase Core Res Sampling" 0 0 1 1
+#pragma parameter HSM_SCALEFX_TITLE	                                "[ --- SMOOTHING - SCALEFX - ADV Presets Only ---- ]:" 0 0 0.01 0.01
+#pragma parameter HSM_SCALEFX_ON 	                                "          ScaleFx ON - Must Increase Core Res Sampling" 0 0 1 1
 
 
 //---------------------------------------------------------------------------------------------------
@@ -402,7 +403,6 @@ float HSM_2ND_SCREEN_CROP_PERCENT_LEFT = global.HSM_2ND_SCREEN_CROP_PERCENT_LEFT
 
 #pragma parameter HSM_2ND_SCREEN_CROP_PERCENT_RIGHT 				"          2nd Screen Crop Right %" 0 -10 100 0.1
 float HSM_2ND_SCREEN_CROP_PERCENT_RIGHT = global.HSM_2ND_SCREEN_CROP_PERCENT_RIGHT / 100;
-
 
 
 //---------------------------------------------------------------------------------------------------

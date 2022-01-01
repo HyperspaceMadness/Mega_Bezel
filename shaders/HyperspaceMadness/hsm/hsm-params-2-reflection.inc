@@ -27,9 +27,6 @@
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_REFLECTION_TITLE			                "[ REFLECTION ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_REFLECT_BLEND_MODE                        "          Blend Mode -  Off | Normal | Add"  2 0 2 1
-float HSM_REFLECT_BLEND_MODE = global.HSM_REFLECT_BLEND_MODE;
-
 #pragma parameter HSM_REFLECT_MASK_MODE                         "  Mask - ALL | Screen | Tube | Bz- | Bz | Bz+ | Frm | Frm+ | BG"   4 0 8 1
 float HSM_REFLECT_MASK_MODE = global.HSM_REFLECT_MASK_MODE;
 

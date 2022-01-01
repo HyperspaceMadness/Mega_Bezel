@@ -279,7 +279,6 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 	// Reflection
 	float HSM_REFLECT_GLOBAL_AMOUNT;
-	float HSM_REFLECT_BLEND_MODE;
 	float HSM_REFLECT_MASK_MODE;
 	float HSM_REFLECT_GLOBAL_GAMMA_ADJUST;
 

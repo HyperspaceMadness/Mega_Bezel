@@ -205,9 +205,9 @@ float HSM_VIEWPORT_VIGNETTE_POS_Y = global.HSM_VIEWPORT_VIGNETTE_POS_Y / 100;
 //---------------------------------------------------------------------------------------------------
 //    LED IMAGE
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_LED_TITLE			                "[ LED LAYER ]:" 0 0 0.01 0.01
+#pragma parameter HSM_LED_TITLE		                "[ LED LAYER ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_LED_OPACITY                       "          Opacity"  100 0 100 1
+#pragma parameter HSM_LED_OPACITY                   "          Opacity"  100 0 100 1
 float HSM_LED_OPACITY = global.HSM_LED_OPACITY / 100;
 
 #pragma parameter HSM_LED_COLORIZE_ON               "          Colorize" 0 0 1 1
@@ -264,14 +264,14 @@ float HSM_LED_POS_X = global.HSM_LED_POS_X / -100;
 #pragma parameter HSM_LED_POS_Y                         "          Position Y"  0 -1000 1000 0.05
 float HSM_LED_POS_Y = global.HSM_LED_POS_Y / 100;
 
-#pragma parameter HSM_LED_MIPMAPPING_BLEND_BIAS          "          Mipmapping Blend Bias" 0 -5 5 0.1
+#pragma parameter HSM_LED_MIPMAPPING_BLEND_BIAS         "          Mipmapping Blend Bias" 0 -5 5 0.1
 float HSM_LED_MIPMAPPING_BLEND_BIAS = global.HSM_LED_MIPMAPPING_BLEND_BIAS;
 
 
 //---------------------------------------------------------------------------------------------------
 //    DEVICE IMAGE
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_DEVICE_TITLE			            "[ DEVICE IMAGE LAYER ]:" 0 0 0.01 0.01
+#pragma parameter HSM_DEVICE_TITLE			           "[ DEVICE IMAGE LAYER ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_DEVICE_OPACITY                   "          Opacity" 100 0 100 1
 float HSM_DEVICE_OPACITY = global.HSM_DEVICE_OPACITY / 100;
@@ -540,6 +540,7 @@ float HSM_TOP_MIRROR_WRAP = global.HSM_TOP_MIRROR_WRAP;
 
 #pragma parameter HSM_TOP_MIPMAPPING_BLEND_BIAS         "          Mipmapping Blend Bias" 0 -5 5 0.1
 float HSM_TOP_MIPMAPPING_BLEND_BIAS = global.HSM_TOP_MIPMAPPING_BLEND_BIAS;
+
 
 #pragma parameter HSM_RENDER_FOR_SIMPLIFIED_TITLE       "[ Render for Simplified Presets ]:" 1 0 1 1
 
