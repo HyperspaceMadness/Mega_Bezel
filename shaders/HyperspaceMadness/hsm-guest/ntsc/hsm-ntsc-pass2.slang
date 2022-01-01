@@ -286,6 +286,4 @@ void main()
 
    // if(global.linearize < 0.5) return;
    // else FragColor = pow(FragColor, vec4(2.2));
-
-   FragColor = pow(FragColor, vec4(2.2));
 }  
