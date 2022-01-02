@@ -38,7 +38,7 @@ HSM_INTRO_WHEN_TO_SHOW = "1.000000"
 
 
 HSM_POST_CRT_BRIGHTNESS = "212.000000"
-signalResolution = "400.000000"
+signalResolution = "592.000000"
 
 
 scanline1 = "9.000000"
