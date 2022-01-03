@@ -146,6 +146,7 @@ bool HSM_GetUseTubeColoredGelImage()
 
 vec4 HSM_GetTubeHighlight(vec2 tube_curved_coord, bool apply_to_mirror, in sampler2D TubeStaticReflectionImage, vec4 ambient_lighting_image)
 {
+	tube_curved_coord = HSM_GetViewportCoordWithFlip(tube_curved_coord);
 	vec4 out_color = vec4(0);
 
 	vec2 mirrored_tube_coord = tube_curved_coord;

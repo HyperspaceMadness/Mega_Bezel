@@ -3,12 +3,7 @@
 Mega Bezel is updated to V 0.9.095 2022-01-01 Rev 1
 
 Changes:
-  * Updated to use Guest's latest NTSC-Adaptive, less Blurry more correct results now
-  * Added Guest's Humbar back to guest advanced
-  * Sharpen On/Off removed so sharpen parameters would be automatically applied when copying from a community posted preset
-  * Added Sonkun's 32Bit and Arcade Presets to Experimental
-  * Updated Cyberlab presets
-  * Simple fixup to BendBombBoom Slotmask presets for slot width
+  * Fixed Tube Highlight with Flip Viewport
 
 *  Performance of Base presets at 3840x2160 on Nvidia RTX2060:
   *  ADVANCED -                      78 FPS  -  No comparable old preset
