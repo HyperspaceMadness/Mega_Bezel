@@ -21,6 +21,16 @@ Be sure to check out my brand new Computer Monitor - Raw and Computer Monitor - 
 
 There are a couple caveats though. The 4K optimized ones are slightly darker than my other presets and they of course require at least a 4K display to get the full effect. With that said, they probably represent some of my best work to date! So if you have the requisite equipment you're in for a real treat!
 
+My current personal favorite preset in the pack is my Computer Monitor - Sharp preset.
+
+You can play around with the MDAPT setting if you want that one to handle blending and transparency as well. I suggest setting MDAPT to 2 for most games that use dither patterns but 3 for games like Sonic The Hedgehog.
+
+When finished adjusting, you can save either a Game Preset or a Core Preset.
+
+I also recommend you get familiar with the Cropping settings to eliminate black borders or screen junk in some games. After you’re satisfied with your Cropping settings save a Game Preset.
+
+Be sure to spread the word that these exist so that others may also benefit!
+
 
 CyberLab__Composite-Sharp__PVM-Edition__ADV.slangp 
 
