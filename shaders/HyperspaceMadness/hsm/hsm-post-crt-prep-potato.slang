@@ -64,7 +64,9 @@ vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_CO
 { 
 	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(SCREEN_COORD, 1, SCREEN_SCALE, TUBE_SCALE, SCREEN_ASPECT, 1);
 	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
-	TUBE_MASK = HSM_GetCornerMask(tube_curved_coord, SCREEN_ASPECT, bezel_corner_radius, 0.99);
+
+	float outside_tube_mask = 1 - HSM_GetCornerMask(tube_curved_coord, SCREEN_ASPECT, bezel_corner_radius, 0.99);
+	TUBE_MASK = 1 - outside_tube_mask;
 
 	if (HSM_MONOCHROME_MODE > 0.5 && HSM_GetUseOnCurrentScreenIndex(HSM_MONOCHROME_DUALSCREEN_VIS_MODE))
 		in_color_with_gamma = HSM_ApplyMonochrome(in_color_with_gamma);
@@ -111,10 +113,16 @@ vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_CO
 
 		bg_layer.rgb *= HSM_BG_BRIGHTNESS;
 
-		if (HSM_STANDARD_BG_SHOW_OVER_SCREEN == 1)
-			out_color = HSM_BlendModeLayerMix(out_color, bg_layer, HSM_BG_BLEND_MODE, HSM_BG_OPACITY);
-		else
-			out_color = HSM_BlendModeLayerMix(bg_layer, out_color, HSM_CRT_SCREEN_BLEND_MODE, 1);
+		if (HSM_CRT_SCREEN_BLEND_MODE == 1)
+			bg_layer *= (1 - TUBE_MASK);
+
+		if (HSM_CRT_SCREEN_BLEND_MODE > 0)
+		{
+			if (HSM_POTATO_SHOW_SCREEN_OVER_BG == 1)
+				out_color = HSM_BlendModeLayerMix(out_color, bg_layer, HSM_BG_BLEND_MODE, HSM_BG_OPACITY);
+			else
+				out_color = HSM_BlendModeLayerMix(bg_layer, out_color, HSM_CRT_SCREEN_BLEND_MODE, 1);
+		}
 	}
 
 	// Apply the final Gamma

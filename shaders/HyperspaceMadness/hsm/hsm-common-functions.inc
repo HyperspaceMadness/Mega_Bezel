@@ -835,7 +835,6 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 		TUBE_SCALE_FEEDBACK = texture_sample.rg;
 		SCREEN_POS_OFFSET_FEEDBACK = texture_sample.ba;
 
-
 		// Sample 4, 1
 		// rg CROPPED_ROTATED_SIZE_WITH_RES_MULT
 		sample_coord = HSM_GetCacheSampleCoord(4, 1);
@@ -873,6 +872,13 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 		texture_sample = texture(in_cache_pass, sample_coord);
 		TUBE_SCALE = 		texture_sample.rg;
 		SCREEN_POS_OFFSET = texture_sample.ba;
+
+		// Sample 3, 2 Feedback
+		// rg TUBE_SCALE_FEEDBACK
+		// ba SCREEN_POS_OFFSET_FEEDBACK
+		texture_sample = texture(in_cache_feedback_pass, sample_coord);
+		TUBE_SCALE_FEEDBACK = texture_sample.rg;
+		SCREEN_POS_OFFSET_FEEDBACK = texture_sample.ba;
 
 		// 8th Sample - 2nd Screen
 		// rg CROPPED_ROTATED_SIZE_WITH_RES_MULT
@@ -969,19 +975,20 @@ bool HSM_CheckCacheInfoChanged()
 	float epsilon = 0.0001;
 	return (CORE_SIZE.x != CORE_FEEDBACK_SIZE.x
 			|| CORE_SIZE.y != CORE_FEEDBACK_SIZE.y
-			|| (
-					HSM_DUALSCREEN_MODE < 0.5 && 
-					(
-						abs(SCREEN_SCALE.x - SCREEN_SCALE_FEEDBACK.x) > epsilon 
-						|| abs(SCREEN_SCALE.y - SCREEN_SCALE_FEEDBACK.y) > epsilon
-						|| abs(SCREEN_POS_OFFSET.x - SCREEN_POS_OFFSET_FEEDBACK.x) > epsilon
-						|| abs(SCREEN_POS_OFFSET.y - SCREEN_POS_OFFSET_FEEDBACK.y) > epsilon
-					)
+			|| 	HSM_DUALSCREEN_MODE < 0.5 && 
+				(
+					abs(SCREEN_SCALE.x - SCREEN_SCALE_FEEDBACK.x) > epsilon 
+					|| abs(SCREEN_SCALE.y - SCREEN_SCALE_FEEDBACK.y) > epsilon
 				)
-			|| abs(SCREEN_SCALE_2ND_SCREEN.x - SCREEN_SCALE_2ND_SCREEN_FEEDBACK.x) > epsilon 
-			|| abs(SCREEN_SCALE_2ND_SCREEN.y - SCREEN_SCALE_2ND_SCREEN_FEEDBACK.y) > epsilon
-			|| abs(SCREEN_POS_OFFSET_2ND_SCREEN.x - SCREEN_POS_OFFSET_2ND_SCREEN_FEEDBACK.x) > epsilon
-			|| abs(SCREEN_POS_OFFSET_2ND_SCREEN.y - SCREEN_POS_OFFSET_2ND_SCREEN_FEEDBACK.y) > epsilon
+			|| abs(SCREEN_POS_OFFSET.x - SCREEN_POS_OFFSET_FEEDBACK.x) > epsilon
+			|| abs(SCREEN_POS_OFFSET.y - SCREEN_POS_OFFSET_FEEDBACK.y) > epsilon
+			|| HSM_DUALSCREEN_MODE > 0.5 && 
+				(
+					abs(SCREEN_SCALE_2ND_SCREEN.x - SCREEN_SCALE_2ND_SCREEN_FEEDBACK.x) > epsilon 
+					|| abs(SCREEN_SCALE_2ND_SCREEN.y - SCREEN_SCALE_2ND_SCREEN_FEEDBACK.y) > epsilon
+					|| abs(SCREEN_POS_OFFSET_2ND_SCREEN.x - SCREEN_POS_OFFSET_2ND_SCREEN_FEEDBACK.x) > epsilon
+					|| abs(SCREEN_POS_OFFSET_2ND_SCREEN.y - SCREEN_POS_OFFSET_2ND_SCREEN_FEEDBACK.y) > epsilon
+				)
 			|| abs(TUBE_SCALE.x - TUBE_SCALE_FEEDBACK.x) > epsilon
 			|| abs(TUBE_SCALE.y - TUBE_SCALE_FEEDBACK.y) > epsilon
 			|| abs(VIEWPORT_SCALE.y - VIEWPORT_SCALE_FEEDBACK.x) > epsilon

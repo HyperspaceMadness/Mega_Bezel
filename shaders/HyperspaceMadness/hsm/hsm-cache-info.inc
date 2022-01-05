@@ -393,13 +393,13 @@ void HSM_GetCroppedRotatedSizeAndPixelSampleAreaStart(float screen_index, sample
 
 			if (HSM_GetCoreImageSplitDirection() == 1)
 			{
-				default_crop_top_px = floor(rotated_negative_crop_added_size.y * (0.5 + HSM_DUALSCREEN_CORE_IMAGE_SPLIT_OFFSET));
+				default_crop_top_px = floor(rotated_negative_crop_added_size.y * (0.5 - HSM_DUALSCREEN_CORE_IMAGE_SPLIT_OFFSET));
 				crop_top_px = floor(crop_top_px / 2);
 				crop_bottom_px = floor(crop_bottom_px / 2);
 			}
 			else
 			{
-				default_crop_left_px = floor(rotated_negative_crop_added_size.x * (0.5 + HSM_DUALSCREEN_CORE_IMAGE_SPLIT_OFFSET));
+				default_crop_left_px = floor(rotated_negative_crop_added_size.x * (0.5 - HSM_DUALSCREEN_CORE_IMAGE_SPLIT_OFFSET));
 				crop_left_px = floor(crop_left_px / 2);
 				crop_right_px = floor(crop_right_px / 2);
 			}
@@ -856,9 +856,7 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	vec2 screen_pos_and_height = HSM_GetScreenPlacementYPosAndHeight(screen_placement_image, 60);
 	float screen_aspect = HSM_GetScreenAspect(1, cropped_rotated_size);
 	vec2 screen_scale = HSM_GetScreenScale(screen_aspect, screen_pos_and_height.y, cropped_rotated_size);
-	vec2 tube_scale = vec2(0.5);
-
-	tube_scale = HSM_GetTubeScale(screen_scale, screen_pos_and_height.y);
+	vec2 tube_scale = HSM_GetTubeScale(screen_scale, screen_pos_and_height.y);
 	
 	vec2 pos_offset = HSM_GetPositionOffset(vec2(0.5, screen_pos_and_height.x), screen_scale);
 
@@ -870,11 +868,7 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	HSM_GetCroppedRotatedSizeAndPixelSampleAreaStart(2, original_pass, cropped_size_2nd_screen, cropped_size_with_res_mult_2nd_screen, sample_area_start_pixel_coord_2nd_screen);
 	float screen_aspect_2nd_screen = HSM_2ND_SCREEN_ASPECT_RATIO_MODE == 1 ? cropped_size_2nd_screen.x/cropped_size_2nd_screen.y : screen_aspect;
 	vec2 screen_scale_2nd_screen = HSM_GetScreenScaleFor2ndScreen(screen_scale, screen_aspect_2nd_screen);
-	vec2 tube_scale_2nd_screen = vec2(0.5);
-	
-	#ifdef HAS_BEZEL_PARAMS
-	tube_scale_2nd_screen = HSM_GetTubeScale(screen_scale_2nd_screen, DEFAULT_UNCORRECTED_SCREEN_SCALE.y);
-	#endif
+	vec2 tube_scale_2nd_screen = HSM_GetTubeScale(screen_scale_2nd_screen, DEFAULT_UNCORRECTED_SCREEN_SCALE.y);
 
 	vec2 pos_offset_2nd_screen = HSM_GetPositionOffsetFor2ndScreen(screen_scale_2nd_screen);
 

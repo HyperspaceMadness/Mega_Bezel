@@ -39,7 +39,7 @@ float HSM_BG_BLEND_MODE = global.HSM_BG_BLEND_MODE;
 #pragma parameter HSM_BG_BRIGHTNESS                "          Brightness" 100 0 200 1
 float HSM_BG_BRIGHTNESS = global.HSM_BG_BRIGHTNESS / 100;
 
-#pragma parameter HSM_STANDARD_BG_SHOW_OVER_SCREEN 	"          Show over Screen" 0 0 1 1
-float HSM_STANDARD_BG_SHOW_OVER_SCREEN = global.HSM_STANDARD_BG_SHOW_OVER_SCREEN;
+#pragma parameter HSM_POTATO_SHOW_SCREEN_OVER_BG 	"          Show Screen: 0:UNDER BG | 1:OVER BG" 1 0 1 1
+float HSM_POTATO_SHOW_SCREEN_OVER_BG = global.HSM_POTATO_SHOW_SCREEN_OVER_BG;
 
 

@@ -345,65 +345,6 @@ float HSM_CURVATURE_3D_TILT_ANGLE_X = global.HSM_CURVATURE_3D_TILT_ANGLE_X / 100
 float HSM_CURVATURE_3D_TILT_ANGLE_Y = global.HSM_CURVATURE_3D_TILT_ANGLE_Y / 100;
 
 
-//---------------------------------------------------------------------------------------------------
-//    DUAL SCREEN
-//---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_DUALSCREEN_TITLE								"[ DUAL SCREEN ]:" 0 0 0.01 0.01
-
-#pragma parameter HSM_DUALSCREEN_MODE								"          Dual Screen Mode - OFF | VERTICAL | HORIZONTAL" 0 0 2 1
-float HSM_DUALSCREEN_MODE = global.HSM_DUALSCREEN_MODE;
-
-#pragma parameter HSM_DUALSCREEN_CORE_IMAGE_SPLIT_MODE				"          Core Image Split Mode  - AUTO | VERTICAL | HORIZONTAL" 1 0 2 1
-float HSM_DUALSCREEN_CORE_IMAGE_SPLIT_MODE = global.HSM_DUALSCREEN_CORE_IMAGE_SPLIT_MODE;
-
-#pragma parameter HSM_DUALSCREEN_CORE_IMAGE_SWAP_SCREENS			"          Core Image Swap Screen Content" 0 0 1 1
-float HSM_DUALSCREEN_CORE_IMAGE_SWAP_SCREENS = global.HSM_DUALSCREEN_CORE_IMAGE_SWAP_SCREENS;
-
-#pragma parameter HSM_DUALSCREEN_CORE_IMAGE_SPLIT_OFFSET			"          Core Image Split Offset" 0 -100 100 1
-float HSM_DUALSCREEN_CORE_IMAGE_SPLIT_OFFSET = global.HSM_DUALSCREEN_CORE_IMAGE_SPLIT_OFFSET / 100;
-
-// #pragma parameter HSM_2ND_SCREEN_SIDES_CROP				"          Crop % from Edges of 2nd Screen" 0 0 100 0.1
-// float HSM_2ND_SCREEN_SIDES_CROP = global.HSM_2ND_SCREEN_SIDES_CROP / 100;
-
-#pragma parameter HSM_DUALSCREEN_VIEWPORT_SPLIT_LOCATION			"          Viewport Split Offset" 0 -500 500 1
-float HSM_DUALSCREEN_VIEWPORT_SPLIT_LOCATION = global.HSM_DUALSCREEN_VIEWPORT_SPLIT_LOCATION / 1000;
-
-#pragma parameter HSM_DUALSCREEN_SHIFT_POSITION_WITH_SCALE			"          Scale Screens from Center of Split" 1 0 1 1
-float HSM_DUALSCREEN_SHIFT_POSITION_WITH_SCALE = global.HSM_DUALSCREEN_SHIFT_POSITION_WITH_SCALE;
-
-#pragma parameter HSM_DUALSCREEN_POSITION_OFFSET_BETWEEN_SCREENS	"          Position Offset Between Screens" 0 -250 250 0.2
-float HSM_DUALSCREEN_POSITION_OFFSET_BETWEEN_SCREENS = global.HSM_DUALSCREEN_POSITION_OFFSET_BETWEEN_SCREENS / 1000;
-
-#pragma parameter HSM_2ND_SCREEN_ASPECT_RATIO_MODE		            "        2nd Screen Aspect Ratio Mode - Same as 1st Screen | PAR" 0 0 1 1
-float HSM_2ND_SCREEN_ASPECT_RATIO_MODE = global.HSM_2ND_SCREEN_ASPECT_RATIO_MODE;
-
-#pragma parameter HSM_2ND_SCREEN_INDEPENDENT_SCALE		            "          2nd Screen Use Independent Scale" 0 0 1 1
-float HSM_2ND_SCREEN_INDEPENDENT_SCALE = global.HSM_2ND_SCREEN_INDEPENDENT_SCALE;
-
-#pragma parameter HSM_2ND_SCREEN_SCALE_OFFSET			            "          2nd Screen Scale Offset" 100 1 500 0.5
-float HSM_2ND_SCREEN_SCALE_OFFSET = global.HSM_2ND_SCREEN_SCALE_OFFSET / 100;
-
-#pragma parameter HSM_2ND_SCREEN_POS_X					            "          2nd Screen Pos X" 0 -500 500 1
-float HSM_2ND_SCREEN_POS_X = global.HSM_2ND_SCREEN_POS_X / 1000;
-
-#pragma parameter HSM_2ND_SCREEN_POS_Y					            "          2nd Screen Pos Y" 0 -500 500 1
-float HSM_2ND_SCREEN_POS_Y = global.HSM_2ND_SCREEN_POS_Y / 1000;
-
-#pragma parameter HSM_2ND_SCREEN_CROP_PERCENT_ZOOM					"          2nd Screen Crop Zoom %" 0 -10 100 0.1
-float HSM_2ND_SCREEN_CROP_PERCENT_ZOOM = global.HSM_2ND_SCREEN_CROP_PERCENT_ZOOM / 100;
-
-#pragma parameter HSM_2ND_SCREEN_CROP_PERCENT_TOP 					"          2nd Screen Crop Top %" 0 -10 100 0.1
-float HSM_2ND_SCREEN_CROP_PERCENT_TOP = global.HSM_2ND_SCREEN_CROP_PERCENT_TOP / 100;
-
-#pragma parameter HSM_2ND_SCREEN_CROP_PERCENT_BOTTOM 				"          2nd Screen Crop Bottom %" 0 -10 100 0.1
-float HSM_2ND_SCREEN_CROP_PERCENT_BOTTOM = global.HSM_2ND_SCREEN_CROP_PERCENT_BOTTOM / 100;
-
-#pragma parameter HSM_2ND_SCREEN_CROP_PERCENT_LEFT 					"          2nd Screen Crop Left %" 0 -10 100 0.1
-float HSM_2ND_SCREEN_CROP_PERCENT_LEFT = global.HSM_2ND_SCREEN_CROP_PERCENT_LEFT / 100;
-
-#pragma parameter HSM_2ND_SCREEN_CROP_PERCENT_RIGHT 				"          2nd Screen Crop Right %" 0 -10 100 0.1
-float HSM_2ND_SCREEN_CROP_PERCENT_RIGHT = global.HSM_2ND_SCREEN_CROP_PERCENT_RIGHT / 100;
-
 
 //---------------------------------------------------------------------------------------------------
 //    ANTI-FLICKER
@@ -588,6 +529,66 @@ float HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE = global.HSM_TUBE_STATIC_REFLECTION
 
 #pragma parameter HSM_TUBE_BLACK_EDGE_THICKNESS 					"          Black Edge Thickness" 100 -800 800 5
 #define HSM_TUBE_BLACK_EDGE_THICKNESS (0.7 * global.HSM_TUBE_BLACK_EDGE_THICKNESS / 100)
+
+
+//---------------------------------------------------------------------------------------------------
+//    DUAL SCREEN
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_DUALSCREEN_TITLE								"[ DUAL SCREEN ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_DUALSCREEN_MODE								"          Dual Screen Mode - OFF | VERTICAL | HORIZONTAL" 0 0 2 1
+float HSM_DUALSCREEN_MODE = global.HSM_DUALSCREEN_MODE;
+
+#pragma parameter HSM_DUALSCREEN_CORE_IMAGE_SPLIT_MODE				"          Core Image Split Mode  - AUTO | VERTICAL | HORIZONTAL" 1 0 2 1
+float HSM_DUALSCREEN_CORE_IMAGE_SPLIT_MODE = global.HSM_DUALSCREEN_CORE_IMAGE_SPLIT_MODE;
+
+#pragma parameter HSM_DUALSCREEN_CORE_IMAGE_SWAP_SCREENS			"          Core Image Swap Screen Content" 0 0 1 1
+float HSM_DUALSCREEN_CORE_IMAGE_SWAP_SCREENS = global.HSM_DUALSCREEN_CORE_IMAGE_SWAP_SCREENS;
+
+#pragma parameter HSM_DUALSCREEN_CORE_IMAGE_SPLIT_OFFSET			"          Core Image Split Offset" 0 -100 100 1
+float HSM_DUALSCREEN_CORE_IMAGE_SPLIT_OFFSET = global.HSM_DUALSCREEN_CORE_IMAGE_SPLIT_OFFSET / 1000;
+
+// #pragma parameter HSM_2ND_SCREEN_SIDES_CROP				"          Crop % from Edges of 2nd Screen" 0 0 100 0.1
+// float HSM_2ND_SCREEN_SIDES_CROP = global.HSM_2ND_SCREEN_SIDES_CROP / 100;
+
+#pragma parameter HSM_DUALSCREEN_VIEWPORT_SPLIT_LOCATION			"          Viewport Split Offset" 0 -500 500 1
+float HSM_DUALSCREEN_VIEWPORT_SPLIT_LOCATION = global.HSM_DUALSCREEN_VIEWPORT_SPLIT_LOCATION / 1000;
+
+#pragma parameter HSM_DUALSCREEN_SHIFT_POSITION_WITH_SCALE			"          Scale Screens from Center of Split" 1 0 1 1
+float HSM_DUALSCREEN_SHIFT_POSITION_WITH_SCALE = global.HSM_DUALSCREEN_SHIFT_POSITION_WITH_SCALE;
+
+#pragma parameter HSM_DUALSCREEN_POSITION_OFFSET_BETWEEN_SCREENS	"          Position Offset Between Screens" 0 -250 250 0.2
+float HSM_DUALSCREEN_POSITION_OFFSET_BETWEEN_SCREENS = global.HSM_DUALSCREEN_POSITION_OFFSET_BETWEEN_SCREENS / 1000;
+
+#pragma parameter HSM_2ND_SCREEN_ASPECT_RATIO_MODE		            "        2nd Screen Aspect Ratio Mode - Same as 1st Screen | PAR" 0 0 1 1
+float HSM_2ND_SCREEN_ASPECT_RATIO_MODE = global.HSM_2ND_SCREEN_ASPECT_RATIO_MODE;
+
+#pragma parameter HSM_2ND_SCREEN_INDEPENDENT_SCALE		            "          2nd Screen Use Independent Scale" 0 0 1 1
+float HSM_2ND_SCREEN_INDEPENDENT_SCALE = global.HSM_2ND_SCREEN_INDEPENDENT_SCALE;
+
+#pragma parameter HSM_2ND_SCREEN_SCALE_OFFSET			            "          2nd Screen Scale Offset" 100 1 500 0.5
+float HSM_2ND_SCREEN_SCALE_OFFSET = global.HSM_2ND_SCREEN_SCALE_OFFSET / 100;
+
+#pragma parameter HSM_2ND_SCREEN_POS_X					            "          2nd Screen Pos X" 0 -500 500 1
+float HSM_2ND_SCREEN_POS_X = global.HSM_2ND_SCREEN_POS_X / 1000;
+
+#pragma parameter HSM_2ND_SCREEN_POS_Y					            "          2nd Screen Pos Y" 0 -500 500 1
+float HSM_2ND_SCREEN_POS_Y = global.HSM_2ND_SCREEN_POS_Y / 1000;
+
+#pragma parameter HSM_2ND_SCREEN_CROP_PERCENT_ZOOM					"          2nd Screen Crop Zoom %" 0 -10 100 0.1
+float HSM_2ND_SCREEN_CROP_PERCENT_ZOOM = global.HSM_2ND_SCREEN_CROP_PERCENT_ZOOM / 100;
+
+#pragma parameter HSM_2ND_SCREEN_CROP_PERCENT_TOP 					"          2nd Screen Crop Top %" 0 -10 100 0.1
+float HSM_2ND_SCREEN_CROP_PERCENT_TOP = global.HSM_2ND_SCREEN_CROP_PERCENT_TOP / 100;
+
+#pragma parameter HSM_2ND_SCREEN_CROP_PERCENT_BOTTOM 				"          2nd Screen Crop Bottom %" 0 -10 100 0.1
+float HSM_2ND_SCREEN_CROP_PERCENT_BOTTOM = global.HSM_2ND_SCREEN_CROP_PERCENT_BOTTOM / 100;
+
+#pragma parameter HSM_2ND_SCREEN_CROP_PERCENT_LEFT 					"          2nd Screen Crop Left %" 0 -10 100 0.1
+float HSM_2ND_SCREEN_CROP_PERCENT_LEFT = global.HSM_2ND_SCREEN_CROP_PERCENT_LEFT / 100;
+
+#pragma parameter HSM_2ND_SCREEN_CROP_PERCENT_RIGHT 				"          2nd Screen Crop Right %" 0 -10 100 0.1
+float HSM_2ND_SCREEN_CROP_PERCENT_RIGHT = global.HSM_2ND_SCREEN_CROP_PERCENT_RIGHT / 100;
 
 
 //---------------------------------------------------------------------------------------------------
