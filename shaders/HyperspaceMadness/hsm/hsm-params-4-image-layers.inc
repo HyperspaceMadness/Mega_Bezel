@@ -544,5 +544,8 @@ float HSM_TOP_MIPMAPPING_BLEND_BIAS = global.HSM_TOP_MIPMAPPING_BLEND_BIAS;
 
 #pragma parameter HSM_RENDER_FOR_SIMPLIFIED_TITLE       "[ Render for Simplified Presets ]:" 1 0 1 1
 
-#pragma parameter HSM_RENDER_SIMPLE_MODE                "       Mode:  NORM|BLK-1|BLK-2|PNK-1|PNK-2|PNK-3|BW-1|BW-2|BW-3" 0 0 8 1
+#pragma parameter HSM_RENDER_SIMPLE_MODE                "     Mode:  NORM | BLACK-SCREEN | BLACK-BG | PINK-MASK| BW-MASK" 0 0 4 1
 float HSM_RENDER_SIMPLE_MODE = global.HSM_RENDER_SIMPLE_MODE;
+
+#pragma parameter HSM_RENDER_SIMPLE_MASK_TYPE           "      Mask Type:  SCREEN | TUBE | BEZEL & FRAME | BEZEL | FRAME" 0 0 4 1
+float HSM_RENDER_SIMPLE_MASK_TYPE = global.HSM_RENDER_SIMPLE_MASK_TYPE;
