@@ -111,7 +111,8 @@ vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_CO
 			bg_layer = texture(BackgroundVertImage, bg_coord);
 		bg_layer = HSM_Linearize(bg_layer, DEFAULT_SRGB_GAMMA);
 
-		bg_layer.rgb *= HSM_BG_BRIGHTNESS;
+		bg_layer.rgb *= HSM_GLOBAL_GRAPHICS_BRIGHTNESS;
+		bg_layer.rgb = pow(bg_layer.rgb, vec3(1/HSM_STATIC_LAYERS_GAMMA));
 
 		if (HSM_CRT_SCREEN_BLEND_MODE == 1)
 			bg_layer *= (1 - TUBE_MASK);

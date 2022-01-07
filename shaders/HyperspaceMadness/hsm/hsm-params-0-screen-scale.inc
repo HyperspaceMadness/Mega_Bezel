@@ -46,7 +46,7 @@ float HSM_CACHE_UPDATE_INDICATOR_MODE = global.HSM_CACHE_UPDATE_INDICATOR_MODE;
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_GLOBAL_GRAPHICS_BRIGHTNESS_TITLE              "[ GRAPHICS GLOBAL BRIGHTNESS ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_GLOBAL_GRAPHICS_BRIGHTNESS                    "          Graphics Brightness"  100 0 200 1
+#pragma parameter HSM_GLOBAL_GRAPHICS_BRIGHTNESS                    "          Graphics Brightness"  100 0 500 1
 float HSM_GLOBAL_GRAPHICS_BRIGHTNESS = global.HSM_GLOBAL_GRAPHICS_BRIGHTNESS / 100;
 
 #pragma parameter HSM_STATIC_LAYERS_GAMMA		                    "          Graphics Gamma Adjust" 1 0.01 5 0.01

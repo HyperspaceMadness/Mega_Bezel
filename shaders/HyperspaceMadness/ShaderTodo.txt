@@ -3,8 +3,8 @@
 Mega Bezel is updated to V 0.9.097 2022-01-05 Rev 2
 
 Changes:
-  * Added Mask modes to Render Simple Presets, only Bezel and only Frame
-  * Updated CyberLab Presets
+  * POTATO now uses Global Brightness & Gamma
+
 
 
 *  Performance of Base presets at 3840x2160 on Nvidia RTX2060:
@@ -25,8 +25,7 @@ Changes:
 
 Mega Bezel Still to Come:
 
-V1 TODO
-  * Potato Should use Global Brightness / Gamma?  
+V1 TODO 
   * Colored Gel Over/Under Black Edge?
 
   
