@@ -415,7 +415,8 @@ void main()
 		// }
 	}
 
-	crt_linear.rgb *= SCREEN_MASK;
+	if (HSM_SHOW_BLACK_EDGE_ON_TOP_OF_COLORED_GEL > 0.5)
+		crt_linear.rgb *= (1 - HSM_SHOW_BLACK_EDGE_ON_TOP_OF_COLORED_GEL) + HSM_SHOW_BLACK_EDGE_ON_TOP_OF_COLORED_GEL * SCREEN_MASK;
 	
 	// Put the frame and bezel over top a black tube
 	// It must be a little wider than the inside of the bezel so we don't see a gap
