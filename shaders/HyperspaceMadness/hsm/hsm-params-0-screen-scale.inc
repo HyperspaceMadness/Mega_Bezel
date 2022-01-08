@@ -30,6 +30,21 @@ float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
 
 
 //---------------------------------------------------------------------------------------------------
+//    CRT Layer
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_CRT_TITLE                             "[ CRT BRIGHTNESS & GAMMA ]:" 0 0 0.01 0.01
+
+#pragma parameter GAMMA_INPUT   							"          CRT Gamma In (Gamma to Linear Space Decode) Def 2.4" 2.4 0.1 5 0.05
+#define HSM_GAMMA_IN_LINEARIZE global.GAMMA_INPUT
+
+#pragma parameter gamma_out   								"          CRT Gamma Out (Linear to Gamma Space Encode) Def 2.4" 2.4 0.1 5 0.05
+#define HSM_GAMMA_OUT_CRT global.gamma_out
+
+#pragma parameter post_br                                   "          Post CRT Brightness" 100 1 500 1
+#define HSM_POST_CRT_BRIGHTNESS global.post_br / 100
+
+
+//---------------------------------------------------------------------------------------------------
 //    Global Graphics Brightness
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_GLOBAL_GRAPHICS_CACHE_TITLE                   "[ GRAPHICS CACHE ]:" 0 0 0.01 0.01
@@ -254,13 +269,13 @@ float HSM_SCANLINE_DIRECTION = global.HSM_SCANLINE_DIRECTION;
 #pragma parameter HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR			"          Scanline Dir Multiplier (X-Prescale for H Scanline)"  100 50 1600 50
 float HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = global.HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR / 100;
 
-#pragma parameter HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR 					"          Scanline Dir Downsample Blur" 0 0 200 2
+#pragma parameter HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR 					"          Scanline Dir Downsample Blur" 0 0 200 1
 float HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR = global.HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR / 100;
 
 #pragma parameter HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR			"          Opposite Dir Multiplier (Y Downsample for H Scanline)"  100 25 1600 25
 float HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR = global.HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR / 100;
 
-#pragma parameter HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR 					"          Opposite Dir Downsample Blur" 0 0 200 2
+#pragma parameter HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR 					"          Opposite Dir Downsample Blur" 0 0 200 1
 float HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = global.HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR / 100;
 
 
@@ -368,21 +383,6 @@ float HSM_CRT_ORIGINAL_AB_COMPARE_ON = global.HSM_CRT_ORIGINAL_AB_COMPARE_ON;
 
 #pragma parameter HSM_CRT_ORIGINAL_AB_COMPARE_SPLIT_POSITION   		"          Splitscreen Position" 50 0 100 0.2
 float HSM_CRT_ORIGINAL_AB_COMPARE_SPLIT_POSITION = global.HSM_CRT_ORIGINAL_AB_COMPARE_SPLIT_POSITION / 100;
-
-
-//---------------------------------------------------------------------------------------------------
-//    CRT Layer
-//---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_CRT_TITLE                                     "[ CRT SCREEN LAYER ]:" 0 0 0.01 0.01
-
-#pragma parameter GAMMA_INPUT   							"          CRT Gamma In (Gamma to Linear Space Decode) Def 2.4" 2.4 0.1 5 0.05
-#define HSM_GAMMA_IN_LINEARIZE global.GAMMA_INPUT
-
-#pragma parameter gamma_out   								"          CRT Gamma Out (Linear to Gamma Space Encode) Def 2.4" 2.4 0.1 5 0.05
-#define HSM_GAMMA_OUT_CRT global.gamma_out
-
-#pragma parameter post_br                                           "          Post CRT Brightness" 100 1 500 1
-#define HSM_POST_CRT_BRIGHTNESS global.post_br / 100
 
 
 //---------------------------------------------------------------------------------------------------

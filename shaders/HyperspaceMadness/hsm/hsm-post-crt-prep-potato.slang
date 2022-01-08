@@ -122,7 +122,10 @@ vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_CO
 			if (HSM_POTATO_SHOW_SCREEN_OVER_BG == 1)
 				out_color = HSM_BlendModeLayerMix(out_color, bg_layer, HSM_BG_BLEND_MODE, HSM_BG_OPACITY);
 			else
+			{
+				bg_layer.rgb *= HSM_BG_OPACITY;
 				out_color = HSM_BlendModeLayerMix(bg_layer, out_color, HSM_CRT_SCREEN_BLEND_MODE, 1);
+			}
 		}
 	}
 

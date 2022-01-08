@@ -4,8 +4,14 @@ Mega Bezel is updated to V 0.9.097 2022-01-05 Rev 2
 
 Changes:
   * POTATO now uses Global Brightness & Gamma
-
-
+  * Renamed Parameters for consistency with Guest Advanced params
+    * HSM_GAMMA_OUT_CRT -> gamma_out
+    * HSM_GAMMA_IN_LINEARIZE -> GAMMA_INPUT
+    * HSM_POST_CRT_BRIGHTNESS -> post_br
+  * Updated to crt-guest-advanced-2022-01-07-release1
+  * Added GLASS__LCD-GRID presets because why not ;)
+  * Fixed Downsample blur amount in ADV presets like Smoothed-ScaleFx
+  * 
 
 *  Performance of Base presets at 3840x2160 on Nvidia RTX2060:
   *  ADVANCED -                      78 FPS  -  No comparable old preset
