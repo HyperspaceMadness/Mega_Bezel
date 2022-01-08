@@ -11,7 +11,7 @@ Changes:
   * Updated to crt-guest-advanced-2022-01-07-release1
   * Added GLASS__LCD-GRID presets because why not ;)
   * Fixed Downsample blur amount in ADV presets like Smoothed-ScaleFx
-  * 
+  * Fixed Text not updating when Core Resolution Sampling Multiplier changed
 
 *  Performance of Base presets at 3840x2160 on Nvidia RTX2060:
   *  ADVANCED -                      78 FPS  -  No comparable old preset
@@ -33,6 +33,7 @@ Mega Bezel Still to Come:
 
 V1 TODO 
   * Colored Gel Over/Under Black Edge?
+  * Freeze Graphics & Screen A/B
 
   
   Post V1
