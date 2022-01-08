@@ -259,5 +259,5 @@ TopLayerImage_mipmap = 1
 // HSM_CURVATURE_MODE = 0
 
 // Easymode Parameters
-HSM_GAMMA_OUT_CRT = 2.2
-HSM_POST_CRT_BRIGHTNESS = 75
+gamma_out = 2.2
+post_br = 75

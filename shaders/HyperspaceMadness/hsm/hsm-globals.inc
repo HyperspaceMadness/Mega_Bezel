@@ -162,9 +162,12 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float HSM_CRT_ORIGINAL_AB_COMPARE_SPLIT_POSITION;
 
 	// CRT Screen
-	float HSM_GAMMA_IN_LINEARIZE;
-	float HSM_GAMMA_OUT_CRT;
-	float HSM_POST_CRT_BRIGHTNESS;
+	// These names are inconsistent with the general naming on purpose
+	// They match the namse in Guest's shader
+	float GAMMA_INPUT;
+	float gamma_out;
+	float post_br;
+
 	float HSM_CRT_SCREEN_BLEND_MODE;
 
 	//    Screen Vignette

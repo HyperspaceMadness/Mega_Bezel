@@ -5,7 +5,7 @@
 // Parameters
 wp_temperature = "8004.000000"
 LUTLOW = "20.000000"
-HSM_GAMMA_IN_LINEARIZE = "2.199999"
+GAMMA_INPUT = "2.199999"
 glow = "0.000000"
 brightboost = "2.999999"
 brightboost1 = "3.000000"

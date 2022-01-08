@@ -375,14 +375,14 @@ float HSM_CRT_ORIGINAL_AB_COMPARE_SPLIT_POSITION = global.HSM_CRT_ORIGINAL_AB_CO
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_CRT_TITLE                                     "[ CRT SCREEN LAYER ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_GAMMA_IN_LINEARIZE   							"          CRT Gamma In (Gamma to Linear Space Decode) Def 2.4" 2.4 0.1 5 0.05
-#define HSM_GAMMA_IN_LINEARIZE global.HSM_GAMMA_IN_LINEARIZE
+#pragma parameter GAMMA_INPUT   							"          CRT Gamma In (Gamma to Linear Space Decode) Def 2.4" 2.4 0.1 5 0.05
+#define HSM_GAMMA_IN_LINEARIZE global.GAMMA_INPUT
 
-#pragma parameter HSM_GAMMA_OUT_CRT   								"          CRT Gamma Out (Linear to Gamma Space Encode) Def 2.4" 2.4 0.1 5 0.05
-#define HSM_GAMMA_OUT_CRT global.HSM_GAMMA_OUT_CRT
+#pragma parameter gamma_out   								"          CRT Gamma Out (Linear to Gamma Space Encode) Def 2.4" 2.4 0.1 5 0.05
+#define HSM_GAMMA_OUT_CRT global.gamma_out
 
-#pragma parameter HSM_POST_CRT_BRIGHTNESS                           "          Post CRT Brightness" 100 1 500 1
-#define HSM_POST_CRT_BRIGHTNESS global.HSM_POST_CRT_BRIGHTNESS / 100
+#pragma parameter post_br                                           "          Post CRT Brightness" 100 1 500 1
+#define HSM_POST_CRT_BRIGHTNESS global.post_br / 100
 
 
 //---------------------------------------------------------------------------------------------------

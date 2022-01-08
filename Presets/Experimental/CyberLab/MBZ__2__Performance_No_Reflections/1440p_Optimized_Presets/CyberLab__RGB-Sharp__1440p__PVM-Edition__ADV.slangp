@@ -5,7 +5,7 @@ masksize = "2.000000"
 
 // Additional Scanline Tweaks
 
-HSM_POST_CRT_BRIGHTNESS = "115.000000"
+post_br = "115.000000"
 // gsl = "0.000000"
 scanline1 = "9.000000"
 scanline2 = "9.000000"

@@ -5,7 +5,7 @@ wp_temperature = "7000.000000"
 gamma_c = "1.639999"
 
 
-HSM_POST_CRT_BRIGHTNESS = "157.000000"
+post_br = "157.000000"
 signalResolution = "448.000000"
 g_sat = "0.100000"
 masksize = "0.000000"

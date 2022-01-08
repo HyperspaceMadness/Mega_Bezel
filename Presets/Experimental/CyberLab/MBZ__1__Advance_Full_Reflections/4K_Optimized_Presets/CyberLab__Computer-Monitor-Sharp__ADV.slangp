@@ -34,12 +34,12 @@ glow = "0.000000"
 halation = "0.000000"
 scans = "1.000000"
 
-HSM_GAMMA_IN_LINEARIZE = "2.400000"
+GAMMA_INPUT = "2.400000"
 HSM_INTRO_WHEN_TO_SHOW = "1.000000"
 
 
 
-HSM_POST_CRT_BRIGHTNESS = "212.000000"
+post_br = "212.000000"
 signalResolution = "592.000000"
 
 
