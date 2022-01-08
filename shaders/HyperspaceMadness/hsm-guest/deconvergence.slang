@@ -43,6 +43,7 @@ layout(push_constant) uniform Push
 	float dctypey;
 	float monochrome;
 	float mgamma;
+	float post_br;
 } params;
 
 #pragma parameter TATE "          TATE Mode" 0.0 0.0 1.0 1.0
@@ -82,6 +83,10 @@ layout(push_constant) uniform Push
 
 #pragma parameter mgamma "          Monochrome Gamma" 1.0 1.0 2.4 0.1
 #define mgamma params.mgamma
+
+#pragma parameter post_br "          Post Brightness" 1.0 0.25 5.0 0.05
+#define post_br params.post_br
+
 
 layout(std140, set = 0, binding = 0) uniform UBO
 {
@@ -124,6 +129,7 @@ vec3 noise(vec3 v){
 	v = fract(v*dot(v, v)*123.456);	
     return v;
 }
+
 
 void main()
 {
@@ -210,5 +216,5 @@ void main()
 		result = pow(luma, 1.0/mgamma) * mcolor;
 	}
 	
-	FragColor = vec4(result*corner, 1.0);
+	FragColor = vec4(result*corner*post_br, 1.0);
 }

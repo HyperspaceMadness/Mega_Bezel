@@ -123,7 +123,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter scangamma "          Scanline Gamma" 2.40 0.5 5.0 0.05
 #define scangamma global.scangamma
 
-#pragma parameter rolling_scan "          Rolling Scanlines" 0.0 -1.0 1.0 0.05
+#pragma parameter rolling_scan "          Rolling Scanlines" 0.0 -1.0 1.0 0.01
 #define rolling_scan        global.rolling_scan     // rolling scanlines
 
 #pragma parameter bogus_filtering "[ FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0

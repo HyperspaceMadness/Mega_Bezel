@@ -33,11 +33,13 @@ SamplerLUT3_linear = true
 SamplerLUT4 = ./lut/ntsc-lut.png
 SamplerLUT4_linear = true 
 
+# custom ntsc shaders
+
 shader4 = ./ntsc/ntsc-pass1.slang
 shader5 = ./ntsc/ntsc-pass2.slang
 
 filter_linear4 = false
-filter_linear5 = false
+filter_linear5 = true
 
 scale_type_x4 = source
 scale_type_y4 = source

@@ -127,7 +127,7 @@ layout(push_constant) uniform Push
 #pragma parameter scangammaoffset "          Scanline Gamma Offset" 1 0.15 5.0 0.05
 #define scangammaoffset global.scangammaoffset
 
-#pragma parameter rolling_scan "          Rolling Scanlines" 0.0 -1.0 1.0 0.05
+#pragma parameter rolling_scan "          Rolling Scanlines" 0.0 -1.0 1.0 0.01
 #define rolling_scan        global.rolling_scan     // rolling scanlines
 
 #pragma parameter bogus_filtering "[ GDV - FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
