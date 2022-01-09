@@ -158,8 +158,12 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float HSM_ANTI_FLICKER_THRESHOLD;
 	
 	//    CRT vs ORIGINAL A/B TESTING
-	float HSM_CRT_ORIGINAL_AB_COMPARE_ON;
-	float HSM_CRT_ORIGINAL_AB_COMPARE_SPLIT_POSITION;
+	float HSM_AB_COMPARE_SHOW_MODE;
+	float HSM_AB_COMPARE_AREA;
+	float HSM_AB_COMPARE_FREEZE_CRT_TUBE;
+	float HSM_AB_COMPARE_FREEZE_GRAPHICS;
+	float HSM_AB_COMPARE_SPLIT_AREA;
+	float HSM_AB_COMPARE_SPLIT_POSITION;
 
 	// CRT Screen
 	// These names are inconsistent with the general naming on purpose
@@ -179,6 +183,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	
 	//    Monochrome
 	float HSM_MONOCHROME_MODE;
+float HSM_MONOCHROME_BRIGHTNESS;
 	float HSM_MONOCHROME_GAMMA;
 	float HSM_MONOCHROME_HUE_OFFSET;
 	float HSM_MONOCHROME_SATURATION;

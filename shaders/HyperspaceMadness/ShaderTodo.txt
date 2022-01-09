@@ -11,7 +11,11 @@ Changes:
   * Updated to crt-guest-advanced-2022-01-07-release1
   * Added GLASS__LCD-GRID presets because why not ;)
   * Fixed Downsample blur amount in ADV presets like Smoothed-ScaleFx
-  * Fixed Text not updating when Core Resolution Sampling Multiplier changed
+  * Fixed Text not updating when Core Resolution Sampling Multiplier changed mentioned by @cyber
+  * AB Splitscreen Compare
+    * Choose different portions of the screen, Left, Right, Top, Bottom
+    * Freeze Mode for the tube so you can freeze one side and adjust other parameters to see the difference 
+    * Freeze Mode for the Graphics so you can freeze one side and adjust other parameters to see the difference 
 
 *  Performance of Base presets at 3840x2160 on Nvidia RTX2060:
   *  ADVANCED -                      78 FPS  -  No comparable old preset

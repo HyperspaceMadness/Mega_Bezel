@@ -163,8 +163,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 
 	// out_color *= screen_edge_mask;
 
-
-	if (HSM_CRT_ORIGINAL_AB_COMPARE_ON == 1)
+	if (HSM_AB_COMPARE_SHOW_MODE == 1 && HSM_GetIsInABCompareArea(VIEWPORT_COORD))
 	{
 		vec4 source_color = HSM_GetCroppedTexSample(source_pass, mirrored_screen_coord);
 		if (!source_is_linear)
@@ -172,7 +171,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 		source_color = HSM_Delinearize(source_color, HSM_GAMMA_OUT_CRT);
 		source_color = HSM_Linearize(source_color, DEFAULT_SRGB_GAMMA);
 
-		out_color = mix(out_color, source_color, mirrored_screen_coord.x < HSM_CRT_ORIGINAL_AB_COMPARE_SPLIT_POSITION ? 1 : 0);
+		out_color = source_color;
 	}
 
 	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(SCREEN_COORD, 1, SCREEN_SCALE, TUBE_SCALE, SCREEN_ASPECT, 1);
@@ -189,8 +188,6 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 		float tube_highlight_mask = HSM_GetCornerMask((tube_curved_coord - 0.5) * 0.995 + 0.5 , SCREEN_ASPECT, HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS, 0.05);
 		out_color = mix(out_color, scanline_masked_color, tube_highlight_mask);
 	}
-
-
 	
 	// TubeDiffuseImage
 	vec4 tube_diffuse = vec4(0, 0, 0, 1);
@@ -262,6 +259,12 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 
 void main()
 {
+	if (HSM_AB_COMPARE_FREEZE_CRT_TUBE == 1 && HSM_GetIsInABCompareArea(vTexCoord))
+	{
+		FragColor = texture(PassFeedback, vTexCoord);
+		return;
+	}
+
 	VIEWPORT_UNSCALED_COORD = HSM_GetViewportCoordWithFlip(vTexCoord);
 	// VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 

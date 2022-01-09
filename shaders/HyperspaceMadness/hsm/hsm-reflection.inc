@@ -98,6 +98,12 @@ layout(set = 0, binding = 12) uniform sampler2D BR_CRTAndReflectionPassFeedback;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
 {
+	if (HSM_AB_COMPARE_FREEZE_CRT_TUBE == 1 && HSM_GetIsInABCompareArea(vTexCoord))
+	{
+		FragColor = texture(PassFeedback, vTexCoord);
+		return;
+	}
+
 	VIEWPORT_UNSCALED_COORD = HSM_GetViewportCoordWithFlip(vTexCoord);
 	VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 

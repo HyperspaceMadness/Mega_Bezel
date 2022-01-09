@@ -970,6 +970,14 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 	return vec4(0);
 }
 
+bool HSM_GetIsInABCompareArea(vec2 viewport_coord)
+{
+	float test_value = HSM_AB_COMPARE_AREA > 1.5 ? viewport_coord.y : viewport_coord.x;
+	float position = mod(HSM_AB_COMPARE_AREA, 2) == 1 ? (1 - HSM_AB_COMPARE_SPLIT_POSITION) : HSM_AB_COMPARE_SPLIT_POSITION;
+	return  mod(HSM_AB_COMPARE_AREA, 2) == 0 && test_value < position || 
+			mod(HSM_AB_COMPARE_AREA, 2) == 1 && test_value > position;
+}
+
 bool HSM_CheckCacheInfoChanged()
 {
 	float epsilon = 0.0001;
@@ -1096,6 +1104,7 @@ vec4 HSM_ApplyMonochrome(vec4 in_color)
 	vec4 out_color = in_color;
 	out_color.rgb = pow(out_color.rgb, HSM_MONOCHROME_GAMMA.xxx);
 	float luma = dot(out_color.rgb, vec3(0.299, 0.587, 0.114));
+	luma *= HSM_MONOCHROME_BRIGHTNESS;
 	vec3 mcolor = vec3(1.0);
 
 	if (HSM_MONOCHROME_MODE > 1.5) mcolor = (HSM_MONOCHROME_MODE > 2.5) ? vec3(0.2549, 1.0, 0.0) : vec3(1.0, 0.749, 0.0);

@@ -376,13 +376,22 @@ float HSM_CURVATURE_3D_TILT_ANGLE_Y = global.HSM_CURVATURE_3D_TILT_ANGLE_Y / 100
 //---------------------------------------------------------------------------------------------------
 //    CRT vs ORIGINAL A/B TESTING
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_CRT_AB_COMPARE_TITLE							"[ CRT vs ORIGINAL A/B COMPARE ]:" 0 0 0.01 0.01
+#pragma parameter HSM_CRT_AB_COMPARE_TITLE							"[ A/B SPLITSCREEN COMPARE ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_CRT_ORIGINAL_AB_COMPARE_ON   					"          Compare ON" 0 0 1 1
-float HSM_CRT_ORIGINAL_AB_COMPARE_ON = global.HSM_CRT_ORIGINAL_AB_COMPARE_ON;
+#pragma parameter HSM_AB_COMPARE_SHOW_MODE   				        "          Show:  CRT SHADER | ORIGINAL" 0 0 1 1
+float HSM_AB_COMPARE_SHOW_MODE = global.HSM_AB_COMPARE_SHOW_MODE;
 
-#pragma parameter HSM_CRT_ORIGINAL_AB_COMPARE_SPLIT_POSITION   		"          Splitscreen Position" 50 0 100 0.2
-float HSM_CRT_ORIGINAL_AB_COMPARE_SPLIT_POSITION = global.HSM_CRT_ORIGINAL_AB_COMPARE_SPLIT_POSITION / 100;
+#pragma parameter HSM_AB_COMPARE_AREA   					        "          Compare Area:  LEFT | RIGHT | TOP | BOTTOM" 0 0 3 1
+float HSM_AB_COMPARE_AREA = global.HSM_AB_COMPARE_AREA;
+
+#pragma parameter HSM_AB_COMPARE_SPLIT_POSITION   		            "          Splitscreen Position" 50 0 100 0.2
+float HSM_AB_COMPARE_SPLIT_POSITION = global.HSM_AB_COMPARE_SPLIT_POSITION / 100;
+
+#pragma parameter HSM_AB_COMPARE_FREEZE_CRT_TUBE   				    "          Freeze CRT Tube" 0 0 1 1
+float HSM_AB_COMPARE_FREEZE_CRT_TUBE = global.HSM_AB_COMPARE_FREEZE_CRT_TUBE;
+
+#pragma parameter HSM_AB_COMPARE_FREEZE_GRAPHICS   				    "          Freeze Graphics" 0 0 1 1
+float HSM_AB_COMPARE_FREEZE_GRAPHICS = global.HSM_AB_COMPARE_FREEZE_GRAPHICS;
 
 
 //---------------------------------------------------------------------------------------------------
@@ -413,6 +422,9 @@ float HSM_SCREEN_VIGNETTE_DUALSCREEN_VIS_MODE = global.HSM_SCREEN_VIGNETTE_DUALS
 
 #pragma parameter HSM_MONOCHROME_MODE  								"          Monochrome Color: OFF | BW | AMBER | GREEN" 0.0 0.0 3.0 1.0
 #define HSM_MONOCHROME_MODE global.HSM_MONOCHROME_MODE
+
+#pragma parameter HSM_MONOCHROME_BRIGHTNESS							"          Monochrome Brightness" 100 1 500 1
+#define HSM_MONOCHROME_BRIGHTNESS global.HSM_MONOCHROME_BRIGHTNESS / 100
 
 #pragma parameter HSM_MONOCHROME_GAMMA 								"          Monochrome Gamma" 1.0 0.1 5 0.1
 #define HSM_MONOCHROME_GAMMA global.HSM_MONOCHROME_GAMMA
