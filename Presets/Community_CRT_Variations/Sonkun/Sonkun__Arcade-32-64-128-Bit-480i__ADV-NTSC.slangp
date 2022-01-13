@@ -1,12 +1,8 @@
 #reference ":/shaders/shaders_slang/bezel/Mega_Bezel/Presets/Base_CRT_Presets/MBZ__1__ADV__GDV-NTSC.slangp"
 
 // Thanks to Sonkun from the Libretro forum for the settings in this preset!
-SHARPEN = "3.000001"
-CONTR = "0.120000"
-
-PR = "0.080000"
-PG = "0.080000"
-PB = "0.080000"
+gamma_out = "2.400000"
+GAMMA_INPUT = "2.400000"
 
 interm = "5.000000"
 

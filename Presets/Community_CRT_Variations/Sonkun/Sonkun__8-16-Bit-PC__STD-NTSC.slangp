@@ -1,16 +1,14 @@
 #reference ":/shaders/shaders_slang/bezel/Mega_Bezel/Presets/Base_CRT_Presets/MBZ__3__STD__GDV-NTSC.slangp"
 
 // Thanks to Sonkun from the Libretro forum for the settings in this preset!
-PR = "0.080000"
-PG = "0.080000"
-PB = "0.080000"
+GAMMA_INPUT = "2.400000"
+gamma_out = "2.400000"
 
 bloom = "0.900000"
 halation = "0.400000"
 BLOOM = "1.000000"
 
 barspeed = "200.000000"
-barintensity = "0.010000"
 
 shadowMask = "8.000000"
 maskstr = "1.000000"
