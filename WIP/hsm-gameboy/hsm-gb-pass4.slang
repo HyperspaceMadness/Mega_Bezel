@@ -105,7 +105,7 @@ void main()
     gl_Position = global.MVP * Position;
     vTexCoord = TexCoord * 1.0001;
     
-	MY_SCREEN_COORD = HSM_GetScreenVTexCoord(vTexCoord, MY_SCREEN_SCALE, HSM_GetPositionOffset(vec2(0.5,0.5)));
+	MY_SCREEN_COORD = HSM_GetScreenVTexCoord(vTexCoord, MY_SCREEN_SCALE, HSM_GetScreenPositionOffset(vec2(0.5,0.5)));
 
     texel = params.SourceSize.zw;
 }

@@ -106,7 +106,7 @@ void main()
     // Remaps position to integer scaled output
     gl_Position = global.MVP * Position / vec4( vec2(MY_SCREEN_SCALE * params.OutputSize.xy / scaled_video_out), 1.0, 1.0 );   
     vTexCoord = TexCoord * 1.0001;
-    MY_SCREEN_SCALE = HSM_GetVTexCoordWithArgs(vTexCoord, MY_SCREEN_SCALE, HSM_GetPositionOffset(vec2(0.5, 0.5)));
+    MY_SCREEN_SCALE = HSM_GetVTexCoordWithArgs(vTexCoord, MY_SCREEN_SCALE, HSM_GetScreenPositionOffset(vec2(0.5, 0.5)));
 
     // Pixel size inside source
     dot_size = 1 / MY_CROPPED_ORIGINAL_SIZE;

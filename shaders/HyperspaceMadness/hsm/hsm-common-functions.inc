@@ -296,72 +296,49 @@ vec2 HSM_GetRotatedCorePreppedSizeWithResMult(float screen_index)
 	return HSM_ROTATE_CORE_IMAGE * sampling_size.yx + (1 - HSM_ROTATE_CORE_IMAGE) * sampling_size.xy;
 }
 
-vec2 HSM_GetPositionOffset(vec2 placement_image_pos, vec2 screen_scale )
+vec2 HSM_GetScreenPositionOffset(vec2 placement_image_pos, vec2 screen_scale, float screen_index )
 {
-	vec2 screen_center_pos = vec2(0.5, 0.5);
-	
+
+	float output_aspect = global.FinalViewportSize.x / global.FinalViewportSize.y;
+
+
+	// If we are not using the image placement then get its offset from the center
+	placement_image_pos = HSM_USE_IMAGE_FOR_PLACEMENT == 1 && screen_index == 1 ? placement_image_pos : vec2(0.5);
+
+	vec2 pos_offset = screen_index == 1 ? vec2(HSM_SCREEN_POSITION_X / output_aspect, HSM_SCREEN_POSITION_Y) + (placement_image_pos - 0.5)
+										: vec2(HSM_2ND_SCREEN_POS_X / output_aspect, HSM_2ND_SCREEN_POS_Y);
+
+
+	float split_offset_multiplier = screen_index == 1 ? -1 : 1;
+
 	if (HSM_DUALSCREEN_MODE == 1)
 	{
 		if (HSM_DUALSCREEN_SHIFT_POSITION_WITH_SCALE == 1)
-			screen_center_pos = vec2(0.5, 0.5 + HSM_DUALSCREEN_VIEWPORT_SPLIT_LOCATION - screen_scale.y * 1.17 / 2);
+			pos_offset.y += HSM_DUALSCREEN_VIEWPORT_SPLIT_LOCATION + split_offset_multiplier * screen_scale.y * 1.17 / 2;
 		else
-			screen_center_pos = vec2(0.5, 0.25);
+			pos_offset.y += split_offset_multiplier * 0.25;
 
-		screen_center_pos.y -= HSM_DUALSCREEN_POSITION_OFFSET_BETWEEN_SCREENS;
+		pos_offset.y += split_offset_multiplier * HSM_DUALSCREEN_POSITION_OFFSET_BETWEEN_SCREENS;
 	}
 
 	if (HSM_DUALSCREEN_MODE == 2)
 	{
 		if (HSM_DUALSCREEN_SHIFT_POSITION_WITH_SCALE == 1)
-			screen_center_pos = vec2(0.5 + HSM_DUALSCREEN_VIEWPORT_SPLIT_LOCATION - screen_scale.x * 1.17 / 2, 0.5);
+			pos_offset.x += HSM_DUALSCREEN_VIEWPORT_SPLIT_LOCATION / output_aspect + split_offset_multiplier * screen_scale.x * 1.17 / 2;
 		else
-			screen_center_pos = vec2(0.25, 0.5);
+			pos_offset.x += split_offset_multiplier * 0.25 / output_aspect;
 
-		screen_center_pos.x -= HSM_DUALSCREEN_POSITION_OFFSET_BETWEEN_SCREENS;
+		pos_offset.x += split_offset_multiplier * HSM_DUALSCREEN_POSITION_OFFSET_BETWEEN_SCREENS / output_aspect;
 	}
 
-	vec2 center_offset = screen_center_pos - vec2(0.5, 0.5);
-
-	if (HSM_USE_IMAGE_FOR_PLACEMENT == 0)
-		placement_image_pos = vec2(0.5);
-
-	float output_aspect_ratio = global.FinalViewportSize.x / global.FinalViewportSize.y;
-	vec2 pos_offset = vec2(HSM_SCREEN_POSITION_X / output_aspect_ratio, HSM_SCREEN_POSITION_Y) + (placement_image_pos - 0.5);
-	pos_offset += center_offset;
-
-	return pos_offset;
-}
-
-vec2 HSM_GetPositionOffsetFor2ndScreen(vec2 screen_scale)
-{
-	float output_aspect_ratio = global.FinalViewportSize.x / global.FinalViewportSize.y;
-	vec2 pos_offset = vec2(HSM_2ND_SCREEN_POS_X / output_aspect_ratio, HSM_2ND_SCREEN_POS_Y);
-
-	vec2 screen_center_pos = vec2(0.5, 0.5);
-	
-	
-	if (HSM_DUALSCREEN_MODE == 1)
+	if (screen_index == 1)
 	{
-		if (HSM_DUALSCREEN_SHIFT_POSITION_WITH_SCALE == 1)
-			screen_center_pos = vec2(0.5, 0.5 + HSM_DUALSCREEN_VIEWPORT_SPLIT_LOCATION + screen_scale.y * 1.17 / 2);
-		else
-			screen_center_pos = vec2(0.5, 0.75);
-
-		screen_center_pos.y += HSM_DUALSCREEN_POSITION_OFFSET_BETWEEN_SCREENS;
+		pos_offset.x += HSM_SCREEN_POSITION_X / output_aspect;
+		pos_offset.y += HSM_SCREEN_POSITION_Y;
 	}
 
-	if (HSM_DUALSCREEN_MODE == 2)
-	{
-		if (HSM_DUALSCREEN_SHIFT_POSITION_WITH_SCALE == 1)
-			screen_center_pos = vec2(0.5 + HSM_DUALSCREEN_VIEWPORT_SPLIT_LOCATION + screen_scale.x * 1.17 / 2, 0.5);
-		else
-			screen_center_pos = vec2(0.75, 0.5);
 
-		screen_center_pos.x += HSM_DUALSCREEN_POSITION_OFFSET_BETWEEN_SCREENS;
-	}
 
-	vec2 center_offset = screen_center_pos - vec2(0.5, 0.5);
-	pos_offset += center_offset;
 	return pos_offset;
 }
 
@@ -778,13 +755,14 @@ vec4 HSM_GetStoichaicBlurredSample(sampler2D in_sampler, vec2 in_coord, float nu
 float HSM_GetScreenIndex(vec2 viewport_coord)
 {
 	float out_index = 1;
+	float output_aspect = global.FinalViewportSize.x / global.FinalViewportSize.x;
 
 	if (HSM_DUALSCREEN_MODE == 0)
 		out_index = 1;
 	if (HSM_DUALSCREEN_MODE == 1)
-		out_index = (viewport_coord.y < 0.5 + HSM_DUALSCREEN_VIEWPORT_SPLIT_LOCATION) ? 1 : 2;
+		out_index = (viewport_coord.y < 0.5 + HSM_DUALSCREEN_VIEWPORT_SPLIT_LOCATION * 1.7777 / output_aspect) ? 1 : 2;
 	if (HSM_DUALSCREEN_MODE == 2)
-		out_index = (viewport_coord.x < 0.5 + HSM_DUALSCREEN_VIEWPORT_SPLIT_LOCATION) ? 1 : 2;
+		out_index = (viewport_coord.x < 0.5 + HSM_DUALSCREEN_VIEWPORT_SPLIT_LOCATION * 1.7777 / output_aspect) ? 1 : 2;
 
 	return out_index;
 }

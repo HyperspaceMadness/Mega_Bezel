@@ -205,6 +205,9 @@ float HSM_GetScreenAspect(float screen_index, vec2 cropped_size)
 	vec2 sony_psp = 						vec2(480, 272);
 	vec2 sony_ps_fmv_res = 					vec2(320, 480);
 	vec2 sony_ps_fmv_res_2 = 				vec2(512, 480);
+
+	// This should handle some PS games with weird resolutions like Tekken and Driver 
+	float sony_ps_height = 448;
 	
 	if (HSM_ASPECT_RATIO_MODE == 0)
 	{
@@ -226,6 +229,7 @@ float HSM_GetScreenAspect(float screen_index, vec2 cropped_size)
 		else if (HSM_ResolutionIsEqual(atari_2600_crop_res, 			original_size)) horizontal_aspect = 1.333;
 		else if (HSM_ResolutionIsEqual(sony_ps_fmv_res, 				original_size)) horizontal_aspect = 1.333;
 		else if (HSM_ResolutionIsEqual(sony_ps_fmv_res_2, 				original_size)) horizontal_aspect = 1.333;
+		else if (original_size.y == sony_ps_height) 									horizontal_aspect = 1.333;
 		// Fall back to the explicit ratio
 		else horizontal_aspect = HSM_ASPECT_RATIO_EXPLICIT;
 	}
@@ -251,7 +255,8 @@ float HSM_GetScreenAspect(float screen_index, vec2 cropped_size)
 		   		HSM_ResolutionIsEqual(atari_2600_crop_res, original_size) ||
 		   		HSM_ResolutionIsEqual(sega_saturn_fmv_res, original_size) ||
 				HSM_ResolutionIsEqual(sony_ps_fmv_res, original_size) ||
-				HSM_ResolutionIsEqual(sony_ps_fmv_res_2, original_size)
+				HSM_ResolutionIsEqual(sony_ps_fmv_res_2, original_size) ||
+				original_size.y == sony_ps_height
 		   ) 
 		{
 		   final_orientation = 1;
@@ -865,7 +870,7 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	vec2 screen_scale = HSM_GetScreenScale(screen_aspect, screen_pos_and_height.y, cropped_rotated_size);
 	vec2 tube_scale = HSM_GetTubeScale(screen_scale, screen_pos_and_height.y);
 	
-	vec2 pos_offset = HSM_GetPositionOffset(vec2(0.5, screen_pos_and_height.x), screen_scale);
+	vec2 pos_offset = HSM_GetScreenPositionOffset(vec2(0.5, screen_pos_and_height.x), screen_scale, 1);
 
 	vec2 rotated_core_preppezd_size = HSM_GetRotatedScreenCorePreppedSize(1);
 
@@ -877,7 +882,7 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	vec2 screen_scale_2nd_screen = HSM_GetScreenScaleFor2ndScreen(screen_scale, screen_aspect_2nd_screen);
 	vec2 tube_scale_2nd_screen = HSM_GetTubeScale(screen_scale_2nd_screen, DEFAULT_UNCORRECTED_SCREEN_SCALE.y);
 
-	vec2 pos_offset_2nd_screen = HSM_GetPositionOffsetFor2ndScreen(screen_scale_2nd_screen);
+	vec2 pos_offset_2nd_screen = HSM_GetScreenPositionOffset(vec2(0.5, 0.5), screen_scale_2nd_screen, 2);
 
 	vec4 sample_2d_range = vec4(0);
 
