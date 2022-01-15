@@ -266,7 +266,7 @@ float HSM_SCANLINE_DIRECTION = global.HSM_SCANLINE_DIRECTION;
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_SAMPLING_TITLE								"[ CORE RES SAMPLING]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR			"          Scanline Dir Multiplier (X-Prescale for H Scanline)"  100 50 1600 50
+#pragma parameter HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR			"          Scanline Dir Multiplier (X-Prescale for H Scanline)"  100 25 1600 25
 float HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = global.HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR / 100;
 
 #pragma parameter HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR 					"          Scanline Dir Downsample Blur" 0 0 200 1
