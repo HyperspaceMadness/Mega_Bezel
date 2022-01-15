@@ -85,7 +85,7 @@ scale_type12 = source
 scale_x12 = 0.5
 scale_y12 = 1.0
 
-shader13 = ../../shaders/HyperspaceMadness/hsm-guest/stock.slang
+shader13 = ../../../../stock.slang
 filter_linear13 = true
 scale_type13 = source
 scale_x13 = 1.0

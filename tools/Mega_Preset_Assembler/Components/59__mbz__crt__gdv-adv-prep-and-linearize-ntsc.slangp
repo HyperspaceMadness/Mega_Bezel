@@ -45,7 +45,7 @@ scale_type6 = source
 scale_x6 = 0.5
 scale_y6 = 1.0
 
-shader7 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/stock.slang
+shader7 = :/shaders/shaders_slang/stock.slang
 filter_linear7 = true
 scale_type7 = source
 scale_x7 = 1.0
