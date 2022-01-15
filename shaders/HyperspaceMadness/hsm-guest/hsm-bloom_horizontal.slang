@@ -31,18 +31,18 @@ layout(push_constant) uniform Push
 	float SIGMA_HB;
 } params;
 
-#pragma parameter bogus_bloom "[ GDV - BLOOM & HALATION ]:" 0.0 0.0 1.0 1.0
+#pragma parameter bogus_bloom 	"[ GDV - BLOOM & HALATION ]:" 0.0 0.0 1.0 1.0
 
-#pragma parameter bloom "          Bloom Strength -- bloom" 0.0 0.0 2.0 0.05
+#pragma parameter bloom 		"          Bloom Strength -- bloom" 0.0 -2.0 2.0 0.05
 #define bloom         params.bloom     // bloom effect
 
-#pragma parameter halation "          Halation Strength -- halation" 0.0 0.0 2.0 0.025
+#pragma parameter halation 		"          Halation Strength -- halation" 0.0 0.0 2.0 0.025
 #define halation         params.halation     // halation effect
 
-#pragma parameter SIZEHB "          Horizontal Radius ( Num Samples ) -- SIZEHB" 4.0 1.0 50.0 1.0 
+#pragma parameter SIZEHB 		"          Horizontal Radius ( Num Samples ) -- SIZEHB" 4.0 1.0 50.0 1.0 
 #define SIZEHB params.SIZEHB
 
-#pragma parameter SIGMA_HB "          Horizontal Sigma ( Spread ) -- SIGMA_HB" 0.70 0.25 15.0 0.05
+#pragma parameter SIGMA_HB 		"          Horizontal Sigma ( Spread ) -- SIGMA_HB" 0.70 0.25 15.0 0.05
 #define SIGMA_HB params.SIGMA_HB
 
 

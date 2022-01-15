@@ -75,7 +75,7 @@ layout(push_constant) uniform Push
 #pragma parameter glow "          Strength -- glow" 0.08 -2.0 2.0 0.01
 #define glow         params.glow     // Glow Strength
 
-#pragma parameter bloom "          Bloom Strength -- bloom" 0.0 0.0 2.0 0.05
+#pragma parameter bloom "          Bloom Strength -- bloom" 0.0 -2.0 2.0 0.05
 #define bloom         params.bloom     // bloom effect
 
 #pragma parameter halation "          Halation Strength -- halation" 0.0 0.0 2.0 0.025
@@ -1128,6 +1128,7 @@ if (!interb)
 	color*=bb;
 
 	vec3  Glow = COMPAT_TEXTURE(GlowPass, pos).rgb;
+	vec3  Ref = COMPAT_TEXTURE(LinearizePass, pos).rgb;
 	vec3  Bloom = COMPAT_TEXTURE(BloomPass, pos).rgb;
 	float maxb = COMPAT_TEXTURE(BloomPass, pos).a;
 
@@ -1136,9 +1137,16 @@ if (!interb)
 	*/
 
 	vec3 Bloom1 = min(Bloom*(orig1+color), max(0.5*(colmx + orig1 - color),0.0));
-	Bloom1 = mix(Bloom1, 0.5*(colmx*orig1+Bloom1), 1.0-color);
+	Bloom1 = mix(Bloom1, mix(colmx*orig1, Bloom1, 0.5), 1.0-color);
 	
-	color = color + bloom*Bloom1;
+	
+	if (bloom < 0.0) {
+		Ref = max(Bloom-Ref, 0.0);
+		Ref = plant(Bloom1, max(max(Ref.r,Ref.g),Ref.b));
+		Bloom1 = 2.0*mix(Ref, mix(colmx*Ref, Bloom1, 0.5), 1.0-color);
+	}
+
+	color = color + abs(bloom)*Bloom1;
 
 	color = min(color, mix(one, cmask, mclip));
 	if (!interb) color = declip(color, pow(w3,0.60));
