@@ -1,8 +1,11 @@
 #reference "../4K_Optimized_Presets/CyberLab__Composite-Pure__ADV.slangp"
 
+post_br = "307.000000"
 
 HSM_SCALEFX_ON = "0.000000"
-signalResolution = "256.000000"
+signalResolution = "512.000000"
+g_hue_degrees = "0.000000"
+
 
 
 
@@ -16,4 +19,11 @@ g_crtgamut = "2.000000"
 halation = "0.075000"
 shadowMask = "6.000000"
 masksize = "0.000000"
-GDV_DECONVERGENCE_ON = "0.000000"
+
+GDV_DECONVERGENCE_ON = "1.000000"
+deconrr = "0.000000"
+deconrb = "0.000000"
+deconrry = "-0.250000"
+deconrgy = "-0.500000"
+deconrby = "0.000000"
+decons = "4.000000"

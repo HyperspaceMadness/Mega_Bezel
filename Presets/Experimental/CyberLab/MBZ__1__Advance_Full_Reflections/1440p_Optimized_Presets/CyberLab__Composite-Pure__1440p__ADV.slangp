@@ -1,3 +1,4 @@
-#reference "../1080p_Optimized_Presets/CyberLab__Composite-Pure__1080p__ADV.slangp"
+#reference "../4K_Optimized_Presets/CyberLab__Composite-Pure__ADV.slangp"
 
-addnoised = "0.160000"
+shadowMask = "5.000000"
+GDV_DECONVERGENCE_ON = "1.000000"

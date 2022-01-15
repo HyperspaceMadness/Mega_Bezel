@@ -3,10 +3,13 @@
 Mega Bezel is updated to V 0.9.098 2022-01-08 Rev 1
 
 Changes:
+  * Updated to crt-guest-advanced-2022-01-14-release1
   * Graduated Sonkun and BendBombBoom presets to the Community_CRT_Variations folder
+  * Updated Cyberlab
   * Auto Aspect Ratio
     * Put in a catch for PS games with a 448 vertical resolution so they show up with a horizontal aspect, like tekken
-
+  * Fixed Core Sampling Multiplier when the Rotate CRT is on
+  * Fixed distance between Dual screens for wider monitor setups
 
 
 
@@ -15,8 +18,6 @@ Mega Bezel Still to Come:
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
-  * Update Guest, Retrofit Guest Grade
-  * Fix Dual Screen Center offset for Horizontal
   * Add CoreRequestedRotation to Shader System
   * Auto Rotate
   * Update Cyberlab
