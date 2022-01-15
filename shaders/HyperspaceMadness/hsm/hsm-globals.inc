@@ -549,6 +549,10 @@ float HSM_MONOCHROME_BRIGHTNESS;
     float g_satr;
     float g_satg;
     float g_satb;
+
+	// Grade Afterglow Params
+    float AS;
+    float asat;
 } global;
 
 /////////////// DEFINES ///////////////

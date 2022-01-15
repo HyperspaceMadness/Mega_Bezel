@@ -253,6 +253,9 @@ vec2 HSM_GetResMult()
 
 	vec2 original_size = HSM_GetRotatedNegativeCropAddedSize();
 	float use_vert_scanlines = HSM_GetUseVerticalScanlines(original_size.x/original_size.y);
+
+	// TODO
+	// if HSM_ROTATE_CORE_IMAGE swap the result 
 	vec2 sampling_mult = (1 - use_vert_scanlines) * vec2(HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR, HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR) + 
 							  use_vert_scanlines *  vec2(HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR, HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR);
 	return sampling_mult;

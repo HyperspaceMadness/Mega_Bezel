@@ -740,13 +740,18 @@ if (!interb)
 	// Scanline saturation application
 	
 	vec3 w1 = vec3(wf1); vec3 w2 = vec3(wf2);
-	w3 = wf1+wf2;	
+	w3 = wf1+wf2;
 	
-	cref1 = color1 / (max(max(color1.r,color1.g),color1.b) + 0.00001);
-	cref2 = color2 / (max(max(color2.r,color2.g),color2.b) + 0.00001);	
+	float mc1 = max(max(color1.r,color1.g),color1.b) + eps;
+	float mc2 = max(max(color2.r,color2.g),color2.b) + eps;
+	
+	cref1 = color1 / mc1; cref1=cref1*cref1; cref1*=cref1;
+	cref2 = color2 / mc2; cref2=cref2*cref2; cref2*=cref2;
 
-	w1 = mix(w1*mix(one, cref1*cref1*cref1, scans), w1, wf1);
-	w2 = mix(w2*mix(one, cref2*cref2*cref2, scans), w2, wf2);
+	w1 = mix(w1*mix(one, cref1, scans), w1, wf1*(1.0+0.2*scans)); w1 = min(w1*color1, mc1)/(color1 + eps);
+	w2 = mix(w2*mix(one, cref2, scans), w2, wf2*(1.0+0.2*scans)); w2 = min(w2*color2, mc2)/(color2 + eps);
+	
+	// Scanline Deconvergence
 	
 	vec3 cd1 = one; vec3 cd2 = one; float vm = sqrt(abs(vertmask));
 	
@@ -821,13 +826,15 @@ if (!interb)
 	float vig  = COMPAT_TEXTURE(PrePass, clamp(pos, 0.0+0.5*global.OriginalSize.zw, 1.0-0.5*global.OriginalSize.zw)).a;
 
 	vec3 Bloom1 = min(Bloom*(orig1+color), max(0.5*(colmx + orig1 - color),0.0));
+	Bloom1 = mix(Bloom1, 0.5*(colmx*orig1+Bloom1), 1.0-color);
+	
 	color = color + bloom*Bloom1;
 
 	color = min(color, mix(one, cmask, mclip));
 	if (!interb) color = declip(color, pow(w3,0.60));
 
 	if (halation > 0.025) {
-		Bloom = mix(0.5*(Bloom + Bloom*Bloom), Bloom*Bloom, colmx);	
+		Bloom = mix(0.5*(Bloom + Bloom*Bloom), 0.75*Bloom*Bloom, colmx);	
 		color = color + (1.1-0.25*colmx)*(0.75+maxb)*Bloom*(0.75 + 0.70*pow(colmx,0.33333))*mix(1.0,w3,0.5*colmx)*mix(one,cmask,0.35 + 0.4*maxb)*halation; }
 
 	Glow = mix(Glow, 0.25*color, 0.7*colmx);

@@ -25,9 +25,7 @@ Mega Bezel Still to Come:
     * Gamma for graphics may need to be a post adjustment, current gamma creates banding
   * Black Edge Over/Under Colored Gel. If under needs to happen when before colored gel is added
   * Add vscode link in readme [![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/organization/repository)
-  * Auto Aspect Ratio
-    *  Bloody Roar II and Tobal 2, Tekken 3 and R4 (Tekken 3 & 4 are registering as vertical)
-
+  * Fix Directions for Core Resolution Multiplier, Incorrect if rotated
 
 ----------------------------------------------------
 --- Examples  --------------------------------------
