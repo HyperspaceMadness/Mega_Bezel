@@ -106,7 +106,7 @@ scale_type21 = source
 scale_x21 = 0.5
 scale_y21 = 1.0
 
-shader22 = ../../shaders/HyperspaceMadness/hsm-guest/stock.slang
+shader22 = ../../../../stock.slang
 filter_linear22 = true
 scale_type22 = source
 scale_x22 = 1.0

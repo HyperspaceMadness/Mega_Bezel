@@ -51,7 +51,7 @@ scale_type7 = source
 scale_x7 = 0.5
 scale_y7 = 1.0
 
-shader8 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/stock.slang
+shader8 = :/shaders/shaders_slang/stock.slang
 filter_linear8 = true
 scale_type8 = source
 scale_x8 = 1.0
