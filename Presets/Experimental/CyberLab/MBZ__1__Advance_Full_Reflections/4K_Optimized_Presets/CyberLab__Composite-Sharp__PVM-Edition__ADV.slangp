@@ -8,7 +8,7 @@ HSM_INT_SCALE_MODE = "1.000000"
 
 post_br = "185.000000"
 
-HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = "1600.000000"
+HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = "300.000000"
 
 
 
@@ -20,7 +20,7 @@ halation = "0.050000"
 
 GTU_ON = "1.000000"
 compositeConnection = "1.000000"
-signalResolution = "944.000000"
+signalResolution = "512.000000"
 signalResolutionI = "350.000000"
 signalResolutionQ = "304.000000"
 
