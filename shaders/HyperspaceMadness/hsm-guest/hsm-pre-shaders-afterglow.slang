@@ -243,6 +243,7 @@ void main()
    
    imgColor.rgb = imgColor.rgb * params.pre_bb;
    
+   // Retro Sega Systems: Genesis, 32x, CD and Saturn 2D had color palettes designed in TV levels to save on transformations.
    if (params.sega_fix > 0.5) imgColor.rgb = imgColor.rgb * (255.0 / 239.0);
    
    imgColor.rgb = min(imgColor.rgb, 1.0);

@@ -15,9 +15,9 @@ layout(push_constant) uniform Push
     float g_I_MUL;
     float g_Q_MUL;
     float g_lum_fix;
-    float g_vignette;
-    float g_vstr;
-    float g_vpower;
+    // float g_vignette;
+    // float g_vstr;
+    // float g_vpower;
     float g_sat;
     float g_vibr;
     float g_lum;
@@ -126,10 +126,10 @@ layout(push_constant) uniform Push
 #pragma parameter g_mid                             "          Contrast Pivot"       0.5  0.0 1.0 0.01
 #pragma parameter g_lift                            "          Black Level"         0.0 -0.5 0.5 0.01
 
-#pragma parameter DG_VIGNETTE_TITLE                 "[ GRADE - VIGNETTE ]:" 0 0 0 1
-#pragma parameter g_vignette                        "          Use Vignette"          0.0  0.0 1.0 1.0
-#pragma parameter g_vstr                            "          Amount (Strength)"     40.0 0.0 98.0 2.0
-#pragma parameter g_vpower                          "          Corner Amount (Power)" 26 0.0 200 2
+// #pragma parameter DG_VIGNETTE_TITLE                 "[ GRADE - VIGNETTE ]:" 0 0 0 1
+// #pragma parameter g_vignette                        "          Use Vignette"          0.0  0.0 1.0 1.0
+// #pragma parameter g_vstr                            "          Amount (Strength)"     40.0 0.0 98.0 2.0
+// #pragma parameter g_vpower                          "          Corner Amount (Power)" 26 0.0 200 2
 
 #pragma parameter DG_COLOR_TEMP_TITLE               "[ GRADE - COLOR TEMP & HUE ]:" 0 0 0 1
 // Color temp changed to 7000 (Used to be 6500) because this seems to be better for the default crt phosphor gamut of NTSC-J
@@ -181,9 +181,9 @@ layout(push_constant) uniform Push
 #define I_MUL           params.g_I_MUL
 #define Q_MUL           params.g_Q_MUL
 #define lum_fix         params.g_lum_fix
-#define vignette        params.g_vignette
-#define vstr            (1 - params.g_vstr / 100) * 50
-#define vpower          params.g_vpower / 100
+// #define vignette        params.g_vignette
+// #define vstr            (1 - params.g_vstr / 100) * 50
+// #define vpower          params.g_vpower / 100
 #define g_sat           params.g_sat
 #define vibr            params.g_vibr
 #define satr            global.g_satr
@@ -892,14 +892,14 @@ vec3 vcolor = adj;
 
     vec2 vpos = pos_in_cropped_coords;
 
-    if (vignette > 0.5)
-    {
-        vpos = (vpos - 0.5) / (1 - 2 * MAX_NEGATIVE_CROP + 0.01) + 0.5;
-        vpos *= 1.0 - vpos.xy;
-        float vig = vpos.x * vpos.y * vstr;
-        vig = min(pow(vig, vpower), 1.0);
-        contrast *= (vignette == 1.0) ? vig : 1.0;
-    }
+    // if (vignette > 0.5)
+    // {
+    //     vpos = (vpos - 0.5) / (1 - 2 * MAX_NEGATIVE_CROP + 0.01) + 0.5;
+    //     vpos *= 1.0 - vpos.xy;
+    //     float vig = vpos.x * vpos.y * vstr;
+    //     vig = min(pow(vig, vpower), 1.0);
+    //     contrast *= (vignette == 1.0) ? vig : 1.0;
+    // }
     contrast += (lift / 20.0) * (1.0 - contrast);
 
 
