@@ -312,7 +312,6 @@ vec2 HSM_GetScreenPositionOffset(vec2 placement_image_pos, vec2 screen_scale, fl
 	vec2 pos_offset = screen_index == 1 ? vec2(HSM_SCREEN_POSITION_X / output_aspect, HSM_SCREEN_POSITION_Y) + (placement_image_pos - 0.5)
 										: vec2(HSM_2ND_SCREEN_POS_X / output_aspect, HSM_2ND_SCREEN_POS_Y);
 
-
 	float split_offset_multiplier = screen_index == 1 ? -1 : 1;
 
 	if (HSM_DUALSCREEN_MODE == 1)
@@ -334,14 +333,6 @@ vec2 HSM_GetScreenPositionOffset(vec2 placement_image_pos, vec2 screen_scale, fl
 
 		pos_offset.x += split_offset_multiplier * HSM_DUALSCREEN_POSITION_OFFSET_BETWEEN_SCREENS / output_aspect;
 	}
-
-	if (screen_index == 1)
-	{
-		pos_offset.x += HSM_SCREEN_POSITION_X / output_aspect;
-		pos_offset.y += HSM_SCREEN_POSITION_Y;
-	}
-
-
 
 	return pos_offset;
 }
@@ -759,14 +750,14 @@ vec4 HSM_GetStoichaicBlurredSample(sampler2D in_sampler, vec2 in_coord, float nu
 float HSM_GetScreenIndex(vec2 viewport_coord)
 {
 	float out_index = 1;
-	float output_aspect = global.FinalViewportSize.x / global.FinalViewportSize.x;
+	float output_aspect = global.FinalViewportSize.x / global.FinalViewportSize.y;
 
 	if (HSM_DUALSCREEN_MODE == 0)
 		out_index = 1;
 	if (HSM_DUALSCREEN_MODE == 1)
-		out_index = (viewport_coord.y < 0.5 + HSM_DUALSCREEN_VIEWPORT_SPLIT_LOCATION * 1.7777 / output_aspect) ? 1 : 2;
+		out_index = (viewport_coord.y < 0.5 + HSM_DUALSCREEN_VIEWPORT_SPLIT_LOCATION / output_aspect) ? 1 : 2;
 	if (HSM_DUALSCREEN_MODE == 2)
-		out_index = (viewport_coord.x < 0.5 + HSM_DUALSCREEN_VIEWPORT_SPLIT_LOCATION * 1.7777 / output_aspect) ? 1 : 2;
+		out_index = (viewport_coord.x < 0.5 + HSM_DUALSCREEN_VIEWPORT_SPLIT_LOCATION / output_aspect) ? 1 : 2;
 
 	return out_index;
 }

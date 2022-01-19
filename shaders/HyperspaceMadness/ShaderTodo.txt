@@ -18,9 +18,7 @@ Mega Bezel Still to Come:
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
-  * Add CoreRequestedRotation to Shader System
   * Auto Rotate
-  * Update Cyberlab
   * Figure out POTATO crashing
   * Test with HDR for good results
     * Gamma for graphics may need to be a post adjustment, current gamma creates banding

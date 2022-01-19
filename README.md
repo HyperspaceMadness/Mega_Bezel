@@ -34,23 +34,25 @@ Installation
 ----------------------------------------
 
 * **You MUST use Retroarch Version 1.9.8 or Later** (It will fail to load on earlier versions)
-  * If you have previous versions of the Mega Bezel installed:
-    * Delete the old Mega Bezel stuff from shaders/shaders_slang/bezel
-  * Inside the .zip is a bezel folder, copy the bezel folder into your Retroarch/shaders/shaders_slang folder
-    * The final path to the Mega bezel should be `Retroarch/shaders/shaders_slang/bezel/Mega_Bezel`
-  * Set video driver to **Vulcan**
-    * It will run in **GLCore** but seems faster in **Vulcan**
-    * Some users have run it successfully in **D3D11** but with a slow load time
-  * Set **Video / Scaling / Aspect Ratio** to **Full**
+* If you have previous versions of the Mega Bezel installed:
+  * Delete the old Mega Bezel stuff from shaders/shaders_slang/bezel
+* Inside the .zip is a bezel folder, copy the bezel folder into your Retroarch/shaders/shaders_slang folder
+  * The final path to the Mega bezel should be `Retroarch/shaders/shaders_slang/bezel/Mega_Bezel`
+* Set video driver to **Vulcan**
+  * It will run in **GLCore** but seems faster in **Vulcan**
+  * Some users have run it successfully in **D3D11** but with a slow load time
+* Open the **Settings** Menu and Set:
+  * **Video / Scaling / Aspect Ratio** to **Full**
     * This will match your monitor aspect aspect ratio
-  * Set **Video / Scaling / Integer Scale** to **OFF**
-  * Set **Video / Output / Rotation** to **Normal**
-  * Set **Settings / Core / Allow Rotation** to **OFF** -- **Important for FB Neo**
-  * Load a preset in the shaders menu, Mega Bezel shader presets are found in:
-    * shaders/shaders_slang/bezel/Mega_Bezel/Presets
-  * When you save a preset make sure you have the **Simple Presets** feature set to **ON**
-    * This will save a preset with a reference to the preset you loaded plus whatever parameter changes you made
-    * This will keep your presets loading properly when the shader updates in the future
+  * **Video / Scaling / Integer Scale** to **OFF**
+  * **Video / Output / Video Rotation** to **Normal**
+  * **User Interface / Show Advanced Settings** to **ON**
+  * **Core / Allow Rotation** to **OFF** -- **Important for FB Neo**
+* **Load a preset** in the shaders menu, Mega Bezel shader presets are found in:
+  * shaders/shaders_slang/bezel/Mega_Bezel/Presets
+* When you save a preset make sure you have the **Simple Presets** feature set to **ON**
+  * This will save a preset with a reference to the preset you loaded plus whatever parameter changes you made
+  * This will keep your presets loading properly when the shader updates in the future
 
 
 
@@ -61,8 +63,10 @@ Choosing a Preset
   * Presets are named/sorted by performance
   * The most flexible and most resource hungry start with index 0.
   * As the name's index number increases the performance of the preset improves but but flexibility decreases.
+----------------------------------------
 
-**Presets in Mega_Bezel / Presets**
+Presets in Mega_Bezel / Presets
+----------------------------------------
 
 - All in the root of the Presets folder use @guest.r's awesome Guest-DrVenom-Advanced CRT shader which is considered the default CRT shader for the Mega Bezel, the only exception to this is the POTATO preset which uses GDV-MINI for performance reasons.
 
@@ -75,13 +79,18 @@ Choosing a Preset
 | MBZ__3__STD__Glass     | ✔           |              | ✔           | SIMPLIFIED    | N/A
 | MBZ__4__STD-NO-REFLECT |            | ✔             | ✔           | SIMPLIFIED    | MBZ__4__BASIC
 | MBZ__5__POTATO         |            | BG ONLY       |              | MINIMAL       | MBZ__5__POTATO
-
+|
 **Descriptions:**
 
   * **Glass** 
     * Presets which show a blurry reflection in the area around the screen
   * **Image Layering**
     * Layering of multiple images for background, crt housing, leds etc
+    * Includes the Automatically Generated Bezel & Frame
+  * **Tube Effects**
+    * Tube Static Reflection Highlight
+    * Tube Diffuse Image
+    * Tube Colored Gel
   * **Full Pre-CRT shader chain** 
     * Includes Grade, MDAPT, ScaleFX & GTU
     * Resolution is tripled in the middle of the chain for ScaleFX 
@@ -103,15 +112,15 @@ Choosing a Preset
 
   * **Community_CRT_Variations**
     - Presets with crt settings created by community members
+    - Thanks to some of our community members who's settings appear here including @BendBombBoom, @NesGuy & @Sonkun
 
   * **Variations**
     * These presets are simple presets referencing one of the presets in the Mega_Bezel folder
     * They reference the original preset then have adjusted parameters or texture paths
 
   * **Experimental**
-    * These presets are work in progress and therfore 
     * **Use at your own risk!**
-    * These may disappear, be renamed, or change behavior at any future release
+    * These presets are work in progress and may disappear, be moved, renamed, or change behavior at any future release
 
 
 
