@@ -1,4 +1,5 @@
 #reference "../4K_Optimized_Presets/CyberLab__Arcade-Raw__ADV.slangp"
 
-shadowMask = "5.000000"
+shadowMask = "10.000000"
+masksize = "1.000000"
 GDV_DECONVERGENCE_ON = "1.000000"
