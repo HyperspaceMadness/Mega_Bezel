@@ -30,7 +30,7 @@ vec2 HSM_GetScreenScaleWithEdgeHeight(float edge_height, vec2 screen_scale)
 	float aspect_ratio = screen_scale.x / screen_scale.y;
 
 	vec2 edge_width_height_as_scale = vec2(0, 0);
-	edge_width_height_as_scale.x = 1 + (edge_height / screen_scale.y) / aspect_ratio / output_aspect_ratio;
+	edge_width_height_as_scale.x = 1 + (edge_height * HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE / screen_scale.y) / aspect_ratio / output_aspect_ratio;
 	edge_width_height_as_scale.y = 1 + edge_height / screen_scale.y;
 
 	return screen_scale * edge_width_height_as_scale;
@@ -613,6 +613,8 @@ float HSM_GetParameterSum()
 					+ HSM_TUBE_BLACK_EDGE_SHARPNESS * 100
 					+ HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE * 100
 					+ HSM_TUBE_BLACK_EDGE_THICKNESS * 100
+					+ HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE * 100
+					+ HSM_TUBE_BLACK_EDGE_LAYERING_MODE
 
 					// //    BEZEL INDEPENDENT SCALE
 					+ HSM_BZL_USE_INDEPENDENT_SCALE

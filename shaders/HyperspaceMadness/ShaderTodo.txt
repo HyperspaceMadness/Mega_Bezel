@@ -10,6 +10,9 @@ Changes:
     * Put in a catch for PS games with a 448 vertical resolution so they show up with a horizontal aspect, like tekken
   * Fixed Core Sampling Multiplier when the Rotate CRT is on
   * Fixed distance between Dual screens for wider monitor setups
+  * On/Off scaling of masks with viewport zoom, defaults to Off
+  * Parameter for Black Edge Under/Over the gel image 
+  * Tube Black Edge Thickness X Scale 
 
 
 
@@ -19,6 +22,8 @@ Mega Bezel Still to Come:
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
   * Auto Rotate
+  * Param for Scaling Mask Size with Viewport zoom
+  * Horizontal Scale of black edge
   * Figure out POTATO crashing
   * Test with HDR for good results
     * Gamma for graphics may need to be a post adjustment, current gamma creates banding
@@ -38,6 +43,7 @@ Mega Bezel Still to Come:
 ----------------------------------------------------
 --- Post V1  ---------------------------------------
 ----------------------------------------------------
+  * Original scaling mode to deal with black final viewport in Parallel RDP in both mupen and Parallel cores.
   * Compensate for Negative Crop, 
     * User crop values should be relative to original core image, not core image + negative crop area 
   * Missing inner Edge static shading?

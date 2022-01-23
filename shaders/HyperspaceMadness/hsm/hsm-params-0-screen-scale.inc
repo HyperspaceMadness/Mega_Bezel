@@ -108,12 +108,14 @@ float HSM_AMBIENT_LIGHTING_DITHERING_SAMPLES = 0;
 #pragma parameter HSM_VIEWPORT_ZOOM									"          Viewport Zoom"  100 10 500 0.2
 float HSM_VIEWPORT_ZOOM = global.HSM_VIEWPORT_ZOOM / 100;
 
+#pragma parameter HSM_VIEWPORT_ZOOM_MASK							"          Zoom CRT Mask"  0 0 1 1
+float HSM_VIEWPORT_ZOOM_MASK = global.HSM_VIEWPORT_ZOOM_MASK;
+
 #pragma parameter HSM_VIEWPORT_POSITION_X							"          Viewport Position X"  0 -500 500 1
 float HSM_VIEWPORT_POSITION_X = -1 * global.HSM_VIEWPORT_POSITION_X / 1000;
 
 #pragma parameter HSM_VIEWPORT_POSITION_Y							"          Viewport Position Y"  0 -500 500 1
 float HSM_VIEWPORT_POSITION_Y = -1 * global.HSM_VIEWPORT_POSITION_Y / 1000;
-
 
 //---------------------------------------------------------------------------------------------------
 //    FLIP & ROTATE
@@ -495,12 +497,11 @@ float HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_BRIGHTNESS = global.HSM_TUBE_COLORED_GEL
 #pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD "          Normal Blend Transparency Threshold" 23 0 100 1
 float HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD = global.HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD / 100;
 
-// #pragma parameter HSM_SHOW_BLACK_EDGE_ON_TOP_OF_COLORED_GEL		    "          Show Black Edge on Top of Colored Gel" 1 0 1 1
-// float HSM_SHOW_BLACK_EDGE_ON_TOP_OF_COLORED_GEL = global.HSM_SHOW_BLACK_EDGE_ON_TOP_OF_COLORED_GEL;
-float HSM_SHOW_BLACK_EDGE_ON_TOP_OF_COLORED_GEL = 1;
-
 #pragma parameter HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL				"          Show CRT on Top of Colored Gel Normal" 0 0 1 1
 float HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL = global.HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL;
+
+#pragma parameter HSM_TUBE_BLACK_EDGE_LAYERING_MODE		                "          Show Black Edge:  UNDER GEL | OVER GEL" 1 0 1 1
+float HSM_TUBE_BLACK_EDGE_LAYERING_MODE = global.HSM_TUBE_BLACK_EDGE_LAYERING_MODE;
 
 //---------------------------------------------------------------------------------------------------
 //    TUBE STATIC REFLECTION
@@ -545,6 +546,9 @@ float HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE = global.HSM_TUBE_STATIC_REFLECTION
 
 #pragma parameter HSM_TUBE_BLACK_EDGE_THICKNESS 					"          Black Edge Thickness" 100 -800 800 5
 #define HSM_TUBE_BLACK_EDGE_THICKNESS (0.7 * global.HSM_TUBE_BLACK_EDGE_THICKNESS / 100)
+
+#pragma parameter HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE 			"          Black Edge Thickness X Scale" 100 0 3000 10
+#define HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE (global.HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE / 100)
 
 
 //---------------------------------------------------------------------------------------------------
