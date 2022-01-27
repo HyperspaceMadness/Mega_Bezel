@@ -237,7 +237,6 @@ alias42 = "BR_LayersOverCRTPass"
 // Combine Passes ----------------------------------------------------------------
 shader43 = ../../shaders/HyperspaceMadness/hsm/hsm-combine-passes.slang
 scale_type43 = viewport
-float_framebuffer43 = true
 alias43 = "CombinePass"
 // Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;LEDImage;TopLayerImage;"

@@ -3,33 +3,26 @@
 Mega Bezel is updated to V 0.9.099 2022-01-22 Rev 1
 
 Changes:
-  * Updated to crt-guest-advanced-2022-01-14-release1
-  * Graduated Sonkun and BendBombBoom presets to the Community_CRT_Variations folder
-  * Updated Cyberlab
-  * Auto Aspect Ratio
-    * Put in a catch for PS games with a 448 vertical resolution so they show up with a horizontal aspect, like tekken
-  * Fixed Core Sampling Multiplier when the Rotate CRT is on
-  * Fixed distance between Dual screens for wider monitor setups
-  * On/Off scaling of masks with viewport zoom, defaults to Off
-  * Parameter for Black Edge Under/Over the gel image 
-  * Tube Black Edge Thickness X Scale 
+  * Changed Color Format on last passes for better HDR behavior (Avoid Washed-Out Look)
+  * Added Presets:
+    * NDS DREZ Preset
+    * PSP DREZ Preset
 
 
-
-Mega Bezel Still to Come:
 
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
+  * Check out Colorize Behavior on DMG-01 (Colored Gameboy)
+  * Multiply mode for CRT Screen
+  * DREZ presets for NDS, Playstation, Platform focused presets?
+  * Different bloom/glow on STD vs ADV
   * Auto Rotate
-  * Param for Scaling Mask Size with Viewport zoom
-  * Horizontal Scale of black edge
+  * Potato NTSC GDV-MINI
   * Figure out POTATO crashing
   * Test with HDR for good results
     * Gamma for graphics may need to be a post adjustment, current gamma creates banding
-  * Black Edge Over/Under Colored Gel. If under needs to happen when before colored gel is added
   * Add vscode link in readme [![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/organization/repository)
-  * Fix Directions for Core Resolution Multiplier, Incorrect if rotated
 
 ----------------------------------------------------
 --- Examples  --------------------------------------

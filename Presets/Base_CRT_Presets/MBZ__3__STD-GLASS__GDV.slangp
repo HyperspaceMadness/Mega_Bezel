@@ -179,7 +179,6 @@ alias24 = "BR_MirrorFullscreenGlowPass"
 // Bezel Reflection ----------------------------------------------------------------
 shader25 = ../../shaders/HyperspaceMadness/hsm/hsm-reflection-glass.slang
 scale_type25 = viewport
-float_framebuffer25 = true
 alias25 = "BR_CRTAndReflectionPass"
 // Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;LEDImage;TopLayerImage;"

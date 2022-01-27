@@ -170,7 +170,7 @@ float HSM_ASPECT_RATIO_EXPLICIT = global.HSM_ASPECT_RATIO_EXPLICIT;
 #pragma parameter HSM_INT_SCALE_BORDER_MIN_HEIGHT 					"          Int Scale Border Min Height %" 5.5 -20 20 0.5
 float HSM_INT_SCALE_BORDER_MIN_HEIGHT = global.HSM_INT_SCALE_BORDER_MIN_HEIGHT;
 
-#pragma parameter HSM_VERTICAL_PRESET 								"          Vertical Preset (E.G. 4K Vertical)" 0 0 1 1
+#pragma parameter HSM_VERTICAL_PRESET 								"       Preset is for Monitor Portrait Mode (Smaller CRT Screen)" 0 0 1 1
 float HSM_VERTICAL_PRESET = global.HSM_VERTICAL_PRESET;
 
 // Non integer scale is set to 82.97 so that cores which output 224px will have integer scale by default
@@ -389,10 +389,10 @@ float HSM_AB_COMPARE_AREA = global.HSM_AB_COMPARE_AREA;
 #pragma parameter HSM_AB_COMPARE_SPLIT_POSITION   		            "          Splitscreen Position" 50 0 100 0.2
 float HSM_AB_COMPARE_SPLIT_POSITION = global.HSM_AB_COMPARE_SPLIT_POSITION / 100;
 
-#pragma parameter HSM_AB_COMPARE_FREEZE_CRT_TUBE   				    "          Freeze CRT Tube" 0 0 1 1
+#pragma parameter HSM_AB_COMPARE_FREEZE_CRT_TUBE   				    "          Freeze CRT Tube (Freeze Left, New changes on Right)" 0 0 1 1
 float HSM_AB_COMPARE_FREEZE_CRT_TUBE = global.HSM_AB_COMPARE_FREEZE_CRT_TUBE;
 
-#pragma parameter HSM_AB_COMPARE_FREEZE_GRAPHICS   				    "          Freeze Graphics" 0 0 1 1
+#pragma parameter HSM_AB_COMPARE_FREEZE_GRAPHICS   				    "          Freeze Graphics (Freeze Left, New changes on Right)" 0 0 1 1
 float HSM_AB_COMPARE_FREEZE_GRAPHICS = global.HSM_AB_COMPARE_FREEZE_GRAPHICS;
 
 
@@ -544,7 +544,7 @@ float HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE = global.HSM_TUBE_STATIC_REFLECTION
 #pragma parameter HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE 				"          Black Edge Curvature Scale Multiplier" 100 100 8000 10
 #define HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE global.HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE / 100
 
-#pragma parameter HSM_TUBE_BLACK_EDGE_THICKNESS 					"          Black Edge Thickness" 100 -800 800 5
+#pragma parameter HSM_TUBE_BLACK_EDGE_THICKNESS 					"          Black Edge Thickness" 100 -800 3000 5
 #define HSM_TUBE_BLACK_EDGE_THICKNESS (0.7 * global.HSM_TUBE_BLACK_EDGE_THICKNESS / 100)
 
 #pragma parameter HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE 			"          Black Edge Thickness X Scale" 100 0 3000 10
