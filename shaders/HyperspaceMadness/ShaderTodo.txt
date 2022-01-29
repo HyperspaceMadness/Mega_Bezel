@@ -1,6 +1,6 @@
 ![Mega_Bezel_Logo|512x256, 75%](upload://6PNkvcMF9Go9Wnk6OJXfYR1opXI.png) 
 
-Mega Bezel is updated to V 0.9.099 2022-01-22 Rev 1
+Mega Bezel is updated to V 0.9.100 2022-01-29 Rev 1
 
 Changes:
   * Changed Color Format on last passes for better HDR behavior (Avoid Washed-Out Look)
@@ -8,6 +8,7 @@ Changes:
     * NDS DREZ Preset
     * PSP DREZ Preset
   * Fixed Logo Orientation with Rotate CRT
+  * Update Guest to crt-guest-advanced-2022-01-14-release1
 
 
 ----------------------------------------------------

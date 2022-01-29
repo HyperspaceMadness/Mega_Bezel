@@ -87,10 +87,8 @@ layout(std140, set = 0, binding = 0) uniform UBO
 // #pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader)" 1.0 1.0 4.0 1.0  // Joint parameter with main pass, values must match
 // #define prescalex        params.prescalex     // prescale-x factor
 
-// #pragma parameter GDV_INTERLACE_SCANLINE_SATURATION "          Interlacing (Scanline) Saturation" 0.40 0.0 1.0 0.05
-
-
-#define iscans        GDV_INTERLACE_SCANLINE_SATURATION     // interlace saturation
+#pragma parameter iscans 	"          Interlacing (Scanline) Saturation" 0.25 0 1 0.05
+#define iscans global.iscans
 
 bool use_vert_scanlines_bool = false;
 #pragma stage vertex

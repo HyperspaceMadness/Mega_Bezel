@@ -23,7 +23,7 @@
 */
 
 // Screen Scale Required Parameters
-#pragma parameter HSM_MEGA_BEZEL_TITLE								"[ --- HSM MEGA BEZEL 0.9.099 2022-01-22 Rev 1--- ]" 0 0 0.01 0.01
+#pragma parameter HSM_MEGA_BEZEL_TITLE								"[ --- HSM MEGA BEZEL 0.9.100 2022-01-29 Rev 1--- ]" 0 0 0.01 0.01
 
 #pragma parameter HSM_RESOLUTION_DEBUG_ON							"          Show Resolution Info" 0 0 1 1
 float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
@@ -298,8 +298,8 @@ float HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = global.HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR
 #pragma parameter HSM_INTERLACE_SCANLINE_EFFECT 					"          Interlacing Scanline Effect" 20 0 100 5
 #define HSM_INTERLACE_SCANLINE_EFFECT global.HSM_INTERLACE_SCANLINE_EFFECT / 100
 
-#pragma parameter GDV_INTERLACE_SCANLINE_SATURATION 				"          Interlacing (Scanline) Saturation" 25 0 100 5
-#define GDV_INTERLACE_SCANLINE_SATURATION global.GDV_INTERLACE_SCANLINE_SATURATION / 100
+#pragma parameter iscans 				                            "          Interlacing (Scanline) Saturation" 0.25 0 1 0.05
+#define iscans global.iscans
 
 
 //---------------------------------------------------------------------------------------------------
