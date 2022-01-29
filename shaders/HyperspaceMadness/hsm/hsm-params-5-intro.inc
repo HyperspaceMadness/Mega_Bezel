@@ -48,14 +48,14 @@
 #pragma parameter HSM_INTRO_LOGO_HEIGHT        					"          Logo Height (0 for exact resolution)"  42.86 0 100 1
 #define HSM_INTRO_LOGO_HEIGHT (global.HSM_INTRO_LOGO_HEIGHT / 100)
 
-#pragma parameter HSM_INTRO_LOGO_RES_X        					"          Logo Res X"  192 0 3840 16
-#define HSM_INTRO_LOGO_RES_X global.HSM_INTRO_LOGO_RES_X
-
-#pragma parameter HSM_INTRO_LOGO_RES_Y        					"          Logo Res Y"  96 0 3840 16
-#define HSM_INTRO_LOGO_RES_Y global.HSM_INTRO_LOGO_RES_Y
-
 #pragma parameter HSM_INTRO_LOGO_PLACEMENT        				"          Logo Placement - Middle | TL | TR | BL | BR"  0 0 4 1
 #define HSM_INTRO_LOGO_PLACEMENT global.HSM_INTRO_LOGO_PLACEMENT
+
+#pragma parameter HSM_INTRO_LOGO_POS_X        					"          Logo Pos X"  0 -100 100 0.5
+#define HSM_INTRO_LOGO_POS_X global.HSM_INTRO_LOGO_POS_X / 100
+
+#pragma parameter HSM_INTRO_LOGO_POS_Y        					"          Logo Pos Y"  2 -100 100 0.5
+#define HSM_INTRO_LOGO_POS_Y global.HSM_INTRO_LOGO_POS_Y / 100
 
 // #pragma parameter HSM_INTRO_LOGO_WAIT     					"          Logo Wait Before Start Frames"  20 0 1200 5
 // #define HSM_INTRO_LOGO_WAIT global.HSM_INTRO_LOGO_WAIT

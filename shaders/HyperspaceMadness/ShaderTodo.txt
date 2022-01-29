@@ -7,7 +7,7 @@ Changes:
   * Added Presets:
     * NDS DREZ Preset
     * PSP DREZ Preset
-
+  * Fixed Logo Orientation with Rotate CRT
 
 
 ----------------------------------------------------

@@ -89,7 +89,7 @@ vec4 AntiFlicker(vec2 in_coord, vec4 current)
 // -----------------------------------------------------------------------------
 // TV Startup Static Animation
 // -----------------------------------------------------------------------------
-vec4 GetColorWithIntro(vec4 in_color, vec2 in_coord)
+vec4 GetColorWithIntro(vec4 in_color, vec2 in_coord, in sampler2D in_logo_image_sampler2d)
 {
    vec4 out_color = in_color;
 
@@ -98,6 +98,14 @@ vec4 GetColorWithIntro(vec4 in_color, vec2 in_coord)
    in_coord.y = abs(HSM_FLIP_VIEWPORT_VERTICAL - HSM_FLIP_CORE_VERTICAL) > 0.5 ? 1 - in_coord.y : in_coord.y;
    in_coord.x = abs(HSM_FLIP_VIEWPORT_HORIZONTAL - HSM_FLIP_CORE_HORIZONTAL) > 0.5 ? 1 - in_coord.x : in_coord.x;
 
+
+   // in_coord = HSM_RotateCoordinate(in_coord, HSM_ROTATE_CORE_IMAGE);
+   if (HSM_ROTATE_CORE_IMAGE > 0.5)
+   {
+      in_coord.xy = in_coord.yx;
+      in_coord.y = (in_coord.y - 0.5) * -1 + 0.5;
+   }
+   
    float frame_count = HSM_INTRO_WHEN_TO_SHOW == 2 ? CURRENT_FRAME_FROM_CACHE_INFO : global.FrameCount;
 
    float mask_wait = 20 / HSM_INTRO_SPEED;
@@ -135,8 +143,12 @@ vec4 GetColorWithIntro(vec4 in_color, vec2 in_coord)
 
 	if (frame_count <= full_seq_length)
 	{
-		vec2 noise_res = global.SourceSize.xy;
+      vec2 noise_res = global.SourceSize.xy;
       noise_res = min(noise_res, vec2(640, 480));
+
+      if (HSM_ROTATE_CORE_IMAGE > 0.5)
+         noise_res.xy = noise_res.yx;
+
 		vec2 quantized_coord = vec2(floor((in_coord.x + 0.01) * noise_res.x) / noise_res.x, floor((in_coord.y + 0.01) * noise_res.y) / noise_res.y);
 
 		float width = (frame_count - mask_wait) / (mask_fade_horizontal/2);
@@ -166,15 +178,15 @@ vec4 GetColorWithIntro(vec4 in_color, vec2 in_coord)
 
 		out_color = HSM_BlendModeLayerMix(out_color, noise_color, HSM_INTRO_NOISE_BLEND_MODE, noise_opacity);
 
-      vec2 intro_image_res = vec2(HSM_INTRO_LOGO_RES_X, HSM_INTRO_LOGO_RES_Y);
+      vec2 intro_image_res = textureSize(in_logo_image_sampler2d, 0);
       float intro_image_aspect = intro_image_res.x/intro_image_res.y;
-      // vec2 intro_image_scale = intro_image_res / global.OriginalSize.xy / SCREEN_ASPECT;
 
       float intro_logo_height = HSM_INTRO_LOGO_HEIGHT;
       if (intro_logo_height == 0)
-         intro_logo_height = intro_image_res.y / global.OriginalSize.y;
+         intro_logo_height = HSM_ROTATE_CORE_IMAGE > 0.5 ? intro_image_res.y / global.OriginalSize.y
+                                                         : intro_image_res.y / global.OriginalSize.x;
 
-      vec2 intro_image_scale = vec2(intro_logo_height * intro_image_aspect / SCREEN_ASPECT, intro_logo_height) * min(SCREEN_ASPECT * 0.9, 1);
+      vec2 intro_image_scale = vec2(intro_logo_height * intro_image_aspect / SCREEN_ASPECT, intro_logo_height) * min(SCREEN_ASPECT, 1);
       intro_image_scale = floor(intro_image_scale * global.SourceSize.xy) / global.SourceSize.xy;
 
       if (HSM_DUALSCREEN_MODE > 0.5)
@@ -188,6 +200,9 @@ vec4 GetColorWithIntro(vec4 in_color, vec2 in_coord)
             in_coord.x = in_coord.x * 2 - MAX_NEGATIVE_CROP;
          }
       }
+
+      in_coord.x -= HSM_INTRO_LOGO_POS_X;
+      in_coord.y += HSM_INTRO_LOGO_POS_Y;
 
       // Center
       vec2 coord_in_intro_image = (in_coord - 0.5) / intro_image_scale + 0.5;
@@ -271,7 +286,7 @@ void main()
       FragColor = AntiFlicker(viewport_coord_adjusted, FragColor);
 
    if (HSM_INTRO_WHEN_TO_SHOW > 0)
-      FragColor = GetColorWithIntro(FragColor, viewport_coord_adjusted);
+      FragColor = GetColorWithIntro(FragColor, viewport_coord_adjusted, IntroImage);
 #endif
 
    bool cache_info_changed = HSM_CheckCacheInfoChanged();
