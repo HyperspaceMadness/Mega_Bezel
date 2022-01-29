@@ -298,7 +298,7 @@ float HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = global.HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR
 #pragma parameter HSM_INTERLACE_SCANLINE_EFFECT 					"          Interlacing Scanline Effect" 20 0 100 5
 #define HSM_INTERLACE_SCANLINE_EFFECT global.HSM_INTERLACE_SCANLINE_EFFECT / 100
 
-#pragma parameter GDV_INTERLACE_SCANLINE_SATURATION 				"          Interlacing (Scanline) Saturation" 40 0 100 5
+#pragma parameter GDV_INTERLACE_SCANLINE_SATURATION 				"          Interlacing (Scanline) Saturation" 25 0 100 5
 #define GDV_INTERLACE_SCANLINE_SATURATION global.GDV_INTERLACE_SCANLINE_SATURATION / 100
 
 

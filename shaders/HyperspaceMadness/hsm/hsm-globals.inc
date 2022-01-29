@@ -539,6 +539,7 @@ float HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE;
 	float blendMode;
 	float scangammaoffset;
 	float rolling_scan;
+	float scan_falloff;
 	float slotmask;
 	float slotmask1;
 	float barspeed;

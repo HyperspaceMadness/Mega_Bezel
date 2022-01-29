@@ -68,7 +68,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter downsample_levely "          Downsampling-Y (High-res content, pre-scalers)" 0.0 0.0 3.0 0.05
 #define downsample_levely         params.downsample_levely     // downsample level
 
-#pragma parameter iscans "          Interlacing (Scanline) Saturation" 0.40 0.0 1.0 0.05
+#pragma parameter iscans "          Interlacing (Scanline) Saturation" 0.25 0.0 1.0 0.05
 #define iscans        params.iscans     // interlace saturation
 
 #pragma stage vertex
