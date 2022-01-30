@@ -1,5 +1,20 @@
 #reference "../4K_Optimized_Presets/CyberLab__Composite-Pure__ADV.slangp"
 
+
+
+mask_gamma = "1.549999"
+
+
+
+
+
+wp_temperature = "6800.000000"
+maskstr = "0.980000"
+
+
+
+
+
 post_br = "307.000000"
 
 HSM_SCALEFX_ON = "0.000000"
@@ -13,10 +28,10 @@ g_sat = "0.000000"
 compositeConnection = "0.000000"
 
 
-g_crtgamut = "2.000000"
+g_crtgamut = "1.000000"
 
 
-halation = "0.075000"
+halation = "0.05000"
 shadowMask = "6.000000"
 masksize = "0.000000"
 

@@ -1,15 +1,26 @@
 #reference "../4K_Optimized_Presets/CyberLab__Arcade-Sharp__PVM-Edition__ADV.slangp"
 
+
+gamma_c = "1.859999"
+wp_temperature = "7000.000000"
+
+
+g_sat = "0.000000"
+halation = "0.050000"
+
+
+
 post_br = "307.000000"
-gsl = "1.000000"
+gsl = "2.000000"
 scanline1 = "9.000000"
 scanline2 = "9.000000"
 beam_min = "1.350000"
 beam_max = "1.300000"
-maskstr = "0.900000"
-masksize = "1.000000"
-g_crtgamut = "2.000000"
-g_hue_degrees = "0.000000"
+
+maskstr = "0.980000"
+masksize = "0.000000"
+g_crtgamut = "1.000000"
+g_hue_degrees = "-3.000000"
 
 HSM_INT_SCALE_MODE = "1.000000"
 
