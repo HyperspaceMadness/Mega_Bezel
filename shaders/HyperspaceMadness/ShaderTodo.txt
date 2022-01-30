@@ -3,17 +3,13 @@
 Mega Bezel is updated to V 0.9.100 2022-01-29 Rev 1
 
 Changes:
-  * Changed Color Format on last passes for better HDR behavior (Avoid Washed-Out Look)
-  * Added Presets:
-    * NDS DREZ Preset
-    * PSP DREZ Preset
-  * Fixed Logo Orientation with Rotate CRT
-  * Update Guest to crt-guest-advanced-2022-01-14-release1
-
+  * 
 
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
+  * Increase Black edge to 5000
+  * Add DREZ LCD Presets
   * Check out Colorize Behavior on DMG-01 (Colored Gameboy)
   * Multiply mode for CRT Screen
   * DREZ presets for NDS, Playstation, Platform focused presets?
