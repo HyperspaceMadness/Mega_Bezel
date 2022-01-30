@@ -44,6 +44,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float bsize;
 	float c_shape;
 	float slotmask1;
+	float scan_falloff;	
 } global;
 
 #pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
@@ -60,7 +61,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter c_shape "          Curvature Shape" 0.25 0.05 0.60 0.05
 #define c_shape        global.c_shape     // curvature shape
 
-#pragma parameter csize "          Corner size" 0.0 0.0 0.25 0.01
+#pragma parameter csize "          Corner Size" 0.0 0.0 0.25 0.01
 #define csize        global.csize     // corner size
 
 #pragma parameter bsize "          Border smoothness" 400.0 100.0 700.0 10.0
@@ -97,10 +98,10 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter scanline2 "          Scanline Beam Shape Edges" 8.0 3.0 40.0 1.0 
 #define scanline2    params.scanline2      // scanline param, vertical sharpness
 
-#pragma parameter beam_min "          Scanline Shape Dark Pixels" 1.30 0.25 3.5 0.05
+#pragma parameter beam_min "          Scanline Shape Dark Pixels" 1.30 0.25 5.0 0.05
 #define beam_min     params.beam_min     // dark area beam min - narrow
 
-#pragma parameter beam_max "          Scanline Shape Bright Pixels" 1.00 0.4 2.5 0.05
+#pragma parameter beam_max "          Scanline Shape Bright Pixels" 1.00 0.4 3.5 0.025
 #define beam_max     params.beam_max     // bright area beam max - wide
 
 #pragma parameter beam_size "          Increased Bright Scanline Beam" 0.60 0.0 1.0 0.05
@@ -109,8 +110,11 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter vertmask "          Scanline Color Deconvergence" 0.0 -1.0 1.0 0.1
 #define vertmask     params.vertmask     // Scanline deconvergence colors
 
-#pragma parameter scans "          Scanline Saturation" 0.60 0.0 1.0 0.05
+#pragma parameter scans "          Scanline Saturation / Mask Falloff" 0.60 0.0 3.5 0.05
 #define scans        params.scans     // scanline saturation
+
+#pragma parameter scan_falloff "          Scanline Falloff" 1.0 0.25 2.0 0.05
+#define scan_falloff        global.scan_falloff     // scanline falloff
 
 #pragma parameter bogus_masks "[ CRT MASK OPTIONS ]: " 0.0 0.0 1.0 1.0
 
@@ -542,8 +546,8 @@ if (!interb)
 	
 	float wf1, wf2;
 	
-	vec3 cref1 = mix(sctmp, scolor1, beam_size); float creff1 = max(max(cref1.r,cref1.g),cref1.b);
-	vec3 cref2 = mix(sctmp, scolor2, beam_size); float creff2 = max(max(cref2.r,cref2.g),cref2.b);
+	vec3 cref1 = mix(sctmp, scolor1, beam_size); float creff1 = pow(max(max(cref1.r,cref1.g),cref1.b), scan_falloff);
+	vec3 cref2 = mix(sctmp, scolor2, beam_size); float creff2 = pow(max(max(cref2.r,cref2.g),cref2.b), scan_falloff);
 
 	float f1 = f; 
 	float f2 = 1.0-f;
@@ -565,8 +569,8 @@ if (!interb)
 	cref1 = color1 / mc1; cref1=cref1*cref1; cref1*=cref1;
 	cref2 = color2 / mc2; cref2=cref2*cref2; cref2*=cref2;
 
-	w1 = mix(w1*mix(one, cref1, scans), w1, wf1*(1.0+0.2*scans)); w1 = min(w1*color1, mc1)/(color1 + eps);
-	w2 = mix(w2*mix(one, cref2, scans), w2, wf2*(1.0+0.2*scans)); w2 = min(w2*color2, mc2)/(color2 + eps);
+	w1 = max( mix(w1*mix(one, cref1, scans), w1, wf1*min((1.0+0.15*scans), 1.2)), 0.0); w1 = min(w1*color1, mc1)/(color1 + eps);
+	w2 = max( mix(w2*mix(one, cref2, scans), w2, wf2*min((1.0+0.15*scans), 1.2)), 0.0); w2 = min(w2*color2, mc2)/(color2 + eps);
 	
 	// Scanline Deconvergence
 	

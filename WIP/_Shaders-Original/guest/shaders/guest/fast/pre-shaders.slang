@@ -279,10 +279,6 @@ void main()
          res = mix(color1, color2, f);
       }	
 
-      if (imgColor.r == 0.0) res.r = 0.0;
-      if (imgColor.g == 0.0) res.g = 0.0;
-      if (imgColor.b == 0.0) res.b = 0.0;
-
       res.rgb = fix_lut (res.rgb, imgColor.rgb);
 	  
       color = mix(imgColor.rgb, res.rgb, min(TNTC,1.0));

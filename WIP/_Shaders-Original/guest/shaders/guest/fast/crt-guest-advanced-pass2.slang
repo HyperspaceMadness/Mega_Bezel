@@ -42,13 +42,17 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float warpX;
 	float warpY;
 	float csize;
-	float bsize;
+	float bsize1;
 	float intres;
 	float c_shape;
 	float barspeed;
 	float barintensity;
 	float bardir;
 	float slotmask1;
+	float sborder;
+	float scan_falloff;
+	float overscanX;
+	float overscanY;	
 } global;
 
 #pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
@@ -67,11 +71,20 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter c_shape "          Curvature Shape" 0.25 0.05 0.60 0.05
 #define c_shape        global.c_shape     // curvature shape
 
-#pragma parameter csize "          Corner size" 0.0 0.0 0.25 0.01
+#pragma parameter overscanX "          Overscan X original pixels" 0.0 -100.0 100.0 1.0
+#define overscanX        global.overscanX     // OverscanX pixels
+
+#pragma parameter overscanY "          Overscan Y original pixels" 0.0 -100.0 100.0 1.0
+#define overscanY        global.overscanY     // OverscanY pixels
+
+#pragma parameter csize "          Corner Size" 0.0 0.0 0.25 0.005
 #define csize        global.csize     // corner size
 
-#pragma parameter bsize "          Border smoothness" 400.0 100.0 700.0 10.0
-#define bsize        global.bsize     // border smoothness 
+#pragma parameter bsize1 "          Border Size" 0.01 0.0 2.0 0.01
+#define bsize1        global.bsize1     // border size
+
+#pragma parameter sborder "          Border Intensity" 0.75 0.25 2.0 0.05
+#define sborder       global.sborder     // border intensity
 
 #pragma parameter barspeed "          Hum Bar Speed" 50.0 5.0 200.0 1.0
 
@@ -84,7 +97,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter glow "          Glow Strength" 0.08 -2.0 2.0 0.01
 #define glow         params.glow     // Glow Strength
 
-#pragma parameter bloom "          Bloom Strength" 0.0 0.0 2.0 0.05
+#pragma parameter bloom "          Bloom Strength" 0.0 -2.0 2.0 0.05
 #define bloom         params.bloom     // bloom effect
 
 #pragma parameter halation "          Halation Strength" 0.0 0.0 2.0 0.025
@@ -110,10 +123,10 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter scanline2 "          Scanline Beam Shape Edges" 8.0 3.0 40.0 1.0 
 #define scanline2    params.scanline2      // scanline param, vertical sharpness
 
-#pragma parameter beam_min "          Scanline Shape Dark Pixels" 1.30 0.25 3.5 0.05
+#pragma parameter beam_min "          Scanline Shape Dark Pixels" 1.30 0.25 5.0 0.05
 #define beam_min     params.beam_min     // dark area beam min - narrow
 
-#pragma parameter beam_max "          Scanline Shape Bright Pixels" 1.00 0.4 2.5 0.05
+#pragma parameter beam_max "          Scanline Shape Bright Pixels" 1.00 0.4 3.5 0.025
 #define beam_max     params.beam_max     // bright area beam max - wide
 
 #pragma parameter beam_size "          Increased Bright Scanline Beam" 0.60 0.0 1.0 0.05
@@ -122,8 +135,11 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter vertmask "          Scanline Color Deconvergence" 0.0 -1.0 1.0 0.1
 #define vertmask     params.vertmask     // Scanline deconvergence colors
 
-#pragma parameter scans "          Scanline Saturation" 0.60 0.0 1.0 0.05
+#pragma parameter scans "          Scanline Saturation / Mask Falloff" 0.60 0.0 2.5 0.05
 #define scans        params.scans     // scanline saturation
+
+#pragma parameter scan_falloff "          Scanline Falloff" 1.0 0.25 2.0 0.05
+#define scan_falloff        global.scan_falloff     // scanline falloff
 
 #pragma parameter bogus_masks "[ CRT MASK OPTIONS ]: " 0.0 0.0 1.0 1.0
 
@@ -420,16 +436,19 @@ float humbar(float pos)
 	}	
 }
 
-// Borrowed from cgwg's crt-geom, under GPL
+float corner(vec2 pos) {
+	vec2 b = vec2(bsize1, bsize1) *  vec2(1.0, OutputSize.x/OutputSize.y) * 0.05;
+	pos = clamp(pos, 0.0, 1.0);
+	pos = abs(2.0*(pos - 0.5));
+	float csize1 = mix(400.0, 7.0,  pow(4.0*csize, 0.10));
+	float crn = dot(pow(pos, csize1.xx), vec2(1.0, OutputSize.y/OutputSize.x));
+	crn = (csize == 0.0) ? max(pos.x, pos.y) : pow(crn, 1.0/csize1);
+	pos = max(pos, crn);
+	vec2 res = (bsize1 == 0.0) ? 1.0.xx : mix(0.0.xx, 1.0.xx, smoothstep(1.0.xx, 1.0.xx-b, sqrt(pos)));
+	res = pow(res, sborder.xx);	
+	return sqrt(res.x*res.y);
+}
 
-float corner(vec2 coord)
-{
-	coord = min(coord, vec2(1.0)-coord) * vec2(1.0, OutputSize.y/OutputSize.x);
-	vec2 cdist = vec2(max(csize/3.0, max((1.0-smoothstep(100.0,600.0,bsize))*0.01,0.002)));
-	coord = (cdist - min(coord,cdist));
-	float dist = sqrt(dot(coord,coord));
-	return clamp((cdist.x-dist)*bsize,0.0, 1.0);
-} 
 
 void main()
 {
@@ -457,9 +476,11 @@ void main()
 		texcoord = Overscan(texcoord, scan, scan);
 		if (IOS == 1.0 || IOS == 3.0) texcoord = vec2(TEX0.x, texcoord.y);
 	}
+	
+	texcoord = Overscan(texcoord, (SourceSize.x - overscanX)/SourceSize.x, (SourceSize.y - overscanY)/SourceSize.y);
 
 	vec2 pos  = Warp(texcoord);
-	vec2 cpos = (IOS > 2.5) ? TEX0 : texcoord;
+	vec2 cpos = ((IOS > 2.5) || (IOS == 0.0 && overscanX >= 0.0 && overscanY >= 0.0)) ? TEX0 : texcoord;
 	float corner0 = corner(Warp(cpos));
 
 	float coffset = 0.5;
@@ -510,8 +531,8 @@ if (!interb)
 	
 	float wf1, wf2;
 	
-	vec3 cref1 = mix(sctmp, scolor1, beam_size); float creff1 = max(max(cref1.r,cref1.g),cref1.b);
-	vec3 cref2 = mix(sctmp, scolor2, beam_size); float creff2 = max(max(cref2.r,cref2.g),cref2.b);
+	vec3 cref1 = mix(sctmp, scolor1, beam_size); float creff1 = pow(max(max(cref1.r,cref1.g),cref1.b), scan_falloff);
+	vec3 cref2 = mix(sctmp, scolor2, beam_size); float creff2 = pow(max(max(cref2.r,cref2.g),cref2.b), scan_falloff);
 
 	float f1 = f; 
 	float f2 = 1.0-f;
@@ -533,8 +554,8 @@ if (!interb)
 	cref1 = color1 / mc1; cref1=cref1*cref1; cref1*=cref1;
 	cref2 = color2 / mc2; cref2=cref2*cref2; cref2*=cref2;
 
-	w1 = mix(w1*mix(one, cref1, scans), w1, wf1*(1.0+0.2*scans)); w1 = min(w1*color1, mc1)/(color1 + eps);
-	w2 = mix(w2*mix(one, cref2, scans), w2, wf2*(1.0+0.2*scans)); w2 = min(w2*color2, mc2)/(color2 + eps);
+	w1 = max( mix(w1*mix(one, cref1, scans), w1, wf1*min((1.0+0.15*scans), 1.2)), 0.0); w1 = min(w1*color1, mc1)/(color1 + eps);
+	w2 = max( mix(w2*mix(one, cref2, scans), w2, wf2*min((1.0+0.15*scans), 1.2)), 0.0); w2 = min(w2*color2, mc2)/(color2 + eps);
 	
 	// Scanline Deconvergence
 	
