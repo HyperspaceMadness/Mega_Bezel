@@ -95,7 +95,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter scanline1 "          Scanline Beam Shape Center" 6.0 0.0 20.0 0.5
 #define scanline1    params.scanline1      // scanline param, vertical sharpness
 
-#pragma parameter scanline2 "          Scanline Beam Shape Edges" 8.0 3.0 40.0 1.0 
+#pragma parameter scanline2 "          Scanline Beam Shape Edges" 8.0 3.0 50.0 1.0 
 #define scanline2    params.scanline2      // scanline param, vertical sharpness
 
 #pragma parameter beam_min "          Scanline Shape Dark Pixels" 1.30 0.25 5.0 0.05
@@ -118,10 +118,10 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter bogus_masks "[ CRT MASK OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-#pragma parameter shadowMask "          CRT Mask: 0:CGWG, 1-4:Lottes, 5-9:'Trinitron'" 0.0 -1.0 11.0 1.0
+#pragma parameter shadowMask "          CRT Mask: 0:CGWG, 1-4:Lottes, 5-10:'Trinitron'" 0.0 -1.0 12.0 1.0
 #define shadowMask   params.shadowMask     // Mask Style
 
-#pragma parameter maskstr "          Mask Strength (0, 5-11)" 0.3 -0.5 1.0 0.05
+#pragma parameter maskstr "          Mask Strength (0, 5-12)" 0.3 -0.5 1.0 0.05
 #define maskstr         params.maskstr      // CGWG Mask Strength
 
 #pragma parameter mcut "          Mask 5-9 Low Strength" 1.10 0.0 2.0 0.05
@@ -142,7 +142,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter slotmask1 "          Slot Mask Strength Dark Pixels" 0.0 0.0 1.0 0.05
 #define slotmask1     global.slotmask1
 
-#pragma parameter slotwidth "          Slot Mask Width" 2.0 1.0 6.0 0.5
+#pragma parameter slotwidth "          Slot Mask Width" 2.0 1.0 8.0 1.0
 #define slotwidth    params.slotwidth     // Slot Mask Width
 
 #pragma parameter double_slot "          Slot Mask Height: 2x1 or 4x1" 1.0 1.0 2.0 1.0
@@ -329,19 +329,54 @@ vec3 Mask(vec2 pos, float mx)
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
 	}
 	
-	// BW Trinitron mask 7 - 9
-	else if (shadowMask > 6.5 && shadowMask < 9.5)
+	// BW Trinitron mask 7
+	else if (shadowMask == 7.0)
 	{
-		float fdivid = 0.49; if (shadowMask == 9.0) fdivid = 0.70;
-		float mdivid = 2.00; if (shadowMask >  7.5) mdivid = 3.00;		
-		float maskTmp = clamp(mix( mix(1.0, 0.0, mcut), mix(1.0, 0.0, maskstr), mx), 0.0, 1.0) * dark_compensate;
-		mask = vec3(maskTmp);
-		pos.x = fract(pos.x/mdivid);
-		if  (pos.x < fdivid) mask = vec3(1.0);
+		mask = vec3(0.0);		
+		pos.x = fract(pos.x/2.0);
+		if  (pos.x < 0.49)
+		{	mask  = 0.0.xxx;
+		}
+		else     mask = 1.0.xxx;
+		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
 	}    
 
-	// 4k mask
+	// BW Trinitron mask 8
+	else if (shadowMask == 8.0)
+	{
+		mask = vec3(0.0);
+		pos.x = fract(pos.x/3.0);
+		if      (pos.x < 0.3) mask = 0.0.xxx;
+		else if (pos.x < 0.6) mask = 1.0.xxx;
+		else                    mask = 1.0.xxx;
+		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
+	}    
+
+	// Magenta - Green - Black mask
+	else if (shadowMask == 9.0)
+	{
+		mask = vec3(0.0);
+		pos.x = fract(pos.x/3.0);
+		if      (pos.x < 0.3) mask.rb = 1.0.xx;
+		else if (pos.x < 0.6) mask.g  = 1.0;
+		else                  mask    = 0.0.xxx;
+		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;	
+	}  
+	
+	// RGB - Black mask
 	else if (shadowMask == 10.0)
+	{
+		mask = vec3(0.0);
+		pos.x = fract(pos.x * 0.25);
+		if      (pos.x < 0.2)  mask  = 0.0.xxx;
+		else if (pos.x < 0.4)  mask.r = 1.0;
+		else if (pos.x < 0.7)  mask.g = 1.0;	
+		else                   mask.b = 1.0;
+		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;		
+	}  
+
+	// 4k mask
+	else if (shadowMask == 11.0)
 	{
 		mask = vec3(mc);
 		pos.x = fract(pos.x * 0.25);
@@ -361,7 +396,7 @@ vec3 Mask(vec2 pos, float mx)
 	}     
  
 	return mask;
-}  
+}
 
 float SlotMask(vec2 pos, float m)
 {

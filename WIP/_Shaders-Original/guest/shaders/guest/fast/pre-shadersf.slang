@@ -215,7 +215,7 @@ void main()
 	vec3 c = clamp(color, 0.0, 1.0);
 	
 	vec3 scolor1 = normalize(pow(color + 0.000000001, vec3(wp_saturation)))*length(color);
-	float luma = dot(color, vec3(0.2126, 0.7152, 0.0722));
+	float luma = dot(color, vec3(0.299, 0.587, 0.114));
 	vec3 scolor2 = mix(vec3(luma), color, wp_saturation);
 	color = (wp_saturation > 1.0) ? scolor1 : scolor2;
    
