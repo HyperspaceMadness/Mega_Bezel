@@ -3,23 +3,19 @@
 Mega Bezel is updated to V 0.9.101 2022-01-30 Rev 1
 
 Changes:
-  * Updated Guest to crt-guest-advanced-2022-01-30-release1
-  * Added DREZ LCD-GRID presets for NDS, 3DS & PSP
+  * Added parameters for Ambient Lighting amount and scale for Tube Diffuse and Colored Gel
 
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
-  * Increase Black edge to 5000
-  * Add DREZ LCD Presets
+  * Gel Night Lighting Amount
+  * DREZ LCD STD Presets
   * Check out Colorize Behavior on DMG-01 (Colored Gameboy)
   * Multiply mode for CRT Screen
-  * DREZ presets for NDS, Playstation, Platform focused presets?
   * Different bloom/glow on STD vs ADV
   * Auto Rotate
   * Potato NTSC GDV-MINI
   * Figure out POTATO crashing
-  * Test with HDR for good results
-    * Gamma for graphics may need to be a post adjustment, current gamma creates banding
   * Add vscode link in readme [![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/organization/repository)
 
 ----------------------------------------------------

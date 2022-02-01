@@ -470,6 +470,13 @@ float HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS = global.HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNE
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_GAMMA                      "          Gamma Adjust" 1 0 5 0.01
 float HSM_TUBE_DIFFUSE_IMAGE_GAMMA = global.HSM_TUBE_DIFFUSE_IMAGE_GAMMA;
 
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING           "          Ambient Lighting Multiplier" 100 0 100 1
+float HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING = global.HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING / 100;
+
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_SCALE  			        "          Scale" 100 0 1000 1
+float HSM_TUBE_DIFFUSE_IMAGE_SCALE = global.HSM_TUBE_DIFFUSE_IMAGE_SCALE / 100;
+
+
 
 //---------------------------------------------------------------------------------------------------
 //    TUBE COLORED GEL
@@ -497,10 +504,16 @@ float HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_BRIGHTNESS = global.HSM_TUBE_COLORED_GEL
 #pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD "          Normal Blend Transparency Threshold" 23 0 100 1
 float HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD = global.HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD / 100;
 
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING       "          Ambient Lighting Multiplier" 100 0 100 1
+float HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING = global.HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING / 100;
+
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_SCALE  			    "          Scale" 100 0 1000 1
+float HSM_TUBE_COLORED_GEL_IMAGE_SCALE = global.HSM_TUBE_COLORED_GEL_IMAGE_SCALE / 100;
+
 #pragma parameter HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL				"          Show CRT on Top of Colored Gel Normal" 0 0 1 1
 float HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL = global.HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL;
 
-#pragma parameter HSM_TUBE_BLACK_EDGE_LAYERING_MODE		                "          Show Black Edge:  UNDER GEL | OVER GEL" 1 0 1 1
+#pragma parameter HSM_TUBE_BLACK_EDGE_LAYERING_MODE		            "          Show Black Edge:  UNDER GEL | OVER GEL" 1 0 1 1
 float HSM_TUBE_BLACK_EDGE_LAYERING_MODE = global.HSM_TUBE_BLACK_EDGE_LAYERING_MODE;
 
 //---------------------------------------------------------------------------------------------------

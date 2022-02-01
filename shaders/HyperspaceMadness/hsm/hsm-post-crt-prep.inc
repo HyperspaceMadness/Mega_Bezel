@@ -156,7 +156,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 		out_color *= vignette_factor;
 	}
 
-	vec4 night_lighting_image = HSM_GetNightLightingMultiplyColor( HSM_AMBIENT_LIGHTING_SCALE_MODE > 0.5 ? VIEWPORT_UNSCALED_COORD : VIEWPORT_COORD, NightLightingImage );
+	vec4 ambient_lighting_image = HSM_GetNightLightingMultiplyColor( HSM_AMBIENT_LIGHTING_SCALE_MODE > 0.5 ? VIEWPORT_UNSCALED_COORD : VIEWPORT_COORD, NightLightingImage );
 
 	// float screen_edge_mask = HSM_GetCornerMask(screen_curved_coord, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS, HSM_TUBE_BLACK_EDGE_SHARPNESS);
 	// screen_edge_mask = 1 - ((1 - screen_edge_mask) * screen_mask);
@@ -193,12 +193,15 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	vec4 tube_diffuse = vec4(0, 0, 0, 1);
 	if (HSM_GetUseTubeDiffuseImage())
 	{
-		tube_diffuse = HSM_GetMipmappedTexSample(TubeDiffuseImage, mirrored_tube_coord, TUBE_SCALE, 0);
+		vec2 diffuse_coord = mix( mirrored_tube_coord, -1 * (mirrored_tube_coord - 0.5) + 0.5 , HSM_FLIP_VIEWPORT_VERTICAL);
+		diffuse_coord = (diffuse_coord - 0.5) / HSM_TUBE_DIFFUSE_IMAGE_SCALE + 0.5;
+
+		tube_diffuse = HSM_GetMipmappedTexSample(TubeDiffuseImage, diffuse_coord, TUBE_SCALE, 0);
 		tube_diffuse = HSM_GLOBAL_GRAPHICS_BRIGHTNESS * HSM_GetPreMultipliedColorLinear(tube_diffuse, SOURCE_MATTE_PREMULTIPLIED, DEFAULT_SRGB_GAMMA);
 		tube_diffuse.rgb = HSM_ApplyHSVAdjustment(tube_diffuse.rgb, HSM_TUBE_DIFFUSE_IMAGE_HUE, HSM_TUBE_DIFFUSE_IMAGE_SATURATION, HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS, HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON, HSM_TUBE_DIFFUSE_IMAGE_GAMMA);
 	}
 	tube_diffuse *= HSM_TUBE_DIFFUSE_IMAGE_OPACITY;
-	tube_diffuse.rgb *= night_lighting_image.rgb;
+	tube_diffuse.rgb *=  (1 - HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING) * vec3(1) + HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING * ambient_lighting_image.rgb;
 
 	// Apply the CRT image additively to the tube diffuse color
 	out_color.a = in_color_with_gamma.a;
@@ -221,7 +224,8 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	if (HSM_GetUseTubeColoredGelImage())
 	{
 		vec2 gel_coord = mix( mirrored_tube_coord, -1 * (mirrored_tube_coord - 0.5) + 0.5 , HSM_FLIP_VIEWPORT_VERTICAL);
-		vec4 gel_image = HSM_GetMipmappedTexSample(TubeColoredGelImage, mirrored_tube_coord, TUBE_SCALE, 0);
+		gel_coord = (gel_coord - 0.5) / HSM_TUBE_COLORED_GEL_IMAGE_SCALE + 0.5;
+		vec4 gel_image = HSM_GetMipmappedTexSample(TubeColoredGelImage, gel_coord, TUBE_SCALE, 0);
 		
 		gel_image = HSM_GLOBAL_GRAPHICS_BRIGHTNESS * HSM_Linearize(gel_image, DEFAULT_SRGB_GAMMA);
 
@@ -234,8 +238,10 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 		if (HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT > 0)
 		{
 			gel_image.a = clamp( gel_image.a - HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD, 0, 1 ) / (1 - HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD);
-			gel_image.rgb *= night_lighting_image.rgb;
 			gel_image.rgb *= HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_BRIGHTNESS;
+
+			if (HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING > 0)
+				gel_image.rgb *= (1 - HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING) * vec3(1) + HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING * ambient_lighting_image.rgb;
 
 			if ( HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL == 0 )
 				out_color = HSM_BlendModeLayerMix(out_color, gel_image, BLEND_MODE_NORMAL, HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT);
@@ -244,6 +250,8 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 				vec4 normal_blended = HSM_BlendModeLayerMix(vec4(0, 0, 0, 1), gel_image, BLEND_MODE_NORMAL, HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT);
 				out_color = normal_blended + out_color;
 			}
+
+
 		}
 	} 
 
@@ -252,7 +260,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 
 	// TUBE HIGHLIGHT
 	if (HSM_GetUseTubeStaticReflection())
-		out_color += HSM_GetTubeHighlight(tube_curved_coord, false, TubeStaticReflectionImage, night_lighting_image);
+		out_color += HSM_GetTubeHighlight(tube_curved_coord, false, TubeStaticReflectionImage, ambient_lighting_image);
 	#endif
 
 	// #ifndef IS_NO_REFLECT_PRESET
