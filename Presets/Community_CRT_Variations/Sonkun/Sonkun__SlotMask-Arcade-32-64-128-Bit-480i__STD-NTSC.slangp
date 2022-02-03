@@ -1,4 +1,4 @@
-#reference ":/shaders/shaders_slang/bezel/Mega_Bezel/Presets/Base_CRT_Presets/MBZ__1__ADV__GDV-NTSC.slangp"
+#reference ":/shaders/shaders_slang/bezel/Mega_Bezel/Presets/Base_CRT_Presets/MBZ__3__STD__GDV-NTSC.slangp"
 
 // Thanks to Sonkun from the Libretro forum for the settings in this preset!
 gamma_out = "2.400000"
@@ -12,13 +12,16 @@ quality = "0.000000"
 ntsc_phase = "3.000000"
 
 bloom = "0.900000"
+bloom_dist = "0.900000"
 halation = "0.400000"
+gsl = "-1.000000"
 
-shadowMask = "8.000000"
+shadowMask = "10.000000"
+masksize = "1.000000"
 maskstr = "1.000000"
-slotmask = "0.500000"
-slotmask1 = "0.850000"
-slotwidth = "3.000000"
+slotmask = "1.000000"
+slotmask1 = "1.000000"
+slotwidth = "4.000000"
 double_slot = "2.000000"
 
 GDV_DECONVERGENCE_ON = "1.0"
@@ -27,7 +30,8 @@ deconrb = "-0.750000"
 deconrry = "1.500000"
 deconrby = "-1.500000"
 decons = "-2.000000"
-addnoised = "-0.300000"
 
-GDV_NOISE_ON = "0.0"
-noiseresd = "1.000000"
+
+GDV_NOISE_ON = "1.0"
+addnoised = "-0.300000"
+noiseresd = "1.150000"
