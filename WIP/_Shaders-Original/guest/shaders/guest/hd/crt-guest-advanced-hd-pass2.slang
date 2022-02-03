@@ -60,7 +60,8 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float sborder;
 	float scan_falloff;
 	float overscanX;
-	float overscanY;	
+	float overscanY;
+	float bloom_dist;	
 } global;
 
 #pragma parameter bogus_vfiltering "[ VERTICAL/INTERLACING FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
@@ -126,6 +127,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter bloom "          Bloom Strength" 0.0 -2.0 2.0 0.05
 #define bloom         params.bloom     // bloom effect
 
+#pragma parameter bloom_dist "          Bloom Distribution" 0.0 0.0 2.0 0.05
+#define bloom_dist         global.bloom_dist     // bloom effect distribution
+
 #pragma parameter halation "          Halation Strength" 0.0 0.0 2.0 0.025
 #define halation         params.halation     // halation effect
 
@@ -143,10 +147,10 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter gsl "          Scanline Type" 0.0 -1.0 2.0 1.0
 #define gsl          params.gsl      // Alternate scanlines
 
-#pragma parameter scanline1 "          Scanline Beam Shape Center" 6.0 0.0 20.0 0.5
+#pragma parameter scanline1 "          Scanline Beam Shape Center" 6.0 -20.0 20.0 0.5
 #define scanline1    params.scanline1      // scanline param, vertical sharpness
 
-#pragma parameter scanline2 "          Scanline Beam Shape Edges" 8.0 3.0 50.0 1.0 
+#pragma parameter scanline2 "          Scanline Beam Shape Edges" 8.0 3.0 70.0 1.0 
 #define scanline2    params.scanline2      // scanline param, vertical sharpness
 
 #pragma parameter beam_min "          Scanline Shape Dark Pixels" 1.20 0.25 5.0 0.05
@@ -199,7 +203,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter slotwidth "          Slot Mask Width" 2.0 1.0 8.0 1.0
 #define slotwidth    params.slotwidth     // Slot Mask Width
 
-#pragma parameter double_slot "          Slot Mask Height: 2x1 or 4x1" 1.0 1.0 2.0 1.0
+#pragma parameter double_slot "          Slot Mask Height: 2x1 or 4x1..." 1.0 1.0 4.0 1.0
 #define double_slot  params.double_slot     // Slot Mask Height
 
 #pragma parameter slotms "          Slot Mask Size" 1.0 1.0 4.0 1.0
@@ -403,11 +407,11 @@ vec3 Mask(vec2 pos, float mx)
 	{
 		mask = vec3(0.0);
 		pos.x = fract(pos.x/3.0);
-		if      (pos.x < 0.3) mask.rb = 1.0.xx;
-		else if (pos.x < 0.6) mask.g  = 1.0;
-		else                  mask    = 0.0.xxx;
+		if      (pos.x < 0.3) mask    = 0.0.xxx;
+		else if (pos.x < 0.6) mask.rb = 1.0.xx;
+		else                  mask.g  = 1.0;
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;	
-	}  
+	} 
 	
 	// RGB - Black mask
 	else if (shadowMask == 10.0)
@@ -749,7 +753,7 @@ if (!interb)
 	float vig  = COMPAT_TEXTURE(PrePass, clamp(pos, 0.0+0.5*global.OriginalSize.zw, 1.0-0.5*global.OriginalSize.zw)).a;
 
 	vec3 Bloom1 = min(Bloom*(orig1+color), max(0.5*(colmx + orig1 - color),0.0));
-	Bloom1 = mix(Bloom1, mix(colmx*orig1, Bloom1, 0.5), 1.0-color);
+	Bloom1 = 0.5*(Bloom1 + mix(Bloom1, mix(colmx*orig1, Bloom1, 0.5), 1.0-color));
 	
 	
 	if (bloom < 0.0) {
@@ -758,7 +762,9 @@ if (!interb)
 		Bloom1 = 2.0*mix(Ref, mix(colmx*Ref, Bloom1, 0.5), 1.0-color);
 	}
 
-	color = color + abs(bloom)*Bloom1;
+	Bloom1 = Bloom1 * mix(1.0, 2.0-colmx, bloom_dist);
+
+	color = color + abs(bloom) * Bloom1;
 
 	color = min(color, mix(one, cmask, mclip));
 	if (!interb) color = declip(color, pow(w3,0.60));

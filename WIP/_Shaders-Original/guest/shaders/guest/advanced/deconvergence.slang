@@ -23,7 +23,7 @@
 
 layout(push_constant) uniform Push
 {
-	vec4 OutputSize;
+	vec4 OutputSize;	
 	uint FrameCount;
 	float deconr;
 	float TATE;
@@ -70,7 +70,7 @@ layout(push_constant) uniform Push
 #pragma parameter decons "          Deconvergence Strength (and Type)" 0.5 -4.0 4.0 0.10
 #define decons        params.decons     // Horizontal deconvergence colors strength
 
-#pragma parameter deconsmooth "          Deconvergence Smoothing" 0.0 0.0 1.0 0.10
+#pragma parameter deconsmooth "          Deconvergence/Mask Smoothing" 0.0 0.0 3.0 0.25
 
 #pragma parameter addnoised "          Add Noise" 0.0 -1.0 1.0 0.02
 #define addnoised       params.addnoised   // add noise
@@ -130,11 +130,32 @@ vec3 noise(vec3 v){
     return v;
 }
 
+vec3 fetch_pixel(vec2 coord)
+{
+	vec2 dx = vec2(params.OutputSize.z, 0.0) * params.deconsmooth;
+	vec2 dy = vec2(0.0, params.OutputSize.w) * params.deconsmooth;	
+	vec2 d1 = dx + dy;
+	vec2 d2 = dx - dy;
+	
+	vec3 color  = COMPAT_TEXTURE(Source, coord     ).rgb;
+	vec3 result =(3.0*COMPAT_TEXTURE(Source, coord     ).rgb + 
+	              2.0*COMPAT_TEXTURE(Source, coord + dx).rgb +
+	              2.0*COMPAT_TEXTURE(Source, coord - dx).rgb +
+	              2.0*COMPAT_TEXTURE(Source, coord + dy).rgb +
+	              2.0*COMPAT_TEXTURE(Source, coord - dy).rgb +
+	              COMPAT_TEXTURE(Source, coord + d1).rgb +
+	              COMPAT_TEXTURE(Source, coord - d1).rgb +
+	              COMPAT_TEXTURE(Source, coord + d2).rgb +
+	              COMPAT_TEXTURE(Source, coord - d2).rgb) / 15.0;  
+	
+	float mx = clamp(1.5*max(max(result.r,result.g),result.b)-0.2, 0.0, 1.0);
+	return mix(color, result, mx*mx);
+} 
 
 void main()
 {
 	
-	vec3 color = COMPAT_TEXTURE(Source, vTexCoord).rgb;
+	vec3 color = fetch_pixel(vTexCoord);
 	vec3 result = color;
 	
 	if ((abs(params.deconrr) + abs(params.deconrg) + abs(params.deconrb) + abs(params.deconrry) + abs(params.deconrgy) + abs(params.deconrby)) > 0.20)
@@ -191,7 +212,9 @@ void main()
 		vec3 result1 = vec3(r1,g1,b1);
 		vec3 result2 = vec3(r2,g2,b2);
 		vec3 result3 = vec3(r3,g3,b3);
-		result = (result1+result2+result3)/3.0;
+		
+		float mx = clamp(1.5*max(max(color.r,color.g),color.b)-0.2, 0.0, 1.0);
+		result = mix(result1, (result1+result2+result3)/3.0, mx*mx);
 		
 		vec3 dcolor = max(max(COMPAT_TEXTURE(Source, vTexCoord + sx).rgb, COMPAT_TEXTURE(Source, vTexCoord - sx).rgb), color);
 		

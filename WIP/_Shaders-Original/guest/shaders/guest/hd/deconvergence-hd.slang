@@ -1,7 +1,7 @@
 #version 450
 
 /*
-   CRT - Guest - Advanced - Deconvergence pass (NTSC) + noise
+   CRT - Guest - Advanced - Deconvergence pass + noise
    
    Copyright (C) 2021 guest(r) - guest.r@gmail.com
    
@@ -23,21 +23,31 @@
 
 layout(push_constant) uniform Push
 {
-	vec4 OutputSize;
+	vec4 OutputSize;	
 	uint FrameCount;
+	float deconr;
+	float TATE;
 	float decons;
 	float addnoised;
 	float noiseresd;
+	float shadowMask;
+	float masksize;
 	float deconrr;
 	float deconrg;
 	float deconrb;
 	float deconrry;
 	float deconrgy;
 	float deconrby;	
+	float deconsmooth;
 	float dctypex;
 	float dctypey;
-	float postbr;
+	float monochrome;
+	float mgamma;
+	float post_br;
 } params;
+
+#pragma parameter TATE "          TATE Mode" 0.0 0.0 1.0 1.0
+#define TATE         params.TATE     // Screen orientation
 
 #pragma parameter bogus_deconvergence11 "[ HORIZONTAL/VERTICAL DECONVERGENCE ]: " 0.0 0.0 1.0 1.0
 
@@ -60,14 +70,23 @@ layout(push_constant) uniform Push
 #pragma parameter decons "          Deconvergence Strength (and Type)" 0.5 -4.0 4.0 0.10
 #define decons        params.decons     // Horizontal deconvergence colors strength
 
-#pragma parameter addnoised "          Add Noise" 0.0 -1.0 1.0 0.01
+#pragma parameter deconsmooth "          Deconvergence/Mask Smoothing" 0.0 0.0 3.0 0.25
+
+#pragma parameter addnoised "          Add Noise" 0.0 -1.0 1.0 0.02
 #define addnoised       params.addnoised   // add noise
 
-#pragma parameter noiseresd "          Noise Resolution" 1.0 1.0 10.0 1.0
+#pragma parameter noiseresd "          Noise Resolution" 2.0 1.0 10.0 1.0
 #define noiseresd       params.noiseresd   // add noise
 
-#pragma parameter postbr "          Post Brightness" 1.0 0.25 2.0 0.025
-#define postbr       params.postbr   // post brightness
+#pragma parameter monochrome "          Monochrome Color: OFF | BW | Amber | Green" 0.0 0.0 3.0 1.0
+#define monochrome params.monochrome
+
+#pragma parameter mgamma "          Monochrome Gamma" 1.0 1.0 2.4 0.1
+#define mgamma params.mgamma
+
+#pragma parameter post_br "          Post Brightness" 1.0 0.25 5.0 0.05
+#define post_br params.post_br
+
 
 layout(std140, set = 0, binding = 0) uniform UBO
 {
@@ -92,11 +111,6 @@ layout(set = 0, binding = 2) uniform sampler2D Source;
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
 
-vec3 plant (vec3 tar, float r)
-{
-	float t = max(max(tar.r,tar.g),tar.b) + 0.00001;
-	return tar * r / t;
-}
 
 // noise function:
 // Dedicated to the public domain.
@@ -116,22 +130,49 @@ vec3 noise(vec3 v){
     return v;
 }
 
+vec3 fetch_pixel(vec2 coord)
+{
+	vec2 dx = vec2(params.OutputSize.z, 0.0) * params.deconsmooth;
+	vec2 dy = vec2(0.0, params.OutputSize.w) * params.deconsmooth;	
+	vec2 d1 = dx + dy;
+	vec2 d2 = dx - dy;
+	
+	vec3 color  = COMPAT_TEXTURE(Source, coord     ).rgb;
+	vec3 result =(3.0*COMPAT_TEXTURE(Source, coord     ).rgb + 
+	              2.0*COMPAT_TEXTURE(Source, coord + dx).rgb +
+	              2.0*COMPAT_TEXTURE(Source, coord - dx).rgb +
+	              2.0*COMPAT_TEXTURE(Source, coord + dy).rgb +
+	              2.0*COMPAT_TEXTURE(Source, coord - dy).rgb +
+	              COMPAT_TEXTURE(Source, coord + d1).rgb +
+	              COMPAT_TEXTURE(Source, coord - d1).rgb +
+	              COMPAT_TEXTURE(Source, coord + d2).rgb +
+	              COMPAT_TEXTURE(Source, coord - d2).rgb) / 15.0;  
+	
+	float mx = clamp(1.5*max(max(result.r,result.g),result.b)-0.2, 0.0, 1.0);
+	return mix(color, result, mx*mx);
+} 
+
 void main()
 {
 	
-	vec3 color = COMPAT_TEXTURE(Source, vTexCoord).rgb;
+	vec3 color = fetch_pixel(vTexCoord);
 	vec3 result = color;
 	
 	if ((abs(params.deconrr) + abs(params.deconrg) + abs(params.deconrb) + abs(params.deconrry) + abs(params.deconrgy) + abs(params.deconrby)) > 0.20)
 	{	
-		float stepx = params.OutputSize.z;
-		float stepy = params.OutputSize.w;
+		float step = 1.0;
+		float dstep = step;
+		step*= (TATE < 0.5) ? (params.OutputSize.z) : (params.OutputSize.w);
+		float stepy = (TATE < 0.5) ? (params.OutputSize.w) : (params.OutputSize.z);
+		float stepx = (TATE < 0.5) ? (params.OutputSize.z) : (params.OutputSize.w);
 		
-		vec2 dx = vec2(stepx, 0.0);
-		vec2 dy = vec2(0.0, stepy);
+		vec2 sx = mix(vec2(stepx, 0.0), vec2(0.0, stepx), TATE);
 		
 		float ds = decons;
-						
+				
+		vec2 dx = (TATE < 0.5) ? vec2(step, 0.0) :  vec2(0.0, step);
+		vec2 dy = (TATE > 0.5) ? vec2(stepy, 0.0) :  vec2(0.0, stepy);		
+		
 		float posx = 2.0*vTexCoord.x - 1.0;
 		float posy = 2.0*vTexCoord.y - 1.0;
 		
@@ -153,20 +194,34 @@ void main()
 		vec2 rc = params.deconrr * dx + params.deconrry*dy;
 		vec2 gc = params.deconrg * dx + params.deconrgy*dy;
 		vec2 bc = params.deconrb * dx + params.deconrby*dy;		
-		
-		float r = COMPAT_TEXTURE(Source, vTexCoord + rc    ).r;
-		float g = COMPAT_TEXTURE(Source, vTexCoord + gc    ).g;
-		float b = COMPAT_TEXTURE(Source, vTexCoord + bc    ).b;
 
-		result = vec3(r,g,b);
+		dx = (dx+dy) * params.deconsmooth;
 		
-		vec3 dcolor = max(max(COMPAT_TEXTURE(Source, vTexCoord + dx).rgb, COMPAT_TEXTURE(Source, vTexCoord - dx).rgb), color);
+		float r1 = COMPAT_TEXTURE(Source, vTexCoord + rc    ).r;
+		float g1 = COMPAT_TEXTURE(Source, vTexCoord + gc    ).g;
+		float b1 = COMPAT_TEXTURE(Source, vTexCoord + bc    ).b;
+
+		float r2 = COMPAT_TEXTURE(Source, vTexCoord + rc -dx).r;
+		float g2 = COMPAT_TEXTURE(Source, vTexCoord + gc -dx).g;
+		float b2 = COMPAT_TEXTURE(Source, vTexCoord + bc -dx).b;
+
+		float r3 = COMPAT_TEXTURE(Source, vTexCoord + rc +dx).r;
+		float g3 = COMPAT_TEXTURE(Source, vTexCoord + gc +dx).g;
+		float b3 = COMPAT_TEXTURE(Source, vTexCoord + bc +dx).b;
+
+		vec3 result1 = vec3(r1,g1,b1);
+		vec3 result2 = vec3(r2,g2,b2);
+		vec3 result3 = vec3(r3,g3,b3);
+		
+		float mx = max(max(color.r,color.g),color.b);
+		result = mix(result1, (result1+result2+result3)/3.0, mx*mx);
+		
+		vec3 dcolor = max(max(COMPAT_TEXTURE(Source, vTexCoord + sx).rgb, COMPAT_TEXTURE(Source, vTexCoord - sx).rgb), color);
 		
 		float mc = max(max(dcolor.r, dcolor.g), dcolor.b);
 		if (decons < 0.0) mc = 0.9;
-		float dclamp = min(2.0-0.40*abs(ds),1.0);
 	
-		result = clamp(mix(color, sqrt(mix(result*result, color*result, sqrt(mc))), abs(ds)), dclamp*min(result,color), min(1.0/dclamp*max(result, color),1.0));
+		result = clamp(mix(color, sqrt(mix(result*result, color*result, sqrt(mc))), abs(ds)), min(result,color), max(result, color));
 	}
 	
 	float rc = 0.6*sqrt(max(max(result.r, result.g), result.b))+0.4;
@@ -174,6 +229,15 @@ void main()
 	if (abs(addnoised) > 0.01) result = mix(result, noise(vec3(floor(params.OutputSize.xy * vTexCoord / noiseresd), float(params.FrameCount))), 0.25*abs(addnoised) * rc);
 	
 	float corner = COMPAT_TEXTURE(Source, vTexCoord).a;	
+
+	if (monochrome > 0.5)
+	{
+		result = pow(result, mgamma.xxx);
+		float luma = dot(result, vec3(0.299, 0.587, 0.114));
+		vec3 mcolor = 1.0.xxx;
+		if (monochrome > 1.5) mcolor = (monochrome > 2.5) ? vec3(0.2549, 1.0, 0.0) : vec3(1.0, 0.749, 0.0);
+		result = pow(luma, 1.0/mgamma) * mcolor;
+	}
 	
-	FragColor = vec4(result*corner*postbr, 1.0);
+	FragColor = vec4(result*corner*post_br, 1.0);
 }

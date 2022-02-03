@@ -14,7 +14,7 @@ layout(push_constant) uniform Push
 // #define ntsc_direction params.ntsc_direction
 #define ntsc_direction 0
 
-#pragma parameter blendMode 		"          NTSC Blend Mode - 0:SHARP | 1:STANDARD | 2:ORIGINAL" 1.0 0.0 2.0 1.0
+#pragma parameter blendMode 		"   NTSC Blend Mode - 0:SHARP | 1:STANDARD | 2:ORIG -- blendMode" 1.0 0.0 2.0 1.0
 
 layout(std140, set = 0, binding = 0) uniform UBO
 {

@@ -230,6 +230,12 @@ float vignette (vec2 coords)
 }
 */
 
+vec3 plant (vec3 tar, float r)
+{
+	float t = max(max(tar.r,tar.g),tar.b) + 0.00001;
+	return tar * r / t;
+}
+
 void main()
 {
    vec4 imgColor = COMPAT_TEXTURE(PreCRTPass, vTexCoord.xy);
@@ -328,7 +334,7 @@ void main()
 	
 	if (CP == -1.0) color = c;
 	
-	vec3 scolor1 = normalize(pow(color + 0.000000001, vec3(wp_saturation)))*length(color);
+	vec3 scolor1 = plant(pow(color, vec3(wp_saturation)), max(max(color.r,color.g),color.b));
 	float luma = dot(color, vec3(0.299, 0.587, 0.114));
 	vec3 scolor2 = mix(vec3(luma), color, wp_saturation);
 	color = (wp_saturation > 1.0) ? scolor1 : scolor2;

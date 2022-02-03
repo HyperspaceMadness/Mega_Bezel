@@ -67,7 +67,7 @@ layout(push_constant) uniform Push
 	// float bardir;
 } params;
 
-#pragma parameter blendMode 		"          NTSC Blend Mode - 0:SHARP | 1:STANDARD | 2:ORIGINAL" 1.0 0.0 2.0 1.0
+#pragma parameter blendMode 		"   NTSC Blend Mode - 0:SHARP | 1:STANDARD | 2:ORIG -- blendMode" 1.0 0.0 2.0 1.0
 
 #pragma parameter bogus_brightness "[ GDV - BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
@@ -76,6 +76,9 @@ layout(push_constant) uniform Push
 
 #pragma parameter bloom "          Bloom Strength -- bloom" 0.0 -2.0 2.0 0.05
 #define bloom         params.bloom     // bloom effect
+
+#pragma parameter bloom_dist "          Bloom Distribution -- bloom_dist" 0.0 0.0 2.0 0.05
+#define bloom_dist         global.bloom_dist     // bloom effect distribution
 
 #pragma parameter halation "          Halation Strength -- halation" 0.0 0.0 2.0 0.025
 #define halation         params.halation     // halation effect
@@ -94,10 +97,10 @@ layout(push_constant) uniform Push
 #pragma parameter gsl "          Scanline Type -- gsl" 0.0 -1.0 2.0 1.0
 #define gsl          params.gsl      // Alternate scanlines
 
-#pragma parameter scanline1 "          Scanline Beam Shape Center -- scanline1" 6.0 0.0 20.0 0.5
+#pragma parameter scanline1 "          Scanline Beam Shape Center -- scanline1" 6.0 -20.0 20.0 0.5
 #define scanline1    params.scanline1      // scanline param, vertical sharpness
 
-#pragma parameter scanline2 "          Scanline Beam Shape Edges -- scanline2" 8.0 0.0 50.0 1.0
+#pragma parameter scanline2 "          Scanline Beam Shape Edges -- scanline2" 8.0 0.0 70.0 1.0
 #define scanline2    params.scanline2      // scanline param, vertical sharpness
 
 #pragma parameter beam_min "          Scanline Shape Dark Pixels -- beam_min" 1.30 0.25 5 0.05
@@ -115,16 +118,16 @@ layout(push_constant) uniform Push
 #pragma parameter scans "          Scanline Saturation / Mask Falloff -- scans" 0.60 0.0 2.5 0.05
 #define scans        params.scans     // scanline saturation
 
-#pragma parameter scan_falloff "          Scanline Falloff" 1.0 0.25 2.0 0.05
+#pragma parameter scan_falloff "          Scanline Falloff -- scan_falloff" 1.0 0.25 2.0 0.05
 #define scan_falloff        global.scan_falloff     // scanline falloff
 
 #pragma parameter spike "          Scanline Spike Removal -- spike" 1.0 0.0 2.0 0.10
 #define spike params.spike
 
-#pragma parameter scangammaoffset "          Scanline Gamma Offset" 1 0.15 5.0 0.05
+#pragma parameter scangammaoffset "          Scanline Gamma Offset -- scangammaoffset" 1 0.15 5.0 0.05
 #define scangammaoffset global.scangammaoffset
 
-#pragma parameter rolling_scan "          Rolling Scanlines" 0.0 -1.0 1.0 0.01
+#pragma parameter rolling_scan "          Rolling Scanlines -- rolling_scan" 0.0 -1.0 1.0 0.01
 #define rolling_scan        global.rolling_scan     // rolling scanlines
 
 #pragma parameter bogus_filtering "[ GDV - FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
@@ -212,7 +215,7 @@ layout(push_constant) uniform Push
 #pragma parameter maskLight "          Lottes maskLight" 1.5 0.0 2.0 0.05
 #define maskLight    params.maskLight     // Light "Phosphor"
 
-#pragma parameter mask_gamma "          Mask gamma -- mask_gamma" 2.40 1.0 5.0 0.05
+#pragma parameter mask_gamma "          Mask Gamma -- mask_gamma" 2.40 1.0 5.0 0.05
 #define mask_gamma   params.mask_gamma     // Mask application gamma
 
 #pragma parameter slotmask "          Slot Mask Strength Bright Pixels -- slotmask" 0.0 0.0 1.0 0.05
@@ -222,16 +225,16 @@ layout(push_constant) uniform Push
 #define slotmask1     global.slotmask1
 
 #pragma parameter slotwidth "          Slot Mask Width -- slotwidth" 2.0 1.0 8.0 1
-#define slotwidth    params.slotwidth     // Slot Mask Width
+#define slotwidth    global.slotwidth     // Slot Mask Width
 
-#pragma parameter double_slot "          Slot Mask Height: 2x1 or 4x1 -- double_slot" 1.0 1.0 2.0 1.0
-#define double_slot  params.double_slot     // Slot Mask Height
+#pragma parameter double_slot "          Slot Mask Height: 2x1 or 4x1... -- double_slot" 1.0 1.0 4.0 1.0
+#define double_slot  global.double_slot     // Slot Mask Height
 
 #pragma parameter slotms "          Slot Mask Size - Auto | 2K | 4k -- slotms" 0 1 4 1
-#define slotms  params.slotms     // Slot Mask Size
+#define slotms  global.slotms     // Slot Mask Size
 
 #pragma parameter mclip "          Keep Mask effect with clipping -- mclip" 0.50 0.0 1.0 0.05
-#define mclip  params.mclip     // Slot Mask Size
+#define mclip  global.mclip     // Slot Mask Size
 
 // #pragma parameter gamma_out "Gamma out" 2.4 1.0 5.0 0.05
 #define gamma_out    HSM_GAMMA_OUT_CRT     // output gamma
@@ -465,9 +468,9 @@ vec3 Mask(vec2 pos, float mx)
 	{
 		mask = vec3(0.0);
 		pos.x = fract(pos.x/3.0);
-		if      (pos.x < 0.3) mask.rb = 1.0.xx;
-		else if (pos.x < 0.6) mask.g  = 1.0;
-		else                  mask    = 0.0.xxx;
+		if      (pos.x < 0.3) mask    = 0.0.xxx;
+		else if (pos.x < 0.6) mask.rb = 1.0.xx;
+		else                  mask.g  = 1.0;
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;	
 	}  
 	
@@ -1166,7 +1169,7 @@ if (!interb)
 	*/
 
 	vec3 Bloom1 = min(Bloom*(orig1+color), max(0.5*(colmx + orig1 - color),0.0));
-	Bloom1 = mix(Bloom1, mix(colmx*orig1, Bloom1, 0.5), 1.0-color);
+	Bloom1 = 0.5*(Bloom1 + mix(Bloom1, mix(colmx*orig1, Bloom1, 0.5), 1.0-color));
 	
 	
 	if (bloom < 0.0) {
@@ -1175,7 +1178,9 @@ if (!interb)
 		Bloom1 = 2.0*mix(Ref, mix(colmx*Ref, Bloom1, 0.5), 1.0-color);
 	}
 
-	color = color + abs(bloom)*Bloom1;
+	Bloom1 = Bloom1 * mix(1.0, 2.0-colmx, bloom_dist);
+
+	color = color + abs(bloom) * Bloom1;
 
 	color = min(color, mix(one, cmask, mclip));
 	if (!interb) color = declip(color, pow(w3,0.60));

@@ -541,11 +541,18 @@ float HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE;
 
 	// Guest-Dr-Venom Params
 	float blendMode;
+	float bloom_dist;
 	float scangammaoffset;
 	float rolling_scan;
 	float scan_falloff;
+
 	float slotmask;
 	float slotmask1;
+	float slotwidth;
+	float double_slot;
+	float slotms;
+	float mclip;
+	
 	float barspeed;
 	float barintensity;
 	float bardir;
