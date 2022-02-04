@@ -230,7 +230,7 @@ layout(push_constant) uniform Push
 #pragma parameter double_slot "          Slot Mask Height: 2x1 or 4x1... -- double_slot" 1.0 1.0 4.0 1.0
 #define double_slot  global.double_slot     // Slot Mask Height
 
-#pragma parameter slotms "          Slot Mask Size - Auto | 2K | 4k -- slotms" 0 1 4 1
+#pragma parameter slotms "          Slot Mask Size - Auto | 2K | 4k -- slotms" 0 0 4 1
 #define slotms  global.slotms     // Slot Mask Size
 
 #pragma parameter mclip "          Keep Mask effect with clipping -- mclip" 0.50 0.0 1.0 0.05
