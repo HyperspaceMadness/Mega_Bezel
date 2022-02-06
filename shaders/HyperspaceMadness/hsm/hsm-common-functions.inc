@@ -1094,6 +1094,17 @@ vec4 HSM_ApplyMonochrome(vec4 in_color)
 	return out_color;
 }
 
+float HSM_GetTubeDiffuseOpacity()
+{
+	float tube_diffuse_opacity = HSM_TUBE_DIFFUSE_MODE < 1.5 ? HSM_TUBE_DIFFUSE_OPACITY : 0;
+
+	// If CRT Blend Mode is Multiply (2) then the tube must be fully opaque
+	if (HSM_CRT_BLEND_MODE == 2)
+		tube_diffuse_opacity = 1;
+
+	return tube_diffuse_opacity;
+}
+
 float HSM_Get_Screen_Black_Edge_Mask(vec2 screen_coord, bool apply_to_mirror)
 {
 	if (apply_to_mirror)

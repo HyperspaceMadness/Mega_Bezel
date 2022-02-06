@@ -136,7 +136,7 @@ bool HSM_GetUseTubeStaticReflection()
 
 bool HSM_GetUseTubeDiffuseImage()
 {
-	return HSM_TUBE_DIFFUSE_IMAGE_ON > 0.5 && HSM_GetUseOnCurrentScreenIndex(HSM_TUBE_DIFFUSE_IMAGE_DUALSCREEN_VIS_MODE);
+	return HSM_TUBE_DIFFUSE_MODE == 1 && HSM_GetUseOnCurrentScreenIndex(HSM_TUBE_DIFFUSE_IMAGE_DUALSCREEN_VIS_MODE);
 }
 
 bool HSM_GetUseTubeColoredGelImage()

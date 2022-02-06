@@ -1,7 +1,7 @@
 #reference "../1080p_Optimized_Presets/CyberLab__Computer-Monitor-Sharp__1080p__ADV.slangp"
 
 
-post_br = "177.000000"
+post_br = "1.77000000"
 signalResolution = "512.000000"
 g_sat = "0.080000"
 maskDark = "0.100000"

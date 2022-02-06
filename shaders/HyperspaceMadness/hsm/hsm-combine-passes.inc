@@ -115,8 +115,6 @@ void main()
 	if (HSM_RENDER_SIMPLE_MODE > 0.5)
 		crt_layer.rgb = vec3(0);
 
-	// vec4 reflection_layer = crt_layer;
-
 	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
 	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
 		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;

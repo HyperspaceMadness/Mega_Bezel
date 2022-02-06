@@ -5,7 +5,7 @@ masksize = "2.000000"
 
 // Additional Scanline Tweaks
 
-post_br = "115.000000"
+post_br = "1.15000000"
 // gsl = "0.000000"
 scanline1 = "9.000000"
 scanline2 = "9.000000"

@@ -3,10 +3,14 @@
 Mega Bezel is updated to V 0.9.102 2022-02-02 Rev 1
 
 Changes:
-  * Added parameters for Ambient (Night) Lighting amount and scale for Tube Diffuse and Colored Gel
-  * Updated Guest to crt-guest-advanced-2022-02-01-release1
-  * Updated Sonkun Slot Mask Presets now named:
-    * Sonkun__SlotMask-8-16-Bit-PC...
+  * WARNING post_br is now 100% at 1, not 100, you will need to adjust any presets you have saved, just divide the number by 100
+    * This is so it matches with guest's usage 
+  * Adjusted Tube Diffuse Color
+    * HSM_TUBE_DIFFUSE_IMAGE_ON is renamed to HSM_TUBE_DIFFUSE_MODE
+    * values are now:
+      * 0 - Black
+      * 1 - Image
+      * 2 - Transparent
 
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------

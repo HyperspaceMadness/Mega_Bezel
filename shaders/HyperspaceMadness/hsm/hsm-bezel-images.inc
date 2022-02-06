@@ -605,8 +605,8 @@ void main()
 	}
 
 	float TUBE_MASK_EXPAND = HSM_GetCornerMask((tube_curved_coord - 0.5) * 0.997 + 0.5, SCREEN_ASPECT, bezel_corner_radius, 0.99);
-	// Tube BG is black and possibly semi-transparent
-	vec4 tube_bg_layer = vec4(0, 0, 0, TUBE_MASK_EXPAND * HSM_TUBE_DIFFUSE_IMAGE_OPACITY);
+	
+	vec4 tube_bg_layer = vec4(0, 0, 0, TUBE_MASK_EXPAND * HSM_GetTubeDiffuseOpacity());
 
 // end of ifndef LAYERS_UNDER_CRT
 #endif

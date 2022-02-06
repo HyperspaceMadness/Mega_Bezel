@@ -1,6 +1,6 @@
 #reference "../4K_Optimized_Presets/CyberLab__Blending-And-Transparency__PVM-Edition__ADV.slangp"
 
-post_br = "307.000000"
+post_br = "3.07000000"
 gsl = "1.000000"
 scanline1 = "9.000000"
 scanline2 = "9.000000"

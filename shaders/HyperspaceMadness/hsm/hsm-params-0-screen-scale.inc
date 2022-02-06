@@ -40,9 +40,8 @@ float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
 #pragma parameter gamma_out   								"          CRT Gamma Out (Linear to Gamma Space Encode) Def 2.4" 2.4 0.1 5 0.05
 #define HSM_GAMMA_OUT_CRT global.gamma_out
 
-#pragma parameter post_br                                   "          Post CRT Brightness" 100 1 500 1
-#define HSM_POST_CRT_BRIGHTNESS global.post_br / 100
-
+#pragma parameter post_br                                   "          Post CRT Brightness" 1 0.01 5 0.01
+#define HSM_POST_CRT_BRIGHTNESS global.post_br
 
 //---------------------------------------------------------------------------------------------------
 //    Global Graphics Brightness
@@ -442,15 +441,28 @@ float HSM_MONOCHROME_DUALSCREEN_VIS_MODE = global.HSM_MONOCHROME_DUALSCREEN_VIS_
 
 
 //---------------------------------------------------------------------------------------------------
+//    CRT Blend Over Diffuse
+//---------------------------------------------------------------------------------------------------
+
+#pragma parameter HSM_CRT_BLEND_TITLE						"[ CRT ON TUBE DIFFUSE BLENDING ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_CRT_BLEND_MODE                        "          CRT On Tube Diffuse Blend Mode: OFF | ADD | MULTIPLY" 1 0 2 1
+#define HSM_CRT_BLEND_MODE global.HSM_CRT_BLEND_MODE
+
+#pragma parameter HSM_CRT_BLEND_AMOUNT                      "          CRT On Tube Diffuse Blend Amount" 100 0 100 1
+#define HSM_CRT_BLEND_AMOUNT global.HSM_CRT_BLEND_AMOUNT / 100
+
+
+//---------------------------------------------------------------------------------------------------
 //    TUBE DIFFUSE COLOR
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_TITLE						"[ TUBE DIFFUSE COLOR ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_OPACITY                    "          Opacity" 100 0 100 0.1
-float HSM_TUBE_DIFFUSE_IMAGE_OPACITY = global.HSM_TUBE_DIFFUSE_IMAGE_OPACITY / 100;
+#pragma parameter HSM_TUBE_DIFFUSE_MODE  					        "          Tube Diffuse Color - BLACK | IMAGE | TRANSPARENT" 0 0 2 1
+float HSM_TUBE_DIFFUSE_MODE = global.HSM_TUBE_DIFFUSE_MODE;
 
-#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_ON  					    "          Use Tube Diffuse Image - OFF | ON" 0 0 1 1
-float HSM_TUBE_DIFFUSE_IMAGE_ON = global.HSM_TUBE_DIFFUSE_IMAGE_ON;
+#pragma parameter HSM_TUBE_DIFFUSE_OPACITY                          "          Opacity" 100 0 100 0.1
+float HSM_TUBE_DIFFUSE_OPACITY = global.HSM_TUBE_DIFFUSE_OPACITY / 100;
 
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_DUALSCREEN_VIS_MODE        "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
 float HSM_TUBE_DIFFUSE_IMAGE_DUALSCREEN_VIS_MODE = global.HSM_TUBE_DIFFUSE_IMAGE_DUALSCREEN_VIS_MODE;
@@ -464,7 +476,7 @@ float HSM_TUBE_DIFFUSE_IMAGE_HUE = global.HSM_TUBE_DIFFUSE_IMAGE_HUE / 360;
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_SATURATION                 "          Saturation" 100 0 200 1
 float HSM_TUBE_DIFFUSE_IMAGE_SATURATION = global.HSM_TUBE_DIFFUSE_IMAGE_SATURATION / 100;
 
-#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS                 "          Brightness" 60 0 200 1
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS                 "          Brightness" 60 0 500 1
 float HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS = global.HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS / 100;
 
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_GAMMA                      "          Gamma Adjust" 1 0 5 0.01
@@ -475,7 +487,6 @@ float HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING = global.HSM_TUBE_DIFFUSE_IMAGE_AM
 
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_SCALE  			        "          Scale" 100 0 1000 1
 float HSM_TUBE_DIFFUSE_IMAGE_SCALE = global.HSM_TUBE_DIFFUSE_IMAGE_SCALE / 100;
-
 
 
 //---------------------------------------------------------------------------------------------------

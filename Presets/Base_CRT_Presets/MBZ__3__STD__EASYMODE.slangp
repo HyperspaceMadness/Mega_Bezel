@@ -259,4 +259,4 @@ TopLayerImage_mipmap = 1
 
 // Easymode Parameters
 gamma_out = 2.2
-post_br = 75
+post_br = 0.75

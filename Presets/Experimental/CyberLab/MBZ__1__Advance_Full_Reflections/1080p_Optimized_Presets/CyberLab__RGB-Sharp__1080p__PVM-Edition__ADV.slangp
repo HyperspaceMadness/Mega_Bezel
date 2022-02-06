@@ -1,7 +1,7 @@
 #reference "../4K_Optimized_Presets/CyberLab__RGB-Sharp__PVM-Edition__ADV.slangp"
 
 
-post_br = "129.000000"
+post_br = "1.29000000"
 gsl = "0.000000"
 scanline1 = "9.000000"
 scanline2 = "9.000000"

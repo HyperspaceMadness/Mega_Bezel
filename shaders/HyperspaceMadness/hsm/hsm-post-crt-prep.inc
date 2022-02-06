@@ -189,26 +189,37 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 		out_color = mix(out_color, scanline_masked_color, tube_highlight_mask);
 	}
 	
-	// TubeDiffuseImage
+	// If the crt blend mode is multiply then use the diffuse image
+	float tube_diffuse_mode = HSM_CRT_BLEND_MODE == 2 ? 1 : HSM_TUBE_DIFFUSE_MODE;
 	vec4 tube_diffuse = vec4(0, 0, 0, 1);
-	if (HSM_GetUseTubeDiffuseImage())
+	if (tube_diffuse_mode == 1)
 	{
-		vec2 diffuse_coord = mix( mirrored_tube_coord, -1 * (mirrored_tube_coord - 0.5) + 0.5 , HSM_FLIP_VIEWPORT_VERTICAL);
-		diffuse_coord = (diffuse_coord - 0.5) / HSM_TUBE_DIFFUSE_IMAGE_SCALE + 0.5;
+		// TubeDiffuseImage
+		if (HSM_TUBE_DIFFUSE_MODE == 1 || HSM_CRT_BLEND_MODE == 2)
+		{
+			vec2 diffuse_coord = mix( mirrored_tube_coord, -1 * (mirrored_tube_coord - 0.5) + 0.5 , HSM_FLIP_VIEWPORT_VERTICAL);
+			diffuse_coord = (diffuse_coord - 0.5) / HSM_TUBE_DIFFUSE_IMAGE_SCALE + 0.5;
 
-		tube_diffuse = HSM_GetMipmappedTexSample(TubeDiffuseImage, diffuse_coord, TUBE_SCALE, 0);
-		tube_diffuse = HSM_GLOBAL_GRAPHICS_BRIGHTNESS * HSM_GetPreMultipliedColorLinear(tube_diffuse, SOURCE_MATTE_PREMULTIPLIED, DEFAULT_SRGB_GAMMA);
-		tube_diffuse.rgb = HSM_ApplyHSVAdjustment(tube_diffuse.rgb, HSM_TUBE_DIFFUSE_IMAGE_HUE, HSM_TUBE_DIFFUSE_IMAGE_SATURATION, HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS, HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON, HSM_TUBE_DIFFUSE_IMAGE_GAMMA);
+			tube_diffuse = HSM_GetMipmappedTexSample(TubeDiffuseImage, diffuse_coord, TUBE_SCALE, 0);
+			tube_diffuse = HSM_GLOBAL_GRAPHICS_BRIGHTNESS * HSM_GetPreMultipliedColorLinear(tube_diffuse, SOURCE_MATTE_PREMULTIPLIED, DEFAULT_SRGB_GAMMA);
+			tube_diffuse.rgb = HSM_ApplyHSVAdjustment(tube_diffuse.rgb, HSM_TUBE_DIFFUSE_IMAGE_HUE, HSM_TUBE_DIFFUSE_IMAGE_SATURATION, HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS, HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON, HSM_TUBE_DIFFUSE_IMAGE_GAMMA);
+		}
+		// If CRT Blend Mode is Multiply (2) then the tube must be fully opaque
+		tube_diffuse *= HSM_GetTubeDiffuseOpacity();
+		tube_diffuse.rgb *=  (1 - HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING) * vec3(1) + HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING * ambient_lighting_image.rgb;
+
+		// Apply the CRT image additively to the tube diffuse color
+		out_color.a = in_color_with_gamma.a;
 	}
-	tube_diffuse *= HSM_TUBE_DIFFUSE_IMAGE_OPACITY;
-	tube_diffuse.rgb *=  (1 - HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING) * vec3(1) + HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING * ambient_lighting_image.rgb;
 
-	// Apply the CRT image additively to the tube diffuse color
-	out_color.a = in_color_with_gamma.a;
-	out_color = HSM_BlendModeLayerMix(tube_diffuse, out_color, BLEND_MODE_ADD, 1);
+	if (HSM_CRT_BLEND_MODE == 0)
+		out_color = vec4(0);
 
-		// Shrink the mask by 0.001 to clip off outer edge
-	// float screen_mirror_mask = HSM_Get_Screen_Black_Edge_Mask(HSM_GetMirrorWrapCoord(SCREEN_COORD), false);
+	if (HSM_CRT_BLEND_MODE == 1)
+		out_color = HSM_BlendModeLayerMix(tube_diffuse, out_color, BLEND_MODE_ADD, HSM_CRT_BLEND_AMOUNT);
+
+	if (HSM_CRT_BLEND_MODE == 2)
+		out_color = HSM_BlendModeLayerMix(tube_diffuse, out_color, BLEND_MODE_MULTIPLY, HSM_CRT_BLEND_AMOUNT);
 
 	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
 	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)

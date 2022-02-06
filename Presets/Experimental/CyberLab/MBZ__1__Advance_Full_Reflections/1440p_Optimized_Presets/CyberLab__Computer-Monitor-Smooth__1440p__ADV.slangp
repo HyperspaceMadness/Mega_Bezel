@@ -4,7 +4,7 @@ HSM_SCALEFX_ON = "1.000000"
 MDAPT_MODE = "2.000000"
 
 
-post_br = "177.000000"
+post_br = "1.77000000"
 signalResolution = "848.000000"
 g_sat = "0.080000"
 maskDark = "0.100000"

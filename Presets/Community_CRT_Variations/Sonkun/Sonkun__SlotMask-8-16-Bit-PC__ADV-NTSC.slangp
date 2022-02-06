@@ -3,7 +3,7 @@
 // Thanks to Sonkun from the Libretro forum for the settings in this preset!
 GAMMA_INPUT = "2.400000"
 gamma_out = "2.400000"
-post_br = "115.000000"
+post_br = "1.15000000"
 
 interm = "5.000000"
 
