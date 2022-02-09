@@ -3,7 +3,7 @@
 /*
    CRT - Guest - Advanced - HD - Pass1
    
-   Copyright (C) 2018-2021 guest(r) - guest.r@gmail.com
+   Copyright (C) 2018-2022 guest(r) - guest.r@gmail.com
 
    Incorporates many good ideas and suggestions from Dr. Venom.
    I would also like give thanks to many Libretro forums members for continuous feedback, suggestions and caring about the shader.

@@ -84,6 +84,7 @@ alias9 = BloomPass
 
 shader10 = shaders/guest/advanced/crt-guest-advanced.slang
 filter_linear10 = true
+float_framebuffer10 = true
 scale_type10 = viewport
 scale_x10 = 1.0
 scale_y10 = 1.0

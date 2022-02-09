@@ -89,11 +89,12 @@ alias9 = BloomPass
 
 shader10 = shaders/guest/fast/crt-guest-advanced-ntsc-pass2.slang
 filter_linear10 = true
+float_framebuffer10 = true
 scale_type10 = viewport
 scale_x10 = 1.0
 scale_y10 = 1.0
 
-shader11 = shaders/guest/fast/deconvergence-f.slang
+shader11 = shaders/guest/fast/deconvergence-fntsc.slang
 filter_linear11 = true
 scale_type11 = viewport
 scale_x11 = 1.0

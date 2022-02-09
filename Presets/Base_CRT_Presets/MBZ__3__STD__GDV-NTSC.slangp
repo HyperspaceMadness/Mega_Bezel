@@ -150,6 +150,7 @@ alias20 = BloomPass
 
 shader21 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-crt-guest-advanced-ntsc.slang
 filter_linear21 = true
+float_framebuffer21 = true
 scale_type21 = viewport
 scale_x21 = 1.0
 scale_y21 = 1.0

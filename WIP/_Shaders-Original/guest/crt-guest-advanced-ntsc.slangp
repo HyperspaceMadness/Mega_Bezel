@@ -123,11 +123,12 @@ alias14 = BloomPass
 
 shader15 = shaders/guest/advanced/crt-guest-advanced-ntsc.slang
 filter_linear15 = true
+float_framebuffer15 = true
 scale_type15 = viewport
 scale_x15 = 1.0
 scale_y15 = 1.0
 
-shader16 = shaders/guest/advanced/deconvergence.slang
+shader16 = shaders/guest/advanced/deconvergence-ntsc.slang
 filter_linear16 = true
 scale_type16 = viewport
 scale_x16 = 1.0

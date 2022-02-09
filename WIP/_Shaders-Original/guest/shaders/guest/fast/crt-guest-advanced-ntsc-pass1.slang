@@ -43,10 +43,10 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter bogus_filtering "[ FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-#pragma parameter h_sharp "          Horizontal sharpness" 3.70 0.20 15.0 0.10
+#pragma parameter h_sharp "          Horizontal sharpness" 3.00 0.20 10.0 0.10
 #define h_sharp      params.h_sharp     // pixel sharpness
 
-#pragma parameter s_sharp "          Substractive sharpness (1.0 recommended)" 0.40 0.0 1.5 0.10
+#pragma parameter s_sharp "          Substractive sharpness (1.0 recommended)" 0.20 0.0 1.5 0.10
 #define s_sharp      params.s_sharp     // substractive sharpness
 
 #pragma parameter spike "          Scanline Spike Removal" 1.0 0.0 2.0 0.10
@@ -88,6 +88,7 @@ void main()
 	if (params.blendMode > 1.5) { SourceSize = SourceSize * vec4 (2.0, 1.0, 0.5, 1.0); }
 	
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
+	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
 	
 	// Calculating texel coordinates
    

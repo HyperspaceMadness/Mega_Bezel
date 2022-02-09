@@ -3,7 +3,7 @@
 /*
    CRT - Guest - Advanced
    
-   Copyright (C) 2018-2021 guest(r) - guest.r@gmail.com
+   Copyright (C) 2018-2022 guest(r) - guest.r@gmail.com
 
    Incorporates many good ideas and suggestions from Dr. Venom.
    I would also like give thanks to many Libretro forums members for continuous feedback, suggestions and caring about the shader.
@@ -27,8 +27,7 @@
 layout(push_constant) uniform Push
 {
 	float TATE, IOS, OS, BLOOM, brightboost, brightboost1, gsl, scanline1, scanline2, beam_min, beam_max, beam_size,
-	h_sharp, s_sharp, csize, bsize1, warpX, warpY, glow, shadowMask, masksize, vertmask,
-	slotmask, slotmask1, slotwidth, double_slot, mcut, maskDark, maskLight, maskstr, spike;
+	h_sharp, s_sharp, csize, bsize1, warpX, warpY, glow, vertmask, spike;
 } params;
 
 layout(std140, set = 0, binding = 0) uniform UBO
@@ -41,25 +40,17 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float bloom;
 	float halation;
 	float scans;
-	float slotms;
-	float mclip;
 	float gamma_c;
-	float mask_gamma;
 	float smart_ei;
 	float ei_limit;
 	float sth;
-	float gamma_out;
 	float overscanX;
-	float overscanY;	
+	float overscanY;
+	float c_shape;
 	float intres;
 	float prescalex;
-	float c_shape;
-	float barspeed;
-	float barintensity;   
-	float bardir;
-	float rolling_scan;
-	float sborder;
 	float scan_falloff;
+	float rolling_scan;
 	float bloom_dist;
 } global;
 
@@ -155,21 +146,6 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter BLOOM "          Raster bloom %" 0.0 0.0 20.0 1.0
 #define BLOOM        params.BLOOM     // Bloom overscan percentage
 
-#pragma parameter csize "          Corner Size" 0.0 0.0 0.25 0.005
-#define csize        params.csize     // corner size
-
-#pragma parameter bsize1 "          Border Size" 0.01 0.0 2.0 0.01
-#define bsize1        params.bsize1     // border Size
-
-#pragma parameter sborder "          Border Intensity" 0.75 0.25 2.0 0.05
-#define sborder       global.sborder     // border intensity
-
-#pragma parameter barspeed "          Hum Bar Speed" 50.0 5.0 200.0 1.0
-
-#pragma parameter barintensity "          Hum Bar Intensity" 0.0 -1.0 1.0 0.01
-
-#pragma parameter bardir "          Hum Bar Direction" 0.0 0.0 1.0 1.0
-
 #pragma parameter warpX "          CurvatureX (default 0.03)" 0.0 0.0 0.25 0.01
 #define warpX        params.warpX     // Curvature X
 
@@ -188,49 +164,6 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader)" 1.0 1.0 4.0 1.0
 #define prescalex        global.prescalex     // prescale-x factor
 
-#pragma parameter bogus_masks "[ CRT MASK OPTIONS ]: " 0.0 0.0 1.0 1.0
-
-#pragma parameter shadowMask "          CRT Mask: 0:CGWG, 1-4:Lottes, 5-10:'Trinitron'" 0.0 -1.0 12.0 1.0
-#define shadowMask   params.shadowMask     // Mask Style
-
-#pragma parameter maskstr "          Mask Strength (0, 5-12)" 0.3 -0.5 1.0 0.05
-#define maskstr         params.maskstr      // CGWG Mask Strength
-
-#pragma parameter mcut "          Mask 5-9 Low Strength" 1.10 0.0 2.0 0.05
-#define mcut         params.mcut      // Mask 5-9 dark color strength
-
-#pragma parameter masksize "          CRT Mask Size (2.0 is nice in 4k)" 1.0 1.0 4.0 1.0
-#define masksize     params.masksize     // Mask Size
-
-#pragma parameter maskDark "          Lottes maskDark" 0.5 0.0 2.0 0.05
-#define maskDark     params.maskDark     // Dark "Phosphor"
-
-#pragma parameter maskLight "          Lottes maskLight" 1.5 0.0 2.0 0.05
-#define maskLight    params.maskLight     // Light "Phosphor"
-
-#pragma parameter mask_gamma "          Mask gamma" 2.40 1.0 5.0 0.05
-#define mask_gamma   global.mask_gamma     // Mask application gamma
-
-#pragma parameter slotmask "          Slot Mask Strength Bright Pixels" 0.0 0.0 1.0 0.05
-#define slotmask     params.slotmask
-
-#pragma parameter slotmask1 "          Slot Mask Strength Dark Pixels" 0.0 0.0 1.0 0.05
-#define slotmask1     params.slotmask1
-
-#pragma parameter slotwidth "          Slot Mask Width" 2.0 1.0 8.0 1.0
-#define slotwidth    params.slotwidth     // Slot Mask Width
-
-#pragma parameter double_slot "          Slot Mask Height: 2x1 or 4x1..." 1.0 1.0 4.0 1.0
-#define double_slot  params.double_slot     // Slot Mask Height
-
-#pragma parameter slotms "          Slot Mask Size" 1.0 1.0 4.0 1.0
-#define slotms  global.slotms     // Slot Mask Size
-
-#pragma parameter mclip "          Keep Mask effect with clipping" 0.50 0.0 1.0 0.05
-#define mclip  global.mclip     //
-
-#pragma parameter gamma_out "Gamma out" 2.4 1.0 5.0 0.05
-#define gamma_out    global.gamma_out     // output gamma
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
 #define TEX0 vTexCoord
@@ -254,9 +187,7 @@ layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 2) uniform sampler2D LinearizePass;
 layout(set = 0, binding = 3) uniform sampler2D AvgLumPass;
-layout(set = 0, binding = 4) uniform sampler2D GlowPass;
-layout(set = 0, binding = 5) uniform sampler2D BloomPass;
-layout(set = 0, binding = 6) uniform sampler2D PrePass;
+layout(set = 0, binding = 4) uniform sampler2D PrePass;
 
 #define eps 1e-10 
 
@@ -294,193 +225,6 @@ float sw2(float x, float color, float scanline)
 	return exp2(-scanline*ex*ex);
 }   
 
-// Shadow mask (1-4 from PD CRT Lottes shader).
-
-vec3 Mask(vec2 pos, float mx)
-{
-	pos = floor(pos/masksize);
-	vec3 mask = vec3(maskDark, maskDark, maskDark);
-	vec3 one = vec3(1.0);
-	float dark_compensate  = mix(max( clamp( mix (mcut, maskstr, mx),0.0, 1.0) - 0.3, 0.0) + 1.0, 1.0, mx);
-	float mc = 1.0 - max(maskstr, 0.0);	
-	
-	// No mask
-	if (shadowMask == -1.0)
-	{
-		mask = vec3(1.0);
-	}       
-	
-	// Phosphor.
-	else if (shadowMask == 0.0)
-	{
-		pos.x = fract(pos.x*0.5);
-		if (pos.x < 0.49) { mask.r = 1.0; mask.g = mc; mask.b = 1.0; }
-		else { mask.r = mc; mask.g = 1.0; mask.b = mc; }
-	}    
-   
-	// Very compressed TV style shadow mask.
-	else if (shadowMask == 1.0)
-	{
-		float line = maskLight;
-		float odd  = 0.0;
-
-		if (fract(pos.x/6.0) < 0.49)
-			odd = 1.0;
-		if (fract((pos.y + odd)/2.0) < 0.49)
-			line = maskDark;
-
-		pos.x = fract(pos.x/3.0);
-    
-		if      (pos.x < 0.3) mask.r = maskLight;
-		else if (pos.x < 0.6) mask.g = maskLight;
-		else                    mask.b = maskLight;
-		
-		mask*=line;  
-	} 
-
-	// Aperture-grille.
-	else if (shadowMask == 2.0)
-	{
-		pos.x = fract(pos.x/3.0);
-
-		if      (pos.x < 0.3) mask.r = maskLight;
-		else if (pos.x < 0.6) mask.g = maskLight;
-		else                    mask.b = maskLight;
-	} 
-
-	// Stretched VGA style shadow mask (same as prior shaders).
-	else if (shadowMask == 3.0)
-	{
-		pos.x += pos.y*3.0;
-		pos.x  = fract(pos.x/6.0);
-
-		if      (pos.x < 0.3) mask.r = maskLight;
-		else if (pos.x < 0.6) mask.g = maskLight;
-		else                    mask.b = maskLight;
-	}
-
-	// VGA style shadow mask.
-	else if (shadowMask == 4.0)
-	{
-		pos.xy = floor(pos.xy*vec2(1.0, 0.5));
-		pos.x += pos.y*3.0;
-		pos.x  = fract(pos.x/6.0);
-
-		if      (pos.x < 0.3) mask.r = maskLight;
-		else if (pos.x < 0.6) mask.g = maskLight;
-		else                    mask.b = maskLight;
-	}
-	
-	// Trinitron mask 5
-	else if (shadowMask == 5.0)
-	{
-		mask = vec3(0.0);		
-		pos.x = fract(pos.x/2.0);
-		if  (pos.x < 0.49)
-		{	mask.r  = 1.0;
-			mask.b  = 1.0;
-		}
-		else     mask.g = 1.0;
-		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
-	}    
-
-	// Trinitron mask 6
-	else if (shadowMask == 6.0)
-	{
-		mask = vec3(0.0);
-		pos.x = fract(pos.x/3.0);
-		if      (pos.x < 0.3) mask.r = 1.0;
-		else if (pos.x < 0.6) mask.g = 1.0;
-		else                    mask.b = 1.0;
-		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
-	}
-	
-	// BW Trinitron mask 7
-	else if (shadowMask == 7.0)
-	{
-		mask = vec3(0.0);		
-		pos.x = fract(pos.x/2.0);
-		if  (pos.x < 0.49)
-		{	mask  = 0.0.xxx;
-		}
-		else     mask = 1.0.xxx;
-		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
-	}    
-
-	// BW Trinitron mask 8
-	else if (shadowMask == 8.0)
-	{
-		mask = vec3(0.0);
-		pos.x = fract(pos.x/3.0);
-		if      (pos.x < 0.3) mask = 0.0.xxx;
-		else if (pos.x < 0.6) mask = 1.0.xxx;
-		else                  mask = 1.0.xxx;
-		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
-	}    
-
-	// Magenta - Green - Black mask
-	else if (shadowMask == 9.0)
-	{
-		mask = vec3(0.0);
-		pos.x = fract(pos.x/3.0);
-		if      (pos.x < 0.3) mask    = 0.0.xxx;
-		else if (pos.x < 0.6) mask.rb = 1.0.xx;
-		else                  mask.g  = 1.0;
-		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;	
-	}  
-	
-	// RGB - Black mask
-	else if (shadowMask == 10.0)
-	{
-		mask = vec3(0.0);
-		pos.x = fract(pos.x * 0.25);
-		if      (pos.x < 0.2)  mask  = 0.0.xxx;
-		else if (pos.x < 0.4)  mask.r = 1.0;
-		else if (pos.x < 0.7)  mask.g = 1.0;	
-		else                   mask.b = 1.0;
-		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;		
-	}  
-
-	// 4k mask
-	else if (shadowMask == 11.0)
-	{
-		mask = vec3(mc);
-		pos.x = fract(pos.x * 0.25);
-		if      (pos.x < 0.2)  mask.r  = 1.0;
-		else if (pos.x < 0.4)  mask.rg = 1.0.xx;
-		else if (pos.x < 0.7)  mask.gb = 1.0.xx;	
-		else                   mask.b  = 1.0;	
-	}     
-	else
-	{
-		mask = vec3(mc);
-		pos.x = fract(pos.x * 0.25);
-		if      (pos.x < 0.2)  mask.r  = 1.0;
-		else if (pos.x < 0.4)  mask.rb = 1.0.xx;
-		else if (pos.x < 0.7)  mask.gb = 1.0.xx;	
-		else                   mask.g  = 1.0;	
-	}     
- 
-	return mask;
-}
-
-float SlotMask(vec2 pos, float m)
-{
-	if ((slotmask + slotmask1) == 0.0) return 1.0;
-	else
-	{
-	pos = floor(pos/slotms);
-	float mlen = slotwidth*2.0;
-	float px = fract(pos.x/mlen);
-	float py = floor(fract(pos.y/(2.0*double_slot))*2.0*double_slot);
-	float slot_dark = mix(1.0-slotmask1, 1.0-slotmask, m);
-	float slot = 1.0;
-	if (py == 0.0 && px <  0.5) slot = slot_dark; else
-	if (py == double_slot && px >= 0.5) slot = slot_dark;		
-	
-	return slot;
-	}
-}   
  
 vec2 Warp(vec2 pos)
 {
@@ -495,38 +239,6 @@ vec2 Overscan(vec2 pos, float dx, float dy){
 	return pos*0.5+0.5;
 } 
 
-float humbar(float pos)
-{
-	if (global.barintensity == 0.0) return 1.0; else
-	{
-		pos = (global.barintensity >= 0.0) ? pos : (1.0-pos);
-		pos = fract(pos + mod(float(global.FrameCount),global.barspeed)/(global.barspeed-1.0));
-		pos = (global.barintensity <  0.0) ? pos : (1.0-pos);	
-		return (1.0-global.barintensity) + global.barintensity*pos;
-	}	
-}
-
-
-float corner(vec2 pos) {
-	vec2 b = vec2(bsize1, bsize1) *  vec2(1.0, OutputSize.x/OutputSize.y) * 0.05;
-	pos = clamp(pos, 0.0, 1.0);
-	pos = abs(2.0*(pos - 0.5));
-	float csize1 = mix(400.0, 7.0,  pow(4.0*csize, 0.10));
-	float crn = dot(pow(pos, csize1.xx), vec2(1.0, OutputSize.y/OutputSize.x));
-	crn = (csize == 0.0) ? max(pos.x, pos.y) : pow(crn, 1.0/csize1);
-	pos = max(pos, crn);
-	vec2 res = (bsize1 == 0.0) ? 1.0.xx : mix(0.0.xx, 1.0.xx, smoothstep(1.0.xx, 1.0.xx-b, sqrt(pos)));
-	res = pow(res, sborder.xx);	
-	return sqrt(res.x*res.y);
-}
-
-
-vec3 declip(vec3 c, float b)
-{
-	float m = max(max(c.r,c.g),c.b);
-	if (m > b) c = c*b/m;
-	return c;
-}
 
 vec3 gc(vec3 c)
 {
@@ -535,15 +247,10 @@ vec3 gc(vec3 c)
 	return c * mg/(mc + eps);  
 }
 
-vec3 plant (vec3 tar, float r)
-{
-	float t = max(max(tar.r,tar.g),tar.b) + 0.00001;
-	return tar * r / t;
-}
 
 void main()
 {
-	vec4 SourceSize = global.OriginalSize * vec4(prescalex, 1.0, 1.0/prescalex, 1.0);
+	vec4 SourceSize = global.OriginalSize * mix( vec4(prescalex, 1.0, 1.0/prescalex, 1.0), vec4(1.0, prescalex, 1.0, 1.0/prescalex), TATE);
 	
 	float lum = COMPAT_TEXTURE(AvgLumPass, vec2(0.5,0.5)).a;
 	
@@ -577,7 +284,6 @@ void main()
 	texcoord = Overscan(texcoord, (SourceSize.x - overscanX)/SourceSize.x, (SourceSize.y - overscanY)/SourceSize.y);
 
 	vec2 pos  = Warp(texcoord);
-	vec2 pos0 = Warp(TEX0.xy);
    
 	bool smarte  = (smart_ei > 0.01 && notate); // smart edge interpolation on / off
 
@@ -633,10 +339,10 @@ void main()
 	float fp1 = 1.-fpx;
 
 	float twl3 = max(wl3 - sharp1, 0.0);
-	float twl2 = max(wl2 - sharp1, mix(-0.12, 0.0, 1.0-fp1*fp1)); float scl2 = max(twl2, 0.0);
+	float twl2 = max(wl2 - sharp1, mix(-0.12, 0.0, 1.0-fp1*fp1));
 	float twl1 = max(wl1 - sharp1, 0.0);
 	float twr1 = max(wr1 - sharp1, 0.0);
-	float twr2 = max(wr2 - sharp1, mix(-0.12, 0.0, 1.0-fpx*fpx)); float scr2 = max(twr2, 0.0);
+	float twr2 = max(wr2 - sharp1, mix(-0.12, 0.0, 1.0-fpx*fpx));
 	float twr3 = max(wr3 - sharp1, 0.0);
 	
 	bool sharp = (sharp1 > 0.0);
@@ -690,7 +396,6 @@ void main()
 	float swr2 = max(twr2, 0.0) * (dot(r2,luma) + ts);
 	
 	float fscolor1 = (lm2*swl2 + lm1*swl1 + rm1*swr1 + rm2*swr2)/(swl2+swl1+swr1+swr2);
-	vec3 mcolor1 = vec3(fscolor1);	
 	vec3 scolor1 = vec3(clamp(mix(max(max(color1.r,color1.g),color1.b), fscolor1, spike), 0.0, 1.0));
 	
 	vec3 scolor2, mcolor2;
@@ -733,11 +438,10 @@ void main()
 	swr2 = max(twr2, 0.0) * (dot(r2,luma) + ts);
 	
 	float fscolor2 = (lm2*swl2 + lm1*swl1 + rm1*swr1 + rm2*swr2)/(swl2+swl1+swr1+swr2);
-	mcolor2 = vec3(fscolor2);
 	scolor2 = vec3(clamp(mix(max(max(color2.r,color2.g),color2.b), fscolor2, spike), 0.0, 1.0));
 }
 
-	vec3 ctmp = color1; vec3 mcolor = scolor1; float w3 = 1.0; vec3 color = color1;
+	vec3 ctmp = color1; float w3 = 1.0; vec3 color = color1;
 	vec3 one = vec3(1.0);
 
 if (!interb)
@@ -752,11 +456,9 @@ if (!interb)
 
 	vec3 color00 = color1*wt1 + color2*wt2;
 	vec3 scolor0 = scolor1*wt1 + scolor2*wt2;
-	mcolor  = (mcolor1*wt1 + mcolor2*wt2)/(wt1+wt2);
 	
 	ctmp = color00/(wt1+wt2);
 	vec3 sctmp = scolor0/(wt1+wt2);
-	mcolor = clamp(mix(ctmp, mcolor, 1.25), 0.0, 1.0);
 	
 	float wf1, wf2;
 	
@@ -829,70 +531,9 @@ if (!interb)
 	if (interb) 
 	{
 		color = gc(color1);
-		mcolor = clamp(mix(color1, mcolor1, 1.25), 0.0, 1.0);
 	}
 
-	float mx = max(max(mcolor.r,mcolor.g),mcolor.b);
-	mx = pow(mx, 1.20/gamma_in);
+	float colmx = pow(max(max(ctmp.r,ctmp.g),ctmp.b), 1.40/gamma_in);
    
-	// Apply Mask
-	
-	vec3 orig1 = color;
-	vec3 cmask = one;
-	
-	vec2 maskcoord = gl_FragCoord.yx * 1.000001;
-	if (notate) maskcoord = maskcoord.yx;
-	
-	float smask = SlotMask(maskcoord, mx);	
-	cmask*= Mask(maskcoord, mx);
-	
-	color = pow(color, vec3(mask_gamma/gamma_in));
-	color = color*cmask;
-	color = min(color,1.0);
-	color = color*smask;
-	color = pow(color, vec3(gamma_in/mask_gamma));
-
-	cmask = min(cmask*smask, 1.0);
-
-	if (interb) ctmp = color;
-	float colmx = pow( max( max(ctmp.r, ctmp.g), ctmp.b), 1.40/gamma_out);
-	float bb = mix(brightboost, brightboost1, colmx);
-	if (interb) bb = (abs(intera-0.5)<0.1) ? pow(0.80*bb, 0.65) : pow(bb, 0.70);
-	color*=bb;
-
-	vec3  Glow = COMPAT_TEXTURE(GlowPass, pos).rgb;
-	vec3  Ref = COMPAT_TEXTURE(LinearizePass, pos).rgb;
-	vec3  Bloom = COMPAT_TEXTURE(BloomPass, pos).rgb;
-	float maxb = COMPAT_TEXTURE(BloomPass, pos).a;
-	float vig  = COMPAT_TEXTURE(PrePass, clamp(pos, 0.0+0.5*global.OriginalSize.zw, 1.0-0.5*global.OriginalSize.zw)).a;
-
-	vec3 Bloom1 = min(Bloom*(orig1+color), max(0.5*(colmx + orig1 - color),0.0));
-	Bloom1 = 0.5*(Bloom1 + mix(Bloom1, mix(colmx*orig1, Bloom1, 0.5), 1.0-color));
-	
-	
-	if (bloom < 0.0) {
-		Ref = max(Bloom-Ref, 0.0);
-		Ref = plant(Bloom1, max(max(Ref.r,Ref.g),Ref.b));
-		Bloom1 = 2.0*mix(Ref, mix(colmx*Ref, Bloom1, 0.5), 1.0-color);
-	}
-
-	Bloom1 = Bloom1 * mix(1.0, 2.0-colmx, bloom_dist);
-
-	color = color + abs(bloom) * Bloom1;
-
-	color = min(color, mix(one, cmask, mclip));
-	if (!interb) color = declip(color, pow(w3,0.60));
-
-	if (halation > 0.025) {
-		Bloom = mix(0.5*(Bloom + Bloom*Bloom), 0.75*Bloom*Bloom, colmx);	
-		color = color + (1.1-0.25*colmx)*(0.75+maxb)*Bloom*(0.75 + 0.70*pow(colmx,0.33333))*mix(1.0,w3,0.5*colmx)*mix(one,cmask,0.35 + 0.4*maxb)*halation; }
-
-	Glow = mix(Glow, 0.25*color, 0.7*colmx);
-	if (glow >= 0.0) color = color + 0.5*Glow*glow; else { cmask*=cmask; cmask*=cmask; color = color + (-glow)*cmask*Glow; }
-
-	color = min(color, 1.0);
-	
-	color = pow(color, vec3(1.0/gamma_out));
-	
-	FragColor = vec4(color*vig*humbar(mix(pos.y, pos.x, global.bardir)), corner(pos0));
+	FragColor = vec4(color, colmx);
 }

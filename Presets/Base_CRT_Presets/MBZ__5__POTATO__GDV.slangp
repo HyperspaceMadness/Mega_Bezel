@@ -115,6 +115,7 @@ alias16 = BloomPass
 
 shader17 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-crt-guest-advanced-potato.slang
 filter_linear17 = true
+float_framebuffer17 = true
 scale_type17 = viewport
 scale_x17 = 1.0
 scale_y17 = 1.0

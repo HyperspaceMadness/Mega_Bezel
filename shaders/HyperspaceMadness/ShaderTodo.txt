@@ -15,6 +15,7 @@ Changes:
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
+  * Adjust Text Render to have only relevant items
   * Check out Colorize Behavior on DMG-01 (Colored Gameboy)
   * Multiply mode for CRT Screen
   * Different bloom/glow on STD vs ADV

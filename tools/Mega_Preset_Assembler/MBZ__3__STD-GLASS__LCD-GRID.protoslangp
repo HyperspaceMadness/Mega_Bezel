@@ -7,7 +7,6 @@
 #reference "Components/35__fast-sharpen.slangp"
 #reference "Components/59__mbz__crt__gdv-adv-prep-and-linearize.slangp"
 #reference "Components/60__mbz__crt__lcd-grid.slangp"
-#reference "Components/61__mbz__crt__gdv-adv-deconvergence.slangp"
 #reference "Components/68__mbz__post-crt__glass.slangp"
 #reference "Components/69__mbz__reflection-prep.slangp"
 #reference "Components/70__mbz__reflection__glass.slangp"

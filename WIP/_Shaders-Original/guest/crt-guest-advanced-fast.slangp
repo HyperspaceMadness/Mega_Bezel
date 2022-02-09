@@ -62,6 +62,7 @@ alias6 = BloomPass
 
 shader7 = shaders/guest/fast/crt-guest-advanced-pass2.slang
 filter_linear7 = true
+float_framebuffer7 = true
 scale_type7 = viewport
 scale_x7 = 1.0
 scale_y7 = 1.0

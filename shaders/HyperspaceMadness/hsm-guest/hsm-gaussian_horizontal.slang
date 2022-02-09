@@ -34,7 +34,7 @@ layout(push_constant) uniform Push
 
 #pragma parameter bogus_glow "[ GDV - GLOW ]:" 0.0 0.0 1.0 1.0
 
-#pragma parameter glow "          Strength -- glow" 0.08 -2.0 2.0 0.01
+#pragma parameter glow "          Glow Strength -- glow" 0.08 -2.0 2.0 0.01
 #define glow         params.glow     // Glow Strength
 
 #pragma parameter SIZEH "          Horizontal Radius (Num Samples) -- SIZEH" 6.0 1.0 50.0 1.0 

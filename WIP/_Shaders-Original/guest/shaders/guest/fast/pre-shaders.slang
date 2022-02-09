@@ -49,7 +49,7 @@ layout(push_constant) uniform Push
 #define CP params.CP
 #define CS params.CS
 
-#pragma parameter TNTC "          LUT Colors: Trin. | invTrin. | Nec Mult. | NTSC" 0.0 0.0 4.0 1.0
+#pragma parameter TNTC "          LUT Colors: Trin.1 | Trin.2 | Nec Mult. | NTSC" 0.0 0.0 4.0 1.0
 #define TNTC params.TNTC
 
 #pragma parameter LS "          LUT Size" 32.0 32.0 64.0 32.0
@@ -73,9 +73,9 @@ layout(push_constant) uniform Push
 #pragma parameter BP "          Raise Black Level" 0.0 0.0 25.0 1.0
 #define BP params.BP
 
-#pragma parameter vigstr "          Vignette Strength" 0.0 0.0 2.0 0.025
+#pragma parameter vigstr "          Vignette Strength" 0.0 0.0 2.0 0.05
 
-#pragma parameter vigdef "          Vignette Definition" 7.0 0.4 15.0 0.2
+#pragma parameter vigdef "          Vignette Size" 1.0 0.5 3.0 0.10
 
 
 layout(std140, set = 0, binding = 0) uniform UBO
@@ -194,9 +194,9 @@ const mat3 D65_to_D55 = mat3 (
 
 
 const mat3 D65_to_D93 = mat3 (
-           0.3683017655,  0.1899055978,  0.0172641453,
-           0.3555467892,  0.7110935785,  0.1185155964,
-           0.2475020592,  0.0990008237,  1.3035108450);
+           0.3685813787,  0.1900497734,  0.0172772521,
+           0.3554910153,  0.7109820305,  0.1184970051,
+           0.2474204902,  0.0989681961,  1.3030812484);
 
 
 vec3 fix_lut(vec3 lutcolor, vec3 ref)
@@ -208,18 +208,13 @@ vec3 fix_lut(vec3 lutcolor, vec3 ref)
 	return mix(lutcolor, ref, LUTBR);
 }
 
-vec2 ctransform (vec2 inputc)
-{
-	return vec2( inputc.x * sqrt(1.0 - 0.5*inputc.y*inputc.y), inputc.y * sqrt(1.0 - 0.5*inputc.x*inputc.x));
-}
-
-float vignette (vec2 coords)
-{
-	vec2 ccoords = ctransform(2.0*(coords-0.5));
-	ccoords = ccoords * ccoords;
-	float vstr = sqrt(ccoords.x+ccoords.y);
-	vstr = pow(vstr, params.vigdef);
-	return max(mix(1.0, 1.0-vstr, params.vigstr), 0.0);
+float vignette(vec2 pos) {
+	vec2 b = vec2(params.vigdef, params.vigdef) *  vec2(1.0, params.OriginalSize.x/params.OriginalSize.y) * 0.125;
+	pos = clamp(pos, 0.0, 1.0);
+	pos = abs(2.0*(pos - 0.5));
+	vec2 res = mix(0.0.xx, 1.0.xx, smoothstep(1.0.xx, 1.0.xx-b, sqrt(pos)));
+	res = pow(res, 0.70.xx);	
+	return max(mix(1.0, sqrt(res.x*res.y), params.vigstr), 0.0);
 }
 
 vec3 plant (vec3 tar, float r)

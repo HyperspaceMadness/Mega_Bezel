@@ -1,4 +1,4 @@
-shaders = 20
+shaders = 19
 
 shader0 = ../../shaders/HyperspaceMadness/hsm/hsm-add-params-no-reflect.slang
 alias0 = "CorePass"
@@ -89,33 +89,27 @@ filter_linear14 = true
 
 g_sat = 0.15
 
-shader15 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-deconvergence.slang
-filter_linear15 = true
-scale_type15 = viewport
-scale_x15 = 1.0
-scale_y15 = 1.0
-
-shader16 = ../../shaders/HyperspaceMadness/hsm/hsm-post-crt-prep-no-reflect.slang
-alias16 = "MBZ_PostCRTPass"
+shader15 = ../../shaders/HyperspaceMadness/hsm/hsm-post-crt-prep-no-reflect.slang
+alias15 = "MBZ_PostCRTPass"
 
 // Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 
-shader17 = ../../shaders/HyperspaceMadness/hsm/hsm-bezel-images-under-crt.slang
+shader16 = ../../shaders/HyperspaceMadness/hsm/hsm-bezel-images-under-crt.slang
+filter_linear16 = true
+scale_type16 = viewport
+float_framebuffer16 = true
+alias16 = "BR_LayersUnderCRTPass"
+
+shader17 = ../../shaders/HyperspaceMadness/hsm/hsm-bezel-images-over-crt.slang
 filter_linear17 = true
 scale_type17 = viewport
 float_framebuffer17 = true
-alias17 = "BR_LayersUnderCRTPass"
-
-shader18 = ../../shaders/HyperspaceMadness/hsm/hsm-bezel-images-over-crt.slang
-filter_linear18 = true
-scale_type18 = viewport
-float_framebuffer18 = true
-alias18 = "BR_LayersOverCRTPass"
+alias17 = "BR_LayersOverCRTPass"
 
 // Combine Passes ----------------------------------------------------------------
-shader19 = ../../shaders/HyperspaceMadness/hsm/hsm-combine-passes-no-reflect.slang
-scale_type19 = viewport
-alias19 = "CombinePass"
+shader18 = ../../shaders/HyperspaceMadness/hsm/hsm-combine-passes-no-reflect.slang
+scale_type18 = viewport
+alias18 = "CombinePass"
 // Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;LEDImage;TopLayerImage;"
 

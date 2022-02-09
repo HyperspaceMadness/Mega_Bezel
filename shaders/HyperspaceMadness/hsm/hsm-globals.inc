@@ -169,9 +169,6 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	// CRT Screen
 	// These names are inconsistent with the general naming on purpose
 	// They match the namse in Guest's shader
-	float GAMMA_INPUT;
-	float gamma_out;
-	float post_br;
 	float HSM_CRT_BLEND_MODE;
 	float HSM_CRT_BLEND_AMOUNT;
 
@@ -186,7 +183,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	
 	//    Monochrome
 	float HSM_MONOCHROME_MODE;
-float HSM_MONOCHROME_BRIGHTNESS;
+	float HSM_MONOCHROME_BRIGHTNESS;
 	float HSM_MONOCHROME_GAMMA;
 	float HSM_MONOCHROME_HUE_OFFSET;
 	float HSM_MONOCHROME_SATURATION;
@@ -211,8 +208,8 @@ float HSM_MONOCHROME_BRIGHTNESS;
 	float HSM_TUBE_DIFFUSE_IMAGE_SATURATION;
 	float HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS;
 	float HSM_TUBE_DIFFUSE_IMAGE_GAMMA;
-float HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING;
-float HSM_TUBE_DIFFUSE_IMAGE_SCALE;
+	float HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING;
+	float HSM_TUBE_DIFFUSE_IMAGE_SCALE;
 	float HSM_TUBE_COLORED_GEL_IMAGE_ON;
 	float HSM_TUBE_COLORED_GEL_IMAGE_DUALSCREEN_VIS_MODE;
 	float HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT;
@@ -222,8 +219,8 @@ float HSM_TUBE_DIFFUSE_IMAGE_SCALE;
 	float HSM_TUBE_BLACK_EDGE_LAYERING_MODE;
 	float HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT;
 	float HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL;
-float HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING;
-float HSM_TUBE_COLORED_GEL_IMAGE_SCALE;	
+	float HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING;
+	float HSM_TUBE_COLORED_GEL_IMAGE_SCALE;	
 
 	//    TUBE STATIC REFLECTION
 	float HSM_TUBE_STATIC_REFLECTION_IMAGE_ON;
@@ -239,7 +236,7 @@ float HSM_TUBE_COLORED_GEL_IMAGE_SCALE;
 	float HSM_TUBE_BLACK_EDGE_SHARPNESS;
 	float HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE;
 	float HSM_TUBE_BLACK_EDGE_THICKNESS;
-float HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE;
+	float HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE;
 
 	//    Bezel Independent Scale
 	float HSM_BZL_USE_INDEPENDENT_SCALE;
@@ -542,12 +539,68 @@ float HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE;
 	float HSM_INTRO_SOLID_COLOR_FADE_OUT;
 
 	// Guest-Dr-Venom Params
-	float blendMode;
-	float bloom_dist;
-	float scangammaoffset;
-	float rolling_scan;
-	float scan_falloff;
+	float GAMMA_INPUT;
+	float gamma_out;
+	float post_br;
 
+	float glow;
+	float bloom;
+	float bloom_dist;
+	float halation;
+
+
+	float TATE;
+	float IOS;
+	float OS;
+	float BLOOM;
+	float overscanX;
+	float overscanY;
+	float intres;
+	float prescalex;
+	float c_shape;
+	float sborder;
+	float csize;
+	float bsize1;
+	float warpX;
+	float warpY;
+
+	float gamma_c;
+	float brightboost;
+	float brightboost1;
+
+	float blendMode;
+
+	float gsl;
+	float scanline1;
+	float scanline2;
+	float beam_min;
+	float beam_max;
+	float beam_size;
+	float vertmask;
+	float scans;
+	float scan_falloff;
+	float spike;
+	float scangammaoffset;
+	
+	float rolling_scan;
+
+	float h_sharp;
+	float s_sharp;
+	float smart_ei;
+	float ei_limit;
+	float sth;
+
+	float barspeed;
+	float barintensity;
+	float bardir;
+
+	float shadowMask;
+	float maskstr;
+	float mcut;	
+	float masksize;
+	float maskDark;
+	float maskLight;
+	float mask_gamma;
 	float slotmask;
 	float slotmask1;
 	float slotwidth;
@@ -555,9 +608,20 @@ float HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE;
 	float slotms;
 	float mclip;
 	
-	float barspeed;
-	float barintensity;
-	float bardir;
+	float GDV_DECONVERGENCE_ON;
+	float decons;
+	float GDV_NOISE_ON;
+	float addnoised;
+	float noiseresd;
+	float deconrr;
+	float deconrg;
+	float deconrb;
+	float deconrry;
+	float deconrgy;
+	float deconrby;	
+	float deconsmooth;
+	float dctypex;
+	float dctypey; 
 
 	// Grade Params
 	float g_grade_on;

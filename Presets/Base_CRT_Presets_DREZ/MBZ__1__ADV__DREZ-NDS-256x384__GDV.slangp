@@ -176,6 +176,7 @@ alias32 = BloomPass
 
 shader33 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-crt-guest-advanced.slang
 filter_linear33 = true
+float_framebuffer33 = true
 scale_type33 = viewport
 scale_x33 = 1.0
 scale_y33 = 1.0

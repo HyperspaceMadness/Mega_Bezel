@@ -45,7 +45,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 } global;
 
 
-#pragma parameter GAMMA_INPUT "Gamma Input" 2.2 1.0 5.0 0.05
+#pragma parameter GAMMA_INPUT "Gamma Input" 1.9 1.0 5.0 0.05
 #define GAMMA_INPUT params.GAMMA_INPUT
 
 #pragma parameter bogus_interlacing "[ INTERLACING OPTIONS ]: " 0.0 0.0 0.0 1.0
@@ -89,7 +89,7 @@ void main()
 #pragma stage fragment
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
-layout(set = 0, binding = 2) uniform sampler2D PrePass1;
+layout(set = 0, binding = 2) uniform sampler2D Source;
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
 
@@ -109,15 +109,15 @@ vec3 fetch_pixel(vec2 coord)
 	vec2 d2 = dx - dy;
 	
 	float sum = 15.0;
-	vec3 result = 3.0*COMPAT_TEXTURE(PrePass1, coord     ).rgb + 
-	              2.0*COMPAT_TEXTURE(PrePass1, coord + dx).rgb +
-	              2.0*COMPAT_TEXTURE(PrePass1, coord - dx).rgb +
-	              2.0*COMPAT_TEXTURE(PrePass1, coord + dy).rgb +
-	              2.0*COMPAT_TEXTURE(PrePass1, coord - dy).rgb +
-	              COMPAT_TEXTURE(PrePass1, coord + d1).rgb +
-	              COMPAT_TEXTURE(PrePass1, coord - d1).rgb +
-	              COMPAT_TEXTURE(PrePass1, coord + d2).rgb +
-	              COMPAT_TEXTURE(PrePass1, coord - d2).rgb;  
+	vec3 result = 3.0*COMPAT_TEXTURE(Source, coord     ).rgb + 
+	              2.0*COMPAT_TEXTURE(Source, coord + dx).rgb +
+	              2.0*COMPAT_TEXTURE(Source, coord - dx).rgb +
+	              2.0*COMPAT_TEXTURE(Source, coord + dy).rgb +
+	              2.0*COMPAT_TEXTURE(Source, coord - dy).rgb +
+	              COMPAT_TEXTURE(Source, coord + d1).rgb +
+	              COMPAT_TEXTURE(Source, coord - d1).rgb +
+	              COMPAT_TEXTURE(Source, coord + d2).rgb +
+	              COMPAT_TEXTURE(Source, coord - d2).rgb;  
 				  
 	return result/sum;
 }
@@ -125,8 +125,8 @@ vec3 fetch_pixel(vec2 coord)
 
 void main()
 {
-	vec3 c1 = COMPAT_TEXTURE(PrePass1, vTexCoord).rgb;
-	vec3 c2 = COMPAT_TEXTURE(PrePass1, vTexCoord + vec2(0.0, params.OriginalSize.w)).rgb;
+	vec3 c1 = COMPAT_TEXTURE(Source, vTexCoord).rgb;
+	vec3 c2 = COMPAT_TEXTURE(Source, vTexCoord + vec2(0.0, params.OriginalSize.w)).rgb;
 	
 	if ((downsample_levelx + downsample_levely) > 0.025)
 	{

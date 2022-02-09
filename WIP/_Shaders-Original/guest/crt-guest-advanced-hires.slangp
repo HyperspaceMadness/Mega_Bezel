@@ -67,11 +67,12 @@ alias7 = GlowPass
 
 shader8 = shaders/guest/advanced/crt-guest-advanced-hires.slang
 filter_linear8 = true
+float_framebuffer8 = true
 scale_type8 = viewport
 scale_x8 = 1.0
 scale_y8 = 1.0
 
-shader9 = shaders/guest/advanced/deconvergence.slang
+shader9 = shaders/guest/advanced/deconvergence-hires.slang
 filter_linear9 = true
 scale_type9 = viewport
 scale_x9 = 1.0
