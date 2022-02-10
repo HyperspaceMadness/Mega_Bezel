@@ -5,19 +5,27 @@ Mega Bezel is updated to V 0.9.102 2022-02-02 Rev 1
 Changes:
   * WARNING post_br is now 100% at 1, not 100, you will need to adjust any presets you have saved, just divide the number by 100
     * This is so it matches with guest's usage 
+  * Updated to crt-guest-advanced-2022-02-06-release2
+    * Now with @guest.r's super sweet deconvergence magic, no more blur in the mask with deconvergence
   * Adjusted Tube Diffuse Color
     * HSM_TUBE_DIFFUSE_IMAGE_ON is renamed to HSM_TUBE_DIFFUSE_MODE
     * values are now:
       * 0 - Black
       * 1 - Image
       * 2 - Transparent
+  * Added CRT blend modes, Add & Multiply
+    * Multiply can be useful for when you have a old style lcd like the DMG where the lcd elements are not self-lit
+    * When in Multiply mode the tube diffuse image is set to use the image and will be opaque
+      * So when using multiply the crt image will be always be multiplied on top of the diffuse image
+
 
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
+  * Fix Potato Blend Mode and Show Over BG
+  * Fix Vignette hidden when BG under screen
   * Adjust Text Render to have only relevant items
   * Check out Colorize Behavior on DMG-01 (Colored Gameboy)
-  * Multiply mode for CRT Screen
   * Different bloom/glow on STD vs ADV
   * Auto Rotate
   * Potato NTSC GDV-MINI

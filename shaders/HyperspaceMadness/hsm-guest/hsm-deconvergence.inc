@@ -560,6 +560,8 @@ void main()
 	// HSM Added
 	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+	vec2 SourceSize = CROPPED_ROTATED_SIZE_WITH_RES_MULT;
+	float TATE = USE_VERTICAL_SCANLINES;
 
 // TODO need to adjust presets to have per preset type deconvergence
 // 	vec2 cache_bounds_coord = SCREEN_COORD;
@@ -586,10 +588,6 @@ void main()
 // 			FragColor = vec4(0);
 // 			return;
 // 	}
-
-	float TATE = USE_VERTICAL_SCANLINES;
-	vec2 SourceSize = CROPPED_ROTATED_SIZE_WITH_RES_MULT;
-
 		// TODO
 		// HSM_GetCroppedTexSample(c,d)
 
@@ -599,9 +597,6 @@ void main()
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
 	bool interb  = (intera < 0.5);
 	bool notate  = (TATE < 0.5);
-
-	// if (USE_VERTICAL_SCANLINES > 0.5 && interb)
-	// 	notate = true;
 
 	/* HSM Removed
 	// Calculating texel coordinates
