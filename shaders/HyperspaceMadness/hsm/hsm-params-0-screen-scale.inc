@@ -43,6 +43,9 @@ float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
 #pragma parameter post_br                                   "          Post CRT Brightness" 1 0.01 5 0.01
 #define HSM_POST_CRT_BRIGHTNESS global.post_br
 
+// Hack to turn over 100 values to be 1 based
+// #define HSM_POST_CRT_BRIGHTNESS (max(floor((global.post_br + 1) / 100), 1) * global.post_br / 100 + (1 - max(floor((global.post_br + 1) / 100), 1)) * global.post_br)
+
 //---------------------------------------------------------------------------------------------------
 //    Global Graphics Brightness
 //---------------------------------------------------------------------------------------------------
@@ -412,8 +415,8 @@ float HSM_SCREEN_VIGNETTE_DUALSCREEN_VIS_MODE = global.HSM_SCREEN_VIGNETTE_DUALS
 #pragma parameter HSM_SCREEN_VIGNETTE_POWER                			"          Corner Amount (Power)" 26 0 200 2
 #define HSM_SCREEN_VIGNETTE_POWER global.HSM_SCREEN_VIGNETTE_POWER / 100
 
-#pragma parameter HSM_SCREEN_VIGNETTE_IN_REFLECTION                	"          Show Vignette in Reflection" 1 0 1 1
-#define HSM_SCREEN_VIGNETTE_IN_REFLECTION global.HSM_SCREEN_VIGNETTE_IN_REFLECTION
+#pragma parameter HSM_SCREEN_VIGNETTE_IN_REFLECTION                	"          Amount of Vignette in Reflection" 100 0 100 1
+#define HSM_SCREEN_VIGNETTE_IN_REFLECTION global.HSM_SCREEN_VIGNETTE_IN_REFLECTION / 100
 
 
 //---------------------------------------------------------------------------------------------------

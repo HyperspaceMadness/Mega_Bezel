@@ -1,4 +1,4 @@
-shaders = 5
+shaders = 6
 
 shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-gaussian_horizontal.slang
 filter_linear0 = true
@@ -40,3 +40,9 @@ float_framebuffer4 = true
 scale_type4 = viewport
 scale_x4 = 1.0
 scale_y4 = 1.0
+
+shader5 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-deconvergence-potato.slang
+filter_linear5 = true
+scale_type5 = viewport
+scale_x5 = 1.0
+scale_y5 = 1.0

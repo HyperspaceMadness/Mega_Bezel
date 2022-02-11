@@ -22,9 +22,6 @@
    
 */
 
-#include "../hsm/hsm-globals-and-screen-scale-params.inc"
-
-
 #pragma parameter bogus_brightness "[ GDV - BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
 #pragma parameter glow "          Glow Strength -- glow" 0.08 -2.0 2.0 0.01
@@ -74,13 +71,13 @@
 // #pragma parameter sborder "          Border Intensity" 0.75 0.25 2.0 0.05
 // #define sborder       global.sborder     // border intensity
 
-// #pragma parameter gdv_humbar_title "[ HUM BAR ]: " 0.0 0.0 0.1 0.1
+#pragma parameter gdv_humbar_title "[ HUM BAR ]: " 0.0 0.0 0.1 0.1
 
-// #pragma parameter barspeed "          Hum Bar Speed" 50.0 5.0 200.0 1.0
+#pragma parameter barspeed "          Hum Bar Speed" 50.0 5.0 200.0 1.0
 
-// #pragma parameter barintensity "          Hum Bar Intensity" 0.0 -1.0 1.0 0.01
+#pragma parameter barintensity "          Hum Bar Intensity" 0.0 -1.0 1.0 0.01
 
-// #pragma parameter bardir "          Hum Bar Direction" 0.0 0.0 1.0 1.0
+#pragma parameter bardir "          Hum Bar Direction - -1:SCANDIR | VERTICAL | HORIZ" -1.0 -1.0 1.0 1.0
 
 // #pragma parameter warpX "          CurvatureX (default 0.03)" 0.0 0.0 0.25 0.01
 // #define warpX        global.warpX     // Curvature X
@@ -105,19 +102,19 @@
 #pragma parameter shadowMask "CRT Mask: -1:None|0:CGWG|1-4:Lottes|5-10:Trinitrn -- shadowMask" 0.0 -1.0 12.0 1.0
 #define shadowMask   global.shadowMask     // Mask Style
 
+#pragma parameter masksize "          Mask Size - 0:Auto | 2K | 4k -- masksize" 0 1.0 4 1.0
+#define masksize     global.masksize     // Mask Size
+
 #pragma parameter maskstr "          Mask Strength (0, 5-12) -- maskstr" 0.3 -0.5 1.0 0.05
 #define maskstr         global.maskstr      // CGWG Mask Strength
 
 #pragma parameter mcut "          Mask 5-9 Trinitron Low Strength -- mcut" 1.10 0.0 2.0 0.05
 #define mcut         global.mcut      // Mask 5-9 cutoff
 
-#pragma parameter masksize "          CRT Mask Size - 0:Auto | 2K | 4k -- masksize" 0 1.0 4 1.0
-#define masksize     global.masksize     // Mask Size
-
-#pragma parameter maskDark "          Lottes maskDark" 0.5 0.0 2.0 0.05
+#pragma parameter maskDark "          Mask 1-4 Lottes maskDark" 0.5 0.0 2.0 0.05
 #define maskDark     global.maskDark     // Dark "Phosphor"
 
-#pragma parameter maskLight "          Lottes maskLight" 1.5 0.0 2.0 0.05
+#pragma parameter maskLight "          Mask 1-4 Lottes maskLight" 1.5 0.0 2.0 0.05
 #define maskLight    global.maskLight     // Light "Phosphor"
 
 #pragma parameter mask_gamma "          Mask Gamma -- mask_gamma" 2.40 1.0 5.0 0.05
@@ -136,7 +133,7 @@
 #define double_slot  global.double_slot     // Slot Mask Height
 
 #pragma parameter slotms "          Slot Mask Size - Auto | 2K | 4k -- slotms" 0.0 0.0 4.0 1.0
-#define slotms  global.slotms     // Slot Mask Size
+#define slotms  global.slotms       // Slot Mask Size
 
 #pragma parameter mclip "          Keep Mask effect with clipping -- mclip" 0.50 0.0 1.0 0.05
 #define mclip  global.mclip
@@ -448,7 +445,6 @@ vec2 Overscan(vec2 pos, float dx, float dy){
 }
 */
 
-/* HSM Removed
 float humbar(float pos)
 {
 	if (global.barintensity == 0.0) return 1.0; else
@@ -461,6 +457,7 @@ float humbar(float pos)
 }
 
 
+/* HSM Removed
 float corner(vec2 pos) {
 	vec2 b = vec2(bsize1, bsize1) *  vec2(1.0, OutputSize.x/OutputSize.y) * 0.05;
 	pos = clamp(pos, 0.0, 1.0);
@@ -563,31 +560,30 @@ void main()
 	vec2 SourceSize = CROPPED_ROTATED_SIZE_WITH_RES_MULT;
 	float TATE = USE_VERTICAL_SCANLINES;
 
-// TODO need to adjust presets to have per preset type deconvergence
-// 	vec2 cache_bounds_coord = SCREEN_COORD;
+	vec2 cache_bounds_coord = SCREEN_COORD;
 
-// // If it's the potato preset render the whole frame
-// #ifndef IS_POTATO_PRESET
-// #ifndef IS_NO_REFLECT_PRESET
-// 	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
-// 	HSM_GetBezelCoords(SCREEN_COORD, 
-// 						SCREEN_SCALE, 
-// 						TUBE_SCALE, 
-// 						SCREEN_ASPECT, 
-// 						false,
-// 						BEZEL_OUTSIDE_SCALE,
-// 						BEZEL_OUTSIDE_COORD, 
-// 						BEZEL_OUTSIDE_CURVED_COORD, 
-// 						FRAME_OUTSIDE_CURVED_COORD);
-// 	cache_bounds_coord = (FRAME_OUTSIDE_CURVED_COORD - 0.5) * 0.9 + 0.5;
-// #endif
-// #endif
+// If it's the potato preset render the whole frame
+#ifndef IS_POTATO_PRESET
+#ifndef IS_NO_REFLECT_PRESET
+	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
+	HSM_GetBezelCoords(SCREEN_COORD, 
+						SCREEN_SCALE, 
+						TUBE_SCALE, 
+						SCREEN_ASPECT, 
+						false,
+						BEZEL_OUTSIDE_SCALE,
+						BEZEL_OUTSIDE_COORD, 
+						BEZEL_OUTSIDE_CURVED_COORD, 
+						FRAME_OUTSIDE_CURVED_COORD);
+	cache_bounds_coord = (FRAME_OUTSIDE_CURVED_COORD - 0.5) * 0.9 + 0.5;
+#endif
+#endif
 
-// 	if (cache_bounds_coord.x < -0.01 || cache_bounds_coord.x > 1.01 || cache_bounds_coord.y < -0.01 || cache_bounds_coord.y > 1.01)
-// 	{
-// 			FragColor = vec4(0);
-// 			return;
-// 	}
+	if (cache_bounds_coord.x < -0.01 || cache_bounds_coord.x > 1.01 || cache_bounds_coord.y < -0.01 || cache_bounds_coord.y > 1.01)
+	{
+			FragColor = vec4(0);
+			return;
+	}
 		// TODO
 		// HSM_GetCroppedTexSample(c,d)
 
@@ -668,11 +664,19 @@ void main()
 	if (interb) bb = (abs(intera-0.5)<0.1) ? pow(0.80*bb, 0.65) : pow(bb, 0.70);
 	color*=bb;
 
+/* HSM Removed
 	vec3  Glow = COMPAT_TEXTURE(GlowPass, pos).rgb;
 	vec3  Ref = COMPAT_TEXTURE(LinearizePass, pos).rgb;
 	vec3  Bloom = COMPAT_TEXTURE(BloomPass, pos).rgb;
 	float maxb = COMPAT_TEXTURE(BloomPass, pos).a;
-	// float vig  = COMPAT_TEXTURE(PrePass, clamp(pos, 0.0+0.5*global.OriginalSize.zw, 1.0-0.5*global.OriginalSize.zw)).a;
+	float vig  = COMPAT_TEXTURE(PrePass, clamp(pos, 0.0+0.5*global.OriginalSize.zw, 1.0-0.5*global.OriginalSize.zw)).a;
+*/
+
+	vec3  Glow = HSM_GetCroppedTexSample(GlowPass, pos).rgb;
+	vec3  Ref = HSM_GetCroppedTexSample(LinearizePass, pos).rgb;
+	vec4  bloom_rgba = HSM_GetCroppedTexSample(BloomPass, pos);
+	vec3  Bloom = bloom_rgba.rgb;
+	float maxb = bloom_rgba.a;
 
 	vec3 Bloom1 = min(Bloom*(orig1+color), max(0.5*(colmx + orig1 - color),0.0));
 	Bloom1 = 0.5*(Bloom1 + mix(Bloom1, mix(colmx*orig1, Bloom1, 0.5), 1.0-color));
@@ -719,5 +723,7 @@ void main()
 	*/
 
 	// HSM Added
+	float adjusted_bardir = global.bardir < 0 ? TATE : global.bardir;
+	color.rgb *= humbar(mix(pos.y, pos.x, adjusted_bardir));
 	FragColor = vec4(color, 1.0);
 }

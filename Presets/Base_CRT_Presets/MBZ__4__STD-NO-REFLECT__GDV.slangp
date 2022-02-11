@@ -113,14 +113,14 @@ scale_y16 = 1.0
 float_framebuffer16 = true
 alias16 = BloomPass
 
-shader17 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-crt-guest-advanced.slang
+shader17 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-crt-guest-advanced-no-reflect.slang
 filter_linear17 = true
 float_framebuffer17 = true
 scale_type17 = viewport
 scale_x17 = 1.0
 scale_y17 = 1.0
 
-shader18 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-deconvergence.slang
+shader18 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-deconvergence-no-reflect.slang
 filter_linear18 = true
 scale_type18 = viewport
 scale_x18 = 1.0

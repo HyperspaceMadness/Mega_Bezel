@@ -120,7 +120,7 @@ scale_type17 = viewport
 scale_x17 = 1.0
 scale_y17 = 1.0
 
-shader18 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-deconvergence.slang
+shader18 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-deconvergence-potato.slang
 filter_linear18 = true
 scale_type18 = viewport
 scale_x18 = 1.0

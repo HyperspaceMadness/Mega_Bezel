@@ -22,6 +22,7 @@ Changes:
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
+  * Put shader base brightness adjustment in code instead of post brightness e.g. Easymode
   * Fix Potato Blend Mode and Show Over BG
   * Fix Vignette hidden when BG under screen
   * Adjust Text Render to have only relevant items

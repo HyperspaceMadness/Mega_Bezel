@@ -1,6 +1,5 @@
 #version 450
 
+#define IS_POTATO_PRESET
 #include "../hsm/hsm-globals-and-screen-scale-params.inc"
-#include "../hsm/hsm-params-2-bezel.inc"
-#include "../hsm/hsm-common-functions-bezel.inc"
 #include "hsm-deconvergence.inc"
