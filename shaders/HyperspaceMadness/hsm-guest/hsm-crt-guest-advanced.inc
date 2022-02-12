@@ -27,7 +27,7 @@
 
 #pragma parameter blendMode 		"   NTSC Blend Mode - 0:SHARP | 1:STANDARD | 2:ORIG -- blendMode" 1.0 0.0 2.0 1.0
 
-#pragma parameter bogus_brightness "[ GDV - BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
+#pragma parameter bogus_brightness "[ BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
 #pragma parameter glow "          Glow Strength -- glow" 0.08 -2.0 2.0 0.01
 #define glow         global.glow     // Glow Strength
@@ -50,7 +50,7 @@
 #pragma parameter brightboost1 "          Bright Boost Bright Pixels -- brightboost1" 1.10 0.25 3.00 0.025
 #define brightboost1  global.brightboost1     // adjust brightness
 
-#pragma parameter bogus_scanline "[ GDV - SCANLINE OPTIONS ]: " 0.0 0.0 1.0 1.0
+#pragma parameter bogus_scanline "[ SCANLINE OPTIONS ]: " 0.0 0.0 1.0 1.0
 
 #pragma parameter gsl "          Scanline Type -- gsl" 0.0 -1.0 2.0 1.0
 #define gsl          global.gsl      // Alternate scanlines
@@ -88,7 +88,7 @@
 #pragma parameter rolling_scan "          Rolling Scanlines -- rolling_scan" 0.0 -1.0 1.0 0.01
 #define rolling_scan        global.rolling_scan     // rolling scanlines
 
-#pragma parameter bogus_filtering "[ GDV - FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
+#pragma parameter bogus_filtering "[ FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
 
 #pragma parameter h_sharp "          Horizontal sharpness -- h_sharp" 5.20 0.20 15.0 0.10
 #define h_sharp      global.h_sharp     // pixel sharpness

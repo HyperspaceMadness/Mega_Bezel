@@ -22,7 +22,7 @@
    
 */
 
-#pragma parameter bogus_brightness "[ GDV - BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
+#pragma parameter bogus_brightness "[ BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
 #pragma parameter glow "          Glow Strength -- glow" 0.08 -2.0 2.0 0.01
 #define glow         global.glow     // Glow Strength
@@ -97,7 +97,7 @@
 // #pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader)" 1.0 1.0 4.0 1.0
 // #define prescalex        global.prescalex     // prescale-x factor
 
-#pragma parameter bogus_masks "[ GDV - CRT MASK OPTIONS ]: " 0.0 0.0 1.0 1.0
+#pragma parameter bogus_masks "[ CRT MASK OPTIONS ]: " 0.0 0.0 1.0 1.0
 
 #pragma parameter shadowMask "CRT Mask: -1:None|0:CGWG|1-4:Lottes|5-10:Trinitrn -- shadowMask" 0.0 -1.0 12.0 1.0
 #define shadowMask   global.shadowMask     // Mask Style
@@ -166,7 +166,7 @@
 
 #pragma parameter decons   "          Strength -- decons" 1 0 3.0 0.10
 
-#pragma parameter noise_title "[ GDV - NOISE ]: " 0.0 0.0 1.0 1.0
+#pragma parameter noise_title "[ NOISE ]: " 0.0 0.0 1.0 1.0
 
 #pragma parameter GDV_NOISE_ON 	"          Noise ON" 0 0 1 1
 

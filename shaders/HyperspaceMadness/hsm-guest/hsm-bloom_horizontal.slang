@@ -31,10 +31,13 @@ layout(push_constant) uniform Push
 	float SIGMA_HB;
 } params;
 
-#pragma parameter bogus_bloom 	"[ GDV - BLOOM & HALATION ]:" 0.0 0.0 1.0 1.0
+#pragma parameter bogus_bloom 	"[ BLOOM & HALATION ]:" 0.0 0.0 1.0 1.0
 
 #pragma parameter bloom 		"          Bloom Strength -- bloom" 0.0 -2.0 2.0 0.05
 #define bloom         params.bloom     // bloom effect
+
+#pragma parameter bloom_dist 	"          Bloom Distribution -- bloom_dist" 0.0 0.0 2.0 0.05
+#define bloom_dist         global.bloom_dist     // bloom effect distribution
 
 #pragma parameter halation 		"          Halation Strength -- halation" 0.0 0.0 2.0 0.025
 #define halation         params.halation     // halation effect
