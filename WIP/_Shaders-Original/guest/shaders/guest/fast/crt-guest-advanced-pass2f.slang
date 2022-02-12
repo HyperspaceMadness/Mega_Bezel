@@ -3,7 +3,7 @@
 /*
    CRT - Guest - Advanced - Fastest - Pass2
    
-   Copyright (C) 2018-2021 guest(r) - guest.r@gmail.com
+   Copyright (C) 2018-2022 guest(r) - guest.r@gmail.com
 
    Incorporates many good ideas and suggestions from Dr. Venom.
    I would also like give thanks to many Libretro forums members for continuous feedback, suggestions and caring about the shader.
@@ -45,7 +45,8 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float c_shape;
 	float slotmask1;
 	float scan_falloff;
-	float bloom_dist;	
+	float bloom_dist;
+	float mshift;
 } global;
 
 #pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
@@ -139,6 +140,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter maskLight "          Lottes maskLight" 1.5 0.0 2.0 0.05
 #define maskLight    params.maskLight     // Light "Phosphor"
+
+#pragma parameter mshift "          Mask Shift/Stagger" 0.0 0.0 8.0 1.0
+#define mshift     global.mshift     // mask 'line' shift/stagger
 
 #pragma parameter slotmask "          Slot Mask Strength Bright Pixels" 0.0 0.0 1.0 0.05
 #define slotmask     params.slotmask
@@ -236,7 +240,12 @@ float sw2(float x, float color, float scanline)
 
 vec3 Mask(vec2 pos, float mx)
 {
-	pos = floor(pos/masksize);
+	vec2 pos0 = pos;
+	pos.y = floor(pos.y/masksize);
+	float next_line = float(fract(pos.y*0.5) > 0.25);
+	pos0.x = pos0.x + next_line * mshift;
+	pos = floor(pos0/masksize);
+	
 	vec3 mask = vec3(maskDark, maskDark, maskDark);
 	vec3 one = vec3(1.0);
 	float dark_compensate  = mix(max( clamp( mix (mcut, maskstr, mx),0.0, 1.0) - 0.3, 0.0) + 1.0, 1.0, mx);

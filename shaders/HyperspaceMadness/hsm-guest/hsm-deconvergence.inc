@@ -1,7 +1,7 @@
 /*
    CRT - Guest - Advanced
    
-   Copyright (C) 2018-2021 guest(r) - guest.r@gmail.com
+   Copyright (C) 2018-2022 guest(r) - guest.r@gmail.com
 
    Incorporates many good ideas and suggestions from Dr. Venom.
    I would also like give thanks to many Libretro forums members for continuous feedback, suggestions and caring about the shader.
@@ -77,7 +77,7 @@
 
 #pragma parameter barintensity "          Hum Bar Intensity" 0.0 -1.0 1.0 0.01
 
-#pragma parameter bardir "          Hum Bar Direction - -1:SCANDIR | VERTICAL | HORIZ" -1.0 -1.0 1.0 1.0
+#pragma parameter bardir "          Hum Bar Direction - -1:AUTO | VERTICAL | HORIZ" -1.0 -1.0 1.0 1.0
 
 // #pragma parameter warpX "          CurvatureX (default 0.03)" 0.0 0.0 0.25 0.01
 // #define warpX        global.warpX     // Curvature X
@@ -116,6 +116,9 @@
 
 #pragma parameter maskLight "          Mask 1-4 Lottes maskLight" 1.5 0.0 2.0 0.05
 #define maskLight    global.maskLight     // Light "Phosphor"
+
+#pragma parameter mshift "          Mask Shift/Stagger" 0.0 0.0 8.0 1.0
+#define mshift     global.mshift     // mask 'line' shift/stagger
 
 #pragma parameter mask_gamma "          Mask Gamma -- mask_gamma" 2.40 1.0 5.0 0.05
 #define mask_gamma   global.mask_gamma     // Mask application gamma
@@ -218,10 +221,6 @@ layout(set = 0, binding = 9) uniform sampler2D InfoCachePassFeedback;
 
 vec3 Mask(vec2 pos, float mx)
 {
-	/* HSM Removed
-	pos = floor(pos/masksize);
-	*/
-
 	// HSM Added
 	float final_mask_size = masksize;
 
@@ -231,8 +230,25 @@ vec3 Mask(vec2 pos, float mx)
 	
 	final_mask_size = max(1, floor(((1 - HSM_VIEWPORT_ZOOM_MASK) + HSM_VIEWPORT_ZOOM_MASK * VIEWPORT_SCALE.y) * final_mask_size + 0.2));
 
-	pos = floor(pos / final_mask_size);
+
+/* HSM Removed
+	vec2 pos0 = pos;
+	pos.y = floor(pos.y/masksize);
+	float next_line = float(fract(pos.y*0.5) > 0.25);
+	pos0.x = pos0.x + next_line * mshift;
+	pos = floor(pos0/masksize);
+*/
+
+	vec2 pos0 = pos;
+	pos.y = floor(pos.y/final_mask_size);
+	float next_line = float(fract(pos.y*0.5) > 0.25);
+	pos0.x = pos0.x + next_line * mshift;
+	pos = floor(pos0 / final_mask_size);
 	// End HSM Added
+
+	/* HSM Removed
+	pos = floor(pos/masksize);
+	*/
 
 	vec3 mask = vec3(maskDark, maskDark, maskDark);
 	vec3 one = vec3(1.0);
@@ -678,14 +694,14 @@ void main()
 	vec3  Bloom = bloom_rgba.rgb;
 	float maxb = bloom_rgba.a;
 
-	vec3 Bloom1 = min(Bloom*(orig1+color), max(0.5*(colmx + orig1 - color),0.0));
+	vec3 Bloom1 = min(Bloom*(orig1+color), max(0.5*(colmx + orig1 - color),0.001*Bloom));
 	Bloom1 = 0.5*(Bloom1 + mix(Bloom1, mix(colmx*orig1, Bloom1, 0.5), 1.0-color));
 	
 	
 	if (bloom < 0.0) {
 		Ref = max(Bloom-Ref, 0.0);
 		Ref = plant(Bloom1, max(max(Ref.r,Ref.g),Ref.b));
-		Bloom1 = 2.0*mix(Ref, mix(colmx*Ref, Bloom1, 0.5), 1.0-color);
+		Bloom1 = clamp(2.0*mix(Ref, mix(colmx*Ref, Bloom1, 0.5), 1.0-color), 0.05*Bloom*Bloom, Bloom);
 	}
 
 	Bloom1 = Bloom1 * mix(1.0, 2.0-colmx, bloom_dist);
@@ -694,7 +710,7 @@ void main()
 
 	color = min(color, mix(one, cmask, mclip));
 
-	if (!interb) color = declip(color, pow(w3,0.60)); else w3 = 1.0;
+	if (!interb) color = declip(color, pow(w3,0.6)); else w3 = 1.0;
 
 	if (halation > 0.025) {
 		Bloom = mix(0.5*(Bloom + Bloom*Bloom), 0.75*Bloom*Bloom, colmx);	

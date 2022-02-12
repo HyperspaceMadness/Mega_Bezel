@@ -303,12 +303,12 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
 {
     float col = 0.0;
     
-    float current_line_index = 13;
+    float current_line_index = 14;
 
     //Resolution Text
     printPos = vec2(2, 2.0 + STRHEIGHT(current_line_index));
     
-    TEXT_MODE = NORMAL;  
+    TEXT_MODE = NORMAL;
 
     // Title
     col += GetChar(ch_spc, uv);
@@ -325,6 +325,8 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
     col += GetChar(ch_spc, uv);
 
     // Version
+    current_line_index -= 1;
+    printPos = vec2(2, 2.0 + STRHEIGHT(current_line_index));
     col += GetChar(ch_0, uv);
     col += GetChar(ch_per, uv);
     col += GetChar(ch_9, uv);
