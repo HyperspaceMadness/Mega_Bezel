@@ -208,16 +208,18 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 		tube_diffuse *= HSM_GetTubeDiffuseOpacity();
 		tube_diffuse.rgb *=  (1 - HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING) * vec3(1) + HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING * ambient_lighting_image.rgb;
 
-		// Apply the CRT image additively to the tube diffuse color
-		out_color.a = in_color_with_gamma.a;
 	}
+		out_color.a = in_color_with_gamma.a;
 
+	// Don't apply the CRT images
 	if (HSM_CRT_BLEND_MODE == 0)
 		out_color = vec4(0);
 
+	// Apply the CRT image additively to the tube diffuse color
 	if (HSM_CRT_BLEND_MODE == 1)
 		out_color = HSM_BlendModeLayerMix(tube_diffuse, out_color, BLEND_MODE_ADD, HSM_CRT_BLEND_AMOUNT);
 
+	// Apply the CRT image with multiply blending
 	if (HSM_CRT_BLEND_MODE == 2)
 		out_color = HSM_BlendModeLayerMix(tube_diffuse, out_color, BLEND_MODE_MULTIPLY, HSM_CRT_BLEND_AMOUNT);
 
