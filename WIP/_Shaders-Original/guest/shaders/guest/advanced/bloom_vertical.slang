@@ -32,7 +32,7 @@ layout(push_constant) uniform Push
 } params;
 
 
-#pragma parameter SIZEVB "          Vertical Bloom/Halation/(Glow) Radius" 4.0 1.0 50.0 1.0 
+#pragma parameter SIZEVB "          Vertical Bloom/Halation/(Glow) Radius" 3.0 1.0 50.0 1.0 
 #define SIZEVB params.SIZEVB
 
 #pragma parameter SIGMA_VB "          Vertical Bloom/Halation/(Glow) Sigma" 0.70 0.25 15.0 0.05

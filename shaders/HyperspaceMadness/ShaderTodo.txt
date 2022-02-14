@@ -5,8 +5,9 @@ Mega Bezel is updated to V 0.9.102 2022-02-02 Rev 1
 Changes:
   * WARNING post_br is now 100% at 1, not 100, you will need to adjust any presets you have saved, just divide the number by 100
     * This is so it matches with guest's usage 
-  * Updated to crt-guest-advanced-2022-02-06-release2
+  * Updated to crt-guest-advanced-2022-02-10-release1
     * Now with @guest.r's super sweet deconvergence magic, no more blur in the mask with deconvergence
+    * Mask offset/stagger control added
   * Adjusted Tube Diffuse Color
     * HSM_TUBE_DIFFUSE_IMAGE_ON is renamed to HSM_TUBE_DIFFUSE_MODE
     * values are now:
@@ -22,6 +23,9 @@ Changes:
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
+  * Vignette is too dark now
+  * Vignette should affect only the CRT additive image. 
+    * Should have option for how much vignette affects tube diffuse 
   * Put shader base brightness adjustment in code instead of post brightness e.g. Easymode
   * Fix Potato Blend Mode and Show Over BG
   * Fix Vignette hidden when BG under screen

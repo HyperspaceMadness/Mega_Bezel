@@ -42,10 +42,10 @@ layout(push_constant) uniform Push
 #pragma parameter halation 		"          Halation Strength -- halation" 0.0 0.0 2.0 0.025
 #define halation         params.halation     // halation effect
 
-#pragma parameter SIZEHB 		"          Horizontal Radius ( Num Samples ) -- SIZEHB" 4.0 1.0 50.0 1.0 
+#pragma parameter SIZEHB 		"          Horizontal Radius ( Num Samples ) -- SIZEHB" 3.0 1.0 50.0 1.0 
 #define SIZEHB params.SIZEHB
 
-#pragma parameter SIGMA_HB 		"          Horizontal Sigma ( Spread ) -- SIGMA_HB" 0.70 0.25 15.0 0.05
+#pragma parameter SIGMA_HB 		"          Horizontal Sigma ( Spread ) -- SIGMA_HB" 0.80 0.25 15.0 0.05
 #define SIGMA_HB params.SIGMA_HB
 
 

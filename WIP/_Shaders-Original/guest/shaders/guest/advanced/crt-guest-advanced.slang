@@ -517,7 +517,7 @@ if (!interb)
 	
 	color = gc(color1)*w1*cd1 + gc(color2)*w2*cd2;
 
-	if (abs(rolling_scan) > 0.025) 
+	if (abs(rolling_scan) > 0.005) 
 	{ 
 		wt1 = st1(f);
 		wt2 = st1(1.0-f);

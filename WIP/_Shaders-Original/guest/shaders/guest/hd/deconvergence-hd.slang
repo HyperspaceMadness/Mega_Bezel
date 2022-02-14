@@ -492,7 +492,7 @@ vec3 noise(vec3 v){
     return v;
 } 
 
-vec3 fetch_pixel (vec2 coord)
+void fetch_pixel (inout vec3 c, inout vec3 b, vec2 coord, vec2 bcoord)
 {
 		float stepx = OutputSize.z;
 		float stepy = OutputSize.w;
@@ -528,12 +528,16 @@ vec3 fetch_pixel (vec2 coord)
 		float g1 = COMPAT_TEXTURE(Source, coord + gc).g;
 		float b1 = COMPAT_TEXTURE(Source, coord + bc).b;
 
-		vec3 c = COMPAT_TEXTURE(Source, coord).rgb;
-
 		vec3 d = vec3(r1, g1, b1);
+		c = clamp(mix(c, d, ds), 0.0, 1.0);
 		
-		return clamp(mix(c, d, ds), 0.0, 1.0);
-}
+		r1 = COMPAT_TEXTURE(BloomPass, bcoord + rc).r;
+		g1 = COMPAT_TEXTURE(BloomPass, bcoord + gc).g;
+		b1 = COMPAT_TEXTURE(BloomPass, bcoord + bc).b;
+
+		d = vec3(r1, g1, b1);
+		b = clamp(mix(b, d, ds), 0.0, 1.0);
+} 
 
 
 void main()
@@ -564,7 +568,12 @@ void main()
 	vec2 pos0 = Warp(TEX0.xy);
 	vec3 color0 = COMPAT_TEXTURE(Source,pos1).rgb;
 	float c0 = max(max(color0.r, color0.g),color0.b);
-	vec3 color  = fetch_pixel(pos1);
+	
+	// color and bloom fetching
+	vec3 color = COMPAT_TEXTURE(Source,pos1).rgb;
+	vec3  Bloom = COMPAT_TEXTURE(BloomPass, pos).rgb;
+	fetch_pixel(color, Bloom, pos1, pos); 
+	
 	float cm = max(max(color.r,color.g),color.b);
 	float mx1 = COMPAT_TEXTURE(Source, pos1     ).a;
 	float colmx = max(mx1, cm);
@@ -601,7 +610,6 @@ void main()
 
 	vec3  Glow = COMPAT_TEXTURE(BloomPass, pos).rgb;
 	vec3  Ref = COMPAT_TEXTURE(LinearizePass, pos).rgb;
-	vec3  Bloom = COMPAT_TEXTURE(BloomPass, pos).rgb;
 	float maxb = COMPAT_TEXTURE(BloomPass, pos).a;
 	float vig  = COMPAT_TEXTURE(PrePass, clamp(pos, 0.0+0.5*global.OriginalSize.zw, 1.0-0.5*global.OriginalSize.zw)).a;
 
@@ -621,11 +629,11 @@ void main()
 
 	color = min(color, mix(one, cmask, mclip));
 
-	if (!interb) color = declip(color, pow(w3,0.60)); else w3 = 1.0;
+	if (!interb) color = declip(color, mix(1.0, w3, 0.6)); else w3 = 1.0;
 
-	if (halation > 0.025) {
+	if (halation > 0.01) {
 		Bloom = mix(0.5*(Bloom + Bloom*Bloom), 0.75*Bloom*Bloom, colmx);	
-		color = color + (1.1-0.25*colmx)*(0.75+maxb)*Bloom*(0.75 + 0.70*pow(colmx,0.33333))*mix(1.0,w3,0.5*colmx)*mix(one,cmask,0.35 + 0.4*maxb)*halation; }
+		color = color + 2.0*max((maxb+maxb*maxb-0.5*max(max(Ref.r,Ref.g),Ref.b)),0.25)*mix(1.0,w3,0.5*colmx)*mix(one,cmask,0.6)*Bloom*halation; }
 
 	Glow = mix(Glow, 0.25*color, 0.7*colmx);
 	if (glow >= 0.0) color = color + 0.5*Glow*glow; else { cmask*=cmask; cmask*=cmask; color = color + (-glow)*cmask*Glow; }

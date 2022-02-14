@@ -66,18 +66,18 @@ void main()
 	if (vTexCoord.x > 0.2 || vTexCoord.y > 0.2) discard;
 	
 	float m = max(log2(SourceSize.x), log2(SourceSize.y));
-	m = floor(max(m, 1.0));
+	m = floor(max(m, 1.0))-1.0;
 	
 	float ltotal = 0.0;
 	
-	ltotal+= length(textureLod(PrePass, vec2(0.25, 0.25), m).rgb);
-	ltotal+= length(textureLod(PrePass, vec2(0.25, 0.75), m).rgb);
-	ltotal+= length(textureLod(PrePass, vec2(0.75, 0.25), m).rgb);
-	ltotal+= length(textureLod(PrePass, vec2(0.75, 0.75), m).rgb);
+	ltotal+= length(textureLod(PrePass, vec2(0.3, 0.3), m).rgb);
+	ltotal+= length(textureLod(PrePass, vec2(0.3, 0.7), m).rgb);
+	ltotal+= length(textureLod(PrePass, vec2(0.7, 0.3), m).rgb);
+	ltotal+= length(textureLod(PrePass, vec2(0.7, 0.7), m).rgb);
 	
 	ltotal*=0.25;
 	
-	ltotal = pow(0.577350269 * ltotal, 0.65);
+	ltotal = pow(0.577350269 * ltotal, 0.70);
 	
 	float lhistory = texture(AvgLumPassFeedback, vec2(0.1,0.1)).a;
 

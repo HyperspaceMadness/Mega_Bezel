@@ -32,7 +32,7 @@ layout(push_constant) uniform Push
 } params;
 
 
-#pragma parameter SIZEVB "          Vertical Radius ( Num Samples ) -- SIZEVB" 4.0 1.0 50.0 1.0 
+#pragma parameter SIZEVB "          Vertical Radius ( Num Samples ) -- SIZEVB" 3.0 1.0 50.0 1.0 
 #define SIZEVB params.SIZEVB
 
 #pragma parameter SIGMA_VB "          Vertical Sigma ( Spread ) -- SIGMA_VB" 0.70 0.25 15.0 0.05
