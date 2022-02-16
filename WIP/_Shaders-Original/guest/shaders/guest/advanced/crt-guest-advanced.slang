@@ -521,8 +521,8 @@ if (!interb)
 	{ 
 		wt1 = st1(f);
 		wt2 = st1(1.0-f);
-	    color00 = (color1*wt1 + color2*wt2)/(wt1+wt2);
-		color = gc(color00) * (w1 + w2);
+		color00 = (color1*wt1 + color2*wt2)/(wt1+wt2);
+		color = gc(color00) * mix(w1+w2, w3.xxx, max(wf1,wf2));	
 	}
 	
 	color = min(color, 1.0);
