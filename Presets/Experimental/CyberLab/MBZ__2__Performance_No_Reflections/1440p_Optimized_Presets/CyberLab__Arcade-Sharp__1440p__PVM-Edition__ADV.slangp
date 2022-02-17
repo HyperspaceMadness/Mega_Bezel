@@ -1,6 +1,0 @@
-#reference "../4K_Optimized_Presets/CyberLab__Arcade-Sharp__PVM-Edition__ADV.slangp"
-
-
-shadowMask = "10.000000"
-masksize = "1.000000"
-GDV_DECONVERGENCE_ON = "1.000000"
