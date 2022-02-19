@@ -88,7 +88,7 @@ vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_CO
 		if (HSM_SCREEN_VIGNETTE_IN_REFLECTION < 0.5)
 			vignette_factor = screen_mask * vignette_factor + (1 - screen_mask);
 
-		out_color *= vignette_factor;
+		out_color.rgb *= vignette_factor;
 	}
 
 	out_color.rgb *= screen_mask;
