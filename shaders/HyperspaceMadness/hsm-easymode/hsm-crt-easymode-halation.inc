@@ -53,7 +53,7 @@ layout(push_constant) uniform Push
 #pragma parameter ESM_GLOW_TITLE            "[ GLOW ]:" 0 0 0 1
 #pragma parameter ESM_HALATION              "          Halation" 0.03 0.0 1.0 0.01
 #pragma parameter ESM_DIFFUSION             "          Diffusion" 0.0 0.0 1.0 0.01
-#pragma parameter ESM_BRIGHTNESS            "          Brightness" 1.0 0.0 2.0 0.05
+#pragma parameter ESM_BRIGHTNESS            "          Brightness" 0.73 0.0 2.0 0.01
 
 // HSM Removed
 // #pragma parameter GEOM_CURVATURE "Geom Curvature" 0.0 0.0 0.1 0.01

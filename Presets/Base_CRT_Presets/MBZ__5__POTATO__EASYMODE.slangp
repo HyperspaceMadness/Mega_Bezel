@@ -131,4 +131,3 @@ HSM_ASPECT_RATIO_MODE = 1
 
 // Easymode Parameters
 gamma_out = 2.2
-post_br = 0.75
