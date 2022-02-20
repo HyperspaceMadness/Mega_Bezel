@@ -4,16 +4,17 @@ Mega Bezel is updated to V 0.9.103 2022-02-15 Rev 1
 
 Changes:
   * Fixed Double Vignette issue with POTATO presets when screen was under the BG
-
+  * Updated Resolution Info to not show irrelevant info 
+  * Small update to Sonkun's presets to adjust brightness
 
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
-  * Put shader base brightness adjustment in code instead of post brightness e.g. Easymode
-  * Adjust Text Render to have only relevant items
+  * Set Nesguy presets at mask size 1
+  * Tube Diffuse Shadow
+  * Adjust Chain for better performance in ADV
   * Check out Colorize Behavior on DMG-01 (Colored Gameboy)
-  * Different bloom/glow on STD vs ADV
-  * Auto Rotate
+  * Different colored gel appearance on STD vs ADV
   * Potato NTSC GDV-MINI
   * Figure out POTATO crashing
   * Add vscode link in readme [![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/organization/repository)
@@ -30,6 +31,7 @@ Changes:
 ----------------------------------------------------
 --- Post V1  ---------------------------------------
 ----------------------------------------------------
+  * Auto Rotate
   * Original scaling mode to deal with black final viewport in Parallel RDP in both mupen and Parallel cores.
   * Compensate for Negative Crop, 
     * User crop values should be relative to original core image, not core image + negative crop area 

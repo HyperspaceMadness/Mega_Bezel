@@ -303,62 +303,323 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
 {
     float col = 0.0;
     
-    float current_line_index = 14;
+    float current_line_index = 0;
+    float margin = STRHEIGHT(1);
 
     //Resolution Text
-    printPos = vec2(2, 2.0 + STRHEIGHT(current_line_index));
+    printPos = vec2(margin, 0);
     
     TEXT_MODE = NORMAL;
 
-    // Title
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_M, uv);
-    col += GetChar(ch_E, uv);
-    col += GetChar(ch_G, uv);
-    col += GetChar(ch_A, uv);
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_B, uv);
-    col += GetChar(ch_E, uv);
-    col += GetChar(ch_Z, uv);
-    col += GetChar(ch_E, uv);
-    col += GetChar(ch_L, uv);
-    col += GetChar(ch_spc, uv);
+    // Line 14 Viewport Resolution ----------------------------------------------------
+    printPos.x = margin;
+    printPos.y += STRHEIGHT(1);
+    
+    TEXT_MODE = NORMAL;  
 
-    // Version
-    current_line_index -= 1;
-    printPos = vec2(2, 2.0 + STRHEIGHT(current_line_index));
-    col += GetChar(ch_0, uv);
-    col += GetChar(ch_per, uv);
-    col += GetChar(ch_9, uv);
-    col += GetChar(ch_per, uv);
-    col += GetChar(ch_1, uv);
-    col += GetChar(ch_0, uv);
-    col += GetChar(ch_3, uv);
-    col += GetChar(ch_spc, uv);
-
-    // Date
-    col += GetChar(ch_2, uv);
-    col += GetChar(ch_0, uv);
-    col += GetChar(ch_2, uv);
-    col += GetChar(ch_2, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_0, uv);
-    col += GetChar(ch_2, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_1, uv);
-    col += GetChar(ch_5, uv);
-
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_R, uv);
+    col += GetChar(ch_V, uv);
+    col += GetChar(ch_i, uv);
     col += GetChar(ch_e, uv);
-    col += GetChar(ch_v, uv);
+    col += GetChar(ch_w, uv);
+    col += GetChar(ch_p, uv);
+    col += GetChar(ch_o, uv);
+    col += GetChar(ch_r, uv);
+    col += GetChar(ch_t, uv);
     col += GetChar(ch_spc, uv);
-    col += GetChar(ch_1, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
 
-    //Preset Type
-    current_line_index -= 1;
-    printPos = vec2(2, 2.0 + STRHEIGHT(current_line_index));
     col += GetChar(ch_spc, uv);
+    col += print_integer(viewport_size.x,0, uv); 
+    col += GetChar(ch_spc, uv);
+    col += GetChar(ch_x, uv);
+    col += GetChar(ch_spc, uv);
+    col += print_integer(viewport_size.y,0, uv); 
+
+
+    // Line 13 Screen Resolution ----------------------------------------------------------
+    printPos.x = margin;
+    printPos.y += STRHEIGHT(1);
+
+    col += GetChar(ch_S, uv);
+    col += GetChar(ch_c, uv);
+    col += GetChar(ch_r, uv);
+    col += GetChar(ch_e, uv);
+    col += GetChar(ch_e, uv);
+    col += GetChar(ch_n, uv);
+    col += GetChar(ch_spc, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
+
+    col += GetChar(ch_spc, uv);
+    col += print_integer(screen_size.x,0, uv);
+    col += GetChar(ch_spc, uv);
+    col += GetChar(ch_x, uv);
+    col += GetChar(ch_spc, uv);
+    col += print_integer(screen_size.y,0, uv);
+
+
+    // Line 12 Final Aspect Ratio ----------------------------------------------------------
+    printPos.x = margin;
+    printPos.y += STRHEIGHT(1);
+    
+    col += GetChar(ch_F, uv);
+    col += GetChar(ch_i, uv);
+    col += GetChar(ch_n, uv);
+    col += GetChar(ch_a, uv);
+    col += GetChar(ch_l, uv);
+    col += GetChar(ch_spc, uv);
+    col += GetChar(ch_A, uv);
+    col += GetChar(ch_s, uv);
+    col += GetChar(ch_p, uv);
+    col += GetChar(ch_e, uv);
+    col += GetChar(ch_c, uv);
+    col += GetChar(ch_t, uv);
+    col += GetChar(ch_spc, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
+    
+    col += GetChar(ch_spc, uv);
+    col += print_number(screen_size.x/screen_size.y > 1 ? screen_size.x/screen_size.y : screen_size.y/screen_size.x, uv, 2);
+
+
+    // Line 11 Non-Int Scale Percent ----------------------------------------------------------
+    printPos.x = margin;
+    printPos.y += STRHEIGHT(1);
+    
+    col += GetChar(ch_N, uv);
+    col += GetChar(ch_o, uv);
+    col += GetChar(ch_n, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_I, uv);
+    col += GetChar(ch_n, uv);
+    col += GetChar(ch_t, uv);
+    col += GetChar(ch_spc, uv);
+    col += GetChar(ch_S, uv);
+    col += GetChar(ch_c, uv);
+    col += GetChar(ch_l, uv);
+    col += GetChar(ch_spc, uv);
+    col += GetChar(ch_pct, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
+    
+    col += GetChar(ch_spc, uv);
+    col += print_number(screen_size.y / viewport_size.y * 100, uv, 3);
+
+
+    // Line 10 Int Scale Vertical ----------------------------------------------------------
+    printPos.x = margin;
+    printPos.y += STRHEIGHT(1);
+    
+    col += GetChar(ch_I, uv);
+    col += GetChar(ch_n, uv);
+    col += GetChar(ch_t, uv);
+    col += GetChar(ch_spc, uv);
+    col += GetChar(ch_S, uv);
+    col += GetChar(ch_c, uv);
+    col += GetChar(ch_l, uv);
+    col += GetChar(ch_spc, uv);
+    col += GetChar(ch_V, uv);
+    col += GetChar(ch_e, uv);
+    col += GetChar(ch_r, uv);
+    col += GetChar(ch_t, uv);
+    col += GetChar(ch_spc, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
+    
+    col += GetChar(ch_spc, uv);
+    col += print_number(int_mult.y, uv, 3);
+
+
+    // Line 09 Int Scale Horizontal ----------------------------------------------------------
+    printPos.x = margin;
+    printPos.y += STRHEIGHT(1);
+    
+    col += GetChar(ch_I, uv);
+    col += GetChar(ch_n, uv);
+    col += GetChar(ch_t, uv);
+    col += GetChar(ch_spc, uv);
+    col += GetChar(ch_S, uv);
+    col += GetChar(ch_c, uv);
+    col += GetChar(ch_l, uv);
+    col += GetChar(ch_spc, uv);
+    col += GetChar(ch_H, uv);
+    col += GetChar(ch_o, uv);
+    col += GetChar(ch_r, uv);
+    col += GetChar(ch_z, uv);
+    col += GetChar(ch_spc, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
+    
+    col += GetChar(ch_spc, uv);
+    col += print_number(int_mult.x, uv, 3);
+
+
+    // Line 08 Sampling Resolution ----------------------------------------------------------
+    if (cropped_original_size.x != sampling_res.x || cropped_original_size.y != sampling_res.y)
+    {
+        printPos.x = margin;
+        printPos.y += STRHEIGHT(1);
+        
+        col += GetChar(ch_S, uv);
+        col += GetChar(ch_a, uv);
+        col += GetChar(ch_m, uv);
+        col += GetChar(ch_p, uv);
+        col += GetChar(ch_l, uv);
+        col += GetChar(ch_i, uv);
+        col += GetChar(ch_n, uv);
+        col += GetChar(ch_g, uv);
+        col += GetChar(ch_spc, uv);
+        col += GetChar(ch_R, uv);
+        col += GetChar(ch_e, uv);
+        col += GetChar(ch_s, uv);
+        col += GetChar(ch_spc, uv);
+        col += GetChar(ch_dsh, uv);
+        col += GetChar(ch_dsh, uv);
+
+        col += GetChar(ch_spc, uv);
+        col += print_integer(sampling_res.x,0, uv);
+        col += GetChar(ch_spc, uv);
+        col += GetChar(ch_x, uv);
+        col += GetChar(ch_spc, uv);
+        col += print_integer(sampling_res.y,0, uv);
+    }
+
+
+    // Line 07 CROPPED Resolution ----------------------------------------------------------
+    if (cropped_original_size.x != ROTATED_CORE_PREPPED_SIZE.x || cropped_original_size.y != ROTATED_CORE_PREPPED_SIZE.y)
+    {
+        printPos.x = margin;
+        printPos.y += STRHEIGHT(1);
+        
+        col += GetChar(ch_C, uv);
+        col += GetChar(ch_r, uv);
+        col += GetChar(ch_o, uv);
+        col += GetChar(ch_p, uv);
+        col += GetChar(ch_p, uv);
+        col += GetChar(ch_e, uv);
+        col += GetChar(ch_d, uv);
+        col += GetChar(ch_spc, uv);
+        col += GetChar(ch_dsh, uv);
+        col += GetChar(ch_dsh, uv);
+        col += GetChar(ch_dsh, uv);
+        col += GetChar(ch_dsh, uv);
+        col += GetChar(ch_dsh, uv);
+        col += GetChar(ch_dsh, uv);
+        col += GetChar(ch_dsh, uv);
+
+        col += GetChar(ch_spc, uv);
+        col += print_integer(cropped_original_size.x,0, uv);
+        col += GetChar(ch_spc, uv);
+        col += GetChar(ch_x, uv);
+        col += GetChar(ch_spc, uv);
+        col += print_integer(cropped_original_size.y,0, uv);
+    }
+
+
+    // Line 06 Negative Crop Resolution ----------------------------------------------------------
+    if (derezed_size.x != ROTATED_CORE_PREPPED_SIZE.x || derezed_size.y != ROTATED_CORE_PREPPED_SIZE.y)
+    {
+        printPos.x = margin;
+        printPos.y += STRHEIGHT(1);
+        
+        col += GetChar(ch_N, uv);
+        col += GetChar(ch_e, uv);
+        col += GetChar(ch_g, uv);
+        col += GetChar(ch_dsh, uv);
+        col += GetChar(ch_C, uv);
+        col += GetChar(ch_r, uv);
+        col += GetChar(ch_o, uv);
+        col += GetChar(ch_p, uv);
+        col += GetChar(ch_spc, uv);
+        col += GetChar(ch_A, uv);
+        col += GetChar(ch_d, uv);
+        col += GetChar(ch_d, uv);
+        col += GetChar(ch_spc, uv);
+        col += GetChar(ch_dsh, uv);
+        col += GetChar(ch_dsh, uv);
+
+        col += GetChar(ch_spc, uv);
+        col += print_integer(ROTATED_CORE_PREPPED_SIZE.x,0, uv);
+        col += GetChar(ch_spc, uv);
+        col += GetChar(ch_x, uv);
+        col += GetChar(ch_spc, uv);
+        col += print_integer(ROTATED_CORE_PREPPED_SIZE.y,0, uv);
+    }
+
+
+    // Line 05 DEREZ Resolution ----------------------------------------------------------
+    if (derezed_size.x != ROTATED_CORE_ORIGINAL_SIZE.x || derezed_size.y != ROTATED_CORE_ORIGINAL_SIZE.y)
+    {
+        printPos.x = margin;
+        printPos.y += STRHEIGHT(1);
+        
+        col += GetChar(ch_D, uv);
+        col += GetChar(ch_e, uv);
+        col += GetChar(ch_r, uv);
+        col += GetChar(ch_e, uv);
+        col += GetChar(ch_z, uv);
+        col += GetChar(ch_e, uv);
+        col += GetChar(ch_d, uv);
+        col += GetChar(ch_spc, uv);
+        col += GetChar(ch_dsh, uv);
+        col += GetChar(ch_dsh, uv);
+        col += GetChar(ch_dsh, uv);
+        col += GetChar(ch_dsh, uv);
+        col += GetChar(ch_dsh, uv);
+        col += GetChar(ch_dsh, uv);
+        col += GetChar(ch_dsh, uv);
+
+        col += GetChar(ch_spc, uv);
+        col += print_integer(derezed_size.x,0, uv);
+        col += GetChar(ch_spc, uv);
+        col += GetChar(ch_x, uv);
+        col += GetChar(ch_spc, uv);
+        col += print_integer(derezed_size.y,0, uv);
+    }
+
+
+    // Line 04 CORE Resolution ----------------------------------------------------------
+    printPos.x = margin;
+    printPos.y += STRHEIGHT(1);
+    
+    col += GetChar(ch_C, uv);
+    col += GetChar(ch_o, uv);
+    col += GetChar(ch_r, uv);
+    col += GetChar(ch_e, uv);
+    col += GetChar(ch_spc, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_dsh, uv);
+
+    col += GetChar(ch_spc, uv);
+    col += print_integer(ROTATED_CORE_ORIGINAL_SIZE.x,0, uv);
+    col += GetChar(ch_spc, uv);
+    col += GetChar(ch_x, uv);
+    col += GetChar(ch_spc, uv);
+    col += print_integer(ROTATED_CORE_ORIGINAL_SIZE.y,0, uv);
+
+
+    // Line 03 Preset Type ----------------------------------------------------------
+    printPos.x = margin;
+    printPos.y += STRHEIGHT(2);
     
 #ifdef IS_ADV_PRESET
     col += GetChar(ch_A, uv);
@@ -414,305 +675,57 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
     col += GetChar(ch_O, uv);
 #endif
 
-    current_line_index -= 2;
-    printPos = vec2(2, 2.0 + STRHEIGHT(current_line_index));
-    
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_C, uv);
-    col += GetChar(ch_o, uv);
-    col += GetChar(ch_r, uv);
-    col += GetChar(ch_e, uv);
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
 
-    col += GetChar(ch_spc, uv);
-    col += print_integer(ROTATED_CORE_ORIGINAL_SIZE.x,0, uv);
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_x, uv);
-    col += GetChar(ch_spc, uv);
-    col += print_integer(ROTATED_CORE_ORIGINAL_SIZE.y,0, uv);
+    // Line 02 Version ----------------------------------------------------------
+    printPos.x = margin;
+    printPos.y += STRHEIGHT(1);
 
+    col += GetChar(ch_0, uv);
+    col += GetChar(ch_per, uv);
+    col += GetChar(ch_9, uv);
+    col += GetChar(ch_per, uv);
+    col += GetChar(ch_1, uv);
+    col += GetChar(ch_0, uv);
+    col += GetChar(ch_3, uv);
+    col += GetChar(ch_spc, uv);
 
-    //ReducedRez Resolution
-    current_line_index -= 1;
-    printPos = vec2(2, 2.0 + STRHEIGHT(current_line_index));
-    
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_D, uv);
-    col += GetChar(ch_e, uv);
-    col += GetChar(ch_r, uv);
-    col += GetChar(ch_e, uv);
-    col += GetChar(ch_z, uv);
-    col += GetChar(ch_e, uv);
-    col += GetChar(ch_d, uv);
-    col += GetChar(ch_spc, uv);
+    // Date
+    col += GetChar(ch_2, uv);
+    col += GetChar(ch_0, uv);
+    col += GetChar(ch_2, uv);
+    col += GetChar(ch_2, uv);
     col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_0, uv);
+    col += GetChar(ch_2, uv);
     col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_1, uv);
+    col += GetChar(ch_5, uv);
 
-    col += GetChar(ch_spc, uv);
-    col += print_integer(derezed_size.x,0, uv);
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_x, uv);
-    col += GetChar(ch_spc, uv);
-    col += print_integer(derezed_size.y,0, uv);
-
-    //CorePrepped Resolution
-    current_line_index -= 1;
-    printPos = vec2(2, 2.0 + STRHEIGHT(current_line_index));
-    
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_N, uv);
-    col += GetChar(ch_e, uv);
-    col += GetChar(ch_g, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_C, uv);
-    col += GetChar(ch_r, uv);
-    col += GetChar(ch_o, uv);
-    col += GetChar(ch_p, uv);
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_A, uv);
-    col += GetChar(ch_d, uv);
-    col += GetChar(ch_d, uv);
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-
-    col += GetChar(ch_spc, uv);
-    col += print_integer(ROTATED_CORE_PREPPED_SIZE.x,0, uv);
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_x, uv);
-    col += GetChar(ch_spc, uv);
-    col += print_integer(ROTATED_CORE_PREPPED_SIZE.y,0, uv);
-
-    //Core Resolution Cropped
-    current_line_index -= 1;
-    printPos = vec2(2, 2.0 + STRHEIGHT(current_line_index));
-    
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_C, uv);
-    col += GetChar(ch_r, uv);
-    col += GetChar(ch_o, uv);
-    col += GetChar(ch_p, uv);
-    col += GetChar(ch_p, uv);
-    col += GetChar(ch_e, uv);
-    col += GetChar(ch_d, uv);
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-
-    col += GetChar(ch_spc, uv);
-    col += print_integer(cropped_original_size.x,0, uv);
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_x, uv);
-    col += GetChar(ch_spc, uv);
-    col += print_integer(cropped_original_size.y,0, uv);
-
-
-    //Sampling Resolution
-    current_line_index -= 1;
-    printPos = vec2(2, 2.0 + STRHEIGHT(current_line_index));
-    
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_S, uv);
-    col += GetChar(ch_a, uv);
-    col += GetChar(ch_m, uv);
-    col += GetChar(ch_p, uv);
-    col += GetChar(ch_l, uv);
-    col += GetChar(ch_i, uv);
-    col += GetChar(ch_n, uv);
-    col += GetChar(ch_g, uv);
+    // Revision
     col += GetChar(ch_spc, uv);
     col += GetChar(ch_R, uv);
     col += GetChar(ch_e, uv);
-    col += GetChar(ch_s, uv);
+    col += GetChar(ch_v, uv);
     col += GetChar(ch_spc, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
+    col += GetChar(ch_1, uv);
 
-    col += GetChar(ch_spc, uv);
-    col += print_integer(sampling_res.x,0, uv);
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_x, uv);
-    col += GetChar(ch_spc, uv);
-    col += print_integer(sampling_res.y,0, uv);
 
-    //Int Scale Horizontal
-    current_line_index -= 1;
-    printPos = vec2(2, 2.0 + STRHEIGHT(current_line_index));
-    
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_I, uv);
-    col += GetChar(ch_n, uv);
-    col += GetChar(ch_t, uv);
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_S, uv);
-    col += GetChar(ch_c, uv);
-    col += GetChar(ch_l, uv);
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_H, uv);
-    col += GetChar(ch_o, uv);
-    col += GetChar(ch_r, uv);
-    col += GetChar(ch_z, uv);
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    
-    col += GetChar(ch_spc, uv);
-    col += print_number(int_mult.x, uv, 3);
-    
-    //Int Scale Vertical
-    current_line_index -= 1;
-    printPos = vec2(2, 2.0 + STRHEIGHT(current_line_index));
-    
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_I, uv);
-    col += GetChar(ch_n, uv);
-    col += GetChar(ch_t, uv);
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_S, uv);
-    col += GetChar(ch_c, uv);
-    col += GetChar(ch_l, uv);
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_V, uv);
-    col += GetChar(ch_e, uv);
-    col += GetChar(ch_r, uv);
-    col += GetChar(ch_t, uv);
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    
-    col += GetChar(ch_spc, uv);
-    col += print_number(int_mult.y, uv, 3);
+    // Line 01 Title ----------------------------------------------------------
+    printPos.x = margin;
+    printPos.y += STRHEIGHT(1);
 
-    //Non-Int Scale Percent
-    current_line_index -= 1;
-    printPos = vec2(2, 2.0 + STRHEIGHT(current_line_index));
-    
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_N, uv);
-    col += GetChar(ch_o, uv);
-    col += GetChar(ch_n, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_I, uv);
-    col += GetChar(ch_n, uv);
-    col += GetChar(ch_t, uv);
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_S, uv);
-    col += GetChar(ch_c, uv);
-    col += GetChar(ch_l, uv);
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_pct, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    
-    col += GetChar(ch_spc, uv);
-    col += print_number(screen_size.y / viewport_size.y * 100, uv, 3);
-
-    //Final Aspect Ratio
-    current_line_index -= 1;
-    printPos = vec2(2, 2.0 + STRHEIGHT(current_line_index));
-    
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_F, uv);
-    col += GetChar(ch_i, uv);
-    col += GetChar(ch_n, uv);
-    col += GetChar(ch_a, uv);
-    col += GetChar(ch_l, uv);
-    col += GetChar(ch_spc, uv);
+    col += GetChar(ch_M, uv);
+    col += GetChar(ch_E, uv);
+    col += GetChar(ch_G, uv);
     col += GetChar(ch_A, uv);
-    col += GetChar(ch_s, uv);
-    col += GetChar(ch_p, uv);
-    col += GetChar(ch_e, uv);
-    col += GetChar(ch_c, uv);
-    col += GetChar(ch_t, uv);
     col += GetChar(ch_spc, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    
+    col += GetChar(ch_B, uv);
+    col += GetChar(ch_E, uv);
+    col += GetChar(ch_Z, uv);
+    col += GetChar(ch_E, uv);
+    col += GetChar(ch_L, uv);
     col += GetChar(ch_spc, uv);
-    col += print_number(screen_size.x/screen_size.y > 1 ? screen_size.x/screen_size.y : screen_size.y/screen_size.x, uv, 2);
 
-    //Screen Resolution
-    current_line_index -= 1;
-    printPos = vec2(2, 2.0 + STRHEIGHT(current_line_index));
-
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_S, uv);
-    col += GetChar(ch_c, uv);
-    col += GetChar(ch_r, uv);
-    col += GetChar(ch_e, uv);
-    col += GetChar(ch_e, uv);
-    col += GetChar(ch_n, uv);
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-
-    col += GetChar(ch_spc, uv);
-    col += print_integer(screen_size.x,0, uv);
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_x, uv);
-    col += GetChar(ch_spc, uv);
-    col += print_integer(screen_size.y,0, uv);
-
-
-    //Viewport Resolution
-    current_line_index -= 1;
-    printPos = vec2(2, 2.0 + STRHEIGHT(current_line_index));
-    
-    TEXT_MODE = NORMAL;  
-
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_V, uv);
-    col += GetChar(ch_i, uv);
-    col += GetChar(ch_e, uv);
-    col += GetChar(ch_w, uv);
-    col += GetChar(ch_p, uv);
-    col += GetChar(ch_o, uv);
-    col += GetChar(ch_r, uv);
-    col += GetChar(ch_t, uv);
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_dsh, uv);
-
-    col += GetChar(ch_spc, uv);
-    col += print_integer(viewport_size.x,0, uv); 
-    col += GetChar(ch_spc, uv);
-    col += GetChar(ch_x, uv);
-    col += GetChar(ch_spc, uv);
-    col += print_integer(viewport_size.y,0, uv); 
-
-    //Web Path
-    current_line_index -= 1;
-    printPos = vec2(2, 2.0 + STRHEIGHT(current_line_index));
 
     TEXT_MODE = NORMAL;  
 
