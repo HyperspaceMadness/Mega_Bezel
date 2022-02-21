@@ -1,6 +1,10 @@
 ------------------------------------------------------------------------------------------------------------
 HyperspaceMadness Mega Bezel Shader Readme
 ------------------------------------------------------------------------------------------------------------
+Version 0.9.104 2022-02-20 Rev 1
+----------------------------------------
+----------------------------------------
+
 This file is best viewed in a markdown editor/viewer if possible.
 
 Find more conversation about the shader here:
@@ -40,7 +44,8 @@ Installation
   * The final path to the Mega bezel should be `Retroarch/shaders/shaders_slang/bezel/Mega_Bezel`
 * Set video driver to **Vulcan**
   * It will run in **GLCore** but seems faster in **Vulcan**
-  * Some users have run it successfully in **D3D11** but with a slow load time
+  * Some users have run it successfully in **D3D11** but with a very slow load time
+  * Restart after changing the video driver
 * Open the **Settings** Menu and Set:
   * **Video / Scaling / Aspect Ratio** to **Full**
     * This will match your monitor aspect aspect ratio
@@ -48,12 +53,12 @@ Installation
   * **Video / Output / Video Rotation** to **Normal**
   * **User Interface / Show Advanced Settings** to **ON**
   * **Core / Allow Rotation** to **OFF** -- **Important for FB Neo**
+  * Do this Before loading content 
 * **Load a preset** in the shaders menu, Mega Bezel shader presets are found in:
   * shaders/shaders_slang/bezel/Mega_Bezel/Presets
 * When you save a preset make sure you have the **Simple Presets** feature set to **ON**
   * This will save a preset with a reference to the preset you loaded plus whatever parameter changes you made
   * This will keep your presets loading properly when the shader updates in the future
-
 
 
 ----------------------------------------
