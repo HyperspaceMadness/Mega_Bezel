@@ -1,0 +1,19 @@
+#reference "CyberLab__Composite-Sharp__1080p__PVM-Edition__ADV.slangp"
+
+GDV_DECONVERGENCE_ON = "1.000000"
+
+HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = "0.000000"
+signalResolution = "1024.000000"
+halation = "0.000000"
+gsl = "-1.000000"
+
+
+h_sharp = "15.000000"
+s_sharp = "1.500000"
+maskstr = "0.950000"
+
+noiseresd = "1.000000"
+
+
+HSM_SCALEFX_ON = "0.000000"
+MDAPT_MODE = "0.000000"

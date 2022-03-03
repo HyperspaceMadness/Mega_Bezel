@@ -1,0 +1,20 @@
+#reference "../4K_Optimized_Presets/CyberLab__Composite-Sharp__PVM-Edition__ADV.slangp"
+
+post_br = "3.07000000"
+gsl = "1.000000"
+scanline1 = "9.000000"
+scanline2 = "9.000000"
+beam_min = "1.350000"
+beam_max = "1.300000"
+maskstr = "0.900000"
+masksize = "1.000000"
+
+HSM_INT_SCALE_MODE = "1.000000"
+
+GDV_DECONVERGENCE_ON = "1.000000"
+deconrr = "0.000000"
+deconrb = "0.000000"
+deconrry = "-0.250000"
+deconrgy = "-0.500000"
+deconrby = "0.000000"
+decons = "4.000000"

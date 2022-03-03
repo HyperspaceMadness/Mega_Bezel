@@ -1,55 +1,52 @@
-#reference ":/shaders/shaders_slang/bezel/Mega_Bezel/Presets/Base_CRT_Presets/MBZ__1__ADV__GDV-NTSC.slangp"
+#reference "../../Base_CRT_Presets/MBZ__1__ADV__GDV-NTSC.slangp"
 
 // Thanks to Sonkun from the Libretro forum for the settings in this preset!
+SHARPEN = "2.999999"
+CONTR = "0.150000"
 GAMMA_INPUT = "2.200000"
-gamma_out = "2.200000"
-post_br = "1.10000000"
-
 SIGMA_HB = "0.750000"
 SIGMA_VB = "0.750000"
-
-interm = "5.000000"
-
 bloom = "0.700000"
-bloom_dist = "1.400000"
+bloom_dist = "0.500000"
 halation = "0.100000"
 gamma_c = "1.360000"
 brightboost = "1.300001"
 brightboost1 = "1.250000"
 gsl = "-1.000000"
-
 scanline1 = "2.500000"
 scanline2 = "14.000000"
 beam_min = "1.800000"
 beam_max = "0.775000"
 beam_size = "0.750000"
-
 scans = "1.649999"
 scan_falloff = "0.250000"
 spike = "1.500000"
 sth = "0.300000"
 BLOOM = "3.000000"
-
-barspeed = "200.000000"
-
+warpX = "0.040000"
+warpY = "0.050000"
+csize = "0.115000"
+bsize1 = "0.300000"
 shadowMask = "10.000000"
-masksize = "1.000000"
 maskstr = "1.000000"
-mask_gamma = "2.4"
+mask_gamma = "2.399999"
 slotmask = "1.000000"
 slotmask1 = "1.000000"
 slotwidth = "4.000000"
 double_slot = "2.000000"
-
 mclip = "0.350000"
-
-GDV_DECONVERGENCE_ON = "1.0"
+gamma_out = "2.200000"
 deconrr = "1.750000"
 deconrb = "-1.750000"
 deconrry = "1.250000"
 deconrby = "-1.250000"
-decons = "1.400000"
+decons = "1.200000"
+addnoised = "-0.300000"
+noiseresd = "1.000000"
+post_br = "1.100000"
 
+// Mega Bezel Required Additional Parameter Values
+masksize = "1.000000"
+slotms = "1.000000"
+GDV_DECONVERGENCE_ON = "1.0"
 GDV_NOISE_ON = "1.0"
-addnoised = "-0.400000"
-noiseresd = "1.200000"

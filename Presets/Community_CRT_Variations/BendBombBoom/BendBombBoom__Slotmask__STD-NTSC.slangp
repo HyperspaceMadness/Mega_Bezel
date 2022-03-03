@@ -32,15 +32,16 @@ vertmask = "-0.500000"
 // scangamma = "2.000000"
 scangammaoffset = "0.8"
 
-masksize = "1.0"
 shadowMask = "8.000000"
 maskstr = "0.850000"
 
-slotms = "1.0"
 slotmask = "0.500000"
 slotmask1 = "0.900000"
 slotwidth = "3.000000"
 double_slot = "2.000000"
+
+masksize = "1.000000"
+slotms = "1.000000"
 
 GDV_DECONVERGENCE_ON = "1.0"
 deconrr = "0.750000"

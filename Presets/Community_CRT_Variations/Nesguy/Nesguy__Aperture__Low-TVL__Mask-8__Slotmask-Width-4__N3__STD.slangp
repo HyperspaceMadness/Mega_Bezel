@@ -24,3 +24,6 @@ slotmask = "0.700000"
 slotwidth = "4.000000"
 mclip = "0.700000"
 gamma_out = "2.500000"
+
+masksize = "1.000000"
+slotms = "1.000000"

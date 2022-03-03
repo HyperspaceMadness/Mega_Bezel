@@ -46,6 +46,9 @@ maskDark = "0.250000"
 mcut = "1.100000"
 mask_gamma = "5.000000"
 
+masksize = "1.000000"
+slotms = "1.000000"
+
 GDV_DECONVERGENCE_ON = "1.0"
 deconrr = "-1.000000"
 deconrb = "1.000000"
