@@ -102,7 +102,7 @@
 #pragma parameter shadowMask "CRT Mask: -1:None|0:CGWG|1-4:Lottes|5-10:Trinitrn -- shadowMask" 0.0 -1.0 12.0 1.0
 #define shadowMask   global.shadowMask     // Mask Style
 
-#pragma parameter masksize "          Mask Size - 0:Auto | 2K | 4k -- masksize" 0 1.0 4 1.0
+#pragma parameter masksize "          Mask Size - 0:Auto | 2K | 4k -- masksize" 0.0 0.0 4 1.0
 #define masksize     global.masksize     // Mask Size
 
 #pragma parameter maskstr "          Mask Strength (0, 5-12) -- maskstr" 0.3 -0.5 1.0 0.05

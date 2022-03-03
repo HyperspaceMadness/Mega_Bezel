@@ -95,9 +95,8 @@ vec4 GetColorWithIntro(vec4 in_color, vec2 in_coord, in sampler2D in_logo_image_
 
    // in_coord.y = HSM_INTRO_LOGO_FLIP_VERTICAL > 0.5 ? 1 - in_coord.y : in_coord.y;
 
-   in_coord.y = abs(HSM_FLIP_VIEWPORT_VERTICAL - HSM_FLIP_CORE_VERTICAL) > 0.5 ? 1 - in_coord.y : in_coord.y;
-   in_coord.x = abs(HSM_FLIP_VIEWPORT_HORIZONTAL - HSM_FLIP_CORE_HORIZONTAL) > 0.5 ? 1 - in_coord.x : in_coord.x;
-
+   in_coord.y = HSM_FLIP_VIEWPORT_VERTICAL * HSM_FLIP_CORE_VERTICAL * in_coord.y;
+   in_coord.x = HSM_FLIP_VIEWPORT_HORIZONTAL * HSM_FLIP_CORE_HORIZONTAL * in_coord.x;
 
    // in_coord = HSM_RotateCoordinate(in_coord, HSM_ROTATE_CORE_IMAGE);
    if (HSM_ROTATE_CORE_IMAGE > 0.5)
@@ -276,8 +275,8 @@ void main()
 
 	// Flip the coordinate vertically if desired
    vec2 viewport_coord_adjusted = vTexCoord;
-	viewport_coord_adjusted.x = abs(HSM_FLIP_VIEWPORT_HORIZONTAL - HSM_FLIP_CORE_HORIZONTAL) * (1 - viewport_coord_adjusted.x) + (1 - abs(HSM_FLIP_VIEWPORT_HORIZONTAL - HSM_FLIP_CORE_HORIZONTAL)) * viewport_coord_adjusted.x;
-	viewport_coord_adjusted.y = abs(HSM_FLIP_VIEWPORT_VERTICAL - HSM_FLIP_CORE_VERTICAL) * (1 - viewport_coord_adjusted.y) + (1 - abs(HSM_FLIP_VIEWPORT_VERTICAL - HSM_FLIP_CORE_VERTICAL)) * viewport_coord_adjusted.y;
+	viewport_coord_adjusted.x = HSM_FLIP_VIEWPORT_HORIZONTAL * HSM_FLIP_CORE_HORIZONTAL * (viewport_coord_adjusted.x - 0.5) + 0.5;
+	viewport_coord_adjusted.y = HSM_FLIP_VIEWPORT_VERTICAL * HSM_FLIP_CORE_VERTICAL * (viewport_coord_adjusted.y - 0.5) + 0.5;
 
    FragColor = texture(NegativeCropAddedPass, viewport_coord_adjusted);
 

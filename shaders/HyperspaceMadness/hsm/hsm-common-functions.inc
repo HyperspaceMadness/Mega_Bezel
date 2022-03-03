@@ -39,10 +39,13 @@ vec2 HSM_GetViewportCoordWithFlip(vec2 viewport_coord)
 {
 	vec2 out_coord = viewport_coord;
 
-	if (HSM_FLIP_VIEWPORT_VERTICAL == 1)
+	// out_coord.y = HSM_FLIP_VIEWPORT_VERTICAL * (out_coord.y - 0.5) + 0.5;
+	// out_coord.x = HSM_FLIP_VIEWPORT_HORIZONTAL * (out_coord.x - 0.5) + 0.5;
+
+	if (HSM_FLIP_VIEWPORT_VERTICAL == -1)
 		out_coord.y = 1 - out_coord.y;
-		
-	if (HSM_FLIP_VIEWPORT_HORIZONTAL > 0.5)
+	
+	if (HSM_FLIP_VIEWPORT_HORIZONTAL == -1)
 		out_coord.x =  1 - out_coord.x;
 
 	return out_coord;
@@ -268,8 +271,12 @@ vec4 HSM_GetTexSampleFromSampleStartAndSize(sampler2D in_sampler, vec2 in_screen
 	vec2 core_prepped_size = HSM_GetRotatedNegativeCropAddedSize();
 
 	if ( HSM_DUALSCREEN_MODE > 0 )
-		in_screen_coord.y = abs(HSM_FLIP_CORE_VERTICAL) * (1 - in_screen_coord.y) + (1 - abs(HSM_FLIP_CORE_VERTICAL)) * in_screen_coord.y;
-
+		if (HSM_FLIP_CORE_VERTICAL == -1)
+			in_screen_coord.y = 1 - in_screen_coord.y;
+			
+		// in_screen_coord.y = abs(HSM_FLIP_CORE_VERTICAL) * (1 - in_screen_coord.y) + (1 - abs(HSM_FLIP_CORE_VERTICAL)) * in_screen_coord.y;
+		// in_screen_coord.y = HSM_FLIP_CORE_VERTICAL * (in_screen_coord.y - 0.5) + 0.5;
+		
 	vec2 px_coord = SAMPLE_AREA_START_PIXEL_COORD + in_screen_coord * window_size;
 
 	vec2 sample_coord = px_coord / core_prepped_size;

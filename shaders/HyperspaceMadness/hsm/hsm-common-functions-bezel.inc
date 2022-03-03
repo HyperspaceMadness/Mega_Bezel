@@ -159,8 +159,8 @@ vec4 HSM_GetTubeHighlight(vec2 tube_curved_coord, bool apply_to_mirror, in sampl
 
 	vec2 tube_highlight_coord = (mirrored_tube_coord - 0.5) / HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE + 0.5;
 
-	// TODO need to update this for flip horizontal
-	tube_highlight_coord = mix( tube_highlight_coord, -1 * (tube_highlight_coord - 0.5) + 0.5 , HSM_FLIP_VIEWPORT_VERTICAL);
+	tube_highlight_coord.x = (tube_highlight_coord.x - 0.5) * HSM_FLIP_VIEWPORT_HORIZONTAL + 0.5;
+	tube_highlight_coord.y = (tube_highlight_coord.y - 0.5) * HSM_FLIP_VIEWPORT_VERTICAL + 0.5;
 /*
 	// Dithering for the glass reflection if needed to reduce banding
 	float blur_max_size = 1;

@@ -197,19 +197,28 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 		// TubeDiffuseImage
 		if (HSM_TUBE_DIFFUSE_MODE == 1 || HSM_CRT_BLEND_MODE == 2)
 		{
-			vec2 diffuse_coord = mix( mirrored_tube_coord, -1 * (mirrored_tube_coord - 0.5) + 0.5 , HSM_FLIP_VIEWPORT_VERTICAL);
+			// vec2 tube_shadow_curved_coord = HSM_GetTubeCurvedCoord(SCREEN_COORD + vec2(0, 0.2), 1, SCREEN_SCALE, TUBE_SCALE, SCREEN_ASPECT, 1);
+			// vec2 mirrored_tube_shadow_coord = HSM_GetMirrorWrappedCoord(tube_shadow_curved_coord);
+			// float tube_shadow_mask = HSM_GetCornerMask(mirrored_tube_shadow_coord, SCREEN_ASPECT, bezel_corner_radius, 0.99);
+			
+			vec2 diffuse_coord = mirrored_tube_coord; 
+			diffuse_coord.x = HSM_FLIP_VIEWPORT_HORIZONTAL * (diffuse_coord.x - 0.5) + 0.5;
+			diffuse_coord.y = HSM_FLIP_VIEWPORT_VERTICAL * (diffuse_coord.y - 0.5) + 0.5;
+
 			diffuse_coord = (diffuse_coord - 0.5) / HSM_TUBE_DIFFUSE_IMAGE_SCALE + 0.5;
 
 			tube_diffuse = HSM_GetMipmappedTexSample(TubeDiffuseImage, diffuse_coord, TUBE_SCALE, 0);
 			tube_diffuse = HSM_GLOBAL_GRAPHICS_BRIGHTNESS * HSM_GetPreMultipliedColorLinear(tube_diffuse, SOURCE_MATTE_PREMULTIPLIED, DEFAULT_SRGB_GAMMA);
 			tube_diffuse.rgb = HSM_ApplyHSVAdjustment(tube_diffuse.rgb, HSM_TUBE_DIFFUSE_IMAGE_HUE, HSM_TUBE_DIFFUSE_IMAGE_SATURATION, HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS, HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON, HSM_TUBE_DIFFUSE_IMAGE_GAMMA);
+
+			// tube_diffuse.rgb *= tube_shadow_mask;
 		}
 		// If CRT Blend Mode is Multiply (2) then the tube must be fully opaque
 		tube_diffuse *= HSM_GetTubeDiffuseOpacity();
 		tube_diffuse.rgb *=  (1 - HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING) * vec3(1) + HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING * ambient_lighting_image.rgb;
 
 	}
-		out_color.a = in_color_with_gamma.a;
+	out_color.a = in_color_with_gamma.a;
 
 	// Don't apply the CRT images
 	if (HSM_CRT_BLEND_MODE == 0)
@@ -236,7 +245,9 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	// Add a Colored Gel image on top of the screen, this is what colors games like space invaders or battlezone
 	if (HSM_GetUseTubeColoredGelImage())
 	{
-		vec2 gel_coord = mix( mirrored_tube_coord, -1 * (mirrored_tube_coord - 0.5) + 0.5 , HSM_FLIP_VIEWPORT_VERTICAL);
+		vec2 gel_coord = mirrored_tube_coord;
+		gel_coord.x = HSM_TUBE_COLORED_GEL_IMAGE_FLIP_HORIZONTAL * (gel_coord.x - 0.5) + 0.5;
+		gel_coord.y = HSM_TUBE_COLORED_GEL_IMAGE_FLIP_VERTICAL * (gel_coord.y - 0.5) + 0.5;
 		gel_coord = (gel_coord - 0.5) / HSM_TUBE_COLORED_GEL_IMAGE_SCALE + 0.5;
 		vec4 gel_image = HSM_GetMipmappedTexSample(TubeColoredGelImage, gel_coord, TUBE_SCALE, 0);
 		
@@ -281,9 +292,6 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	out_color = HSM_Delinearize(out_color, DEFAULT_SRGB_GAMMA);
 	// #endif
 	
-
-
-
 	return out_color;
 }
 

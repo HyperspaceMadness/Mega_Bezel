@@ -70,8 +70,8 @@ vec2 GetIntegerScaleMult(vec2 screen_size, vec2 cropped_size)
 
 vec4 AddText(vec2 in_coord, vec4 in_color)
 {
-   in_coord.y = abs(HSM_FLIP_VIEWPORT_VERTICAL - HSM_FLIP_CORE_VERTICAL) > 0.5 ? 1 - in_coord.y : in_coord.y;
-   in_coord.x = abs(HSM_FLIP_VIEWPORT_HORIZONTAL - HSM_FLIP_CORE_HORIZONTAL) > 0.5 ? 1 - in_coord.x : in_coord.x;
+   in_coord.x = HSM_FLIP_VIEWPORT_HORIZONTAL * HSM_FLIP_CORE_HORIZONTAL * (in_coord.x - 0.5) + 0.5;
+   in_coord.y = HSM_FLIP_VIEWPORT_VERTICAL * HSM_FLIP_CORE_VERTICAL * (in_coord.y - 0.5) + 0.5;
 
    vec2 screen_size = GetScreenSize(SCREEN_SCALE);
    vec2 int_scale_mult = GetIntegerScaleMult(screen_size, CROPPED_ROTATED_SIZE);
@@ -102,10 +102,10 @@ void main()
    }
 
    // Flip the coordinate vertically if desired
-   VIEWPORT_COORD.x = abs(HSM_FLIP_VIEWPORT_HORIZONTAL - HSM_FLIP_CORE_HORIZONTAL) * (1 - VIEWPORT_COORD.x) + (1 - abs(HSM_FLIP_VIEWPORT_HORIZONTAL - HSM_FLIP_CORE_HORIZONTAL)) * VIEWPORT_COORD.x;
-   VIEWPORT_COORD.y = abs(HSM_FLIP_VIEWPORT_VERTICAL - HSM_FLIP_CORE_VERTICAL) * (1 - VIEWPORT_COORD.y) + (1 - abs(HSM_FLIP_VIEWPORT_VERTICAL - HSM_FLIP_CORE_VERTICAL)) * VIEWPORT_COORD.y;
+   VIEWPORT_COORD.y = HSM_FLIP_VIEWPORT_VERTICAL * HSM_FLIP_CORE_VERTICAL * (VIEWPORT_COORD.y - 0.5) + 0.5;
+   VIEWPORT_COORD.x = HSM_FLIP_VIEWPORT_HORIZONTAL * HSM_FLIP_CORE_HORIZONTAL * (VIEWPORT_COORD.x - 0.5) + 0.5;
 
-   //////// Draw text to show resolutions ////////// 
+   //////// Draw text to show resolutions //////////
    FragColor = AddText(VIEWPORT_COORD - vec2(MAX_NEGATIVE_CROP, -MAX_NEGATIVE_CROP), FragColor);
 
 	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))

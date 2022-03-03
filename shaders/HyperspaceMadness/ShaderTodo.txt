@@ -6,13 +6,16 @@ Changes:
   * Fixed Double Vignette issue with POTATO presets when screen was under the BG
   * Updated Resolution Info only show relevant info
   * Small update to Sonkun's presets to adjust brightness
+  * Set Nesguy presets at mask size 1
+  * Added Flip Parameters for the Colored Gel and fixed Flip Viewport with the Gel
 
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
-  * Set Nesguy presets at mask size 1
+  * Bezel shadow on Potato Tube / Game Image
   * Tube Diffuse Shadow
   * Adjust Chain for better performance in ADV
+  * Add SMOOTH-ADV Preset List
   * Check out Colorize Behavior on DMG-01 (Colored Gameboy)
   * Different colored gel appearance on STD vs ADV
   * Potato NTSC GDV-MINI
