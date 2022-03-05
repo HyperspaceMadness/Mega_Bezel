@@ -41,39 +41,39 @@ layout(push_constant) uniform Push
    float pre_bb;
 } params;
 
-#pragma parameter AS          "          Afterglow Strength -- AS" 0.20 0.0 0.60 0.01
+#pragma parameter AS             "          Afterglow Strength -- AS" 0.20 0.0 0.60 0.01
 #define AS params.AS
 
-#pragma parameter sat         "          Afterglow Saturation  -- sat" 0.33 0.0 1.0 0.01
+#pragma parameter sat            "          Afterglow Saturation  -- sat" 0.33 0.0 1.0 0.01
 #define sat params.sat
 
 // #pragma parameter BP          "          Brighten Black (For Scanlines on Black) -- BP" 0.0 0.0 100.0 1.0
 
-#pragma parameter bogus_color "[ COLOR TWEAKS ]:" 0.0 0.0 1.0 1.0
+#pragma parameter bogus_color    "[ COLOR TWEAKS ]:" 0.0 0.0 1.0 1.0
 
-#pragma parameter CS          "       Display Gamut: sRGB, Modern, DCI, Adobe, Rec.2020 -- CS" 0.0 0.0 4.0 1.0 
-#pragma parameter CP          "       CRT Profile: EBU | P22 | SMPTE-C | Philips | Trin. -- CP" 0.0 -1.0 5.0 1.0 
+#pragma parameter CS             "       Display Gamut: sRGB, Modern, DCI, Adobe, Rec.2020 -- CS" 0.0 0.0 4.0 1.0 
+#pragma parameter CP             "       CRT Profile: EBU | P22 | SMPTE-C | Philips | Trin. -- CP" 0.0 -1.0 5.0 1.0 
 
 #define CP params.CP
 #define CS params.CS
 
-#pragma parameter TNTC        "       LUT Colors: Trin. | InvTrin. | NEC Mult. | NTSC -- TNTC" 0.0 0.0 4.0 1.0
+#pragma parameter TNTC           "       LUT Colors: Trin. | InvTrin. | NEC Mult. | NTSC -- TNTC" 0.0 0.0 4.0 1.0
 #define TNTC params.TNTC
 
-#pragma parameter LS          "       LUT Size -- LS" 32.0 32.0 64.0 32.0
+#pragma parameter LS             "          LUT Size -- LS" 32.0 32.0 64.0 32.0
 #define LS params.LS
 
 #define LUTLOW 5.0  // "Fix LUT Dark - Range" from 0.0 to 50.0 - RGB singletons
 
 #define LUTBR 1.0   // "Fix LUT Brightness" from 0.0 to 1.0
  
-#pragma parameter WP          "          Color Temperature % -- wp" 0.0 -100.0 100.0 5.0 
+#pragma parameter WP             "          Color Temperature % -- wp" 0.0 -100.0 100.0 5.0 
 
-#pragma parameter wp_saturation "          Saturation Adjustment -- wp_saturation" 1.0 0.0 2.0 0.05 
+#pragma parameter wp_saturation  "          Saturation Adjustment -- wp_saturation" 1.0 0.0 2.0 0.05 
 
-#pragma parameter pre_bb      "          Brightness Adjustment" 1.0 0.0 2.0 0.01
+#pragma parameter pre_bb         "          Brightness Adjustment" 1.0 0.0 2.0 0.01
 
-#pragma parameter sega_fix    "          Sega Brightness Fix" 0.0 0.0 1.0 1.0
+#pragma parameter sega_fix       "          Sega Brightness Fix" 0.0 0.0 1.0 1.0
 
 // #pragma parameter vigstr "          Vignette Strength" 0.0 0.0 2.0 0.025
 

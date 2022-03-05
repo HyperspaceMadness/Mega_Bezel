@@ -127,10 +127,27 @@ Presets in Mega_Bezel / Presets
     * **Use at your own risk!**
     * These presets are work in progress and may disappear, be moved, renamed, or change behavior at any future release
 
-
+----
+**Pre CRT Shader Chain**
+----------------------------------------
+----
+| Shader Behavior                        |SMOOTH-ADV   |ADV   |STD   |POTATO |NTSC-Variants
+|----------------------------------------|-------------|------|------|-------|-------------
+| Reducing Core Resolution               | ✔           | ✔   | ✔   | ✔     | ✔
+| Info Cache                             | ✔           | ✔   | ✔   | ✔     | ✔       
+| Resolution Text                        | ✔           | ✔   | ✔   |       | N/A    
+| Startup Intro                          | ✔           | ✔   | ✔   |       | N/A  
+| De-Dithering                           | ✔           | ✔   |      |       | N/A 
+| Image Sharpening                       | ✔           | ✔   | ✔   |       | ✔ 
+| Uprezed Edge Contour Smoothing         | ✔           |     |      |       |
+| Bandwidth Horizontal Blurring (GTU)    | ✔           | ✔   |     |        |
+| NTSC Signal Processing (NTSC Adaptive) |             |      |     |        | ✔
+| Afterglow                              | ✔           | ✔   | ✔   | ✔     | ✔
+| Color Signal Processing (Grade)        | ✔           | ✔   | ✔   | ✔     | ✔
+| Interlacing & Downsample Blur          | ✔           | ✔   | ✔   | ✔       | ✔
 
 ----------------------------------------
-Troubleshooting
+**Troubleshooting**
 ----------------------------------------
 ---
 

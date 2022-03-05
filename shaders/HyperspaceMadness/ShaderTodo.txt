@@ -8,6 +8,7 @@ Changes:
   * Small update to Sonkun's presets to adjust brightness
   * Set Nesguy presets at mask size 1
   * Added Flip Parameters for the Colored Gel and fixed Flip Viewport with the Gel
+  * Updated GDV-MINI, should not have problems with 4K by default anymore with CGWG mask
 
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
@@ -147,6 +148,7 @@ Old Megabezel https://github.com/HyperspaceMadness/shaders_slang/tree/adf6dc3c0f
   * Fix saving with same name with different capitalization creates self reference
   * Shaders folder as a path token, e.g. "[shaders]/shaders_slang/" [shaders_dir]?
   * Hide Parameters
+  * Add Core Provided Aspect as Uniform
 
   * Stop Reloading Shader multiple times on Save (Keep optional param)
 
