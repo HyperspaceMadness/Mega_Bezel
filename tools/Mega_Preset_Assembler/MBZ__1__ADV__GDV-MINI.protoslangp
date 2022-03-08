@@ -8,7 +8,6 @@
 #reference "Components/30__dedithering__1-sgenpt-mix.slangp"
 #reference "Components/30__dedithering__2-ps1-box-blur.slangp"
 #reference "Components/35__fast-sharpen.slangp"
-#reference "Components/45__upscale__scalefx.slangp"
 #reference "Components/50__tv-processing__gtu.slangp"
 #reference "Components/59__mbz__crt__gdv-adv-prep-and-linearize.slangp"
 #reference "Components/60__mbz__crt__gdv-mini.slangp"

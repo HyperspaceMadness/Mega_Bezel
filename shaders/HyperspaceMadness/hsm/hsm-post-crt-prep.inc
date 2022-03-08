@@ -101,7 +101,7 @@ vec4 HSM_ApplyScanlineMask(vec4 in_color, vec2 screen_scale, vec2 in_coord, vec2
 	vec2 screen_size = global.OutputSize.xy * screen_scale;
 	float scan_axis_screen_scale_res = use_vert_scanlines * screen_size.x + (1 - use_vert_scanlines) * screen_size.y;
 	
-	float simulated_scanline_res = HSM_FAKE_SCANLINE_RES;
+	float simulated_scanline_res = HSM_FAKE_SCANLINE_RES_MODE > 0.5 ? HSM_FAKE_SCANLINE_RES : CROPPED_ROTATED_SIZE.y;
 
 	float scanline_size = scan_axis_screen_scale_res / simulated_scanline_res;
 

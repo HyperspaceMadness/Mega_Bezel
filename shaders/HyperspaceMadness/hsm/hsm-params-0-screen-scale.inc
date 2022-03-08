@@ -317,7 +317,10 @@ float HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = global.HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR
 #pragma parameter HSM_FAKE_SCANLINE_OPACITY 						"          Opacity - Def 70" 0 0 100 5
 #define HSM_FAKE_SCANLINE_OPACITY global.HSM_FAKE_SCANLINE_OPACITY / 100
 
-#pragma parameter HSM_FAKE_SCANLINE_RES 							"          Scan Resolution" 240 0 480 8
+#pragma parameter HSM_FAKE_SCANLINE_RES_MODE						"          Scan Resolution Mode: AUTO (CORE RES) : EXPLICIT" 1 0 1 1
+#define HSM_FAKE_SCANLINE_RES_MODE global.HSM_FAKE_SCANLINE_RES_MODE
+
+#pragma parameter HSM_FAKE_SCANLINE_RES 							"          Explicit Scan Resolution" 240 0 480 8
 #define HSM_FAKE_SCANLINE_RES global.HSM_FAKE_SCANLINE_RES
 
 #pragma parameter HSM_FAKE_SCANLINE_INT_SCALE 						"          Int Scale Scanlines" 1 0 1 1
