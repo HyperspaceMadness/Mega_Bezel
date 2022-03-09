@@ -177,7 +177,7 @@ void main()
     if (params.gameboy_color_palette == 5)
         foreground_color = texture(CustomColorPaletteImage, vec2(0.75, 0.5)).rgb;
 
-    vec2 screen_curved_coord = HSM_GetCurvedCoord(MY_SCREEN_SCALE, 1, MY_SCREEN_ASPECT);
+    vec2 screen_curved_coord = HSM_GetCurvedCoord(MY_SCREEN_SCALE, HSM_CRT_CURVATURE_SCALE, MY_SCREEN_ASPECT);
 	vec2 screen_curved_coord_mirrored = HSM_GetMirrorWrappedCoord(screen_curved_coord);
 
     // Determine if the corrent texel lies on a dot or in the space between dots

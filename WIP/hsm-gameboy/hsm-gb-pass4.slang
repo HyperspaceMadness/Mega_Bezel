@@ -171,7 +171,7 @@ void main()
     if (params.gameboy_color_palette == 5)
         bg_color = texture(CustomColorPaletteImage, vec2(0.25, 0.5));
 
-	vec2 screen_curved_coord = HSM_GetCurvedCoord(MY_SCREEN_COORD, 1, MY_SCREEN_ASPECT);
+	vec2 screen_curved_coord = HSM_GetCurvedCoord(MY_SCREEN_COORD, HSM_CRT_CURVATURE_SCALE, MY_SCREEN_ASPECT);
 	vec2 screen_curved_coord_mirrored = HSM_GetMirrorWrappedCoord(screen_curved_coord);
     // End Addition
 

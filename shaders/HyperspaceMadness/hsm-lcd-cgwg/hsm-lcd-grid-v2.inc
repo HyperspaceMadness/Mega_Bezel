@@ -105,7 +105,7 @@ void main()
 	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
-	vec2 screen_curved_coord = HSM_GetCurvedCoord(SCREEN_COORD, 1, SCREEN_ASPECT);
+	vec2 screen_curved_coord = HSM_GetCurvedCoord(SCREEN_COORD, HSM_CRT_CURVATURE_SCALE, SCREEN_ASPECT);
     vec2 curved_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
     vec2 texelSize = 1 / CROPPED_ROTATED_SIZE_WITH_RES_MULT;
     // End Addition

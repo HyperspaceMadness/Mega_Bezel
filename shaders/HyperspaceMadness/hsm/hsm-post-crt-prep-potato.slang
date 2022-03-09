@@ -151,7 +151,7 @@ void main()
 
 	FragColor = texture(Source, UNFLIPPED_VIEWPORT_COORD);
 
-	vec2 screen_curved_coord = HSM_GetCurvedCoord(SCREEN_COORD, 1, SCREEN_ASPECT);
+	vec2 screen_curved_coord = HSM_GetCurvedCoord(SCREEN_COORD, HSM_CRT_CURVATURE_SCALE, SCREEN_ASPECT);
 	FragColor = HSM_GetPostCrtPreppedColorPotato(FragColor, vTexCoord, viewportCoordTransformed, screen_curved_coord, BackgroundImage, BackgroundVertImage);
 
 	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))

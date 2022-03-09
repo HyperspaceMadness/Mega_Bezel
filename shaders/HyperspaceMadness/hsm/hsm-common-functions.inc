@@ -95,7 +95,6 @@ vec2 HSM_GetRotatedDerezedSize()
 	return HSM_ROTATE_CORE_IMAGE * global.DerezedPassSize.yx + (1 - HSM_ROTATE_CORE_IMAGE) * global.DerezedPassSize.xy;
 }
 
-
 // Core Prepped Size is the size after DeRez and adding in the negative crop
 vec2 HSM_GetNegativeCropAddedSize()
 {
@@ -1046,10 +1045,10 @@ vec4 HSM_GetNightLightingMultiplyColor( vec2 viewport_coord, in sampler2D NightL
 	vec2 night_lighting_coord = HSM_GetMirrorWrapCoord(viewport_coord);
 	
 	night_lighting_coord = (night_lighting_coord - 0.5) / HSM_AMBIENT_LIGHTING_SCALE + 0.5;
+	night_lighting_coord = HSM_RotateCoordinate(night_lighting_coord, HSM_AMBIENT_LIGHTING_ROTATE);
 
 	if (HSM_AMBIENT_LIGHTING_MIRROR_HORZ == 1)
 		night_lighting_coord.x = (night_lighting_coord.x - 0.5) * -1 + 0.5;
-
 	
 	vec4 night_lighting_image = vec4(0);
 	// if (HSM_AMBIENT_LIGHTING_DITHERING_SAMPLES > 0.5)

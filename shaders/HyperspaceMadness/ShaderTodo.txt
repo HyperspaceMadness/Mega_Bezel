@@ -10,6 +10,10 @@ Changes:
   * Variations/Smoothed-ScaleFX_... presets renamed to SMOOTH-ADV
   * Sonkun's Presets have been moved into a 4k and a new additional 1080p folder
     * The the 1080p presets have the curvature of the screen reduced to almost 0 and the bezel curvature increased so the bezel looks the same
+  * Added CRT Curvature Multiplier so it can be set at 0 
+    * This will set the crt curvature to 0 while the bezel stays curved
+  * Added Rotate parameter for Ambient (Night) Lighting
+  * Variations/Max-Int-Scale presets renamed to Max-Int-Scale-No-Bezel for clarity, also now the bezel and background are off
 
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------

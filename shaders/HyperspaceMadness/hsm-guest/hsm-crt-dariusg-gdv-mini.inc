@@ -280,7 +280,7 @@ void main()
 			return;
 	}
 	
-	vec2 screen_curved_coord = HSM_GetCurvedCoord(SCREEN_COORD, 1, SCREEN_ASPECT);
+	vec2 screen_curved_coord = HSM_GetCurvedCoord(SCREEN_COORD, HSM_CRT_CURVATURE_SCALE, SCREEN_ASPECT);
 	vec2 pos = HSM_GetMirrorWrappedCoord(screen_curved_coord);
 
 	// HSM Added

@@ -156,7 +156,7 @@ void main()
     // HSM Removed
     // vec2 curved_uv = mix( curve( uv ), uv, 0.4 );
 
-    vec2 screen_curved_coord = HSM_GetCurvedCoord(uv, 1, SCREEN_ASPECT);
+    vec2 screen_curved_coord = HSM_GetCurvedCoord(uv, HSM_CRT_CURVATURE_SCALE, SCREEN_ASPECT);
     vec2 curved_uv = HSM_GetMirrorWrappedCoord(screen_curved_coord);
     // vec2 screen_curved_coord = curve(uv);
     // vec2 curved_uv = mix( screen_curved_coord, uv, 0.4 );

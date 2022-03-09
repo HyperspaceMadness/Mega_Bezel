@@ -93,6 +93,9 @@ float HSM_AMBIENT_LIGHTING_SCALE_MODE = global.HSM_AMBIENT_LIGHTING_SCALE_MODE;
 #pragma parameter HSM_AMBIENT_LIGHTING_SCALE             	        "          Scale Offset"  100 10 1000 1
 float HSM_AMBIENT_LIGHTING_SCALE = global.HSM_AMBIENT_LIGHTING_SCALE / 100;
 
+#pragma parameter HSM_AMBIENT_LIGHTING_ROTATE         	            "          Rotate"  0 0 1 1
+float HSM_AMBIENT_LIGHTING_ROTATE = global.HSM_AMBIENT_LIGHTING_ROTATE;
+
 #pragma parameter HSM_AMBIENT_LIGHTING_MIRROR_HORZ         	        "          Mirror Horizontal"  0 0 1 1
 float HSM_AMBIENT_LIGHTING_MIRROR_HORZ = global.HSM_AMBIENT_LIGHTING_MIRROR_HORZ;
 
@@ -367,6 +370,9 @@ float HSM_CURVATURE_3D_TILT_ANGLE_X = global.HSM_CURVATURE_3D_TILT_ANGLE_X / 100
 
 #pragma parameter HSM_CURVATURE_3D_TILT_ANGLE_Y 					"          3D Tilt Angle Y" 0 -120 120 1
 float HSM_CURVATURE_3D_TILT_ANGLE_Y = global.HSM_CURVATURE_3D_TILT_ANGLE_Y / 100;
+
+#pragma parameter HSM_CRT_CURVATURE_SCALE 				            "       CRT Curvature Scale Multiplier: 0 = Less Moire Artifacts" 100 0 400 1
+float HSM_CRT_CURVATURE_SCALE = global.HSM_CRT_CURVATURE_SCALE / 100;
 
 
 
