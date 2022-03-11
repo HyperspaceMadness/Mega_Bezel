@@ -661,6 +661,21 @@ float HSM_GetCornerMask(vec2 in_coord, float screen_aspect, float corner_radius,
 	return clamp((corner_distance.x - distance) * (edge_sharpness * 500 + 100), 0.0, 1.0);
 }
 
+// Guest improved corner mask, to integrate
+// sborder is border intensity
+// float corner(vec2 pos) {
+// 	vec2 b = vec2(bsize1, bsize1) *  vec2(1.0, OutputSize.x/OutputSize.y) * 0.05;
+// 	pos = clamp(pos, 0.0, 1.0);
+// 	pos = abs(2.0*(pos - 0.5));
+// 	float csize1 = mix(400.0, 7.0,  pow(4.0*csize, 0.10));
+// 	float crn = dot(pow(pos, csize1.xx), vec2(1.0, OutputSize.y/OutputSize.x));
+// 	crn = (csize == 0.0) ? max(pos.x, pos.y) : pow(crn, 1.0/csize1);
+// 	pos = max(pos, crn);
+// 	vec2 res = (bsize1 == 0.0) ? 1.0.xx : mix(0.0.xx, 1.0.xx, smoothstep(1.0.xx, 1.0.xx-b, sqrt(pos)));
+// 	res = pow(res, sborder.xx);	
+// 	return sqrt(res.x*res.y);
+// }
+
 vec2 HSM_GetTubeCurvedCoord(vec2 screen_coord, float curvature_scale, vec2 screen_scale, vec2 tube_scale, float screen_aspect, float apply_black_edge_offset)
 {
 	vec2 black_edge_scale_offset = tube_scale / screen_scale;

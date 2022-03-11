@@ -220,6 +220,15 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	}
 	out_color.a = in_color_with_gamma.a;
 
+	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
+	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
+		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
+
+	float tube_mask =  HSM_GetCornerMask(tube_curved_coord, SCREEN_ASPECT, bezel_corner_radius, 0.99);
+	float black_edge_mask_invert = 1 - (tube_mask - screen_mask);
+
+	out_color *= black_edge_mask_invert;
+
 	// Don't apply the CRT images
 	if (HSM_CRT_BLEND_MODE == 0)
 		out_color = vec4(0);
@@ -232,15 +241,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	if (HSM_CRT_BLEND_MODE == 2)
 		out_color = HSM_BlendModeLayerMix(tube_diffuse, out_color, BLEND_MODE_MULTIPLY, HSM_CRT_BLEND_AMOUNT);
 
-	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
-	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
-		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
 
-	float tube_mask =  HSM_GetCornerMask(tube_curved_coord, SCREEN_ASPECT, bezel_corner_radius, 0.99);
-	float black_edge_mask_invert = 1 - (tube_mask - screen_mask);
-
-	if (HSM_TUBE_BLACK_EDGE_LAYERING_MODE < 0.5)
-		out_color *= black_edge_mask_invert;
 
 	// Add a Colored Gel image on top of the screen, this is what colors games like space invaders or battlezone
 	if (HSM_GetUseTubeColoredGelImage())

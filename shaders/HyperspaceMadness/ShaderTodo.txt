@@ -14,6 +14,7 @@ Changes:
     * This will set the crt curvature to 0 while the bezel stays curved
   * Added Rotate parameter for Ambient (Night) Lighting
   * Variations/Max-Int-Scale presets renamed to Max-Int-Scale-No-Bezel for clarity, also now the bezel and background are off
+  * Black edge layering mode now shows the tube diffuse image when it's 0
 
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------

@@ -544,9 +544,6 @@ float HSM_TUBE_COLORED_GEL_IMAGE_FLIP_VERTICAL = -(global.HSM_TUBE_COLORED_GEL_I
 #pragma parameter HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL				"          Show CRT on Top of Colored Gel Normal" 0 0 1 1
 float HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL = global.HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL;
 
-#pragma parameter HSM_TUBE_BLACK_EDGE_LAYERING_MODE		            "          Show Black Edge:  UNDER GEL | OVER GEL" 1 0 1 1
-float HSM_TUBE_BLACK_EDGE_LAYERING_MODE = global.HSM_TUBE_BLACK_EDGE_LAYERING_MODE;
-
 //---------------------------------------------------------------------------------------------------
 //    TUBE STATIC REFLECTION
 //---------------------------------------------------------------------------------------------------
@@ -575,6 +572,9 @@ float HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE = global.HSM_TUBE_STATIC_REFLECTION
 //    SCREEN BLACK EDGE
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_SCREEN_EDGE_TITLE								"[ SCREEN BLACK EDGE ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_TUBE_BLACK_EDGE_LAYERING_MODE		            "          Show Black Edge:  OFF | OVER DIFFUSE & GEL" 1 0 1 1
+float HSM_TUBE_BLACK_EDGE_LAYERING_MODE = global.HSM_TUBE_BLACK_EDGE_LAYERING_MODE;
 
 #pragma parameter HSM_GLOBAL_CORNER_RADIUS 							"          Global Corner Radius - Def 10" 10 4 500 2
 #define HSM_GLOBAL_CORNER_RADIUS global.HSM_GLOBAL_CORNER_RADIUS

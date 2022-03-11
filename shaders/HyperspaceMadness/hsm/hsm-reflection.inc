@@ -153,9 +153,6 @@ void main()
 	float outside_tube_mask = 1 - HSM_GetCornerMask(tube_curved_coord, SCREEN_ASPECT, bezel_corner_radius, 0.99);
 	TUBE_MASK = 1 - outside_tube_mask;
 
-	// Shrink the mask by 0.001 to clip off outer edge
-	SCREEN_MASK = HSM_Get_Screen_Black_Edge_Mask(SCREEN_COORD, false);
-
 	OUTSIDE_BEZEL_MASK = 1 - HSM_GetCornerMask(BEZEL_OUTSIDE_CURVED_COORD, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS * HSM_BZL_OUTER_CORNER_RADIUS_SCALE, 0.9);
 
 	//----------------------------------------------------
@@ -422,8 +419,10 @@ void main()
 	}
 
 	if (HSM_TUBE_BLACK_EDGE_LAYERING_MODE > 0.5)
-		crt_linear.rgb *= (1 - HSM_TUBE_BLACK_EDGE_LAYERING_MODE) + HSM_TUBE_BLACK_EDGE_LAYERING_MODE * SCREEN_MASK;
-	
+		crt_linear.rgb *= (1 - HSM_TUBE_BLACK_EDGE_LAYERING_MODE) + HSM_TUBE_BLACK_EDGE_LAYERING_MODE * HSM_Get_Screen_Black_Edge_Mask(SCREEN_COORD, false);
+
+	crt_linear.rgb *= TUBE_MASK;
+
 	// Put the frame and bezel over top a black tube
 	// It must be a little wider than the inside of the bezel so we don't see a gap
 	crt_linear = HSM_PreMultAlphaBlend(vec4(0, 0, 0, 1 - outside_tube_mask_wider), crt_linear);
