@@ -613,6 +613,7 @@ float HSM_CRT_CURVATURE_SCALE;
 	float slotms;
 	float mclip;
 	float mshift;
+float mask_layout;
 	
 	float GDV_DECONVERGENCE_ON;
 	float decons;

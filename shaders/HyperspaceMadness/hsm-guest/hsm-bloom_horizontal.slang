@@ -45,7 +45,7 @@ layout(push_constant) uniform Push
 #pragma parameter SIZEHB 		"          Horizontal Radius ( Num Samples ) -- SIZEHB" 3.0 1.0 50.0 1.0 
 #define SIZEHB params.SIZEHB
 
-#pragma parameter SIGMA_HB 		"          Horizontal Sigma ( Spread ) -- SIGMA_HB" 0.80 0.25 15.0 0.05
+#pragma parameter SIGMA_HB 		"          Horizontal Sigma ( Spread ) -- SIGMA_HB" 0.75 0.25 15.0 0.05
 #define SIGMA_HB params.SIGMA_HB
 
 

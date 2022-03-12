@@ -35,7 +35,7 @@ layout(push_constant) uniform Push
 #pragma parameter SIZEVB "          Vertical Radius ( Num Samples ) -- SIZEVB" 3.0 1.0 50.0 1.0 
 #define SIZEVB params.SIZEVB
 
-#pragma parameter SIGMA_VB "          Vertical Sigma ( Spread ) -- SIGMA_VB" 0.70 0.25 15.0 0.05
+#pragma parameter SIGMA_VB "          Vertical Sigma ( Spread ) -- SIGMA_VB" 0.60 0.25 15.0 0.05
 #define SIGMA_VB params.SIGMA_VB
 
 layout(std140, set = 0, binding = 0) uniform UBO

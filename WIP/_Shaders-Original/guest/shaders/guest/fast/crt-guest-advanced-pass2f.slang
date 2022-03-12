@@ -47,6 +47,8 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float scan_falloff;
 	float bloom_dist;
 	float mshift;
+float mask_layout;
+	float mask_layout;
 } global;
 
 #pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
@@ -143,6 +145,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter mshift "          Mask Shift/Stagger" 0.0 0.0 8.0 1.0
 #define mshift     global.mshift     // mask 'line' shift/stagger
+
+#pragma parameter mask_layout "          Mask Layout: RGB or BGR (check LCD panel) " 0.0 0.0 1.0 1.0
+#define mask_layout     global.mask_layout     // mask layout: RGB or BGR
 
 #pragma parameter slotmask "          Slot Mask Strength Bright Pixels" 0.0 0.0 1.0 0.05
 #define slotmask     params.slotmask
@@ -662,6 +667,8 @@ if (!interb)
 	
 	float smask = SlotMask(gl_FragCoord.xy * 1.000001, mx);	
 	cmask*= Mask(gl_FragCoord.xy * 1.000001, mx);
+
+	if (mask_layout > 0.5) cmask = cmask.rbg;
 	
 	color = color*cmask;
 	color = min(color,1.0);

@@ -27,7 +27,7 @@
 layout(push_constant) uniform Push
 {
 	float TATE, IOS, OS, BLOOM, brightboost, brightboost1, csize, bsize1, warpX, warpY, glow, shadowMask, masksize,
-	slotmask, slotmask1, slotwidth, double_slot, mcut, maskDark, maskLight, maskstr, mshift;
+	slotmask, slotmask1, slotwidth, double_slot, mcut, maskDark, maskLight, maskstr, mshift, mask_layout;
 } params;
 
 layout(std140, set = 0, binding = 0) uniform UBO
@@ -161,6 +161,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter mshift "          Mask Shift/Stagger" 0.0 0.0 8.0 1.0
 #define mshift     params.mshift     // mask 'line' shift/stagger
+
+#pragma parameter mask_layout "          Mask Layout: RGB or BGR (check LCD panel) " 0.0 0.0 1.0 1.0
+#define mask_layout     params.mask_layout     // mask layout: RGB or BGR
 
 #pragma parameter mask_gamma "          Mask gamma" 2.40 1.0 5.0 0.05
 #define mask_gamma   global.mask_gamma     // Mask application gamma
@@ -615,6 +618,8 @@ void main()
 	
 	float smask = SlotMask(maskcoord, mx);	
 	cmask*= Mask(maskcoord, mx);
+
+	if (mask_layout > 0.5) cmask = cmask.rbg;
 	
 	color = pow(color, vec3(mask_gamma/gamma_in));
 	color = color*cmask;

@@ -5,6 +5,7 @@ Mega Bezel is updated to V 0.9.104 2022-02-20 Rev 1
 Changes:
   * Added SMOOTH-ADV Preset Tier, this has ScaleFX in it and the required Upres in the chain
     * ADV has had ScaleFx removed. If you have any presets which used ScaleFx they should have their references changed to the appropriate SMOOTH-ADV preset
+  * Updated to Guest-Advanced to crt-guest-advanced-2022-03-10-release1
   * Updated GDV-MINI, should not have problems with 4K by default anymore with CGWG mask
   * Auto Fake Scanline Res Added as an option, Explicit Fake Scanline Res is still available
   * Variations/Smoothed-ScaleFX_... presets renamed to SMOOTH-ADV

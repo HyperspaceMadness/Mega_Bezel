@@ -120,6 +120,9 @@
 #pragma parameter mshift "          Mask Shift/Stagger" 0.0 0.0 8.0 1.0
 #define mshift     global.mshift     // mask 'line' shift/stagger
 
+#pragma parameter mask_layout "       Mask Layout: RGB or BGR (check LCD panel) -- mask_layout" 0.0 0.0 1.0 1.0
+#define mask_layout     global.mask_layout     // mask layout: RGB or BGR
+
 #pragma parameter mask_gamma "          Mask Gamma -- mask_gamma" 2.40 1.0 5.0 0.05
 #define mask_gamma   global.mask_gamma     // Mask application gamma
 
@@ -686,6 +689,8 @@ void main()
 	
 	float smask = SlotMask(maskcoord, mx);	
 	cmask*= Mask(maskcoord, mx);
+	
+	if (mask_layout > 0.5) cmask = cmask.rbg;
 	
 	color = pow(color, vec3(mask_gamma/gamma_in));
 	color = color*cmask;
