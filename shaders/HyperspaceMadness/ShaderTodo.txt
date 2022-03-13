@@ -22,13 +22,12 @@ Changes:
 ----------------------------------------------------
   * Bezel shadow on Potato Tube / Game Image
   * Tube Diffuse Shadow
-  * Add SMOOTH-ADV Preset List
   * Check out Colorize Behavior on DMG-01 (Colored Gameboy)
   * Different colored gel appearance on STD vs ADV
   * Potato NTSC GDV-MINI
   * Figure out POTATO crashing
   * Add vscode link in readme [![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/organization/repository)
-
+  * Investigate Higher Ambient Light Multiplier on BG
 ----------------------------------------------------
 --- Examples  --------------------------------------
 ----------------------------------------------------
