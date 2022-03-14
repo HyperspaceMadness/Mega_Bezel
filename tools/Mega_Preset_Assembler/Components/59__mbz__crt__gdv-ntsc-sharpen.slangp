@@ -1,0 +1,32 @@
+shaders = 5
+
+shader0 = :/shaders/shaders_slang/stock.slang
+alias0 = "PrePass0"
+
+shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/ntsc/hsm-ntsc-pass1.slang
+filter_linear1 = false
+scale_type_x1 = source
+scale_type_y1 = source
+scale_x1 = 4.0
+scale_y1 = 1.0
+frame_count_mod1 = 2
+float_framebuffer1 = true
+
+shader2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/ntsc/hsm-ntsc-pass2.slang
+filter_linear2 = false
+scale_type2 = source
+scale_x2 = 0.5
+scale_y2 = 1.0
+
+shader3 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-custom-fast-sharpen.slang
+filter_linear3 = true
+scale_type3 = source
+scale_x3 = 1.0
+scale_y3 = 1.0
+alias3 = NtscPass
+
+shader4 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-convert-ntsc.slang
+filter_linear4 = true
+scale_type4 = source
+scale_x4 = 0.5
+scale_y4 = 1.0
