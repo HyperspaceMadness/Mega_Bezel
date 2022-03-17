@@ -283,7 +283,7 @@ shader46 = ../../shaders/HyperspaceMadness/hsm/hsm-combine-passes.slang
 scale_type46 = viewport
 alias46 = "CombinePass"
 // Define textures to be used by the different passes
-textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;LEDImage;TopLayerImage;"
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;LEDImage;TopLayerImage;"
 
 SamplerLUT1 = ../../shaders/HyperspaceMadness/hsm-guest/lut/trinitron-lut.png
 SamplerLUT1_linear = true 
@@ -308,6 +308,10 @@ TubeDiffuseImage_mipmap = 1
 TubeColoredGelImage = ../../shaders/HyperspaceMadness/textures/Colored_Gel_Rainbow.png
 TubeColoredGelImage_linear = true
 TubeColoredGelImage_mipmap = 1
+
+TubeShadowImage = ../../shaders/HyperspaceMadness/textures/Tube_Shadow_1600x1200.png
+TubeShadowImage_linear = true
+TubeShadowImage_mipmap = 1
 
 TubeStaticReflectionImage = ../../shaders/HyperspaceMadness/textures/TubeGlassOverlayImage_3840x2160.png
 TubeStaticReflectionImage_linear = true
@@ -388,4 +392,4 @@ HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR = 100
 
 ntsc_scale = "0.33333"
 
-shadowMask = 3
+// shadowMask = 3

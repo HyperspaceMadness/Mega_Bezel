@@ -17,15 +17,15 @@ Changes:
   * Added Rotate parameter for Ambient (Night) Lighting
   * Variations/Max-Int-Scale presets renamed to Max-Int-Scale-No-Bezel for clarity, also now the bezel and background are off
   * Black edge layering mode now shows the tube diffuse image when it's 0
+  * Added Tube Shadow Image
 
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
+  * Add Tube Expand Thickness which will add to Black Edge
   * Bezel shadow on Potato Tube / Game Image
-  * Tube Diffuse Shadow
   * Check out Colorize Behavior on DMG-01 (Colored Gameboy)
   * Different colored gel appearance on STD vs ADV
-  * Potato NTSC GDV-MINI
   * Figure out POTATO crashing
   * Add vscode link in readme [![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/organization/repository)
   * Investigate Higher Ambient Light Multiplier on BG

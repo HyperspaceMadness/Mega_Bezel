@@ -472,7 +472,7 @@ float HSM_MONOCHROME_DUALSCREEN_VIS_MODE = global.HSM_MONOCHROME_DUALSCREEN_VIS_
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_TITLE						"[ TUBE DIFFUSE COLOR ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_TUBE_DIFFUSE_MODE  					        "          Tube Diffuse Color - BLACK | IMAGE | TRANSPARENT" 0 0 2 1
+#pragma parameter HSM_TUBE_DIFFUSE_MODE  					        "          Tube Diffuse Color - BLACK | IMAGE | TRANSPARENT" 1 0 2 1
 float HSM_TUBE_DIFFUSE_MODE = global.HSM_TUBE_DIFFUSE_MODE;
 
 #pragma parameter HSM_TUBE_DIFFUSE_OPACITY                          "          Opacity" 100 0 100 0.1
@@ -544,6 +544,34 @@ float HSM_TUBE_COLORED_GEL_IMAGE_FLIP_VERTICAL = -(global.HSM_TUBE_COLORED_GEL_I
 #pragma parameter HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL				"          Show CRT on Top of Colored Gel Normal" 0 0 1 1
 float HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL = global.HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL;
 
+
+//---------------------------------------------------------------------------------------------------
+//    TUBE SHADOW COLOR
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_TUBE_SHADOW_IMAGE_TITLE						"[ TUBE SHADOW ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_TUBE_SHADOW_IMAGE_ON  					"          Tube Shadow Image - OFF | ON" 1 0 1 1
+float HSM_TUBE_SHADOW_IMAGE_ON = global.HSM_TUBE_SHADOW_IMAGE_ON;
+
+#pragma parameter HSM_TUBE_SHADOW_IMAGE_OPACITY                 "          Opacity" 60 0 100 2
+float HSM_TUBE_SHADOW_IMAGE_OPACITY = global.HSM_TUBE_SHADOW_IMAGE_OPACITY / 100;
+
+#pragma parameter HSM_TUBE_SHADOW_IMAGE_POS_X			        "          Position X" 0 -500 500 0.1
+float HSM_TUBE_SHADOW_IMAGE_POS_X = global.HSM_TUBE_SHADOW_IMAGE_POS_X / 100;
+
+#pragma parameter HSM_TUBE_SHADOW_IMAGE_POS_Y			        "          Position Y" 7 -500 500 0.1
+float HSM_TUBE_SHADOW_IMAGE_POS_Y = global.HSM_TUBE_SHADOW_IMAGE_POS_Y / 100;
+
+#pragma parameter HSM_TUBE_SHADOW_IMAGE_SCALE_X  			    "          Scale X" 122 0 1000 0.1
+float HSM_TUBE_SHADOW_IMAGE_SCALE_X = global.HSM_TUBE_SHADOW_IMAGE_SCALE_X / 100;
+
+#pragma parameter HSM_TUBE_SHADOW_IMAGE_SCALE_Y  			    "          Scale Y" 130 0 1000 0.1
+float HSM_TUBE_SHADOW_IMAGE_SCALE_Y = global.HSM_TUBE_SHADOW_IMAGE_SCALE_Y / 100;
+
+#pragma parameter HSM_TUBE_SHADOW_CURVATURE_SCALE			    "          Curvature Scale" 600 0 2000 1
+float HSM_TUBE_SHADOW_CURVATURE_SCALE = global.HSM_TUBE_SHADOW_CURVATURE_SCALE / 100;
+
+
 //---------------------------------------------------------------------------------------------------
 //    TUBE STATIC REFLECTION
 //---------------------------------------------------------------------------------------------------
@@ -582,7 +610,7 @@ float HSM_TUBE_BLACK_EDGE_LAYERING_MODE = global.HSM_TUBE_BLACK_EDGE_LAYERING_MO
 #pragma parameter HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE 			"          Black Edge Corner Radius Scale" 100 100 8000 10
 #define HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE global.HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE / 100
 
-#pragma parameter HSM_TUBE_BLACK_EDGE_SHARPNESS 					"          Black Edge Sharpness - Def 40" 40 0 90 1
+#pragma parameter HSM_TUBE_BLACK_EDGE_SHARPNESS 					"          Black Edge Sharpness - Def 70" 70 0 90 1
 #define HSM_TUBE_BLACK_EDGE_SHARPNESS global.HSM_TUBE_BLACK_EDGE_SHARPNESS / 100
 
 #pragma parameter HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE 				"          Black Edge Curvature Scale Multiplier" 100 100 8000 10

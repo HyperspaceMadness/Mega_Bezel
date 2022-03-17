@@ -53,16 +53,17 @@ layout(set = 0, binding = 2) uniform sampler2D InfoCachePass;
 layout(set = 0, binding = 3) uniform sampler2D InfoCachePassFeedback;
 
 layout(set = 0, binding = 4) uniform sampler2D TubeDiffuseImage;
-layout(set = 0, binding = 5) uniform sampler2D TubeColoredGelImage;
-layout(set = 0, binding = 6) uniform sampler2D TubeStaticReflectionImage;
+layout(set = 0, binding = 5) uniform sampler2D TubeShadowImage;
+layout(set = 0, binding = 6) uniform sampler2D TubeColoredGelImage;
+layout(set = 0, binding = 7) uniform sampler2D TubeStaticReflectionImage;
 
-layout(set = 0, binding = 7) uniform sampler2D BackgroundImage;
-layout(set = 0, binding = 8) uniform sampler2D BackgroundVertImage;
+layout(set = 0, binding = 8) uniform sampler2D BackgroundImage;
+layout(set = 0, binding = 9) uniform sampler2D BackgroundVertImage;
 
-layout(set = 0, binding = 9) uniform sampler2D NightLightingImage;
-layout(set = 0, binding = 10) uniform sampler2D IntroPass;
+layout(set = 0, binding = 10) uniform sampler2D NightLightingImage;
+layout(set = 0, binding = 11) uniform sampler2D IntroPass;
 
-layout(set = 0, binding = 11) uniform sampler2D MBZ_PostCRTPassFeedback;
+layout(set = 0, binding = 12) uniform sampler2D MBZ_PostCRTPassFeedback;
 #define PassFeedback MBZ_PostCRTPassFeedback
 
 // Torridgristle - ScanlineSimple pass - Public domain
@@ -189,6 +190,25 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 		out_color = mix(out_color, scanline_masked_color, tube_highlight_mask);
 	}
 	
+	vec3 tube_shadow = vec3(1);
+	if (HSM_TUBE_SHADOW_IMAGE_ON > 0.5)
+	{
+		vec2 shadow_coord = SCREEN_COORD;
+
+		shadow_coord.x = (shadow_coord.x - HSM_TUBE_SHADOW_IMAGE_POS_X - 0.5) / HSM_TUBE_SHADOW_IMAGE_SCALE_X + 0.5;
+		shadow_coord.y = (shadow_coord.y + HSM_TUBE_SHADOW_IMAGE_POS_Y) / HSM_TUBE_SHADOW_IMAGE_SCALE_Y;
+		shadow_coord = HSM_GetTubeCurvedCoord(shadow_coord, HSM_TUBE_SHADOW_CURVATURE_SCALE, SCREEN_SCALE, TUBE_SCALE, SCREEN_ASPECT, 1);
+		shadow_coord = HSM_GetMirrorWrappedCoord(shadow_coord);
+
+		shadow_coord.x = HSM_FLIP_VIEWPORT_HORIZONTAL * (shadow_coord.x - 0.5) + 0.5;
+		shadow_coord.y = HSM_FLIP_VIEWPORT_VERTICAL * (shadow_coord.y - 0.5) + 0.5;
+		
+		vec4 tube_shadow_sample = HSM_GetMipmappedTexSample(TubeShadowImage, shadow_coord, TUBE_SCALE * vec2(HSM_TUBE_SHADOW_IMAGE_SCALE_X, HSM_TUBE_SHADOW_IMAGE_SCALE_Y), 0);
+		tube_shadow_sample = HSM_GLOBAL_GRAPHICS_BRIGHTNESS * HSM_GetPreMultipliedColorLinear(tube_shadow_sample, SOURCE_MATTE_PREMULTIPLIED, DEFAULT_SRGB_GAMMA);
+
+		tube_shadow = (1 - HSM_TUBE_SHADOW_IMAGE_OPACITY) + HSM_TUBE_SHADOW_IMAGE_OPACITY * tube_shadow_sample.rgb;
+	}
+
 	// If the crt blend mode is multiply then use the diffuse image
 	float tube_diffuse_mode = HSM_CRT_BLEND_MODE == 2 ? 1 : HSM_TUBE_DIFFUSE_MODE;
 	vec4 tube_diffuse = vec4(0, 0, 0, 1);
@@ -197,26 +217,22 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 		// TubeDiffuseImage
 		if (HSM_TUBE_DIFFUSE_MODE == 1 || HSM_CRT_BLEND_MODE == 2)
 		{
-			// vec2 tube_shadow_curved_coord = HSM_GetTubeCurvedCoord(SCREEN_COORD + vec2(0, 0.2), 1, SCREEN_SCALE, TUBE_SCALE, SCREEN_ASPECT, 1);
-			// vec2 mirrored_tube_shadow_coord = HSM_GetMirrorWrappedCoord(tube_shadow_curved_coord);
-			// float tube_shadow_mask = HSM_GetCornerMask(mirrored_tube_shadow_coord, SCREEN_ASPECT, bezel_corner_radius, 0.99);
-			
 			vec2 diffuse_coord = mirrored_tube_coord; 
 			diffuse_coord.x = HSM_FLIP_VIEWPORT_HORIZONTAL * (diffuse_coord.x - 0.5) + 0.5;
 			diffuse_coord.y = HSM_FLIP_VIEWPORT_VERTICAL * (diffuse_coord.y - 0.5) + 0.5;
 
 			diffuse_coord = (diffuse_coord - 0.5) / HSM_TUBE_DIFFUSE_IMAGE_SCALE + 0.5;
 
-			tube_diffuse = HSM_GetMipmappedTexSample(TubeDiffuseImage, diffuse_coord, TUBE_SCALE, 0);
+			tube_diffuse = HSM_GetMipmappedTexSample(TubeDiffuseImage, diffuse_coord, TUBE_SCALE * HSM_TUBE_DIFFUSE_IMAGE_SCALE, 0);
 			tube_diffuse = HSM_GLOBAL_GRAPHICS_BRIGHTNESS * HSM_GetPreMultipliedColorLinear(tube_diffuse, SOURCE_MATTE_PREMULTIPLIED, DEFAULT_SRGB_GAMMA);
 			tube_diffuse.rgb = HSM_ApplyHSVAdjustment(tube_diffuse.rgb, HSM_TUBE_DIFFUSE_IMAGE_HUE, HSM_TUBE_DIFFUSE_IMAGE_SATURATION, HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS, HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON, HSM_TUBE_DIFFUSE_IMAGE_GAMMA);
 
-			// tube_diffuse.rgb *= tube_shadow_mask;
+			tube_diffuse.rgb *= tube_shadow;
 		}
+
 		// If CRT Blend Mode is Multiply (2) then the tube must be fully opaque
 		tube_diffuse *= HSM_GetTubeDiffuseOpacity();
 		tube_diffuse.rgb *=  (1 - HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING) * vec3(1) + HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING * ambient_lighting_image.rgb;
-
 	}
 	out_color.a = in_color_with_gamma.a;
 
@@ -241,8 +257,6 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	if (HSM_CRT_BLEND_MODE == 2)
 		out_color = HSM_BlendModeLayerMix(tube_diffuse, out_color, BLEND_MODE_MULTIPLY, HSM_CRT_BLEND_AMOUNT);
 
-
-
 	// Add a Colored Gel image on top of the screen, this is what colors games like space invaders or battlezone
 	if (HSM_GetUseTubeColoredGelImage())
 	{
@@ -264,6 +278,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 		{
 			gel_image.a = clamp( gel_image.a - HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD, 0, 1 ) / (1 - HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD);
 			gel_image.rgb *= HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_BRIGHTNESS;
+			gel_image.rgb *= tube_shadow;
 
 			if (HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING > 0)
 				gel_image.rgb *= (1 - HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING) * vec3(1) + HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING * ambient_lighting_image.rgb;
@@ -275,8 +290,6 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 				vec4 normal_blended = HSM_BlendModeLayerMix(vec4(0, 0, 0, 1), gel_image, BLEND_MODE_NORMAL, HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT);
 				out_color = normal_blended + out_color;
 			}
-
-
 		}
 	} 
 
