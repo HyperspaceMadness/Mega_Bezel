@@ -472,7 +472,7 @@ float HSM_MONOCHROME_DUALSCREEN_VIS_MODE = global.HSM_MONOCHROME_DUALSCREEN_VIS_
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_TITLE						"[ TUBE DIFFUSE COLOR ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_TUBE_DIFFUSE_MODE  					        "          Tube Diffuse Color - BLACK | IMAGE | TRANSPARENT" 1 0 2 1
+#pragma parameter HSM_TUBE_DIFFUSE_MODE  					        "          Tube Diffuse Color - BLACK | IMAGE | TRANSPARENT" 0 0 2 1
 float HSM_TUBE_DIFFUSE_MODE = global.HSM_TUBE_DIFFUSE_MODE;
 
 #pragma parameter HSM_TUBE_DIFFUSE_OPACITY                          "          Opacity" 100 0 100 0.1
@@ -501,6 +501,12 @@ float HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING = global.HSM_TUBE_DIFFUSE_IMAGE_AM
 
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_SCALE  			        "          Scale" 100 0 1000 1
 float HSM_TUBE_DIFFUSE_IMAGE_SCALE = global.HSM_TUBE_DIFFUSE_IMAGE_SCALE / 100;
+
+#pragma parameter HSM_TUBE_EMPTY_THICKNESS 				"          Empty Tube Thickness" 0 0 6000 5
+#define HSM_TUBE_EMPTY_THICKNESS (0.7 * global.HSM_TUBE_EMPTY_THICKNESS / 100)
+
+#pragma parameter HSM_TUBE_EMPTY_THICKNESS_X_SCALE 			"          Empty Tube Thicknes X Scale" 100 0 3000 1
+#define HSM_TUBE_EMPTY_THICKNESS_X_SCALE (global.HSM_TUBE_EMPTY_THICKNESS_X_SCALE / 100)
 
 
 //---------------------------------------------------------------------------------------------------

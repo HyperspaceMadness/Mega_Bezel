@@ -144,7 +144,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 
 	vec2 mirrored_screen_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
 	float screen_mask = HSM_GetCornerMask((screen_curved_coord - 0.5) * 0.999 + 0.5, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS, 0.9);
-
+						
 	if (HSM_GetUseScreenVignette())
 	{
 		// out_color *= HSM_GetScreenVignetteFactor(screen_curved_coord);
@@ -294,7 +294,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	} 
 
 	#ifdef IS_NO_REFLECT_PRESET
-	out_color.rgb *= HSM_Get_Screen_Black_Edge_Mask(SCREEN_COORD, false);
+	out_color.rgb *= HSM_Get_Screen_Black_Edge_Mask(BLACK_EDGE_COORD, false);
 
 	// TUBE HIGHLIGHT
 	if (HSM_GetUseTubeStaticReflection())

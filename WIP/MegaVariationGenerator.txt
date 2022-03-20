@@ -1,0 +1,67 @@
+Family - Computer Family, e.g. amiga
+Scenery - Specific Model, Room__White Kitchen
+Device - Monitor, bezel Beige, commodore_1080
+CRT-Shader - Aperture Grille, Slot-mask, Dot-Mask
+
+Shaders, Variants, SubVariants
+
+CRT Effect:
+    AG-Vanilla-Enhanced-Slot-mask
+    AG-Vanilla-Enhanced-MonochromeAmber
+    AG-Vanilla-Enhanced-MonochromeAmber-Slot-mask ?
+    RF-Enhanced-Slot-mask
+    RF-Enhanced-MonochromeAmber
+    Signal-ScreenTreatment-PhosphorType
+    ScreenTreatment-Signal-PhosphorType
+
+    PhosphorType-Signal-ScreenTreatment
+    SlotMask-RF-Enhanced
+    SlotMask-RF-Fast
+    SlotMask-RF-Faster
+
+Amiga-500-sonyBVM-[AG-Vanilla-Enhanced-MonochromeAmber]-Flat-Near-Night
+
+CRT Type
+    Aperture Grille
+    Slotmask
+    Dotmask
+    Plasma
+
+Shaders:
+    MBZ Vanilla
+        Variants
+            ADV_GDV
+            ADV_GDV-NTSC
+            STD_GDV
+            STD_GDV-NTSC
+            Potato-GDV
+            Potato-GDV-NTSC
+            Potato-GDV-MINI
+    RGB_SCART
+        Enhanced
+        Sharp
+        Soft
+        Monochrome amber
+        Monochrome aqua
+            BW
+            ...
+        Performance
+            Fast
+            Faster
+    S-VIDEO_YC
+        Enhanced
+        Sharp
+        Soft
+    COMPOSITE__CVBS
+    RF-MODULATOR
+Ambient Lighting
+    Day
+    Night
+Curvature
+    Flat
+    Curved
+    Curved-Faux
+Scaling
+    Near
+    Normal
+    Integer Scale

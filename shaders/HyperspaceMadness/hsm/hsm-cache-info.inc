@@ -22,23 +22,23 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-vec2 HSM_GetScreenScaleWithEdgeHeight(float edge_height, vec2 screen_scale)
+vec2 HSM_GetScreenScaleWithEdgeHeight(vec2 edge_thickness, vec2 screen_scale)
 // Edge Height is a 0 to 1 percentage of the screen height
 {
 	float output_aspect_ratio = global.FinalViewportSize.x / global.FinalViewportSize.y;
 	
 	float aspect_ratio = screen_scale.x / screen_scale.y;
-
+	//TODO need separate tube width
 	vec2 edge_width_height_as_scale = vec2(0, 0);
-	edge_width_height_as_scale.x = 1 + (edge_height * HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE / screen_scale.y) / aspect_ratio / output_aspect_ratio;
-	edge_width_height_as_scale.y = 1 + edge_height / screen_scale.y;
+	edge_width_height_as_scale.x = 1 + (edge_thickness.x / screen_scale.y) / aspect_ratio / output_aspect_ratio;
+	edge_width_height_as_scale.y = 1 + edge_thickness.y / screen_scale.y;
 
 	return screen_scale * edge_width_height_as_scale;
 }
 
 // Same as the HSM_GetScreenScale, but adds the width of the black edge
 // Used for scaling the overlay outside the black edge
-vec2 HSM_GetTubeScale(vec2 screen_scale, float image_placement_screen_height)
+vec2 HSM_GetTubeScale(vec2 screen_scale, float image_placement_screen_height, vec2 edge_thickness)
 {
 	// Add switch for independent scale
 	if (HSM_BZL_USE_INDEPENDENT_SCALE == 1)
@@ -50,7 +50,7 @@ vec2 HSM_GetTubeScale(vec2 screen_scale, float image_placement_screen_height)
 	}
 
 	float normalized_screen_height = screen_scale.y / DEFAULT_UNCORRECTED_SCREEN_SCALE.y;
-	return HSM_GetScreenScaleWithEdgeHeight(1.2 * HSM_TUBE_BLACK_EDGE_THICKNESS / 100.0 * normalized_screen_height, screen_scale * HSM_BZL_SCALE_OFFSET);
+	return HSM_GetScreenScaleWithEdgeHeight(edge_thickness * vec2(1.2 / 100.0 * normalized_screen_height), screen_scale * HSM_BZL_SCALE_OFFSET);
 }
 
 
@@ -871,7 +871,8 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	vec2 screen_pos_and_height = HSM_GetScreenPlacementYPosAndHeight(screen_placement_image, 60);
 	float screen_aspect = HSM_GetScreenAspect(1, cropped_rotated_size);
 	vec2 screen_scale = HSM_GetScreenScale(screen_aspect, screen_pos_and_height.y, cropped_rotated_size);
-	vec2 tube_scale = HSM_GetTubeScale(screen_scale, screen_pos_and_height.y);
+	vec2 tube_scale = HSM_GetTubeScale(screen_scale, screen_pos_and_height.y, vec2(HSM_TUBE_EMPTY_THICKNESS + HSM_TUBE_BLACK_EDGE_THICKNESS) * vec2(HSM_TUBE_EMPTY_THICKNESS_X_SCALE * HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE, 1));	
+	vec2 black_edge_scale = HSM_GetTubeScale(screen_scale, screen_pos_and_height.y, vec2(HSM_TUBE_EMPTY_THICKNESS) * vec2(HSM_TUBE_EMPTY_THICKNESS_X_SCALE, 1));
 	
 	vec2 pos_offset = HSM_GetScreenPositionOffset(vec2(0.5, screen_pos_and_height.x), screen_scale, 1);
 
@@ -883,7 +884,8 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	HSM_GetCroppedRotatedSizeAndPixelSampleAreaStart(2, original_pass, cropped_size_2nd_screen, cropped_size_with_res_mult_2nd_screen, sample_area_start_pixel_coord_2nd_screen);
 	float screen_aspect_2nd_screen = HSM_2ND_SCREEN_ASPECT_RATIO_MODE == 1 ? cropped_size_2nd_screen.x/cropped_size_2nd_screen.y : screen_aspect;
 	vec2 screen_scale_2nd_screen = HSM_GetScreenScaleFor2ndScreen(screen_scale, screen_aspect_2nd_screen);
-	vec2 tube_scale_2nd_screen = HSM_GetTubeScale(screen_scale_2nd_screen, DEFAULT_UNCORRECTED_SCREEN_SCALE.y);
+	vec2 tube_scale_2nd_screen = HSM_GetTubeScale(screen_scale_2nd_screen, DEFAULT_UNCORRECTED_SCREEN_SCALE.y, vec2(HSM_TUBE_EMPTY_THICKNESS + HSM_TUBE_BLACK_EDGE_THICKNESS) * vec2(HSM_TUBE_EMPTY_THICKNESS_X_SCALE * HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE, 1));
+	vec2 black_edge_scale_2nd_screen = HSM_GetTubeScale(screen_scale_2nd_screen, DEFAULT_UNCORRECTED_SCREEN_SCALE.y, vec2(HSM_TUBE_EMPTY_THICKNESS) * vec2(HSM_TUBE_EMPTY_THICKNESS_X_SCALE, 1));
 
 	vec2 pos_offset_2nd_screen = HSM_GetScreenPositionOffset(vec2(0.5, 0.5), screen_scale_2nd_screen, 2);
 
@@ -1023,6 +1025,16 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	{
 		out_color.r = NEGATIVE_CROP_EXPAND_MULTIPLIER;
 		out_color.g = MAX_NEGATIVE_CROP;
+	}
+
+	// Sample 3, 4
+	// rg BLACK_EDGE_SCALE
+	// rg BLACK_EDGE_SCALE_2ND_SCREEN
+	sample_2d_range = HSM_GetCacheSampleRange(3, 4);
+	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
+	{
+		out_color.rg = black_edge_scale;
+		out_color.ba = black_edge_scale_2nd_screen;
 	}
 
 	return out_color;

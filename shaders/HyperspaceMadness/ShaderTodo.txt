@@ -18,11 +18,11 @@ Changes:
   * Variations/Max-Int-Scale presets renamed to Max-Int-Scale-No-Bezel for clarity, also now the bezel and background are off
   * Black edge layering mode now shows the tube diffuse image when it's 0
   * Added Tube Shadow Image
+  * Added Empty Tube Thickness, so extra empty tube area can be added around the game screen
 
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
-  * Add Tube Expand Thickness which will add to Black Edge
   * Bezel shadow on Potato Tube / Game Image
   * Check out Colorize Behavior on DMG-01 (Colored Gameboy)
   * Different colored gel appearance on STD vs ADV

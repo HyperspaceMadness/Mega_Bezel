@@ -419,7 +419,7 @@ void main()
 	}
 
 	if (HSM_TUBE_BLACK_EDGE_LAYERING_MODE > 0.5)
-		crt_linear.rgb *= (1 - HSM_TUBE_BLACK_EDGE_LAYERING_MODE) + HSM_TUBE_BLACK_EDGE_LAYERING_MODE * HSM_Get_Screen_Black_Edge_Mask(SCREEN_COORD, false);
+		crt_linear.rgb *= (1 - HSM_TUBE_BLACK_EDGE_LAYERING_MODE) + HSM_TUBE_BLACK_EDGE_LAYERING_MODE * HSM_Get_Screen_Black_Edge_Mask(BLACK_EDGE_COORD, false);
 
 	crt_linear.rgb *= TUBE_MASK;
 

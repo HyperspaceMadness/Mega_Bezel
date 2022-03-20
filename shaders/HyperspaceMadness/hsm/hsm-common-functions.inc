@@ -829,6 +829,12 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 		TUBE_SCALE_FEEDBACK = texture_sample.rg;
 		SCREEN_POS_OFFSET_FEEDBACK = texture_sample.ba;
 
+		// Sample 3, 4
+		// rg BLACK_EDGE_SCALE 
+		sample_coord = HSM_GetCacheSampleCoord(3, 4);
+		texture_sample = texture(in_cache_pass, sample_coord);
+		BLACK_EDGE_SCALE = texture_sample.rg;
+
 		// Sample 4, 1
 		// rg CROPPED_ROTATED_SIZE_WITH_RES_MULT
 		sample_coord = HSM_GetCacheSampleCoord(4, 1);
@@ -874,14 +880,20 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 		TUBE_SCALE_FEEDBACK = texture_sample.rg;
 		SCREEN_POS_OFFSET_FEEDBACK = texture_sample.ba;
 
-		// 8th Sample - 2nd Screen
+		// Sample 3, 4
+		// rg BLACK_EDGE_SCALE 
+		sample_coord = HSM_GetCacheSampleCoord(3, 4);
+		texture_sample = texture(in_cache_pass, sample_coord);
+		BLACK_EDGE_SCALE = texture_sample.ba;
+
+		// Sample 4, 2
 		// rg CROPPED_ROTATED_SIZE_WITH_RES_MULT
 		// sample_coord = vec2(0.875, 0.375);
 		sample_coord = HSM_GetCacheSampleCoord(4, 2);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		CROPPED_ROTATED_SIZE_WITH_RES_MULT = texture_sample.rg;
 
-		// 9th Sample - 2nd Screen
+		// Sample 1, 3
 		// rg CROPPED_ROTATED_SIZE
 		// ba SAMPLE_AREA_START_PIXEL_COORD
 		// sample_coord = vec2(0.125, 0.675);
@@ -957,6 +969,7 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 
 	USE_VERTICAL_SCANLINES = HSM_GetUseVerticalScanlines(SCREEN_ASPECT);
 	SCREEN_COORD = HSM_GetVTexCoordWithArgs(flipped_viewport_coord, SCREEN_SCALE, SCREEN_POS_OFFSET);
+	BLACK_EDGE_COORD = HSM_GetVTexCoordWithArgs(flipped_viewport_coord, BLACK_EDGE_SCALE, SCREEN_POS_OFFSET);
 
 	float param_sum_epsilon = 0.0000001;
 	CACHE_INFO_PARAM_SUM_CHANGED = (abs(parameter_sum - parameter_sum_feedback) > param_sum_epsilon);
