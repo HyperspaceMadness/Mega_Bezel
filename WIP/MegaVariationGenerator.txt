@@ -1,7 +1,16 @@
-Family - Computer Family, e.g. amiga
-Scenery - Specific Model, Room__White Kitchen
-Device - Monitor, bezel Beige, commodore_1080
-CRT-Shader - Aperture Grille, Slot-mask, Dot-Mask
+Family (E.G. Computer Family possibly just organizational)
+    Commodore_Amiga
+    Commodore_64
+    ...
+    Environments (AKA Retro-Scenarios)
+    
+Scene
+    Specific Model of Computer/Console or Environment
+    Amiga-500
+    Amiga-500plus
+    commodore_64-Breadbin
+    ...
+    Room__White-Kitchen
 
 Shaders, Variants, SubVariants
 
@@ -54,14 +63,29 @@ Shaders:
         Soft
     COMPOSITE__CVBS
     RF-MODULATOR
-Ambient Lighting
-    Day
-    Night
+
+Device/Monitor
+    bezel_beige
+    bezel_black
+    ...
+    commodore_1080
+    ...
+    sony_pvm-14l5
+    ...
+
 Curvature
     Flat
     Curved
     Curved-Faux
+
+Device Curvature Tweaks
+    tweaks per device to adjust to curvature change
+
 Scaling
     Near
     Normal
     Integer Scale
+    
+Ambient Lighting
+    Day
+    Night

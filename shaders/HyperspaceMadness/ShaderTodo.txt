@@ -1,6 +1,6 @@
 ![Mega_Bezel_Logo|512x256, 75%](upload://6PNkvcMF9Go9Wnk6OJXfYR1opXI.png) 
 
-Mega Bezel is updated to V 0.9.104 2022-02-20 Rev 1
+Mega Bezel is updated to V 0.9.105 2022-03-20 Rev 1
 
 Changes:
   * Added SMOOTH-ADV Preset Tier, this has ScaleFX in it and the required Upres in the chain
@@ -19,10 +19,19 @@ Changes:
   * Black edge layering mode now shows the tube diffuse image when it's 0
   * Added Tube Shadow Image
   * Added Empty Tube Thickness, so extra empty tube area can be added around the game screen
+  * Snap to Closest Integer Scale adjusted for easier use
+    * An On/Off switch has been added HSM_USE_SNAP_TO_CLOSEST_INT_SCALE
+    * HSM_SNAP_TO_CLOSEST_INT_SCALE_TOLERANCE renamed to HSM_SNAP_TO_CLOSEST_INT_SCALE_TOLERANCE
+  * Changed Minimum border scale for integer scale to be max size for integer scale instead
+    * Default value is 94.5 * of screen size
+    * HSM_INT_SCALE_BORDER_MIN_HEIGHT is renamed to HSM_INT_SCALE_MAX_HEIGHT
+
 
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
+  * Change Minimum Border to Max Int Scale size
+  * Auto-Snap to Int Scale, Look at Max Int Scale?
   * Bezel shadow on Potato Tube / Game Image
   * Check out Colorize Behavior on DMG-01 (Colored Gameboy)
   * Different colored gel appearance on STD vs ADV

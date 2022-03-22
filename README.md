@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------------------------------------
 HyperspaceMadness Mega Bezel Shader Readme
 ------------------------------------------------------------------------------------------------------------
-Version 0.9.104 2022-02-20 Rev 1
+Version 0.9.105 2022-03-20 Rev 1
 ----------------------------------------
 ----------------------------------------
 
@@ -131,20 +131,22 @@ Presets in Mega_Bezel / Presets
 **Pre CRT Shader Chain**
 ----------------------------------------
 ----
-| Shader Behavior                        |SMOOTH-ADV   |ADV   |STD   |POTATO |NTSC-Variants
-|----------------------------------------|-------------|------|------|-------|-------------
-| Reducing Core Resolution               | ✔           | ✔   | ✔   | ✔     | ✔
-| Info Cache                             | ✔           | ✔   | ✔   | ✔     | ✔       
-| Resolution Text                        | ✔           | ✔   | ✔   |       | N/A    
-| Startup Intro                          | ✔           | ✔   | ✔   |       | N/A  
-| De-Dithering                           | ✔           | ✔   |      |       | N/A 
-| Image Sharpening                       | ✔           | ✔   | ✔   |       | ✔ 
-| Uprezed Edge Contour Smoothing         | ✔           |     |      |       |
-| Bandwidth Horizontal Blurring (GTU)    | ✔           | ✔   |     |        |
-| NTSC Signal Processing (NTSC Adaptive) |             |      |     |        | ✔
-| Afterglow                              | ✔           | ✔   | ✔   | ✔     | ✔
-| Color Signal Processing (Grade)        | ✔           | ✔   | ✔   | ✔     | ✔
-| Interlacing & Downsample Blur          | ✔           | ✔   | ✔   | ✔       | ✔
+| Shader Behavior                        |SMOOTH-ADV   |ADV   |STD   |POTATO
+|----------------------------------------|-------------|------|------|-------
+| Reducing Core Resolution               | ✔           | ✔   | ✔   | ✔
+| Info Cache                             | ✔           | ✔   | ✔   | ✔
+| Resolution Text                        | ✔           | ✔   | ✔   | 
+| Startup Intro                          | ✔           | ✔   | ✔   |
+| De-Dithering                           | ✔           | ✔   |     |
+| Image Sharpening                       | ✔           | ✔   | ✔   |
+| Uprezed Edge Contour Smoothing         | ✔           |     |      |
+| Bandwidth Horizontal Blurring (GTU)    | ✔           | ✔   | ✔   |
+| NTSC Signal Processing (NTSC Adaptive) | ✔           | ✔   | ✔   | ✔
+| Afterglow                              | ✔           | ✔   | ✔   | ✔
+| Color Signal Processing (Grade)        | ✔           | ✔   | ✔   | ✔
+| Interlacing & Downsample Blur          | ✔           | ✔   | ✔   | ✔
+
+NTSC Processing only included in NTSC Presets, and GTU Horizontal blurring only included in non-NTSC presets
 
 ----------------------------------------
 **Troubleshooting**
@@ -219,6 +221,12 @@ Parameter Descriptions
   * **Show Resolution Info** --- Show Resolution info from different aspects of the shader chain with onscreen text
 
 -----------------------------------------------------------------------------------------------
+**[ CRT BRIGHTNESS & GAMMA ]:**
+  * **CRT Gamma In (Gamma to Linear Space Decode)** - The gamma adjustment applied to take the core image and bring it into linear color space  
+  * **CRT Gamma Out (Linear to Gamma Space Encode)** - The gamma adjustment applied to the CRT shader's linear color output to bring it back into a gamma corrected space
+  * **Post CRT Brightness** - Brightness adjustment on the CRT color output
+
+-----------------------------------------------------------------------------------------------
 **[ GRAPHICS CACHE ]:**
 
   * **Cache Graphics**
@@ -249,12 +257,15 @@ Parameter Descriptions
   - **FULL** Scale the image to the full window
 - **Scale Offset**
   - Scale the lighting image
+- **Rotate**
+  - Rotate the lighting image
 - **Mirror Horizontal**
   - Mirror the ambient lighting image
 
 -----------------------------------------------------------------------------------------------
 **[ VIEWPORT ZOOM ]:** 
 * **Viewport Zoom** --- Zoom in or out on all the graphics and screen
+* **Zoom CRT Mask** --- When we zoom in we should the crt phosphor mask also scale
 * **Viewport Position X** 
 * **Viewport Position Y**
 
@@ -299,8 +310,8 @@ Parameter Descriptions
   - Adjusts the size of the screen by increasing the multiple of the core resolution (on both axes) when using integer scale, to make the screen larger or smaller
 - **Int Scale Multiple Offset Long Axis**
   - Adds an additional multiple offset but for only the long axis, with a horizontal aspect ratio this is the horizontal axis
-- **Int Scale Border Min Height %**
-  - The amount of vertical screen space reserved for the area around the screen when using integer scale
+- **Int Scale Max Height %**
+  - The maximum screen height of the default integer scale when integer scale is on
 - **Vertical Preset (E.G. 4K Vertical)**
   - Turn on if this is a vertical monitor preset, E.G. if your physical monitor is turned vertical
 - **Non-Integer Scale %**
@@ -311,13 +322,15 @@ Parameter Descriptions
 **[ EXTENDED CRT SCREEN SCALING ]:**
 
 - **Use Image For Placement (Scale & Y Pos)**
-  - TODO Description
+  - When on the placement image is inspected to find where to place and scale the screen image
 - **Placement Image Mode: TRANSPARENCY : WHITE ON BLACK**
-  - TODO Description
+  - What channel of the texture to look at to find the hole in the image, either the transparent part, or a white rectangle on top of a black background
 - **Non-Integer Scale Offset**
-  - TODO Description
-- **Snap To Int-Scale Tolerance**
-  - Snaps the non-integer scale to the closest integer scale within the tolerance. This allows you to set an approximate size for the screen and have it snap to an integer scale but not if it would be too much different
+  - Additional scale offset added on top of the non-integer scale, including image placement scale
+- **Snap to Closest Integer Scale**
+  - Takes the current Non-Integer scale and snaps to the closest integer scale within a tolerance
+- **Snap To Closest Integer Scale Tolerance**
+  - Tolerance of how far away from the current integer scale we will snap to an integer scale
 
 
 -----------------------------------------------------------------------------------------------
@@ -332,27 +345,29 @@ Parameter Descriptions
 Cropping removes parts of the game image at the edges of the screen which were never meant to be seen. Negative values can add more black area at the edges of the screen
 
 - **Crop Mode  -  OFF | CROP BLACK ONLY | CROP ANY**
+  - **0 - Off,** No Cropping applied
+  - **1 - Crop Black Only** Only apply the cropping amount within the black areas of the core image
+  - **2 - Crop Any** Apply full crop amount
 - **Crop Zoom %**
 - **Crop Overscan Top**
 - **Crop Overscan Bottom**
 - **Crop Overscan Left**
 - **Crop Overscan Right**
-- **Black Threshold for 'CROP BLACK ONLY'**
+- **Black Threshold for 'CROP BLACK ONLY'** - The brightness threshold of the black area to be cropped
 
 
 -----------------------------------------------------------------------------------------------
-**[ --- FAST SHARPEN - GUEST.R --- ]:**
-- **Sharpen ON**
+**[ --- FAST SHARPEN - GUEST.R --- ]:** --- Image Sharpening
 - **Sharpen Strength**
 - **Amount of Sharpening**
 - **Details Sharpened**
 
 
 -----------------------------------------------------------------------------------------------
-**[ --- SMOOTHING - SCALEFX - ADV Presets Only ---- ]:**
+**[ --- SMOOTHING - SCALEFX - SMOOTH-ADV Presets Only ---- ]:**
 
-**ScaleFX** applies a shape smoothing on the core image and creates a higher resolution smoothed image
-  - **ScaleFx ON** - After you turn this on you must increase **Core Res Sampling**, or **Downsample Blur** in the next section to see a difference
+**ScaleFX ON** applies a shape smoothing on the core image and creates a higher resolution smoothed image
+  - After you turn this on you must increase **Core Res Sampling**, or **Downsample Blur** in the next section to see a difference
 
 
 -----------------------------------------------------------------------------------------------
@@ -388,6 +403,7 @@ Cropping removes parts of the game image at the edges of the screen which were n
 - **Interlace and Fake Scanlines Trigger Res**
   - Resolution where the shader should switch into its interlace or high res content mode.
 - **Interlacing Mode: OFF | Normal 1-3 | Interpolation 4-5**
+  * Default is Mode 4 which gives a result with no scanlines
 - **Interlacing Effect Smoothness**
 - **Interlacing Scanline Effect**
 - **Interlacing (Scanline) Saturation**
@@ -400,6 +416,8 @@ Cropping removes parts of the game image at the edges of the screen which were n
   - Opacity of scanlines added on top of the crt image.
   - These scanlines are not tied to the core image resolution
 - **Scan Resolution**
+- **Scan Resolution Mode: AUTO (CORE RES) : EXPLICIT**
+- **Explicit Scan Resolution**
 - **Int Scale Scanlines**
 - **Rolling Scanlines**
 - **Scanline Curvature**
@@ -420,6 +438,112 @@ Cropping removes parts of the game image at the edges of the screen which were n
 - **3D Radius** - Radius for the sphere the 3D projection is done on, values from 1-4 then to be useful
 - **3D View Distance** - This is the distance of the virtual camera from the Sphere
 - **3D Tilt Angle Y** - Vertical Tilt, with split screen this will tilt both screens towards or away from the center
+- **CRT Curvature Scale Multiplier** - This allows increasing or decreasing the curvature of the crt image while the bezel and black edge stays the same
+
+-----------------------------------------------------------------------------------------------
+**[ ANTI-FLICKER ]:**
+
+Blend parts of the image which flicker on/off repeatedly between frames often used for Character's Shadow, giving a blended result.
+
+- **Anti-Flicker ON** --- Turn the effect ON / OFF
+- **Luma Difference Threshold**
+  - Brightness difference required before the colors will be blended
+
+-----------------------------------------------------------------------------------------------
+**[ A/B SPLITSCREEN COMPARE ]:**
+
+- **Show:  CRT SHADER | ORIGINAL**
+  - Switch between showing the raw game image or the complete CRT image
+- **Compare Area:  LEFT | RIGHT | TOP | BOTTOM**
+  - Which part of the screen should we show the comparison image
+- **Splitscreen Position**
+  - Shift the split in the middle of the screen towards the left or right
+- **Freeze CRT Tube (Freeze Left, New changes on Right)**
+  - Freeze an image of the CRT tube at the current time on one side of the screen, while the area on the other side keeps updating to user changes
+- **Freeze Graphics (Freeze Left, New changes on Right)**
+  - Freeze an image of the Graphics at the current time ion one side of the screen, while the area on the other side keeps updating to user changes
+
+-----------------------------------------------------------------------------------------------
+**[ SCREEN VIGNETTE ]:**
+
+- **Use Vignette** 
+  - Fade out the game screen as we move away from the center of the screen
+- **Amount (Strength)** - Overall Darkness
+- **Corner Amount (Power)** - Darkeness towards the edges
+- **Show Vignette in Reflection** - Darken the reflection or not
+
+
+-----------------------------------------------------------------------------------------------
+**[ MONOCHROME ]:** --- Have the screen act as if it is a monochrome CRT
+
+- **Monochrome Color:** 
+  - **0: OFF**
+  - **1: BLACK & WHITE**
+  - **1: AMBER**
+  - **1: GREEN**
+
+- **Monochrome Gamma** 
+- **Monochrome Hue Offset** 
+- **Monochrome Saturation** 
+
+-----------------------------------------------------------------------------------------------
+**[ TUBE DIFFUSE IMAGE ]:**
+
+The color/texture of the tube which appears behind the CRT image
+- **Opacity** 
+  - Opacity of the tube background, With opacity of 0 you will see through to the background, good for things like Tron's Deadly Discs 
+- **Use Tube Diffuse Image** 
+  - If 0 black is used instead
+- **Colorize On** - Colorize the image
+- **Hue Offset**
+- **Saturation**
+- **Brightness**
+- **Gamma Adjust**
+
+-----------------------------------------------------------------------------------------------
+**[ TUBE SHADOW IMAGE ]:**
+
+Adds a shadow on top of the tube diffuse image and colored gel
+- **Opacity** 
+  - Opacity of the shadow, and how dark the shadow is
+- **Position X** 
+- **Position Y** 
+- **Scale X** 
+- **Scale Y** - Scales shadow from the top of the tube
+- **Curvature Scale** - How much curvature is applied to the shadow, more curvature has the effect of making it look like the light is higher relative to the tube/bezel
+
+-----------------------------------------------------------------------------------------------
+**[ TUBE COLORED GEL IMAGE ]:**
+    Colored effect added on top of the CRT image to tint it
+
+- **Use Tube Colored Gel** - Apply the image or not
+- **Multiply Blend Amount** - Image applied like a colored gel in photography
+  - Used to make vector games which output black and white colored, E.G Battlezone
+- **Additive Blend Amount** - Image applied as a brightening of the tube area
+  - Used to add color to the screen as if it was the gel being diffusely lit from outside the monitor
+- **Normal Blend Amount** - Used for the more opaque parts of a gel image like for the Vectrex
+- **Normal Blend Brightness** - Brightness for these more opaque parts
+- **Normal Blend Transparency Threshold** - Adjusts at what transparency of the image the area should be fully transparent
+- **Show CRT on Top of Colored Gel Normal** - Put the CRT image on top of the gel image so it is not color shifted or obscured.
+
+
+-----------------------------------------------------------------------------------------------
+**[ TUBE STATIC REFLECTION IMAGE  ]:**
+- **Use Tube Static Reflection Image** --- OFF/ON to apply the image
+- **Opacity** --- This is the shine on the tube which imitates reflection from the environment
+- **Ambient Lighting Multiplier** --- How much of the ambient lighting image to apply, default is 100
+- **Scale** --- Scales the tube reflection image from the center of the tube
+
+
+-----------------------------------------------------------------------------------------------
+**[ SCREEN BLACK EDGE ]:**
+
+- **Global Corner Radius** --- Global radius of all corners before their own multipliers are applied
+- **Black Edge Corner Radius Scale** --- the roundness of the corner of the screen area
+- **Black Edge Sharpness** --- Blends the edge of the game screen image to black, lower values will fade the edge
+- **Black Edge Curvature Scale Multiplier** --- How much the black edge will follow the screen curvature
+- **Black Edge Thickness** --- Distance between the illuminated game screen and the inner edge of the bezel
+  - Set this to 0 or less to remove the black edge
 
 -----------------------------------------------------------------------------------------------
 **[ DUAL SCREEN ]:**
@@ -463,108 +587,6 @@ Cropping removes parts of the game image at the edges of the screen which were n
 - **2nd Screen Crop Overscan Bottom**
 - **2nd Screen Crop Overscan Left**
 - **2nd Screen Crop Overscan Right**
-
-
------------------------------------------------------------------------------------------------
-**[ ANTI-FLICKER ]:**
-
-Blend parts of the image which flicker on/off repeatedly between frames often used for Character's Shadow, giving a blended result.
-
-- **Anti-Flicker ON** --- Turn the effect ON / OFF
-- **Luma Difference Threshold**
-  - Brightness difference required before the colors will be blended
-
------------------------------------------------------------------------------------------------
-**[ CRT vs ORIGINAL A/B COMPARE ]:**
-
-- **Compare ON**
-  - Shows a split screen between the raw game image and the with processing by the crt shader and effects and 
-
-- **Splitscreen Position**
-  - Shift the split in the middle of the screen towards the left or right
-
-
------------------------------------------------------------------------------------------------
-**[ CRT SCREEN GAMMA & BRIGHTNESS ]:**
-
-- **CRT Gamma In** (Gamma to Linear Space Decode) Def 2.4
-
-- **CRT Gamma Out** (Linear to Gamma Space Encode) Def 2.4
-
-- **Post CRT Brightness** - Brightness adjustment after the CRT effect
-
-
------------------------------------------------------------------------------------------------
-**[ SCREEN VIGNETTE ]:**
-
-- **Use Vignette** 
-  - Fade out the game screen as we move away from the center of the screen
-- **Amount (Strength)** - Overall Darkness
-- **Corner Amount (Power)** - Darkeness towards the edges
-- **Show Vignette in Reflection** - Darken the reflection or not
-
-
------------------------------------------------------------------------------------------------
-**[ MONOCHROME ]:** --- Have the screen act as if it is a monochrome CRT
-
-- **Monochrome Color:** 
-  - **0: OFF**
-  - **1: BLACK & WHITE**
-  - **1: AMBER**
-  - **1: GREEN**
-
-- **Monochrome Gamma** 
-- **Monochrome Hue Offset** 
-- **Monochrome Saturation** 
-
------------------------------------------------------------------------------------------------
-**[ TUBE DIFFUSE COLOR ]:**
-
-The color/texture of the tube which appears behind the CRT image
-- **Opacity** 
-  - Opacity of the tube background, With opacity of 0 you will see through to the background, good for things like Tron's Deadly Discs 
-- **Use Tube Diffuse Image** 
-  - If 0 black is used instead
-- **Colorize On** - Colorize the image
-- **Hue Offset**
-- **Saturation**
-- **Brightness**
-- **Gamma Adjust**
-
-
------------------------------------------------------------------------------------------------
-**[ TUBE COLORED GEL IMAGE ]:**
-    Colored effect added on top of the CRT image to tint it
-
-- **Use Tube Colored Gel** - Apply the image or not
-- **Multiply Blend Amount** - Image applied like a colored gel in photography
-  - Used to make vector games which output black and white colored, E.G Battlezone
-- **Additive Blend Amount** - Image applied as a brightening of the tube area
-  - Used to add color to the screen as if it was the gel being diffusely lit from outside the monitor
-- **Normal Blend Amount** - Used for the more opaque parts of a gel image like for the Vectrex
-- **Normal Blend Brightness** - Brightness for these more opaque parts
-- **Normal Blend Transparency Threshold** - Adjusts at what transparency of the image the area should be fully transparent
-- **Show CRT on Top of Colored Gel Normal** - Put the CRT image on top of the gel image so it is not color shifted or obscured.
-
-
------------------------------------------------------------------------------------------------
-**[ TUBE STATIC REFLECTION IMAGE  ]:**
-- **Use Tube Static Reflection Image** --- OFF/ON to apply the image
-- **Opacity** --- This is the shine on the tube which imitates reflection from the environment
-- **Ambient Lighting Multiplier** --- How much of the ambient lighting image to apply, default is 100
-- **Scale** --- Scales the tube reflection image from the center of the tube
-
-
------------------------------------------------------------------------------------------------
-**[ SCREEN BLACK EDGE ]:**
-
-- **Global Corner Radius** --- Global radius of all corners before their own multipliers are applied
-- **Black Edge Corner Radius Scale** --- the roundness of the corner of the screen area
-- **Black Edge Sharpness** --- Blends the edge of the game screen image to black, lower values will fade the edge
-- **Black Edge Curvature Scale Multiplier** --- How much the black edge will follow the screen curvature
-- **Black Edge Thickness** --- Distance between the illuminated game screen and the inner edge of the bezel
-  - Set this to 0 or less to remove the black edge
-
 
 -----------------------------------------------------------------------------------------------
 **[ REFLECTION POSITION & SCALE ]:**

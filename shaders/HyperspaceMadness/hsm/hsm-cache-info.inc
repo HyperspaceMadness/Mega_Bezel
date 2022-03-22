@@ -54,7 +54,7 @@ vec2 HSM_GetTubeScale(vec2 screen_scale, float image_placement_screen_height, ve
 }
 
 
-// HSM_SNAP_TO_INT_SCALE_TOLERANCE
+// HSM_SNAP_TO_CLOSEST_INT_SCALE_TOLERANCE
 vec2 HSM_GetScreenScale(float screen_aspect, float screen_height_from_image, vec2 cropped_size)
 {
 	if (HSM_ASPECT_RATIO_MODE > 5.5)
@@ -87,13 +87,13 @@ vec2 HSM_GetScreenScale(float screen_aspect, float screen_height_from_image, vec
 			screen_height *= HSM_NON_INTEGER_SCALE_OFFSET;
 
 			// If the integer tolerance is greater than zero see if we can snap to the nearest integer multiple
-			if (HSM_SNAP_TO_INT_SCALE_TOLERANCE > 0)
+			if (HSM_SNAP_TO_CLOSEST_INT_SCALE_TOLERANCE > 0)
 			{
 				float integer_scale_multiple_vert = screen_height * global.FinalViewportSize.y / cropped_size.y;
 				float int_scale_remainder = fract(integer_scale_multiple_vert);
 				int_scale_remainder = (int_scale_remainder < 1 - int_scale_remainder) ? int_scale_remainder : 1 - int_scale_remainder;
 				float remainder_percent_of_screen_height = (int_scale_remainder * cropped_size.y) / (screen_height * global.FinalViewportSize.y);
-				if (remainder_percent_of_screen_height < HSM_SNAP_TO_INT_SCALE_TOLERANCE)
+				if (remainder_percent_of_screen_height < HSM_SNAP_TO_CLOSEST_INT_SCALE_TOLERANCE)
 				{
 					integer_scale_multiple_vert = round(integer_scale_multiple_vert);
 					screen_height = integer_scale_multiple_vert * cropped_size.y / global.FinalViewportSize.y;
@@ -104,14 +104,14 @@ vec2 HSM_GetScreenScale(float screen_aspect, float screen_height_from_image, vec
 		}
 
 		// Get the maximum height that the integer scale needs to fit into
-		float viewport_res_y_without_border = global.FinalViewportSize.y - 2 * (HSM_INT_SCALE_BORDER_MIN_HEIGHT / 100) * global.FinalViewportSize.y;
-		float viewport_res_x_without_border = global.FinalViewportSize.x - 2 * (HSM_INT_SCALE_BORDER_MIN_HEIGHT / 100) * global.FinalViewportSize.x;
+		float viewport_res_y_without_border = global.FinalViewportSize.y - (1 - HSM_INT_SCALE_MAX_HEIGHT) * global.FinalViewportSize.y;
+		float viewport_res_x_without_border = global.FinalViewportSize.x - (1 - HSM_INT_SCALE_MAX_HEIGHT) * global.FinalViewportSize.x;
 
 		if (HSM_DUALSCREEN_MODE == 1)
-			viewport_res_y_without_border = global.FinalViewportSize.y / 2 - 0.5 * (HSM_INT_SCALE_BORDER_MIN_HEIGHT / 100) * global.FinalViewportSize.y;
+			viewport_res_y_without_border = global.FinalViewportSize.y / 2 - 0.5 * (1 - HSM_INT_SCALE_MAX_HEIGHT) * global.FinalViewportSize.y;
 
 		if (HSM_DUALSCREEN_MODE == 2)
-			viewport_res_x_without_border *= global.FinalViewportSize.x / 2 - 0.5 * (HSM_INT_SCALE_BORDER_MIN_HEIGHT / 100) * global.FinalViewportSize.x;
+			viewport_res_x_without_border *= global.FinalViewportSize.x / 2 - 0.5 * (1 - HSM_INT_SCALE_MAX_HEIGHT) * global.FinalViewportSize.x;
 
 		// If the viewport is taller than it is wide then get the height from the corresponding available width
 		if (viewport_is_vertical) viewport_res_y_without_border = viewport_res_x_without_border / screen_aspect;
@@ -119,7 +119,7 @@ vec2 HSM_GetScreenScale(float screen_aspect, float screen_height_from_image, vec
 		// If the screen is too high
 		if ((viewport_res_y_without_border * screen_aspect) > global.FinalViewportSize.x)
 		{
-			viewport_res_y_without_border = (1 - 2 * HSM_INT_SCALE_BORDER_MIN_HEIGHT / 100) * global.FinalViewportSize.x / screen_aspect; 
+			viewport_res_y_without_border = (1 - 2 * (1 - HSM_INT_SCALE_MAX_HEIGHT)) * global.FinalViewportSize.x / screen_aspect; 
 		}
 
 		float integer_scale_multiple_vert = clamp(floor(viewport_res_y_without_border / cropped_size.y) + HSM_INT_SCALE_MULTIPLE_OFFSET, 1, 100);
@@ -540,7 +540,7 @@ float HSM_GetParameterSum()
 					+ HSM_INT_SCALE_MODE
 					+ HSM_INT_SCALE_MULTIPLE_OFFSET
 					+ HSM_INT_SCALE_MULTIPLE_OFFSET_LONG
-					+ HSM_INT_SCALE_BORDER_MIN_HEIGHT
+					+ HSM_INT_SCALE_MAX_HEIGHT
 					+ HSM_VERTICAL_PRESET
 					+ HSM_NON_INTEGER_SCALE
 
@@ -548,7 +548,7 @@ float HSM_GetParameterSum()
 					// + HSM_USE_IMAGE_FOR_PLACEMENT
 					// + HSM_PLACEMENT_IMAGE_MODE
 					// + HSM_NON_INTEGER_SCALE_OFFSET * 100
-					// + HSM_SNAP_TO_INT_SCALE_TOLERANCE
+					// + HSM_SNAP_TO_CLOSEST_INT_SCALE_TOLERANCE
 
 					// //    Position
 					// + HSM_SCREEN_POSITION_X * 1000
