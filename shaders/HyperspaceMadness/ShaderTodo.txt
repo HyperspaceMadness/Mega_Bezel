@@ -1,6 +1,6 @@
 ![Mega_Bezel_Logo|512x256, 75%](upload://6PNkvcMF9Go9Wnk6OJXfYR1opXI.png) 
 
-Mega Bezel is updated to V 0.9.105 2022-03-20 Rev 1
+Mega Bezel is updated to V 0.9.105 2022-03-23 Rev 1
 
 Changes:
   * Added SMOOTH-ADV Preset Tier, this has ScaleFX in it and the required Upres in the chain
@@ -10,8 +10,6 @@ Changes:
   * Updated GDV-MINI, should not have problems with 4K by default anymore with CGWG mask
   * Auto Fake Scanline Res Added as an option, Explicit Fake Scanline Res is still available
   * Variations/Smoothed-ScaleFX_... presets renamed to SMOOTH-ADV
-  * Sonkun's Presets have been moved into a 4k and a new additional 1080p folder
-    * The the 1080p presets have the curvature of the screen reduced to almost 0 and the bezel curvature increased so the bezel looks the same
   * Added CRT Curvature Multiplier so it can be set at 0 
     * This will set the crt curvature to 0 while the bezel stays curved
   * Added Rotate parameter for Ambient (Night) Lighting
@@ -25,13 +23,15 @@ Changes:
   * Changed Minimum border scale for integer scale to be max size for integer scale instead
     * Default value is 94.5 * of screen size
     * HSM_INT_SCALE_BORDER_MIN_HEIGHT is renamed to HSM_INT_SCALE_MAX_HEIGHT
+  * Sonkun's Presets have been updated to the latest and moved into a 4k and a new additional 1080p folder
+    * The the 1080p presets have the curvature of the screen reduced to almost 0 and the bezel curvature increased so the bezel looks the same
+  * Cyber's presets have been updated
+  * Updated/Added Day & Night presets in variations using the tube diffuse image
 
 
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
-  * Change Minimum Border to Max Int Scale size
-  * Auto-Snap to Int Scale, Look at Max Int Scale?
   * Bezel shadow on Potato Tube / Game Image
   * Check out Colorize Behavior on DMG-01 (Colored Gameboy)
   * Different colored gel appearance on STD vs ADV

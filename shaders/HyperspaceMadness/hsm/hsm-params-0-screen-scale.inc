@@ -23,7 +23,7 @@
 */
 
 // Screen Scale Required Parameters
-#pragma parameter HSM_MEGA_BEZEL_TITLE								"[ --- HSM MEGA BEZEL 0.9.104 2022-02-20 Rev 1--- ]" 0 0 0.01 0.01
+#pragma parameter HSM_MEGA_BEZEL_TITLE								"[ --- HSM MEGA BEZEL 0.9.105 2022-02-23 Rev 1--- ]" 0 0 0.01 0.01
 
 #pragma parameter HSM_RESOLUTION_DEBUG_ON							"          Show Resolution Info" 0 0 1 1
 float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
@@ -34,10 +34,10 @@ float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_CRT_TITLE                             "[ CRT BRIGHTNESS & GAMMA ]:" 0 0 0.01 0.01
 
-#pragma parameter GAMMA_INPUT   							"          CRT Gamma In (Gamma to Linear Space Decode) Def 2.4" 2.4 0.1 5 0.05
+#pragma parameter GAMMA_INPUT   							"Gamma In (Game Embedded Gamma - Gamma Space to Linear) Def 2.4" 2.4 0.1 5 0.05
 #define HSM_GAMMA_IN_LINEARIZE global.GAMMA_INPUT
 
-#pragma parameter gamma_out   								"          CRT Gamma Out (Linear to Gamma Space Encode) Def 2.4" 2.4 0.1 5 0.05
+#pragma parameter gamma_out   								"Gamma Out (Electron Gun Gamma - Linear to Gamma Space) Def 2.4" 2.4 0.1 5 0.05
 #define HSM_GAMMA_OUT_CRT global.gamma_out
 
 #pragma parameter post_br                                   "          Post CRT Brightness" 1 0.01 5 0.01
@@ -165,16 +165,16 @@ float HSM_ASPECT_RATIO_EXPLICIT = global.HSM_ASPECT_RATIO_EXPLICIT;
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_SCALING_TITLE									"[ CRT SCREEN SCALING ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_INT_SCALE_MODE 								"          Int Scale Mode - OFF | ShortAxis | BothAxes" 0 0 2 1
+#pragma parameter HSM_INT_SCALE_MODE 								"          Integer Scale Mode - OFF | ShortAxis | BothAxes" 0 0 2 1
 #define HSM_INT_SCALE_MODE global.HSM_INT_SCALE_MODE
 
-#pragma parameter HSM_INT_SCALE_MULTIPLE_OFFSET 					"          Int Scale Multiple Offset" 0 -20 20 1
+#pragma parameter HSM_INT_SCALE_MULTIPLE_OFFSET 					"          Integer Scale Multiple Offset" 0 -20 20 1
 #define HSM_INT_SCALE_MULTIPLE_OFFSET global.HSM_INT_SCALE_MULTIPLE_OFFSET
 
-#pragma parameter HSM_INT_SCALE_MULTIPLE_OFFSET_LONG 				"          Int Scale Multiple Offset on Long Axis" 0 -20 20 1
+#pragma parameter HSM_INT_SCALE_MULTIPLE_OFFSET_LONG 				"          Integer Scale Multiple Offset on Long Axis" 0 -20 20 1
 #define HSM_INT_SCALE_MULTIPLE_OFFSET_LONG global.HSM_INT_SCALE_MULTIPLE_OFFSET_LONG
 
-#pragma parameter HSM_INT_SCALE_MAX_HEIGHT 					        "          Int Scale Max Height %" 94.5 60 140 0.5
+#pragma parameter HSM_INT_SCALE_MAX_HEIGHT 					        "          Integer Scale Max Height %" 94.5 60 140 0.5
 float HSM_INT_SCALE_MAX_HEIGHT = global.HSM_INT_SCALE_MAX_HEIGHT / 100;
 
 #pragma parameter HSM_VERTICAL_PRESET 								"       Preset is for Monitor Portrait Mode (Smaller CRT Screen)" 0 0 1 1
@@ -184,6 +184,12 @@ float HSM_VERTICAL_PRESET = global.HSM_VERTICAL_PRESET;
 // This is 8x integer scale at 3840x2160 and 6x integer scale at 1920x1080
 #pragma parameter HSM_NON_INTEGER_SCALE 							"          Non-Integer Scale %" 82.97 1 200 0.2
 float HSM_NON_INTEGER_SCALE = global.HSM_NON_INTEGER_SCALE - (HSM_VERTICAL_PRESET > 0.5 ? 47.92 : 0);
+
+#pragma parameter HSM_USE_SNAP_TO_CLOSEST_INT_SCALE 				"          Snap to Closest Integer Scale: OFF | ON" 0 0 1 1
+float HSM_USE_SNAP_TO_CLOSEST_INT_SCALE = global.HSM_USE_SNAP_TO_CLOSEST_INT_SCALE;
+
+#pragma parameter HSM_SNAP_TO_CLOSEST_INT_SCALE_TOLERANCE 			"          Snap To Closest Integer Scale Tolerance" 20 0 300 1
+float HSM_SNAP_TO_CLOSEST_INT_SCALE_TOLERANCE = HSM_USE_SNAP_TO_CLOSEST_INT_SCALE > 0.5 ? global.HSM_SNAP_TO_CLOSEST_INT_SCALE_TOLERANCE / 100 : 0;
 
 
 //---------------------------------------------------------------------------------------------------
@@ -199,12 +205,6 @@ float HSM_PLACEMENT_IMAGE_MODE = global.HSM_PLACEMENT_IMAGE_MODE;
 
 #pragma parameter HSM_NON_INTEGER_SCALE_OFFSET 						"          Non-Integer Scale Offset" 100 5 400 0.1
 float HSM_NON_INTEGER_SCALE_OFFSET = global.HSM_NON_INTEGER_SCALE_OFFSET / 100;
-
-#pragma parameter HSM_USE_SNAP_TO_CLOSEST_INT_SCALE 				"          Snap to Closest Integer Scale: OFF | ON" 0 0 1 1
-float HSM_USE_SNAP_TO_CLOSEST_INT_SCALE = global.HSM_USE_SNAP_TO_CLOSEST_INT_SCALE;
-
-#pragma parameter HSM_SNAP_TO_CLOSEST_INT_SCALE_TOLERANCE 			"          Snap To Closest Integer Scale Tolerance" 20 0 300 1
-float HSM_SNAP_TO_CLOSEST_INT_SCALE_TOLERANCE = HSM_USE_SNAP_TO_CLOSEST_INT_SCALE > 0.5 ? global.HSM_SNAP_TO_CLOSEST_INT_SCALE_TOLERANCE / 100 : 0;
 
 
 //---------------------------------------------------------------------------------------------------
@@ -540,6 +540,30 @@ float HSM_TUBE_SHADOW_CURVATURE_SCALE = global.HSM_TUBE_SHADOW_CURVATURE_SCALE /
 
 
 //---------------------------------------------------------------------------------------------------
+//    TUBE STATIC REFLECTION
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_TITLE			"[ TUBE STATIC REFLECTION IMAGE ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_ON  				"          Use Tube Static Reflection Image - OFF | ON" 0 0 1 1
+float HSM_TUBE_STATIC_REFLECTION_IMAGE_ON = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_ON;
+
+#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_DUALSCREEN_VIS_MODE    "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
+float HSM_TUBE_STATIC_REFLECTION_IMAGE_DUALSCREEN_VIS_MODE = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_DUALSCREEN_VIS_MODE;
+
+#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY  		"          Opacity" 10 0 100 0.1
+float HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY / 100;
+
+#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING "          Ambient Lighting Multiplier" 100 0 100 1
+float HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING / 100;
+
+#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE  			"          Scale" 110 0 1000 1
+float HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE / 100;
+
+// #pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_DITHERING_SAMPLES  "[ TUBE IMAGES ]   Tube Static Reflection Noise Samples (Reduces Banding)" 0 0 10 1
+// float HSM_TUBE_STATIC_REFLECTION_IMAGE_DITHERING_SAMPLES = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_DITHERING_SAMPLES;
+
+
+//---------------------------------------------------------------------------------------------------
 //    TUBE COLORED GEL
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_TUBE_IMAGES_TITLE								"[ TUBE COLORED GEL IMAGE ]:" 0 0 0.01 0.01
@@ -579,30 +603,6 @@ float HSM_TUBE_COLORED_GEL_IMAGE_FLIP_VERTICAL = -(global.HSM_TUBE_COLORED_GEL_I
 
 #pragma parameter HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL				"          Show CRT on Top of Colored Gel Normal" 0 0 1 1
 float HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL = global.HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL;
-
-
-//---------------------------------------------------------------------------------------------------
-//    TUBE STATIC REFLECTION
-//---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_TITLE			"[ TUBE STATIC REFLECTION IMAGE ]:" 0 0 0.01 0.01
-
-#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_ON  				"          Use Tube Static Reflection Image - OFF | ON" 0 0 1 1
-float HSM_TUBE_STATIC_REFLECTION_IMAGE_ON = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_ON;
-
-#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_DUALSCREEN_VIS_MODE    "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
-float HSM_TUBE_STATIC_REFLECTION_IMAGE_DUALSCREEN_VIS_MODE = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_DUALSCREEN_VIS_MODE;
-
-#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY  		"          Opacity" 10 0 100 0.1
-float HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY / 100;
-
-#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING "          Ambient Lighting Multiplier" 100 0 100 1
-float HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING / 100;
-
-#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE  			"          Scale" 110 0 1000 1
-float HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE / 100;
-
-// #pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_DITHERING_SAMPLES  "[ TUBE IMAGES ]   Tube Static Reflection Noise Samples (Reduces Banding)" 0 0 10 1
-// float HSM_TUBE_STATIC_REFLECTION_IMAGE_DITHERING_SAMPLES = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_DITHERING_SAMPLES;
 
 
 //---------------------------------------------------------------------------------------------------

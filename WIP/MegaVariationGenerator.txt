@@ -12,24 +12,6 @@ Scene
     ...
     Room__White-Kitchen
 
-Shaders, Variants, SubVariants
-
-CRT Effect:
-    AG-Vanilla-Enhanced-Slot-mask
-    AG-Vanilla-Enhanced-MonochromeAmber
-    AG-Vanilla-Enhanced-MonochromeAmber-Slot-mask ?
-    RF-Enhanced-Slot-mask
-    RF-Enhanced-MonochromeAmber
-    Signal-ScreenTreatment-PhosphorType
-    ScreenTreatment-Signal-PhosphorType
-
-    PhosphorType-Signal-ScreenTreatment
-    SlotMask-RF-Enhanced
-    SlotMask-RF-Fast
-    SlotMask-RF-Faster
-
-Amiga-500-sonyBVM-[AG-Vanilla-Enhanced-MonochromeAmber]-Flat-Near-Night
-
 CRT Type
     Aperture Grille
     Slotmask
@@ -89,3 +71,20 @@ Scaling
 Ambient Lighting
     Day
     Night
+
+
+CRT Effect:
+    AG-Vanilla-Enhanced-Slot-mask
+    AG-Vanilla-Enhanced-MonochromeAmber
+    AG-Vanilla-Enhanced-MonochromeAmber-Slot-mask ?
+    RF-Enhanced-Slot-mask
+    RF-Enhanced-MonochromeAmber
+    Signal-ScreenTreatment-PhosphorType
+    ScreenTreatment-Signal-PhosphorType
+
+    PhosphorType-Signal-ScreenTreatment
+    SlotMask-RF-Enhanced
+    SlotMask-RF-Fast
+    SlotMask-RF-Faster
+
+Amiga-500-sonyBVM-[AG-Vanilla-Enhanced-MonochromeAmber]-Flat-Near-Night

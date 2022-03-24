@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------------------------------------
 HyperspaceMadness Mega Bezel Shader Readme
 ------------------------------------------------------------------------------------------------------------
-Version 0.9.105 2022-03-20 Rev 1
+Version 0.9.105 2022-03-23 Rev 1
 ----------------------------------------
 ----------------------------------------
 
@@ -75,34 +75,36 @@ Presets in Mega_Bezel / Presets
 
 - All in the root of the Presets folder use @guest.r's awesome Guest-DrVenom-Advanced CRT shader which is considered the default CRT shader for the Mega Bezel, the only exception to this is the POTATO preset which uses GDV-MINI for performance reasons.
 
-|                       |Reflection  |Image Layering |Tube Effects  |Pre-CRT Chain  |Old Similar Preset
-|-----------------------|------------|---------------|--------------|---------------|----
-| MBZ__1__ADV            | ✔           | ✔           | ✔           | FULL           | MBZ__1__ADV
-| MBZ__2__ADV__Glass     | ✔           |              | ✔           | FULL          | MBZ__2__GLASS
-| MBZ__2__ADV-NO-REFLECT |              | ✔           | ✔           | FULL          | MBZ__3__BASIC-EXTRA-PASSES__GDV
-| MBZ__3__STD            | ✔           | ✔           | ✔            | SIMPLIFIED    | MBZ__3__BASIC-REFLECT
-| MBZ__3__STD__Glass     | ✔           |              | ✔           | SIMPLIFIED    | N/A
-| MBZ__4__STD-NO-REFLECT |            | ✔             | ✔           | SIMPLIFIED    | MBZ__4__BASIC
-| MBZ__5__POTATO         |            | BG ONLY       |              | MINIMAL       | MBZ__5__POTATO
+|                        |Reflection  |Image Layering |Tube Effects  |Pre-CRT Chain  Preset
+|------------------------|------------|---------------|--------------|---------------
+| MBZ__0__SMOOTH-ADV     | ✔          | ✔           | ✔             | FULL + ScaleFx UpRes 
+| MBZ__1__ADV            | ✔          | ✔           | ✔             | FULL           
+| MBZ__2__ADV-GLASS      | ✔          |              | ✔             | FULL          
+| MBZ__2__ADV-NO-REFLECT |             | ✔           | ✔             | FULL          
+| MBZ__3__STD            | ✔          | ✔           | ✔             | BASIC    
+| MBZ__3__STD-GLASS      | ✔          |              | ✔             | BASIC    
+| MBZ__4__STD-NO-REFLECT |             | ✔           | ✔             | BASIC    
+| MBZ__5__POTATO         |             | BG ONLY     |                | MINIMAL       
 |
 **Descriptions:**
 
   * **Glass** 
     * Presets which show a blurry reflection in the area around the screen
   * **Image Layering**
-    * Layering of multiple images for background, crt housing, leds etc
+    * Layering of multiple images for background, crt housing, LEDs etc
     * Includes the Automatically Generated Bezel & Frame
   * **Tube Effects**
     * Tube Static Reflection Highlight
-    * Tube Diffuse Image
+    * Tube Diffuse Image & Shadow
     * Tube Colored Gel
+  * **Basic Pre-CRT shader chain**
+    * Fewest passes, but still Includes Grade
   * **Full Pre-CRT shader chain** 
-    * Includes Grade, MDAPT, ScaleFX & GTU
-    * Resolution is tripled in the middle of the chain for ScaleFX 
-  * **Simple Pre-CRT shader chain**
-    * Fewer passes
-    * Includes Grade
-    * No Upscaling in the chain so works better with higher res core output, e.g. 4x Internal Res
+    * Includes Grade, MDAPT & GTU
+  * **Full + ScaleFx Upres Pre-CRT shader chain** 
+    * Includes Full Pre-CRT shader chain and ScaleFX
+    * Resolution is tripled in the middle of the chain for ScaleFX
+    * This requires increased GPU processing
 
 **Preset Folders in Mega_Bezel / Presets**
 
@@ -125,7 +127,7 @@ Presets in Mega_Bezel / Presets
 
   * **Experimental**
     * **Use at your own risk!**
-    * These presets are work in progress and may disappear, be moved, renamed, or change behavior at any future release
+    * These presets are work in progress and are likely to be moved, renamed, dissappear or change behavior at any future release
 
 ----
 **Pre CRT Shader Chain**
@@ -146,7 +148,7 @@ Presets in Mega_Bezel / Presets
 | Color Signal Processing (Grade)        | ✔           | ✔   | ✔   | ✔
 | Interlacing & Downsample Blur          | ✔           | ✔   | ✔   | ✔
 
-NTSC Processing only included in NTSC Presets, and GTU Horizontal blurring only included in non-NTSC presets
+NTSC Processing is only included in NTSC Presets, and GTU Horizontal blurring isincluded in non-NTSC presets
 
 ----------------------------------------
 **Troubleshooting**
@@ -170,11 +172,12 @@ NTSC Processing only included in NTSC Presets, and GTU Horizontal blurring only 
       * **Log to File - Off**
     
 * These settings will **cause a log window to come up** when you launch, and you should see any Retroarch errors, and shader loading details
+---
+**If the Screen is changing size unexpectedly**
 
- * **If the Screen is changing size unexpectedly**
-    * If the screen changes size when loading a game or switching between different parts of the game e.g. gameplay vs cinematic, this is because of the interaction between the different resolutions the core is outputting on different screens and the shader's integer scale or automatic aspect ratio settings.
+  * If the screen changes size when loading a game or switching between different parts of the game e.g. gameplay vs cinematic, this is because of the interaction between the different resolutions the core is outputting on different screens and the shader's integer scale or automatic aspect ratio settings.
     
-* **To fix**
+* **How to fix**
   
   * **Make sure Integer Scale is OFF in the RetroArch Video Settings**
   * **If BOTH the HEIGHT and WIDTH of the screen size are changing size**
@@ -184,14 +187,17 @@ NTSC Processing only included in NTSC Presets, and GTU Horizontal blurring only 
     * Set the Aspect Ratio Type to Explicit (1) This will use the explicit aspect ratio number instead of guessing
     
     * If this solves your issue please consider posting on the thread at the top of this document the issue you had so that we can improve the auto aspect ratio in the future
-    
-  * Artifacts on the screen that look round swirls or circles which look like tree trunk rings
+---
+**If you see artifacts on the game image like circles or interference patterns**
+  * These artifacts which look like round swirls or circles like tree trunk rings are called a Moiré patterns which happen when a high frequency pattern is sampled at a lower frequency - https://en.wikipedia.org/wiki/Moiré_pattern
 
-    * This kind of artifact is called a Moiré pattern - https://en.wikipedia.org/wiki/Moiré_pattern
+    * The base cause of the Moiré pattern is usually the curvature in combination with visible scanlines, if you set the curvature to 0 the moire should go away
 
-    * The base cause of the Moiré pattern is usually the curvature, if you set the curvature to 0 the moire should go away
-
-    * Also in general moire artifacts are less of a problem when you are at an integer scale and using a higher resolution monitor.
+* **How to fix**
+    * Set **CRT Curvature Scale Multiplier** to 0, This will remove curvature from the game image but leave everything else the same
+    * Set **Integer Scale Mode** to 1 or 2
+    * Make the game screen larger with either **Viewport Zoom** or **Non-Integer Scale %**
+    * Use a higher resolution monitor if available
 
 ----------------------------------------
 ---
@@ -199,14 +205,12 @@ NTSC Processing only included in NTSC Presets, and GTU Horizontal blurring only 
 Bug Reporting
 ----------------------------------------
 
-- When reporting a bug, **please post images of the issue if it is at all visual in nature**. This often helps communicate the issue better & quicker, even if the issue seems simple.
-- Please make sure you are using the latest version of the shader when reporting bugs
+- **Please post images** of the issue if it is at all visual in nature. This often helps communicate the issue better & quicker, **even if the issue seems simple**.
+- Please make sure to **Use the latest version of the shader** when reporting bugs
 - If you are having any issues with the shader not loading or crashing please include a log (See above for turning on logs)
 - Please include info about your setup
   - Preset
-  - Core
-  - Core Internal Res 1x, 2x etc?
-  - Monitor resolution?
+  - Core and Internal Res 1x, 2x etc?
   - GPU
 
 
@@ -222,9 +226,9 @@ Parameter Descriptions
 
 -----------------------------------------------------------------------------------------------
 **[ CRT BRIGHTNESS & GAMMA ]:**
-  * **CRT Gamma In (Gamma to Linear Space Decode)** - The gamma adjustment applied to take the core image and bring it into linear color space  
-  * **CRT Gamma Out (Linear to Gamma Space Encode)** - The gamma adjustment applied to the CRT shader's linear color output to bring it back into a gamma corrected space
-  * **Post CRT Brightness** - Brightness adjustment on the CRT color output
+  * **Gamma In (Game Embedded Gamma - Gamma Space to Linear) Def 2.4** - The gamma adjustment applied to take the core image and bring it into linear color space. Gamma to Linear Space Decode
+  * **Gamma Out (Electron Gun Gamma - Linear to Gamma Space) Def 2.4** - The gamma adjustment applied to the CRT shader's linear color output to bring it back into a gamma corrected space. Also known as Linear to Gamma Space Encode
+  * **Post CRT Brightness** - Brightness adjustment on the CRT color output (Applied in Linear Color Space)
 
 -----------------------------------------------------------------------------------------------
 **[ GRAPHICS CACHE ]:**
@@ -240,7 +244,7 @@ Parameter Descriptions
 -----------------------------------------------------------------------------------------------
 **[ GRAPHICS GLOBAL BRIGHTNESS ]:**
   * **Graphics Brightness** - Brightness of all graphics and images which are not the CRT Shader
-  * **Graphics Gamma Adjust** - Apply a gamma adjustment on all graphics and images which are not the CRT Shader 
+  * **Graphics Gamma Adjust** - Gamma adjustment on all graphics and images which are not the CRT Shader to adjust brightness with a gamma curve
 
 -----------------------------------------------------------------------------------------------
 **[ AMBIENT LIGHTING ]:** - Usually used to apply night lighting on all graphics
@@ -264,9 +268,9 @@ Parameter Descriptions
 
 -----------------------------------------------------------------------------------------------
 **[ VIEWPORT ZOOM ]:** 
-* **Viewport Zoom** --- Zoom in or out on all the graphics and screen
-* **Zoom CRT Mask** --- When we zoom in we should the crt phosphor mask also scale
-* **Viewport Position X** 
+* **Viewport Zoom** --- Zoom in or out on everything
+* **Zoom CRT Mask** --- When this is on and we zoom in the crt phosphor mask will also scale in integer steps
+* **Viewport Position X**
 * **Viewport Position Y**
 
 -----------------------------------------------------------------------------------------------
@@ -301,21 +305,25 @@ Parameter Descriptions
 **[ CRT SCREEN SCALING ]:**
 
 - **Show Resolution Info**
-- **Int Scale Mode**
+- **Integer Scale Mode**
   - **0 - Off,** Use Non-Integer Scale
   - **1 - ShortAxis Integer Scale On** - for the viewport (monitor) in landscape mode this is the vertical axis, If the screen/tube aspect ratio is vertical then integer scale is used for both horizontal and vertical axes
   - **2 - Integer Scale on both axes**
 
-- **Int Scale Multiple Offset**
+- **Integer Scale Multiple Offset**
   - Adjusts the size of the screen by increasing the multiple of the core resolution (on both axes) when using integer scale, to make the screen larger or smaller
-- **Int Scale Multiple Offset Long Axis**
+- **Integer Scale Multiple Offset Long Axis**
   - Adds an additional multiple offset but for only the long axis, with a horizontal aspect ratio this is the horizontal axis
-- **Int Scale Max Height %**
+- **Integer Scale Max Height %**
   - The maximum screen height of the default integer scale when integer scale is on
 - **Vertical Preset (E.G. 4K Vertical)**
   - Turn on if this is a vertical monitor preset, E.G. if your physical monitor is turned vertical
 - **Non-Integer Scale %**
   - If integer scale isn't used, this sets the vertical size of the vertical percentage of the full viewport
+- **Snap to Closest Integer Scale**
+  - Takes the current Non-Integer scale and snaps to the closest integer scale within a tolerance
+- **Snap To Closest Integer Scale Tolerance**
+  - Tolerance of how far away from the current integer scale we will snap to an integer scale
 
 
 -----------------------------------------------------------------------------------------------
@@ -327,10 +335,6 @@ Parameter Descriptions
   - What channel of the texture to look at to find the hole in the image, either the transparent part, or a white rectangle on top of a black background
 - **Non-Integer Scale Offset**
   - Additional scale offset added on top of the non-integer scale, including image placement scale
-- **Snap to Closest Integer Scale**
-  - Takes the current Non-Integer scale and snaps to the closest integer scale within a tolerance
-- **Snap To Closest Integer Scale Tolerance**
-  - Tolerance of how far away from the current integer scale we will snap to an integer scale
 
 
 -----------------------------------------------------------------------------------------------
@@ -368,32 +372,32 @@ Cropping removes parts of the game image at the edges of the screen which were n
 
 **ScaleFX ON** applies a shape smoothing on the core image and creates a higher resolution smoothed image
   - After you turn this on you must increase **Core Res Sampling**, or **Downsample Blur** in the next section to see a difference
-
+  - ScaleFX only works well when the it's input is the native res from the core
+  To see the contour smoothing coming from **ScaleFX** either **Core Res Sampling**, or **Downsample Blur** must be increased from their default value.
 
 -----------------------------------------------------------------------------------------------
 **[ SCANLINE DIRECTION ]:**
 
-- **Scanline Direction (GDV & Easymode)**
+- **Scanline Direction** - Direction of the scanlines
   - **0 - Auto** --- Chooses horizontal or vertical scanline direction based on aspect ratio
-  - **1 - Horizontal** scanlines
-  - **2 - Vertical** scanlines
+  - **1 - Horizontal**
+  - **2 - Vertical**
 
 
 -----------------------------------------------------------------------------------------------
 **[ CORE RES SAMPLING ]:**
 
 **Adjusting core res sampling changes how the CRT perceives the core resolution**
-  e.g. If you use a core with 4X internal resolution you can set core res sampling to 0.25 it will appear if it was at 1x resolution
-  To use **ScaleFX** to smooth the shapes in the core image you will need to set the core res sampling higher than 1, otherwise you will not see the increased smoothing coming from ScaleFX
+  e.g. If you use a core with 4X internal resolution you can set core res sampling to 0.25 it be sampled as if it was at 1x resolution
 
 - **Scanline Direction Multiplier (X-Prescale for H Scanline)**
   - Adjust the sampling in direction of the scanlines
-  - E.G. if the scanlines are horizontal adjust sampling along the horizontal axis
+  - E.G. if the scanlines are horizontal this adjusts sampling along the horizontal axis
 - **Scanline Dir Downsample Blur**
   - Add blur along the scanline direction
 - **Opposite Direction Multiplier (Y Downsample for H Scanline)**
   - Adjust the sampling in direction opposite of the scanlines
-  - E.G. if the scanlines are horizontal adjust sampling along the vertical axis
+  - E.G. if the scanlines are horizontal this adjusts sampling along the vertical axis
 - **Opposite Dir Downsample Blur**
   - Add blur along the opposite direction of the scanlines
 
