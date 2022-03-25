@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------------------------------------
 HyperspaceMadness Mega Bezel Shader Readme
 ------------------------------------------------------------------------------------------------------------
-Version 0.9.105 2022-03-23 Rev 1
+Version 0.9.106 2022-03-24 Rev 1
 ----------------------------------------
 ----------------------------------------
 
@@ -68,6 +68,10 @@ Choosing a Preset
   * Presets are named/sorted by performance
   * The most flexible and most resource hungry start with index 0.
   * As the name's index number increases the performance of the preset improves but but flexibility decreases.
+  * The presets with the lowest performance requirements are:
+    * MBZ__3__STD__GDV-MINI - This has a Dynamic Bezel and Reflections
+    * MBZ__4__STD-NO-REFLECT__GDV-MINI - This Has a Dynamic Bezel but No Reflections
+    * MBZ__5__POTATO__GDV-MINI - This has no Dynamic Bezel and no Reflections
 ----------------------------------------
 
 Presets in Mega_Bezel / Presets
@@ -310,12 +314,13 @@ Parameter Descriptions
   - **1 - ShortAxis Integer Scale On** - for the viewport (monitor) in landscape mode this is the vertical axis, If the screen/tube aspect ratio is vertical then integer scale is used for both horizontal and vertical axes
   - **2 - Integer Scale on both axes**
 
+- **Base Integer Scale Max Height %**
+  - The maximum screen height of the default integer scale when integer scale is on
+
 - **Integer Scale Multiple Offset**
   - Adjusts the size of the screen by increasing the multiple of the core resolution (on both axes) when using integer scale, to make the screen larger or smaller
 - **Integer Scale Multiple Offset Long Axis**
   - Adds an additional multiple offset but for only the long axis, with a horizontal aspect ratio this is the horizontal axis
-- **Integer Scale Max Height %**
-  - The maximum screen height of the default integer scale when integer scale is on
 - **Vertical Preset (E.G. 4K Vertical)**
   - Turn on if this is a vertical monitor preset, E.G. if your physical monitor is turned vertical
 - **Non-Integer Scale %**

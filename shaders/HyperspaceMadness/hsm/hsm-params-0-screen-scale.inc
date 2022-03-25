@@ -23,7 +23,7 @@
 */
 
 // Screen Scale Required Parameters
-#pragma parameter HSM_MEGA_BEZEL_TITLE								"[ --- HSM MEGA BEZEL 0.9.105 2022-02-23 Rev 1--- ]" 0 0 0.01 0.01
+#pragma parameter HSM_MEGA_BEZEL_TITLE								"[ --- HSM MEGA BEZEL 0.9.106 2022-02-24 Rev 1--- ]" 0 0 0.01 0.01
 
 #pragma parameter HSM_RESOLUTION_DEBUG_ON							"          Show Resolution Info" 0 0 1 1
 float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
@@ -168,14 +168,14 @@ float HSM_ASPECT_RATIO_EXPLICIT = global.HSM_ASPECT_RATIO_EXPLICIT;
 #pragma parameter HSM_INT_SCALE_MODE 								"          Integer Scale Mode - OFF | ShortAxis | BothAxes" 0 0 2 1
 #define HSM_INT_SCALE_MODE global.HSM_INT_SCALE_MODE
 
+#pragma parameter HSM_INT_SCALE_MAX_HEIGHT 					        "          Base Integer Scale Max Height %" 89 60 140 0.5
+float HSM_INT_SCALE_MAX_HEIGHT = global.HSM_INT_SCALE_MAX_HEIGHT / 100;
+
 #pragma parameter HSM_INT_SCALE_MULTIPLE_OFFSET 					"          Integer Scale Multiple Offset" 0 -20 20 1
 #define HSM_INT_SCALE_MULTIPLE_OFFSET global.HSM_INT_SCALE_MULTIPLE_OFFSET
 
 #pragma parameter HSM_INT_SCALE_MULTIPLE_OFFSET_LONG 				"          Integer Scale Multiple Offset on Long Axis" 0 -20 20 1
 #define HSM_INT_SCALE_MULTIPLE_OFFSET_LONG global.HSM_INT_SCALE_MULTIPLE_OFFSET_LONG
-
-#pragma parameter HSM_INT_SCALE_MAX_HEIGHT 					        "          Integer Scale Max Height %" 94.5 60 140 0.5
-float HSM_INT_SCALE_MAX_HEIGHT = global.HSM_INT_SCALE_MAX_HEIGHT / 100;
 
 #pragma parameter HSM_VERTICAL_PRESET 								"       Preset is for Monitor Portrait Mode (Smaller CRT Screen)" 0 0 1 1
 float HSM_VERTICAL_PRESET = global.HSM_VERTICAL_PRESET;

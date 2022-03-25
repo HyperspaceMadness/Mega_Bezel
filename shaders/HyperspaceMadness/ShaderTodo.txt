@@ -1,33 +1,9 @@
 ![Mega_Bezel_Logo|512x256, 75%](upload://6PNkvcMF9Go9Wnk6OJXfYR1opXI.png) 
 
-Mega Bezel is updated to V 0.9.105 2022-03-23 Rev 1
+Mega Bezel is updated to V 0.9.106 2022-03-24 Rev 1
 
 Changes:
-  * Added SMOOTH-ADV Preset Tier, this has ScaleFX in it and the required Upres in the chain
-    * SMOOTH-ADV-NTSC presets added, so now there is an option for smoothed + NTSC
-    * ADV has had ScaleFx removed. If you have any presets which used ScaleFx they should have their references changed to the appropriate SMOOTH-ADV preset
-  * Updated to Guest-Advanced to crt-guest-advanced-2022-03-10-release1
-  * Updated GDV-MINI, should not have problems with 4K by default anymore with CGWG mask
-  * Auto Fake Scanline Res Added as an option, Explicit Fake Scanline Res is still available
-  * Variations/Smoothed-ScaleFX_... presets renamed to SMOOTH-ADV
-  * Added CRT Curvature Multiplier so it can be set at 0 
-    * This will set the crt curvature to 0 while the bezel stays curved
-  * Added Rotate parameter for Ambient (Night) Lighting
-  * Variations/Max-Int-Scale presets renamed to Max-Int-Scale-No-Bezel for clarity, also now the bezel and background are off
-  * Black edge layering mode now shows the tube diffuse image when it's 0
-  * Added Tube Shadow Image
-  * Added Empty Tube Thickness, so extra empty tube area can be added around the game screen
-  * Snap to Closest Integer Scale adjusted for easier use
-    * An On/Off switch has been added HSM_USE_SNAP_TO_CLOSEST_INT_SCALE
-    * HSM_SNAP_TO_CLOSEST_INT_SCALE_TOLERANCE renamed to HSM_SNAP_TO_CLOSEST_INT_SCALE_TOLERANCE
-  * Changed Minimum border scale for integer scale to be max size for integer scale instead
-    * Default value is 94.5 * of screen size
-    * HSM_INT_SCALE_BORDER_MIN_HEIGHT is renamed to HSM_INT_SCALE_MAX_HEIGHT
-  * Sonkun's Presets have been updated to the latest and moved into a 4k and a new additional 1080p folder
-    * The the 1080p presets have the curvature of the screen reduced to almost 0 and the bezel curvature increased so the bezel looks the same
-  * Cyber's presets have been updated
-  * Updated/Added Day & Night presets in variations using the tube diffuse image
-
+  * Fixed the Base Integer Scale Max Height
 
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
