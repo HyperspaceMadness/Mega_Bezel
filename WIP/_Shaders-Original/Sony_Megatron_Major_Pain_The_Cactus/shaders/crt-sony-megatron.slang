@@ -81,41 +81,41 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #include "include/parameters.h"
 
-#define HCRT_HDR                            params.hcrt_hdr
-#define HCRT_OUTPUT_COLOUR_SPACE            params.hcrt_colour_space
-#define HCRT_MAX_NITS                       params.hcrt_max_nits
-#define HCRT_PAPER_WHITE_NITS               params.hcrt_paper_white_nits
-#define HCRT_EXPAND_GAMUT                   params.hcrt_expand_gamut
-#define HCRT_GAMMA                          params.hcrt_gamma
+#define HCRT_HDR                             params.hcrt_hdr
+#define HCRT_OUTPUT_COLOUR_SPACE             params.hcrt_colour_space
+#define HCRT_MAX_NITS                        params.hcrt_max_nits
+#define HCRT_PAPER_WHITE_NITS                params.hcrt_paper_white_nits
+#define HCRT_EXPAND_GAMUT                    params.hcrt_expand_gamut
+#define HCRT_GAMMA                           params.hcrt_gamma
 
-#define HCRT_LCD_RESOLUTION                 params.hcrt_lcd_resolution 
-#define HCRT_LCD_SUBPIXEL                   params.hcrt_lcd_subpixel
-#define HCRT_RED_VERTICAL_CONVERGENCE       params.hcrt_red_vertical_convergence
-#define HCRT_GREEN_VERTICAL_CONVERGENCE     params.hcrt_green_vertical_convergence
-#define HCRT_BLUE_VERTICAL_CONVERGENCE      params.hcrt_blue_vertical_convergence
-#define HCRT_RED_HORIZONTAL_CONVERGENCE     params.hcrt_red_horizontal_convergence
-#define HCRT_GREEN_HORIZONTAL_CONVERGENCE   params.hcrt_green_horizontal_convergence
-#define HCRT_BLUE_HORIZONTAL_CONVERGENCE    params.hcrt_blue_horizontal_convergence
+#define HCRT_LCD_RESOLUTION                  params.hcrt_lcd_resolution 
+#define HCRT_LCD_SUBPIXEL                    params.hcrt_lcd_subpixel
+#define HCRT_RED_VERTICAL_CONVERGENCE        params.hcrt_red_vertical_convergence
+#define HCRT_GREEN_VERTICAL_CONVERGENCE      params.hcrt_green_vertical_convergence
+#define HCRT_BLUE_VERTICAL_CONVERGENCE       params.hcrt_blue_vertical_convergence
+#define HCRT_RED_HORIZONTAL_CONVERGENCE      params.hcrt_red_horizontal_convergence
+#define HCRT_GREEN_HORIZONTAL_CONVERGENCE    params.hcrt_green_horizontal_convergence
+#define HCRT_BLUE_HORIZONTAL_CONVERGENCE     params.hcrt_blue_horizontal_convergence
 
-#define HCRT_CRT_SCREEN_TYPE                params.hcrt_crt_screen_type
-#define HCRT_CRT_RESOLUTION                 params.hcrt_crt_resolution
+#define HCRT_CRT_SCREEN_TYPE                 params.hcrt_crt_screen_type
+#define HCRT_CRT_RESOLUTION                  params.hcrt_crt_resolution
 
-#define HCRT_RED_SCANLINE_MIN               params.hcrt_red_scanline_min
-#define HCRT_RED_SCANLINE_MAX               params.hcrt_red_scanline_max
-#define HCRT_RED_SCANLINE_ATTACK            params.hcrt_red_scanline_attack
-#define HCRT_GREEN_SCANLINE_MIN             params.hcrt_green_scanline_min
-#define HCRT_GREEN_SCANLINE_MAX             params.hcrt_green_scanline_max
-#define HCRT_GREEN_SCANLINE_ATTACK          params.hcrt_green_scanline_attack
-#define HCRT_BLUE_SCANLINE_MIN              params.hcrt_blue_scanline_min
-#define HCRT_BLUE_SCANLINE_MAX              params.hcrt_blue_scanline_max
-#define HCRT_BLUE_SCANLINE_ATTACK           params.hcrt_blue_scanline_attack
+#define HCRT_RED_SCANLINE_MIN                params.hcrt_red_scanline_min
+#define HCRT_RED_SCANLINE_MAX                params.hcrt_red_scanline_max
+#define HCRT_RED_SCANLINE_ATTACK             params.hcrt_red_scanline_attack
+#define HCRT_GREEN_SCANLINE_MIN              params.hcrt_green_scanline_min
+#define HCRT_GREEN_SCANLINE_MAX              params.hcrt_green_scanline_max
+#define HCRT_GREEN_SCANLINE_ATTACK           params.hcrt_green_scanline_attack
+#define HCRT_BLUE_SCANLINE_MIN               params.hcrt_blue_scanline_min
+#define HCRT_BLUE_SCANLINE_MAX               params.hcrt_blue_scanline_max
+#define HCRT_BLUE_SCANLINE_ATTACK            params.hcrt_blue_scanline_attack
 
-#define HCRT_RED_BEAM_SHARPNESS             params.hcrt_red_beam_sharpness
-#define HCRT_RED_BEAM_ATTACK                params.hcrt_red_beam_attack
-#define HCRT_GREEN_BEAM_SHARPNESS           params.hcrt_green_beam_sharpness
-#define HCRT_GREEN_BEAM_ATTACK              params.hcrt_green_beam_attack
-#define HCRT_BLUE_BEAM_SHARPNESS            params.hcrt_blue_beam_sharpness
-#define HCRT_BLUE_BEAM_ATTACK               params.hcrt_blue_beam_attack
+#define HCRT_RED_BEAM_SHARPNESS              params.hcrt_red_beam_sharpness
+#define HCRT_RED_BEAM_ATTACK                 params.hcrt_red_beam_attack
+#define HCRT_GREEN_BEAM_SHARPNESS            params.hcrt_green_beam_sharpness
+#define HCRT_GREEN_BEAM_ATTACK               params.hcrt_green_beam_attack
+#define HCRT_BLUE_BEAM_SHARPNESS             params.hcrt_blue_beam_sharpness
+#define HCRT_BLUE_BEAM_ATTACK                params.hcrt_blue_beam_attack
 
 #define COMPAT_TEXTURE(c, d) texture(c, d)
 
@@ -286,7 +286,7 @@ const uint kShadowMasks[kResolutionAxis][kTVLAxis][kBGRAxis][kMaxShadowMaskSizeY
 
 #define kMaxSlotMaskSize   8
 #define kMaxSlotSizeX      2
-#define kMaxSlotSizeY      4
+#define kMaxSlotSizeY      6
 
 #define kXXXX     { kBlack, kBlack, kBlack, kBlack, kBlack, kBlack, kBlack, kBlack }
 
@@ -305,33 +305,34 @@ const uint kShadowMasks[kResolutionAxis][kTVLAxis][kBGRAxis][kMaxShadowMaskSizeY
 #define kRRGGBBX  { kRed, kRed, kGreen, kGreen, kBlue, kBlue, kBlack, kBlack }
 #define kBBGGRRX  { kBlue, kBlue, kGreen, kGreen, kRed, kRed, kBlack, kBlack }
 
-#define kMGMG_MGXX_MGMG_XXMG   { { kMG, kMG }, { kMG, kXXXX }, { kMG, kMG }, { kXXXX, kMG } }
-#define kGMGM_GMXX_GMGM_XXGM   { { kGM, kGM }, { kGM, kXXXX }, { kGM, kGM }, { kXXXX, kGM } }
+#define kMGMG_MGXX_MGMG_XXMG   { { kMG, kMG }, { kMG, kXXXX }, { kMG, kMG }, { kXXXX, kMG }, { kXXXX, kXXXX }, { kXXXX, kXXXX } }
+#define kGMGM_GMXX_GMGM_XXGM   { { kGM, kGM }, { kGM, kXXXX }, { kGM, kGM }, { kXXXX, kGM }, { kXXXX, kXXXX }, { kXXXX, kXXXX } }
 
-#define kBGRBGR_BGRXXX_BGRBGR_XXXBGR   { { kBGR, kBGR }, { kBGR, kXXXX }, { kBGR, kBGR }, { kXXXX, kBGR } }
-#define kRGBRGB_RGBXXX_RGBRGB_XXXRGB   { { kRGB, kRGB }, { kRGB, kXXXX }, { kRGB, kRGB }, { kXXXX, kRGB } }
+#define kBGRBGR_BGRXXX_BGRBGR_XXXBGR   { { kBGR, kBGR }, { kBGR, kXXXX }, { kBGR, kBGR }, { kXXXX, kBGR }, { kXXXX, kXXXX }, { kXXXX, kXXXX } }
+#define kRGBRGB_RGBXXX_RGBRGB_XXXRGB   { { kRGB, kRGB }, { kRGB, kXXXX }, { kRGB, kRGB }, { kXXXX, kRGB }, { kXXXX, kXXXX }, { kXXXX, kXXXX } }
 
-#define kRGBXRGBX_RGBXXXXX_RGBXRGBX_XXXXRGBX   { { kRGBX, kRGBX }, { kRGBX, kXXXX }, { kRGBX, kRGBX }, { kXXXX, kRGBX } }
-#define kBGRXBGRX_BGRXXXXX_BGRXBGRX_XXXXBGRX   { { kBGRX, kBGRX }, { kBGRX, kXXXX }, { kBGRX, kBGRX }, { kXXXX, kBGRX } }
+#define kRGBXRGBX_RGBXXXXX_RGBXRGBX_XXXXRGBX   { { kRGBX, kRGBX }, { kRGBX, kXXXX }, { kRGBX, kRGBX }, { kXXXX, kRGBX }, { kXXXX, kXXXX }, { kXXXX, kXXXX } }
+#define kBGRXBGRX_BGRXXXXX_BGRXBGRX_XXXXBGRX   { { kBGRX, kBGRX }, { kBGRX, kXXXX }, { kBGRX, kBGRX }, { kXXXX, kBGRX }, { kXXXX, kXXXX }, { kXXXX, kXXXX } }
 
-#define kRYCBXRYCBX_RYCBXXXXX_RYCBXRYCBX_XXXXRYCBX   { { kRYCBX, kRYCBX }, { kRYCBX, kXXXX }, { kRYCBX, kRYCBX }, { kXXXX, kRYCBX } }
-#define kBCYRXBCYRX_BCYRXXXXX_BCYRXBCYRX_XXXXBCYRX   { { kBCYRX, kBCYRX }, { kBCYRX, kXXXX }, { kBCYRX, kBCYRX }, { kXXXX, kBCYRX } }
+#define kRYCBXRYCBX_RYCBXXXXX_RYCBXRYCBX_XXXXRYCBX   { { kRYCBX, kRYCBX }, { kRYCBX, kXXXX }, { kRYCBX, kRYCBX }, { kXXXX, kRYCBX }, { kXXXX, kXXXX }, { kXXXX, kXXXX } }
+#define kBCYRXBCYRX_BCYRXXXXX_BCYRXBCYRX_XXXXBCYRX   { { kBCYRX, kBCYRX }, { kBCYRX, kXXXX }, { kBCYRX, kBCYRX }, { kXXXX, kBCYRX }, { kXXXX, kXXXX }, { kXXXX, kXXXX } }
 
-#define kRRGGBBXRRGGBBX_RRGGBBXXXXX_RRGGBBXRRGGBBX_XXXXRRGGBBX   { { kRRGGBBX, kRRGGBBX }, { kRRGGBBX, kXXXX }, { kRRGGBBX, kRRGGBBX }, { kXXXX, kRRGGBBX } }
-#define kBBGGRRXBBGGRRX_BBGGRRXXXXX_BBGGRRXBBGGRRX_XXXXBBGGRRX   { { kBBGGRRX, kBBGGRRX }, { kBBGGRRX, kXXXX }, { kBBGGRRX, kBBGGRRX }, { kXXXX, kBBGGRRX } }
+#define kRRGGBBXRRGGBBX_RRGGBBXRRGGBBX_RRGGBBXXXXX_RRGGBBXRRGGBBX_RRGGBBXRRGGBBX_XXXXRRGGBBX   { { kRRGGBBX, kRRGGBBX }, { kRRGGBBX, kRRGGBBX }, { kRRGGBBX, kXXXX }, { kRRGGBBX, kRRGGBBX }, { kRRGGBBX, kRRGGBBX }, { kXXXX, kRRGGBBX } }
+#define kBBGGRRXBBGGRRX_BBGGRRXBBGGRRX_BBGGRRXXXXX_BBGGRRXBBGGRRX_BBGGRRXBBGGRRX_XXXXBBGGRRX   { { kBBGGRRX, kBBGGRRX }, { kBBGGRRX, kBBGGRRX }, { kBBGGRRX, kXXXX }, { kBBGGRRX, kBBGGRRX }, { kBBGGRRX, kBBGGRRX }, { kXXXX, kBBGGRRX } }
 
-const float kSlotMaskSize[kResolutionAxis][kTVLAxis] = { { 7.0f, 4.0f, 3.0f, 2.0f }, { 7.0f, 7.0f, 5.0f, 4.0f } }; //4K: 300 TVL, 600 TVL, 800 TVL, 1000 TVL   8K: 300 TVL, 600 TVL, 800 TVL, 1000 TVL
+const float kSlotMaskSizeX[kResolutionAxis][kTVLAxis] = { { 7.0f, 4.0f, 3.0f, 2.0f }, { 7.0f, 7.0f, 5.0f, 4.0f } }; //4K: 300 TVL, 600 TVL, 800 TVL, 1000 TVL   8K: 300 TVL, 600 TVL, 800 TVL, 1000 TVL
+const float kSlotMaskSizeY[kResolutionAxis][kTVLAxis] = { { 6.0f, 4.0f, 4.0f, 4.0f }, { 6.0f, 6.0f, 4.0f, 4.0f } }; //4K: 300 TVL, 600 TVL, 800 TVL, 1000 TVL   8K: 300 TVL, 600 TVL, 800 TVL, 1000 TVL
 
 const uint kSlotMasks[kResolutionAxis][kTVLAxis][kBGRAxis][kMaxSlotSizeY][kMaxSlotSizeX][kMaxSlotMaskSize] = {
    { // 4K
-      { kRRGGBBXRRGGBBX_RRGGBBXXXXX_RRGGBBXRRGGBBX_XXXXRRGGBBX, kBBGGRRXBBGGRRX_BBGGRRXXXXX_BBGGRRXBBGGRRX_XXXXBBGGRRX },   // 300 TVL
+      { kRRGGBBXRRGGBBX_RRGGBBXRRGGBBX_RRGGBBXXXXX_RRGGBBXRRGGBBX_RRGGBBXRRGGBBX_XXXXRRGGBBX, kBBGGRRXBBGGRRX_BBGGRRXBBGGRRX_BBGGRRXXXXX_BBGGRRXBBGGRRX_BBGGRRXBBGGRRX_XXXXBBGGRRX },   // 300 TVL
       { kRGBXRGBX_RGBXXXXX_RGBXRGBX_XXXXRGBX, kBGRXBGRX_BGRXXXXX_BGRXBGRX_XXXXBGRX },                                       // 600 TVL
       { kBGRBGR_BGRXXX_BGRBGR_XXXBGR, kRGBRGB_RGBXXX_RGBRGB_XXXRGB },                                                       // 800 TVL
       { kMGMG_MGXX_MGMG_XXMG, kGMGM_GMXX_GMGM_XXGM }                                                                        // 1000 TVL
    },
    { // 8K
-      { kRRGGBBXRRGGBBX_RRGGBBXXXXX_RRGGBBXRRGGBBX_XXXXRRGGBBX, kBBGGRRXBBGGRRX_BBGGRRXXXXX_BBGGRRXBBGGRRX_XXXXBBGGRRX },   // 300 TVL
-      { kRRGGBBXRRGGBBX_RRGGBBXXXXX_RRGGBBXRRGGBBX_XXXXRRGGBBX, kBBGGRRXBBGGRRX_BBGGRRXXXXX_BBGGRRXBBGGRRX_XXXXBBGGRRX },   // 600 TVL
+      { kRRGGBBXRRGGBBX_RRGGBBXRRGGBBX_RRGGBBXXXXX_RRGGBBXRRGGBBX_RRGGBBXRRGGBBX_XXXXRRGGBBX, kBBGGRRXBBGGRRX_BBGGRRXBBGGRRX_BBGGRRXXXXX_BBGGRRXBBGGRRX_BBGGRRXBBGGRRX_XXXXBBGGRRX },   // 300 TVL
+      { kRRGGBBXRRGGBBX_RRGGBBXRRGGBBX_RRGGBBXXXXX_RRGGBBXRRGGBBX_RRGGBBXRRGGBBX_XXXXRRGGBBX, kBBGGRRXBBGGRRX_BBGGRRXBBGGRRX_BBGGRRXXXXX_BBGGRRXBBGGRRX_BBGGRRXBBGGRRX_XXXXBBGGRRX },   // 600 TVL
       { kRYCBXRYCBX_RYCBXXXXX_RYCBXRYCBX_XXXXRYCBX, kBCYRXBCYRX_BCYRXXXXX_BCYRXBCYRX_XXXXBCYRX },                           // 800 TVL
       { kRGBXRGBX_RGBXXXXX_RGBXRGBX_XXXXRGBX, kBGRXBGRX_BGRXXXXX_BGRXBGRX_XXXXBGRX }                                        // 1000 TVL
    }
@@ -464,10 +465,10 @@ void main()
       }
       case kSlotMask:
       {
-         uint slot_x = uint(floor(mod(current_position.x / kSlotMaskSize[lcd_resolution][crt_resolution], kMaxSlotSizeX)));
-         uint slot_y = uint(floor(mod(current_position.y, kMaxSlotSizeY)));
+         uint slot_x = uint(floor(mod(current_position.x / kSlotMaskSizeX[lcd_resolution][crt_resolution], kMaxSlotSizeX)));
+         uint slot_y = uint(floor(mod(current_position.y, kSlotMaskSizeY[lcd_resolution][crt_resolution])));
 
-         uint mask = uint(floor(mod(current_position.x, kSlotMaskSize[lcd_resolution][crt_resolution])));
+         uint mask = uint(floor(mod(current_position.x, kSlotMaskSizeX[lcd_resolution][crt_resolution])));
 
          colour_mask = kSlotMasks[lcd_resolution][crt_resolution][lcd_subpixel_layout][slot_x][slot_y][mask];
 
