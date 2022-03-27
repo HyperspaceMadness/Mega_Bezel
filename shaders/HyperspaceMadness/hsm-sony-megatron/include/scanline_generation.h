@@ -32,6 +32,7 @@ float ScanlineColour(const uint channel,
                      const vec2 source_size, 
                      const float scanline_size, 
                      const float source_tex_coord_x, 
+                     const float in_tex_coord_y, 
                      const float narrowed_source_pixel_offset, 
                      const float vertical_convergence, 
                      const float beam_attack, 
@@ -40,7 +41,7 @@ float ScanlineColour(const uint channel,
                      const float scanline_attack, 
                      inout float next_prev)
 {
-   const float current_source_position_y  = ((vTexCoord.y * source_size.y) - vertical_convergence) + next_prev;
+   const float current_source_position_y  = ((in_tex_coord_y * source_size.y) - vertical_convergence) + next_prev;
    const float current_source_center_y    = floor(current_source_position_y) + 0.5f; 
    
    const float source_tex_coord_y         = current_source_center_y / source_size.y; 
@@ -79,6 +80,7 @@ float ScanlineColour(const uint channel,
 }
 
 float GenerateScanline( const uint channel, 
+                        const vec2 tex_coord, 
                         const vec2 source_size, 
                         const float scanline_size, 
                         const float horizontal_convergence, 
@@ -89,7 +91,7 @@ float GenerateScanline( const uint channel,
                         const float scanline_max, 
                         const float scanline_attack)
 {
-   const float current_source_position_x      = (vTexCoord.x * source_size.x) - horizontal_convergence;
+   const float current_source_position_x      = (tex_coord.x * source_size.x) - horizontal_convergence;
    const float current_source_center_x        = floor(current_source_position_x) + 0.5f; 
    
    const float source_tex_coord_x             = current_source_center_x / source_size.x; 
@@ -104,6 +106,7 @@ float GenerateScanline( const uint channel,
                                                    source_size, 
                                                    scanline_size, 
                                                    source_tex_coord_x, 
+                                                   tex_coord.y, 
                                                    narrowed_source_pixel_offset, 
                                                    vertical_convergence,  
                                                    beam_attack, 
@@ -120,6 +123,7 @@ float GenerateScanline( const uint channel,
                                                    source_size, 
                                                    scanline_size, 
                                                    source_tex_coord_x, 
+                                                   tex_coord.y, 
                                                    narrowed_source_pixel_offset,
                                                    vertical_convergence,  
                                                    beam_attack, 

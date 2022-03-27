@@ -38,6 +38,7 @@ layout(push_constant) uniform Push
    float hcrt_gamma;
 } params;
 
+/* HSM Removed
 layout(std140, set = 0, binding = 0) uniform UBO
 {
 	mat4 MVP;
@@ -46,6 +47,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	vec4 OutputSize;
 	uint FrameCount;
 } global;
+*/
+
+#include "../hsm/hsm-globals-and-screen-scale-params.inc"
 
 #include "include/parameters.h"
 
@@ -79,6 +83,9 @@ layout(set = 0, binding = 2) uniform sampler2D Source;
 void main()
 {
    vec3 source = COMPAT_TEXTURE(Source, vTexCoord).rgb;
+
+   // Put the source back in the original gamma space
+   source = HSM_Delinearize(vec4(source, 1), HSM_GAMMA_IN_LINEARIZE).rgb;
 
    const vec3 colour   = ColourGrade(source);
 

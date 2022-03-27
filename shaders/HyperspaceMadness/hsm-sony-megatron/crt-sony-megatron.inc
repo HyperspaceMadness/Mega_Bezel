@@ -68,6 +68,7 @@ layout(push_constant) uniform Push
 
 } params;
 
+/* HSM Removed
 layout(std140, set = 0, binding = 0) uniform UBO
 {
 	mat4 MVP;
@@ -76,6 +77,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	vec4 OutputSize;
 	uint FrameCount;
 } global;
+*/
 
 #include "include/parameters.h"
 
@@ -115,7 +117,13 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #define HCRT_BLUE_BEAM_SHARPNESS            params.hcrt_blue_beam_sharpness
 #define HCRT_BLUE_BEAM_ATTACK               params.hcrt_blue_beam_attack
 
-#define COMPAT_TEXTURE(c, d) texture(c, d)
+/* HSM Removed
+ #define COMPAT_TEXTURE(c,d) texture(c,d)
+*/
+
+// HSM Added
+#define COMPAT_TEXTURE(c,d) HSM_GetCroppedTexSample(c,d)
+// End Addition
 
 #pragma stage vertex
 layout(location = 0) in vec4 Position;
@@ -133,6 +141,8 @@ layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 2) uniform sampler2D SourceSDR;
 layout(set = 0, binding = 3) uniform sampler2D SourceHDR;
+layout(set = 0, binding = 4) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 5) uniform sampler2D InfoCachePassFeedback;
 
 
 #define kChannelMask          3
@@ -431,6 +441,35 @@ vec3 GammaCorrect(const vec3 scanline_colour)
 
 void main()
 {
+	// HSM Added
+	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+
+	vec2 cache_bounds_coord = SCREEN_COORD;
+
+// If it's the potato preset render the whole frame
+#ifndef IS_POTATO_PRESET
+#ifndef IS_NO_REFLECT_PRESET
+	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
+	HSM_GetBezelCoords(SCREEN_COORD, 
+                     SCREEN_SCALE, 
+                     TUBE_SCALE, 
+                     SCREEN_ASPECT, 
+                     false,
+                     BEZEL_OUTSIDE_SCALE,
+                     BEZEL_OUTSIDE_COORD, 
+                     BEZEL_OUTSIDE_CURVED_COORD, 
+                     FRAME_OUTSIDE_CURVED_COORD);
+	cache_bounds_coord = (FRAME_OUTSIDE_CURVED_COORD - 0.5) * 0.9 + 0.5;
+#endif
+#endif
+
+	if (cache_bounds_coord.x < -0.01 || cache_bounds_coord.x > 1.01 || cache_bounds_coord.y < -0.01 || cache_bounds_coord.y > 1.01)
+	{
+			FragColor = vec4(0);
+			return;
+	}
+
    const uint screen_type           = uint(HCRT_CRT_SCREEN_TYPE);
    const uint crt_resolution        = uint(HCRT_CRT_RESOLUTION);
    const uint lcd_resolution        = uint(HCRT_LCD_RESOLUTION);
@@ -485,7 +524,12 @@ void main()
       }
    }
 
+   /* HSM Removed
    const float scanline_size           = global.OutputSize.y / global.SourceSize.y;
+   */
+
+   // HSM Added
+   const float scanline_size           = global.OutputSize.y * SCREEN_SCALE.y / CROPPED_ROTATED_SIZE_WITH_RES_MULT.y;
 
    const vec3 horizontal_convergence   = vec3(HCRT_RED_HORIZONTAL_CONVERGENCE, HCRT_GREEN_HORIZONTAL_CONVERGENCE, HCRT_BLUE_HORIZONTAL_CONVERGENCE);
    const vec3 vertical_convergence     = vec3(HCRT_RED_VERTICAL_CONVERGENCE, HCRT_GREEN_VERTICAL_CONVERGENCE, HCRT_BLUE_VERTICAL_CONVERGENCE);
@@ -499,12 +543,18 @@ void main()
 
    vec3 scanline_colour = vec3(0.0f);
 
+	// HSM Added
+	vec2 screen_curved_coord = HSM_GetCurvedCoord(SCREEN_COORD, HSM_CRT_CURVATURE_SCALE, SCREEN_ASPECT);
+	screen_curved_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
+
+
    if(channel_count > 0)
    {
       const uint channel_0             = (colour_mask >> kFirstChannelShift) & 3;
 
       const float scanline_channel_0   = GenerateScanline(channel_0,
-                                                            global.SourceSize.xy, 
+                                                            screen_curved_coord,
+                                                            CROPPED_ROTATED_SIZE_WITH_RES_MULT, 
                                                             scanline_size, 
                                                             horizontal_convergence[channel_0], 
                                                             vertical_convergence[channel_0], 
@@ -522,7 +572,8 @@ void main()
       const uint channel_1             = (colour_mask >> kSecondChannelShift) & 3;
 
       const float scanline_channel_1   = GenerateScanline(channel_1,
-                                                          global.SourceSize.xy, 
+                                                         screen_curved_coord,
+                                                          CROPPED_ROTATED_SIZE_WITH_RES_MULT, 
                                                           scanline_size, 
                                                           horizontal_convergence[channel_1], 
                                                           vertical_convergence[channel_1], 
@@ -540,7 +591,8 @@ void main()
       const uint channel_2             = (colour_mask >> kThirdChannelShift) & 3;
 
       const float scanline_channel_2   = GenerateScanline(channel_2,
-                                                          global.SourceSize.xy, 
+                                                         screen_curved_coord,
+                                                          CROPPED_ROTATED_SIZE_WITH_RES_MULT, 
                                                           scanline_size, 
                                                           horizontal_convergence[channel_2], 
                                                           vertical_convergence[channel_2], 
