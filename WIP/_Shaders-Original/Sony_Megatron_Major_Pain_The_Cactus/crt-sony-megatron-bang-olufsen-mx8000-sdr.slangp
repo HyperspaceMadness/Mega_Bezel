@@ -1,0 +1,7 @@
+#reference "crt-sony-megatron-bang-olufsen-mx8000-hdr.slangp"
+
+hcrt_hdr = "0.000000"
+
+hcrt_brightness = "-0.200000"
+hcrt_contrast = "0.500000"
+hcrt_gamma = "-0.600000"
