@@ -316,7 +316,7 @@ void main()
 	
 	color*=brightboost;
 	color = min(color, 1.0);
-	color = color * Mask(vTexCoord * global.OutputSize.xy * 1.0001, color);
+	color = color * Mask(vTexCoord * global.OutputSize.xy, color);
 
     // TODO Add adjust to take into acount Gamma IN
     color = pow(color, vec3(1.0 / (DEFAULT_SRGB_GAMMA * HSM_GAMMA_IN_LINEARIZE / HSM_GAMMA_OUT_CRT)));

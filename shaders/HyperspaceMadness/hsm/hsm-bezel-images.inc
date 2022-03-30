@@ -758,7 +758,7 @@ void main()
 	vec4 decal_image = vec4(0);
 	if (HSM_DECAL_OPACITY > 0)
 	{
-		decal_image = HSM_GetMipmappedTexSample(DecalImage, DECAL_COORD, DECAL_SCALE, HSM_DECAL_MIPMAPPING_BLEND_BIAS);
+		decal_image = HSM_GetMipmappedTexSample(DecalImage, DECAL_CURVED_COORD, DECAL_SCALE, HSM_DECAL_MIPMAPPING_BLEND_BIAS);
 		
 		// Premultiply Alpha
 		decal_image = HSM_GetPreMultipliedColorLinear(decal_image, HSM_DECAL_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);

@@ -4,13 +4,13 @@ Mega Bezel is updated to V 0.9.106 2022-03-24 Rev 1
 
 Changes:
   * Added Sony Megatron from @MajorPainTheCactus
+  * Fixed Decal Image Split-Scale Mode
+  * Fixed GDV-MINI 4K mask bug which appeared 3/4 across the screen
 
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
-  * Fix GDV-MINI Mask issue at 4K (3/4 across the screen)
   * Megatron HDR Combination at end of chain
-  * Split not working on decal layer
   * Multi-Reference workflow for Retroarch
   * Create #include for outside screen caching for non-calculation
 
