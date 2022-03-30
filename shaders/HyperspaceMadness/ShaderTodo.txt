@@ -8,12 +8,17 @@ Changes:
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
+  * Fix GDV-MINI Mask issue at 4K (3/4 across the screen)
+  * Megatron HDR Combination at end of chain
+  * Split not working on decal layer
+  * Multi-Reference workflow for Retroarch
+  * Create #include for outside screen caching for non-calculation
+
   * Bezel shadow on Potato Tube / Game Image
   * Check out Colorize Behavior on DMG-01 (Colored Gameboy)
   * Different colored gel appearance on STD vs ADV
-  * Figure out POTATO crashing
   * Add vscode link in readme [![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/organization/repository)
-  * Investigate Higher Ambient Light Multiplier on BG
+
 ----------------------------------------------------
 --- Examples  --------------------------------------
 ----------------------------------------------------
@@ -27,6 +32,7 @@ Changes:
 --- Post V1  ---------------------------------------
 ----------------------------------------------------
   * Auto Rotate
+  * Investigate Higher Ambient Light Multiplier on BG
   * Original scaling mode to deal with black final viewport in Parallel RDP in both mupen and Parallel cores.
   * Compensate for Negative Crop, 
     * User crop values should be relative to original core image, not core image + negative crop area 

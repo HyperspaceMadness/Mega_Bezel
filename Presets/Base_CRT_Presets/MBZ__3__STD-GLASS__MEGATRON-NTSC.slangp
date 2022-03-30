@@ -1,6 +1,6 @@
-shaders = 30
+shaders = 27
 
-shader0 = ../../shaders/HyperspaceMadness/hsm/hsm-add-params-all.slang
+shader0 = ../../shaders/HyperspaceMadness/hsm/hsm-add-params-glass.slang
 alias0 = "CorePass"
 
 shader1 =  ../../../../stock.slang // ../../shaders/HyperspaceMadness/hsm-guest/g-sharp_resampler.slang
@@ -20,13 +20,13 @@ scale_x2 = 1
 scale_y2 = 1
 alias2 = "NegativeCropAddedPass"
 
-shader3 = ../../shaders/HyperspaceMadness/hsm/hsm-cache-info-all-params.slang
+shader3 = ../../shaders/HyperspaceMadness/hsm/hsm-cache-info-screen-scale-params.slang
 filter_linear3 = false
 scale_type3 = source
 scale3 = 1.0
 alias3 = "InfoCachePass"
 
-shader4 = ../../shaders/HyperspaceMadness/hsm/hsm-text-std.slang
+shader4 = ../../shaders/HyperspaceMadness/hsm/hsm-text-std-glass.slang
 filter_linear4 = false
 float_framebuffer4 = true
 scale_type4 = source
@@ -141,7 +141,7 @@ float_framebuffer19 = "false"
 srgb_framebuffer19 = "false"
 scale_type19 = "viewport"
 
-shader20 = ../../shaders/HyperspaceMadness/hsm/hsm-post-crt-prep-image-layers.slang
+shader20 = ../../shaders/HyperspaceMadness/hsm/hsm-post-crt-prep-glass.slang
 alias20 = "MBZ_PostCRTPass"
 
 // Reduce Resolution  ----------------------------------------------------------------
@@ -193,29 +193,9 @@ scale_y25 = 12
 alias25 = "BR_MirrorFullscreenGlowPass"
 
 // Bezel Reflection ----------------------------------------------------------------
-shader26 = ../../shaders/HyperspaceMadness/hsm/hsm-reflection.slang
+shader26 = ../../shaders/HyperspaceMadness/hsm/hsm-reflection-glass.slang
 scale_type26 = viewport
-float_framebuffer26 = true
 alias26 = "BR_CRTAndReflectionPass"
-
-// Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
-
-shader27 = ../../shaders/HyperspaceMadness/hsm/hsm-bezel-images-under-crt.slang
-filter_linear27 = true
-scale_type27 = viewport
-float_framebuffer27 = true
-alias27 = "BR_LayersUnderCRTPass"
-
-shader28 = ../../shaders/HyperspaceMadness/hsm/hsm-bezel-images-over-crt.slang
-filter_linear28 = true
-scale_type28 = viewport
-float_framebuffer28 = true
-alias28 = "BR_LayersOverCRTPass"
-
-// Combine Passes ----------------------------------------------------------------
-shader29 = ../../shaders/HyperspaceMadness/hsm/hsm-combine-passes.slang
-scale_type29 = viewport
-alias29 = "CombinePass"
 // Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;LEDImage;TopLayerImage;"
 
@@ -235,21 +215,21 @@ IntroImage_mipmap = 1
 ScreenPlacementImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 ScreenPlacementImage_linear = false
 
+TubeStaticReflectionImage = ../../shaders/HyperspaceMadness/textures/TubeGlassOverlayImage_3840x2160.png
+TubeStaticReflectionImage_linear = true
+TubeStaticReflectionImage_mipmap = 1
+
 TubeDiffuseImage = ../../shaders/HyperspaceMadness/textures/Tube_Diffuse_2390x1792.png
 TubeDiffuseImage_linear = true
 TubeDiffuseImage_mipmap = 1
-
-TubeColoredGelImage = ../../shaders/HyperspaceMadness/textures/Colored_Gel_Rainbow.png
-TubeColoredGelImage_linear = true
-TubeColoredGelImage_mipmap = 1
 
 TubeShadowImage = ../../shaders/HyperspaceMadness/textures/Tube_Shadow_1600x1200.png
 TubeShadowImage_linear = true
 TubeShadowImage_mipmap = 1
 
-TubeStaticReflectionImage = ../../shaders/HyperspaceMadness/textures/TubeGlassOverlayImage_3840x2160.png
-TubeStaticReflectionImage_linear = true
-TubeStaticReflectionImage_mipmap = 1
+TubeColoredGelImage = ../../shaders/HyperspaceMadness/textures/Colored_Gel_Rainbow.png
+TubeColoredGelImage_linear = true
+TubeColoredGelImage_mipmap = 1
 
 ReflectionMaskImage = ../../shaders/HyperspaceMadness/textures/Placeholder_White_16x16.png
 ReflectionMaskImage_linear = true
@@ -259,11 +239,11 @@ FrameTextureImage = ../../shaders/HyperspaceMadness/textures/FrameTexture_2800x2
 FrameTextureImage_linear = true
 FrameTextureImage_mipmap = 1
 
-BackgroundImage = ../../shaders/HyperspaceMadness/textures/BackgroundImage_Carbon_3840x2160.png
+BackgroundImage = ../../shaders/HyperspaceMadness/textures/TopLayerImageGradient_3840x2160.png
 BackgroundImage_linear = true
 BackgroundImage_mipmap = 1
 
-BackgroundVertImage = ../../shaders/HyperspaceMadness/textures/BackgroundImage_Carbon_3840x2160.png
+BackgroundVertImage = ../../shaders/HyperspaceMadness/textures/TopLayerImageGradient_3840x2160.png
 BackgroundVertImage_linear = true
 BackgroundVertImage_mipmap = 1
 
@@ -299,15 +279,52 @@ TopLayerImage_mipmap = 1
 // HSM_ASPECT_RATIO_MODE = 6
 // HSM_CURVATURE_MODE = 0
 
-// Sony Megatron Color Monitor
-hcrt_hdr = "0.000000"
+// Parameters
+HSM_TUBE_BLACK_EDGE_SHARPNESS = "90.0000"
+HSM_TUBE_BLACK_EDGE_THICKNESS = -7
+HSM_BG_OPACITY = "1.000000"
+HSM_GLASS_BORDER_ON = "1.000000"
+HSM_BZL_WIDTH = 3000
+HSM_BZL_HEIGHT = 3000
+HSM_BZL_INNER_EDGE_THICKNESS = 350
+HSM_BZL_INNER_EDGE_SHARPNESS = 30
+HSM_BZL_INNER_CORNER_RADIUS_SCALE = "100.000000"
+HSM_BZL_INNER_EDGE_SHADOW = "0.000000"
+HSM_FRM_OPACITY = "100.000000"
+HSM_REFLECT_GLOBAL_AMOUNT = "35.00000"
+HSM_REFLECT_GLOBAL_GAMMA_ADJUST = "0.900000"
+HSM_REFLECT_BEZEL_INNER_EDGE_AMOUNT = "60.0000"
+HSM_REFLECT_BEZEL_INNER_EDGE_FULLSCREEN_GLOW = "40.0000"
+HSM_REFLECT_FULLSCREEN_GLOW = "30.000000"
+HSM_REFLECT_FULLSCREEN_GLOW_GAMMA = "1.500000"
+HSM_REFLECT_FADE_AMOUNT = "20.0000"
+HSM_REFLECT_RADIAL_FADE_WIDTH = "500.000000"
+HSM_REFLECT_RADIAL_FADE_HEIGHT = "300.000000"
+HSM_REFLECT_LATERAL_OUTER_FADE_POSITION = "500.000000"
+HSM_REFLECT_CORNER_FADE = "0.000000"
+HSM_REFLECT_BLUR_MIN = "30.0000"
+HSM_REFLECT_BLUR_MAX = "60.0000"
+HSM_REFLECT_NOISE_AMOUNT = "100.000000"
+HSM_REFLECT_NOISE_SAMPLES = "4.000000"
+HSM_REFLECT_NOISE_SAMPLE_DISTANCE = "15.0000"
+HSM_REFLECT_NOISE_SAMPLE_DISTANCE = "15.0000"
+HSM_REFLECT_IS_LAST_PASS = "1.000000"
+HSM_BG_BRIGHTNESS = "0.000000"
+HSM_SCREEN_VIGNETTE_STRENGTH = "20.000000"
+HSM_SCREEN_VIGNETTE_POWER = "4.000000"
+HSM_SCREEN_VIGNETTE_IN_REFLECTION = "0.000000"
 
-hcrt_brightness = "-0.200000"
-hcrt_contrast = "0.500000"
-hcrt_gamma = "-0.600000"
+g_vignette = "0.0"
 
-HSM_INT_SCALE_MODE = "1.000000"
-HSM_CRT_CURVATURE_SCALE = "0.000000"
+// NTSC Parameters
+GAMMA_INPUT = 2.0
+gamma_out = 2.0
+
+brightboost = 1.25
+scans = 0.65
+spike = 0.7
+h_sharp = 3.7
+s_sharp = 0.2
 
 // Sony Megatron Color Monitor
 hcrt_hdr = "0.000000"
