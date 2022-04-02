@@ -1,4 +1,4 @@
-#reference "crt-sony-megatron.slangp"
+#reference "crt-sony-megatron-sdr.slangp"
 
 hcrt_hdr = "1.000000"
 hcrt_crt_resolution = "0.000000"

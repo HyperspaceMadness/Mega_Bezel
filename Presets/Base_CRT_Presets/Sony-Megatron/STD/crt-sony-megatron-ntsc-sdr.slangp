@@ -26,10 +26,10 @@ Works only with the D3D11/D3D12/Vulkan drivers currently
 DONT USE THIS PRESET DIRECTLY - Use any of the others in this directory
 */
 
-#reference "../../MBZ__3__STD__MEGATRON.slangp"
+#reference "../../MBZ__3__STD__MEGATRON-NTSC.slangp"
 
-hcrt_hdr = "1.000000"
+hcrt_hdr = "0.000000"
 
-hcrt_brightness = "0.000000"
-hcrt_contrast = "0.000000"
-hcrt_gamma = "0.000000"
+hcrt_brightness = "-0.200000"
+hcrt_contrast = "0.500000"
+hcrt_gamma = "-0.600000"
