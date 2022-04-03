@@ -22,8 +22,8 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "hsm-globals-and-reflection-params.inc"
-#include "hsm-common-functions-bezel.inc"
+#include "common/hsm-globals-and-reflection-params.inc"
+#include "common/hsm-common-functions-bezel.inc"
 
 #pragma stage vertex
 layout(location = 0) in vec4 Position;

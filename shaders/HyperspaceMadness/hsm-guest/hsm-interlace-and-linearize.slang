@@ -21,7 +21,7 @@
    
 */  
 
-#include "../hsm/hsm-globals-and-screen-scale-params.inc"
+#include "../hsm/common/hsm-globals-and-screen-scale-params.inc"
 
 layout(push_constant) uniform Push
 {

@@ -22,7 +22,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "../hsm/hsm-common-functions-bezel.inc"
+#include "../hsm/common/hsm-common-functions-bezel.inc"
 
 #pragma stage vertex
 

@@ -1,4 +1,4 @@
 #version 450
 
-#include "hsm-globals-and-glass-params.inc"
+#include "common/hsm-globals-and-glass-params.inc"
 #include "hsm-reflection.inc"

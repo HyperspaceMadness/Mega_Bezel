@@ -24,7 +24,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "hsm-globals-and-screen-scale-params.inc"
+#include "common/hsm-globals-and-screen-scale-params.inc"
 
 layout(push_constant) uniform Push
 {

@@ -23,7 +23,7 @@
 */
 
 /////////////// IMPORTS ///////////////
-#include "hsm-common-functions-bezel.inc"
+#include "common/hsm-common-functions-bezel.inc"
 
 // Removed because BackgroundImageSize returns vec4(0,0,0,0), this happens with all user defined textures
 // layout(push_constant) uniform Push

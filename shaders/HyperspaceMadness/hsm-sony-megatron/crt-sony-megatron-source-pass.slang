@@ -49,7 +49,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 } global;
 */
 
-#include "../hsm/hsm-globals-and-screen-scale-params.inc"
+#include "../hsm/common/hsm-globals-and-screen-scale-params.inc"
 
 #include "include/parameters.h"
 

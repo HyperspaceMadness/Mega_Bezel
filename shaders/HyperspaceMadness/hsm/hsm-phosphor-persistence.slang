@@ -24,9 +24,9 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "hsm-globals.inc"
+#include "common/hsm-globals.inc"
 #include "hsm-params-0-screen-scale.inc"
-#include "hsm-common-functions.inc"
+#include "common/hsm-common-functions.inc"
 
 //---------------------------------------------------------------------------------------------------
 //    PHOSPHOR PERSISTENCE

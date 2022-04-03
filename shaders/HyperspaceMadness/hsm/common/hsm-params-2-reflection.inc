@@ -30,7 +30,7 @@
 #pragma parameter HSM_REFLECT_MASK_MODE                         "  Mask - ALL | Screen | Tube | Bz- | Bz | Bz+ | Frm | Frm+ | BG"   4 0 8 1
 float HSM_REFLECT_MASK_MODE = global.HSM_REFLECT_MASK_MODE;
 
-#pragma parameter HSM_REFLECT_GLOBAL_AMOUNT 				    "          Global Amount" 40 0 300 1
+#pragma parameter HSM_REFLECT_GLOBAL_AMOUNT 				    "          Global Amount" 40 0 1000 1
 float HSM_REFLECT_GLOBAL_AMOUNT = global.HSM_REFLECT_GLOBAL_AMOUNT / 100;
 
 #pragma parameter HSM_REFLECT_GLOBAL_GAMMA_ADJUST 			    "          Global Gamma Adjust" 1.2 0.25 3 0.05

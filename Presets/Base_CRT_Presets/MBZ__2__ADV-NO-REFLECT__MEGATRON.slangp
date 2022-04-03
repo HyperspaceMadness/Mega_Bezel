@@ -1,4 +1,4 @@
-shaders = 30
+shaders = 29
 
 shader0 = ../../shaders/HyperspaceMadness/hsm/hsm-add-params-no-reflect.slang
 alias0 = "CorePass"
@@ -87,75 +87,71 @@ filter_linear19 = false
 scale_type19 = source
 mipmap_input19 = true
 scale19 = 1.0
+alias19 = "PrePass"
 
-// Color Correction with Dogway's awesome Grade shader
-// Grade is after Afterglow so that brightening the black level does not break the afterglow
-shader20 = ../../shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
-alias20 = "PrePass"
+shader20 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-avg-lum.slang
+filter_linear20 = true
+scale_type20 = source
+scale20 = 1.0
+mipmap_input20 = true
+alias20 = "AvgLumPass"
 
-shader21 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-avg-lum.slang
+// Pass referenced by subsequent blurring passes and crt pass
+shader21 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-interlace-and-linearize.slang
 filter_linear21 = true
 scale_type21 = source
 scale21 = 1.0
-mipmap_input21 = true
-alias21 = "AvgLumPass"
-
-// Pass referenced by subsequent blurring passes and crt pass
-shader22 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-interlace-and-linearize.slang
-filter_linear22 = true
-scale_type22 = source
-scale22 = 1.0
-float_framebuffer22 = true
-alias22 = "LinearizePass"
+float_framebuffer21 = true
+alias21 = "LinearizePass"
 feedback_pass = "0"
 
 // Sony Megatron Colour Video Monitor by Major Pain The Cactus
-shader23 = "../../shaders/HyperspaceMadness/hsm-sony-megatron/crt-sony-megatron-source-pass.slang"
+shader22 = "../../shaders/HyperspaceMadness/hsm-sony-megatron/crt-sony-megatron-source-pass.slang"
+filter_linear22 = "false"
+scale_type22 = "source"
+scale22 = "1.0"
+wrap_mode0 = "clamp_to_border"
+mipmap_input22 = "false"
+alias22 = "SourceSDR"
+
+shader23 = "../../shaders/HyperspaceMadness/hsm-sony-megatron/crt-sony-megatron-hdr-pass.slang"
 filter_linear23 = "false"
 scale_type23 = "source"
 scale23 = "1.0"
-wrap_mode0 = "clamp_to_border"
-mipmap_input23 = "false"
-alias23 = "SourceSDR"
-
-shader24 = "../../shaders/HyperspaceMadness/hsm-sony-megatron/crt-sony-megatron-hdr-pass.slang"
-filter_linear24 = "false"
-scale_type24 = "source"
-scale24 = "1.0"
 wrap_mode1 = "clamp_to_border"
-mipmap_input24 = "false"
-alias24 = "SourceHDR"
+mipmap_input23 = "false"
+alias23 = "SourceHDR"
 
-shader25 = "../../shaders/HyperspaceMadness/hsm-sony-megatron/crt-sony-megatron-no-reflect.slang"
-filter_linear25 = "false"
+shader24 = "../../shaders/HyperspaceMadness/hsm-sony-megatron/crt-sony-megatron-no-reflect.slang"
+filter_linear24 = "false"
 wrap_mode2 = "clamp_to_border"
-mipmap_input25 = "false"
-alias25 = ""
-float_framebuffer25 = "false"
-srgb_framebuffer25 = "false"
-scale_type25 = "viewport"
+mipmap_input24 = "false"
+alias24 = ""
+float_framebuffer24 = "false"
+srgb_framebuffer24 = "false"
+scale_type24 = "viewport"
 
-shader26 = ../../shaders/HyperspaceMadness/hsm/hsm-post-crt-prep-no-reflect.slang
-alias26 = "MBZ_PostCRTPass"
+shader25 = ../../shaders/HyperspaceMadness/hsm/hsm-post-crt-prep-no-reflect.slang
+alias25 = "MBZ_PostCRTPass"
 
 // Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 
-shader27 = ../../shaders/HyperspaceMadness/hsm/hsm-bezel-images-under-crt.slang
+shader26 = ../../shaders/HyperspaceMadness/hsm/hsm-bezel-images-under-crt.slang
+filter_linear26 = true
+scale_type26 = viewport
+float_framebuffer26 = true
+alias26 = "BR_LayersUnderCRTPass"
+
+shader27 = ../../shaders/HyperspaceMadness/hsm/hsm-bezel-images-over-crt.slang
 filter_linear27 = true
 scale_type27 = viewport
 float_framebuffer27 = true
-alias27 = "BR_LayersUnderCRTPass"
-
-shader28 = ../../shaders/HyperspaceMadness/hsm/hsm-bezel-images-over-crt.slang
-filter_linear28 = true
-scale_type28 = viewport
-float_framebuffer28 = true
-alias28 = "BR_LayersOverCRTPass"
+alias27 = "BR_LayersOverCRTPass"
 
 // Combine Passes ----------------------------------------------------------------
-shader29 = ../../shaders/HyperspaceMadness/hsm/hsm-combine-passes-no-reflect.slang
-scale_type29 = viewport
-alias29 = "CombinePass"
+shader28 = ../../shaders/HyperspaceMadness/hsm/hsm-combine-passes-no-reflect.slang
+scale_type28 = viewport
+alias28 = "CombinePass"
 // Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;LEDImage;TopLayerImage;"
 
@@ -249,3 +245,4 @@ hcrt_gamma = "-0.600000"
 HSM_INT_SCALE_MODE = "1.000000"
 HSM_CRT_CURVATURE_SCALE = "0.000000"
 HSM_GLOBAL_GRAPHICS_BRIGHTNESS = "40.000000"
+HSM_REFLECT_GLOBAL_AMOUNT = "300.000000"

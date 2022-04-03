@@ -23,8 +23,8 @@
 */
 
 /////////////// IMPORTS ///////////////
-#include "hsm-globals-and-image-layers-params.inc"
-#include "hsm-common-functions-bezel.inc"
+#include "common/hsm-globals-and-image-layers-params.inc"
+#include "common/hsm-common-functions-bezel.inc"
 
 
 vec2 UNFLIPPED_VIEWPORT_COORD = vec2(0.5);

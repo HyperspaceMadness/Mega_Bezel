@@ -24,7 +24,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "hsm-globals-and-potato-params.inc"
+#include "common/hsm-globals-and-potato-params.inc"
 
 #pragma stage vertex
 

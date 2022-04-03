@@ -23,7 +23,7 @@
 */
 
 /////////////// IMPORTS ///////////////
-#include "hsm-common-functions-bezel.inc"
+#include "common/hsm-common-functions-bezel.inc"
 
 vec2 VIEWPORT_COORD = vec2(0.5);
 
