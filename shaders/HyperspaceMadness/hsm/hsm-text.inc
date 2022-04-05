@@ -24,7 +24,7 @@
 
 // Import so all the mega bezel parameters are the first in the parameter list
 
-#include "hsm-text-lib.inc"
+#include "hsm-text-resolution.inc"
 
 #pragma alias TextPass
 
