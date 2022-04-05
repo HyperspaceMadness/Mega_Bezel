@@ -418,9 +418,6 @@ vec2 HSM_GetCurvatureValues(float screen_aspect)
 {
 	vec2 curvature_values = screen_aspect < 1 ? vec2(2 * HSM_CURVATURE_2D_SCALE_SHORT_AXIS * 2 / 100, HSM_CURVATURE_2D_SCALE_LONG_AXIS * 3 / 100)
 											  : vec2(HSM_CURVATURE_2D_SCALE_LONG_AXIS * 3 / 100, 2 * HSM_CURVATURE_2D_SCALE_SHORT_AXIS * 2 / 100);
-
-	curvature_values.x *= HSM_CURVATURE_MODE == CURVATURE_MODE_2D_CYLINDER ? 0 : 1;
-
 	return curvature_values;
 }
 
@@ -537,7 +534,7 @@ vec2 HSM_GetCrtPiCurvedCoord(vec2 in_coord, vec2 in_curvature)
 	in_curvature *= 5;
 	vec2 barrelScale = 1.0 - (0.23 * in_curvature);
     in_coord -= vec2(0.5);
-    float rsq = in_coord.x * in_coord.x + in_coord.y * in_coord.y;
+    float rsq = in_coord.x * in_coord.x + (HSM_CURVATURE_MODE == 2 ? 0 : in_coord.y * in_coord.y);
     in_coord += in_coord * (in_curvature * rsq);
     in_coord *= barrelScale;
 	in_coord += vec2(0.5);

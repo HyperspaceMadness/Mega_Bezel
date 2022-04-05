@@ -505,6 +505,9 @@ float HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING = global.HSM_TUBE_DIFFUSE_IMAGE_AM
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_SCALE  			        "          Scale" 100 0 1000 1
 float HSM_TUBE_DIFFUSE_IMAGE_SCALE = global.HSM_TUBE_DIFFUSE_IMAGE_SCALE / 100;
 
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_SCALE_X  			        "          Scale X" 100 0 1000 1
+float HSM_TUBE_DIFFUSE_IMAGE_SCALE_X = global.HSM_TUBE_DIFFUSE_IMAGE_SCALE_X / 100;
+
 #pragma parameter HSM_TUBE_EMPTY_THICKNESS 				"          Empty Tube Thickness" 0 0 6000 5
 #define HSM_TUBE_EMPTY_THICKNESS (0.7 * global.HSM_TUBE_EMPTY_THICKNESS / 100)
 

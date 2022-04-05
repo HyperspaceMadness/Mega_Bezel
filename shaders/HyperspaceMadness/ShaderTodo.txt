@@ -6,12 +6,15 @@ Changes:
   * Added Sony Megatron from @MajorPainTheCactus
   * Fixed Decal Image Split-Scale Mode
   * Fixed GDV-MINI 4K mask bug which appeared 3/4 across the screen
+  * Improved 2D Cylinder
+  * Added tube diffuse scale_x which should help with cylindrical tube
+
 
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
   * Megatron HDR Combination at end of chain
-  * Improve 2D Cylinder
+  * Fix Tube Diffuse Shadow in 3D Curvature
   * Multi-Reference workflow for Retroarch
   * Create #include for outside screen caching for non-calculation
 
