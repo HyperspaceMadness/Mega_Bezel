@@ -11,6 +11,7 @@ Changes:
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
   * Megatron HDR Combination at end of chain
+  * Improve 2D Cylinder
   * Multi-Reference workflow for Retroarch
   * Create #include for outside screen caching for non-calculation
 
