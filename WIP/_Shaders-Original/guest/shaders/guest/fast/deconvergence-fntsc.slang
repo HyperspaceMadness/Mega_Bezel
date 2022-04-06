@@ -118,22 +118,22 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter c_shape "          Curvature Shape" 0.25 0.05 0.60 0.05
 #define c_shape        global.c_shape     // curvature shape
 
-#pragma parameter overscanX "          Overscan X original pixels" 0.0 -100.0 100.0 1.0
+#pragma parameter overscanX "          Overscan X original pixels" 0.0 -200.0 200.0 1.0
 #define overscanX        global.overscanX     // OverscanX pixels
 
-#pragma parameter overscanY "          Overscan Y original pixels" 0.0 -100.0 100.0 1.0
+#pragma parameter overscanY "          Overscan Y original pixels" 0.0 -200.0 200.0 1.0
 #define overscanY        global.overscanY     // OverscanY pixels
 
 #pragma parameter bogus_masks "[ CRT MASK OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-#pragma parameter shadowMask "          CRT Mask: 0:CGWG, 1-4:Lottes, 5-10:'Trinitron'" 0.0 -1.0 12.0 1.0
+#pragma parameter shadowMask "          CRT Mask: 0:CGWG, 1-4:Lottes, 5-10:'Trinitron'" 0.0 -1.0 13.0 1.0
 #define shadowMask   params.shadowMask     // Mask Style
 
-#pragma parameter maskstr "          Mask Strength (0, 5-12)" 0.3 -0.5 1.0 0.05
-#define maskstr         params.maskstr      // CGWG Mask Strength
+#pragma parameter maskstr "          Mask Strength (0, 5-13)" 0.3 -0.5 1.0 0.025
+#define maskstr         params.maskstr      // Mask Strength
 
-#pragma parameter mcut "          Mask 5-9 Low Strength" 1.10 0.0 2.0 0.05
-#define mcut         params.mcut      // Mask 5-9 dark color strength
+#pragma parameter mcut "          Mask 5-10,13 Low Strength" 1.10 0.0 2.0 0.05
+#define mcut         params.mcut      // Mask 5-10,13 dark color strength
 
 #pragma parameter masksize "          CRT Mask Size (2.0 is nice in 4k)" 1.0 1.0 4.0 1.0
 #define masksize     params.masksize     // Mask Size
@@ -238,10 +238,10 @@ vec3 Mask(vec2 pos, float mx)
 	float next_line = float(fract(pos.y*0.5) > 0.25);
 	pos0.x = pos0.x + next_line * mshift;
 	pos = floor(pos0/masksize);
-	
+
 	vec3 mask = vec3(maskDark, maskDark, maskDark);
 	vec3 one = vec3(1.0);
-	float dark_compensate  = mix(max( clamp( mix (mcut, maskstr, mx),0.0, 1.0) - 0.3, 0.0) + 1.0, 1.0, mx);
+	float dark_compensate  = mix(max( clamp( mix (mcut, maskstr, mx),0.0, 1.0) - 0.4, 0.0) + 1.0, 1.0, mx);
 	float mc = 1.0 - max(maskstr, 0.0);	
 	
 	// No mask
@@ -369,7 +369,7 @@ vec3 Mask(vec2 pos, float mx)
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;	
 	}  
 	
-	// RGB - Black mask
+	// RGBX
 	else if (shadowMask == 10.0)
 	{
 		mask = vec3(0.0);
@@ -391,7 +391,7 @@ vec3 Mask(vec2 pos, float mx)
 		else if (pos.x < 0.7)  mask.gb = 1.0.xx;	
 		else                   mask.b  = 1.0;	
 	}     
-	else
+	else if (shadowMask == 12.0)
 	{
 		mask = vec3(mc);
 		pos.x = fract(pos.x * 0.25);
@@ -400,6 +400,18 @@ vec3 Mask(vec2 pos, float mx)
 		else if (pos.x < 0.7)  mask.gb = 1.0.xx;	
 		else                   mask.g  = 1.0;	
 	}     
+
+	// RRGGBBX mask
+	else
+	{
+		mask = vec3(0.0);
+		pos.x = floor(mod(pos.x,7.0));
+		if      (pos.x < 1.0)  mask   = 0.0.xxx;
+		else if (pos.x < 3.0)  mask.r = 1.0;
+		else if (pos.x < 5.0)  mask.g = 1.0;	
+		else                   mask.b = 1.0;
+		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;		
+	}  
  
 	return mask;
 }
@@ -552,7 +564,7 @@ void main()
    
 	vec2 texcoord = TEX0.xy;
 
-	if (IOS > 0.0){
+	if (IOS > 0.0 && !interb){
 		vec2 ofactor = OutputSize.xy/SourceSize.xy;
 		vec2 intfactor = (IOS < 2.5) ? floor(ofactor) : ceil(ofactor);
 		vec2 diff = ofactor/intfactor;

@@ -130,7 +130,10 @@
 // #pragma parameter c_shape "          Curvature Shape" 0.25 0.05 0.60 0.05
 // #define c_shape        global.c_shape     // curvature shape
 
-// #pragma parameter overscanY "          Overscan Y original pixels" 0.0 -50.0 50.0 1.0
+// #pragma parameter overscanX "          Overscan X original pixels" 0.0 -200.0 200.0 1.0
+// #define overscanX        global.overscanX     // OverscanX pixels
+
+// #pragma parameter overscanY "          Overscan Y original pixels" 0.0 -200.0 200.0 1.0
 // #define overscanY        global.overscanY     // OverscanY pixels
 
 // #pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader)" 1.0 1.0 4.0 1.0
@@ -313,7 +316,7 @@ void main()
 	// Calculating texel coordinates
    
 	vec2 texcoord = TEX0.xy;
-	if (IOS > 0.0){
+	if (IOS > 0.0 && !interb){
 		vec2 ofactor = OutputSize.xy/SourceSize.xy;
 		vec2 intfactor = (IOS < 2.5) ? floor(ofactor) : ceil(ofactor);
 		vec2 diff = ofactor/intfactor;
@@ -325,10 +328,10 @@ void main()
 	float factor  = 1.00 + (1.0-0.5*OS)*BLOOM/100.0 - lum*BLOOM/100.0;
 	texcoord  = Overscan(texcoord, factor, factor);
 
-	texcoord = Overscan(texcoord, 1.0, (SourceSize.y - overscanY)/SourceSize.y);
+	texcoord = Overscan(texcoord, (SourceSize.x - overscanX)/SourceSize.x, (SourceSize.y - overscanY)/SourceSize.y);
 
 	vec2 pos  = Warp(texcoord);
-	*/
+ 	*/
 
 	// HSM Added
 	vec2 screen_curved_coord = HSM_GetCurvedCoord(SCREEN_COORD, HSM_CRT_CURVATURE_SCALE, SCREEN_ASPECT);
