@@ -351,7 +351,7 @@ float HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = global.HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR
 
 // #pragma parameter HSM_USE_GEOM 									"          Use Geom Curvature" 0 -1 3 1
 // float HSM_USE_GEOM = global.HSM_USE_GEOM;
-// float HSM_USE_GEOM = 0;
+float HSM_USE_GEOM = 0;
 
 #pragma parameter HSM_CURVATURE_MODE 								"       Curvature Mode  OFF | 2D | 2D-CYL | 3D-1 | 3D-2 | 3D CYL" 1 0 5 1
 float HSM_CURVATURE_MODE = global.HSM_CURVATURE_MODE;
@@ -361,6 +361,9 @@ float HSM_CURVATURE_MODE = global.HSM_CURVATURE_MODE;
 
 #pragma parameter HSM_CURVATURE_2D_SCALE_SHORT_AXIS 				"          2D Curvature on Short Axis" 100 5 400 5
 #define HSM_CURVATURE_2D_SCALE_SHORT_AXIS global.HSM_CURVATURE_2D_SCALE_SHORT_AXIS / 100
+
+// #pragma parameter HSM_CURVATURE_2D_SHAPE "          2D Curvature Shape" 0.25 0.05 0.60 0.05
+// #define HSM_CURVATURE_2D_SHAPE        global.HSM_CURVATURE_2D_SHAPE
 
 #pragma parameter HSM_CURVATURE_3D_RADIUS 							"          3D Radius" 200 16 102400 1
 float HSM_CURVATURE_3D_RADIUS = global.HSM_CURVATURE_3D_RADIUS / 100;

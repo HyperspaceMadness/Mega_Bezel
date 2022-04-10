@@ -421,7 +421,7 @@ vec2 HSM_GetCurvatureValues(float screen_aspect)
 	return curvature_values;
 }
 
-/*
+
 // CRT Geom Curvature
 #define FIX(c) max(abs(c), 1e-5)
 
@@ -480,6 +480,7 @@ vec2 transform(vec2 coord, vec3 stretch, vec2 sinangle, vec2 cosangle, float in_
   return (bkwtrans(coord, sinangle, cosangle, in_radius, in_distance)/aspect.xy+vec2(0.5));
 }
 
+// TODO need to rescale so the screen does not shrink
 vec2 HSM_GetGeomCurvedCoord(vec2 in_coord, float tilt_x, float tilt_y, float in_radius, float in_distance, float in_aspect)
 {
 	//default radius = 3.5
@@ -494,18 +495,26 @@ vec2 HSM_GetGeomCurvedCoord(vec2 in_coord, float tilt_x, float tilt_y, float in_
 
 	return curved_coord;
 }
-*/
+
+vec2 HSM_GetGeomCurvedCoordRetainWidth(vec2 in_coord, float tilt_x, float tilt_y, float in_radius, float in_distance, float in_aspect)
+{
+	vec2 ctr_curved_coord =  HSM_GetGeomCurvedCoord(in_coord, tilt_x, tilt_y, in_radius, in_distance, in_aspect) - 0.5;
+	vec2 right_edge_curved_ctr_coord = HSM_GetGeomCurvedCoord(vec2(1, 0.5), tilt_x, tilt_y, in_radius, in_distance, in_aspect) - 0.5;
+	ctr_curved_coord.x = ctr_curved_coord.x * 0.5 / right_edge_curved_ctr_coord.x;
+	return ctr_curved_coord + 0.5;
+}
 
 /*
-vec2 HSM_GetGuestCurvedCoord(vec2 in_coord, vec2 in_curvature)
+vec2 HSM_GetGuestCurvedCoord(vec2 in_coord, vec2 in_curvature, float in_curvature_shape)
 {
-	//Curvature Shape" 0.25 0.05 0.60 0.05
-	float c_shape = 0.25;
-	in_coord  = in_coord*2.0-1.0;    
-	in_coord  = mix(in_coord, 
-					vec2(in_coord.x*inversesqrt(1.0-c_shape*in_coord.y*in_coord.y), in_coord.y*inversesqrt(1.0-c_shape*in_coord.x*in_coord.x)), 
-					vec2(in_curvature.x * 1.8, in_curvature.y * 1.8)/c_shape);
-	return in_coord*0.5 + 0.5;
+	vec2 pos = in_coord;
+	float warpX = in_curvature.x;
+	float warpY = in_curvature.y;
+	float c_shape = in_curvature_shape;
+
+	pos  = pos*2.0-1.0;    
+	pos  = mix(pos, vec2(pos.x*inversesqrt(1.0-c_shape*pos.y*pos.y), pos.y*inversesqrt(1.0-c_shape*pos.x*pos.x)), vec2(warpX, warpY)/c_shape);
+	return pos*0.5 + 0.5;
 }
 */
 
@@ -545,24 +554,13 @@ vec2 HSM_Get2DCurvedCoord(vec2 in_coord, vec2 curvature_values)
 {
 	vec2 ctr_curved_coord = vec2(0) ;
 
-	// ctr_curved_coord = HSM_GetTorridGristleCurvedCoord(in_coord, curvature_values) - 0.5;
+	ctr_curved_coord = HSM_GetCrtPiCurvedCoord(in_coord, curvature_values) - 0.5;
 
-	// vec2 right_edge_curved_ctr_coord = HSM_GetTorridGristleCurvedCoord(vec2(1, 0.5), curvature_values) - 0.5;
-	// ctr_curved_coord.x = ctr_curved_coord.x * 0.5 / right_edge_curved_ctr_coord.x;
+	vec2 right_edge_curved_ctr_coord = HSM_GetCrtPiCurvedCoord(vec2(1, 0.5), curvature_values) - 0.5;
+	ctr_curved_coord.x = ctr_curved_coord.x * 0.5 / right_edge_curved_ctr_coord.x;
 
-	// vec2 bottom_edge_curved_ctr_coord =  HSM_GetTorridGristleCurvedCoord(vec2(0.5, 1), curvature_values) - 0.5;
-	// ctr_curved_coord.y = ctr_curved_coord.y * 0.5 / bottom_edge_curved_ctr_coord.y;
-
-	// if (abs(ctr_curved_coord.x) > 0.5 || abs(ctr_curved_coord.y) > 0.5)
-	// {
-		ctr_curved_coord = HSM_GetCrtPiCurvedCoord(in_coord, curvature_values) - 0.5;
-
-		vec2 right_edge_curved_ctr_coord = HSM_GetCrtPiCurvedCoord(vec2(1, 0.5), curvature_values) - 0.5;
-		ctr_curved_coord.x = ctr_curved_coord.x * 0.5 / right_edge_curved_ctr_coord.x;
-
-		vec2 bottom_edge_curved_ctr_coord =  HSM_GetCrtPiCurvedCoord(vec2(0.5, 1), curvature_values) - 0.5;
-		ctr_curved_coord.y = ctr_curved_coord.y * 0.5 / bottom_edge_curved_ctr_coord.y;
-	// }
+	vec2 bottom_edge_curved_ctr_coord =  HSM_GetCrtPiCurvedCoord(vec2(0.5, 1), curvature_values) - 0.5;
+	ctr_curved_coord.y = ctr_curved_coord.y * 0.5 / bottom_edge_curved_ctr_coord.y;
 
 	return ctr_curved_coord + 0.5;
 }
@@ -585,10 +583,10 @@ vec2 HSM_GetCurvedCoord(vec2 in_coord, float curvature_multiplier, float screen_
 #ifndef IS_POTATO_PRESET
 	if (HSM_CURVATURE_MODE > CURVATURE_MODE_2D_CYLINDER)
 	{
-		// if (HSM_USE_GEOM > 0.5)
-		// 	curved_coord = HSM_GetGeomCurvedCoord(in_coord, HSM_CURVATURE_3D_TILT_ANGLE_X, HSM_CURVATURE_3D_TILT_ANGLE_Y, HSM_CURVATURE_3D_RADIUS, HSM_CURVATURE_3D_VIEW_DIST, screen_aspect);
-		// else
-		// {
+		if (HSM_USE_GEOM > 0.5)
+			curved_coord = HSM_GetGeomCurvedCoordRetainWidth(in_coord, HSM_CURVATURE_3D_TILT_ANGLE_X, HSM_CURVATURE_3D_TILT_ANGLE_Y, HSM_CURVATURE_3D_RADIUS, HSM_CURVATURE_3D_VIEW_DIST, screen_aspect);
+		else
+		{
 			float geom_radius_with_mult = HSM_CURVATURE_3D_RADIUS;
 			// Adjust curvature so 3D mode 1 looks similar to 3D mode 2
 			if (HSM_CURVATURE_MODE == CURVATURE_MODE_3D_1) geom_radius_with_mult -= 0.40;
@@ -610,7 +608,7 @@ vec2 HSM_GetCurvedCoord(vec2 in_coord, float curvature_multiplier, float screen_
 													global.SourceSize.xy,
 													global.OutputSize.xy,
 													pixel_to_video_uv);
-		// }
+		}
 	}
 	else
 	{
