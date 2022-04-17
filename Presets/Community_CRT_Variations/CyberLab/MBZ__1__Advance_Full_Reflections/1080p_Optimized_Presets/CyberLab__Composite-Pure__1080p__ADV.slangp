@@ -17,3 +17,5 @@ noiseresd = "1.000000"
 
 HSM_SCALEFX_ON = "0.000000"
 MDAPT_MODE = "0.000000"
+
+mask_layout = "1.000000"

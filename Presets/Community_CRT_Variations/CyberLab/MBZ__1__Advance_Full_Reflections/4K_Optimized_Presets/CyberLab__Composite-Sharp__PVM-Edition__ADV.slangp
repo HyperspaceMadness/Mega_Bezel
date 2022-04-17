@@ -1,17 +1,17 @@
 #reference "../../../../Base_CRT_Presets/MBZ__0__SMOOTH-ADV__GDV.slangp"
 
-wp_temperature = "6700.000000"
+wp_temperature = "6500.000000"
 bloom = "0.150000"
 halation = "0.000000"
 s_sharp = "1.000000"
 
-GAMMA_INPUT = "2.100000"
-gamma_out = "2.500000"
-post_br = "2.20000000"
+GAMMA_INPUT = "2.400000"
+gamma_out = "2.400000"
+post_br = "2.199999"
 
-g_sat = "0.150000"
+g_sat = "0.020000"
 
-gamma_c = "1.000000"
+gamma_c = "1.240000"
 scans = "1.000000"
 h_sharp = "6.999998"
 
@@ -26,10 +26,10 @@ scanline2 = "9.000000"
 
 HSM_SCALEFX_ON = "1.000000"
 MDAPT_MODE = "2.000000"
-g_hue_degrees = "-5.000000"
+g_hue_degrees = "0.000000"
 
 glow = "0.000000"
-
+HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = "100.000000"
 HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = "6.000000"
 
 signalResolution = "512.000000"
@@ -38,13 +38,12 @@ signalResolutionQ = "304.000000"
 
 GTU_ON = "1.000000"
 compositeConnection = "1.000000"
-g_crtgamut = "1.000000"
+g_crtgamut = "0.000000"
 
 HSM_INT_SCALE_MODE = "1.000000"
 
 // HSM_CURVATURE_MODE = "0.000000"
 HSM_CRT_CURVATURE_SCALE = "0.000000"
-
 shadowMask = "6.000000"
 maskstr = "1.000000"
 

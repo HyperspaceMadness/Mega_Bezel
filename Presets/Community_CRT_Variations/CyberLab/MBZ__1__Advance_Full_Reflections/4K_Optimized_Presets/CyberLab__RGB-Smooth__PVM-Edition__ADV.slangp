@@ -16,7 +16,7 @@ HSM_INT_SCALE_MODE = "1.000000"
 
 deconsmooth = "0.000000"
 
-g_crtgamut = "1.000000"
+g_crtgamut = "0.000000"
 halation = "0.150000"
 gamma_c = "1.640000"
 g_hue_degrees = "0.000000"
