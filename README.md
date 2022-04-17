@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------------------------------------
 HyperspaceMadness Mega Bezel Shader Readme
 ------------------------------------------------------------------------------------------------------------
-Version 0.9.106 2022-04-03 Rev 1
+Version 0.9.107 2022-04-17 Rev 1
 ----------------------------------------
 ----------------------------------------
 
@@ -20,8 +20,6 @@ What does it do?
   * Provide a consistent set of enhanced features wrapped around the core crt shaders
   * Layering images to add artwork and visual effects
 
-
-
 ----------------------------------------
 How does it work?
 ----------------------------------------
@@ -30,7 +28,6 @@ How does it work?
   * The bezel and frame you see around the screen is auto generated and not part of the background image
   * Additional Images can be layered on top to augment the look
   * Most things can be changed to your taste with adjustment of the parameters, so try them out!
-
 
 
 ----------------------------------------

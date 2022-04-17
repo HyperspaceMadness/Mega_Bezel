@@ -1,13 +1,22 @@
 ![Mega_Bezel_Logo|512x256, 75%](upload://6PNkvcMF9Go9Wnk6OJXfYR1opXI.png) 
 
-Mega Bezel is updated to V 0.9.107 2022-03-02 Rev 1
+Mega Bezel is updated to V 0.9.107 2022-04-17 Rev 1
 
 Changes:
   * Added Sony Megatron from @MajorPainTheCactus
+    * SDR Presets only for now
+    * Located `shaders_slang\bezel\Mega_Bezel\Presets\Base_CRT_Presets\Sony-Megatron\STD`
   * Fixed Decal Image Split-Scale Mode
   * Fixed GDV-MINI 4K mask bug which appeared 3/4 across the screen
   * Improved 2D Cylinder
   * Added tube diffuse scale_x which should help with cylindrical tube
+  * Updated Community Presets:
+    * Sonkun
+    * Nesguy
+    * Cyberlab
+    * BendBombBoom
+  * Sharp Pixels preset updated SharpPixels__STD.slangp
+    * Now using the AB Compare so it is really very sharp square Pixels
 
 
 ----------------------------------------------------

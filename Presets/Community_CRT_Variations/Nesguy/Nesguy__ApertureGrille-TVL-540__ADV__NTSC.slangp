@@ -1,4 +1,4 @@
-#reference ":/shaders/shaders_slang/bezel/Mega_Bezel/Presets/Base_CRT_Presets/MBZ__3__STD__GDV-NTSC.slangp"
+#reference "../../../Base_CRT_Presets/MBZ__1__ADV__GDV-NTSC.slangp"
 
 g_crtgamut = "0.000000"
 g_vignette = "0.000000"

@@ -1,0 +1,16 @@
+#reference "../Base_CRT_Presets/MBZ__1__ADV__GDV.slangp"
+
+BackgroundImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+BackgroundVertImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+NightLightingImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+FrameTextureImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+
+// Parameters
+HSM_BZL_OPACITY = "0.000000"
+HSM_BZL_WIDTH = "350.000000"
+HSM_BZL_HEIGHT = "200.000000"
+HSM_FRM_OPACITY = "0.000000"
+HSM_BG_OPACITY = "0.000000"
+HSM_REFLECT_LATERAL_OUTER_FADE_DISTANCE = "30.000000"
+HSM_REFLECT_BLUR_MAX = "40.000000"
+HSM_REFLECT_BLUR_FALLOFF_DISTANCE = "500.000000"

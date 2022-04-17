@@ -166,7 +166,10 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 
 	if (HSM_AB_COMPARE_SHOW_MODE == 1 && HSM_GetIsInABCompareArea(VIEWPORT_COORD))
 	{
-		vec4 source_color = HSM_GetCroppedTexSample(source_pass, mirrored_screen_coord);
+		vec2 ab_screen_coord = HSM_CRT_CURVATURE_SCALE * screen_curved_coord + (1 - HSM_CRT_CURVATURE_SCALE) * SCREEN_COORD;
+		ab_screen_coord = HSM_GetMirrorWrappedCoord(ab_screen_coord);
+
+		vec4 source_color = HSM_GetCroppedTexSample(source_pass, ab_screen_coord);
 		if (!source_is_linear)
 			source_color = HSM_Linearize(source_color, HSM_GAMMA_IN_LINEARIZE);
 		source_color = HSM_Delinearize(source_color, HSM_GAMMA_OUT_CRT);

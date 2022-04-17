@@ -1,4 +1,4 @@
-#reference ":/shaders/shaders_slang/bezel/Mega_Bezel/Presets/Base_CRT_Presets/MBZ__1__ADV__GDV.slangp"
+#reference "../../../Base_CRT_Presets/MBZ__1__ADV__GDV.slangp"
 
 // Thanks to BendBombBoom from the Libretro forum for the settings in this preset!
 HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR = "33"

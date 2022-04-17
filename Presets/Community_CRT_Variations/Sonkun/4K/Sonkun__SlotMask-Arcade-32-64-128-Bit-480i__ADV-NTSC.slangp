@@ -1,4 +1,4 @@
-#reference "../../../Base_CRT_Presets/MBZ__3__STD__GDV-NTSC.slangp"
+#reference "../../../Base_CRT_Presets/MBZ__1__ADV__GDV-NTSC.slangp"
 
 // Thanks to Sonkun from the Libretro forum for the settings in this preset!
 g_signal_type = "0.000000"
