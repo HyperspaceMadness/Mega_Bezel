@@ -654,6 +654,15 @@ float HSM_TUBE_DIFFUSE_IMAGE_SCALE_X;
 	// Grade Afterglow Params
     float AS;
     float asat;
+
+	// Megatron Parameters
+	float hcrt_h_size;
+	float hcrt_v_size;
+	float hcrt_h_cent;
+	float hcrt_v_cent;
+	float hcrt_pin_phase;
+	float hcrt_pin_amp;
+
 } global;
 
 /////////////// DEFINES ///////////////

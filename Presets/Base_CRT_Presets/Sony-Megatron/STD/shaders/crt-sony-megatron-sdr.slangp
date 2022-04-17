@@ -26,29 +26,8 @@ Works only with the D3D11/D3D12/Vulkan drivers currently
 DONT USE THIS PRESET DIRECTLY - Use any of the others in this directory
 */
 
-shaders = "3"
-feedback_pass = "0"
+#reference "../../../MBZ__3__STD__MEGATRON.slangp"
 
-shader0 = "shaders/crt-sony-megatron-source-pass.slang"
-filter_linear0 = "false"
-scale_type0 = "source"
-scale0 = "1.0"
-wrap_mode0 = "clamp_to_border"
-mipmap_input0 = "false"
-alias0 = "SourceSDR"
+hcrt_hdr = "0.000000"
 
-shader1 = "shaders/crt-sony-megatron-hdr-pass.slang"
-filter_linear1 = "false"
-scale_type1 = "source"
-scale1 = "1.0"
-wrap_mode1 = "clamp_to_border"
-mipmap_input1 = "false"
-alias1 = "SourceHDR"
-
-shader2 = "shaders/crt-sony-megatron.slang"
-filter_linear2 = "false"
-wrap_mode2 = "clamp_to_border"
-mipmap_input2 = "false"
-alias2 = ""
-float_framebuffer2 = "false"
-srgb_framebuffer2 = "false"
+hcrt_gamma_in = "-0.200000"

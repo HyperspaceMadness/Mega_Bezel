@@ -1,5 +1,5 @@
 
-#define kColourSystems  3
+#define kColourSystems  4
 
 #define kD50            5003.0f
 #define kD55            5503.0f
@@ -7,49 +7,29 @@
 #define kD75            7504.0f
 #define kD93            9305.0f
 
-const mat3 XYZ_to_sRGB = mat3(
-    3.24081254005432130, -0.969243049621582000,  0.055638398975133896,
-   -1.53730857372283940,  1.875966310501098600, -0.204007431864738460,
-   -0.49858659505844116,  0.041555050760507584,  1.057129383087158200);
+const mat3 k709_to_XYZ = mat3(
+   0.412391f, 0.357584f, 0.180481f,
+   0.212639f, 0.715169f, 0.072192f,
+   0.019331f, 0.119195f, 0.950532f);
 
-const mat3 sRGB_to_XYZ = mat3(
-    0.41241079568862915, 0.21264933049678802, 0.019331756979227066,
-    0.35758456587791443, 0.71516913175582890, 0.119194857776165010,
-    0.18045382201671600, 0.07218152284622192, 0.950390160083770800);
+const mat3 kPAL_to_XYZ = mat3(
+   0.430554f, 0.341550f, 0.178352f,
+   0.222004f, 0.706655f, 0.071341f,
+   0.020182f, 0.129553f, 0.939322f);
 
-// Phosphor transforms found in Dogway's Grade.slang shader
+const mat3 kNTSC_to_XYZ = mat3(
+   0.393521f, 0.365258f, 0.191677f,
+   0.212376f, 0.701060f, 0.086564f,
+   0.018739f, 0.111934f, 0.958385f);
 
-// SMPTE-C - Measured Average Phosphor (1979-1994)
-const mat3 P22_transform = mat3(
-   0.4665636420249939, 0.25661000609397890, 0.005832045804709196,
-   0.3039233088493347, 0.66820019483566280, 0.105618737637996670,
-   0.1799621731042862, 0.07518967241048813, 0.977465748786926300);
+const mat3 kXYZ_to_709 = mat3(
+    3.240970f, -1.537383f, -0.498611f,
+   -0.969244f,  1.875968f,  0.041555f,
+    0.055630f, -0.203977f,  1.056972f);
 
-// SMPTE RP 145-1994 (SMPTE-C), 170M-1999
-// SMPTE-C - Standard Phosphor (Rec.601 NTSC)
-const mat3 SMPTE_transform = mat3(
-   0.39354196190834045, 0.21238772571086884, 0.01874009333550930,
-   0.36525884270668030, 0.70106136798858640, 0.11193416267633438,
-   0.19164848327636720, 0.08655092865228653, 0.95824241638183590);
+const mat3 kColourGamut[kColourSystems] = { k709_to_XYZ, kPAL_to_XYZ, kNTSC_to_XYZ, kNTSC_to_XYZ };
 
-// SMPTE RP 145-1994 (SMPTE-C), 170M-1999
-// NTSC-J - Standard Phosphor (https://web.archive.org/web/20130413104152/http://arib.or.jp/english/html/overview/doc/4-TR-B09v1_0.pdf)
-const mat3 NTSC_J_transform = mat3(
-   0.39603787660598755, 0.22429330646991730, 0.02050681784749031,
-   0.31201449036598206, 0.67417418956756590, 0.12814880907535553,
-   0.24496731162071228, 0.10153251141309738, 1.26512730121612550);
-
-// ITU-R BT.470/601 (B/G)
-// EBU Tech.3213-E PAL - Standard Phosphor for Studio Monitors
-const mat3 EBU_transform = mat3(
-   0.43194326758384705, 0.22272075712680817, 0.020247340202331543,
-   0.34123489260673523, 0.70600330829620360, 0.129433929920196530,
-   0.17818950116634370, 0.07127580046653748, 0.938464701175689700);
-
-// CRT Phosphor Gamut
-const mat3 kPhosphorGamut[kColourSystems] = { EBU_transform , P22_transform, NTSC_J_transform };
-
-const float kTemperatures[kColourSystems] = { kD65, kD65, kD93 }; // 8942.0f 
+const float kTemperatures[kColourSystems] = { kD65, kD65, kD65, kD93 }; 
 
   // Values from: http://blenderartists.org/forum/showthread.php?270332-OSL-Goodness&p=2268693&viewfull=1#post2268693   
 const mat3 kWarmTemperature = mat3(
@@ -86,50 +66,25 @@ vec3 WhiteBalance(float temperature, vec3 colour)
    return result;
 }
 
-float r601r709ToLinear_1(const float channel)
+float r601ToLinear_1(const float channel)
 {
-	return (channel >= 0.081f) ? pow((channel + 0.099f) * (1.0f / 1.099f), (1.0f / 0.45f) + HCRT_GAMMA) : channel * (1.0f / 4.5f);
+	return (channel >= 0.081f) ? pow((channel + 0.099f) * (1.0f / 1.099f), (1.0f / 0.45f)) : channel * (1.0f / 4.5f);
 }
 
-vec3 r601r709ToLinear(const vec3 colour)
+vec3 r601ToLinear(const vec3 colour)
 {
-	return vec3(r601r709ToLinear_1(colour.r), r601r709ToLinear_1(colour.g), r601r709ToLinear_1(colour.b));
+	return vec3(r601ToLinear_1(colour.r), r601ToLinear_1(colour.g), r601ToLinear_1(colour.b));
 }
 
-float LinearTor601r709_1(const float channel)
+
+float r709ToLinear_1(const float channel)
 {
-	return (channel >= 0.018f) ? pow(channel * 1.099f, 0.45f) - 0.099f : channel * 4.5f;
+	return (channel >= 0.081f) ? pow((channel + 0.099f) * (1.0f / 1.099f), (1.0f / 0.45f)) : channel * (1.0f / 4.5f);
 }
 
-vec3 LinearTor601r709(const vec3 colour)
+vec3 r709ToLinear(const vec3 colour)
 {
-	return vec3(LinearTor601r709_1(colour.r), LinearTor601r709_1(colour.g), LinearTor601r709_1(colour.b));
-}
-
-// SDR Colour output spaces
-float sRGBToLinear_1(const float channel)
-{
-	return (channel > 0.04045f) ? pow((channel + 0.055f) * (1.0f / 1.055f), 2.4f + HCRT_GAMMA) : channel * (1.0f / 12.92f);
-}
-
-vec3 sRGBToLinear(const vec3 colour)
-{
-	return vec3(sRGBToLinear_1(colour.r), sRGBToLinear_1(colour.g), sRGBToLinear_1(colour.b));
-}
-
-float LinearTosRGB_1(const float channel)
-{
-	return (channel > 0.0031308f) ? (1.055f * pow(channel, 1.0f / 2.4f)) - 0.055f : channel * 12.92f;
-}
-
-vec3 LinearTosRGB(const vec3 colour)
-{
-	return vec3(LinearTosRGB_1(colour.r), LinearTosRGB_1(colour.g), LinearTosRGB_1(colour.b));
-}
-
-vec3 LinearToDCIP3(const vec3 colour)
-{
-	return pow(colour, vec3(1.0f / 2.6f));
+	return vec3(r709ToLinear_1(colour.r), r709ToLinear_1(colour.g), r709ToLinear_1(colour.b));
 }
 
 // XYZ Yxy transforms found in Dogway's Grade.slang shader
@@ -190,19 +145,17 @@ vec3 Saturation(const vec3 colour)
    return clamp(mix(vec3(luma), colour, vec3(saturation) * 2.0f), 0.0f, 1.0f);
 }
 
-vec3 BrightnessContrastSaturation(const vec3 linear)
+vec3 BrightnessContrastSaturation(const vec3 xyz)
 {
-   const vec3 xyz             = sRGB_to_XYZ * linear;
    const vec3 Yxy             = XYZtoYxy(xyz);
-   const float Y_gamma        = clamp(LinearTosRGB_1(Yxy.x), 0.0f, 1.0f);
+   const float Y_gamma        = clamp(pow(Yxy.x, 1.0f / 2.4f), 0.0f, 1.0f);
    
    const float Y_brightness   = Brightness(Y_gamma);
 
    const float Y_contrast     = Contrast(Y_brightness);
 
-   const vec3 contrast_linear = vec3(sRGBToLinear_1(Y_contrast), Yxy.y, Yxy.z);
-   const vec3 contrast_xyz    = YxytoXYZ(contrast_linear);
-   const vec3 contrast        = clamp(XYZ_to_sRGB * contrast_xyz, 0.0f, 1.0f);
+   const vec3 contrast_linear = vec3(pow(Y_contrast, 2.4f), Yxy.y, Yxy.z);
+   const vec3 contrast        = clamp(YxytoXYZ(contrast_linear) * kXYZ_to_709, 0.0f, 1.0f);
 
    const vec3 saturation      = Saturation(contrast);
 
@@ -213,13 +166,13 @@ vec3 ColourGrade(const vec3 colour)
 {
    const uint colour_system   = uint(HCRT_CRT_COLOUR_SYSTEM);
 
-   const vec3 linear          = r601r709ToLinear(colour);
+   const vec3 white_point     = WhiteBalance(kTemperatures[colour_system] + HCRT_WHITE_TEMPERATURE, colour);
 
-   const vec3 graded          = BrightnessContrastSaturation(linear); 
+   const vec3 linear          = pow(white_point, vec3((1.0f / 0.45f) + HCRT_GAMMA_IN));
 
-   const vec3 gamut           = kPhosphorGamut[colour_system] * graded;
+   const vec3 xyz             = linear * kColourGamut[colour_system];
 
-   const vec3 white_point     = WhiteBalance(kTemperatures[colour_system] + HCRT_WHITE_TEMPERATURE, gamut);
+   const vec3 graded          = BrightnessContrastSaturation(xyz); 
 
-   return clamp(XYZ_to_sRGB * white_point, 0.0f, 1.0f);
+   return graded;
 }

@@ -31,7 +31,7 @@ layout(push_constant) uniform Push
    float hcrt_max_nits;
    float hcrt_paper_white_nits;
    float hcrt_expand_gamut;
-   float hcrt_gamma;
+   float hcrt_gamma_out;
 
    float hcrt_lcd_resolution;
    float hcrt_lcd_subpixel;
@@ -76,49 +76,63 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	vec4 OriginalSize;
 	vec4 OutputSize;
 	uint FrameCount;
+   
+   float hcrt_h_size;
+   float hcrt_v_size;
+   float hcrt_h_cent;
+   float hcrt_v_cent;
+   float hcrt_pin_phase;
+   float hcrt_pin_amp;
 } global;
 */
 
 #include "include/parameters.h"
 
-#define HCRT_HDR                            params.hcrt_hdr
-#define HCRT_OUTPUT_COLOUR_SPACE            params.hcrt_colour_space
-#define HCRT_MAX_NITS                       params.hcrt_max_nits
-#define HCRT_PAPER_WHITE_NITS               params.hcrt_paper_white_nits
-#define HCRT_EXPAND_GAMUT                   params.hcrt_expand_gamut
-#define HCRT_GAMMA                          params.hcrt_gamma
+#define HCRT_HDR                             params.hcrt_hdr
+#define HCRT_OUTPUT_COLOUR_SPACE             params.hcrt_colour_space
+#define HCRT_MAX_NITS                        params.hcrt_max_nits
+#define HCRT_PAPER_WHITE_NITS                params.hcrt_paper_white_nits
+#define HCRT_EXPAND_GAMUT                    params.hcrt_expand_gamut
+#define HCRT_GAMMA_OUT                       params.hcrt_gamma_out
 
-#define HCRT_LCD_RESOLUTION                 params.hcrt_lcd_resolution 
-#define HCRT_LCD_SUBPIXEL                   params.hcrt_lcd_subpixel
-#define HCRT_RED_VERTICAL_CONVERGENCE       params.hcrt_red_vertical_convergence
-#define HCRT_GREEN_VERTICAL_CONVERGENCE     params.hcrt_green_vertical_convergence
-#define HCRT_BLUE_VERTICAL_CONVERGENCE      params.hcrt_blue_vertical_convergence
-#define HCRT_RED_HORIZONTAL_CONVERGENCE     params.hcrt_red_horizontal_convergence
-#define HCRT_GREEN_HORIZONTAL_CONVERGENCE   params.hcrt_green_horizontal_convergence
-#define HCRT_BLUE_HORIZONTAL_CONVERGENCE    params.hcrt_blue_horizontal_convergence
+#define HCRT_LCD_RESOLUTION                  params.hcrt_lcd_resolution 
+#define HCRT_LCD_SUBPIXEL                    params.hcrt_lcd_subpixel
+#define HCRT_RED_VERTICAL_CONVERGENCE        params.hcrt_red_vertical_convergence
+#define HCRT_GREEN_VERTICAL_CONVERGENCE      params.hcrt_green_vertical_convergence
+#define HCRT_BLUE_VERTICAL_CONVERGENCE       params.hcrt_blue_vertical_convergence
+#define HCRT_RED_HORIZONTAL_CONVERGENCE      params.hcrt_red_horizontal_convergence
+#define HCRT_GREEN_HORIZONTAL_CONVERGENCE    params.hcrt_green_horizontal_convergence
+#define HCRT_BLUE_HORIZONTAL_CONVERGENCE     params.hcrt_blue_horizontal_convergence
 
-#define HCRT_CRT_SCREEN_TYPE                params.hcrt_crt_screen_type
-#define HCRT_CRT_RESOLUTION                 params.hcrt_crt_resolution
+#define HCRT_CRT_SCREEN_TYPE                 params.hcrt_crt_screen_type
+#define HCRT_CRT_RESOLUTION                  params.hcrt_crt_resolution
 
-#define HCRT_RED_SCANLINE_MIN               params.hcrt_red_scanline_min
-#define HCRT_RED_SCANLINE_MAX               params.hcrt_red_scanline_max
-#define HCRT_RED_SCANLINE_ATTACK            params.hcrt_red_scanline_attack
-#define HCRT_GREEN_SCANLINE_MIN             params.hcrt_green_scanline_min
-#define HCRT_GREEN_SCANLINE_MAX             params.hcrt_green_scanline_max
-#define HCRT_GREEN_SCANLINE_ATTACK          params.hcrt_green_scanline_attack
-#define HCRT_BLUE_SCANLINE_MIN              params.hcrt_blue_scanline_min
-#define HCRT_BLUE_SCANLINE_MAX              params.hcrt_blue_scanline_max
-#define HCRT_BLUE_SCANLINE_ATTACK           params.hcrt_blue_scanline_attack
+#define HCRT_RED_SCANLINE_MIN                params.hcrt_red_scanline_min
+#define HCRT_RED_SCANLINE_MAX                params.hcrt_red_scanline_max
+#define HCRT_RED_SCANLINE_ATTACK             params.hcrt_red_scanline_attack
+#define HCRT_GREEN_SCANLINE_MIN              params.hcrt_green_scanline_min
+#define HCRT_GREEN_SCANLINE_MAX              params.hcrt_green_scanline_max
+#define HCRT_GREEN_SCANLINE_ATTACK           params.hcrt_green_scanline_attack
+#define HCRT_BLUE_SCANLINE_MIN               params.hcrt_blue_scanline_min
+#define HCRT_BLUE_SCANLINE_MAX               params.hcrt_blue_scanline_max
+#define HCRT_BLUE_SCANLINE_ATTACK            params.hcrt_blue_scanline_attack
 
-#define HCRT_RED_BEAM_SHARPNESS             params.hcrt_red_beam_sharpness
-#define HCRT_RED_BEAM_ATTACK                params.hcrt_red_beam_attack
-#define HCRT_GREEN_BEAM_SHARPNESS           params.hcrt_green_beam_sharpness
-#define HCRT_GREEN_BEAM_ATTACK              params.hcrt_green_beam_attack
-#define HCRT_BLUE_BEAM_SHARPNESS            params.hcrt_blue_beam_sharpness
-#define HCRT_BLUE_BEAM_ATTACK               params.hcrt_blue_beam_attack
+#define HCRT_RED_BEAM_SHARPNESS              params.hcrt_red_beam_sharpness
+#define HCRT_RED_BEAM_ATTACK                 params.hcrt_red_beam_attack
+#define HCRT_GREEN_BEAM_SHARPNESS            params.hcrt_green_beam_sharpness
+#define HCRT_GREEN_BEAM_ATTACK               params.hcrt_green_beam_attack
+#define HCRT_BLUE_BEAM_SHARPNESS             params.hcrt_blue_beam_sharpness
+#define HCRT_BLUE_BEAM_ATTACK                params.hcrt_blue_beam_attack
+
+#define HCRT_H_SIZE                          global.hcrt_h_size
+#define HCRT_V_SIZE                          global.hcrt_v_size
+#define HCRT_H_CENT                          global.hcrt_h_cent
+#define HCRT_V_CENT                          global.hcrt_v_cent
+#define HCRT_PIN_PHASE                       global.hcrt_pin_phase
+#define HCRT_PIN_AMP                         global.hcrt_pin_amp
 
 /* HSM Removed
- #define COMPAT_TEXTURE(c,d) texture(c,d)
+#define COMPAT_TEXTURE(c, d) texture(c, d)
 */
 
 // HSM Added
@@ -401,48 +415,11 @@ const uint kBlackWhiteMasks[kResolutionAxis][kTVLAxis][kBGRAxis][kMaxBlackWhiteS
 
 #include "include/scanline_generation.h"
 #include "include/hdr10.h"
-
-// SDR Colour output spaces
-float sRGBToLinear_1(const float channel)
-{
-	return (channel > 0.04045f) ? pow((channel + 0.055f) * (1.0f / 1.055f), 2.4f + HCRT_GAMMA) : channel * (1.0f / 12.92f);
-}
-
-vec3 sRGBToLinear(const vec3 colour)
-{
-	return vec3(sRGBToLinear_1(colour.r), sRGBToLinear_1(colour.g), sRGBToLinear_1(colour.b));
-}
-
-float LinearTosRGB_1(const float channel)
-{
-	return (channel > 0.0031308f) ? (1.055f * pow(channel, 1.0f / 2.4f)) - 0.055f : channel * 12.92f;
-}
-
-vec3 LinearTosRGB(const vec3 colour)
-{
-	return vec3(LinearTosRGB_1(colour.r), LinearTosRGB_1(colour.g), LinearTosRGB_1(colour.b));
-}
-
-vec3 LinearToDCIP3(const vec3 colour)
-{
-	return pow(colour, vec3(1.0f / 2.6f));
-}
-
-vec3 GammaCorrect(const vec3 scanline_colour)
-{
-   if(HCRT_HDR < 1.0f)
-   {
-      return HCRT_OUTPUT_COLOUR_SPACE == 0.0f ? LinearTosRGB(scanline_colour) : LinearToDCIP3(scanline_colour);
-   }
-   else
-   {
-      return Hdr10(scanline_colour, HCRT_PAPER_WHITE_NITS, HCRT_EXPAND_GAMUT);
-   }
-}
+#include "include/gamma_correct.h"
 
 void main()
 {
-	// HSM Added
+// HSM Added
 	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
@@ -471,10 +448,21 @@ void main()
 			return;
 	}
 
+	vec2 screen_curved_coord = HSM_GetCurvedCoord(SCREEN_COORD, HSM_CRT_CURVATURE_SCALE, SCREEN_ASPECT);
+	screen_curved_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
+
+// End HSM Added
+
    const uint screen_type           = uint(HCRT_CRT_SCREEN_TYPE);
    const uint crt_resolution        = uint(HCRT_CRT_RESOLUTION);
    const uint lcd_resolution        = uint(HCRT_LCD_RESOLUTION);
    const uint lcd_subpixel_layout   = uint(HCRT_LCD_SUBPIXEL);
+
+   vec2 tex_coord                   = screen_curved_coord - vec2(0.5f);
+   tex_coord                        = tex_coord * vec2(1.0f + (HCRT_PIN_PHASE * tex_coord.y), 1.0f);
+   tex_coord                        = tex_coord * vec2(HCRT_H_SIZE, HCRT_V_SIZE);
+   tex_coord                        = tex_coord + vec2(0.5f);
+   tex_coord                        = tex_coord + vec2(HCRT_H_CENT, HCRT_V_CENT) / global.OutputSize.xy; 
 
    const vec2 current_position      = vTexCoord * global.OutputSize.xy;
 
@@ -525,12 +513,7 @@ void main()
       }
    }
 
-   /* HSM Removed
    const float scanline_size           = global.OutputSize.y / global.SourceSize.y;
-   */
-
-   // HSM Added
-   const float scanline_size           = global.OutputSize.y * SCREEN_SCALE.y / CROPPED_ROTATED_SIZE_WITH_RES_MULT.y;
 
    const vec3 horizontal_convergence   = vec3(HCRT_RED_HORIZONTAL_CONVERGENCE, HCRT_GREEN_HORIZONTAL_CONVERGENCE, HCRT_BLUE_HORIZONTAL_CONVERGENCE);
    const vec3 vertical_convergence     = vec3(HCRT_RED_VERTICAL_CONVERGENCE, HCRT_GREEN_VERTICAL_CONVERGENCE, HCRT_BLUE_VERTICAL_CONVERGENCE);
@@ -544,18 +527,13 @@ void main()
 
    vec3 scanline_colour = vec3(0.0f);
 
-	// HSM Added
-	vec2 screen_curved_coord = HSM_GetCurvedCoord(SCREEN_COORD, HSM_CRT_CURVATURE_SCALE, SCREEN_ASPECT);
-	screen_curved_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
-
-
    if(channel_count > 0)
    {
       const uint channel_0             = (colour_mask >> kFirstChannelShift) & 3;
 
-      const float scanline_channel_0   = GenerateScanline(channel_0,
-                                                            screen_curved_coord,
-                                                            CROPPED_ROTATED_SIZE_WITH_RES_MULT, 
+      const float scanline_channel_0   = GenerateScanline(  channel_0,
+                                                            tex_coord,
+                                                            global.SourceSize.xy, 
                                                             scanline_size, 
                                                             horizontal_convergence[channel_0], 
                                                             vertical_convergence[channel_0], 
@@ -573,8 +551,8 @@ void main()
       const uint channel_1             = (colour_mask >> kSecondChannelShift) & 3;
 
       const float scanline_channel_1   = GenerateScanline(channel_1,
-                                                         screen_curved_coord,
-                                                          CROPPED_ROTATED_SIZE_WITH_RES_MULT, 
+                                                          tex_coord,
+                                                          global.SourceSize.xy, 
                                                           scanline_size, 
                                                           horizontal_convergence[channel_1], 
                                                           vertical_convergence[channel_1], 
@@ -592,8 +570,8 @@ void main()
       const uint channel_2             = (colour_mask >> kThirdChannelShift) & 3;
 
       const float scanline_channel_2   = GenerateScanline(channel_2,
-                                                         screen_curved_coord,
-                                                          CROPPED_ROTATED_SIZE_WITH_RES_MULT, 
+                                                          tex_coord,
+                                                          global.SourceSize.xy, 
                                                           scanline_size, 
                                                           horizontal_convergence[channel_2], 
                                                           vertical_convergence[channel_2], 

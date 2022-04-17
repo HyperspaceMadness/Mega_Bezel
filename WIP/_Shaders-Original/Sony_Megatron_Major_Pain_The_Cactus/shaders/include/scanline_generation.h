@@ -29,6 +29,7 @@ vec4 BeamControlPoints(const float beam_attack, const bool falloff)
 }
 
 float ScanlineColour(const uint channel, 
+                     const vec2 tex_coord,
                      const vec2 source_size, 
                      const float scanline_size, 
                      const float source_tex_coord_x, 
@@ -40,7 +41,7 @@ float ScanlineColour(const uint channel,
                      const float scanline_attack, 
                      inout float next_prev)
 {
-   const float current_source_position_y  = ((vTexCoord.y * source_size.y) - vertical_convergence) + next_prev;
+   const float current_source_position_y  = ((tex_coord.y * source_size.y) - vertical_convergence) + next_prev;
    const float current_source_center_y    = floor(current_source_position_y) + 0.5f; 
    
    const float source_tex_coord_y         = current_source_center_y / source_size.y; 
@@ -79,6 +80,7 @@ float ScanlineColour(const uint channel,
 }
 
 float GenerateScanline( const uint channel, 
+                        const vec2 tex_coord,
                         const vec2 source_size, 
                         const float scanline_size, 
                         const float horizontal_convergence, 
@@ -89,7 +91,7 @@ float GenerateScanline( const uint channel,
                         const float scanline_max, 
                         const float scanline_attack)
 {
-   const float current_source_position_x      = (vTexCoord.x * source_size.x) - horizontal_convergence;
+   const float current_source_position_x      = (tex_coord.x * source_size.x) - horizontal_convergence;
    const float current_source_center_x        = floor(current_source_position_x) + 0.5f; 
    
    const float source_tex_coord_x             = current_source_center_x / source_size.x; 
@@ -101,6 +103,7 @@ float GenerateScanline( const uint channel,
    float next_prev = 0.0f;
 
    const float scanline_colour0  = ScanlineColour( channel, 
+                                                   tex_coord,
                                                    source_size, 
                                                    scanline_size, 
                                                    source_tex_coord_x, 
@@ -117,6 +120,7 @@ float GenerateScanline( const uint channel,
    if(scanline_max > 1.0f)
    {
       scanline_colour1           = ScanlineColour( channel, 
+                                                   tex_coord,
                                                    source_size, 
                                                    scanline_size, 
                                                    source_tex_coord_x, 
