@@ -457,6 +457,7 @@ void main()
    const uint crt_resolution        = uint(HCRT_CRT_RESOLUTION);
    const uint lcd_resolution        = uint(HCRT_LCD_RESOLUTION);
    const uint lcd_subpixel_layout   = uint(HCRT_LCD_SUBPIXEL);
+   const vec2 source_resolution     = CROPPED_ROTATED_SIZE_WITH_RES_MULT;
 
    vec2 tex_coord                   = screen_curved_coord - vec2(0.5f);
    tex_coord                        = tex_coord * vec2(1.0f + (HCRT_PIN_PHASE * tex_coord.y), 1.0f);
@@ -533,7 +534,7 @@ void main()
 
       const float scanline_channel_0   = GenerateScanline(  channel_0,
                                                             tex_coord,
-                                                            global.SourceSize.xy, 
+                                                            source_resolution, 
                                                             scanline_size, 
                                                             horizontal_convergence[channel_0], 
                                                             vertical_convergence[channel_0], 
@@ -552,7 +553,7 @@ void main()
 
       const float scanline_channel_1   = GenerateScanline(channel_1,
                                                           tex_coord,
-                                                          global.SourceSize.xy, 
+                                                          source_resolution, 
                                                           scanline_size, 
                                                           horizontal_convergence[channel_1], 
                                                           vertical_convergence[channel_1], 
@@ -571,7 +572,7 @@ void main()
 
       const float scanline_channel_2   = GenerateScanline(channel_2,
                                                           tex_coord,
-                                                          global.SourceSize.xy, 
+                                                          source_resolution, 
                                                           scanline_size, 
                                                           horizontal_convergence[channel_2], 
                                                           vertical_convergence[channel_2], 
