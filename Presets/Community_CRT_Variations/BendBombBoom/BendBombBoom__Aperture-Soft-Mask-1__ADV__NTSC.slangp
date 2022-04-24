@@ -1,0 +1,60 @@
+#reference "../../Base_CRT_Presets/MBZ__1__ADV__GDV-NTSC.slangp"
+
+// Thanks to BendBombBoom from the Libretro forum for the settings in this preset!
+HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR = "33"
+HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = "33"
+
+MDAPT_MODE = 2
+
+// Parameters
+GTU_ON = "1.000000"
+compositeConnection = "1.000000"
+signalResolution = "336.000000"
+signalResolutionI = "111.000000"
+signalResolutionQ = "35.000000"
+
+g_crtgamut = "1.000000"
+g_mid = "0.250000"
+wp_temperature = "6900.000000"
+wlg = "0.900000"
+wlb = "1.100000"
+
+LUT_Size1 = "32.000000"
+LUT_Size2 = "32.000000"
+
+PR = "0.140000"
+PG = "0.140000"
+PB = "0.140000"
+
+vigdef = "3.600000"
+interm = "4.000000"
+SIZEHB = "1.000000"
+SIGMA_HB = "0.250000"
+SIZEVB = "1.000000"
+SIGMA_VB = "0.250000"
+glow = "0.040000"
+bloom = "0.200000"
+halation = "0.300001"
+brightboost = "2.000000"
+brightboost1 = "1.500000"
+gsl = "-1.000000"
+scanline1 = "5.000000"
+beam_min = "1.700000"
+beam_max = "1.100000"
+shadowMask = "1.000000"
+maskDark = "0.400000"
+mask_gamma = "3.000000"
+slotwidth = "3.000000"
+
+masksize = "1.000000"
+slotms = "1.000000"
+
+GDV_DECONVERGENCE_ON = "1.000000"
+dctypex = "0.450000"
+dctypey = "0.500000"
+deconrr = "-2.000000"
+deconrb = "2.000000"
+deconrry = "2.000000"
+deconrby = "-2.000000"
+decons = "0.400000"
+deconsmooth = "0.200000"
