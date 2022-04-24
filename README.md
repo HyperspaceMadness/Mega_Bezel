@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------------------------------------
 HyperspaceMadness Mega Bezel Shader Readme
 ------------------------------------------------------------------------------------------------------------
-Version 0.9.107 2022-04-17 Rev 1
+Version 0.9.108 2022-04-23 Rev 1
 ----------------------------------------
 ----------------------------------------
 
@@ -9,6 +9,12 @@ This file is best viewed in a markdown editor/viewer if possible.
 
 Find more conversation about the shader here:
 https://forums.libretro.com/t/hsm-mega-bezel-reflection-shader-feedback-and-updates
+
+----------------------------------------
+Licensing
+----------------------------------------
+
+Licensing of package components which incuded licensing are LGPL3
 
 ----------------------------------------
 What does it do?
