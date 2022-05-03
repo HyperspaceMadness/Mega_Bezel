@@ -1,0 +1,127 @@
+// Define textures to be used by the different passes
+textures = "Dirt;Sprite;SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;LEDImage;TopLayerImage;"
+
+Dirt = :/shaders/shaders_slang/reshade/shaders/bloom/LensDB.png
+Dirt_wrap_mode = "clamp_to_border"
+Dirt_mipmap = "false"
+
+Sprite = :/shaders/shaders_slang/reshade/shaders/bloom/LensSprite.png
+Sprite_wrap_mode = "clamp_to_border"
+Sprite_mipmap = "false"
+
+SamplerLUT1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/lut/trinitron-lut.png
+SamplerLUT1_linear = true 
+SamplerLUT2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/lut/inv-trinitron-lut.png
+SamplerLUT2_linear = true 
+SamplerLUT3 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/lut/nec-lut.png
+SamplerLUT3_linear = true
+SamplerLUT4 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/lut/ntsc-lut.png
+SamplerLUT4_linear = true
+
+IntroImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/IntroImage_MegaBezelLogo.png
+IntroImage_linear = true
+IntroImage_mipmap = 1
+
+ScreenPlacementImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+ScreenPlacementImage_linear = false
+
+TubeStaticReflectionImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/TubeGlassOverlayImage_3840x2160.png
+TubeStaticReflectionImage_linear = true
+TubeStaticReflectionImage_mipmap = 1
+
+TubeDiffuseImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Tube_Diffuse_2390x1792.png
+TubeDiffuseImage_linear = true
+TubeDiffuseImage_mipmap = 1
+
+TubeShadowImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Tube_Shadow_1600x1200.png
+TubeShadowImage_linear = true
+TubeShadowImage_mipmap = 1
+
+TubeColoredGelImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Colored_Gel_Rainbow.png
+TubeColoredGelImage_linear = true
+TubeColoredGelImage_mipmap = 1
+
+ReflectionMaskImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_White_16x16.png
+ReflectionMaskImage_linear = true
+ReflectionMaskImage_mipmap = 1
+
+FrameTextureImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/FrameTexture_2800x2120.png
+FrameTextureImage_linear = true
+FrameTextureImage_mipmap = 1
+
+BackgroundImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/TopLayerImageGradient_3840x2160.png
+BackgroundImage_linear = true
+BackgroundImage_mipmap = 1
+
+BackgroundVertImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/TopLayerImageGradient_3840x2160.png
+BackgroundVertImage_linear = true
+BackgroundVertImage_mipmap = 1
+
+CabinetGlassImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+CabinetGlassImage_linear = true
+CabinetGlassImage_mipmap = 1
+
+DeviceImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+DeviceImage_linear = true
+DeviceImage_mipmap = 1
+
+DeviceVertImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+DeviceVertImage_linear = true
+DeviceVertImage_mipmap = 1
+
+DecalImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+DecalImage_linear = true
+DecalImage_mipmap = 1
+
+NightLightingImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/NightLighting_1920x1080.png
+NightLightingImage_linear = true
+NightLightingImage_mipmap = 1
+
+LEDImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+LEDImage_linear = true
+LEDImage_mipmap = 1
+
+TopLayerImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+TopLayerImage_linear = true
+TopLayerImage_mipmap = 1
+
+// Use for matching vanilla GDV-Advanced
+// HSM_ASPECT_RATIO_MODE = 6
+// HSM_CURVATURE_MODE = 0
+
+// Parameters
+HSM_TUBE_BLACK_EDGE_SHARPNESS = "90.0000"
+HSM_TUBE_BLACK_EDGE_THICKNESS = -7
+HSM_BG_OPACITY = "1.000000"
+HSM_GLASS_BORDER_ON = "1.000000"
+HSM_BZL_WIDTH = 3000
+HSM_BZL_HEIGHT = 3000
+HSM_BZL_INNER_EDGE_THICKNESS = 350
+HSM_BZL_INNER_EDGE_SHARPNESS = 30
+HSM_BZL_INNER_CORNER_RADIUS_SCALE = "100.000000"
+HSM_BZL_INNER_EDGE_SHADOW = "0.000000"
+HSM_FRM_OPACITY = "100.000000"
+HSM_REFLECT_GLOBAL_AMOUNT = "35.00000"
+HSM_REFLECT_GLOBAL_GAMMA_ADJUST = "0.900000"
+HSM_REFLECT_BEZEL_INNER_EDGE_AMOUNT = "60.0000"
+HSM_REFLECT_BEZEL_INNER_EDGE_FULLSCREEN_GLOW = "40.0000"
+HSM_REFLECT_FULLSCREEN_GLOW = "30.000000"
+HSM_REFLECT_FULLSCREEN_GLOW_GAMMA = "1.500000"
+HSM_REFLECT_FADE_AMOUNT = "20.0000"
+HSM_REFLECT_RADIAL_FADE_WIDTH = "500.000000"
+HSM_REFLECT_RADIAL_FADE_HEIGHT = "300.000000"
+HSM_REFLECT_LATERAL_OUTER_FADE_POSITION = "500.000000"
+HSM_REFLECT_CORNER_FADE = "0.000000"
+HSM_REFLECT_BLUR_MIN = "30.0000"
+HSM_REFLECT_BLUR_MAX = "60.0000"
+HSM_REFLECT_NOISE_AMOUNT = "100.000000"
+HSM_REFLECT_NOISE_SAMPLES = "4.000000"
+HSM_REFLECT_NOISE_SAMPLE_DISTANCE = "15.0000"
+HSM_REFLECT_NOISE_SAMPLE_DISTANCE = "15.0000"
+HSM_REFLECT_IS_LAST_PASS = "1.000000"
+HSM_BG_BRIGHTNESS = "0.000000"
+HSM_SCREEN_VIGNETTE_STRENGTH = "20.000000"
+HSM_SCREEN_VIGNETTE_POWER = "4.000000"
+HSM_SCREEN_VIGNETTE_IN_REFLECTION = "0.000000"
+
+g_vignette = "0.0"
