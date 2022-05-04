@@ -45,9 +45,12 @@ Installation
   * Delete the old Mega Bezel stuff from shaders/shaders_slang/bezel
 * Inside the .zip is a bezel folder, copy the bezel folder into your Retroarch/shaders/shaders_slang folder
   * The final path to the Mega bezel should be `Retroarch/shaders/shaders_slang/bezel/Mega_Bezel`
+* If you are using any community packages (including the examples) place them in:
+  * `Retroarch/shaders/Mega_Bezel_Community_Collections`
+  * E.G. the examples go here `Retroarch/shaders/Mega_Bezel_Community_Collections/HSM-Mega-Bezel-Examples`
 * Set video driver to **Vulcan**
   * It will run in **GLCore** but seems faster in **Vulcan**
-  * Some users have run it successfully in **D3D11** but with a very slow load time
+  * Some users have run it with a very long load time in **D3D11** (Not Recommended)
   * Restart after changing the video driver
 * Open the **Settings** Menu and Set:
   * **Video / Scaling / Aspect Ratio** to **Full**
@@ -59,7 +62,7 @@ Installation
   * Do this Before loading content 
 * **Load a preset** in the shaders menu, Mega Bezel shader presets are found in:
   * shaders/shaders_slang/bezel/Mega_Bezel/Presets
-* When you save a preset make sure you have the **Simple Presets** feature set to **ON**
+* When you **save a preset** make sure you have the **Simple Presets** feature set to **ON**
   * This will save a preset with a reference to the preset you loaded plus whatever parameter changes you made
   * This will keep your presets loading properly when the shader updates in the future
 
