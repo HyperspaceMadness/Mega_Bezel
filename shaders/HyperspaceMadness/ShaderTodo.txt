@@ -3,15 +3,13 @@
 Mega Bezel is updated to V 0.9.108 2022-04-23 Rev 1
 
 Changes:
-  * Fixed cropping in Megatron Presets
-  * Fixed path problems in Community_CRT_Variations
+  * Update to crt-guest-advanced-2022-05-07-release1
 
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
   * Megatron HDR Combination at end of chain
   * Fix Tube Diffuse Shadow in 3D Curvature
-  * Multi-Reference workflow for Retroarch
   * Create #include for outside screen caching for non-calculation
 
   * Bezel shadow on Potato Tube / Game Image

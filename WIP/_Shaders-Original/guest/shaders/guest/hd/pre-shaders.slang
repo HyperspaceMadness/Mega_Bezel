@@ -39,6 +39,7 @@ layout(push_constant) uniform Push
    float sega_fix;
    float pre_bb;
    float internal_res;
+   float contr;
 } params;
 
 #pragma parameter bogus_resolution "[ INTERNAL RESOLUTION (Quick setup) ]:" 0.0 0.0 1.0 1.0
@@ -69,6 +70,8 @@ layout(push_constant) uniform Push
 #pragma parameter wp_saturation "          Saturation Adjustment" 1.0 0.0 2.0 0.05 
 
 #pragma parameter pre_bb "          Brightness Adjustment" 1.0 0.0 2.0 0.01
+
+#pragma parameter contr "          Contrast Adjustment" 0.0 -1.0 1.0 0.05
 
 #define WP params.WP
 #define wp_saturation params.wp_saturation
@@ -228,6 +231,13 @@ vec3 plant (vec3 tar, float r)
 	return tar * r / t;
 }
 
+float contrast(float x)
+{ 
+  float y = 2.0*x-1.0;
+  y = (sin(y*1.57079632679)+1.0)*0.5;
+  return mix(x, y, params.contr);
+}
+
 void main()
 {
    vec4 imgColor = COMPAT_TEXTURE(Source, vTexCoord.xy);
@@ -325,7 +335,9 @@ void main()
 	float luma = dot(color, vec3(0.299, 0.587, 0.114));
 	vec3 scolor2 = mix(vec3(luma), color, wp_saturation);
 	color = (wp_saturation > 1.0) ? scolor1 : scolor2;
-   
+
+	color = plant(color, contrast(max(max(color.r,color.g),color.b)));
+
 	p = 2.2;
 	
 	color = pow(color, vec3(p)); 

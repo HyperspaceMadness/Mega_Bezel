@@ -633,6 +633,7 @@ float HSM_TUBE_DIFFUSE_IMAGE_SCALE_X;
 	float decons;
 	float GDV_NOISE_ON;
 	float addnoised;
+	float noisetype;
 	float noiseresd;
 	float deconrr;
 	float deconrg;

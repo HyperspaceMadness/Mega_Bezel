@@ -56,6 +56,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float deconr;
 	float decons;
 	float addnoised;
+	float noisetype;
 	float noiseresd;
 	float deconrr;
 	float deconrg;
@@ -214,6 +215,8 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter noiseresd "          Noise Resolution" 2.0 1.0 10.0 1.0
 
+#pragma parameter noisetype "          Noise Type: Colored, Luma" 0.0 0.0 1.0 1.0
+
 #pragma parameter post_br "          Post Brightness" 1.0 0.25 5.0 0.05
 
 
@@ -265,7 +268,6 @@ vec3 Mask(vec2 pos, float mx)
 	if (shadowMask == -1.0)
 	{
 		mask = vec3(1.0);
-		
 	}       
 	
 	// Phosphor.
@@ -651,15 +653,12 @@ void main()
 	float maxb = COMPAT_TEXTURE(BloomPass, pos).a;
 	float vig  = COMPAT_TEXTURE(PrePass, clamp(pos, 0.0+0.5*global.OriginalSize.zw, 1.0-0.5*global.OriginalSize.zw)).a;
 
-	vec3 Bloom1 = min(Bloom*(orig1+color), max(0.5*(colmx + orig1 - color),0.001*Bloom));
+	vec3 Bloom1 = Bloom;
+
+	if (bloom < -0.01) Bloom1 = plant(Bloom, maxb);
+
+	Bloom1 = min(Bloom1*(orig1+color), max(0.5*(colmx + orig1 - color),0.001*Bloom1));
 	Bloom1 = 0.5*(Bloom1 + mix(Bloom1, mix(colmx*orig1, Bloom1, 0.5), 1.0-color));
-	
-	
-	if (bloom < 0.0) {
-		Ref = max(Bloom-Ref, 0.0);
-		Ref = plant(Bloom1, max(max(Ref.r,Ref.g),Ref.b));
-		Bloom1 = clamp(2.0*mix(Ref, mix(colmx*Ref, Bloom1, 0.5), 1.0-color), 0.05*Bloom*Bloom, Bloom);
-	}
 
 	Bloom1 = Bloom1 * mix(1.0, 2.0-colmx, bloom_dist);
 
@@ -677,13 +676,18 @@ void main()
 	Glow = mix(Glow, 0.25*color, 0.7*colmx);
 	if (glow >= 0.0) color = color + 0.5*Glow*glow; else { cmask*=cmask; cmask*=cmask; color = color + (-glow)*cmask*Glow; }
 
-	color = min(color, 1.0)*corner(pos0);
+	color = min(color, 1.0);
 	
 	color = pow(color, vec3(1.0/gamma_out));
 
 	float rc = 0.6*sqrt(max(max(color.r, color.g), color.b))+0.4;
 	
-	if (abs(global.addnoised) > 0.01) color = mix(color, noise(vec3(floor(OutputSize.xy * vTexCoord / global.noiseresd), float(global.FrameCount))), 0.25*abs(global.addnoised) * rc); 
+	if (abs(global.addnoised) > 0.01) 
+	{
+		vec3 noise0 = noise(vec3(floor(OutputSize.xy * vTexCoord / global.noiseresd), float(global.FrameCount)));
+		if (global.noisetype < 0.5) color = mix(color, noise0, 0.25*abs(global.addnoised) * rc); 
+		else color = min(color * mix(1.0, 1.5*noise0.x, 0.5*abs(global.addnoised)), 1.0);
+	}
 	
-	FragColor = vec4(color*vig*humbar(mix(pos.y, pos.x, global.bardir))*global.post_br, 1.0);
+	FragColor = vec4(color*vig*humbar(mix(pos.y, pos.x, global.bardir))*global.post_br*corner(pos0), 1.0);
 }
