@@ -1,0 +1,17 @@
+#reference "../CyberLab__Composite-Sharp__PVM-Edition__ADV.slangp"
+
+GAMMA_INPUT = "1.350001"
+gamma_out = "1.350001"
+post_br = "2.199999"
+g_crtgamut = "0.000000"
+
+g_sat = "0.040000"
+gamma_c = "1.000000"
+signalResolution = "352.000000"
+
+h_sharp = "5.200000"
+s_sharp = "0.500000"
+
+GDV_DECONVERGENCE_ON = "1.000000"
+
+SHARPEN = "0.400000"

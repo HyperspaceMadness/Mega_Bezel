@@ -18,4 +18,15 @@ noiseresd = "1.000000"
 HSM_SCALEFX_ON = "0.000000"
 MDAPT_MODE = "0.000000"
 
+GAMMA_INPUT = "2.100000"
+gamma_out = "2.500000"
+deconrr = "1.000000"
+deconrb = "-1.000000"
+deconrry = "1.000000"
+deconrgy = "0.000000"
+deconrby = "-1.000000"
+decons = "1.000000"
+
+
+
 mask_layout = "1.000000"

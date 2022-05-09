@@ -4,6 +4,9 @@ Mega Bezel is updated to V 0.9.108 2022-04-23 Rev 1
 
 Changes:
   * Update to crt-guest-advanced-2022-05-07-release1
+  * Updated Sonkun Presets
+  * Updated Cyberlab presets
+  * Updated Nesguy's Nesguy__ApertureGrille-TVL-540__ADV preset
 
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
