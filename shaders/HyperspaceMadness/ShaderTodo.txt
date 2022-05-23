@@ -12,13 +12,16 @@ Changes:
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
   * Megatron HDR Combination at end of chain
+  * Auto Positioning horizontal
+  * Add CRT Reflection Curvature Multiplier
+  * Add how to remove Moire Guide
   * Fix Tube Diffuse Shadow in 3D Curvature
   * Create #include for outside screen caching for non-calculation
+  * Add slangs #reference to with all parameters commented out
 
   * Bezel shadow on Potato Tube / Game Image
   * Check out Colorize Behavior on DMG-01 (Colored Gameboy)
   * Different colored gel appearance on STD vs ADV
-  * Add vscode link in readme [![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/organization/repository)
 
 ----------------------------------------------------
 --- Examples  --------------------------------------

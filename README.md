@@ -1,6 +1,8 @@
 ------------------------------------------------------------------------------------------------------------
 HyperspaceMadness Mega Bezel Shader Readme
 ------------------------------------------------------------------------------------------------------------
+![Mega Bezel Logo](MegaBezelLogo.png)
+
 Version 0.9.108 2022-04-23 Rev 1
 ----------------------------------------
 ----------------------------------------
@@ -9,6 +11,13 @@ This file is best viewed in a markdown editor/viewer if possible.
 
 Find more conversation about the shader here:
 https://forums.libretro.com/t/hsm-mega-bezel-reflection-shader-feedback-and-updates
+
+
+Github Repo
+----------------------------------------
+https://github.com/HyperspaceMadness/Mega_Bezel
+
+[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://github.com/HyperspaceMadness/Mega_Bezel)
 
 ----------------------------------------
 Licensing
