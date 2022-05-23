@@ -1,0 +1,6 @@
+#reference "../BendBombBoom__Snotty-RF__ADV__NTSC.slangp"
+
+masksize = "1.000000"
+slotwidth = "2.000000"
+double_slot = "1.000000"
+slotms = "2.000000"
