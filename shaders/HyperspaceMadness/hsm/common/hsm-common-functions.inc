@@ -367,7 +367,7 @@ float HSM_GetAverageLuma(sampler2D Source, vec2 SourceSize)
    return luma_total;
 }
 
-vec2 HSM_GetScreenPlacementYPosAndHeight(sampler2D in_sampler_2D, float num_samples)
+vec3 HSM_GetScreenPlacementAndHeight(sampler2D in_sampler_2D, float num_samples)
 {
 	float screen_top_y_pos = 1;
 	float screen_bottom_y_pos = 0;
@@ -388,7 +388,28 @@ vec2 HSM_GetScreenPlacementYPosAndHeight(sampler2D in_sampler_2D, float num_samp
 			screen_bottom_y_pos = max(screen_bottom_y_pos, y_pos);
 		}
 	}
-   return vec2((screen_top_y_pos + screen_bottom_y_pos) / 2, screen_bottom_y_pos - screen_top_y_pos);
+
+	float screen_left_x_pos = 1;
+	float screen_right_x_pos = 0;
+
+	for (int i=0; i < num_samples; i++)
+	{
+		float x_pos = i * 1 / num_samples;
+		vec4 sample_color = texture(in_sampler_2D, vec2(x_pos, 0.5));
+		float test_value = 0;
+		if (HSM_PLACEMENT_IMAGE_MODE == 1)
+			test_value = (sample_color.r + sample_color.b + sample_color.g) / 3;
+		else
+			test_value = 1 - sample_color.a;
+
+		if (test_value > 0.5)
+		{
+			screen_left_x_pos = min(screen_left_x_pos, x_pos);
+			screen_right_x_pos = max(screen_right_x_pos, x_pos);
+		}
+	}
+
+   return vec3((screen_left_x_pos + screen_right_x_pos) / 2, (screen_top_y_pos + screen_bottom_y_pos) / 2, screen_bottom_y_pos - screen_top_y_pos);
 }
 
 vec2 HSM_GetCoordWithPositionOffset(vec2 in_coord, vec2 position_offset)

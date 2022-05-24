@@ -868,13 +868,13 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	HSM_GetCroppedRotatedSizeAndPixelSampleAreaStart(1, original_pass, cropped_rotated_size, cropped_rotated_size_with_res_mult, cropped_sample_area_start_pixel_coord);
 
 	// First Screen
-	vec2 screen_pos_and_height = HSM_GetScreenPlacementYPosAndHeight(screen_placement_image, 60);
+	vec3 screen_pos_and_height = HSM_GetScreenPlacementAndHeight(screen_placement_image, 120);
 	float screen_aspect = HSM_GetScreenAspect(1, cropped_rotated_size);
-	vec2 screen_scale = HSM_GetScreenScale(screen_aspect, screen_pos_and_height.y, cropped_rotated_size);
-	vec2 tube_scale = HSM_GetTubeScale(screen_scale, screen_pos_and_height.y, vec2(HSM_TUBE_EMPTY_THICKNESS + HSM_TUBE_BLACK_EDGE_THICKNESS) * vec2(HSM_TUBE_EMPTY_THICKNESS_X_SCALE * HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE, 1));	
-	vec2 black_edge_scale = HSM_GetTubeScale(screen_scale, screen_pos_and_height.y, vec2(HSM_TUBE_EMPTY_THICKNESS) * vec2(HSM_TUBE_EMPTY_THICKNESS_X_SCALE, 1));
+	vec2 screen_scale = HSM_GetScreenScale(screen_aspect, screen_pos_and_height.z, cropped_rotated_size);
+	vec2 tube_scale = HSM_GetTubeScale(screen_scale, screen_pos_and_height.z, vec2(HSM_TUBE_EMPTY_THICKNESS + HSM_TUBE_BLACK_EDGE_THICKNESS) * vec2(HSM_TUBE_EMPTY_THICKNESS_X_SCALE * HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE, 1));	
+	vec2 black_edge_scale = HSM_GetTubeScale(screen_scale, screen_pos_and_height.z, vec2(HSM_TUBE_EMPTY_THICKNESS) * vec2(HSM_TUBE_EMPTY_THICKNESS_X_SCALE, 1));
 	
-	vec2 pos_offset = HSM_GetScreenPositionOffset(vec2(0.5, screen_pos_and_height.x), screen_scale, 1);
+	vec2 pos_offset = HSM_GetScreenPositionOffset(screen_pos_and_height.xy, screen_scale, 1);
 
 	vec2 rotated_core_preppezd_size = HSM_GetRotatedScreenCorePreppedSize(1);
 

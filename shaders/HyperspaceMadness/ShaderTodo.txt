@@ -11,9 +11,11 @@ Changes:
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
-  * Megatron HDR Combination at end of chain
-  * Auto Positioning horizontal
+  * Update to New Guest
+  * Update Sonkun
+  * Update Cyberlab
   * Add CRT Reflection Curvature Multiplier
+  * Megatron HDR Combination at end of chain
   * Add how to remove Moire Guide
   * Fix Tube Diffuse Shadow in 3D Curvature
   * Create #include for outside screen caching for non-calculation
