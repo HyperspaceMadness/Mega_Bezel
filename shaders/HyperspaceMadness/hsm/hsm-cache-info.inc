@@ -868,7 +868,7 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	HSM_GetCroppedRotatedSizeAndPixelSampleAreaStart(1, original_pass, cropped_rotated_size, cropped_rotated_size_with_res_mult, cropped_sample_area_start_pixel_coord);
 
 	// First Screen
-	vec3 screen_pos_and_height = HSM_GetScreenPlacementAndHeight(screen_placement_image, 120);
+	vec3 screen_pos_and_height = HSM_GetScreenPlacementAndHeight(screen_placement_image, 60);
 	float screen_aspect = HSM_GetScreenAspect(1, cropped_rotated_size);
 	vec2 screen_scale = HSM_GetScreenScale(screen_aspect, screen_pos_and_height.z, cropped_rotated_size);
 	vec2 tube_scale = HSM_GetTubeScale(screen_scale, screen_pos_and_height.z, vec2(HSM_TUBE_EMPTY_THICKNESS + HSM_TUBE_BLACK_EDGE_THICKNESS) * vec2(HSM_TUBE_EMPTY_THICKNESS_X_SCALE * HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE, 1));	
