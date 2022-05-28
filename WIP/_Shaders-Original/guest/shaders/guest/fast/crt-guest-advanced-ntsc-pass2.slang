@@ -252,7 +252,7 @@ void main()
 		if (IOS == 1.0 || IOS == 3.0) texcoord = vec2(TEX0.x, texcoord.y);
 	}
 
-	texcoord = Overscan(texcoord, (SourceSize.x - overscanX)/SourceSize.x, (SourceSize.y - overscanY)/SourceSize.y);
+	texcoord = Overscan(texcoord, (global.OriginalSize.x - overscanX)/global.OriginalSize.x, (global.OriginalSize.y - overscanY)/global.OriginalSize.y);
 
 	vec2 pos  = Warp(texcoord);
 
@@ -277,14 +277,14 @@ void main()
 	vec3 color1 = COMPAT_TEXTURE(Pass1, pC4      ).rgb;
 	vec3 scolor1 = 	COMPAT_TEXTURE(Pass1, pC4      ).aaa;
 
-	color1 = pow(color1, vec3(scangamma/gamma_in));
+	if(!interb) color1 = pow(color1, vec3(scangamma/gamma_in));
   
 	pC4+=dy;
 	
 	vec3 color2 = COMPAT_TEXTURE(Pass1, pC4      ).rgb;
 	vec3 scolor2 = 	COMPAT_TEXTURE(Pass1, pC4      ).aaa;
 
-	color2 = pow(color2, vec3(scangamma/gamma_in));
+	if(!interb) color2 = pow(color2, vec3(scangamma/gamma_in));
 	
 	// calculating scanlines
 
@@ -366,7 +366,7 @@ if (!interb)
 
 	float colmx = pow(max(max(ctmp.r,ctmp.g),ctmp.b), 1.40/gamma_in);
 
-	color = pow( color, vec3(gamma_in/scangamma) );
+	if(!interb) color = pow( color, vec3(gamma_in/scangamma) );
   
 	FragColor = vec4(color, colmx);
 }

@@ -13,10 +13,16 @@ layout(std140, set = 0, binding = 0) uniform UBO
    float ntsc_scale;
    float ntsc_phase;
    float auto_res;
+   float ntsc_sharp;
+   float ntsc_slimit;
+   float ntsc_details;
 } global;
 
 #pragma parameter ntsc_scale "NTSC Resolution Scaling" 1.0 0.20 2.25 0.01
 #pragma parameter ntsc_phase "NTSC Phase: Auto | 2 phase | 3 phase" 1.0 1.0 3.0 1.0
+#pragma parameter ntsc_sharp "NTSC Sharpness (negative: Adaptive)" 0.0 -12.0 12.0 0.20
+#pragma parameter ntsc_slimit "NTSC Adaptive Sharpness Limit" 0.5 0.0 1.0 0.05
+#pragma parameter ntsc_details "NTSC Adaptive Sharpness Details" 1.0 0.0 1.0 0.25
 
 #pragma stage vertex
 layout(location = 0) in vec4 Position;
@@ -26,17 +32,18 @@ layout(location = 0) out vec2 vTexCoord;
 void main()
 {
    gl_Position = global.MVP * Position;
-   vTexCoord = TexCoord - vec2(0.5 / global.SourceSize.x, 0.0); // Compensate for decimate-by-2.
+   vTexCoord = TexCoord;
 }
 
 #pragma stage fragment
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 2) uniform sampler2D Source;
+layout(set = 0, binding = 3) uniform sampler2D NPass1;
 
 vec3 fetch_offset(float offset, float one_x)
 {
-   return texture(Source, vTexCoord + vec2((offset) * (one_x), 0.0)).xyz;
+   return texture(NPass1, vTexCoord + vec2((offset) * (one_x), 0.0)).xyz;
 }
 
 const mat3 yiq2rgb_mat = mat3(
@@ -61,6 +68,7 @@ vec3 rgb2yiq(vec3 col)
 }
 
 const int TAPS_2_phase = 32;
+
 const float luma_filter_2_phase[33] = float[33](
    -0.000174844,
    -0.000205844,
@@ -95,6 +103,21 @@ const float luma_filter_2_phase[33] = float[33](
    0.139044281,
    0.168055832,
    0.178571429);
+
+
+const float luma_filter_2_phase1[12] = float[12](
+   -0.001102056,
+   -0.008373026,
+   -0.016897700,
+   -0.022914480,
+   -0.021642347,
+   -0.008863273,
+   0.012271957,
+   0.044921920,
+   0.078342579,
+   0.119044281,
+   0.188055832,
+   0.248571429);
 
 const float chroma_filter_2_phase[33] = float[33](
    0.001384762,
@@ -132,7 +155,8 @@ const float chroma_filter_2_phase[33] = float[33](
    0.031517031);
 
 const int TAPS_3_phase = 24;
-const float luma_filter_3_phase[25] = float[25](
+
+const float luma_filter_3_phase1[25] = float[25](
    -0.000012020,
    -0.000022146,
    -0.000013155,
@@ -158,6 +182,19 @@ const float luma_filter_3_phase[25] = float[25](
    0.135563500,
    0.175261268,
    0.190176552);
+
+
+const float luma_filter_3_phase2[10] = float[10](
+   -0.000909882,
+   -0.007049081,
+   -0.013222860,
+   -0.017606931,
+   0.002460860,
+   0.020868225,
+   0.064016453,
+   0.125563500,
+   0.1800261268,
+   0.280176552);
 
 const float chroma_filter_3_phase[25] = float[25](
    -0.000118847,
@@ -185,12 +222,40 @@ const float chroma_filter_3_phase[25] = float[25](
    0.074356193,
    0.077856564,
    0.079052396);
+   
 
 void main()
 {
+   vec3 l1 = texture(Source, vTexCoord + vec2(global.SourceSize.z, 0.0)).xyz;
+   vec3 l2 = texture(Source, vTexCoord - vec2(global.SourceSize.z, 0.0)).xyz;
+   vec3 l3 = texture(Source, vTexCoord + 0.5*vec2(global.SourceSize.z, 0.0)).xyz;
+   vec3 l4 = texture(Source, vTexCoord - 0.5*vec2(global.SourceSize.z, 0.0)).xyz;
+
+   float lf = texture(Source, vTexCoord).x;
+   float lu = texture(NPass1, vTexCoord).x;
+
+   float ml1 = texture(NPass1, vTexCoord + 0.5*vec2(global.SourceSize.z, 0.0)).a;
+   float ml2 = texture(NPass1, vTexCoord).a;
+   float ml3 = texture(NPass1, vTexCoord - 0.5*vec2(global.SourceSize.z, 0.0)).a;
+   
+   float dif = max(max(abs(l1.x-l2.x), abs(l1.y-l2.y)), max(abs(l1.z-l2.z), abs(l1.x*l1.x-l2.x*l2.x)));
+   float dff = max(max(abs(l3.x-l4.x), abs(l3.y-l4.y)), max(abs(l3.z-l4.z), abs(l3.x*l3.x-l4.x*l4.x)));   
+   
+   float lc = (1.0-smoothstep(0.175, 0.3, abs(lf-lu)))*pow(dff, 0.25)*global.ntsc_details;
+
+   vec3 ref = 	clamp(yiq2rgb(texture(Source, vTexCoord).xyz), 0.0, 1.0);
+   float sweight = min(smoothstep(0.05-0.03*lc, 0.275 - 0.25*lc, dif), global.ntsc_slimit);
+   float nsharp = abs(global.ntsc_sharp);
+   
+   float luma_filter_3_phase[25] = luma_filter_3_phase1;
+   if (abs(global.ntsc_sharp) > 0.05)
+   {
+      for (int i = 15; i <= TAPS_3_phase; i++)  { luma_filter_3_phase[i] = mix(luma_filter_3_phase1[i], luma_filter_3_phase2[i-15], nsharp); }
+   }
+   
    float res = global.ntsc_scale;
    float OriginalSize = global.OriginalSize.x; 
-   float one_x = global.SourceSize.z / res;
+   float one_x = 0.5 * global.SourceSize.z / res;
    vec3 signal = vec3(0.0);
    float phase = (global.ntsc_phase < 1.5) ? ((OriginalSize > 300.0) ? 2.0 : 3.0) : ((global.ntsc_phase > 2.5) ? 3.0 : 2.0);
 
@@ -239,30 +304,30 @@ void main()
       sums = fetch_offset(20.0 - 32.0, one_x) + fetch_offset(32.0 - 20.0, one_x);
       signal += sums * vec3(luma_filter_2_phase[20], chroma_filter_2_phase[20], chroma_filter_2_phase[20]);
       sums = fetch_offset(21.0 - 32.0, one_x) + fetch_offset(32.0 - 21.0, one_x);
-      signal += sums * vec3(luma_filter_2_phase[21], chroma_filter_2_phase[21], chroma_filter_2_phase[21]);
+      signal += sums * vec3(mix(luma_filter_2_phase[21], luma_filter_2_phase1[0], nsharp), chroma_filter_2_phase[21], chroma_filter_2_phase[21]);
       sums = fetch_offset(22.0 - 32.0, one_x) + fetch_offset(32.0 - 22.0, one_x);
-      signal += sums * vec3(luma_filter_2_phase[22], chroma_filter_2_phase[22], chroma_filter_2_phase[22]);
+      signal += sums * vec3(mix(luma_filter_2_phase[22], luma_filter_2_phase1[1], nsharp), chroma_filter_2_phase[22], chroma_filter_2_phase[22]);
       sums = fetch_offset(23.0 - 32.0, one_x) + fetch_offset(32.0 - 23.0, one_x);
-      signal += sums * vec3(luma_filter_2_phase[23], chroma_filter_2_phase[23], chroma_filter_2_phase[23]);
+      signal += sums * vec3(mix(luma_filter_2_phase[23], luma_filter_2_phase1[2], nsharp), chroma_filter_2_phase[23], chroma_filter_2_phase[23]);
       sums = fetch_offset(24.0 - 32.0, one_x) + fetch_offset(32.0 - 24.0, one_x);
-      signal += sums * vec3(luma_filter_2_phase[24], chroma_filter_2_phase[24], chroma_filter_2_phase[24]);
+      signal += sums * vec3(mix(luma_filter_2_phase[24], luma_filter_2_phase1[3], nsharp), chroma_filter_2_phase[24], chroma_filter_2_phase[24]);
       sums = fetch_offset(25.0 - 32.0, one_x) + fetch_offset(32.0 - 25.0, one_x);
-      signal += sums * vec3(luma_filter_2_phase[25], chroma_filter_2_phase[25], chroma_filter_2_phase[25]);
+      signal += sums * vec3(mix(luma_filter_2_phase[25], luma_filter_2_phase1[4], nsharp), chroma_filter_2_phase[25], chroma_filter_2_phase[25]);
       sums = fetch_offset(26.0 - 32.0, one_x) + fetch_offset(32.0 - 26.0, one_x);
-      signal += sums * vec3(luma_filter_2_phase[26], chroma_filter_2_phase[26], chroma_filter_2_phase[26]);
+      signal += sums * vec3(mix(luma_filter_2_phase[26], luma_filter_2_phase1[5], nsharp), chroma_filter_2_phase[26], chroma_filter_2_phase[26]);
       sums = fetch_offset(27.0 - 32.0, one_x) + fetch_offset(32.0 - 27.0, one_x);
-      signal += sums * vec3(luma_filter_2_phase[27], chroma_filter_2_phase[27], chroma_filter_2_phase[27]);
+      signal += sums * vec3(mix(luma_filter_2_phase[27], luma_filter_2_phase1[6], nsharp), chroma_filter_2_phase[27], chroma_filter_2_phase[27]);
       sums = fetch_offset(28.0 - 32.0, one_x) + fetch_offset(32.0 - 28.0, one_x);
-      signal += sums * vec3(luma_filter_2_phase[28], chroma_filter_2_phase[28], chroma_filter_2_phase[28]);
+      signal += sums * vec3(mix(luma_filter_2_phase[28], luma_filter_2_phase1[7], nsharp), chroma_filter_2_phase[28], chroma_filter_2_phase[28]);
       sums = fetch_offset(29.0 - 32.0, one_x) + fetch_offset(32.0 - 29.0, one_x);
-      signal += sums * vec3(luma_filter_2_phase[29], chroma_filter_2_phase[29], chroma_filter_2_phase[29]);
+      signal += sums * vec3(mix(luma_filter_2_phase[29], luma_filter_2_phase1[8], nsharp), chroma_filter_2_phase[29], chroma_filter_2_phase[29]);
       sums = fetch_offset(30.0 - 32.0, one_x) + fetch_offset(32.0 - 30.0, one_x);
-      signal += sums * vec3(luma_filter_2_phase[30], chroma_filter_2_phase[30], chroma_filter_2_phase[30]);
+      signal += sums * vec3(mix(luma_filter_2_phase[30], luma_filter_2_phase1[9], nsharp), chroma_filter_2_phase[30], chroma_filter_2_phase[30]);
       sums = fetch_offset(31.0 - 32.0, one_x) + fetch_offset(32.0 - 31.0, one_x);
-      signal += sums * vec3(luma_filter_2_phase[31], chroma_filter_2_phase[31], chroma_filter_2_phase[31]);
+      signal += sums * vec3(mix(luma_filter_2_phase[31], luma_filter_2_phase1[10], nsharp), chroma_filter_2_phase[31], chroma_filter_2_phase[31]);
       
-      signal += texture(Source, vTexCoord).xyz *
-         vec3(luma_filter_2_phase[TAPS_2_phase], chroma_filter_2_phase[TAPS_2_phase], chroma_filter_2_phase[TAPS_2_phase]);
+      signal += texture(NPass1, vTexCoord).xyz *
+         vec3(mix(luma_filter_2_phase[TAPS_2_phase], luma_filter_2_phase1[11], nsharp), chroma_filter_2_phase[TAPS_2_phase], chroma_filter_2_phase[TAPS_2_phase]);
    }
    else if(phase > 2.5)
    {
@@ -274,12 +339,27 @@ void main()
             fetch_offset(float(TAPS_3_phase) - offset, one_x);
          signal += sums * vec3(luma_filter_3_phase[i], chroma_filter_3_phase[i], chroma_filter_3_phase[i]);
       }
-      signal += texture(Source, vTexCoord).xyz *
+      signal += texture(NPass1, vTexCoord).xyz *
          vec3(luma_filter_3_phase[TAPS_3_phase], chroma_filter_3_phase[TAPS_3_phase], chroma_filter_3_phase[TAPS_3_phase]);
    }
 
-   signal.x = clamp(signal.x, -1.0, 1.0);   
-   vec3 rgb = signal;
-   
+   signal.x = clamp(signal.x, -1.0, 1.0);
+
+   if (global.ntsc_sharp < -0.1) signal.x = mix(clamp(signal.x, min(min(ml1,ml2),ml3), max(max(ml1,ml2),ml3)), min(ml2, mix(ml2, signal.x, lu)), abs(signal.x)); 
+  
+   signal = clamp(yiq2rgb(signal), 0.0, 1.0);
+
+
+
+   vec3 rgb = signal;	
+   if (global.ntsc_sharp < -0.1)
+   {
+      rgb = mix(ref, signal, sweight);
+      vec3 color1 = mix(ref*ref, signal*signal,  sweight); color1 = sqrt(color1);
+      vec3 color2 = mix(sqrt(ref), sqrt(signal), sweight); color2 = color2*color2; 
+      float k1 = dot(signal-color1,signal-color1) + 0.000001;
+      float k2 = dot(signal-color2,signal-color2) + 0.000001;
+      rgb = (color1*k2 + color2*k1)/(k1+k2);
+   }
    FragColor = vec4(rgb, 1.0);
 }  

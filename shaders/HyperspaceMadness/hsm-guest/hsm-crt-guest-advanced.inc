@@ -93,8 +93,11 @@
 #pragma parameter h_sharp "          Horizontal sharpness -- h_sharp" 5.20 0.20 15.0 0.10
 #define h_sharp      global.h_sharp     // pixel sharpness
 
-#pragma parameter s_sharp "          Substractive sharpness (1.0 recommended) -- s_sharp" 0.50 0.0 1.5 0.10
+#pragma parameter s_sharp "          Substractive sharpness (1.0 recommended) -- s_sharp" 0.80 0.0 1.5 0.10
 #define s_sharp      global.s_sharp     // substractive sharpness
+
+#pragma parameter ring "          Substractive sharpness Ringing -- ring" 0.8 0.0 4.0 0.1
+#define ring      global.ring     // substractive sharpness ringing
 
 #pragma parameter smart_ei "          Smart Edges Effect Strength -- smart_ei" 0.0 0.0 0.75 0.01
 #define smart_ei      global.smart_ei     // smart edge handling
@@ -422,10 +425,10 @@ void main()
 	float fp1 = 1.-fpx;
 
 	float twl3 = max(wl3 - sharp1, 0.0);
-	float twl2 = max(wl2 - sharp1, mix(-0.12, 0.0, 1.0-fp1*fp1));
+	float twl2 = max(wl2 - sharp1, mix(-0.15, 0.0, fpx));
 	float twl1 = max(wl1 - sharp1, 0.0);
 	float twr1 = max(wr1 - sharp1, 0.0);
-	float twr2 = max(wr2 - sharp1, mix(-0.12, 0.0, 1.0-fpx*fpx));
+	float twr2 = max(wr2 - sharp1, mix(-0.15, 0.0, fp1));
 	float twr3 = max(wr3 - sharp1, 0.0);
 	
 	bool sharp = (sharp1 > 0.0);
@@ -516,11 +519,12 @@ else
 	}
 
 	color1 = (l3*twl3 + l2*twl2 + l1*twl1 + r1*twr1 + r2*twr2 + r3*twr3)/(twl3+twl2+twl1+twr1+twr2+twr3);
-
-	if (sharp) color1 = clamp(color1, colmin, colmax);
+	if (sharp) color1 = clamp(mix(clamp(color1, colmin, colmax), color1, ring), 0.0, 1.0);
+	if (nmode1 && !interb) color1 = min(normalize (color1+eps) * length(sqrt(color1 * cc)) ,1.0);
 	
-	if (nmode1 && !interb) 
-		color1 = min(normalize (color1+eps) * length(sqrt(color1 * cc)) ,1.0);
+	/* HSM Removed
+	if (!interb) color1 = pow(color1, vec3(scangamma/gamma_in));
+`	*/
 
 	// HSM Added From NTSC
 	color1 = pow(color1, vec3(scangammaoffset));
@@ -561,7 +565,7 @@ if (ntscbm)
 	float fscolor1 = (lm2*swl2 + lm1*swl1 + rm1*swr1 + rm2*swr2)/(swl2+swl1+swr1+swr2);
 	vec3 scolor1 = vec3(clamp(mix(max(max(color1.r,color1.g),color1.b), fscolor1, spike), 0.0, 1.0));
 	
-	vec3 scolor2, mcolor2;
+	vec3 scolor2;
 	
 	if (!interb)
 {	
@@ -604,11 +608,10 @@ else
 		twl1 = max(wl1-pc, 0.01*wl1); twr1 = max(wr1-pc, 0.01*wr1);
 		twl2 = max(wl2-pl, 0.01*wl2); twr2 = max(wr2-pr, 0.01*wr2);
 	}
-
-	color2 = (l3*twl3 + l2*twl2 + l1*twl1 + r1*twr1 + r2*twr2 + r3*twr3)/(twl3+twl2+twl1+twr1+twr2+twr3);
 	
-	if (sharp) color2 = clamp(color2, colmin, colmax);
-
+	color2 = (l3*twl3 + l2*twl2 + l1*twl1 + r1*twr1 + r2*twr2 + r3*twr3)/(twl3+twl2+twl1+twr1+twr2+twr3);
+	if (sharp) color2 = clamp(mix(clamp(color2, colmin, colmax), color2, ring), 0.0, 1.0);
+	if (nmode1 && !interb) color2 = min(normalize (color2+eps) * length(sqrt(color2 * cc)) ,1.0);	
 	
 	if (nmode1 && !interb) 
 		color2 = min(normalize (color2+eps) * length(sqrt(color2 * cc)) ,1.0);	

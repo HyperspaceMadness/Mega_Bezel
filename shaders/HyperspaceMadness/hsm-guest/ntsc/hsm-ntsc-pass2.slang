@@ -2,7 +2,7 @@
 
 // NTSC-Adaptive
 // based on Themaister's NTSC shader
-// Sone Adjustments for better sharpness by guest.r
+
 
 layout(std140, set = 0, binding = 0) uniform UBO
 {
@@ -279,6 +279,8 @@ void main()
          vec3(luma_filter_3_phase[TAPS_3_phase], chroma_filter_3_phase[TAPS_3_phase], chroma_filter_3_phase[TAPS_3_phase]);
    }
 
-   vec3 rgb = yiq2rgb(signal);
+   signal.x = clamp(signal.x, -1.0, 1.0);   
+   vec3 rgb = signal;
+   
    FragColor = vec4(rgb, 1.0);
 }  

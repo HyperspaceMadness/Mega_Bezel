@@ -202,7 +202,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter noisetype "          Noise Type: Colored, Luma" 0.0 0.0 1.0 1.0
 
-#pragma parameter post_br "          Post Brightness" 1.0 0.25 5.0 0.05
+#pragma parameter post_br "          Post Brightness" 1.0 0.25 5.0 0.01
 
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
@@ -495,7 +495,7 @@ vec3 declip(vec3 c, float b)
 // Adapted from ChuckNorris - shadertoy: https://www.shadertoy.com/view/XtK3Dz
 
 vec3 noise(vec3 v){
-    if (params.addnoised < 0.0) v.z = -params.addnoised; else v.z = v.z/6000.0;
+    if (params.addnoised < 0.0) v.z = -params.addnoised; else v.z = mod(v.z,6001.0)/1753.0;
 	// ensure reasonable range
     v = fract(v) + fract(v*1e4) + fract(v*1e-4);
     // seed
@@ -503,6 +503,7 @@ vec3 noise(vec3 v){
     // more iterations => more random
     v = fract(v*dot(v, v)*123.456);
     v = fract(v*dot(v, v)*123.456);
+	v = fract(v*dot(v, v)*123.456);
 	v = fract(v*dot(v, v)*123.456);	
     return v;
 } 
@@ -575,7 +576,7 @@ void main()
 		if (IOS == 1.0 || IOS == 3.0) texcoord = vec2(TEX0.x, texcoord.y);
 	} 
 
-	texcoord = Overscan(texcoord, (SourceSize.x - overscanX)/SourceSize.x, (SourceSize.y - overscanY)/SourceSize.y);
+	texcoord = Overscan(texcoord, (global.OriginalSize.x - overscanX)/global.OriginalSize.x, (global.OriginalSize.y - overscanY)/global.OriginalSize.y);
 
 	vec2 pos1 = TEX0.xy;
 	vec2 pos  = Warp(texcoord);

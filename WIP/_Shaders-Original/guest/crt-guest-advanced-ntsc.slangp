@@ -1,4 +1,5 @@
-shaders = 17
+shaders = 8
+
 
 shader0 = shaders/guest/advanced/stock.slang
 filter_linear0 = false
@@ -38,6 +39,8 @@ SamplerLUT4_linear = true
 shader4 = shaders/guest/advanced/ntsc/ntsc-pass1.slang
 shader5 = shaders/guest/advanced/ntsc/ntsc-pass2.slang
 
+alias4 = NPass1
+
 filter_linear4 = false
 filter_linear5 = true
 
@@ -45,14 +48,14 @@ scale_type_x4 = source
 scale_type_y4 = source
 scale_x4 = 4.0
 scale_y4 = 1.0
-frame_count_mod4 = 2
 float_framebuffer4 = true
+float_framebuffer5 = true
 
 scale_type5 = source
 scale_x5 = 0.5
 scale_y5 = 1.0
 
-shader6 = shaders/guest/advanced/custom-fast-sharpen.slang
+shader6 = shaders/guest/advanced/ntsc/ntsc-pass3.slang
 filter_linear6 = true
 scale_type6 = source
 scale_x6 = 1.0

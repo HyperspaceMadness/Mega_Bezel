@@ -46,22 +46,24 @@ shader6 = ../../shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
 shader7 = ../../../../stock.slang
 alias7 = "PrePass0"
 
-shader8 = ../../shaders/HyperspaceMadness/hsm-guest/ntsc/hsm-ntsc-pass1.slang
+shader8 = :\shaders\shaders_slang\ntsc\shaders\ntsc-adaptive\ntsc-pass1.slang
 filter_linear8 = false
+float_framebuffer8 = true
 scale_type_x8 = source
 scale_type_y8 = source
 scale_x8 = 4.0
 scale_y8 = 1.0
 frame_count_mod8 = 2
-float_framebuffer8 = true
+alias8 = NPass1
 
-shader9 = ../../shaders/HyperspaceMadness/hsm-guest/ntsc/hsm-ntsc-pass2.slang
-filter_linear9 = false
+shader9 = :\shaders\shaders_slang\ntsc\shaders\ntsc-adaptive\ntsc-pass2.slang
+filter_linear9 = true
+float_framebuffer9 = true
 scale_type9 = source
 scale_x9 = 0.5
 scale_y9 = 1.0
 
-shader10 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-custom-fast-sharpen.slang
+shader10 = :\shaders\shaders_slang\ntsc\shaders\ntsc-adaptive\ntsc-pass3.slang
 filter_linear10 = true
 scale_type10 = source
 scale_x10 = 1.0

@@ -27,7 +27,7 @@
 layout(push_constant) uniform Push
 {
 	float TATE, IOS, OS, BLOOM, brightboost, brightboost1, gsl, scanline1, scanline2, beam_min, beam_max, beam_size,
-    h_sharp, s_sharp, warpX, warpY, glow, vertmask, spike, intres;
+    h_sharp, s_sharp, warpX, warpY, glow, vertmask, spike, intres, ring;
 } params;
 
 layout(std140, set = 0, binding = 0) uniform UBO
@@ -110,6 +110,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter s_sharp "          Substractive sharpness (1.0 recommended)" 0.50 0.0 1.5 0.10
 #define s_sharp      params.s_sharp     // substractive sharpness
+
+#pragma parameter ring "          Substractive sharpness Ringing" 0.0 0.0 4.0 0.1
+#define ring      params.ring     // substractive sharpness ringing 
 
 #pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
 
@@ -254,7 +257,7 @@ void main()
    
 	float factor  = 1.00 + (1.0-0.5*OS)*BLOOM/100.0 - lum*BLOOM/100.0;
 	texcoord  = Overscan(texcoord, factor, factor);
-	texcoord = Overscan(texcoord, (SourceSize.x - overscanX)/SourceSize.x, (SourceSize.y - overscanY)/SourceSize.y);
+	texcoord = Overscan(texcoord, (global.OriginalSize.x - overscanX)/global.OriginalSize.x, (global.OriginalSize.y - overscanY)/global.OriginalSize.y);
 	vec2 pos  = Warp(texcoord);
 	vec2 pos0 = Warp(TEX0.xy);
    
@@ -320,12 +323,12 @@ void main()
 
 	float twl5 = max(wl5 - sharp1, 0.0);
 	float twl4 = max(wl4 - sharp1, mix(0.0,mix(-0.03,  0.00, fpx),float(s_sharp > 0.05))); float swl4 = max(wl4 - sharp1, 0.0);
-	float twl3 = max(wl3 - sharp1, mix(0.0,mix(-0.10, -0.03, fpx),float(s_sharp > 0.05))); float swl3 = max(wl3 - sharp1, 0.0);
+	float twl3 = max(wl3 - sharp1, mix(0.0,mix(-0.15, -0.03, fpx),float(s_sharp > 0.05))); float swl3 = max(wl3 - sharp1, 0.0);
 	float twl2 = max(wl2 - sharp1, 0.0);
 	float twl1 = max(wl1 - sharp1, 0.0);
 	float twr1 = max(wr1 - sharp1, 0.0);
 	float twr2 = max(wr2 - sharp1, 0.0);
-	float twr3 = max(wr3 - sharp1, mix(0.0,mix(-0.10, -0.03, fp1),float(s_sharp > 0.05))); float swr3 = max(wr3 - sharp1, 0.0);
+	float twr3 = max(wr3 - sharp1, mix(0.0,mix(-0.15, -0.03, fp1),float(s_sharp > 0.05))); float swr3 = max(wr3 - sharp1, 0.0);
 	float twr4 = max(wr4 - sharp1, mix(0.0,mix(-0.03,  0.00, fp1),float(s_sharp > 0.05))); float swr4 = max(wr4 - sharp1, 0.0);
 	float twr5 = max(wr5 - sharp1, 0.0);
 	
@@ -360,7 +363,7 @@ void main()
 	vec3 colmin = min(colmin1, colmin2);
 	vec3 colmax = max(colmax1, colmax2);
 	
-	if (sharp) color1 = clamp(color1, colmin, colmax);
+	if (sharp) color1 = clamp(mix(clamp(color1, colmin, colmax), color1, ring), 0.0, 1.0);
 	
 	vec3 gtmp = vec3(1.0/6.0);
 	
@@ -401,7 +404,7 @@ void main()
 	colmin = min(colmin1, colmin2);
 	colmax = max(colmax1, colmax2);
 	
-	if (sharp) color2 = clamp(color2, colmin, colmax);
+	if (sharp) color2 = clamp(mix(clamp(color2, colmin, colmax), color2, ring), 0.0, 1.0);
 	
 	scolor2 = (sl3*swl3 + sl2*twl2 + sl1*twl1 + sr1*twr1 + sr2*twr2 + sr3*swr3)*wt;
 	scolor2 = pow(scolor2, gtmp);

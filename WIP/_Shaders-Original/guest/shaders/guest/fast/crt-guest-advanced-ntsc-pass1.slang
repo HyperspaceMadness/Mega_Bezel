@@ -1,9 +1,9 @@
 #version 450
 
 /*
-   CRT - Guest - Advanced - Fast - Pass1
+   CRT - Guest - NTSC - Fast - Pass1
    
-   Copyright (C) 2018-2021 guest(r) - guest.r@gmail.com
+   Copyright (C) 2018-2022 guest(r) - guest.r@gmail.com
 
    Incorporates many good ideas and suggestions from Dr. Venom.
    I would also like give thanks to many Libretro forums members for continuous feedback, suggestions and caring about the shader.
@@ -30,9 +30,15 @@ layout(push_constant) uniform Push
 	vec4 OriginalSize;
 	vec4 OutputSize;
 	uint FrameCount;
-	float IOS, h_sharp, s_sharp, spike;
+	float SIGMA_HOR;
+	float HSHARPNESS;
+	float S_SHARP;
+	float HARNG;
+	float HSHARP; 
 	float prescalex;
-	float blendMode;	
+	float prescaley;
+	float spike;
+	float internal_res;
 } params;
 
 layout(std140, set = 0, binding = 0) uniform UBO
@@ -43,20 +49,26 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter bogus_filtering "[ FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-#pragma parameter h_sharp "          Horizontal sharpness" 3.00 0.20 10.0 0.10
-#define h_sharp      params.h_sharp     // pixel sharpness
+#pragma parameter HSHARPNESS "          Horizontal Filter Range" 1.5 1.0 8.0 0.125
+#define HSHARPNESS params.HSHARPNESS
 
-#pragma parameter s_sharp "          Substractive sharpness (1.0 recommended)" 0.20 0.0 1.5 0.10
-#define s_sharp      params.s_sharp     // substractive sharpness
+#pragma parameter SIGMA_HOR "          Horizontal Blur Sigma" 0.60 0.1 7.0 0.05
+#define SIGMA_HOR params.SIGMA_HOR
+
+#pragma parameter S_SHARP "          Substractive Sharpness" 0.80 0.0 2.0 0.10
+#define S_SHARP params.S_SHARP
+
+#pragma parameter HSHARP "          Sharpness Definition" 1.2 0.0 2.0 0.10
+#define HSHARP params.HSHARP
+
+#pragma parameter HARNG "          Substractive Sharpness Ringing" 0.2 0.0 4.0 0.10
+#define HARNG params.HARNG 
 
 #pragma parameter spike "          Scanline Spike Removal" 1.0 0.0 2.0 0.10
 #define spike params.spike
 
-#pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader, NTSC...)" 1.0 1.0 5.0 0.25  // Joint parameter with linearize pass, values must match
+#pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader, NTSC...)" 1.0 1.0 5.0 0.25  // Joint parameter with main pass, values must match
 #define prescalex        params.prescalex     // prescale-x factor
-
-#pragma parameter blendMode "NTSC Blend Mode (Main Mode Control)" 0.0 0.0 2.0 1.0
-
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
 #define TEX0 vTexCoord
@@ -80,95 +92,72 @@ layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 2) uniform sampler2D LinearizePass;
 
+float invsqrsigma = 1.0/(2.0*SIGMA_HOR*SIGMA_HOR);
+
+float gaussian(float x)
+{
+	return exp(-x*x*invsqrsigma);
+}
 
 void main()
 {	
-	vec4 SourceSize = params.OriginalSize * vec4(prescalex, 1.0, 1.0/prescalex, 1.0);
+	vec4 SourceSize = params.OriginalSize * vec4(2.0*prescalex, 1.0, 0.5/prescalex, 1.0);
 	
-	if (params.blendMode > 1.5) { SourceSize = SourceSize * vec4 (2.0, 1.0, 0.5, 1.0); }
-	
-	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
-	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
-	
-	// Calculating texel coordinates
-   
-	vec2 texcoord = TEX0.xy;
-   
-	vec2 pos  = texcoord;
+	float f = fract(SourceSize.x * vTexCoord.x);
+	f = 0.5 - f;
+	vec2 tex = floor(SourceSize.xy * vTexCoord)*SourceSize.zw + 0.5*SourceSize.zw;
+	vec3 color = 0.0.xxx;
+	float scolor = 0.0;
+	vec2 dx  = vec2(SourceSize.z, 0.0);
 
-	vec2 coffset = vec2(0.5, 0.5);
-	
-	vec2 ps = SourceSize.zw;
-	vec2 OGL2Pos = pos * SourceSize.xy - coffset;
-	float fpx = fract(OGL2Pos.x);
-	
-	vec2 offx = vec2(ps.x,0.0);
-   
-	// Reading the texels
-	vec2 x2 = 2.0*offx;
-	
-	vec2 pC4 = floor(OGL2Pos) * ps + 0.5*ps; 
-	
-	float zero = exp2(-h_sharp);
-	float sharp1 = s_sharp * zero;
-	
-	float fdivider = min(prescalex, 2.0);
-	
-	float wl3 = (2.0 + fpx)/fdivider;
-	float wl2 = (1.0 + fpx)/fdivider;
-	float wl1 = (      fpx)/fdivider;
-	float wr1 = (1.0 - fpx)/fdivider;
-	float wr2 = (2.0 - fpx)/fdivider;
-	float wr3 = (3.0 - fpx)/fdivider;
+	float w = 0.0;
+	float swsum = 0.0;
+	float wsum = 0.0;
+	vec3 pixel;
 
-	wl3*=wl3; wl3 = exp2(-h_sharp*wl3);
-	wl2*=wl2; wl2 = exp2(-h_sharp*wl2);
-	wl1*=wl1; wl1 = exp2(-h_sharp*wl1);
-	wr1*=wr1; wr1 = exp2(-h_sharp*wr1);
-	wr2*=wr2; wr2 = exp2(-h_sharp*wr2);
-	wr3*=wr3; wr3 = exp2(-h_sharp*wr3);
-	
-	float fp1 = 1.-fpx;
+	float hsharpness = HSHARPNESS;
+	vec3 cmax = 0.0.xxx;
+	vec3 cmin = 1.0.xxx;
+	float sharp = gaussian(hsharpness) * S_SHARP;
+	float maxsharp = 0.20;
+	float FPR = hsharpness;
+	float fpx = 0.0;
+	float sp = 0.0;
+	float sw = 0.0;
 
-	float twl3 = max(wl3 - sharp1, 0.0);
-	float twl2 = max(wl2 - sharp1, mix(-0.12, 0.0, 1.0-fp1*fp1));
-	float twl1 = max(wl1 - sharp1, 0.0);
-	float twr1 = max(wr1 - sharp1, 0.0);
-	float twr2 = max(wr2 - sharp1, mix(-0.12, 0.0, 1.0-fpx*fpx));
-	float twr3 = max(wr3 - sharp1, 0.0);
-	
-	bool sharp = (sharp1 > 0.0);
-
-	vec3 l3, l2, l1, r1, r2, r3, color1, colmin, colmax;
-
-	l3 = COMPAT_TEXTURE(LinearizePass, pC4   -x2).rgb;
-	l2 = COMPAT_TEXTURE(LinearizePass, pC4 -offx).rgb;
-	l1 = COMPAT_TEXTURE(LinearizePass, pC4      ).rgb;
-	r1 = COMPAT_TEXTURE(LinearizePass, pC4 +offx).rgb;
-	r2 = COMPAT_TEXTURE(LinearizePass, pC4   +x2).rgb;
-	r3 = COMPAT_TEXTURE(LinearizePass, pC4 +offx+x2).rgb;
-
-	colmin = min(min(l1,r1), min(l2,r2));
-	colmax = max(max(l1,r1), max(l2,r2));
-	
-	color1 = (l3*twl3 + l2*twl2 + l1*twl1 + r1*twr1 + r2*twr2 + r3*twr3)/(twl3+twl2+twl1+twr1+twr2+twr3);
-
-	if (sharp) color1 = clamp(color1, colmin, colmax);
 	float ts = 0.025;
-	vec3 luma = vec3(0.2126, 0.7152, 0.0722);
+	vec3 luma = vec3(0.2126, 0.7152, 0.0722); 
+
+	float LOOPSIZE = ceil(2.0*FPR);	
+	float n = -LOOPSIZE;
 	
-	float lm2 = max(max(l2.r,l2.g),l2.b);
-	float lm1 = max(max(l1.r,l1.g),l1.b);
-	float rm1 = max(max(r1.r,r1.g),r1.b);
-	float rm2 = max(max(r2.r,r2.g),r2.b);
+	do
+	{
+		pixel  = COMPAT_TEXTURE(LinearizePass, tex + n*dx).rgb;
+		sp = max(max(pixel.r,pixel.g),pixel.b);
+		
+		w = gaussian(n+f) - sharp;
+		fpx = abs(n+f-sign(n)*FPR)/FPR;
+		if (abs(n) <= FPR) { cmax = max(cmax, pixel); cmin = min(cmin, pixel); }
+		if (w < 0.0) w = clamp(w, mix(-maxsharp, 0.0, pow(fpx, HSHARP)), 0.0);
 	
-	float swl2 = max(twl2, 0.0) * (dot(l2,luma) + ts);
-	float swl1 = twl1 * (dot(l1,luma) + ts);
-	float swr1 = twr1 * (dot(r1,luma) + ts);
-	float swr2 = max(twr2, 0.0) * (dot(r2,luma) + ts);
+		color = color + w * pixel;
+		wsum  = wsum + w;
+
+		sw = max(w, 0.0) * (dot(pixel,luma) + ts); 
+		scolor = scolor + sw * sp;
+		swsum = swsum + sw;
+		
+		n = n + 1.0;
+			
+	} while (n <= LOOPSIZE);
+
+	color = color / wsum;
+	scolor = scolor / swsum;
 	
-	float fscolor1 = (lm2*swl2 + lm1*swl1 + rm1*swr1 + rm2*swr2)/(swl2+swl1+swr1+swr2);
-	float sresult = clamp(mix(max(max(color1.r,color1.g),color1.b), fscolor1, spike), 0.0, 1.0);
+	color = clamp(mix(clamp(color, cmin, cmax), color, HARNG), 0.0, 1.0); 
 	
-	FragColor = vec4(color1, sresult);
+	scolor = clamp(mix(max(max(color.r, color.g),color.b), scolor, spike), 0.0, 1.0);
+	
+	FragColor = vec4(color, scolor);
 } 

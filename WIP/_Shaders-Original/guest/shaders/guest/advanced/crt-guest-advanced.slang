@@ -27,7 +27,7 @@
 layout(push_constant) uniform Push
 {
 	float TATE, IOS, OS, BLOOM, brightboost, brightboost1, gsl, scanline1, scanline2, beam_min, beam_max, beam_size,
-	h_sharp, s_sharp, csize, bsize1, warpX, warpY, glow, vertmask, spike;
+	h_sharp, s_sharp, csize, bsize1, warpX, warpY, glow, vertmask, spike, ring;
 } params;
 
 layout(std140, set = 0, binding = 0) uniform UBO
@@ -120,6 +120,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter s_sharp "          Substractive sharpness (1.0 recommended)" 0.50 0.0 1.5 0.10
 #define s_sharp      params.s_sharp     // substractive sharpness
+
+#pragma parameter ring "          Substractive sharpness Ringing" 0.0 0.0 3.0 0.05
+#define ring      params.ring     // substractive sharpness ringing
 
 #pragma parameter smart_ei "          Smart Edges Effect Strength" 0.0 0.0 0.75 0.01
 #define smart_ei      global.smart_ei     // smart edge handling
@@ -281,7 +284,7 @@ void main()
 	float factor  = 1.00 + (1.0-0.5*OS)*BLOOM/100.0 - lum*BLOOM/100.0;
 	texcoord  = Overscan(texcoord, factor, factor);
 
-	texcoord = Overscan(texcoord, (SourceSize.x - overscanX)/SourceSize.x, (SourceSize.y - overscanY)/SourceSize.y);
+	texcoord = Overscan(texcoord, (global.OriginalSize.x - overscanX)/global.OriginalSize.x, (global.OriginalSize.y - overscanY)/global.OriginalSize.y);
 
 	vec2 pos  = Warp(texcoord);
    
@@ -381,7 +384,7 @@ void main()
 	
 	color1 = (l3*twl3 + l2*twl2 + l1*twl1 + r1*twr1 + r2*twr2 + r3*twr3)/(twl3+twl2+twl1+twr1+twr2+twr3);
 
-	if (sharp) color1 = clamp(color1, colmin, colmax);
+	if (sharp) color1 = clamp(mix(clamp(color1, colmin, colmax), color1, ring), 0.0, 1.0);
 	float ts = 0.025;
 	vec3 luma = vec3(0.2126, 0.7152, 0.0722);
 	
@@ -398,7 +401,7 @@ void main()
 	float fscolor1 = (lm2*swl2 + lm1*swl1 + rm1*swr1 + rm2*swr2)/(swl2+swl1+swr1+swr2);
 	vec3 scolor1 = vec3(clamp(mix(max(max(color1.r,color1.g),color1.b), fscolor1, spike), 0.0, 1.0));
 	
-	vec3 scolor2, mcolor2;
+	vec3 scolor2;
 	
 	if (!interb)
 {	
@@ -425,7 +428,7 @@ void main()
 	
 	color2 = (l3*twl3 + l2*twl2 + l1*twl1 + r1*twr1 + r2*twr2 + r3*twr3)/(twl3+twl2+twl1+twr1+twr2+twr3);
 	
-	if (sharp) color2 = clamp(color2, colmin, colmax);
+	if (sharp) color2 = clamp(mix(clamp(color2, colmin, colmax), color2, ring), 0.0, 1.0);
 
 	lm2 = max(max(l2.r,l2.g),l2.b);
 	lm1 = max(max(l1.r,l1.g),l1.b);
