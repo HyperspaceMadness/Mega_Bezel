@@ -51,32 +51,32 @@ shader9 = ../../shaders/HyperspaceMadness/hsm-mdapt/hsm-mdapt-pass2.slang
 shader10 = ../../shaders/HyperspaceMadness/hsm-mdapt/hsm-mdapt-pass3.slang
 shader11 = ../../shaders/HyperspaceMadness/hsm-mdapt/hsm-mdapt-pass4.slang
 
-// SGENDPT - Hyllian's great de-dither shader
-shader12 = ../../shaders/HyperspaceMadness/hsm-sgenpt-mix/hsm-sgenpt-mix.slang
+shader12 = ../../shaders/HyperspaceMadness/hsm-ps1dither/hsm-PS1-Undither-BoxBlur.slang
 
-shader13 = ../../shaders/HyperspaceMadness/hsm-ps1dither/hsm-PS1-Undither-BoxBlur.slang
+shader13 = ../../../../stock.slang
+alias13 = "PreCRTPass"
 
-shader14 = ../../../../stock.slang
-alias14 = "PreCRTPass"
+shader14 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-afterglow0.slang
+filter_linear14 = true
+scale_type14 = source
+scale14 = 1.0
+alias14 = "AfterglowPass"
 
-shader15 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-afterglow0.slang
+shader15 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-pre-shaders-afterglow.slang
 filter_linear15 = true
 scale_type15 = source
+mipmap_input15 = true
 scale15 = 1.0
-alias15 = "AfterglowPass"
-
-shader16 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-pre-shaders-afterglow.slang
-filter_linear16 = true
-scale_type16 = source
-mipmap_input16 = true
-scale16 = 1.0
 
 // Color Correction with Dogway's awesome Grade shader
 // Grade is after Afterglow so that brightening the black level does not break the afterglow
+shader16 = ../../shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
+filter_linear16 = true
+scale_type16 = source
+scale16 = 1.0
+
+// Color Correction with Dogway's awesome Grade shader
 shader17 = ../../shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
-filter_linear17 = true
-scale_type17 = source
-scale17 = 1.0
 
 shader18 = ../../../../stock.slang
 alias18 = "PrePass0"

@@ -1,16 +1,16 @@
-shaders = 6
+shaders = 4
 
 shader0 = :/shaders/shaders_slang/stock.slang
 alias0 = "PreCRTPass"
 
 shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-afterglow0.slang
-filter_linear1 = false
+filter_linear1 = true
 scale_type1 = source
 scale1 = 1.0
 alias1 = "AfterglowPass"
 
 shader2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-pre-shaders-afterglow.slang
-filter_linear2 = false
+filter_linear2 = true
 scale_type2 = source
 mipmap_input2 = true
 scale2 = 1.0
@@ -18,19 +18,6 @@ scale2 = 1.0
 // Color Correction with Dogway's awesome Grade shader
 // Grade is after Afterglow so that brightening the black level does not break the afterglow
 shader3 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
-alias3 = "PrePass"
-
-shader4 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-avg-lum.slang
-filter_linear4 = true
-scale_type4 = source
-scale4 = 1.0
-mipmap_input4 = true
-alias4 = "AvgLumPass"
-
-// Pass referenced by subsequent blurring passes and crt pass
-shader5 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-interlace-and-linearize.slang
-filter_linear5 = true
-scale_type5 = source
-scale5 = 1.0
-float_framebuffer5 = true
-alias5 = "LinearizePass"
+filter_linear3 = true
+scale_type3 = source
+scale3 = 1.0

@@ -1,4 +1,4 @@
-shaders = 18
+shaders = 20
 
 shader0 = ../../shaders/HyperspaceMadness/hsm/hsm-add-params-potato.slang
 alias0 = "CorePass"
@@ -48,13 +48,13 @@ shader7 = ../../../../stock.slang
 alias7 = "PreCRTPass"
 
 shader8 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-afterglow0.slang
-filter_linear8 = false
+filter_linear8 = true
 scale_type8 = source
 scale8 = 1.0
 alias8 = "AfterglowPass"
 
 shader9 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-pre-shaders-afterglow.slang
-filter_linear9 = false
+filter_linear9 = true
 scale_type9 = source
 mipmap_input9 = true
 scale9 = 1.0
@@ -62,43 +62,56 @@ scale9 = 1.0
 // Color Correction with Dogway's awesome Grade shader
 // Grade is after Afterglow so that brightening the black level does not break the afterglow
 shader10 = ../../shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
-alias10 = "PrePass"
+filter_linear10 = true
+scale_type10 = source
+scale10 = 1.0
 
-shader11 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-avg-lum.slang
-filter_linear11 = true
-scale_type11 = source
-scale11 = 1.0
-mipmap_input11 = true
-alias11 = "AvgLumPass"
+// Color Correction with Dogway's awesome Grade shader
+shader11 = ../../shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
 
-// Pass referenced by subsequent blurring passes and crt pass
-shader12 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-interlace-and-linearize.slang
+shader12 = ../../../../stock.slang
 filter_linear12 = true
 scale_type12 = source
-scale12 = 1.0
-float_framebuffer12 = true
-alias12 = "LinearizePass"
+scale_x12 = 1.0
+scale_y12 = 1.0
+alias12 = "PrePass"
+mipmap_input12 = true
 
-shader13 = ../../shaders/HyperspaceMadness/hsm-easymode/hsm-crt-easymode-blur_horiz.slang
-filter_linear13 = false
-srgb_framebuffer13 = true
+shader13 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-avg-lum.slang
+filter_linear13 = true
+scale_type13 = source
+scale13 = 1.0
+mipmap_input13 = true
+alias13 = "AvgLumPass"
 
-shader14 = ../../shaders/HyperspaceMadness/hsm-easymode/hsm-crt-easymode-blur_vert.slang
-filter_linear14 = false
-srgb_framebuffer14 = true
+// Pass referenced by subsequent blurring passes and crt pass
+shader14 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-interlace-and-linearize.slang
+filter_linear14 = true
+scale_type14 = source
+scale14 = 1.0
+float_framebuffer14 = true
+alias14 = "LinearizePass"
 
-shader15 = ../../shaders/HyperspaceMadness/hsm-easymode/hsm-crt-easymode-threshold.slang
+shader15 = ../../shaders/HyperspaceMadness/hsm-easymode/hsm-crt-easymode-blur_horiz.slang
 filter_linear15 = false
 srgb_framebuffer15 = true
 
-// Easymode's Shader!
-shader16 = ../../shaders/HyperspaceMadness/hsm-easymode/hsm-crt-easymode-halation.slang
-filter_linear16 = true
-scale_type16 = viewport
-float_framebuffer16 = true
+shader16 = ../../shaders/HyperspaceMadness/hsm-easymode/hsm-crt-easymode-blur_vert.slang
+filter_linear16 = false
+srgb_framebuffer16 = true
 
-shader17 = ../../shaders/HyperspaceMadness/hsm/hsm-post-crt-prep-potato.slang
-alias17 = "MBZ_PostCRTPass"
+shader17 = ../../shaders/HyperspaceMadness/hsm-easymode/hsm-crt-easymode-threshold.slang
+filter_linear17 = false
+srgb_framebuffer17 = true
+
+// Easymode's Shader!
+shader18 = ../../shaders/HyperspaceMadness/hsm-easymode/hsm-crt-easymode-halation.slang
+filter_linear18 = true
+scale_type18 = viewport
+float_framebuffer18 = true
+
+shader19 = ../../shaders/HyperspaceMadness/hsm/hsm-post-crt-prep-potato.slang
+alias19 = "MBZ_PostCRTPass"
 // Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
 

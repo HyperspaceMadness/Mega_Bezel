@@ -3,19 +3,18 @@
 Mega Bezel is updated to V 0.9.108 2022-04-23 Rev 1
 
 Changes:
-  * Update to crt-guest-advanced-2022-05-07-release1
+  * Update to crt-guest-advanced-2022-05-27-release3
   * Updated Sonkun Presets
   * Updated Cyberlab presets
-  * Updated Nesguy's Nesguy__ApertureGrille-TVL-540__ADV preset
+  * Updated Nesguy's Nesguy__ApertureGrille-TVL-540__ADV
 
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
-  * Update to New Guest
+  * Add CRT Reflection Curvature Multiplier
   * Update Sonkun
   * Update Cyberlab
   * Add Frame Color
-  * Add CRT Reflection Curvature Multiplier
   * Megatron HDR Combination at end of chain
   * Add how to remove Moire Guide
   * Fix Tube Diffuse Shadow in 3D Curvature

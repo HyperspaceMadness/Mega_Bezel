@@ -1,4 +1,4 @@
-shaders = 31
+shaders = 33
 
 shader0 = ../../shaders/HyperspaceMadness/hsm/hsm-add-params-no-reflect.slang
 alias0 = "CorePass"
@@ -50,126 +50,137 @@ shader9 = ../../shaders/HyperspaceMadness/hsm-mdapt/hsm-mdapt-pass2.slang
 shader10 = ../../shaders/HyperspaceMadness/hsm-mdapt/hsm-mdapt-pass3.slang
 shader11 = ../../shaders/HyperspaceMadness/hsm-mdapt/hsm-mdapt-pass4.slang
 
-// SGENDPT - Hyllian's great de-dither shader
-shader12 = ../../shaders/HyperspaceMadness/hsm-sgenpt-mix/hsm-sgenpt-mix.slang
+shader12 = ../../shaders/HyperspaceMadness/hsm-ps1dither/hsm-PS1-Undither-BoxBlur.slang
 
-shader13 = ../../shaders/HyperspaceMadness/hsm-ps1dither/hsm-PS1-Undither-BoxBlur.slang
+shader13 = ../../../../stock.slang
+alias13 = "PreCRTPass"
 
-shader14 = ../../../../stock.slang
-alias14 = "PreCRTPass"
+shader14 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-afterglow0.slang
+filter_linear14 = true
+scale_type14 = source
+scale14 = 1.0
+alias14 = "AfterglowPass"
 
-shader15 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-afterglow0.slang
+shader15 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-pre-shaders-afterglow.slang
 filter_linear15 = true
 scale_type15 = source
+mipmap_input15 = true
 scale15 = 1.0
-alias15 = "AfterglowPass"
 
-shader16 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-pre-shaders-afterglow.slang
+// Color Correction with Dogway's awesome Grade shader
+// Grade is after Afterglow so that brightening the black level does not break the afterglow
+shader16 = ../../shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
 filter_linear16 = true
 scale_type16 = source
-mipmap_input16 = true
 scale16 = 1.0
-alias16 = "PrePass0"
 
-shader17 = ../../shaders/HyperspaceMadness/hsm-guest/ntsc/hsm-ntsc-pass1.slang
-filter_linear17 = false
-scale_type_x17 = source
-scale_type_y17 = source
-scale_x17 = 4.0
-scale_y17 = 1.0
-frame_count_mod17 = 2
-float_framebuffer17 = true
+// Color Correction with Dogway's awesome Grade shader
+shader17 = ../../shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
 
-shader18 = ../../shaders/HyperspaceMadness/hsm-guest/ntsc/hsm-ntsc-pass2.slang
-filter_linear18 = false
-scale_type18 = source
-scale_x18 = 0.5
-scale_y18 = 1.0
+shader18 = ../../../../stock.slang
+alias18 = "PrePass0"
 
-shader19 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-custom-fast-sharpen.slang
-filter_linear19 = true
-scale_type19 = source
-scale_x19 = 1.0
+shader19 = ../../shaders/HyperspaceMadness/hsm-guest/ntsc/hsm-ntsc-pass1.slang
+filter_linear19 = false
+float_framebuffer19 = true
+scale_type_x19 = source
+scale_type_y19 = source
+scale_x19 = 4.0
 scale_y19 = 1.0
-alias19 = NtscPass
+frame_count_mod19 = 2
+alias19 = NPass1
 
-shader20 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-convert-ntsc.slang
+shader20 = ../../shaders/HyperspaceMadness/hsm-guest/ntsc/hsm-ntsc-pass2.slang
+float_framebuffer20 = true
 filter_linear20 = true
 scale_type20 = source
 scale_x20 = 0.5
 scale_y20 = 1.0
 
-shader21 = ../../../../stock.slang
+shader21 = ../../shaders/HyperspaceMadness/hsm-guest/ntsc/hsm-ntsc-pass3.slang
 filter_linear21 = true
 scale_type21 = source
 scale_x21 = 1.0
 scale_y21 = 1.0
-alias21 = "PrePass"
-mipmap_input21 = true
+alias21 = NtscPass
 
-shader22 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-avg-lum.slang
+shader22 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-convert-ntsc.slang
 filter_linear22 = true
 scale_type22 = source
-scale22 = 1.0
-mipmap_input22 = true
-alias22 = "AvgLumPass"
+scale_x22 = 0.5
+scale_y22 = 1.0
 
-// Pass referenced by subsequent blurring passes and crt pass
-shader23 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-interlace-and-linearize.slang
+shader23 = ../../../../stock.slang
 filter_linear23 = true
 scale_type23 = source
-scale23 = 1.0
-float_framebuffer23 = true
-alias23 = "LinearizePass"
+scale_x23 = 1.0
+scale_y23 = 1.0
+alias23 = "PrePass"
+mipmap_input23 = true
+
+shader24 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-avg-lum.slang
+filter_linear24 = true
+scale_type24 = source
+scale24 = 1.0
+mipmap_input24 = true
+alias24 = "AvgLumPass"
+
+// Pass referenced by subsequent blurring passes and crt pass
+shader25 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-interlace-and-linearize.slang
+filter_linear25 = true
+scale_type25 = source
+scale25 = 1.0
+float_framebuffer25 = true
+alias25 = "LinearizePass"
 feedback_pass = "0"
 
 // Sony Megatron Colour Video Monitor by Major Pain The Cactus
-shader24 = "../../shaders/HyperspaceMadness/hsm-megatron/crt-sony-megatron-source-pass.slang"
-filter_linear24 = "false"
-scale_type24 = "source"
-scale24 = "1.0"
-wrap_mode0 = "clamp_to_border"
-mipmap_input24 = "false"
-alias24 = "SourceSDR"
-
-shader25 = "../../shaders/HyperspaceMadness/hsm-megatron/crt-sony-megatron-hdr-pass.slang"
-filter_linear25 = "false"
-scale_type25 = "source"
-scale25 = "1.0"
-wrap_mode1 = "clamp_to_border"
-mipmap_input25 = "false"
-alias25 = "SourceHDR"
-
-shader26 = "../../shaders/HyperspaceMadness/hsm-megatron/crt-sony-megatron-no-reflect.slang"
+shader26 = "../../shaders/HyperspaceMadness/hsm-megatron/crt-sony-megatron-source-pass.slang"
 filter_linear26 = "false"
-wrap_mode2 = "clamp_to_border"
+scale_type26 = "source"
+scale26 = "1.0"
+wrap_mode0 = "clamp_to_border"
 mipmap_input26 = "false"
-alias26 = ""
-float_framebuffer26 = "false"
-srgb_framebuffer26 = "false"
-scale_type26 = "viewport"
+alias26 = "SourceSDR"
 
-shader27 = ../../shaders/HyperspaceMadness/hsm/hsm-post-crt-prep-no-reflect.slang
-alias27 = "MBZ_PostCRTPass"
+shader27 = "../../shaders/HyperspaceMadness/hsm-megatron/crt-sony-megatron-hdr-pass.slang"
+filter_linear27 = "false"
+scale_type27 = "source"
+scale27 = "1.0"
+wrap_mode1 = "clamp_to_border"
+mipmap_input27 = "false"
+alias27 = "SourceHDR"
+
+shader28 = "../../shaders/HyperspaceMadness/hsm-megatron/crt-sony-megatron-no-reflect.slang"
+filter_linear28 = "false"
+wrap_mode2 = "clamp_to_border"
+mipmap_input28 = "false"
+alias28 = ""
+float_framebuffer28 = "false"
+srgb_framebuffer28 = "false"
+scale_type28 = "viewport"
+
+shader29 = ../../shaders/HyperspaceMadness/hsm/hsm-post-crt-prep-no-reflect.slang
+alias29 = "MBZ_PostCRTPass"
 
 // Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 
-shader28 = ../../shaders/HyperspaceMadness/hsm/hsm-bezel-images-under-crt.slang
-filter_linear28 = true
-scale_type28 = viewport
-float_framebuffer28 = true
-alias28 = "BR_LayersUnderCRTPass"
+shader30 = ../../shaders/HyperspaceMadness/hsm/hsm-bezel-images-under-crt.slang
+filter_linear30 = true
+scale_type30 = viewport
+float_framebuffer30 = true
+alias30 = "BR_LayersUnderCRTPass"
 
-shader29 = ../../shaders/HyperspaceMadness/hsm/hsm-bezel-images-over-crt.slang
-filter_linear29 = true
-scale_type29 = viewport
-float_framebuffer29 = true
-alias29 = "BR_LayersOverCRTPass"
+shader31 = ../../shaders/HyperspaceMadness/hsm/hsm-bezel-images-over-crt.slang
+filter_linear31 = true
+scale_type31 = viewport
+float_framebuffer31 = true
+alias31 = "BR_LayersOverCRTPass"
 
 // Combine Passes ----------------------------------------------------------------
-shader30 = ../../shaders/HyperspaceMadness/hsm/hsm-combine-passes-no-reflect.slang
-scale_type30 = viewport
-alias30 = "CombinePass"
+shader32 = ../../shaders/HyperspaceMadness/hsm/hsm-combine-passes-no-reflect.slang
+scale_type32 = viewport
+alias32 = "CombinePass"
 // Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;LEDImage;TopLayerImage;"
 
