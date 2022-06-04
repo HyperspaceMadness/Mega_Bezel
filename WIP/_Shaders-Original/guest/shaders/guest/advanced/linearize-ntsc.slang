@@ -89,7 +89,7 @@ void main()
 #pragma stage fragment
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
-layout(set = 0, binding = 2) uniform sampler2D PrePass;
+layout(set = 0, binding = 2) uniform sampler2D NtscPass;
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
 
@@ -109,15 +109,15 @@ vec3 fetch_pixel(vec2 coord)
 	vec2 d2 = dx - dy;
 	
 	float sum = 15.0;
-	vec3 result = 3.0*COMPAT_TEXTURE(PrePass, coord     ).rgb + 
-	              2.0*COMPAT_TEXTURE(PrePass, coord + dx).rgb +
-	              2.0*COMPAT_TEXTURE(PrePass, coord - dx).rgb +
-	              2.0*COMPAT_TEXTURE(PrePass, coord + dy).rgb +
-	              2.0*COMPAT_TEXTURE(PrePass, coord - dy).rgb +
-	              COMPAT_TEXTURE(PrePass, coord + d1).rgb +
-	              COMPAT_TEXTURE(PrePass, coord - d1).rgb +
-	              COMPAT_TEXTURE(PrePass, coord + d2).rgb +
-	              COMPAT_TEXTURE(PrePass, coord - d2).rgb;  
+	vec3 result = 3.0*COMPAT_TEXTURE(NtscPass, coord     ).rgb + 
+	              2.0*COMPAT_TEXTURE(NtscPass, coord + dx).rgb +
+	              2.0*COMPAT_TEXTURE(NtscPass, coord - dx).rgb +
+	              2.0*COMPAT_TEXTURE(NtscPass, coord + dy).rgb +
+	              2.0*COMPAT_TEXTURE(NtscPass, coord - dy).rgb +
+	              COMPAT_TEXTURE(NtscPass, coord + d1).rgb +
+	              COMPAT_TEXTURE(NtscPass, coord - d1).rgb +
+	              COMPAT_TEXTURE(NtscPass, coord + d2).rgb +
+	              COMPAT_TEXTURE(NtscPass, coord - d2).rgb;  
 				  
 	return result/sum;
 }
@@ -125,8 +125,8 @@ vec3 fetch_pixel(vec2 coord)
 
 void main()
 {
-	vec3 c1 = COMPAT_TEXTURE(PrePass, vTexCoord).rgb;
-	vec3 c2 = COMPAT_TEXTURE(PrePass, vTexCoord + vec2(0.0, params.OriginalSize.w)).rgb;
+	vec3 c1 = COMPAT_TEXTURE(NtscPass, vTexCoord).rgb;
+	vec3 c2 = COMPAT_TEXTURE(NtscPass, vTexCoord + vec2(0.0, params.OriginalSize.w)).rgb;
 	
 	if ((downsample_levelx + downsample_levely) > 0.025)
 	{

@@ -69,7 +69,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter HSHARP "          Sharpness Definition" 1.25 0.0 2.0 0.10
 #define HSHARP params.HSHARP
 
-#pragma parameter HARNG "          Anti-Ringing" 0.75 0.0 1.0 0.10
+#pragma parameter HARNG "          Substractive Sharpness Ringing" 0.2 0.0 4.0 0.10
 #define HARNG params.HARNG 
 
 #pragma parameter bogus_vfiltering "[ VERTICAL/INTERLACING FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
@@ -86,8 +86,8 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter VSHARP "          Vert. Sharpness Definition" 1.25 0.0 2.0 0.10
 #define VSHARP global.VSHARP
 
-#pragma parameter VARNG "          Vert. Anti-Ringing" 0.75 0.0 1.0 0.10
-#define VARNG global.VARNG 
+#pragma parameter VARNG "          Substractive Sharpness Ringing" 0.2 0.0 4.0 0.10
+#define VARNG params.VARNG
 
 #pragma parameter spike "          Scanline Spike Removal" 1.0 0.0 2.0 0.10
 #define spike params.spike
@@ -156,7 +156,9 @@ void main()
 	float ts = 0.025;
 	vec3 luma = vec3(0.2126, 0.7152, 0.0722); 
 
-	float LOOPSIZE = ceil(2.0*FPR);	
+	float LOOPSIZE = ceil(2.0*FPR);
+	float CLAMPSIZE = round(2.0*LOOPSIZE/3.0);
+	
 	float n = -LOOPSIZE;
 	
 	do
@@ -166,7 +168,7 @@ void main()
 		
 		w = gaussian(n+f) - sharp;
 		fpx = abs(n+f-sign(n)*FPR)/FPR;
-		if (abs(n) <= FPR) { cmax = max(cmax, pixel); cmin = min(cmin, pixel); }
+		if (abs(n) <= CLAMPSIZE) { cmax = max(cmax, pixel); cmin = min(cmin, pixel); }
 		if (w < 0.0) w = clamp(w, mix(-maxsharp, 0.0, pow(fpx, HSHARP)), 0.0);
 	
 		color = color + w * pixel;
@@ -183,7 +185,7 @@ void main()
 	color = color / wsum;
 	scolor = scolor / swsum;
 	
-	color = mix(clamp(color, 0.0, 1.0), clamp(color, cmin, cmax), HARNG); 
+	color = clamp(mix(clamp(color, cmin, cmax), color, HARNG), 0.0, 1.0);
 	
 	scolor = clamp(mix(max(max(color.r, color.g),color.b), scolor, spike), 0.0, 1.0);
 	

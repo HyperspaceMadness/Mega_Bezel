@@ -26,7 +26,7 @@
 
 layout(push_constant) uniform Push
 {
-	float TATE, IOS, OS, BLOOM, brightboost, brightboost1, csize, bsize1, warpX, warpY, glow, shadowMask, masksize,
+	float IOS, OS, BLOOM, brightboost, brightboost1, csize, bsize1, warpX, warpY, glow, shadowMask, masksize,
 	slotmask, slotmask1, slotwidth, double_slot, mcut, maskDark, maskLight, maskstr, mshift, mask_layout;
 } params;
 
@@ -94,9 +94,6 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #define brightboost1  params.brightboost1     // adjust brightness
 
 #pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
-
-#pragma parameter TATE "          TATE Mode" 0.0 0.0 1.0 1.0
-#define TATE         params.TATE     // Screen orientation
 
 #pragma parameter IOS "          Integer Scaling: Odd:Y, Even:'X'+Y" 0.0 0.0 4.0 1.0
 #define IOS          params.IOS     // Smart Integer Scaling
@@ -582,7 +579,6 @@ void main()
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
 	bool interb  = (intera < 0.5);
-	bool notate  = (TATE < 0.5);
 	
 	// Calculating texel coordinates
    
@@ -591,9 +587,9 @@ void main()
 		vec2 ofactor = OutputSize.xy/SourceSize.xy;
 		vec2 intfactor = (IOS < 2.5) ? floor(ofactor) : ceil(ofactor);
 		vec2 diff = ofactor/intfactor;
-		float scan = mix(diff.y, diff.x, TATE);
+		float scan = diff.y;
 		texcoord = Overscan(texcoord, scan, scan);
-		if (IOS == 1.0 || IOS == 3.0) texcoord = mix(vec2(TEX0.x, texcoord.y), vec2(texcoord.x, TEX0.y), TATE);
+		if (IOS == 1.0 || IOS == 3.0) texcoord = vec2(TEX0.x, texcoord.y);
 	}
    
 	float factor  = 1.00 + (1.0-0.5*OS)*BLOOM/100.0 - lum*BLOOM/100.0;
@@ -617,7 +613,7 @@ void main()
 	float colmx = max(mx1, cm);
 	float w3 = min((c0 + 0.0005) / (pow(colmx, gamma_in/1.4) + 0.0005), 1.0);
 	
-	vec2 dx = mix(vec2(0.001, 0.0), vec2(0.0, 0.001), TATE);
+	vec2 dx = vec2(0.001, 0.0);
 	float mx0 = COMPAT_TEXTURE(Source, pos1 - dx).a;
 	float mx2 = COMPAT_TEXTURE(Source, pos1 + dx).a;
 	float mx = max(max(mx0,mx1),max(mx2,cm));
@@ -629,8 +625,7 @@ void main()
 	vec3 orig1 = color;
 	vec3 cmask = one;
 	
-	vec2 maskcoord = gl_FragCoord.yx * 1.000001;
-	if (notate) maskcoord = maskcoord.yx;
+	vec2 maskcoord = gl_FragCoord.xy * 1.000001;
 	
 	float smask = SlotMask(maskcoord, mx);	
 	cmask*= Mask(maskcoord, mx);

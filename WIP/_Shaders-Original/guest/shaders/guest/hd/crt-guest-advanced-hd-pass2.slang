@@ -75,9 +75,8 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter VSHARP "          Vert. Sharpness Definition" 1.25 0.0 2.0 0.10
 #define VSHARP global.VSHARP
 
-#pragma parameter VARNG "          Vert. Anti-Ringing" 0.75 0.0 1.0 0.10
+#pragma parameter VARNG "          Substractive Sharpness Ringing" 0.2 0.0 4.0 0.10
 #define VARNG global.VARNG 
-
 
 #pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
 
@@ -283,7 +282,9 @@ vec3 v_resample (vec2 tex0, vec4 Size) {
 	float FPR = vsharpness;
 	float fpx = 0.0;
 
-	float LOOPSIZE = ceil(2.0*FPR);	
+	float LOOPSIZE = ceil(2.0*FPR);
+	float CLAMPSIZE = round(2.0*LOOPSIZE/3.0);
+	
 	float n = -LOOPSIZE;
 	
 	do
@@ -292,7 +293,7 @@ vec3 v_resample (vec2 tex0, vec4 Size) {
 
 		w = gaussian(n+f) - sharp;
 		fpx = abs(n+f-sign(n)*FPR)/FPR;
-		if (abs(n) <= FPR) { cmax = max(cmax, pixel); cmin = min(cmin, pixel); }
+		if (abs(n) <= CLAMPSIZE) { cmax = max(cmax, pixel); cmin = min(cmin, pixel); }
 		if (w < 0.0) w = clamp(w, mix(-maxsharp, 0.0, pow(fpx, VSHARP)), 0.0);
 	
 		color = color + w * pixel;
@@ -304,7 +305,7 @@ vec3 v_resample (vec2 tex0, vec4 Size) {
 
 	color = color / wsum;
 
-	color = mix(clamp(color, 0.0, 1.0), clamp(color, cmin, cmax), VARNG); 
+	color = clamp(mix(clamp(color, cmin, cmax), color, VARNG), 0.0, 1.0);
 
 	return color; 
 }

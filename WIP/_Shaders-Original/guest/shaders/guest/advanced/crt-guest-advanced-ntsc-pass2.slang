@@ -1,7 +1,7 @@
 #version 450
 
 /*
-   CRT - Guest - Advanced - Fast - Pass2
+   CRT - Guest - Advanced - NTSC
    
    Copyright (C) 2018-2022 guest(r) - guest.r@gmail.com
 
@@ -26,8 +26,8 @@
 
 layout(push_constant) uniform Push
 {
-	float brightboost, brightboost1, gsl, scanline1, scanline2, beam_min, beam_max, beam_size,
-    glow, vertmask, inters, bloom, halation, scans, gamma_c, gamma_out, IOS;
+	float IOS, OS, BLOOM, brightboost, brightboost1, gsl, scanline1, scanline2, beam_min, beam_max, beam_size,
+	h_sharp, s_sharp, warpX, warpY, glow, shadowMask, masksize, vertmask, ring;
 } params;
 
 layout(std140, set = 0, binding = 0) uniform UBO
@@ -37,59 +37,24 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	vec4 OriginalSize;
 	vec4 OutputSize;
 	uint FrameCount;
-	float warpX;
-	float warpY;
-	float csize;
-	float bsize1;
-	float intres;
-	float c_shape;
-	float barspeed;
-	float barintensity;
-	float bardir;
-	float sborder;
-	float scan_falloff;
+	float bloom;
+	float halation;
+	float scans;
+	float gamma_c;
+	float gamma_out;
 	float overscanX;
 	float overscanY;
-	float bloom_dist;
+	float intres;
+	float prescalex;
+	float c_shape;
+	float blendMode; 
 	float scangamma;
+	float rolling_scan;
+	float sborder;
+	float scan_falloff;
+	float bloom_dist;
 } global;
 
-#pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
-
-#pragma parameter intres "          Internal Resolution Y: 224p/240p, 1.5...y-dowsample" 0.0 0.0 6.0 0.5 // Joint parameter with linearize pass, values must match
-
-#pragma parameter IOS "          Integer Scaling: Odd:Y, Even:'X'+Y" 0.0 0.0 4.0 1.0
-#define IOS          params.IOS     // Smart Integer Scaling
-
-#pragma parameter warpX "          CurvatureX (default 0.03)" 0.0 0.0 0.25 0.01
-#define warpX        global.warpX     // Curvature X
-
-#pragma parameter warpY "          CurvatureY (default 0.04)" 0.0 0.0 0.25 0.01
-#define warpY        global.warpY     // Curvature Y
-
-#pragma parameter c_shape "          Curvature Shape" 0.25 0.05 0.60 0.05
-#define c_shape        global.c_shape     // curvature shape
-
-#pragma parameter overscanX "          Overscan X original pixels" 0.0 -200.0 200.0 1.0
-#define overscanX        global.overscanX     // OverscanX pixels
-
-#pragma parameter overscanY "          Overscan Y original pixels" 0.0 -200.0 200.0 1.0
-#define overscanY        global.overscanY     // OverscanY pixels
-
-#pragma parameter csize "          Corner Size" 0.0 0.0 0.25 0.005
-#define csize        global.csize     // corner size
-
-#pragma parameter bsize1 "          Border Size" 0.01 0.0 3.0 0.01
-#define bsize1        global.bsize1     // border smoothness
-
-#pragma parameter sborder "          Border Intensity" 0.75 0.25 2.0 0.05
-#define sborder       global.sborder     // border intensity
-
-#pragma parameter barspeed "          Hum Bar Speed" 50.0 5.0 200.0 1.0
-
-#pragma parameter barintensity "          Hum Bar Intensity" 0.0 -1.0 1.0 0.01
-
-#pragma parameter bardir "          Hum Bar Direction" 0.0 0.0 1.0 1.0
 
 #pragma parameter bogus_brightness "[ BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
@@ -97,16 +62,16 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #define glow         params.glow     // Glow Strength
 
 #pragma parameter bloom "          Bloom Strength" 0.0 -2.0 2.0 0.05
-#define bloom         params.bloom     // bloom effect
+#define bloom         global.bloom     // bloom effect
 
 #pragma parameter bloom_dist "          Bloom Distribution" 0.0 0.0 2.0 0.05
 #define bloom_dist         global.bloom_dist     // bloom effect distribution
 
 #pragma parameter halation "          Halation Strength" 0.0 0.0 2.0 0.025
-#define halation         params.halation     // halation effect
+#define halation         global.halation     // halation effect
 
 #pragma parameter gamma_c "          Gamma correct" 1.0 0.50 2.0 0.02
-#define gamma_c   params.gamma_c     // adjust brightness
+#define gamma_c   global.gamma_c     // adjust brightness
 
 #pragma parameter brightboost "          Bright Boost Dark Pixels" 1.40 0.25 10.0 0.05
 #define brightboost  params.brightboost     // adjust brightness
@@ -122,10 +87,10 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter scanline1 "          Scanline Beam Shape Center" 6.0 -20.0 20.0 0.5
 #define scanline1    params.scanline1      // scanline param, vertical sharpness
 
-#pragma parameter scanline2 "          Scanline Beam Shape Edges" 8.0 3.0 70.0 1.0 
+#pragma parameter scanline2 "          Scanline Beam Shape Edges" 8.0 0.0 70.0 1.0 
 #define scanline2    params.scanline2      // scanline param, vertical sharpness
 
-#pragma parameter beam_min "          Scanline Shape Dark Pixels" 1.20 0.25 5.0 0.05
+#pragma parameter beam_min "          Scanline Shape Dark Pixels" 1.30 0.25 5.0 0.05
 #define beam_min     params.beam_min     // dark area beam min - narrow
 
 #pragma parameter beam_max "          Scanline Shape Bright Pixels" 1.00 0.4 3.5 0.025
@@ -138,13 +103,48 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #define vertmask     params.vertmask     // Scanline deconvergence colors
 
 #pragma parameter scans "          Scanline Saturation / Mask Falloff" 0.60 0.0 2.5 0.05
-#define scans        params.scans     // scanline saturation
+#define scans        global.scans     // scanline saturation
 
 #pragma parameter scan_falloff "          Scanline Falloff" 1.0 0.25 2.0 0.05
 #define scan_falloff        global.scan_falloff     // scanline falloff
 
 #pragma parameter scangamma "          Scanline Gamma" 2.40 0.5 5.0 0.05
 #define scangamma global.scangamma
+
+#pragma parameter rolling_scan "          Rolling Scanlines" 0.0 -1.0 1.0 0.01
+#define rolling_scan        global.rolling_scan     // rolling scanlines
+
+#pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
+
+#pragma parameter intres "          Internal Resolution Y: 224p/240p, 1.5...y-dowsample" 0.0 0.0 6.0 0.5 // Joint parameter with linearize pass, values must match
+
+#pragma parameter IOS "          Integer Scaling: Odd:Y, Even:'X'+Y" 0.0 0.0 4.0 1.0
+#define IOS          params.IOS     // Smart Integer Scaling
+
+#pragma parameter OS "          R. Bloom Overscan Mode" 1.0 0.0 2.0 1.0
+#define OS           params.OS     // Do overscan
+
+#pragma parameter BLOOM "          Raster bloom %" 0.0 0.0 20.0 1.0
+#define BLOOM        params.BLOOM     // Bloom overscan percentage
+
+#pragma parameter warpX "          CurvatureX (default 0.03)" 0.0 0.0 0.25 0.01
+#define warpX        params.warpX     // Curvature X
+
+#pragma parameter warpY "          CurvatureY (default 0.04)" 0.0 0.0 0.25 0.01
+#define warpY        params.warpY     // Curvature Y
+
+#pragma parameter c_shape "          Curvature Shape" 0.25 0.05 0.60 0.05
+#define c_shape        global.c_shape     // curvature shape
+
+#pragma parameter overscanX "          Overscan X original pixels" 0.0 -200.0 200.0 1.0
+#define overscanX        global.overscanX     // OverscanX pixels
+
+#pragma parameter overscanY "          Overscan Y original pixels" 0.0 -200.0 200.0 1.0
+#define overscanY        global.overscanY     // OverscanY pixels
+
+#pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader)" 1.0 1.0 4.0 1.0
+#define prescalex        global.prescalex     // prescale-x factor
+
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
 #define TEX0 vTexCoord
@@ -166,17 +166,21 @@ void main()
 #pragma stage fragment
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
-layout(set = 0, binding = 2) uniform sampler2D Pass1;
-layout(set = 0, binding = 3) uniform sampler2D LinearizePass;
-layout(set = 0, binding = 4) uniform sampler2D BloomPass;
+layout(set = 0, binding = 2) uniform sampler2D LinearizePass;
+layout(set = 0, binding = 3) uniform sampler2D AvgLumPass;
+layout(set = 0, binding = 4) uniform sampler2D Pass1;
 
-
-#define eps 1e-10 
+#define eps 1e-8
 
 float st(float x)
 {
 	return exp2(-10.0*x*x);
 } 
+
+float st1(float x)
+{
+	return exp2(-7.0*x*x);
+}
    
 float sw0(float x, float color, float scanline)
 {
@@ -201,6 +205,19 @@ float sw2(float x, float color, float scanline)
 	float ex = x*tmp;
 	return exp2(-scanline*ex*ex);
 }  
+ 
+vec2 Warp(vec2 pos)
+{
+	pos  = pos*2.0-1.0;    
+	pos  = mix(pos, vec2(pos.x*inversesqrt(1.0-c_shape*pos.y*pos.y), pos.y*inversesqrt(1.0-c_shape*pos.x*pos.x)), vec2(warpX, warpY)/c_shape);
+	return pos*0.5 + 0.5;
+}
+
+vec2 Overscan(vec2 pos, float dx, float dy){
+	pos=pos*2.0-1.0;    
+	pos*=vec2(dx,dy);
+	return pos*0.5+0.5;
+} 
 
 
 vec3 gc(vec3 c)
@@ -211,38 +228,28 @@ vec3 gc(vec3 c)
 }
 
 
-vec2 Overscan(vec2 pos, float dx, float dy){
-	pos=pos*2.0-1.0;    
-	pos*=vec2(dx,dy);
-	return pos*0.5+0.5;
-}  
-
-vec2 Warp(vec2 pos)
-{
-	pos  = pos*2.0-1.0;    
-	pos  = mix(pos, vec2(pos.x*inversesqrt(1.0-c_shape*pos.y*pos.y), pos.y*inversesqrt(1.0-c_shape*pos.x*pos.x)), vec2(warpX, warpY)/c_shape);
-	return pos*0.5 + 0.5;
-}
-
-
 void main()
 {
-	vec4 SourceSize = vec4(global.SourceSize.x, global.OriginalSize.y, global.SourceSize.z, global.OriginalSize.w);
+	vec4 SourceSize = global.OriginalSize * vec4(prescalex, 1.0, 1.0/prescalex, 1.0);
+	
+	SourceSize*= vec4(2.0, 1.0, 0.5, 1.0);
+	
+	float lum = COMPAT_TEXTURE(AvgLumPass, vec2(0.5,0.5)).a;
+	
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
 	bool interb  = (intera < 0.5);
-
+	
 	float SourceY = SourceSize.y;
 	float sy = 1.0;
 	if (global.intres == 0.5) sy = SourceY/224.0; else
 	if (global.intres == 1.0) sy = SourceY/240.0; else
 	if (global.intres > 1.25) sy = global.intres;
-	SourceSize*=vec4(1.0, 1.0/sy, 1.0, sy); 
-
+	SourceSize*=vec4(1.0, 1.0/sy, 1.0, sy);
+	
 	// Calculating texel coordinates
    
 	vec2 texcoord = TEX0.xy;
-
 	if (IOS > 0.0 && !interb){
 		vec2 ofactor = OutputSize.xy/SourceSize.xy;
 		vec2 intfactor = (IOS < 2.5) ? floor(ofactor) : ceil(ofactor);
@@ -251,29 +258,32 @@ void main()
 		texcoord = Overscan(texcoord, scan, scan);
 		if (IOS == 1.0 || IOS == 3.0) texcoord = vec2(TEX0.x, texcoord.y);
 	}
+   
+	float factor  = 1.00 + (1.0-0.5*OS)*BLOOM/100.0 - lum*BLOOM/100.0;
+	texcoord  = Overscan(texcoord, factor, factor);
 
-	texcoord = Overscan(texcoord, (global.OriginalSize.x - overscanX)/global.OriginalSize.x, (global.OriginalSize.y - overscanY)/global.OriginalSize.y);
+	texcoord = Overscan(texcoord, (SourceSize.x - overscanX)/SourceSize.x, (SourceSize.y - overscanY)/SourceSize.y);
 
 	vec2 pos  = Warp(texcoord);
+	vec2 pos0 = Warp(TEX0.xy);
 
-	float coffset = 0.5;
+	vec2 coffset = vec2(0.5, 0.5);
 	
 	vec2 ps = SourceSize.zw;
-	float OGL2Pos = pos.y * SourceSize.y - coffset;
-	float f = fract(OGL2Pos);
+	vec2 OGL2Pos = pos * SourceSize.xy - coffset;
+	vec2 fp = fract(OGL2Pos);
 	
 	vec2 dx = vec2(ps.x,0.0);
 	vec2 dy = vec2(0.0, ps.y);
    
 	// Reading the texels
 
-	vec2 pC4;
+	float  f = fp.y;
 	
-	pC4.y = floor(OGL2Pos) * ps.y + 0.5*ps.y; 
-	pC4.x = pos.x;
-	
+	vec2 pC4 = floor(OGL2Pos) * ps + 0.5*ps;
+	pC4.x = pos.x;	
 	if (interb)  pC4.y = pos.y;
-	
+
 	vec3 color1 = COMPAT_TEXTURE(Pass1, pC4      ).rgb;
 	vec3 scolor1 = 	COMPAT_TEXTURE(Pass1, pC4      ).aaa;
 
@@ -284,15 +294,15 @@ void main()
 	vec3 color2 = COMPAT_TEXTURE(Pass1, pC4      ).rgb;
 	vec3 scolor2 = 	COMPAT_TEXTURE(Pass1, pC4      ).aaa;
 
-	if(!interb) color2 = pow(color2, vec3(scangamma/gamma_in));
-	
-	// calculating scanlines
+	if(!interb) color2 = pow(color2, vec3(scangamma/gamma_in)); 
 
 	vec3 ctmp = color1; float w3 = 1.0; vec3 color = color1;
 	vec3 one = vec3(1.0);
 
 if (!interb)
 {	
+	// calculating scanlines
+
 	float shape1 = mix(scanline1, scanline2, f);
 	float shape2 = mix(scanline1, scanline2, 1.0-f);	
 	
@@ -303,7 +313,7 @@ if (!interb)
 	vec3 scolor0 = scolor1*wt1 + scolor2*wt2;
 	
 	ctmp = color00/(wt1+wt2);
-	vec3 sctmp = max(scolor0/(wt1+wt2), ctmp);
+	vec3 sctmp = scolor0/(wt1+wt2);
 	
 	float wf1, wf2;
 	
@@ -312,11 +322,16 @@ if (!interb)
 
 	float f1 = f; 
 	float f2 = 1.0-f;
+
+	float scanpix = SourceSize.x/OutputSize.x;
+
+	f1 = fract(f1 + rolling_scan*float(global.FrameCount)*scanpix);
+	f2 = 1.0 - f1;
 	
 	if (gsl <  0.5) { wf1 = sw0(f1,creff1,shape1); wf2 = sw0(f2,creff2,shape2);} else
 	if (gsl == 1.0) { wf1 = sw1(f1,creff1,shape1); wf2 = sw1(f2,creff2,shape2);} else
 	                { wf1 = sw2(f1,creff1,shape1); wf2 = sw2(f2,creff2,shape2);}
-
+	
 	if ((wf1 + wf2) > 1.0) { float wtmp = 1.0/(wf1+wf2); wf1*=wtmp; wf2*=wtmp; }
 	
 	// Scanline saturation application
@@ -356,6 +371,15 @@ if (!interb)
 	}
 	
 	color = gc(color1)*w1*cd1 + gc(color2)*w2*cd2;
+
+	if (abs(rolling_scan) > 0.005) 
+	{ 
+		wt1 = st1(f);
+		wt2 = st1(1.0-f);
+		color00 = (color1*wt1 + color2*wt2)/(wt1+wt2);
+		color = gc(color00) * mix(w1+w2, w3.xxx, max(wf1,wf2));	
+	}
+	
 	color = min(color, 1.0);
 }
 	

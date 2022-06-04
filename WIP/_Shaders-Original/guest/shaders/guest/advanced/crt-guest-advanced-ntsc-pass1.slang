@@ -1,7 +1,7 @@
 #version 450
 
 /*
-   CRT - Guest - NTSC - Fast - Pass1
+   CRT - Guest - NTSC - Pass1
    
    Copyright (C) 2018-2022 guest(r) - guest.r@gmail.com
 
@@ -67,8 +67,8 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter spike "          Scanline Spike Removal" 1.0 0.0 2.0 0.10
 #define spike params.spike
 
-#pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader, NTSC...)" 1.0 1.0 5.0 0.25  // Joint parameter with main pass, values must match
-#define prescalex        params.prescalex     // prescale-x factor
+#pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader)" 1.0 1.0 4.0 1.0  // Joint parameter with main pass, values must match
+#define prescalex        params.prescalex     // prescale-x factor 
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
 #define TEX0 vTexCoord

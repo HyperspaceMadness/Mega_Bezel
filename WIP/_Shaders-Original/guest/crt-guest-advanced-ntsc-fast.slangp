@@ -26,7 +26,7 @@ shader2 = shaders/guest/fast/pre-shaders.slang
 filter_linear2 = true
 scale_type2 = source
 scale2 = 1.0
-alias2 = PrePass
+alias2 = PrePass0
 
 # custom ntsc shaders
 

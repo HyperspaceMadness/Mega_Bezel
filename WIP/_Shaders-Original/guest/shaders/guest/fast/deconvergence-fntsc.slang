@@ -225,7 +225,7 @@ void main()
 #pragma stage fragment
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
-layout(set = 0, binding = 2) uniform sampler2D PrePass;
+layout(set = 0, binding = 2) uniform sampler2D PrePass0;
 layout(set = 0, binding = 3) uniform sampler2D LinearizePass;
 layout(set = 0, binding = 4) uniform sampler2D BloomPass;
 layout(set = 0, binding = 5) uniform sampler2D Source;
@@ -629,7 +629,7 @@ void main()
 	vec3  Glow = COMPAT_TEXTURE(BloomPass, pos).rgb;
 	vec3  Ref = COMPAT_TEXTURE(LinearizePass, pos).rgb;	
 	float maxb = COMPAT_TEXTURE(BloomPass, pos).a;
-	float vig  = COMPAT_TEXTURE(PrePass, clamp(pos, 0.0+0.5*global.OriginalSize.zw, 1.0-0.5*global.OriginalSize.zw)).a;
+	float vig  = COMPAT_TEXTURE(PrePass0, clamp(pos, 0.0+0.5*global.OriginalSize.zw, 1.0-0.5*global.OriginalSize.zw)).a;
 	
 	vec3 Bloom1 = Bloom;
 
