@@ -273,3 +273,8 @@ vec4 HHLP_GetBilinearTextureSample(sampler2D in_sampler, vec2 in_coord, vec4 in_
 
    return result;
 }
+
+bool HHLP_IsOutsideCoordSpace(vec2 in_coord)
+{
+	return (in_coord.x < -0.01 || in_coord.x > 1.01 || in_coord.y < -0.01 || in_coord.y > 1.01);
+}

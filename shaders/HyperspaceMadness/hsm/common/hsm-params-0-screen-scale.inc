@@ -250,11 +250,11 @@ float HSM_CROP_BLACK_THRESHOLD = global.HSM_CROP_BLACK_THRESHOLD / 100;
 //---------------------------------------------------------------------------------------------------
 //    SHARPEN
 //---------------------------------------------------------------------------------------------------
-#pragma parameter SHARPEN_TITLE  									"[ --- FAST SHARPEN - GUEST.R --- ]:"       			0.00 0.0 2.00 0.05
-// #pragma parameter SHARPEN_ON  										"          Sharpen ON"       		0 0 1 1
-#pragma parameter SHARPEN  			"          Sharpen Strength"    0.00 0.0 4.00 0.10 
-#pragma parameter CONTR    											"          Amount of Sharpening"  	0.05 0.0 0.25 0.01
-#pragma parameter DETAILS  											"          Details Sharpened"     	1.00 0.0 1.00 0.05
+// #pragma parameter SHARPEN_TITLE  									"[ --- FAST SHARPEN - GUEST.R --- ]:"       			0.00 0.0 2.00 0.05
+// // #pragma parameter SHARPEN_ON  										"          Sharpen ON"       		0 0 1 1
+// #pragma parameter SHARPEN  			"          Sharpen Strength"    0.00 0.0 4.00 0.10 
+// #pragma parameter CONTR    											"          Amount of Sharpening"  	0.05 0.0 0.25 0.01
+// #pragma parameter DETAILS  											"          Details Sharpened"     	1.00 0.0 1.00 0.05
 
 
 //---------------------------------------------------------------------------------------------------
@@ -702,7 +702,6 @@ float HSM_2ND_SCREEN_CROP_PERCENT_RIGHT = global.HSM_2ND_SCREEN_CROP_PERCENT_RIG
 //    Reflection Transform
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_REFLECTIONAPPEARANCE_TITLE					"[ REFLECTION POSITION & SCALE ]:" 0 0 0.01 0.01
-
 
 #pragma parameter HSM_SCREEN_REFLECTION_SCALE     					"          Screen Reflection Scale" 100 1 300 1
 float HSM_SCREEN_REFLECTION_SCALE = global.HSM_SCREEN_REFLECTION_SCALE / 100;

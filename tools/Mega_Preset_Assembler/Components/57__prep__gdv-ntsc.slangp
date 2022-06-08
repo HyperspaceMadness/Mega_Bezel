@@ -1,4 +1,4 @@
-shaders = 5
+shaders = 4
 
 shader0 = :/shaders/shaders_slang/stock.slang
 alias0 = "PrePass0"
@@ -25,10 +25,3 @@ filter_linear3 = true
 scale_type3 = source
 scale_x3 = 1.0
 scale_y3 = 1.0
-alias3 = NtscPass
-
-shader4 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-convert-ntsc.slang
-filter_linear4 = true
-scale_type4 = source
-scale_x4 = 0.5
-scale_y4 = 1.0

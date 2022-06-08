@@ -1,4 +1,4 @@
-shaders = 39
+shaders = 38
 
 shader0 = ../../shaders/HyperspaceMadness/hsm/hsm-add-params-no-reflect.slang
 alias0 = "CorePass"
@@ -105,113 +105,107 @@ filter_linear22 = true
 scale_type22 = source
 scale22 = 1.0
 
-// Color Correction with Dogway's awesome Grade shader
-shader23 = ../../shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
+shader23 = ../../../../stock.slang
+alias23 = "PrePass0"
 
-shader24 = ../../../../stock.slang
-alias24 = "PrePass0"
+shader24 = ../../shaders/HyperspaceMadness/hsm-guest/ntsc/hsm-ntsc-pass1.slang
+filter_linear24 = false
+float_framebuffer24 = true
+scale_type_x24 = source
+scale_type_y24 = source
+scale_x24 = 4.0
+scale_y24 = 1.0
+frame_count_mod24 = 2
+alias24 = NPass1
 
-shader25 = ../../shaders/HyperspaceMadness/hsm-guest/ntsc/hsm-ntsc-pass1.slang
-filter_linear25 = false
+shader25 = ../../shaders/HyperspaceMadness/hsm-guest/ntsc/hsm-ntsc-pass2.slang
 float_framebuffer25 = true
-scale_type_x25 = source
-scale_type_y25 = source
-scale_x25 = 4.0
+filter_linear25 = true
+scale_type25 = source
+scale_x25 = 0.5
 scale_y25 = 1.0
-frame_count_mod25 = 2
-alias25 = NPass1
 
-shader26 = ../../shaders/HyperspaceMadness/hsm-guest/ntsc/hsm-ntsc-pass2.slang
-float_framebuffer26 = true
+shader26 = ../../shaders/HyperspaceMadness/hsm-guest/ntsc/hsm-ntsc-pass3.slang
 filter_linear26 = true
 scale_type26 = source
-scale_x26 = 0.5
+scale_x26 = 1.0
 scale_y26 = 1.0
 
-shader27 = ../../shaders/HyperspaceMadness/hsm-guest/ntsc/hsm-ntsc-pass3.slang
-filter_linear27 = true
-scale_type27 = source
-scale_x27 = 1.0
-scale_y27 = 1.0
-alias27 = NtscPass
+shader27 =  ../../shaders/HyperspaceMadness/hsm-guest/hsm-custom-fast-sharpen.slang // ../../shaders/HyperspaceMadness/hsm-guest/g-sharp_resampler.slang
+filter_linear27 = false
+srgb_framebuffer27 = true
 
-shader28 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-convert-ntsc.slang
+shader28 = ../../../../stock.slang
 filter_linear28 = true
 scale_type28 = source
-scale_x28 = 0.5
+scale_x28 = 1.0
 scale_y28 = 1.0
+alias28 = "PrePass"
+mipmap_input28 = true
 
-shader29 = ../../../../stock.slang
+shader29 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-avg-lum.slang
 filter_linear29 = true
 scale_type29 = source
-scale_x29 = 1.0
-scale_y29 = 1.0
-alias29 = "PrePass"
+scale29 = 1.0
 mipmap_input29 = true
+alias29 = "AvgLumPass"
 
-shader30 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-avg-lum.slang
+// Pass referenced by subsequent blurring passes and crt pass
+shader30 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-interlace-and-linearize.slang
 filter_linear30 = true
 scale_type30 = source
 scale30 = 1.0
-mipmap_input30 = true
-alias30 = "AvgLumPass"
-
-// Pass referenced by subsequent blurring passes and crt pass
-shader31 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-interlace-and-linearize.slang
-filter_linear31 = true
-scale_type31 = source
-scale31 = 1.0
-float_framebuffer31 = true
-alias31 = "LinearizePass"
+float_framebuffer30 = true
+alias30 = "LinearizePass"
 feedback_pass = "0"
 
 // Sony Megatron Colour Video Monitor by Major Pain The Cactus
-shader32 = "../../shaders/HyperspaceMadness/hsm-megatron/crt-sony-megatron-source-pass.slang"
+shader31 = "../../shaders/HyperspaceMadness/hsm-megatron/crt-sony-megatron-source-pass.slang"
+filter_linear31 = "false"
+scale_type31 = "source"
+scale31 = "1.0"
+wrap_mode0 = "clamp_to_border"
+mipmap_input31 = "false"
+alias31 = "SourceSDR"
+
+shader32 = "../../shaders/HyperspaceMadness/hsm-megatron/crt-sony-megatron-hdr-pass.slang"
 filter_linear32 = "false"
 scale_type32 = "source"
 scale32 = "1.0"
-wrap_mode0 = "clamp_to_border"
-mipmap_input32 = "false"
-alias32 = "SourceSDR"
-
-shader33 = "../../shaders/HyperspaceMadness/hsm-megatron/crt-sony-megatron-hdr-pass.slang"
-filter_linear33 = "false"
-scale_type33 = "source"
-scale33 = "1.0"
 wrap_mode1 = "clamp_to_border"
-mipmap_input33 = "false"
-alias33 = "SourceHDR"
+mipmap_input32 = "false"
+alias32 = "SourceHDR"
 
-shader34 = "../../shaders/HyperspaceMadness/hsm-megatron/crt-sony-megatron-no-reflect.slang"
-filter_linear34 = "false"
+shader33 = "../../shaders/HyperspaceMadness/hsm-megatron/crt-sony-megatron-no-reflect.slang"
+filter_linear33 = "false"
 wrap_mode2 = "clamp_to_border"
-mipmap_input34 = "false"
-alias34 = ""
-float_framebuffer34 = "false"
-srgb_framebuffer34 = "false"
-scale_type34 = "viewport"
+mipmap_input33 = "false"
+alias33 = ""
+float_framebuffer33 = "false"
+srgb_framebuffer33 = "false"
+scale_type33 = "viewport"
 
-shader35 = ../../shaders/HyperspaceMadness/hsm/hsm-post-crt-prep-no-reflect.slang
-alias35 = "MBZ_PostCRTPass"
+shader34 = ../../shaders/HyperspaceMadness/hsm/hsm-post-crt-prep-no-reflect.slang
+alias34 = "MBZ_PostCRTPass"
 
 // Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 
-shader36 = ../../shaders/HyperspaceMadness/hsm/hsm-bezel-images-under-crt.slang
+shader35 = ../../shaders/HyperspaceMadness/hsm/hsm-bezel-images-under-crt.slang
+filter_linear35 = true
+scale_type35 = viewport
+float_framebuffer35 = true
+alias35 = "BR_LayersUnderCRTPass"
+
+shader36 = ../../shaders/HyperspaceMadness/hsm/hsm-bezel-images-over-crt.slang
 filter_linear36 = true
 scale_type36 = viewport
 float_framebuffer36 = true
-alias36 = "BR_LayersUnderCRTPass"
-
-shader37 = ../../shaders/HyperspaceMadness/hsm/hsm-bezel-images-over-crt.slang
-filter_linear37 = true
-scale_type37 = viewport
-float_framebuffer37 = true
-alias37 = "BR_LayersOverCRTPass"
+alias36 = "BR_LayersOverCRTPass"
 
 // Combine Passes ----------------------------------------------------------------
-shader38 = ../../shaders/HyperspaceMadness/hsm/hsm-combine-passes-no-reflect.slang
-scale_type38 = viewport
-alias38 = "CombinePass"
+shader37 = ../../shaders/HyperspaceMadness/hsm/hsm-combine-passes-no-reflect.slang
+scale_type37 = viewport
+alias37 = "CombinePass"
 // Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;LEDImage;TopLayerImage;"
 
@@ -295,16 +289,6 @@ TopLayerImage_mipmap = 1
 // HSM_ASPECT_RATIO_MODE = 6
 // HSM_CURVATURE_MODE = 0
 
-// NTSC Parameters
-GAMMA_INPUT = 2.0
-gamma_out = 2.0
-
-brightboost = 1.25
-scans = 0.65
-spike = 0.7
-h_sharp = 3.7
-s_sharp = 0.2
-
 // SMOOTH-ADV
 MDAPT_MODE = 1
 
@@ -312,17 +296,7 @@ HSM_SCALEFX_ON = 1
 
 HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = 500
 HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR = 100
-
-// HSM_INTERLACE_TRIGGER_RES = 100
-// HSM_FAKE_SCANLINE_RES_MODE = 0
-// HSM_FAKE_SCANLINE_OPACITY = 70
-// HSM_FAKE_SCANLINE_RES = 240
-// HSM_FAKE_SCANLINE_INT_SCALE = 1
-// HSM_FAKE_SCANLINE_CURVATURE = 0
-
-ntsc_scale = "0.33333"
-
-// shadowMask = 3
+HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = 30
 
 // Sony Megatron Color Monitor
 hcrt_hdr = "0.000000"

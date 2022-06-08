@@ -1,0 +1,7 @@
+#reference "../Base_CRT_Presets/MBZ__3__STD__GDV.slangp"
+
+#reference "Dual-Screen-3DS__STD.slangp"
+#reference "_Night__Settings.slangp"
+#reference "_Night__Lighting.slangp"
+#reference "_Night__Bezel.slangp"
+#reference "_Night__Bezel_Color_Teal.slangp"

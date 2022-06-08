@@ -1,4 +1,4 @@
-shaders = 4
+shaders = 3
 
 shader0 = :/shaders/shaders_slang/stock.slang
 alias0 = "PreCRTPass"
@@ -14,10 +14,3 @@ filter_linear2 = true
 scale_type2 = source
 mipmap_input2 = true
 scale2 = 1.0
-
-// Color Correction with Dogway's awesome Grade shader
-// Grade is after Afterglow so that brightening the black level does not break the afterglow
-shader3 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
-filter_linear3 = true
-scale_type3 = source
-scale3 = 1.0

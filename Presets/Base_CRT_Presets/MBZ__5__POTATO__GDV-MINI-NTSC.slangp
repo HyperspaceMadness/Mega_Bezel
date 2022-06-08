@@ -1,4 +1,4 @@
-shaders = 14
+shaders = 13
 
 shader0 = ../../shaders/HyperspaceMadness/hsm/hsm-add-params-potato.slang
 alias0 = "CorePass"
@@ -41,7 +41,11 @@ scale5 = 1.0
 alias5 = "IntroPass"
 
 // Color Correction with Dogway's awesome Grade shader
+// Grade is after Afterglow so that brightening the black level does not break the afterglow
 shader6 = ../../shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
+filter_linear6 = true
+scale_type6 = source
+scale6 = 1.0
 
 shader7 = ../../../../stock.slang
 alias7 = "PrePass0"
@@ -68,24 +72,17 @@ filter_linear10 = true
 scale_type10 = source
 scale_x10 = 1.0
 scale_y10 = 1.0
-alias10 = NtscPass
 
-shader11 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-convert-ntsc.slang
-filter_linear11 = true
-scale_type11 = source
-scale_x11 = 0.5
+shader11 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-crt-dariusg-gdv-mini-potato.slang
+scale_type11 = viewport
+scale_x11 = 1.0
 scale_y11 = 1.0
-
-shader12 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-crt-dariusg-gdv-mini-potato.slang
-scale_type12 = viewport
-scale_x12 = 1.0
-scale_y12 = 1.0
-filter_linear12 = true
+filter_linear11 = true
 
 g_sat = 0.15
 
-shader13 = ../../shaders/HyperspaceMadness/hsm/hsm-post-crt-prep-potato.slang
-alias13 = "MBZ_PostCRTPass"
+shader12 = ../../shaders/HyperspaceMadness/hsm/hsm-post-crt-prep-potato.slang
+alias12 = "MBZ_PostCRTPass"
 // Define textures to be used by the different passes
 textures = "ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
 
@@ -106,5 +103,3 @@ HSM_ASPECT_RATIO_MODE = 1
 // Use for matching vanilla GDV-Advanced
 // HSM_ASPECT_RATIO_MODE = 6
 // HSM_CURVATURE_MODE = 0
-// Define textures to be used by the different passes
-HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = 400

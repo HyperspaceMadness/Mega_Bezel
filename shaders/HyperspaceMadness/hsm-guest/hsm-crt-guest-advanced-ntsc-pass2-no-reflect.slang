@@ -1,6 +1,5 @@
 #version 450
 
 #define IS_NO_REFLECT_PRESET
-#define IS_NTSC_PRESET
 #include "../hsm/common/hsm-globals-and-screen-scale-params.inc"
-#include "hsm-crt-guest-advanced.inc"
+#include "hsm-crt-guest-advanced-ntsc-pass2.inc"

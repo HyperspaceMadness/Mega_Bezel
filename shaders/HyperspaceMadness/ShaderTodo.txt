@@ -3,27 +3,28 @@
 Mega Bezel is updated to V 0.9.108 2022-04-23 Rev 1
 
 Changes:
-  * Update to crt-guest-advanced-2022-05-27-release3
-  * Updated Sonkun Presets
-  * Updated Cyberlab presets
-  * Updated Nesguy's Nesguy__ApertureGrille-TVL-540__ADV
+  * Update to crt-guest-advanced-2022-06-02-release1
 
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
+  * Updated Sonkun Presets
+  * Updated Cyberlab presets
+  * Updated Nesguy's Nesguy__ApertureGrille-TVL-540__ADV
   * Add CRT Reflection Curvature Multiplier
+  * Add Night Lighting controls on layers inc Top Layer
+  * Correct Grade Black Level with Post Brightness
   * Update Sonkun
   * Update Cyberlab
   * Add Frame Color
+  * Adjust Tube Shadow Size?
   * Megatron HDR Combination at end of chain
   * Add how to remove Moire Guide
   * Fix Tube Diffuse Shadow in 3D Curvature
-  * Create #include for outside screen caching for non-calculation
-  * Add slangs #reference to with all parameters commented out
+  * Add .params #reference to with all parameters commented out
 
   * Bezel shadow on Potato Tube / Game Image
   * Check out Colorize Behavior on DMG-01 (Colored Gameboy)
-  * Different colored gel appearance on STD vs ADV
 
 ----------------------------------------------------
 --- Examples  --------------------------------------

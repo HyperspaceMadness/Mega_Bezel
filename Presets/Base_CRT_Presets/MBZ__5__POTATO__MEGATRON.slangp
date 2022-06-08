@@ -1,4 +1,4 @@
-shaders = 19
+shaders = 18
 
 shader0 = ../../shaders/HyperspaceMadness/hsm/hsm-add-params-potato.slang
 alias0 = "CorePass"
@@ -40,87 +40,84 @@ scale_type5 = source
 scale5 = 1.0
 alias5 = "IntroPass"
 
-shader6 =  ../../shaders/HyperspaceMadness/hsm-guest/hsm-custom-fast-sharpen.slang // ../../shaders/HyperspaceMadness/hsm-guest/g-sharp_resampler.slang
-filter_linear6 = false
-srgb_framebuffer6 = true
+shader6 = ../../../../stock.slang
+alias6 = "PreCRTPass"
 
-shader7 = ../../../../stock.slang
-alias7 = "PreCRTPass"
+shader7 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-afterglow0.slang
+filter_linear7 = true
+scale_type7 = source
+scale7 = 1.0
+alias7 = "AfterglowPass"
 
-shader8 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-afterglow0.slang
+shader8 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-pre-shaders-afterglow.slang
 filter_linear8 = true
 scale_type8 = source
+mipmap_input8 = true
 scale8 = 1.0
-alias8 = "AfterglowPass"
-
-shader9 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-pre-shaders-afterglow.slang
-filter_linear9 = true
-scale_type9 = source
-mipmap_input9 = true
-scale9 = 1.0
 
 // Color Correction with Dogway's awesome Grade shader
 // Grade is after Afterglow so that brightening the black level does not break the afterglow
-shader10 = ../../shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
-filter_linear10 = true
-scale_type10 = source
-scale10 = 1.0
+shader9 = ../../shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
+filter_linear9 = true
+scale_type9 = source
+scale9 = 1.0
 
-// Color Correction with Dogway's awesome Grade shader
-shader11 = ../../shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
+shader10 =  ../../shaders/HyperspaceMadness/hsm-guest/hsm-custom-fast-sharpen.slang // ../../shaders/HyperspaceMadness/hsm-guest/g-sharp_resampler.slang
+filter_linear10 = false
+srgb_framebuffer10 = true
 
-shader12 = ../../../../stock.slang
+shader11 = ../../../../stock.slang
+filter_linear11 = true
+scale_type11 = source
+scale_x11 = 1.0
+scale_y11 = 1.0
+alias11 = "PrePass"
+mipmap_input11 = true
+
+shader12 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-avg-lum.slang
 filter_linear12 = true
 scale_type12 = source
-scale_x12 = 1.0
-scale_y12 = 1.0
-alias12 = "PrePass"
+scale12 = 1.0
 mipmap_input12 = true
+alias12 = "AvgLumPass"
 
-shader13 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-avg-lum.slang
+// Pass referenced by subsequent blurring passes and crt pass
+shader13 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-interlace-and-linearize.slang
 filter_linear13 = true
 scale_type13 = source
 scale13 = 1.0
-mipmap_input13 = true
-alias13 = "AvgLumPass"
-
-// Pass referenced by subsequent blurring passes and crt pass
-shader14 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-interlace-and-linearize.slang
-filter_linear14 = true
-scale_type14 = source
-scale14 = 1.0
-float_framebuffer14 = true
-alias14 = "LinearizePass"
+float_framebuffer13 = true
+alias13 = "LinearizePass"
 feedback_pass = "0"
 
 // Sony Megatron Colour Video Monitor by Major Pain The Cactus
-shader15 = "../../shaders/HyperspaceMadness/hsm-megatron/crt-sony-megatron-source-pass.slang"
+shader14 = "../../shaders/HyperspaceMadness/hsm-megatron/crt-sony-megatron-source-pass.slang"
+filter_linear14 = "false"
+scale_type14 = "source"
+scale14 = "1.0"
+wrap_mode0 = "clamp_to_border"
+mipmap_input14 = "false"
+alias14 = "SourceSDR"
+
+shader15 = "../../shaders/HyperspaceMadness/hsm-megatron/crt-sony-megatron-hdr-pass.slang"
 filter_linear15 = "false"
 scale_type15 = "source"
 scale15 = "1.0"
-wrap_mode0 = "clamp_to_border"
-mipmap_input15 = "false"
-alias15 = "SourceSDR"
-
-shader16 = "../../shaders/HyperspaceMadness/hsm-megatron/crt-sony-megatron-hdr-pass.slang"
-filter_linear16 = "false"
-scale_type16 = "source"
-scale16 = "1.0"
 wrap_mode1 = "clamp_to_border"
-mipmap_input16 = "false"
-alias16 = "SourceHDR"
+mipmap_input15 = "false"
+alias15 = "SourceHDR"
 
-shader17 = "../../shaders/HyperspaceMadness/hsm-megatron/crt-sony-megatron-potato.slang"
-filter_linear17 = "false"
+shader16 = "../../shaders/HyperspaceMadness/hsm-megatron/crt-sony-megatron-potato.slang"
+filter_linear16 = "false"
 wrap_mode2 = "clamp_to_border"
-mipmap_input17 = "false"
-alias17 = ""
-float_framebuffer17 = "false"
-srgb_framebuffer17 = "false"
-scale_type17 = "viewport"
+mipmap_input16 = "false"
+alias16 = ""
+float_framebuffer16 = "false"
+srgb_framebuffer16 = "false"
+scale_type16 = "viewport"
 
-shader18 = ../../shaders/HyperspaceMadness/hsm/hsm-post-crt-prep-potato.slang
-alias18 = "MBZ_PostCRTPass"
+shader17 = ../../shaders/HyperspaceMadness/hsm/hsm-post-crt-prep-potato.slang
+alias17 = "MBZ_PostCRTPass"
 // Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
 

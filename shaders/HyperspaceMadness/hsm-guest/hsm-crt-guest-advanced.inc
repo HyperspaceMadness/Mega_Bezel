@@ -1,7 +1,7 @@
 /*
    CRT - Guest - Advanced
    
-   Copyright (C) 2018-2021 guest(r) - guest.r@gmail.com
+   Copyright (C) 2018-2022 guest(r) - guest.r@gmail.com
 
    Incorporates many good ideas and suggestions from Dr. Venom.
    I would also like give thanks to many Libretro forums members for continuous feedback, suggestions and caring about the shader.
@@ -24,8 +24,6 @@
 
 // All parameter uniform values are in hsm-globals.inc 
 
-
-#pragma parameter blendMode 		"   NTSC Blend Mode - 0:SHARP | 1:STANDARD | 2:ORIG -- blendMode" 1.0 0.0 2.0 1.0
 
 #pragma parameter bogus_brightness "[ BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
@@ -171,21 +169,13 @@ layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 2) uniform sampler2D LinearizePass;
 layout(set = 0, binding = 3) uniform sampler2D AvgLumPass;
-
-/* HSM Removed - Seemingly only used for vignette
 layout(set = 0, binding = 4) uniform sampler2D PrePass;
-*/
-
-#ifdef IS_NTSC_PRESET
-layout(set = 0, binding = 4) uniform sampler2D PrePass0;
-layout(set = 0, binding = 5) uniform sampler2D NtscPass;
-#endif
 
 // HSM Added
 layout(set = 0, binding = 6) uniform sampler2D InfoCachePass;
 layout(set = 0, binding = 7) uniform sampler2D InfoCachePassFeedback;
 
-#define eps 1e-8
+#define eps 1e-10 
 
 float st(float x)
 {
@@ -273,7 +263,7 @@ void main()
 #endif
 #endif
 
-	if (cache_bounds_coord.x < -0.01 || cache_bounds_coord.x > 1.01 || cache_bounds_coord.y < -0.01 || cache_bounds_coord.y > 1.01)
+	if (HHLP_IsOutsideCoordSpace(cache_bounds_coord))
 	{
 			FragColor = vec4(0);
 			return;
@@ -286,18 +276,9 @@ void main()
 	*/
 
 	// HSM Added
-	vec2 SourceSize = CROPPED_ROTATED_SIZE_WITH_RES_MULT;
+	vec4 SourceSize = vec4(CROPPED_ROTATED_SIZE_WITH_RES_MULT, 1/CROPPED_ROTATED_SIZE_WITH_RES_MULT);
 	
-	bool nmode1 = (ntsc_processing_on && global.blendMode == 1.0);
-	bool nmode2 = (ntsc_processing_on && global.blendMode >  1.5);
 
-	/* HSM Removed NTSC
-	if (nmode2) SourceSize*= vec4(2.0, 1.0, 0.5, 1.0);
-	*/
-
-	if (nmode2) 
-		SourceSize*= vec2(2.0, 1.0);
-		
 	float lum = COMPAT_TEXTURE(AvgLumPass, vec2(0.5,0.5)).a;
 	
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
@@ -331,7 +312,7 @@ void main()
 	float factor  = 1.00 + (1.0-0.5*OS)*BLOOM/100.0 - lum*BLOOM/100.0;
 	texcoord  = Overscan(texcoord, factor, factor);
 
-	texcoord = Overscan(texcoord, (SourceSize.x - overscanX)/SourceSize.x, (SourceSize.y - overscanY)/SourceSize.y);
+	texcoord = Overscan(texcoord, (global.OriginalSize.x - overscanX)/global.OriginalSize.x, (global.OriginalSize.y - overscanY)/global.OriginalSize.y);
 
 	vec2 pos  = Warp(texcoord);
  	*/
@@ -343,14 +324,8 @@ void main()
 	bool smarte  = (smart_ei > 0.01); // smart edge interpolation on / off
 
 	vec2 coffset = vec2(0.5, 0.5);
-	
-	/* HSM Removed
+
 	vec2 ps = SourceSize.zw;
-	*/
-
-	// HSM Added
-	vec2 ps = 1 / SourceSize.xy;
-
 	vec2 OGL2Pos = pos * SourceSize.xy - coffset;
 	vec2 fp = fract(OGL2Pos);
 	
@@ -376,17 +351,6 @@ void main()
 	
 	vec2 pC4 = floor(OGL2Pos) * ps + 0.5*ps; 
 
-	/* HSM Removed NTSC
-	vec2 pC5 = mix(vec2(pos.x, pC4.y), vec2(pC4.x, pos.y), float(!notate));
-	*/
-
-	// HSM Added - Only used in NTSC Processing
-	vec2 pC5 = vec2(0);
-
-	if (ntsc_processing_on)
-		pC5 = mix(vec2(pos.x, pC4.y), vec2(pC4.x, pos.y), float(!notate));
-	// End Addition
-
 	if (interb)  pC4.y = pos.y;
 	
 	float zero = exp2(-h_sharp);
@@ -397,14 +361,8 @@ void main()
 	*/
 	
 	// HSM Added
-	float opposite_dir_divide_add = 0;
-
-	if (ntsc_processing_on)
-		opposite_dir_divide_add = 0.325 * float(nmode2);
-
 	float fdivider = min((1 - USE_VERTICAL_SCANLINES) * HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR + 
-			   				USE_VERTICAL_SCANLINES *  HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR
-							+ opposite_dir_divide_add, 
+			   				USE_VERTICAL_SCANLINES *  HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR, 
 			   				2.0);
 	// End Addition
 
@@ -425,10 +383,10 @@ void main()
 	float fp1 = 1.-fpx;
 
 	float twl3 = max(wl3 - sharp1, 0.0);
-	float twl2 = max(wl2 - sharp1, mix(-0.15, 0.0, fpx));
+	float twl2 = max(wl2 - sharp1, mix(-0.12, 0.0, 1.0-fp1*fp1));
 	float twl1 = max(wl1 - sharp1, 0.0);
 	float twr1 = max(wr1 - sharp1, 0.0);
-	float twr2 = max(wr2 - sharp1, mix(-0.15, 0.0, fp1));
+	float twr2 = max(wr2 - sharp1, mix(-0.12, 0.0, 1.0-fpx*fpx));
 	float twr3 = max(wr3 - sharp1, 0.0);
 	
 	bool sharp = (sharp1 > 0.0);
@@ -445,66 +403,13 @@ void main()
 	}
 
 	vec3 l3, l2, l1, r1, r2, r3, sl2, sl1, sr1, sr2, color1, color2, colmin, colmax;
-	// HSM Added NTSC
-	vec3 cc;
-	// End Addition
 
-	// HSM Added NTSC
-	if (nmode2)
-	{
-#ifdef IS_NTSC_PRESET 
-		l3 = pow(COMPAT_TEXTURE(NtscPass, pC4 -off2).rgb, gamma_in.xxx);
-		l2 = pow(COMPAT_TEXTURE(NtscPass, pC4 -offx).rgb, gamma_in.xxx);
-		l1 = pow(COMPAT_TEXTURE(NtscPass, pC4      ).rgb, gamma_in.xxx);
-		r1 = pow(COMPAT_TEXTURE(NtscPass, pC4 +offx).rgb, gamma_in.xxx);
-		r2 = pow(COMPAT_TEXTURE(NtscPass, pC4 +off2).rgb, gamma_in.xxx);
-		r3 = pow(COMPAT_TEXTURE(NtscPass, pC4 +offx+off2).rgb, gamma_in.xxx);
-#endif
-	}
-	else
-	{
-		l3 = COMPAT_TEXTURE(LinearizePass, pC4 -off2).rgb;
-		l2 = COMPAT_TEXTURE(LinearizePass, pC4 -offx).rgb;
-		l1 = COMPAT_TEXTURE(LinearizePass, pC4      ).rgb;
-		r1 = COMPAT_TEXTURE(LinearizePass, pC4 +offx).rgb;
-		r2 = COMPAT_TEXTURE(LinearizePass, pC4 +off2).rgb;
-		r3 = COMPAT_TEXTURE(LinearizePass, pC4 +offx+off2).rgb;
-#ifdef IS_NTSC_PRESET 
-		if (ntsc_processing_on)
-			cc = pow(COMPAT_TEXTURE(NtscPass, pC5).rgb, gamma_in.xxx);
-#endif
-	}
-
-	/* HSM Removed NTSC
-//if (nmode2)
-{
-	l3 = pow(COMPAT_TEXTURE(NtscPass, pC4 -off2).rgb, gamma_in.xxx);
-	l2 = pow(COMPAT_TEXTURE(NtscPass, pC4 -offx).rgb, gamma_in.xxx);
-	l1 = pow(COMPAT_TEXTURE(NtscPass, pC4      ).rgb, gamma_in.xxx);
-	r1 = pow(COMPAT_TEXTURE(NtscPass, pC4 +offx).rgb, gamma_in.xxx);
-	r2 = pow(COMPAT_TEXTURE(NtscPass, pC4 +off2).rgb, gamma_in.xxx);
-	r3 = pow(COMPAT_TEXTURE(NtscPass, pC4 +offx+off2).rgb, gamma_in.xxx);
-}
-else
-{
 	l3 = COMPAT_TEXTURE(LinearizePass, pC4 -off2).rgb;
 	l2 = COMPAT_TEXTURE(LinearizePass, pC4 -offx).rgb;
 	l1 = COMPAT_TEXTURE(LinearizePass, pC4      ).rgb;
 	r1 = COMPAT_TEXTURE(LinearizePass, pC4 +offx).rgb;
 	r2 = COMPAT_TEXTURE(LinearizePass, pC4 +off2).rgb;
 	r3 = COMPAT_TEXTURE(LinearizePass, pC4 +offx+off2).rgb;
-	cc = pow(COMPAT_TEXTURE(NtscPass, pC5).rgb, gamma_in.xxx);
-}
-*/
-
-/* HSM Removed default GDV
-	l3 = COMPAT_TEXTURE(LinearizePass, pC4 -off2).rgb;
-	l2 = COMPAT_TEXTURE(LinearizePass, pC4 -offx).rgb;
-	l1 = COMPAT_TEXTURE(LinearizePass, pC4      ).rgb;
-	r1 = COMPAT_TEXTURE(LinearizePass, pC4 +offx).rgb;
-	r2 = COMPAT_TEXTURE(LinearizePass, pC4 +off2).rgb;
-	r3 = COMPAT_TEXTURE(LinearizePass, pC4 +offx+off2).rgb;
-*/
 
 	colmin = min(min(l1,r1), min(l2,r2));
 	colmax = max(max(l1,r1), max(l2,r2));
@@ -519,12 +424,8 @@ else
 	}
 
 	color1 = (l3*twl3 + l2*twl2 + l1*twl1 + r1*twr1 + r2*twr2 + r3*twr3)/(twl3+twl2+twl1+twr1+twr2+twr3);
+
 	if (sharp) color1 = clamp(mix(clamp(color1, colmin, colmax), color1, ring), 0.0, 1.0);
-	if (nmode1 && !interb) color1 = min(normalize (color1+eps) * length(sqrt(color1 * cc)) ,1.0);
-	
-	/* HSM Removed
-	if (!interb) color1 = pow(color1, vec3(scangamma/gamma_in));
-`	*/
 
 	// HSM Added From NTSC
 	color1 = pow(color1, vec3(scangammaoffset));
@@ -532,31 +433,11 @@ else
 	float ts = 0.025;
 	vec3 luma = vec3(0.2126, 0.7152, 0.0722);
 	
-	bool ntscbm = ntsc_processing_on && (global.blendMode == 0.0);
-
-if (ntscbm)
-{
-#ifdef IS_NTSC_PRESET 
-	l2 = COMPAT_TEXTURE(PrePass0, pC4 -offx).rgb;
-	l1 = COMPAT_TEXTURE(PrePass0, pC4      ).rgb;
-	r1 = COMPAT_TEXTURE(PrePass0, pC4 +offx).rgb;
-	r2 = COMPAT_TEXTURE(PrePass0, pC4 +off2).rgb;
-#endif
-}
-	
 	float lm2 = max(max(l2.r,l2.g),l2.b);
 	float lm1 = max(max(l1.r,l1.g),l1.b);
 	float rm1 = max(max(r1.r,r1.g),r1.b);
 	float rm2 = max(max(r2.r,r2.g),r2.b);	
 
-if (ntscbm)
-{	
-	lm2 = pow(lm2, gamma_in);
-	lm1 = pow(lm1, gamma_in);
-	rm1 = pow(rm1, gamma_in);
-	rm2 = pow(rm2, gamma_in);
-}
-	
 	float swl2 = max(twl2, 0.0) * (dot(l2,luma) + ts);
 	float swl1 = twl1 * (dot(l1,luma) + ts);
 	float swr1 = twr1 * (dot(r1,luma) + ts);
@@ -570,32 +451,13 @@ if (ntscbm)
 	if (!interb)
 {	
 	pC4+=offy;
-	pC5+=offy;
 	
-if (ntsc_processing_on && nmode2)
-{
-#ifdef IS_NTSC_PRESET 
-	l3 = pow(COMPAT_TEXTURE(NtscPass, pC4 -off2).rgb, gamma_in.xxx);
-	l2 = pow(COMPAT_TEXTURE(NtscPass, pC4 -offx).rgb, gamma_in.xxx);
-	l1 = pow(COMPAT_TEXTURE(NtscPass, pC4      ).rgb, gamma_in.xxx);
-	r1 = pow(COMPAT_TEXTURE(NtscPass, pC4 +offx).rgb, gamma_in.xxx);
-	r2 = pow(COMPAT_TEXTURE(NtscPass, pC4 +off2).rgb, gamma_in.xxx);
-	r3 = pow(COMPAT_TEXTURE(NtscPass, pC4 +offx+off2).rgb, gamma_in.xxx);
-#endif
-}
-else
-{
 	l3 = COMPAT_TEXTURE(LinearizePass, pC4 -off2).rgb;
 	l2 = COMPAT_TEXTURE(LinearizePass, pC4 -offx).rgb;
 	l1 = COMPAT_TEXTURE(LinearizePass, pC4      ).rgb;
 	r1 = COMPAT_TEXTURE(LinearizePass, pC4 +offx).rgb;
 	r2 = COMPAT_TEXTURE(LinearizePass, pC4 +off2).rgb;
 	r3 = COMPAT_TEXTURE(LinearizePass, pC4 +offx+off2).rgb;
-#ifdef IS_NTSC_PRESET 
-	if (ntsc_processing_on)
-		cc = pow(COMPAT_TEXTURE(NtscPass, pC5).rgb, gamma_in.xxx);	
-#endif
-}
 
 	colmin = min(min(l1,r1), min(l2,r2));
 	colmax = max(max(l1,r1), max(l2,r2));
@@ -610,37 +472,16 @@ else
 	}
 	
 	color2 = (l3*twl3 + l2*twl2 + l1*twl1 + r1*twr1 + r2*twr2 + r3*twr3)/(twl3+twl2+twl1+twr1+twr2+twr3);
+
 	if (sharp) color2 = clamp(mix(clamp(color2, colmin, colmax), color2, ring), 0.0, 1.0);
-	if (nmode1 && !interb) color2 = min(normalize (color2+eps) * length(sqrt(color2 * cc)) ,1.0);	
-	
-	if (nmode1 && !interb) 
-		color2 = min(normalize (color2+eps) * length(sqrt(color2 * cc)) ,1.0);	
-		
+
 	// HSM Added From NTSC
 	color2 = pow(color2, vec3(scangammaoffset));	
-
-	if (ntscbm)
-	{
-#ifdef IS_NTSC_PRESET 
-		l2 = COMPAT_TEXTURE(PrePass0, pC4 -offx).rgb;
-		l1 = COMPAT_TEXTURE(PrePass0, pC4      ).rgb;
-		r1 = COMPAT_TEXTURE(PrePass0, pC4 +offx).rgb;
-		r2 = COMPAT_TEXTURE(PrePass0, pC4 +off2).rgb;
-#endif
-	}
 
 	lm2 = max(max(l2.r,l2.g),l2.b);
 	lm1 = max(max(l1.r,l1.g),l1.b);
 	rm1 = max(max(r1.r,r1.g),r1.b);
 	rm2 = max(max(r2.r,r2.g),r2.b);
-
-if (ntscbm)
-{
-	lm2 = pow(lm2, gamma_in);
-	lm1 = pow(lm1, gamma_in);
-	rm1 = pow(rm1, gamma_in);
-	rm2 = pow(rm2, gamma_in);
-}
 
 	swl2 = max(twl2, 0.0) * (dot(l2,luma) + ts);
 	swl1 = twl1 * (dot(l1,luma) + ts);
@@ -678,8 +519,9 @@ if (!interb)
 	float f1 = f; 
 	float f2 = 1.0-f;
 
-	// HSM Removed	
-	// float scanpix = mix(SourceSize.x/OutputSize.x, SourceSize.y/OutputSize.y, float(notate));
+	/* HSM Removed	
+	float scanpix = mix(SourceSize.x/OutputSize.x, SourceSize.y/OutputSize.y, float(notate));
+	*/
 
 	// HSM Added
 	float scanpix = mix(SourceSize.x/(SCREEN_SCALE.x * OutputSize.x), SourceSize.y/(SCREEN_SCALE.y * OutputSize.y), float(notate));
@@ -756,5 +598,4 @@ if (!interb)
 	// color = pow(color, vec3(1.0/gamma_out));
 
 	FragColor = vec4(color, colmx);
-
 }

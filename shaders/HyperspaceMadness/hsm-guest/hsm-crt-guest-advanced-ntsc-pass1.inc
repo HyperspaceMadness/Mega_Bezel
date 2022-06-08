@@ -39,36 +39,36 @@ layout(push_constant) uniform Push
 	float internal_res;
 } params;
 
-layout(std140, set = 0, binding = 0) uniform UBO
-{
-	mat4 MVP;
-} global;
-
-
 #pragma parameter bogus_filtering "[ FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-#pragma parameter HSHARPNESS "          Horizontal Filter Range" 1.5 1.0 8.0 0.125
+#pragma parameter HSHARPNESS "          Horizontal Filter Range -- HSHARPNESS" 1.5 1.0 8.0 0.125
 #define HSHARPNESS params.HSHARPNESS
 
-#pragma parameter SIGMA_HOR "          Horizontal Blur Sigma" 0.90 0.1 7.0 0.05
+#pragma parameter SIGMA_HOR "          Horizontal Blur Sigma -- SIGMA_HOR" 0.90 0.1 7.0 0.05
 #define SIGMA_HOR params.SIGMA_HOR
 
-#pragma parameter S_SHARP "          Substractive Sharpness" 0.9 0.0 2.0 0.10
+#pragma parameter S_SHARP "          Substractive Sharpness -- S_SHARP" 0.9 0.0 2.0 0.10
 #define S_SHARP params.S_SHARP
 
-#pragma parameter HSHARP "          Sharpness Definition" 1.2 0.0 2.0 0.10
+#pragma parameter HSHARP "          Sharpness Definition -- HSHARP" 1.2 0.0 2.0 0.10
 #define HSHARP params.HSHARP
 
-#pragma parameter HARNG "          Substractive Sharpness Ringing" 0.4 0.0 4.0 0.10
+#pragma parameter HARNG "          Substractive Sharpness Ringing -- HARNG" 0.4 0.0 4.0 0.10
 #define HARNG params.HARNG 
 
-#pragma parameter spike "          Scanline Spike Removal" 1.0 0.0 2.0 0.10
+#pragma parameter spike "          Scanline Spike Removal -- spike" 1.0 0.0 2.0 0.10
 #define spike params.spike
 
-#pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader)" 1.0 1.0 4.0 1.0  // Joint parameter with main pass, values must match
-#define prescalex        params.prescalex     // prescale-x factor 
+// #pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader)" 1.0 1.0 4.0 1.0  // Joint parameter with main pass, values must match
+// #define prescalex        params.prescalex     // prescale-x factor 
 
-#define COMPAT_TEXTURE(c,d) texture(c,d)
+/// HSM Removed
+// #define COMPAT_TEXTURE(c,d) texture(c,d)
+
+// HSM Added
+#define COMPAT_TEXTURE(c,d) HSM_GetCroppedTexSample(c,d)
+// End Addition
+
 #define TEX0 vTexCoord
 
 #define OutputSize params.OutputSize
@@ -89,6 +89,8 @@ void main()
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 2) uniform sampler2D LinearizePass;
+layout(set = 0, binding = 3) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 4) uniform sampler2D InfoCachePassFeedback;
 
 float invsqrsigma = 1.0/(2.0*SIGMA_HOR*SIGMA_HOR);
 
@@ -99,11 +101,42 @@ float gaussian(float x)
 
 void main()
 {	
+	// HSM Added
+	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+
+// If it's the potato preset render the whole frame
+#ifndef IS_POTATO_PRESET
+#ifndef IS_NO_REFLECT_PRESET
+	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
+	HSM_GetBezelCoords(SCREEN_COORD, 
+						SCREEN_SCALE, 
+						TUBE_SCALE, 
+						SCREEN_ASPECT, 
+						false,
+						BEZEL_OUTSIDE_SCALE,
+						BEZEL_OUTSIDE_COORD, 
+						BEZEL_OUTSIDE_CURVED_COORD, 
+						FRAME_OUTSIDE_CURVED_COORD);
+#endif
+#endif
+
+	/* HSM Removed
 	vec4 SourceSize = params.OriginalSize * vec4(2.0*prescalex, 1.0, 0.5/prescalex, 1.0);
-	
+
 	float f = fract(SourceSize.x * vTexCoord.x);
 	f = 0.5 - f;
 	vec2 tex = floor(SourceSize.xy * vTexCoord)*SourceSize.zw + 0.5*SourceSize.zw;
+	*/
+
+	// HSM Added
+	vec4 SourceSize = vec4(CROPPED_ROTATED_SIZE_WITH_RES_MULT, 1 / CROPPED_ROTATED_SIZE_WITH_RES_MULT);
+
+	float f = fract(SourceSize.x * vTexCoord.x);
+	f = 0.5 - f;
+	vec2 tex = floor(SourceSize.xy * vTexCoord)*SourceSize.zw + 0.5*SourceSize.zw;
+	// End Addition
+
 	vec3 color = 0.0.xxx;
 	float scolor = 0.0;
 	vec2 dx  = vec2(SourceSize.z, 0.0);

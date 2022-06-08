@@ -28,123 +28,132 @@ layout(push_constant) uniform Push
 	h_sharp, s_sharp, warpX, warpY, glow, shadowMask, masksize, vertmask, ring;
 } params;
 
-layout(std140, set = 0, binding = 0) uniform UBO
-{
-	mat4 MVP;
-	vec4 SourceSize;
-	vec4 OriginalSize;
-	vec4 OutputSize;
-	uint FrameCount;
-	float bloom;
-	float halation;
-	float scans;
-	float gamma_c;
-	float gamma_out;
-	float overscanX;
-	float overscanY;
-	float intres;
-	float prescalex;
-	float c_shape;
-	float blendMode; 
-	float scangamma;
-	float rolling_scan;
-	float sborder;
-	float scan_falloff;
-	float bloom_dist;
-} global;
+// layout(std140, set = 0, binding = 0) uniform UBO
+// {
+// 	mat4 MVP;
+// 	vec4 SourceSize;
+// 	vec4 OriginalSize;
+// 	vec4 OutputSize;
+// 	uint FrameCount;
+// 	float bloom;
+// 	float halation;
+// 	float scans;
+// 	float gamma_c;
+// 	float gamma_out;
+// 	float overscanX;
+// 	float overscanY;
+// 	float intres;
+// 	float prescalex;
+// 	float c_shape;
+// 	float blendMode; 
+// 	float scangamma;
+// 	float rolling_scan;
+// 	float sborder;
+// 	float scan_falloff;
+// 	float bloom_dist;
+// } global;
 
 
 #pragma parameter bogus_brightness "[ BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
-#pragma parameter glow "          Glow Strength" 0.08 -2.0 2.0 0.01
-#define glow         params.glow     // Glow Strength
+#pragma parameter glow "          Glow Strength -- glow" 0.08 -2.0 2.0 0.01
+#define glow         global.glow     // Glow Strength
 
-#pragma parameter bloom "          Bloom Strength" 0.0 -2.0 2.0 0.05
+#pragma parameter bloom "          Bloom Strength -- bloom" 0.0 -2.0 2.0 0.05
 #define bloom         global.bloom     // bloom effect
 
-#pragma parameter bloom_dist "          Bloom Distribution" 0.0 0.0 2.0 0.05
+#pragma parameter bloom_dist "          Bloom Distribution -- bloom_dist" 0.0 0.0 2.0 0.05
 #define bloom_dist         global.bloom_dist     // bloom effect distribution
 
-#pragma parameter halation "          Halation Strength" 0.0 0.0 2.0 0.025
+#pragma parameter halation "          Halation Strength -- halation" 0.0 0.0 2.0 0.025
 #define halation         global.halation     // halation effect
 
-#pragma parameter gamma_c "          Gamma correct" 1.0 0.50 2.0 0.02
+#pragma parameter gamma_c "          Gamma Correct -- gamma_c" 1.0 0.50 2.0 0.02
 #define gamma_c   global.gamma_c     // adjust brightness
 
-#pragma parameter brightboost "          Bright Boost Dark Pixels" 1.40 0.25 10.0 0.05
-#define brightboost  params.brightboost     // adjust brightness
+#pragma parameter brightboost "          Bright Boost Dark Pixels -- brightboost" 1.40 0.25 10.0 0.05
+#define brightboost  global.brightboost     // adjust brightness
 
-#pragma parameter brightboost1 "          Bright Boost Bright Pixels" 1.10 0.25 3.00 0.025
-#define brightboost1  params.brightboost1     // adjust brightness
+#pragma parameter brightboost1 "          Bright Boost Bright Pixels -- brightboost1" 1.10 0.25 3.00 0.025
+#define brightboost1  global.brightboost1     // adjust brightness
 
 #pragma parameter bogus_scanline "[ SCANLINE OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-#pragma parameter gsl "          Scanline Type" 0.0 -1.0 2.0 1.0
-#define gsl          params.gsl      // Alternate scanlines
+#pragma parameter gsl "          Scanline Type -- gsl" 0.0 -1.0 2.0 1.0
+#define gsl          global.gsl      // Alternate scanlines
 
-#pragma parameter scanline1 "          Scanline Beam Shape Center" 6.0 -20.0 20.0 0.5
-#define scanline1    params.scanline1      // scanline param, vertical sharpness
+#pragma parameter scanline1 "          Scanline Beam Shape Center -- scanline1" 6.0 -20.0 20.0 0.5
+#define scanline1    global.scanline1      // scanline param, vertical sharpness
 
-#pragma parameter scanline2 "          Scanline Beam Shape Edges" 8.0 0.0 70.0 1.0 
-#define scanline2    params.scanline2      // scanline param, vertical sharpness
+#pragma parameter scanline2 "          Scanline Beam Shape Edges -- scanline2" 8.0 0.0 70.0 1.0
+#define scanline2    global.scanline2      // scanline param, vertical sharpness
 
-#pragma parameter beam_min "          Scanline Shape Dark Pixels" 1.30 0.25 5.0 0.05
-#define beam_min     params.beam_min     // dark area beam min - narrow
+#pragma parameter beam_min "          Scanline Shape Dark Pixels -- beam_min" 1.30 0.25 5 0.05
+#define beam_min     global.beam_min     // dark area beam min - narrow
 
-#pragma parameter beam_max "          Scanline Shape Bright Pixels" 1.00 0.4 3.5 0.025
-#define beam_max     params.beam_max     // bright area beam max - wide
+#pragma parameter beam_max "          Scanline Shape Bright Pixels -- beam_max" 1.00 0.4 3.5 0.025
+#define beam_max     global.beam_max     // bright area beam max - wide
 
-#pragma parameter beam_size "          Increased Bright Scanline Beam" 0.60 0.0 1.0 0.05
-#define beam_size    params.beam_size     // increased max. beam size
+#pragma parameter beam_size "          Increased Bright Scanline Beam -- beam_size" 0.60 0.0 1.0 0.05
+#define beam_size    global.beam_size     // increased max. beam size
 
-#pragma parameter vertmask "          Scanline Color Deconvergence" 0.0 -1.0 1.0 0.1
-#define vertmask     params.vertmask     // Scanline deconvergence colors
+#pragma parameter vertmask "          Scanline Color Deconvergence -- vertmask" 0.0 -1.0 1.0 0.1
+#define vertmask     global.vertmask     // Scanline deconvergence colors
 
-#pragma parameter scans "          Scanline Saturation / Mask Falloff" 0.60 0.0 2.5 0.05
+#pragma parameter scans "          Scanline Saturation / Mask Falloff -- scans" 0.60 0.0 2.5 0.05
 #define scans        global.scans     // scanline saturation
 
-#pragma parameter scan_falloff "          Scanline Falloff" 1.0 0.25 2.0 0.05
+#pragma parameter scan_falloff "          Scanline Falloff -- scan_falloff" 1.0 0.25 2.0 0.05
 #define scan_falloff        global.scan_falloff     // scanline falloff
 
-#pragma parameter scangamma "          Scanline Gamma" 2.40 0.5 5.0 0.05
-#define scangamma global.scangamma
+// #pragma parameter scangamma "          Scanline Gamma" 2.40 0.5 5.0 0.05
+// #define scangamma global.scangamma
+
+#pragma parameter scangammaoffset "          Scanline Gamma Offset -- scangammaoffset" 1 0.15 5.0 0.05
+#define scangammaoffset global.scangammaoffset
 
 #pragma parameter rolling_scan "          Rolling Scanlines" 0.0 -1.0 1.0 0.01
 #define rolling_scan        global.rolling_scan     // rolling scanlines
 
-#pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
+// #pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-#pragma parameter intres "          Internal Resolution Y: 224p/240p, 1.5...y-dowsample" 0.0 0.0 6.0 0.5 // Joint parameter with linearize pass, values must match
+// #pragma parameter intres "          Internal Resolution Y: 224p/240p, 1.5...y-dowsample" 0.0 0.0 6.0 0.5 // Joint parameter with linearize pass, values must match
 
-#pragma parameter IOS "          Integer Scaling: Odd:Y, Even:'X'+Y" 0.0 0.0 4.0 1.0
-#define IOS          params.IOS     // Smart Integer Scaling
+// #pragma parameter IOS "          Integer Scaling: Odd:Y, Even:'X'+Y" 0.0 0.0 4.0 1.0
+// #define IOS          params.IOS     // Smart Integer Scaling
 
-#pragma parameter OS "          R. Bloom Overscan Mode" 1.0 0.0 2.0 1.0
-#define OS           params.OS     // Do overscan
+// #pragma parameter OS "          R. Bloom Overscan Mode" 1.0 0.0 2.0 1.0
+// #define OS           params.OS     // Do overscan
 
-#pragma parameter BLOOM "          Raster bloom %" 0.0 0.0 20.0 1.0
-#define BLOOM        params.BLOOM     // Bloom overscan percentage
+// #pragma parameter BLOOM "          Raster bloom %" 0.0 0.0 20.0 1.0
+// #define BLOOM        params.BLOOM     // Bloom overscan percentage
 
-#pragma parameter warpX "          CurvatureX (default 0.03)" 0.0 0.0 0.25 0.01
-#define warpX        params.warpX     // Curvature X
+// #pragma parameter warpX "          CurvatureX (default 0.03)" 0.0 0.0 0.25 0.01
+// #define warpX        params.warpX     // Curvature X
 
-#pragma parameter warpY "          CurvatureY (default 0.04)" 0.0 0.0 0.25 0.01
-#define warpY        params.warpY     // Curvature Y
+// #pragma parameter warpY "          CurvatureY (default 0.04)" 0.0 0.0 0.25 0.01
+// #define warpY        params.warpY     // Curvature Y
 
-#pragma parameter c_shape "          Curvature Shape" 0.25 0.05 0.60 0.05
-#define c_shape        global.c_shape     // curvature shape
+// #pragma parameter c_shape "          Curvature Shape" 0.25 0.05 0.60 0.05
+// #define c_shape        global.c_shape     // curvature shape
 
-#pragma parameter overscanX "          Overscan X original pixels" 0.0 -200.0 200.0 1.0
-#define overscanX        global.overscanX     // OverscanX pixels
+// #pragma parameter overscanX "          Overscan X original pixels" 0.0 -200.0 200.0 1.0
+// #define overscanX        global.overscanX     // OverscanX pixels
 
-#pragma parameter overscanY "          Overscan Y original pixels" 0.0 -200.0 200.0 1.0
-#define overscanY        global.overscanY     // OverscanY pixels
+// #pragma parameter overscanY "          Overscan Y original pixels" 0.0 -200.0 200.0 1.0
+// #define overscanY        global.overscanY     // OverscanY pixels
 
-#pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader)" 1.0 1.0 4.0 1.0
-#define prescalex        global.prescalex     // prescale-x factor
+// #pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader)" 1.0 1.0 4.0 1.0
+// #define prescalex        global.prescalex     // prescale-x factor
 
 
-#define COMPAT_TEXTURE(c,d) texture(c,d)
+/// HSM Removed
+// #define COMPAT_TEXTURE(c,d) texture(c,d)
+
+// HSM Added
+#define COMPAT_TEXTURE(c,d) HSM_GetCroppedTexSample(c,d)
+// End Addition
+
 #define TEX0 vTexCoord
 
 #define OutputSize global.OutputSize
@@ -167,6 +176,8 @@ layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 2) uniform sampler2D LinearizePass;
 layout(set = 0, binding = 3) uniform sampler2D AvgLumPass;
 layout(set = 0, binding = 4) uniform sampler2D Pass1;
+layout(set = 0, binding = 6) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 7) uniform sampler2D InfoCachePassFeedback;
 
 #define eps 1e-8
 
@@ -203,7 +214,8 @@ float sw2(float x, float color, float scanline)
 	float ex = x*tmp;
 	return exp2(-scanline*ex*ex);
 }  
- 
+
+/* HSM Removed
 vec2 Warp(vec2 pos)
 {
 	pos  = pos*2.0-1.0;    
@@ -216,7 +228,7 @@ vec2 Overscan(vec2 pos, float dx, float dy){
 	pos*=vec2(dx,dy);
 	return pos*0.5+0.5;
 } 
-
+*/
 
 vec3 gc(vec3 c)
 {
@@ -228,8 +240,46 @@ vec3 gc(vec3 c)
 
 void main()
 {
-	vec4 SourceSize = global.OriginalSize * vec4(prescalex, 1.0, 1.0/prescalex, 1.0);
-	
+		// HSM Added
+	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+
+	vec2 cache_bounds_coord = SCREEN_COORD;
+
+// If it's the potato preset render the whole frame
+#ifndef IS_POTATO_PRESET
+#ifndef IS_NO_REFLECT_PRESET
+	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
+	HSM_GetBezelCoords(SCREEN_COORD, 
+						SCREEN_SCALE, 
+						TUBE_SCALE, 
+						SCREEN_ASPECT, 
+						false,
+						BEZEL_OUTSIDE_SCALE,
+						BEZEL_OUTSIDE_COORD, 
+						BEZEL_OUTSIDE_CURVED_COORD, 
+						FRAME_OUTSIDE_CURVED_COORD);
+	cache_bounds_coord = (FRAME_OUTSIDE_CURVED_COORD - 0.5) * 0.9 + 0.5;
+#endif
+#endif
+
+	if (HHLP_IsOutsideCoordSpace(cache_bounds_coord))
+	{
+			FragColor = vec4(0);
+			return;
+	}
+
+	/* HSM Removed
+	vec4 SourceSize = params.OriginalSize * vec4(2.0*prescalex, 1.0, 0.5/prescalex, 1.0);
+
+	float f = fract(SourceSize.x * vTexCoord.x);
+	f = 0.5 - f;
+	vec2 tex = floor(SourceSize.xy * vTexCoord)*SourceSize.zw + 0.5*SourceSize.zw;
+	*/
+
+	// HSM Added
+	vec4 SourceSize = vec4(CROPPED_ROTATED_SIZE_WITH_RES_MULT, 1 / CROPPED_ROTATED_SIZE_WITH_RES_MULT);
+
 	SourceSize*= vec4(2.0, 1.0, 0.5, 1.0);
 	
 	float lum = COMPAT_TEXTURE(AvgLumPass, vec2(0.5,0.5)).a;
@@ -238,6 +288,7 @@ void main()
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
 	bool interb  = (intera < 0.5);
 	
+   	/* HSM Removed
 	float SourceY = SourceSize.y;
 	float sy = 1.0;
 	if (global.intres == 0.5) sy = SourceY/224.0; else
@@ -248,6 +299,13 @@ void main()
 	// Calculating texel coordinates
    
 	vec2 texcoord = TEX0.xy;
+	*/
+	// HSM Added
+	vec2 texcoord = HSM_GetCurvedCoord(SCREEN_COORD, HSM_CRT_CURVATURE_SCALE, SCREEN_ASPECT);
+	texcoord = HSM_GetMirrorWrappedCoord(texcoord);
+	// End Addition
+
+	/* HSM Removed
 	if (IOS > 0.0 && !interb){
 		vec2 ofactor = OutputSize.xy/SourceSize.xy;
 		vec2 intfactor = (IOS < 2.5) ? floor(ofactor) : ceil(ofactor);
@@ -264,6 +322,12 @@ void main()
 
 	vec2 pos  = Warp(texcoord);
 	vec2 pos0 = Warp(TEX0.xy);
+ 	*/
+
+	// HSM Added
+	vec2 screen_curved_coord = HSM_GetCurvedCoord(SCREEN_COORD, HSM_CRT_CURVATURE_SCALE, SCREEN_ASPECT);
+	vec2 pos = HSM_GetMirrorWrappedCoord(screen_curved_coord);
+
 
 	vec2 coffset = vec2(0.5, 0.5);
 	
@@ -285,14 +349,18 @@ void main()
 	vec3 color1 = COMPAT_TEXTURE(Pass1, pC4      ).rgb;
 	vec3 scolor1 = 	COMPAT_TEXTURE(Pass1, pC4      ).aaa;
 
+	/* HSM Removed
 	if(!interb) color1 = pow(color1, vec3(scangamma/gamma_in));
-  
+	*/
+
 	pC4+=dy;
 	
 	vec3 color2 = COMPAT_TEXTURE(Pass1, pC4      ).rgb;
 	vec3 scolor2 = 	COMPAT_TEXTURE(Pass1, pC4      ).aaa;
 
+	/* HSM Removed
 	if(!interb) color2 = pow(color2, vec3(scangamma/gamma_in)); 
+	*/
 
 	vec3 ctmp = color1; float w3 = 1.0; vec3 color = color1;
 	vec3 one = vec3(1.0);
@@ -388,7 +456,12 @@ if (!interb)
 
 	float colmx = pow(max(max(ctmp.r,ctmp.g),ctmp.b), 1.40/gamma_in);
 
+	/* HSM Removed
 	if(!interb) color = pow( color, vec3(gamma_in/scangamma) );
-  
+	*/
+
+	// HSM Added
+	color = pow(color, vec3(1/scangammaoffset));
+
 	FragColor = vec4(color, colmx);
 }

@@ -108,7 +108,6 @@ layout(location = 0) out vec4 FragColor;
 
 layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
 layout(set = 0, binding = 2) uniform sampler2D InfoCachePassFeedback;
-
 layout(set = 0, binding = 3) uniform sampler2D PrePass;
 layout(set = 0, binding = 4) uniform sampler2D NegativeCropAddedPass;
 
@@ -174,7 +173,6 @@ void main()
 		use_vert_scanlines_bool = !use_vert_scanlines_bool;
 	}
 
-
 	vec2 rotated_derezed_size = HSM_GetRotatedDerezedSize();
 
 	float derezed_opposite_dir_res = use_vert_scanlines_bool ? rotated_derezed_size.x : rotated_derezed_size.y;
@@ -233,7 +231,6 @@ void main()
 
 		// HSM Added
 		float line_no  = clamp( floor( mod( orig_opposite_dir_res * tex_coord_scan_dir, 2.0 ) ), 0.0, 1.0 );
-
 		float frame_no = clamp(floor(mod(float(params.FrameCount),2.0)), 0.0, 1.0);
 		float ii = abs(line_no-frame_no);
 		
