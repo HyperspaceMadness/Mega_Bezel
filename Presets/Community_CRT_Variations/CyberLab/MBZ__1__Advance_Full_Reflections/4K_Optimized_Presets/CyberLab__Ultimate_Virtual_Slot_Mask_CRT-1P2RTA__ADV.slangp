@@ -1,0 +1,36 @@
+#reference "CyberLab__Turbo_Duo__ADV.slangp"
+
+GAMMA_INPUT = "2.300000"
+gamma_out = "2.450000"
+post_br = "1.230000"
+g_crtgamut = "0.000000"
+
+MDAPT_MODE = "0.000000"
+
+g_sat = "0.040000"
+gamma_c = "1.000000"
+signalResolution = "640.000000"
+
+h_sharp = "5.200000"
+s_sharp = "0.500000"
+
+GDV_DECONVERGENCE_ON = "1.000000"
+
+SHARPEN = "0.400000"
+
+
+HSM_SCALEFX_ON = "0.000000"
+HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = "0.000000"
+
+gsl = "-1.000000"
+scanline1 = "6.000000"
+scanline2 = "8.000000"
+beam_max = "1.000000"
+scans = "0.600000"
+masksize = "2.000000"
+maskstr = "1.000000"
+slotmask = "1.000000"
+slotmask1 = "1.000000"
+slotwidth = "3.000000"
+double_slot = "2.000000"
+slotms = "2.000000"
