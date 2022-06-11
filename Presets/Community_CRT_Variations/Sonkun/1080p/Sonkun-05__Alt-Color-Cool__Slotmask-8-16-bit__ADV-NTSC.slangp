@@ -1,5 +1,0 @@
-#reference "Sonkun-01__J-Warm__Slotmask-8-16-bit__ADV-NTSC.slangp"
-
-g_crtgamut = "-4.000000"
-wp_temperature = "9304.000000"
-g_sat = "-0.200000"
