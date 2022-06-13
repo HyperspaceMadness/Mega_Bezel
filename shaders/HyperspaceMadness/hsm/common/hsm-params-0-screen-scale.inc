@@ -35,7 +35,7 @@ float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
 #pragma parameter HSM_CRT_TITLE                             "[ CRT BRIGHTNESS & GAMMA ]:" 0 0 0.01 0.01
 
 #pragma parameter GAMMA_INPUT   							"Gamma In (Game Embedded Gamma - Gamma Space to Linear) Def 2.4" 2.4 0.1 5 0.05
-#define HSM_GAMMA_IN_LINEARIZE global.GAMMA_INPUT
+#define GAMMA_INPUT global.GAMMA_INPUT
 
 #pragma parameter gamma_out   								"Gamma Out (Electron Gun Gamma - Linear to Gamma Space) Def 2.4" 2.4 0.1 5 0.05
 #define HSM_GAMMA_OUT_CRT global.gamma_out

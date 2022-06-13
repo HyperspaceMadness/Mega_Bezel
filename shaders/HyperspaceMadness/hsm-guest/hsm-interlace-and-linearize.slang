@@ -50,7 +50,6 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 // #pragma parameter GAMMA_INPUT "Gamma Input" 2.4 1.0 5.0 0.05
 */
-#define GAMMA_INPUT HSM_GAMMA_IN_LINEARIZE
 
 /*
 // #pragma parameter bogus_interlacing "[ INTERLACING OPTIONS ]: " 0.0 0.0 0.0 1.0

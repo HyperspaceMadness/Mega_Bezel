@@ -1,5 +1,7 @@
 shaders = 1
 
 shader0 =  :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-custom-fast-sharpen.slang // :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/g-sharp_resampler.slang
-filter_linear0 = false
-srgb_framebuffer0 = true
+filter_linear0 = true
+scale_type0 = source
+scale_x0 = 1.0
+scale_y0 = 1.0

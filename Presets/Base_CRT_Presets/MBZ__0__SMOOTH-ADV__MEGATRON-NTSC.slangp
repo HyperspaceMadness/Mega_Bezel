@@ -132,8 +132,10 @@ scale_x26 = 1.0
 scale_y26 = 1.0
 
 shader27 =  ../../shaders/HyperspaceMadness/hsm-guest/hsm-custom-fast-sharpen.slang // ../../shaders/HyperspaceMadness/hsm-guest/g-sharp_resampler.slang
-filter_linear27 = false
-srgb_framebuffer27 = true
+filter_linear27 = true
+scale_type27 = source
+scale_x27 = 1.0
+scale_y27 = 1.0
 
 shader28 = ../../../../stock.slang
 filter_linear28 = true

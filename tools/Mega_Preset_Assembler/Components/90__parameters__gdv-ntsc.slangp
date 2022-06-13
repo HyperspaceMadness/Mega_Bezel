@@ -1,10 +1,4 @@
 
 // NTSC Parameters
 GAMMA_INPUT = 2.0
-gamma_out = 2.0
-
-brightboost = 1.25
-scans = 0.65
-spike = 0.7
-h_sharp = 3.7
-s_sharp = 0.2
+gamma_out = 1.95

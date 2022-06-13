@@ -319,8 +319,8 @@ void main()
 	color = color * Mask(vTexCoord * global.OutputSize.xy, color);
 
     // TODO Add adjust to take into acount Gamma IN
-    color = pow(color, vec3(1.0 / (DEFAULT_SRGB_GAMMA * HSM_GAMMA_IN_LINEARIZE / HSM_GAMMA_OUT_CRT)));
-    // color = pow(color, vec3(1.0/(DEFAULT_SRGB_GAMMA * HSM_GAMMA_IN_LINEARIZE / (0.9 * HSM_GAMMA_OUT_CRT))));
+    color = pow(color, vec3(1.0 / (DEFAULT_SRGB_GAMMA * GAMMA_INPUT / HSM_GAMMA_OUT_CRT)));
+    // color = pow(color, vec3(1.0/(DEFAULT_SRGB_GAMMA * GAMMA_INPUT / (0.9 * HSM_GAMMA_OUT_CRT))));
 
 	float l = length(color);
 	color = normalize(pow(color, vec3(saturation,saturation,saturation)))*l;

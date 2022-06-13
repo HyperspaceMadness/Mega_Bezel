@@ -171,7 +171,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 
 		vec4 source_color = HSM_GetCroppedTexSample(source_pass, ab_screen_coord);
 		if (!source_is_linear)
-			source_color = HSM_Linearize(source_color, HSM_GAMMA_IN_LINEARIZE);
+			source_color = HSM_Linearize(source_color, GAMMA_INPUT);
 		source_color = HSM_Delinearize(source_color, HSM_GAMMA_OUT_CRT);
 		source_color = HSM_Linearize(source_color, DEFAULT_SRGB_GAMMA);
 

@@ -59,8 +59,8 @@ layout(push_constant) uniform Push
 #pragma parameter spike "          Scanline Spike Removal -- spike" 1.0 0.0 2.0 0.10
 #define spike params.spike
 
-// #pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader)" 1.0 1.0 4.0 1.0  // Joint parameter with main pass, values must match
-// #define prescalex        params.prescalex     // prescale-x factor 
+#pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader) -- prescalex" 1.0 1.0 4.0 1.0  // Joint parameter with main pass, values must match
+#define prescalex        params.prescalex     // prescale-x factor 
 
 /// HSM Removed
 // #define COMPAT_TEXTURE(c,d) texture(c,d)
@@ -101,7 +101,7 @@ float gaussian(float x)
 
 void main()
 {	
-	// HSM Added
+		// HSM Added
 	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
@@ -123,20 +123,13 @@ void main()
 
 	/* HSM Removed
 	vec4 SourceSize = params.OriginalSize * vec4(2.0*prescalex, 1.0, 0.5/prescalex, 1.0);
-
-	float f = fract(SourceSize.x * vTexCoord.x);
-	f = 0.5 - f;
-	vec2 tex = floor(SourceSize.xy * vTexCoord)*SourceSize.zw + 0.5*SourceSize.zw;
 	*/
-
 	// HSM Added
-	vec4 SourceSize = vec4(CROPPED_ROTATED_SIZE_WITH_RES_MULT, 1 / CROPPED_ROTATED_SIZE_WITH_RES_MULT);
+	vec4 SourceSize = vec4(CROPPED_ROTATED_SIZE_WITH_RES_MULT, 1 / CROPPED_ROTATED_SIZE_WITH_RES_MULT) * vec4(2.0*prescalex, 1.0, 0.5/prescalex, 1.0);
 
 	float f = fract(SourceSize.x * vTexCoord.x);
 	f = 0.5 - f;
 	vec2 tex = floor(SourceSize.xy * vTexCoord)*SourceSize.zw + 0.5*SourceSize.zw;
-	// End Addition
-
 	vec3 color = 0.0.xxx;
 	float scolor = 0.0;
 	vec2 dx  = vec2(SourceSize.z, 0.0);

@@ -64,8 +64,10 @@ scale_type9 = source
 scale9 = 1.0
 
 shader10 =  ../../shaders/HyperspaceMadness/hsm-guest/hsm-custom-fast-sharpen.slang // ../../shaders/HyperspaceMadness/hsm-guest/g-sharp_resampler.slang
-filter_linear10 = false
-srgb_framebuffer10 = true
+filter_linear10 = true
+scale_type10 = source
+scale_x10 = 1.0
+scale_y10 = 1.0
 
 shader11 = ../../../../stock.slang
 filter_linear11 = true
