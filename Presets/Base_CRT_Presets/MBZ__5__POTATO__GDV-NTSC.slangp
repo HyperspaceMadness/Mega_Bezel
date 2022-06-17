@@ -204,3 +204,7 @@ HSM_ASPECT_RATIO_MODE = 1
 // Use for matching vanilla GDV-Advanced
 // HSM_ASPECT_RATIO_MODE = 6
 // HSM_CURVATURE_MODE = 0
+
+// NTSC Parameters
+GAMMA_INPUT = 2.0
+gamma_out = 1.95

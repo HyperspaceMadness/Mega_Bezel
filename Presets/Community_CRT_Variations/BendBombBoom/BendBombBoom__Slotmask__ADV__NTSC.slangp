@@ -29,8 +29,7 @@ scanline2 = "4.000000"
 beam_min = "1.100000"
 vertmask = "-0.500000"
 
-// scangamma = "2.000000"
-scangammaoffset = "0.8"
+scangamma = "2.000000"
 
 shadowMask = "8.000000"
 maskstr = "0.850000"

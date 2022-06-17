@@ -80,9 +80,6 @@
 #pragma parameter spike "          Scanline Spike Removal -- spike" 1.0 0.0 2.0 0.10
 #define spike global.spike
 
-#pragma parameter scangammaoffset "          Scanline Gamma Offset -- scangammaoffset" 1 0.15 5.0 0.05
-#define scangammaoffset global.scangammaoffset
-
 #pragma parameter rolling_scan "          Rolling Scanlines -- rolling_scan" 0.0 -1.0 1.0 0.01
 #define rolling_scan        global.rolling_scan     // rolling scanlines
 
@@ -427,9 +424,6 @@ void main()
 
 	if (sharp) color1 = clamp(mix(clamp(color1, colmin, colmax), color1, ring), 0.0, 1.0);
 
-	// HSM Added From NTSC
-	color1 = pow(color1, vec3(scangammaoffset));
-
 	float ts = 0.025;
 	vec3 luma = vec3(0.2126, 0.7152, 0.0722);
 	
@@ -474,9 +468,6 @@ void main()
 	color2 = (l3*twl3 + l2*twl2 + l1*twl1 + r1*twr1 + r2*twr2 + r3*twr3)/(twl3+twl2+twl1+twr1+twr2+twr3);
 
 	if (sharp) color2 = clamp(mix(clamp(color2, colmin, colmax), color2, ring), 0.0, 1.0);
-
-	// HSM Added From NTSC
-	color2 = pow(color2, vec3(scangammaoffset));	
 
 	lm2 = max(max(l2.r,l2.g),l2.b);
 	lm1 = max(max(l1.r,l1.g),l1.b);
@@ -590,9 +581,6 @@ if (!interb)
 	}
 
 	float colmx = pow(max(max(ctmp.r,ctmp.g),ctmp.b), 1.40/gamma_in);
-
-	// HSM Added From NTSC
-	color = pow(color, vec3(1/scangammaoffset));
 
 	// TODO Don't add gamma, output from pass should be linear
 	// color = pow(color, vec3(1.0/gamma_out));

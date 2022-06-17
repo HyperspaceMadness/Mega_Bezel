@@ -106,13 +106,10 @@ layout(push_constant) uniform Push
 #pragma parameter scan_falloff "          Scanline Falloff -- scan_falloff" 1.0 0.25 2.0 0.05
 #define scan_falloff        global.scan_falloff     // scanline falloff
 
-// #pragma parameter scangamma "          Scanline Gamma" 2.40 0.5 5.0 0.05
-// #define scangamma global.scangamma
+#pragma parameter scangamma "          Scanline Gamma -- scangamma" 2.40 0.5 5.0 0.05
+#define scangamma global.scangamma
 
-#pragma parameter scangammaoffset "          Scanline Gamma Offset -- scangammaoffset" 1 0.15 5.0 0.05
-#define scangammaoffset global.scangammaoffset
-
-#pragma parameter rolling_scan "          Rolling Scanlines" 0.0 -1.0 1.0 0.01
+#pragma parameter rolling_scan "          Rolling Scanlines -- rolling_scan" 0.0 -1.0 1.0 0.01
 #define rolling_scan        global.rolling_scan     // rolling scanlines
 
 // #pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
@@ -349,18 +346,14 @@ void main()
 	vec3 color1 = COMPAT_TEXTURE(Pass1, pC4      ).rgb;
 	vec3 scolor1 = 	COMPAT_TEXTURE(Pass1, pC4      ).aaa;
 
-	/* HSM Removed
 	if(!interb) color1 = pow(color1, vec3(scangamma/gamma_in));
-	*/
 
 	pC4+=dy;
 	
 	vec3 color2 = COMPAT_TEXTURE(Pass1, pC4      ).rgb;
 	vec3 scolor2 = 	COMPAT_TEXTURE(Pass1, pC4      ).aaa;
 
-	/* HSM Removed
 	if(!interb) color2 = pow(color2, vec3(scangamma/gamma_in)); 
-	*/
 
 	vec3 ctmp = color1; float w3 = 1.0; vec3 color = color1;
 	vec3 one = vec3(1.0);
@@ -456,12 +449,7 @@ if (!interb)
 
 	float colmx = pow(max(max(ctmp.r,ctmp.g),ctmp.b), 1.40/gamma_in);
 
-	/* HSM Removed
 	if(!interb) color = pow( color, vec3(gamma_in/scangamma) );
-	*/
-
-	// HSM Added
-	color = pow(color, vec3(1/scangammaoffset));
 
 	FragColor = vec4(color, colmx);
 }

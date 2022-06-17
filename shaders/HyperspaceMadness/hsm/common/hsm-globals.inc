@@ -601,7 +601,7 @@ float HSM_TUBE_DIFFUSE_IMAGE_SCALE_X;
 	float scan_falloff;
 	float spike;
 	float ring;
-	float scangammaoffset;
+	float scangamma;
 	
 	float rolling_scan;
 
