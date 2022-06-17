@@ -48,7 +48,7 @@ float HSM_REFLECT_FULLSCREEN_GLOW = global.HSM_REFLECT_FULLSCREEN_GLOW / 100;
 #pragma parameter HSM_REFLECT_FULLSCREEN_GLOW_GAMMA 		    "          FullScreen Glow Gamma" 3 0 5 0.02
 float HSM_REFLECT_FULLSCREEN_GLOW_GAMMA = global.HSM_REFLECT_FULLSCREEN_GLOW_GAMMA;
 
-#pragma parameter HSM_REFLECT_BEZEL_INNER_EDGE_AMOUNT 			"          Bezel Inner Edge Amount" 90 0 300 2
+#pragma parameter HSM_REFLECT_BEZEL_INNER_EDGE_AMOUNT 			"          Bezel Inner Edge Amount" 130 0 300 2
 float HSM_REFLECT_BEZEL_INNER_EDGE_AMOUNT = global.HSM_REFLECT_BEZEL_INNER_EDGE_AMOUNT / 100;
 
 #pragma parameter HSM_REFLECT_BEZEL_INNER_EDGE_FULLSCREEN_GLOW 	"          Bezel Inner Edge Fullscreen Glow" 40 0 1000 1
