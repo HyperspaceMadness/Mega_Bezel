@@ -43,8 +43,8 @@ float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
 #pragma parameter post_br                                   "          Post CRT Brightness" 1 0.01 5 0.01
 #define HSM_POST_CRT_BRIGHTNESS global.post_br
 
-// Hack to turn over 100 values to be 1 based
-// #define HSM_POST_CRT_BRIGHTNESS (max(floor((global.post_br + 1) / 100), 1) * global.post_br / 100 + (1 - max(floor((global.post_br + 1) / 100), 1)) * global.post_br)
+#pragma parameter post_br_affect_black_level                "          Post CRT Brightness Affects Grade Black Level" 100 0 100 10
+#define HSM_POST_CRT_BRIGHTNESS_AFFECT_BLACK_LEVEL global.post_br_affect_black_level / 100
 
 //---------------------------------------------------------------------------------------------------
 //    Global Graphics Caching

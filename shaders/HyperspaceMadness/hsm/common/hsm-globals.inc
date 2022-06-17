@@ -562,6 +562,7 @@ float HSM_TUBE_DIFFUSE_IMAGE_SCALE_X;
 	float GAMMA_INPUT;
 	float gamma_out;
 	float post_br;
+	float post_br_affect_black_level;
 
 	float glow;
 	float bloom;

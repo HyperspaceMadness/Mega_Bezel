@@ -124,7 +124,7 @@ layout(push_constant) uniform Push
 #pragma parameter g_lum                             "          Brightness"           0.0 -0.5 1.0 0.01
 #pragma parameter g_cntrst                          "          Contrast"             0.0 -1.0 1.0 0.05
 #pragma parameter g_mid                             "          Contrast Pivot"       0.5  0.0 1.0 0.01
-#pragma parameter g_lift                            "          Black Level (Adds Scanlines Over Black)"         0.0 -0.5 0.5 0.001
+#pragma parameter g_lift                            "          Black Level (Adds Scanlines Over Black)"         0.0 -0.5 0.5 0.05
 
 // #pragma parameter DG_VIGNETTE_TITLE                 "[ VIGNETTE ]:" 0 0 0 1
 // #pragma parameter g_vignette                        "          Use Vignette"          0.0  0.0 1.0 1.0
@@ -900,7 +900,10 @@ vec3 vcolor = adj;
     //     vig = min(pow(vig, vpower), 1.0);
     //     contrast *= (vignette == 1.0) ? vig : 1.0;
     // }
-    contrast += (lift / 20.0) * (1.0 - contrast);
+
+    float adjusted_lift = (1 - HSM_POST_CRT_BRIGHTNESS_AFFECT_BLACK_LEVEL) * lift / HSM_POST_CRT_BRIGHTNESS + HSM_POST_CRT_BRIGHTNESS_AFFECT_BLACK_LEVEL * lift;
+
+    contrast += (adjusted_lift / 20.0) * (1.0 - contrast);
 
 
 // RGB Related Transforms
