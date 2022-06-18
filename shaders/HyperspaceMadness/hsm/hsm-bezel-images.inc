@@ -246,6 +246,11 @@ float GetFade(float current_position, float corner_position, float fade_distance
 	return smoothstep(corner_position + fade_distance / 2, corner_position - fade_distance / 2, current_position);
 }
 
+vec3 ApplyMultiplyImageWithBlend(vec3 baseImage, vec3 multiplyImage, float blendAmount) 
+{
+	return (1 - blendAmount) * baseImage.rgb + blendAmount * baseImage.rgb * multiplyImage.rgb;
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma stage vertex
 
@@ -577,9 +582,12 @@ void main()
 			bezel_and_frame_rgba = HSM_ApplyGamma(bezel_and_frame_rgba, HSM_STATIC_LAYERS_GAMMA);
 
 		// NIGHT LIGHTING
-		if (HSM_AMBIENT_LIGHTING_OPACITY > 0)
-			if (HSM_BZL_BLEND_MODE != BLEND_MODE_ADD)
-				bezel_and_frame_rgba.rgb *= night_lighting_image.rgb;
+		if (HSM_AMBIENT_LIGHTING_OPACITY > 0 && 
+			HSM_BZL_BLEND_MODE != BLEND_MODE_ADD && 
+			HSM_BZL_AMBIENT_LIGHTING_MULTIPLIER > 0)
+		{
+			bezel_and_frame_rgba.rgb = ApplyMultiplyImageWithBlend(bezel_and_frame_rgba.rgb, night_lighting_image.rgb, HSM_BZL_AMBIENT_LIGHTING_MULTIPLIER);
+		}
 
 		float FRAME_AND_BEZEL_MASK = outside_tube_mask * (1 - OUTSIDE_FRAME_MASK);
 
@@ -647,14 +655,17 @@ void main()
 		// HSV Adjustments
 		bg_image.rgb = HSM_ApplyHSVAdjustment(bg_image.rgb, HSM_BG_HUE, HSM_BG_SATURATION, HSM_BG_BRIGHTNESS, HSM_BG_COLORIZE_ON, HSM_BG_GAMMA);
 
-		if (HSM_BG_APPLY_ADJUSTMENT == 1)
-			if (HSM_STATIC_LAYERS_GAMMA != 1)
-				bg_image = HSM_ApplyGamma(bg_image, HSM_STATIC_LAYERS_GAMMA);
+		if (HSM_STATIC_LAYERS_GAMMA != 1)
+			bg_image = HSM_ApplyGamma(bg_image, HSM_STATIC_LAYERS_GAMMA);
 
 		// NIGHT LIGHTING
-		if (HSM_BG_APPLY_ADJUSTMENT == 1)
-			if (HSM_AMBIENT_LIGHTING_OPACITY > 0)
-				bg_image.rgb *= night_lighting_image.rgb;
+		if (HSM_AMBIENT_LIGHTING_OPACITY > 0 && 
+			HSM_BG_BLEND_MODE != BLEND_MODE_ADD && 
+			HSM_BG_AMBIENT_LIGHTING_MULTIPLIER > 0)
+		{
+			bg_image.rgb = ApplyMultiplyImageWithBlend(bg_image.rgb, night_lighting_image.rgb, HSM_BG_AMBIENT_LIGHTING_MULTIPLIER);
+		}
+
 	}
 
 	//----------------------------------------------------
@@ -692,9 +703,13 @@ void main()
 			device_image = HSM_ApplyGamma(device_image, HSM_STATIC_LAYERS_GAMMA);
 
 		// NIGHT LIGHTING
-		if (HSM_AMBIENT_LIGHTING_OPACITY > 0)
-			if (HSM_DEVICE_BLEND_MODE != BLEND_MODE_ADD)
-				device_image.rgb *= night_lighting_image.rgb;
+		if (HSM_AMBIENT_LIGHTING_OPACITY > 0 && 
+			HSM_DEVICE_BLEND_MODE != BLEND_MODE_ADD && 
+			HSM_DEVICE_AMBIENT_LIGHTING_MULTIPLIER > 0)
+			{
+				device_image.rgb = ApplyMultiplyImageWithBlend(device_image.rgb, night_lighting_image.rgb, HSM_DEVICE_AMBIENT_LIGHTING_MULTIPLIER);
+			}
+
 	}
 
 	//----------------------------------------------------
@@ -732,9 +747,13 @@ void main()
 			led_image = HSM_ApplyGamma(led_image, HSM_STATIC_LAYERS_GAMMA);
 
 		// NIGHT LIGHTING
-		if (HSM_AMBIENT_LIGHTING_OPACITY > 0)
-			if (HSM_LED_BLEND_MODE != BLEND_MODE_ADD)
-				led_image.rgb *= night_lighting_image.rgb;
+		if (HSM_AMBIENT_LIGHTING_OPACITY > 0 && 
+			HSM_LED_BLEND_MODE != BLEND_MODE_ADD && 
+			HSM_LED_AMBIENT_LIGHTING_MULTIPLIER > 0)
+		{
+			led_image.rgb = ApplyMultiplyImageWithBlend(led_image.rgb, night_lighting_image.rgb, HSM_LED_AMBIENT_LIGHTING_MULTIPLIER);
+		}
+
 	}
 
 	//----------------------------------------------------
@@ -771,9 +790,12 @@ void main()
 			decal_image = HSM_ApplyGamma(decal_image, HSM_STATIC_LAYERS_GAMMA);
 
 		// NIGHT LIGHTING
-		if (HSM_AMBIENT_LIGHTING_OPACITY > 0)
-			if (HSM_DECAL_BLEND_MODE != BLEND_MODE_ADD)
-				decal_image.rgb *= night_lighting_image.rgb;
+		if (HSM_AMBIENT_LIGHTING_OPACITY > 0 && 
+			HSM_DECAL_BLEND_MODE != BLEND_MODE_ADD && 
+			HSM_DECAL_AMBIENT_LIGHTING_MULTIPLIER > 0)
+			{
+				decal_image.rgb = ApplyMultiplyImageWithBlend(decal_image.rgb, night_lighting_image.rgb, HSM_DECAL_AMBIENT_LIGHTING_MULTIPLIER);
+			}
 	}
 
 //----------------------------------------------------
@@ -814,10 +836,15 @@ void main()
 		if (HSM_STATIC_LAYERS_GAMMA != 1)
 			top_image = HSM_ApplyGamma(top_image, HSM_STATIC_LAYERS_GAMMA);
 
+
 		// NIGHT LIGHTING
-		if (HSM_AMBIENT_LIGHTING_OPACITY > 0)
-				if (HSM_TOP_BLEND_MODE != BLEND_MODE_ADD)
-					top_image.rgb *= night_lighting_image.rgb;
+		if (HSM_AMBIENT_LIGHTING_OPACITY > 0 && 
+			HSM_TOP_BLEND_MODE != BLEND_MODE_ADD && 
+			HSM_TOP_AMBIENT_LIGHTING_MULTIPLIER > 0)
+			{
+				top_image.rgb = ApplyMultiplyImageWithBlend(top_image.rgb, night_lighting_image.rgb, HSM_TOP_AMBIENT_LIGHTING_MULTIPLIER);
+			}
+
 	}
 
 	//----------------------------------------------------
@@ -860,10 +887,12 @@ void main()
 			cab_glass_image = HSM_ApplyGamma(cab_glass_image, HSM_STATIC_LAYERS_GAMMA);
 
 		// NIGHT LIGHTING
-		if (HSM_AMBIENT_LIGHTING_OPACITY > 0)
-			if (HSM_CAB_GLASS_APPLY_NIGHTLIGHTING > 0.5)
-				if (HSM_CAB_GLASS_BLEND_MODE != BLEND_MODE_ADD)
-					cab_glass_image.rgb *= night_lighting_image.rgb;
+		if (HSM_AMBIENT_LIGHTING_OPACITY > 0 && 
+			HSM_CAB_GLASS_BLEND_MODE != BLEND_MODE_ADD && 
+			HSM_CAB_GLASS_AMBIENT_LIGHTING_MULTIPLIER > 0)
+			{
+				cab_glass_image.rgb = ApplyMultiplyImageWithBlend(cab_glass_image.rgb, night_lighting_image.rgb, HSM_CAB_GLASS_AMBIENT_LIGHTING_MULTIPLIER);
+			}
 	}
 
 
