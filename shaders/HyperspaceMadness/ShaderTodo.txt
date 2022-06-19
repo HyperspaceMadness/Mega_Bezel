@@ -15,7 +15,10 @@ Changes:
   * Community CRT Presets have now moved to the examples package
     * Updated Cyberlab presets
     * Updated Nesguy presets (fixed the dark appearance in the Mega Bezel)
+  * Fixed Reflection when using the CRT Curvature multiplier
+    * Now  the game image can look flat and the reflection will not show seams
 
+    
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------

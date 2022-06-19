@@ -442,13 +442,13 @@ void main()
 #endif
 #endif
 
-	if (cache_bounds_coord.x < -0.01 || cache_bounds_coord.x > 1.01 || cache_bounds_coord.y < -0.01 || cache_bounds_coord.y > 1.01)
+	if (HHLP_IsOutsideCoordSpace(cache_bounds_coord))
 	{
 			FragColor = vec4(0);
 			return;
 	}
 
-	vec2 screen_curved_coord = HSM_GetCurvedCoord(SCREEN_COORD, HSM_CRT_CURVATURE_SCALE, SCREEN_ASPECT);
+	vec2 screen_curved_coord = HSM_GetCRTShaderCurvedCoord(SCREEN_COORD);
 	screen_curved_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
 
 // End HSM Added

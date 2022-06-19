@@ -651,6 +651,18 @@ vec2 HSM_GetCurvedCoord(vec2 in_coord, float curvature_multiplier, float screen_
 	return curved_coord;
 }
 
+vec2 HSM_GetCRTShaderCurvedCoord(vec2 in_coord)
+{	
+	vec2 out_coord = HSM_GetCurvedCoord(in_coord, 1, SCREEN_ASPECT);
+	
+	if (HSM_CRT_CURVATURE_SCALE < 100 && !HHLP_IsOutsideCoordSpace(out_coord))
+	{
+		out_coord = HSM_GetCurvedCoord(in_coord, HSM_CRT_CURVATURE_SCALE, SCREEN_ASPECT);
+	}
+
+	return out_coord;
+}
+
 vec2 HSM_GetMirrorWrappedCoord(vec2 in_coord)
 {	
 	vec2 ctr_coord = in_coord - 0.5;

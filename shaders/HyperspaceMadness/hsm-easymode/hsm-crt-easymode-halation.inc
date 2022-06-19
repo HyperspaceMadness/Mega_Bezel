@@ -212,8 +212,8 @@ void main()
 
     vec2 co = SCREEN_COORD;
     vec2 screen_coord = co;
-    vec2 screen_curved_coord = HSM_GetCurvedCoord(screen_coord, HSM_CRT_CURVATURE_SCALE, SCREEN_ASPECT);
-    vec2 xy = HSM_GetMirrorWrappedCoord(screen_curved_coord);
+    vec2 screen_curved_coord = HSM_GetCRTShaderCurvedCoord(screen_coord);
+	vec2 xy = HSM_GetMirrorWrappedCoord(screen_curved_coord);
 
     // HSM Removed
     // float corner_weight = 1;
