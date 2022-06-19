@@ -532,7 +532,7 @@ float HSM_TUBE_SHADOW_IMAGE_OPACITY = global.HSM_TUBE_SHADOW_IMAGE_OPACITY / 100
 #pragma parameter HSM_TUBE_SHADOW_IMAGE_POS_X			        "          Position X" 0 -500 500 0.1
 float HSM_TUBE_SHADOW_IMAGE_POS_X = global.HSM_TUBE_SHADOW_IMAGE_POS_X / 100;
 
-#pragma parameter HSM_TUBE_SHADOW_IMAGE_POS_Y			        "          Position Y" 7 -500 500 0.1
+#pragma parameter HSM_TUBE_SHADOW_IMAGE_POS_Y			        "          Position Y" 9 -500 500 0.1
 float HSM_TUBE_SHADOW_IMAGE_POS_Y = global.HSM_TUBE_SHADOW_IMAGE_POS_Y / 100;
 
 #pragma parameter HSM_TUBE_SHADOW_IMAGE_SCALE_X  			    "          Scale X" 122 0 1000 0.1
@@ -541,7 +541,7 @@ float HSM_TUBE_SHADOW_IMAGE_SCALE_X = global.HSM_TUBE_SHADOW_IMAGE_SCALE_X / 100
 #pragma parameter HSM_TUBE_SHADOW_IMAGE_SCALE_Y  			    "          Scale Y" 130 0 1000 0.1
 float HSM_TUBE_SHADOW_IMAGE_SCALE_Y = global.HSM_TUBE_SHADOW_IMAGE_SCALE_Y / 100;
 
-#pragma parameter HSM_TUBE_SHADOW_CURVATURE_SCALE			    "          Curvature Scale" 600 0 2000 1
+#pragma parameter HSM_TUBE_SHADOW_CURVATURE_SCALE			    "          Curvature Scale" 300 0 2000 1
 float HSM_TUBE_SHADOW_CURVATURE_SCALE = global.HSM_TUBE_SHADOW_CURVATURE_SCALE / 100;
 
 
