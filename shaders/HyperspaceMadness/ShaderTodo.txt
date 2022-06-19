@@ -8,8 +8,10 @@ Changes:
     * Added **Post CRT Brightness Affects Grade Black Level**
       * This is 100 by default, so Post CRT Brightness affects the increase in black level added in Grade
       * If you set this to a low value e.g. 10 then as you increase Post CRT Brightness the black areas will not get brighter
-    * Added 0-100 Ambient Lighting Multiplier for each of the Image layers
-      * This replaces the disable ambient lighting controls that used to be there 
+    * Ambient Lighting controls for image layers
+      * Added Ambient Lighting Multiplier (0-100) for each of the Image layers
+      * Added Apply Ambient Lighting in ADD Blend Mode
+      * This replaces the disable ambient lighting controls that used to be there
   * Community CRT Presets have now moved to the examples package
     * Updated Cyberlab presets
     * Updated Nesguy presets (fixed the dark appearance in the Mega Bezel)

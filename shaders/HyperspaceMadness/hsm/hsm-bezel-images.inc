@@ -246,9 +246,18 @@ float GetFade(float current_position, float corner_position, float fade_distance
 	return smoothstep(corner_position + fade_distance / 2, corner_position - fade_distance / 2, current_position);
 }
 
-vec3 ApplyMultiplyImageWithBlend(vec3 baseImage, vec3 multiplyImage, float blendAmount) 
+vec3 ApplyAmbientImage(vec3 base_image, vec3 ambient_image, float layer_blend_amount, float applyInAddMode, float layerBlendMode) 
 {
-	return (1 - blendAmount) * baseImage.rgb + blendAmount * baseImage.rgb * multiplyImage.rgb;
+	vec3 outImage = base_image;
+
+	if (HSM_AMBIENT_LIGHTING_OPACITY > 0 && 
+		(applyInAddMode == 1 || layerBlendMode != BLEND_MODE_ADD) && 
+		layer_blend_amount > 0)
+		{
+			outImage = (1 - layer_blend_amount) * base_image.rgb + layer_blend_amount * base_image.rgb * ambient_image.rgb;
+		}
+
+	return outImage;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -331,9 +340,9 @@ void main()
 	//-----------------------------------------------------------------------------------------
 	// Add Multiplied Image for Darkening
 	// Sample the image and do some color correction
-	vec4 night_lighting_image = vec4(1);
+	vec4 ambient_lighting_image = vec4(1);
 	if (HSM_AMBIENT_LIGHTING_OPACITY > 0)
-		night_lighting_image = HSM_GetNightLightingMultiplyColor( HSM_AMBIENT_LIGHTING_SCALE_MODE > 0.5 ? VIEWPORT_UNSCALED_COORD : VIEWPORT_COORD, NightLightingImage );
+		ambient_lighting_image = HSM_GetNightLightingMultiplyColor( HSM_AMBIENT_LIGHTING_SCALE_MODE > 0.5 ? VIEWPORT_UNSCALED_COORD : VIEWPORT_COORD, NightLightingImage );
 
 	SCREEN_BLACK_EDGE_CURVED_COORD = HSM_GetCurvedCoord(SCREEN_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, SCREEN_ASPECT);
 
@@ -581,13 +590,11 @@ void main()
 		if (HSM_STATIC_LAYERS_GAMMA != 1)
 			bezel_and_frame_rgba = HSM_ApplyGamma(bezel_and_frame_rgba, HSM_STATIC_LAYERS_GAMMA);
 
-		// NIGHT LIGHTING
-		if (HSM_AMBIENT_LIGHTING_OPACITY > 0 && 
-			HSM_BZL_BLEND_MODE != BLEND_MODE_ADD && 
-			HSM_BZL_AMBIENT_LIGHTING_MULTIPLIER > 0)
-		{
-			bezel_and_frame_rgba.rgb = ApplyMultiplyImageWithBlend(bezel_and_frame_rgba.rgb, night_lighting_image.rgb, HSM_BZL_AMBIENT_LIGHTING_MULTIPLIER);
-		}
+		bezel_and_frame_rgba.rgb = ApplyAmbientImage(bezel_and_frame_rgba.rgb, 
+													 ambient_lighting_image.rgb,
+													 HSM_BZL_AMBIENT_LIGHTING_MULTIPLIER,
+													 1,
+													 HSM_BZL_BLEND_MODE);
 
 		float FRAME_AND_BEZEL_MASK = outside_tube_mask * (1 - OUTSIDE_FRAME_MASK);
 
@@ -658,14 +665,11 @@ void main()
 		if (HSM_STATIC_LAYERS_GAMMA != 1)
 			bg_image = HSM_ApplyGamma(bg_image, HSM_STATIC_LAYERS_GAMMA);
 
-		// NIGHT LIGHTING
-		if (HSM_AMBIENT_LIGHTING_OPACITY > 0 && 
-			HSM_BG_BLEND_MODE != BLEND_MODE_ADD && 
-			HSM_BG_AMBIENT_LIGHTING_MULTIPLIER > 0)
-		{
-			bg_image.rgb = ApplyMultiplyImageWithBlend(bg_image.rgb, night_lighting_image.rgb, HSM_BG_AMBIENT_LIGHTING_MULTIPLIER);
-		}
-
+		bg_image.rgb = ApplyAmbientImage(bg_image.rgb, 
+										ambient_lighting_image.rgb,
+										HSM_BG_AMBIENT_LIGHTING_MULTIPLIER,
+										HSM_BG_APPLY_AMBIENT_IN_ADD_MODE,
+										HSM_BG_BLEND_MODE);
 	}
 
 	//----------------------------------------------------
@@ -702,14 +706,11 @@ void main()
 		if (HSM_STATIC_LAYERS_GAMMA != 1)
 			device_image = HSM_ApplyGamma(device_image, HSM_STATIC_LAYERS_GAMMA);
 
-		// NIGHT LIGHTING
-		if (HSM_AMBIENT_LIGHTING_OPACITY > 0 && 
-			HSM_DEVICE_BLEND_MODE != BLEND_MODE_ADD && 
-			HSM_DEVICE_AMBIENT_LIGHTING_MULTIPLIER > 0)
-			{
-				device_image.rgb = ApplyMultiplyImageWithBlend(device_image.rgb, night_lighting_image.rgb, HSM_DEVICE_AMBIENT_LIGHTING_MULTIPLIER);
-			}
-
+		device_image.rgb = ApplyAmbientImage(device_image.rgb, 
+											ambient_lighting_image.rgb,
+											HSM_DEVICE_AMBIENT_LIGHTING_MULTIPLIER,
+											HSM_DEVICE_APPLY_AMBIENT_IN_ADD_MODE,
+											HSM_DEVICE_BLEND_MODE);
 	}
 
 	//----------------------------------------------------
@@ -746,14 +747,11 @@ void main()
 		if (HSM_STATIC_LAYERS_GAMMA != 1)
 			led_image = HSM_ApplyGamma(led_image, HSM_STATIC_LAYERS_GAMMA);
 
-		// NIGHT LIGHTING
-		if (HSM_AMBIENT_LIGHTING_OPACITY > 0 && 
-			HSM_LED_BLEND_MODE != BLEND_MODE_ADD && 
-			HSM_LED_AMBIENT_LIGHTING_MULTIPLIER > 0)
-		{
-			led_image.rgb = ApplyMultiplyImageWithBlend(led_image.rgb, night_lighting_image.rgb, HSM_LED_AMBIENT_LIGHTING_MULTIPLIER);
-		}
-
+		led_image.rgb = ApplyAmbientImage(led_image.rgb, 
+											ambient_lighting_image.rgb,
+											HSM_LED_AMBIENT_LIGHTING_MULTIPLIER,
+											HSM_LED_APPLY_AMBIENT_IN_ADD_MODE,
+											HSM_LED_BLEND_MODE);
 	}
 
 	//----------------------------------------------------
@@ -789,13 +787,11 @@ void main()
 		if (HSM_STATIC_LAYERS_GAMMA != 1)
 			decal_image = HSM_ApplyGamma(decal_image, HSM_STATIC_LAYERS_GAMMA);
 
-		// NIGHT LIGHTING
-		if (HSM_AMBIENT_LIGHTING_OPACITY > 0 && 
-			HSM_DECAL_BLEND_MODE != BLEND_MODE_ADD && 
-			HSM_DECAL_AMBIENT_LIGHTING_MULTIPLIER > 0)
-			{
-				decal_image.rgb = ApplyMultiplyImageWithBlend(decal_image.rgb, night_lighting_image.rgb, HSM_DECAL_AMBIENT_LIGHTING_MULTIPLIER);
-			}
+		decal_image.rgb = ApplyAmbientImage(decal_image.rgb, 
+											ambient_lighting_image.rgb,
+											HSM_DECAL_AMBIENT_LIGHTING_MULTIPLIER,
+											HSM_DECAL_APPLY_AMBIENT_IN_ADD_MODE,
+											HSM_DECAL_BLEND_MODE);
 	}
 
 //----------------------------------------------------
@@ -836,15 +832,11 @@ void main()
 		if (HSM_STATIC_LAYERS_GAMMA != 1)
 			top_image = HSM_ApplyGamma(top_image, HSM_STATIC_LAYERS_GAMMA);
 
-
-		// NIGHT LIGHTING
-		if (HSM_AMBIENT_LIGHTING_OPACITY > 0 && 
-			HSM_TOP_BLEND_MODE != BLEND_MODE_ADD && 
-			HSM_TOP_AMBIENT_LIGHTING_MULTIPLIER > 0)
-			{
-				top_image.rgb = ApplyMultiplyImageWithBlend(top_image.rgb, night_lighting_image.rgb, HSM_TOP_AMBIENT_LIGHTING_MULTIPLIER);
-			}
-
+		top_image.rgb = ApplyAmbientImage(top_image.rgb, 
+											ambient_lighting_image.rgb,
+											HSM_TOP_AMBIENT_LIGHTING_MULTIPLIER,
+											HSM_TOP_APPLY_AMBIENT_IN_ADD_MODE,
+											HSM_TOP_BLEND_MODE);
 	}
 
 	//----------------------------------------------------
@@ -886,13 +878,11 @@ void main()
 		if (HSM_STATIC_LAYERS_GAMMA != 1)
 			cab_glass_image = HSM_ApplyGamma(cab_glass_image, HSM_STATIC_LAYERS_GAMMA);
 
-		// NIGHT LIGHTING
-		if (HSM_AMBIENT_LIGHTING_OPACITY > 0 && 
-			HSM_CAB_GLASS_BLEND_MODE != BLEND_MODE_ADD && 
-			HSM_CAB_GLASS_AMBIENT_LIGHTING_MULTIPLIER > 0)
-			{
-				cab_glass_image.rgb = ApplyMultiplyImageWithBlend(cab_glass_image.rgb, night_lighting_image.rgb, HSM_CAB_GLASS_AMBIENT_LIGHTING_MULTIPLIER);
-			}
+		cab_glass_image.rgb = ApplyAmbientImage(cab_glass_image.rgb, 
+												ambient_lighting_image.rgb,
+												HSM_CAB_GLASS_AMBIENT_LIGHTING_MULTIPLIER,
+												HSM_CAB_GLASS_APPLY_AMBIENT_IN_ADD_MODE,
+												HSM_CAB_GLASS_BLEND_MODE);
 	}
 
 
