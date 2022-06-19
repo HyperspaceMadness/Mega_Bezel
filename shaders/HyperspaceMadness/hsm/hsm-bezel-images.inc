@@ -523,8 +523,15 @@ void main()
 	vec3 bottom_color = hmbz_bezel_brightness_bottom * HSM_BZL_BRIGHTNESS * base_color_with_noise;
 	vec3 sides_color = hmbz_bezel_brightness_sides * HSM_BZL_BRIGHTNESS * base_color_with_noise;
 
-	vec3 frame_color = hmbz_frame_brightness / 100 * mix(base_color, 1.5 * base_color * noise_mask, 0.6 * HSM_BZL_NOISE);;
-	
+	vec3 frame_base_color = base_color;
+	vec3 frame_base_color_with_noise = base_color_with_noise;
+	if (HSM_FRM_USE_BZL_COLOR < 1)
+	{
+		frame_base_color = HSM_Linearize(vec4(HSM_HSVtoRGB(vec3(HSM_FRM_COLOR_HUE, HSM_FRM_COLOR_SATURATION, HSM_FRM_COLOR_VALUE)), 1), DEFAULT_SRGB_GAMMA).rgb;
+		frame_base_color_with_noise = mix(frame_base_color, 1.5 * frame_base_color * noise_mask, HSM_FRM_NOISE);
+	}
+
+	vec3 frame_color = hmbz_frame_brightness / 100 * mix(frame_base_color, 1.5 * frame_base_color * noise_mask, 0.6 * HSM_BZL_NOISE);;
 	vec3 outside_frame_color = hmbz_brightness_shadow * base_color_with_noise;
 
 	vec3 bezel_diffuse_color = mix(sides_color, top_color, top_mask);
@@ -547,7 +554,7 @@ void main()
 
 	// Add the inner edge highlight on top of the bezel color which has it's own highlight
 	float inner_edge_highlight_multiplier = hmbz_bezel_brightness_frame_inner_edge + HSM_BZL_HIGHLIGHT * 10 * hmbz_bezel_brightness_frame_inner_edge;
-	vec3 frame_inner_edge_color = base_color * (1 + 15 * inner_edge_highlight_multiplier) +	0.5 * inner_edge_highlight_multiplier;
+	vec3 frame_inner_edge_color = frame_base_color * (1 + 15 * inner_edge_highlight_multiplier) +	0.5 * inner_edge_highlight_multiplier;
 
 	bezel_color = mix(bezel_color, frame_inner_edge_color, frame_inner_edge_mask);
 

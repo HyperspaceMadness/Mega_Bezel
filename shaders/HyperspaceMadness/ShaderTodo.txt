@@ -5,13 +5,15 @@ Mega Bezel is updated to V 0.9.108 2022-04-23 Rev 1
 Changes:
   * Update to crt-guest-advanced-2022-06-18-release1
     * Includes @guest's new NTSC filtering and sharpening magic
-    * Added **Post CRT Brightness Affects Grade Black Level**
-      * This is 100 by default, so Post CRT Brightness affects the increase in black level added in Grade
-      * If you set this to a low value e.g. 10 then as you increase Post CRT Brightness the black areas will not get brighter
-    * Ambient Lighting controls for image layers
-      * Added Ambient Lighting Multiplier (0-100) for each of the Image layers
-      * Added Apply Ambient Lighting in ADD Blend Mode
-      * This replaces the disable ambient lighting controls that used to be there
+  * Added **Post CRT Brightness Affects Grade Black Level**
+    * This is 100 by default, so Post CRT Brightness affects the increase in black level added in Grade
+    * If you set this to a low value e.g. 10 then as you increase Post CRT Brightness the black areas will not get brighter
+  * Ambient Lighting controls for image layers
+    * Added Ambient Lighting Multiplier (0-100) for each of the Image layers
+    * Added Apply Ambient Lighting in ADD Blend Mode
+    * This replaces the disable ambient lighting controls that used to be there
+  * Added optional separate color for the frame
+    * Use Bezel Color controls if the frame color follows the bezel or not
   * Community CRT Presets have now moved to the examples package
     * Updated Cyberlab presets
     * Updated Nesguy presets (fixed the dark appearance in the Mega Bezel)
@@ -23,8 +25,7 @@ Changes:
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
-  * Add Frame Color
-  * Adjust Tube Shadow Size?
+  * Try to add different placement modes for tube static reflection (Tube, Bezel, Frame)
 
   * Megatron HDR Combination at end of chain
   * Add how to remove Moire Guide

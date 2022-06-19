@@ -644,12 +644,19 @@ float HSM_GetParameterSum()
 					+ HSM_BZL_HIGHLIGHT * 100
 					+ HSM_BZL_INNER_EDGE_SHADOW * 100
 
-					// Generated Bezel
+					// Bezel Color
 					+ HSM_BZL_COLOR_HUE * 360
 					+ HSM_BZL_COLOR_SATURATION * 100
 					+ HSM_BZL_COLOR_VALUE * 100
 					+ HSM_BZL_NOISE * 100
 					+ HSM_BZL_AMBIENT_LIGHTING_MULTIPLIER * 100
+
+					// Frame Color
+					+ HSM_FRM_USE_BZL_COLOR
+					+ HSM_FRM_COLOR_HUE * 360
+					+ HSM_FRM_COLOR_SATURATION * 100
+					+ HSM_FRM_COLOR_VALUE * 100
+					+ HSM_FRM_NOISE * 100
 
 					// Generated Frame
 					+ HSM_FRM_OPACITY * 100

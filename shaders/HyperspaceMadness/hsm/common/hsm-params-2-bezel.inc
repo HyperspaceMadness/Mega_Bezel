@@ -58,9 +58,9 @@ float HSM_BZL_INNER_EDGE_SHADOW = global.HSM_BZL_INNER_EDGE_SHADOW / 100;
 
 
 //---------------------------------------------------------------------------------------------------
-// Bezel & Frame Color
+// Bezel Color
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_BEZEL_FRAME_COLOR_TITLE		"[ BEZEL & FRAME COLOR ]:" 0 0 0.01 0.01
+#pragma parameter HSM_BEZEL_COLOR_TITLE		"[ BEZEL COLOR ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_BZL_COLOR_HUE					"          Hue" 0 0 360 1
 float HSM_BZL_COLOR_HUE = global.HSM_BZL_COLOR_HUE / 360;
@@ -77,20 +77,38 @@ float HSM_BZL_NOISE = global.HSM_BZL_NOISE / 100;
 #pragma parameter HSM_BZL_AMBIENT_LIGHTING_MULTIPLIER         "          Bezel Ambient Lighting Multiplier"  100 0 100 1
 float HSM_BZL_AMBIENT_LIGHTING_MULTIPLIER = global.HSM_BZL_AMBIENT_LIGHTING_MULTIPLIER / 100;
 
+//---------------------------------------------------------------------------------------------------
+// Frame Color
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_FRM_COLOR_TITLE		"[ FRAME COLOR ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_FRM_USE_BZL_COLOR				"          Use Bezel Color" 1 0 1 1
+float HSM_FRM_USE_BZL_COLOR = global.HSM_FRM_USE_BZL_COLOR;
+
+#pragma parameter HSM_FRM_COLOR_HUE					"          Hue" 0 0 360 1
+float HSM_FRM_COLOR_HUE = global.HSM_FRM_COLOR_HUE / 360;
+
+#pragma parameter HSM_FRM_COLOR_SATURATION			"          Saturation" 0 0 100 1
+float HSM_FRM_COLOR_SATURATION = global.HSM_FRM_COLOR_SATURATION / 100;
+
+#pragma parameter HSM_FRM_COLOR_VALUE				"          Value/Brightness - Def 10" 10 0 100 0.2
+float HSM_FRM_COLOR_VALUE = global.HSM_FRM_COLOR_VALUE / 100;
+
+#pragma parameter HSM_FRM_NOISE 					"          Noise - Def 30" 30 0 100 1
+float HSM_FRM_NOISE = global.HSM_FRM_NOISE / 100;
 
 //---------------------------------------------------------------------------------------------------
 //    FRAME
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_FRAME_TITLE			            "[ FRAME ]:" 0 0 0.01 0.01
+#pragma parameter HSM_FRAME_TITLE			        "[ FRAME GENERAL ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_FRM_OPACITY                       "          Opacity" 100 0 100 5
+#pragma parameter HSM_FRM_OPACITY                   "          Opacity" 100 0 100 5
 float HSM_FRM_OPACITY = global.HSM_FRM_OPACITY / 100;
 
 // #pragma parameter HSM_FRM_BLEND_MODE                    "          Blend Mode - Off | Normal | Add | Mult"  1 0 3 1
 // float HSM_FRM_BLEND_MODE = global.HSM_FRM_BLEND_MODE;
 
 float HSM_FRM_BLEND_MODE = 1;
-
 
 #pragma parameter HSM_FRM_TEXTURE_OPACITY               "          Texture Overlay Opacity (Highlight)" 1.5 0 100 0.1
 float HSM_FRM_TEXTURE_OPACITY = global.HSM_FRM_TEXTURE_OPACITY / 100;
