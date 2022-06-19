@@ -123,7 +123,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter bloom "          Bloom Strength" 0.0 -2.0 2.0 0.05
 #define bloom         params.bloom     // bloom effect
 
-#pragma parameter bloom_dist "          Bloom Distribution" 0.0 0.0 2.0 0.05
+#pragma parameter bloom_dist "          Bloom Distribution" 0.0 0.0 3.0 0.05
 #define bloom_dist         global.bloom_dist     // bloom effect distribution
 
 #pragma parameter halation "          Halation Strength" 0.0 0.0 2.0 0.025

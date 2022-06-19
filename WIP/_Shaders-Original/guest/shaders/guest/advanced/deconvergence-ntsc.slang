@@ -78,7 +78,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter bloom "          Bloom Strength" 0.0 -2.0 2.0 0.05
 #define bloom         global.bloom     // bloom effect
 
-#pragma parameter bloom_dist "          Bloom Distribution" 0.0 0.0 2.0 0.05
+#pragma parameter bloom_dist "          Bloom Distribution" 0.0 0.0 3.0 0.05
 #define bloom_dist         global.bloom_dist     // bloom effect distribution
 
 #pragma parameter halation "          Halation Strength" 0.0 0.0 2.0 0.025
@@ -139,16 +139,16 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter bogus_masks "[ CRT MASK OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-#pragma parameter shadowMask "          CRT Mask: 0:CGWG, 1-4:Lottes, 5-10:'Trinitron'" 0.0 -1.0 13.0 1.0
+#pragma parameter shadowMask "          CRT Mask: 0:CGWG, 1-4:Lottes, 5-12:'Trinitron'" 0.0 -1.0 12.0 1.0
 #define shadowMask   params.shadowMask     // Mask Style
 
-#pragma parameter maskstr "          Mask Strength (0, 5-13)" 0.3 -0.5 1.0 0.025
+#pragma parameter maskstr "          Mask Strength (0, 5-12)" 0.3 -0.5 1.0 0.025
 #define maskstr         params.maskstr      // Mask Strength
 
-#pragma parameter mcut "          Mask 5-10,13 Low Strength" 1.10 0.0 2.0 0.05
-#define mcut         params.mcut      // Mask 5-10,13 dark color strength
+#pragma parameter mcut "          Mask 5-12 Low Strength" 1.10 0.0 2.0 0.05
+#define mcut         params.mcut      // Mask 5-12 dark color strength
 
-#pragma parameter masksize "          CRT Mask Size (2.0 is nice in 4k)" 1.0 1.0 4.0 1.0
+#pragma parameter masksize "          CRT Mask Size" 1.0 1.0 4.0 1.0
 #define masksize     params.masksize     // Mask Size
 
 #pragma parameter maskDark "          Lottes maskDark" 0.5 0.0 2.0 0.05
@@ -157,7 +157,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter maskLight "          Lottes maskLight" 1.5 0.0 2.0 0.05
 #define maskLight    params.maskLight     // Light "Phosphor"
 
-#pragma parameter mshift "          Mask Shift/Stagger" 0.0 0.0 8.0 1.0
+#pragma parameter mshift "          Mask Shift/Stagger" 0.0 -8.0 8.0 1.0
 #define mshift     params.mshift     // mask 'line' shift/stagger
 
 #pragma parameter mask_layout "          Mask Layout: RGB or BGR (check LCD panel) " 0.0 0.0 1.0 1.0
@@ -253,7 +253,7 @@ vec3 Mask(vec2 pos, float mx)
 	vec2 pos0 = pos;
 	pos.y = floor(pos.y/masksize);
 	float next_line = float(fract(pos.y*0.5) > 0.25);
-	pos0.x = pos0.x + next_line * mshift;
+	pos0.x = (mshift > -0.25) ? (pos0.x + next_line * mshift) : (pos0.x + pos.y * mshift);
 	pos = floor(pos0/masksize);
 
 	vec3 mask = vec3(maskDark, maskDark, maskDark);
@@ -401,21 +401,13 @@ vec3 Mask(vec2 pos, float mx)
 	// 4k mask
 	else if (shadowMask == 11.0)
 	{
-		mask = vec3(mc);
+		mask = vec3(0.0);
 		pos.x = fract(pos.x * 0.25);
 		if      (pos.x < 0.2)  mask.r  = 1.0;
 		else if (pos.x < 0.4)  mask.rg = 1.0.xx;
 		else if (pos.x < 0.7)  mask.gb = 1.0.xx;	
-		else                   mask.b  = 1.0;	
-	}     
-	else if (shadowMask == 12.0)
-	{
-		mask = vec3(mc);
-		pos.x = fract(pos.x * 0.25);
-		if      (pos.x < 0.2)  mask.r  = 1.0;
-		else if (pos.x < 0.4)  mask.rb = 1.0.xx;
-		else if (pos.x < 0.7)  mask.gb = 1.0.xx;	
-		else                   mask.g  = 1.0;	
+		else                   mask.b  = 1.0;
+		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;		
 	}     
 
 	// RRGGBBX mask
@@ -427,9 +419,9 @@ vec3 Mask(vec2 pos, float mx)
 		else if (pos.x < 3.0)  mask.r = 1.0;
 		else if (pos.x < 5.0)  mask.g = 1.0;	
 		else                   mask.b = 1.0;
-		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;		
-	}  
- 
+		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
+	}
+	
 	return mask;
 }
 

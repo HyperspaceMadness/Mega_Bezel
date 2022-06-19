@@ -3,7 +3,7 @@
 Mega Bezel is updated to V 0.9.108 2022-04-23 Rev 1
 
 Changes:
-  * Update to crt-guest-advanced-2022-06-02-release1
+  * Update to crt-guest-advanced-2022-06-18-release1
     * Includes @guest's new NTSC filtering and sharpening magic
     * Added **Post CRT Brightness Affects Grade Black Level**
       * This is 100 by default, so Post CRT Brightness affects the increase in black level added in Grade
