@@ -81,6 +81,15 @@ vec2 HSM_GetScreenScale(float screen_aspect, float screen_height_from_image, vec
 				screen_height = (diagonal_length * 1) / sqrt(screen_aspect * screen_aspect + 1 * 1);
 			}
 
+			if (HSM_USE_PHYSICAL_SIZE_FOR_NON_INTEGER == 1)
+			{
+				float monitor_aspect_with_rotation = global.FinalViewportSize.x > global.FinalViewportSize.y ? HSM_PHYSICAL_MONITOR_ASPECT_RATIO : 1 / HSM_PHYSICAL_MONITOR_ASPECT_RATIO;
+				float monitor_height = HSM_PHYSICAL_MONITOR_DIAGONAL_SIZE / sqrt(monitor_aspect_with_rotation * monitor_aspect_with_rotation + 1);
+				float sim_screen_height = HSM_PHYSICAL_SIM_TUBE_DIAGONAL_SIZE / sqrt(screen_aspect * screen_aspect + 1);
+
+				screen_height = 0.012 + sim_screen_height / monitor_height;
+			}
+
 			if (HSM_USE_IMAGE_FOR_PLACEMENT == 1)
 				screen_height = screen_height_from_image;
 

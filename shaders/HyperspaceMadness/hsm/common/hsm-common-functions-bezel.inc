@@ -28,14 +28,6 @@ vec2 HSM_GetOuterBezelScale(vec2 screen_scale, float screen_aspect)
 	return bezel_outer_scale_offset;
 }
 
-// vec2 HSM_GetFrameScale(vec2 screen_scale, vec2 tube_scale, float screen_aspect)
-// {
-// 	vec2 bezel_outer_scale_offset = HSM_GetOuterBezelScale(screen_scale, screen_aspect);
-// 	vec2 black_edge_scale_offset = tube_scale / screen_scale;
-// 	vec2 frame_scale = screen_scale * black_edge_scale_offset * bezel_outer_scale_offset;
-// 	return frame_scale;
-// }
-
 vec2 GetDefaultScreenScale()
 {
 	float output_aspect = global.FinalViewportSize.x / global.FinalViewportSize.y;
@@ -104,15 +96,6 @@ float HSM_GetBezelCoords(vec2 screen_coord,
 
 	return 0;
 }
-
-// vec4 HSM_AddTransform(vec4 in_transform_base, vec4 in_transform_add)
-// {
-// 	vec4 out_transform = in_transform_base;
-// 	out_transform.xy *= in_transform_add.xy;
-// 	// Multiply the second position because it should be scaled by the base transform
-// 	out_transform.zw += in_transform_base.xy * in_transform_add.zw;
-// 	return out_transform;
-// }
 
 // Change Transforms for Scale
 

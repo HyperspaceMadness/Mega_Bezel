@@ -185,6 +185,25 @@ float HSM_VERTICAL_PRESET = global.HSM_VERTICAL_PRESET;
 #pragma parameter HSM_NON_INTEGER_SCALE 							"          Non-Integer Scale %" 82.97 1 200 0.2
 float HSM_NON_INTEGER_SCALE = global.HSM_NON_INTEGER_SCALE - (HSM_VERTICAL_PRESET > 0.5 ? 47.92 : 0);
 
+
+
+#pragma parameter HSM_PHYSICAL_SIZE_TITLE							"[ PHYSICAL SIZES FOR NON INTEGER ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_USE_PHYSICAL_SIZE_FOR_NON_INTEGER 			"          Use Physical Monitor and Tube Sizes for Non-Integer" 0 0 1 1
+float HSM_USE_PHYSICAL_SIZE_FOR_NON_INTEGER = global.HSM_USE_PHYSICAL_SIZE_FOR_NON_INTEGER;
+
+#pragma parameter HSM_PHYSICAL_MONITOR_ASPECT_RATIO					"          Your Monitor's Aspect Ratio" 1.77 0.25 5 0.01
+float HSM_PHYSICAL_MONITOR_ASPECT_RATIO = global.HSM_PHYSICAL_MONITOR_ASPECT_RATIO;
+
+#pragma parameter HSM_PHYSICAL_MONITOR_DIAGONAL_SIZE		        "          Your Monitor's Size (Diagonal)" 27 1 100 0.1
+float HSM_PHYSICAL_MONITOR_DIAGONAL_SIZE = global.HSM_PHYSICAL_MONITOR_DIAGONAL_SIZE;
+
+#pragma parameter HSM_PHYSICAL_SIM_TUBE_DIAGONAL_SIZE				"          Simulated Tube Size (Diagonal)" 18.1 1 100 0.1
+float HSM_PHYSICAL_SIM_TUBE_DIAGONAL_SIZE = global.HSM_PHYSICAL_SIM_TUBE_DIAGONAL_SIZE;
+
+
+#pragma parameter HSM_SNAP_NONINTEGER_TITLE							"[ SNAP NON-INTEGER TO INTEGER SCALE ]:" 0 0 0.01 0.01
+
 #pragma parameter HSM_USE_SNAP_TO_CLOSEST_INT_SCALE 				"          Snap to Closest Integer Scale: OFF | ON" 0 0 1 1
 float HSM_USE_SNAP_TO_CLOSEST_INT_SCALE = global.HSM_USE_SNAP_TO_CLOSEST_INT_SCALE;
 

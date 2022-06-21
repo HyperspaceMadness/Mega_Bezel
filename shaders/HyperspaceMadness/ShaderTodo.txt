@@ -20,6 +20,8 @@ Changes:
   * Fixed Reflection when using the CRT Curvature multiplier
     * Now  the game image can look flat and the reflection will not show seams
   * Made Adjusted Diffuse Shadow smaller and less curved to be more natural
+  * Screen Size by setting inches and monitor size
+
 
 
 ----------------------------------------------------
