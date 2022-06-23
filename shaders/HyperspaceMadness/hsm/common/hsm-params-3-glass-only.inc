@@ -25,9 +25,7 @@
 //---------------------------------------------------------------------------------------------------
 //    STANDARD BACKGROUND IMAGE LAYER
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_GLASS_IMG_TITLE	            "[ GLASS IMAGE LAYER ]:" 0 0 0.01 0.01
-
-#pragma parameter HSM_BG_IMG_TITLE	            "[ BACKGROUND IMAGE ]:" 0 0 0.01 0.01
+#pragma parameter HSM_BG_IMG_TITLE	            "[ GLASS BACKGROUND IMAGE ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_BG_OPACITY                  "          Opacity" 100 0 100 0.1
 float HSM_BG_OPACITY = global.HSM_BG_OPACITY / 100;

@@ -267,16 +267,6 @@ float HSM_CROP_BLACK_THRESHOLD = global.HSM_CROP_BLACK_THRESHOLD / 100;
 
 
 //---------------------------------------------------------------------------------------------------
-//    SHARPEN
-//---------------------------------------------------------------------------------------------------
-// #pragma parameter SHARPEN_TITLE  									"[ --- FAST SHARPEN - GUEST.R --- ]:"       			0.00 0.0 2.00 0.05
-// // #pragma parameter SHARPEN_ON  										"          Sharpen ON"       		0 0 1 1
-// #pragma parameter SHARPEN  			"          Sharpen Strength"    0.00 0.0 4.00 0.10 
-// #pragma parameter CONTR    											"          Amount of Sharpening"  	0.05 0.0 0.25 0.01
-// #pragma parameter DETAILS  											"          Details Sharpened"     	1.00 0.0 1.00 0.05
-
-
-//---------------------------------------------------------------------------------------------------
 //    SHADERFX
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_SCALEFX_TITLE	                                "[ --- SMOOTHING - SCALEFX - SMOOTH-ADV Presets Only ---- ]:" 0 0 0.01 0.01

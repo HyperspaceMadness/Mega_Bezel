@@ -136,9 +136,12 @@ Presets in Mega_Bezel / Presets
     * Good for reducing the resolution from the core to native res to use with a crt shader
     * Helps working with cores which are outputting at increased internal resolution, e.g. 2x, 4k this creates antialiasing at native res which comes from rendering at a higher resolution then reducing it 
 
+
+**HSM Examples Package (Separate additional Package from Mega Bezel)**
+
   * **Community_CRT_Variations**
     - Presets with crt settings created by community members
-    - Thanks to some of our community members who's settings appear here including @BendBombBoom, @NesGuy & @Sonkun
+    - Thanks to some of our community members who's settings appear here including @BendBombBoom, @NesGuy, @Sonkun & @Cyberlab
 
   * **Variations**
     * These presets are simple presets referencing one of the presets in the Mega_Bezel folder
@@ -210,7 +213,7 @@ NTSC Processing is only included in NTSC Presets, and GTU Horizontal blurring is
 **If you see artifacts on the game image like circles or interference patterns**
   * These artifacts which look like round swirls or circles like tree trunk rings are called a Moiré patterns which happen when a high frequency pattern is sampled at a lower frequency - https://en.wikipedia.org/wiki/Moiré_pattern
 
-    * The base cause of the Moiré pattern is usually the curvature in combination with visible scanlines, if you set the curvature to 0 the moire should go away
+    * The base cause of the Moiré pattern is usually the curvature in combination with visible scanlines
 
 * **How to fix**
     * Set **CRT Curvature Scale Multiplier** to 0, This will remove curvature from the game image but leave everything else the same
@@ -248,6 +251,7 @@ Parameter Descriptions
   * **Gamma In (Game Embedded Gamma - Gamma Space to Linear) Def 2.4** - The gamma adjustment applied to take the core image and bring it into linear color space. Gamma to Linear Space Decode
   * **Gamma Out (Electron Gun Gamma - Linear to Gamma Space) Def 2.4** - The gamma adjustment applied to the CRT shader's linear color output to bring it back into a gamma corrected space. Also known as Linear to Gamma Space Encode
   * **Post CRT Brightness** - Brightness adjustment on the CRT color output (Applied in Linear Color Space)
+  * **Post CRT Brightness Affects Grade Black Level** - As this value is reduced the brightness adjustment amount will be reduced on the black level. So if you set it to a low value there will be almost no increase in brightness on the areas which were black before the black level adjustment.
 
 -----------------------------------------------------------------------------------------------
 **[ GRAPHICS CACHE ]:**
@@ -336,10 +340,30 @@ Parameter Descriptions
   - Adjusts the size of the screen by increasing the multiple of the core resolution (on both axes) when using integer scale, to make the screen larger or smaller
 - **Integer Scale Multiple Offset Long Axis**
   - Adds an additional multiple offset but for only the long axis, with a horizontal aspect ratio this is the horizontal axis
-- **Vertical Preset (E.G. 4K Vertical)**
-  - Turn on if this is a vertical monitor preset, E.G. if your physical monitor is turned vertical
+- **Preset is for Monitor Portrait Mode (Smaller CRT Screen)**
+  - Turn on if this preset is to be used on monitor in Portrait mode, E.G. if your physical monitor is turned vertical
 - **Non-Integer Scale %**
-  - If integer scale isn't used, this sets the vertical size of the vertical percentage of the full viewport
+  - If integer scale isn't used, this sets the vertical size of the vertical percentage of the full viewport. The default is 82.97 which corresponds to an exact integer scale of 224p content
+
+-----------------------------------------------------------------------------------------------
+**[ PHYSICAL SIZES FOR NON INTEGER ]:**
+
+- **Use Physical Monitor and Tube Sizes for Non-Integer**
+  - Use these physical sizes instead of the integer scale percentage
+
+- **Your Monitor's Aspect Ratio**
+  - The aspect ratio of your physical monitor, most monitors are 1.77 which equates to 16:9
+
+- **Your Monitor's Size (Diagonal)**
+  - The size of your physical monitor
+
+- **Simulated Tube Size (Diagonal)**
+  - How big you want the crt screen to be on your monitor
+
+
+-----------------------------------------------------------------------------------------------
+**[ SNAP NON-INTEGER TO INTEGER SCALE ]:**
+
 - **Snap to Closest Integer Scale**
   - Takes the current Non-Integer scale and snaps to the closest integer scale within a tolerance
 - **Snap To Closest Integer Scale Tolerance**
@@ -378,13 +402,6 @@ Cropping removes parts of the game image at the edges of the screen which were n
 - **Crop Overscan Left**
 - **Crop Overscan Right**
 - **Black Threshold for 'CROP BLACK ONLY'** - The brightness threshold of the black area to be cropped
-
-
------------------------------------------------------------------------------------------------
-**[ --- FAST SHARPEN - GUEST.R --- ]:** --- Image Sharpening
-- **Sharpen Strength**
-- **Amount of Sharpening**
-- **Details Sharpened**
 
 
 -----------------------------------------------------------------------------------------------
@@ -462,7 +479,7 @@ Cropping removes parts of the game image at the edges of the screen which were n
 - **3D Radius** - Radius for the sphere the 3D projection is done on, values from 1-4 then to be useful
 - **3D View Distance** - This is the distance of the virtual camera from the Sphere
 - **3D Tilt Angle Y** - Vertical Tilt, with split screen this will tilt both screens towards or away from the center
-- **CRT Curvature Scale Multiplier** - This allows increasing or decreasing the curvature of the crt image while the bezel and black edge stays the same
+- **CRT Curvature Scale Multiplier** - This allows reducing the curvature of the crt image to reduce Moire artifacts or just give a flat look while the bezel and black edge stays the same
 
 -----------------------------------------------------------------------------------------------
 **[ ANTI-FLICKER ]:**
@@ -514,20 +531,32 @@ Blend parts of the image which flicker on/off repeatedly between frames often us
 **[ TUBE DIFFUSE IMAGE ]:**
 
 The color/texture of the tube which appears behind the CRT image
+- **Tube Diffuse Color** 
+  - 0: Black - Game image is shown over 100% black
+  - 1: Image - Shows an grayish image of crt tube with lighting
+  - 2: Transparent - See through the CRT tube to the background
 - **Opacity** 
   - Opacity of the tube background, With opacity of 0 you will see through to the background, good for things like Tron's Deadly Discs 
-- **Use Tube Diffuse Image** 
-  - If 0 black is used instead
 - **Colorize On** - Colorize the image
 - **Hue Offset**
 - **Saturation**
 - **Brightness**
 - **Gamma Adjust**
+- **Ambient Lighting Multiplier**
+  - A multiplier on the amount of global ambient lighting applied
+- **Scale**
+- **Scale X**
+- **Empty Tube Thickness**
+  - Amount of Empty tube around the game image
+- **Empty Tube Thicknes X Scale**
+  - Amount of Empty tube around the game image horizontally
 
 -----------------------------------------------------------------------------------------------
 **[ TUBE SHADOW IMAGE ]:**
 
 Adds a shadow on top of the tube diffuse image and colored gel
+- **Tube Shadow Image - OFF | ON** 
+  - Apply a shadow on the top of the tube diffuse coloring
 - **Opacity** 
   - Opacity of the shadow, and how dark the shadow is
 - **Position X** 
@@ -536,11 +565,24 @@ Adds a shadow on top of the tube diffuse image and colored gel
 - **Scale Y** - Scales shadow from the top of the tube
 - **Curvature Scale** - How much curvature is applied to the shadow, more curvature has the effect of making it look like the light is higher relative to the tube/bezel
 
+
+-----------------------------------------------------------------------------------------------
+**[ TUBE STATIC REFLECTION IMAGE  ]:**
+- **Use Tube Static Reflection Image - OFF | ON** --- Apply the effect or not
+- **Opacity** --- This is the shine on the tube which imitates reflection from the environment
+- **Ambient Lighting Multiplier** --- How much of the global ambient lighting image to apply, default is 100
+- **Scale** --- Scales the tube reflection image from the center of the tube
+
+
 -----------------------------------------------------------------------------------------------
 **[ TUBE COLORED GEL IMAGE ]:**
     Colored effect added on top of the CRT image to tint it
 
 - **Use Tube Colored Gel** - Apply the image or not
+- **Dual Screen Visibility** - Which screens to show the colored Gel
+  - 0: Both Screens
+  - 1: Only the First Screen
+  - 2: Only the Second Screen
 - **Multiply Blend Amount** - Image applied like a colored gel in photography
   - Used to make vector games which output black and white colored, E.G Battlezone
 - **Additive Blend Amount** - Image applied as a brightening of the tube area
@@ -548,26 +590,26 @@ Adds a shadow on top of the tube diffuse image and colored gel
 - **Normal Blend Amount** - Used for the more opaque parts of a gel image like for the Vectrex
 - **Normal Blend Brightness** - Brightness for these more opaque parts
 - **Normal Blend Transparency Threshold** - Adjusts at what transparency of the image the area should be fully transparent
+- **Ambient Lighting Multiplier** - How much of the global ambient lighting to apply
+- **Scale** - Scale the colored gel image
+- **Flip Horizontal** - Flip the colored gel image Horizontally
+- **Flip Vertical** - Flip the colored gel image Vertically
 - **Show CRT on Top of Colored Gel Normal** - Put the CRT image on top of the gel image so it is not color shifted or obscured.
-
-
------------------------------------------------------------------------------------------------
-**[ TUBE STATIC REFLECTION IMAGE  ]:**
-- **Use Tube Static Reflection Image** --- OFF/ON to apply the image
-- **Opacity** --- This is the shine on the tube which imitates reflection from the environment
-- **Ambient Lighting Multiplier** --- How much of the ambient lighting image to apply, default is 100
-- **Scale** --- Scales the tube reflection image from the center of the tube
 
 
 -----------------------------------------------------------------------------------------------
 **[ SCREEN BLACK EDGE ]:**
 
+- **Show Black Edge** --- Show the black edge at the edge of the tube
+  - 0: Don't show any black edge
+  - 1: Show the black edge overtop the tube diffuse and gel
 - **Global Corner Radius** --- Global radius of all corners before their own multipliers are applied
 - **Black Edge Corner Radius Scale** --- the roundness of the corner of the screen area
 - **Black Edge Sharpness** --- Blends the edge of the game screen image to black, lower values will fade the edge
 - **Black Edge Curvature Scale Multiplier** --- How much the black edge will follow the screen curvature
-- **Black Edge Thickness** --- Distance between the illuminated game screen and the inner edge of the bezel
+- **Black Edge Thickness** --- How thick the black edge is on the edge of the tube
   - Set this to 0 or less to remove the black edge
+- **Black Edge Thickness X Scale** --- Scale the thickness on the left and right edge
 
 -----------------------------------------------------------------------------------------------
 **[ DUAL SCREEN ]:**
@@ -635,10 +677,6 @@ Adds a shadow on top of the tube diffuse image and colored gel
 - **Use Independent Curvature** --- Define curvature separately from the screen
 - **Independent Curvature X** --- Horizontal curvature for the bezel when independent
 - **Independent Curvature Y** --- Vertical curvature for the bezel when independent
-- **Inner Curvature Scale Multiplier**
-  - Multiplier the curvature of the inner edge of the bezel
-  - Default is 100 which will match the tube curvature
-  - Multiplies the curvature in normal and independent mode
 
 -----------------------------------------------------------------------------------------------
 **[ BEZEL GENERAL ]:**
@@ -662,13 +700,11 @@ Adds a shadow on top of the tube diffuse image and colored gel
   - Scale offset of the Bezel & Frame from its default position
 
 - **Inner Curvature Scale Multiplier**
-  - How much the bezel's curvature follows the screen curvature
+  - How much the bezel's curvature follows the tube curvature
 
 - **Inner Corner Radius Scale** - Def 50
   - Roundness of the inner corner of the bezel, it is a multiplier of the roundness of the screen corner
   - 100 gives you the same roundness as the screen corner
-
-// TODO review subsequent parameter help
 
 - **Inner Edge Thickness**
   - Thickness of edge of inner, default 100
@@ -697,8 +733,22 @@ Adds a shadow on top of the tube diffuse image and colored gel
   - Only visible when the black ring around the screen is reduced so that the bezel is almost on top of the screen
 
 -----------------------------------------------------------------------------------------------
-**[ BEZEL & FRAME COLOR ]:**
+**[ BEZEL COLOR ]:**
 
+- **Hue**
+  - The hue or "color" of the bezel E.G. Blue vs Orange
+- **Saturation**
+  - How saturated or strong the color is
+- **Value/Brightness**
+  - The brightness of the color, default is 10 which is 10%
+- **Noise**
+  - Noise or speckles in the color, default is 30
+
+-----------------------------------------------------------------------------------------------
+**[ FRAME COLOR ]:**
+
+- **Use Inependent Frame Color**
+  - 0 by default, when turned on it uses a different color than the bezel color
 - **Hue**
   - The hue or "color" of the bezel and frame E.G. Blue vs Orange
 - **Saturation**
@@ -709,15 +759,10 @@ Adds a shadow on top of the tube diffuse image and colored gel
   - Noise or speckles in the color, default is 30
 
 -----------------------------------------------------------------------------------------------
-**[ FRAME ]:**
+**[ FRAME GENERAL ]:**
 
 - **Opacity**
   - Opacity of the frame default is 100 which means it is fully visible
-- **Blend Mode** - Default is 1
-  - **0 - Off**
-  - **1 - Normal Blending**
-  - **2 - Additive Blending** - Added on as added with a projector
-  - **3 - Multiply Blending** - Applied by darkening what is underneath
 - **Texture Overlay Opacity (Highlight)**
   - Opacity of the texture applied on top of base color of the frame
   - The default texture is a white highlight and so adds a highlight effect to the frame giving it a bit more dimension
@@ -730,13 +775,13 @@ Adds a shadow on top of the tube diffuse image and colored gel
   - Thickness of the inner edge of the frame
 - **Inner Corner Radius Scale**
   - Roundness of the inner corner, 
-- **Thickness**
+- **Frame Thickness**
   - Base thickness of the frame
-- **Thickness Scale X**
+- **Frame Thickness Scale X**
   - Adjusts the frame thickness of frame at the left and right
-- **Outer Pos Y**
+- **Frame Outer Pos Y**
   - Shift the outside of the frame up and down which can make the top of the frame larger than the bottom or vice versa 
-- **Outer Curvature Scale**
+- **Frame Outer Curvature Scale**
   - Curvature of the outside of the frame, at 100 it will match the curvature of the inside of the frame
 - **Outer Corner Radius**
   - Roundness of the frame outer corner
@@ -849,38 +894,33 @@ Adds a shadow on top of the tube diffuse image and colored gel
 
 
 
-## **BASIC-BORDER Presets Only**
+## **POTATO Presets Only**
 
 -----------------------------------------------------------------------------------------------
-**[ BASIC BACKGROUND IMAGE LAYER ]:**
-
-- **Aspect Ratio**
-
-  - **Full** - Image fills the viewport
-  - **16:9** - For landscape aspect images
-  - **9:16** - For portrait aspect images
-
-- **Background Image Opacity**
+**[ POTATO BACKGROUND IMAGE LAYER ]:**
 
 - **Background Blend Mode** - Default is Additive
 
-  - **Off** - Image is not applied
-  - **Normal**
-  - **Additive** - Adds the image as if it is being projected on top
-  - **Multiply** - Image is applied as if it was a colored plastic film
+  - **OFF** - Image is not applied
+  - **NORMAL**
+  - **ADD** - Adds the image as if it is being projected on top
+  - **MULTIPLY** - Image is applied as if it was a colored plastic film
 
-- **Background Show over Screen**
+- **Opacity**
 
-  - Background is applied on top of the screen
+- **Brightness**
 
-  - Since the default blend mode is additive this gives a backdrop effect
+- **Show Background**
+
+  - **0 - UNDER SCREEN** - Background is applied under the screen and Since the default blend mode is additive this gives a backdrop effect. E.G. Tron's Deadly Discs
+  - **1 - OVER SCREEN** - Background is applied on top of the screen
 
     
 
 ## **GLASS Presets Only**
 
 -----------------------------------------------------------------------------------------------
-**[ GLASS IMAGE LAYER ]:**
+**[ GLASS BACKGROUND IMAGE ]:**
 
 - **Background Image Opacity**
 
@@ -893,31 +933,6 @@ Adds a shadow on top of the tube diffuse image and colored gel
   - **Additive** - Adds the image as if it is being projected on top
 
   - **Multiply** - Image is applied as if it was a colored plastic film
-
-    
-
-## **STANDARD Presets Only**
-
------------------------------------------------------------------------------------------------
-**[ STANDARD IMAGE LAYERS ]:**
-
-- **Aspect Ratio**
-  - **Full** - Image fills the viewport
-  - **16:9** - For landscape aspect images
-  - **9:16** - For portrait aspect images
-- **Background Image Opacity**
-- **Background Blend Mode** - Default is Additive
-  - **Off** - Image is not applied
-  - **Normal**
-  - **Additive** - Adds the image as if it is being projected on top
-  - **Multiply** - Image is applied as if it was a colored plastic film
-- **Background Show over Screen**
-  - Background is applied on top of the screen
-  - Since the default blend mode is additive this gives a backdrop effect
-- **LED Image Opacity**
-- **LED Blend Mode**
-- **Top Extra Image Opacity**
-- **Top Extra Image Blend Mode**
 
 
 -----------------------------------------------------------------------------------------------
@@ -927,14 +942,11 @@ Layer order adjusts the order in which the layers are composited or "layered" on
 
 - **Background Image**
 - **Viewport Vignette**
-- **CRT Screen**
-- **Bezel Image**
-- **Bezel (Generated)**
-- **Frame (Generated)**
-- **Cabinet Glass Image**
-- **Decal Image**
-- **Reflection (Generated)**
 - **LED Image**
+- **Device Image**
+- **CRT Screen**
+- **Decal Image**
+- **Cabinet Glass Image**
 - **Top Image**
 
 -----------------------------------------------------------------------------------------------
@@ -979,21 +991,34 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 
 ## ***Common Layer Parameters***
 
-	*In the multiple image layers there are many parameters which are repeated from layer to layer, their description is shown here*
+	*Many parameters which repeated from layer to layer, their description is shown here*
 
 - ***Opacity***
-
   - *Opacity multiplier of the layer being applied. 0 means we will not see the layer because it is fully transparent*
 
-- ***Blend Mode*** *- How the reflection is applied to the layer underneath Default is Additive*
+- ***Colorize On*** - Turns on the Colorization
+- ***Hue*** - The hue adjustement, eg more blue vs red
+- ***Saturation***
+- ***Brightness***
+  - *Adjust Brightness of the Layer, 100 is no change*
+- ***Gamma***
+
+- ***Ambient Lighting Multiplier***
+  - How much of the global ambient lighting to add to the layer
+
+- ***Apply Ambient Lighting in ADD Blend Mode***
+    - By default when a layer is in ADD mode ambient lighting is not applied to the image, this works well for things like LEDs
+    - When **Apply Ambient Lighting in ADD Blend Mode** is set to 1 the ambient lighting will be applied when in ADD blend mode
+
+- ***Blend Mode*** *- How the image is applied to the layer underneath Default is 1: Normal Blending*
 
   - ***0 - Off*** *- The layer is not shown*
   - ***1 - Normal Blending***
   - ***2 - Additive Blending*** *- Applied additively to brighten what's underneath*
+  - ***3 - Multiply Blending*** *- Applied to as a darkening of what is underneath*
 
 - ***Source Matte Color***
-
-  - *Controls how the image's is interpreted based on the matte color used when the image was stored (what color the image is blended with in the transparent area).* 
+  - *Controls how the image transparency is interpreted based on the matte color used when the image was stored (what color the image is blended with in the transparent area).*
   - *Used to remove white fringing on the edges around transparent areas.*
   - ***0 - Black***
     - *The color in the transparent area was black*. Technically this is called Premultiplied alpha. 
@@ -1003,43 +1028,27 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
     - *The image was not blended with any matte color, the only transparency info is in the alpha channel*
 
 - **Mask** - Mask the layer with the area inside the:
-
   - ***0 - ALL*** *- Whole viewport*
   - ***1 - Screen*** *- Illuminated area of the tube*
-  - ***2 - Tube***
+  - ***2 - Tube*** *- Inside the tube
   - ***2 - Bezel and Inward*** *- Bezel and inward*
-  - ***3 - Bezel***
+  - ***3 - Bezel*** *- Bezel
   - ***4 - Bezel +*** *- Bezel and outward*
-  - ***5 - Frame***
+  - ***5 - Frame*** *- Frame
   - ***6 - Frame +*** *- Frame and outward*
   - ***7 - Background***  *- Outside the frame*
 
 - ***Cutout Mask***
-
   - ***0 - OFF*** *- Don't cut out any area of the layer*
   - ***1 - ON*** *- Make the area of the layer INSIDE the cutout mask transparent*
   - ***2 - Invert*** *- Make the area of the layer OUTSIDE the cutout mask transparent*
 
-- ***Brightness***
+- ***Dual Screen Visibility*** - Where to show this image
+  - ***0 - Show on Both Screens***
+  - ***1 - Show only on Screen 1***
+  - ***2 - Show only on Screen 2***
 
-  - *Adjust Brightness of the Layer, 100 is no change*
-
-- ***Texture Aspect***
-
-  - *Aspect Ratio of the texture file used for this layer*
-  - ***0 - Full*** *- Use Viewport Aspect*
-  - ***Explicit*** *- Use Explicit Aspect*
-  - ***4:3*** *- Landscape*
-  - ***3:4*** *- Portrait*
-  - ***16:9*** *- Landscape*
-  - ***9:16*** *- Portrait*
-
-- **Explicit Texture Aspect**
-
-  - *The Aspect ratio used when Texture Aspect is set to Explicit*
-
-- ***Scale Mode***
-
+- ***Inherit Scale***
   - *Controls if this layer follows another layer's scaling* 
   - ***Full / Fullscreen*** *- Scale to the viewport*
   - ***Tube*** *- Follow the Tube Scaling*
@@ -1049,16 +1058,27 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
   - ***Decal Image*** *- Follow the Decal Image Scaling*
   - ***Top Extra Image*** *- Follow the Top Extra Image Scaling*
 
-- **Keep Aspect**
+- **Zoom FULL Scale Mode**
+  - When the layer Inherit Scale is in **FULL** mode this controls if the layer should scale with the global zoom or not, this defaults to ON
 
-  - *The Layer image should keep its original aspect ratio*
-  - *E.G. If the scale mode was **Tube** and **Keep Aspect** was on regardless of the aspect of the tube the layer's image would stay the aspect ratio of the image. If Keep Aspect is off the texture would react to the tube's changes in horizontal aspect.* 
-  - **0 - OFF**
-  - **1 - ON**
+- **Scale Aspect (Mode)** 
+  - Controls how the texture's aspect reacts to the inherited scale
+  - **0 - INHERIT FROM SCALE MODE** --- The texture's aspect will scale as what it follows is scaled
+  - **1 - USE TEXURE ASPECT** --- The layer's image stays the same aspect as what it follows is scaled
+
+  - **Example:** 
+    - If the scale mode was **Tube** and **USE TEXURE ASPECT** was on, regardless of the aspect of the tube the layer's image would stay the aspect ratio of the image. 
+    - If it is set to **INHERIT FROM SCALE MODE** the layer's image will react to the tube's changes in horizontal aspect.* 
+
+- **Image Fill Mode**
+  - **0 - STRETCH** --- Stretch the image across the whole area
+  - **1 - SPLIT HORIZONTAL** --- Splits the image in the center and slide it out until it hits the outer edge
 
 - **Scale** --- *Scales image layer equally in both directions*
 - **Scale X** --- *Scales image layer horizontally*
+- **Position X** --- *Moves the image layer horizontally*
 - **Position Y** --- *Moves the image layer vertically*
+- **Mipmapping Blend Bias** --- *Adjusts the sharpness of the image*
 
     
 
@@ -1066,26 +1086,32 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 **[ BACKGROUND LAYER ]:**
 
 - **Opacity**
+- **Colorize On**
+- **Hue Offset**
+- **Saturation**
+- **Brightness**
+- **Gamma Adjust**
+- **Ambient Lighting Multiplier**
+- **Ambient Lighting in ADD Mode**
 - **Blend Mode**
 - **Source Matte Color**
 - **Mask**
 - **Cutout Mask**
-- **Brightness**
-- **Apply NightLight & Static Gamma (0 for Backdrop)**
-  - Allows Night Lighting and Static gamma to be turned off
-  - Can be used to simulate a backdrop which is self illuminated
-- **Scale Mode**
+- **Dual Screen Visibility**
+- **Inherit Scale**
   - **0 - FullScreen**
   - **1 - Tube**
   - **2 - Bezel**
-- **Keep Aspect**
+- **Inherit Scale**
+- **Zoom FULL Scale Mode**
+- **Scale Aspect**
 - **Scale**
 - **Scale X**
+- **Position X**
 - **Position Y**
 - **Mirror Wrap**
   - When ON the image is wrapped when we draw out of the texture bounds
-  - **0 - OFF**
-  - **1 - ON**
+- **Mipmapping Blend Bias**
 
 -----------------------------------------------------------------------------------------------
 **[ VIEWPORT VIGNETTE LAYER ]:**
@@ -1093,80 +1119,11 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Opacity**
 - **Mask**
 - **Cutout Mask**
-- **Scale Mode**
+- **Inherit Scale**
   - **0 - Full**
   - **1 - Background**
   - **2 - Tube**
   - **3 - Bezel**
-  - **4 - Decal**
-  - **5 - Top Image**
-- **Scale**
-- **Scale X**
-- **Position Y**
-
------------------------------------------------------------------------------------------------
-**[ CRT SCREEN LAYER ]:**
-
-- **Blend Mode**
-
------------------------------------------------------------------------------------------------
-**[ BEZEL IMAGE LAYER ]:**
-
-- **Opacity**
-- **Hue Offset**
-- **Saturation**
-- **Brightness**
-- **Blend Mode**
-- **Source Matte Color**
-- **Mask**
-- **Cutout Mask**
-- **Scale Mode**
-  - **0 - FullScreen**
-  - **1 - Tube**
-  - **2 - Bezel**
-  - **3 - Background**
-- **Keep Aspect**
-- **Scale**
-- **Scale X**
-- **Position Y**
-- **Use Curvature**
-  - If Use Curvature is ON then the layer image will follow the screen curvature
-
------------------------------------------------------------------------------------------------
-**[ CABINET OR CABINET GLASS LAYER ]:**
-
-- **Opacity**
-- **Brightness**
-- **Blend Mode**
-- **Source Matte Color**
-- **Mask**
-- **Cutout Mask**
-- **Scale Mode**
-  - **0 - FullScreen**
-  - **1 - Tube**
-  - **2 - Bezel**
-  - **3 - Background**
-  - **4 - Top Image**
-- **Keep Aspect**
-- **Scale**
-- **Scale X**
-- **Position Y**
-
------------------------------------------------------------------------------------------------
-**[ DECAL LAYER ]:**
-
-- **Opacity**
-- **Blend Mode**
-- **Source Matte Color**
-- **Mask**
-- **Cutout Mask**
-- **Scale Mode**
-  - **0 - Full Screen**
-  - **1 - Tube**
-  - **2 - Bezel**
-  - **3 - Background**
-  - **4 - Bezel Image**
-- **Scale Keep Aspect**
 - **Scale**
 - **Scale X**
 - **Position Y**
@@ -1175,46 +1132,166 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 **[ LED LAYER ]:**
 
 - **Opacity**
+- **Colorize On**
+- **Hue Offset**
+- **Saturation**
+- **Brightness**
+- **Gamma Adjust**
+- **Ambient Lighting Multiplier**
+- **Ambient Lighting in ADD Mode**
 - **Blend Mode**
 - **Source Matte Color**
 - **Mask**
 - **Cutout Mask**
-- **Scale Mode**
-  - **0 - Full Screen**
+- **Dual Screen Visibility**
+- **Inherit Scale**
+  - **0 - FullScreen**
   - **1 - Tube**
   - **2 - Bezel**
-  - **3 - Background**
-  - **4 - Bezel Image**
-  - **5 - Decal Image**
-- **Scale Keep Aspect**
+  - **3 - BG**
+  - **4 - Device**
+- **Inherit Scale**
+- **Zoom FULL Scale Mode**
+- **Scale Aspect**
 - **Scale**
 - **Scale X**
+- **Position X**
 - **Position Y**
+- **Mipmapping Blend Bias**
+
+-----------------------------------------------------------------------------------------------
+**[ DEVICE IMAGE LAYER ]:**
+
+- **Opacity**
+- **Colorize On**
+- **Hue Offset**
+- **Saturation**
+- **Brightness**
+- **Gamma Adjust**
+- **Ambient Lighting Multiplier**
+- **Ambient Lighting in ADD Mode**
+- **Blend Mode**
+- **Source Matte Color**
+- **Mask**
+- **Cutout Mask**
+- **Dual Screen Visibility**
+- **Inherit Scale**
+  - **0 - FullScreen**
+  - **1 - Tube**
+  - **2 - Bezel**
+  - **3 - BG**
+- **Inherit Scale**
+- **Zoom FULL Scale Mode**
+- **Scale Aspect**
+- **Scale**
+- **Scale X**
+- **Position X**
+- **Position Y**
+- **Mipmapping Blend Bias**
+
+-----------------------------------------------------------------------------------------------
+**[ DECAL LAYER ]:**
+
+- **Opacity**
+- **Colorize On**
+- **Hue Offset**
+- **Saturation**
+- **Brightness**
+- **Gamma Adjust**
+- **Ambient Lighting Multiplier**
+- **Ambient Lighting in ADD Mode**
+- **Blend Mode**
+- **Source Matte Color**
+- **Mask**
+- **Cutout Mask**
+- **Dual Screen Visibility**
+- **Inherit Scale**
+  - **0 - FullScreen**
+  - **1 - Tube**
+  - **2 - Bezel**
+  - **3 - BG**
+  - **4 - Device**
+- **Inherit Scale**
+- **Zoom FULL Scale Mode**
+- **Scale Aspect**
+- **Scale**
+- **Scale X**
+- **Position X**
+- **Position Y**
+- **Mipmapping Blend Bias**
+
+-----------------------------------------------------------------------------------------------
+**[ CABINET OR CABINET GLASS LAYER ]:**
+
+- **Opacity**
+- **Colorize On**
+- **Hue Offset**
+- **Saturation**
+- **Brightness**
+- **Gamma Adjust**
+- **Ambient Lighting Multiplier**
+- **Ambient Lighting in ADD Mode**
+- **Blend Mode**
+- **Source Matte Color**
+- **Mask**
+- **Cutout Mask**
+- **Dual Screen Visibility**
+- **Inherit Scale**
+  - **0 - FullScreen**
+  - **1 - Tube**
+  - **2 - Bezel**
+  - **3 - BG**
+  - **4 - Device**
+  - **4 - Decal**
+- **Inherit Scale**
+- **Zoom FULL Scale Mode**
+- **Scale Aspect**
+- **Scale**
+- **Scale X**
+- **Position X**
+- **Position Y**
+- **Mipmapping Blend Bias**
+
+
 
 -----------------------------------------------------------------------------------------------
 **[ TOP EXTRA LAYER ]:**
 
 - **Opacity**
+- **Colorize On**
+- **Hue Offset**
+- **Saturation**
+- **Brightness**
+- **Gamma Adjust**
+- **Ambient Lighting Multiplier**
+- **Ambient Lighting in ADD Mode**
 - **Blend Mode**
 - **Source Matte Color**
 - **Mask**
 - **Cutout Mask**
-- **Scale Mode**
-  - **0 - Full Screen**
+- **Dual Screen Visibility**
+- **Inherit Scale**
+  - **0 - FullScreen**
   - **1 - Tube**
   - **2 - Bezel**
-  - **3 - Background**
-  - **4 - Bezel Image**
-  - **5 - Decal Image**
-- **Scale Keep Aspect**
+  - **3 - BG**
+  - **4 - Device**
+  - **4 - Decal**
+- **Inherit Scale**
+- **Zoom FULL Scale Mode**
+- **Scale Aspect**
 - **Scale**
 - **Scale X**
+- **Position X**
 - **Position Y**
 - **Mirror Wrap**
   - When drawing past the edges of the texture use mirror wrapping
+- **Mipmapping Blend Bias**
+
 
 -----------------------------------------------------------------------------------------------
 **[ INTRO SEQUENCE ]:**
+
 	Animation sequence which plays when the content starts up, animation times are in frames. The frame rate for most games 60 fps
 
 - **Show Intro**

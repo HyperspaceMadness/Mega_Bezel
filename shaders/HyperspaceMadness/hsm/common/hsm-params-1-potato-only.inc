@@ -28,7 +28,7 @@ float HSM_CRT_SCREEN_BLEND_MODE = global.HSM_CRT_SCREEN_BLEND_MODE;
 //---------------------------------------------------------------------------------------------------
 //    BASIC BACKGROUND IMAGE LAYER
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_BASIC_BG_IMG_TITLE	                    "[ BASIC BACKGROUND IMAGE LAYER ]:" 0 0 0.01 0.01
+#pragma parameter HSM_BASIC_BG_IMG_TITLE	                    "[ POTATO BACKGROUND IMAGE LAYER ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_BG_BLEND_MODE               "          Blend Mode - OFF | NORMAL | ADD | MULTIPLY"  1 -1 3 1
 float HSM_BG_BLEND_MODE = global.HSM_BG_BLEND_MODE;
@@ -39,7 +39,7 @@ float HSM_BG_OPACITY = global.HSM_BG_OPACITY / 100;
 #pragma parameter HSM_BG_BRIGHTNESS                "          Brightness" 100 0 200 1
 float HSM_BG_BRIGHTNESS = global.HSM_BG_BRIGHTNESS / 100;
 
-#pragma parameter HSM_POTATO_SHOW_SCREEN_OVER_BG 	"          Show Screen: 0:UNDER BG | 1:OVER BG" 1 0 1 1
+#pragma parameter HSM_POTATO_SHOW_SCREEN_OVER_BG 	"          Show BG: 0:UNDER SCREEN | 1:OVER SCREEN" 1 0 1 1
 float HSM_POTATO_SHOW_SCREEN_OVER_BG = global.HSM_POTATO_SHOW_SCREEN_OVER_BG;
 
 

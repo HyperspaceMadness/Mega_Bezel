@@ -525,7 +525,7 @@ void main()
 
 	vec3 frame_base_color = base_color;
 	vec3 frame_base_color_with_noise = base_color_with_noise;
-	if (HSM_FRM_USE_BZL_COLOR < 1)
+	if (HSM_FRM_USE_INDEPENDENT_COLOR > 0)
 	{
 		frame_base_color = HSM_Linearize(vec4(HSM_HSVtoRGB(vec3(HSM_FRM_COLOR_HUE, HSM_FRM_COLOR_SATURATION, HSM_FRM_COLOR_VALUE)), 1), DEFAULT_SRGB_GAMMA).rgb;
 		frame_base_color_with_noise = mix(frame_base_color, 1.5 * frame_base_color * noise_mask, HSM_FRM_NOISE);
