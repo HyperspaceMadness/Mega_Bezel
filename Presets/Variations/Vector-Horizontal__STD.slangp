@@ -1,5 +1,7 @@
 #reference "../Base_CRT_Presets/MBZ__3__STD__GDV.slangp"
 
+// Thanks to SixWingedFreak from the Libretro forum for these settings
+
 post_br = "1.300000"
 pre_bb = "2.000000"
 g_gamma_in = "2.800000"

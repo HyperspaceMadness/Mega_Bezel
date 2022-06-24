@@ -3,7 +3,7 @@ HyperspaceMadness Mega Bezel Shader Readme
 ------------------------------------------------------------------------------------------------------------
 ![Mega Bezel Logo](MegaBezelLogo.png)
 
-Version 0.9.108 2022-04-23 Rev 1
+Version 0.9.109 2022-06-24 Rev 1
 ----------------------------------------
 ----------------------------------------
 
@@ -23,7 +23,7 @@ https://github.com/HyperspaceMadness/Mega_Bezel
 Licensing
 ----------------------------------------
 
-Licensing of package components which incuded licensing are LGPL3
+Licensing of package components which incude licensing are LGPL3
 
 ----------------------------------------
 What does it do?
