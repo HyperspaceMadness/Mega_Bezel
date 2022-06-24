@@ -34,10 +34,10 @@ float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_CRT_TITLE                             "[ CRT BRIGHTNESS & GAMMA ]:" 0 0 0.01 0.01
 
-#pragma parameter GAMMA_INPUT   							"Gamma In (Game Embedded Gamma - Gamma Space to Linear) Def 2.4" 2.4 0.1 5 0.05
+#pragma parameter GAMMA_INPUT   							"          Gamma In (Game Embedded Gamma) Def 2.4" 2.4 0.1 5 0.05
 #define GAMMA_INPUT global.GAMMA_INPUT
 
-#pragma parameter gamma_out   								"Gamma Out (Electron Gun Gamma - Linear to Gamma Space) Def 2.4" 2.4 0.1 5 0.05
+#pragma parameter gamma_out   								"          Gamma Out (Electron Gun Gamma) Def 2.4" 2.4 0.1 5 0.05
 #define HSM_GAMMA_OUT_CRT global.gamma_out
 
 #pragma parameter post_br                                   "          Post CRT Brightness" 1 0.01 5 0.01
@@ -122,6 +122,7 @@ float HSM_VIEWPORT_POSITION_X = -1 * global.HSM_VIEWPORT_POSITION_X / 1000;
 #pragma parameter HSM_VIEWPORT_POSITION_Y							"          Viewport Position Y"  0 -500 500 1
 float HSM_VIEWPORT_POSITION_Y = -1 * global.HSM_VIEWPORT_POSITION_Y / 1000;
 
+
 //---------------------------------------------------------------------------------------------------
 //    FLIP & ROTATE
 //---------------------------------------------------------------------------------------------------
@@ -163,10 +164,20 @@ float HSM_ASPECT_RATIO_EXPLICIT = global.HSM_ASPECT_RATIO_EXPLICIT;
 //---------------------------------------------------------------------------------------------------
 //    SCALING
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_SCALING_TITLE									"[ CRT SCREEN SCALING ]:" 0 0 0.01 0.01
+#pragma parameter HSM_SCALING_TITLE									"[ CRT SCREEN SCALING GENERAL ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_INT_SCALE_MODE 								"          Integer Scale Mode - OFF | ShortAxis | BothAxes" 0 0 2 1
 #define HSM_INT_SCALE_MODE global.HSM_INT_SCALE_MODE
+
+#pragma parameter HSM_VERTICAL_PRESET 								"       Preset is for Monitor Portrait Mode (Smaller CRT Screen)" 0 0 1 1
+float HSM_VERTICAL_PRESET = global.HSM_VERTICAL_PRESET;
+
+
+//---------------------------------------------------------------------------------------------------
+//    Integer Scale
+//---------------------------------------------------------------------------------------------------
+
+#pragma parameter HSM_INTEGER_SCALE_TITLE							"[ INTEGER SCALE ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_INT_SCALE_MAX_HEIGHT 					        "          Base Integer Scale Max Height %" 89 60 140 0.5
 float HSM_INT_SCALE_MAX_HEIGHT = global.HSM_INT_SCALE_MAX_HEIGHT / 100;
@@ -177,17 +188,24 @@ float HSM_INT_SCALE_MAX_HEIGHT = global.HSM_INT_SCALE_MAX_HEIGHT / 100;
 #pragma parameter HSM_INT_SCALE_MULTIPLE_OFFSET_LONG 				"          Integer Scale Multiple Offset on Long Axis" 0 -20 20 1
 #define HSM_INT_SCALE_MULTIPLE_OFFSET_LONG global.HSM_INT_SCALE_MULTIPLE_OFFSET_LONG
 
-#pragma parameter HSM_VERTICAL_PRESET 								"       Preset is for Monitor Portrait Mode (Smaller CRT Screen)" 0 0 1 1
-float HSM_VERTICAL_PRESET = global.HSM_VERTICAL_PRESET;
+
+//---------------------------------------------------------------------------------------------------
+//    Non-Integer Scale
+//---------------------------------------------------------------------------------------------------
+
+#pragma parameter HSM_NON_INTEGER_SCALE_PERCENT_TITLE							"[ NON-INTEGER SCALE PERCENT ]:" 0 0 0.01 0.01
 
 // Non integer scale is set to 82.97 so that cores which output 224px will have integer scale by default
 // This is 8x integer scale at 3840x2160 and 6x integer scale at 1920x1080
 #pragma parameter HSM_NON_INTEGER_SCALE 							"          Non-Integer Scale %" 82.97 1 200 0.2
-float HSM_NON_INTEGER_SCALE = global.HSM_NON_INTEGER_SCALE - (HSM_VERTICAL_PRESET > 0.5 ? 47.92 : 0);
+float HSM_NON_INTEGER_SCALE = global.HSM_NON_INTEGER_SCALE / 100;
 
 
+//---------------------------------------------------------------------------------------------------
+//    Physical Size
+//---------------------------------------------------------------------------------------------------
 
-#pragma parameter HSM_PHYSICAL_SIZE_TITLE							"[ PHYSICAL SIZES FOR NON INTEGER ]:" 0 0 0.01 0.01
+#pragma parameter HSM_PHYSICAL_SIZE_TITLE							"[ NON-INTEGER - PHYSICAL SIZES ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_USE_PHYSICAL_SIZE_FOR_NON_INTEGER 			"          Use Physical Monitor and Tube Sizes for Non-Integer" 0 0 1 1
 float HSM_USE_PHYSICAL_SIZE_FOR_NON_INTEGER = global.HSM_USE_PHYSICAL_SIZE_FOR_NON_INTEGER;
@@ -202,7 +220,35 @@ float HSM_PHYSICAL_MONITOR_DIAGONAL_SIZE = global.HSM_PHYSICAL_MONITOR_DIAGONAL_
 float HSM_PHYSICAL_SIM_TUBE_DIAGONAL_SIZE = global.HSM_PHYSICAL_SIM_TUBE_DIAGONAL_SIZE;
 
 
-#pragma parameter HSM_SNAP_NONINTEGER_TITLE							"[ SNAP NON-INTEGER TO INTEGER SCALE ]:" 0 0 0.01 0.01
+//---------------------------------------------------------------------------------------------------
+//    Automatic Scale & Position
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_AUTOMATIC_SCREEN_SCALE_TITLE					"[ NON-INTEGER - AUTOMATIC SCREEN SCALE & PLACEMENT ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_USE_IMAGE_FOR_PLACEMENT 						"          Use Image For Automatic Placement (Scale and Y Pos)" 0 0 1 1
+float HSM_USE_IMAGE_FOR_PLACEMENT = global.HSM_USE_IMAGE_FOR_PLACEMENT;
+
+#pragma parameter HSM_PLACEMENT_IMAGE_USE_HORIZONTAL 				"          Auto Place Horizontal (X Pos)" 0 0 1 1
+float HSM_PLACEMENT_IMAGE_USE_HORIZONTAL = global.HSM_PLACEMENT_IMAGE_USE_HORIZONTAL;
+
+#pragma parameter HSM_PLACEMENT_IMAGE_MODE 						    "          Placement Image Mode: TRANSPARENCY : WHITE ON BLACK" 0 0 1 1
+float HSM_PLACEMENT_IMAGE_MODE = global.HSM_PLACEMENT_IMAGE_MODE;
+
+
+//---------------------------------------------------------------------------------------------------
+//    Non Integer Scale Offset
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_NONINTEGER_SCALE_OFFSET_TITLE					"[ NON-INTEGER SCALE OFFSET ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_NON_INTEGER_SCALE_OFFSET 						"          Non-Integer Scale Offset" 100 5 400 0.1
+float HSM_NON_INTEGER_SCALE_OFFSET = global.HSM_NON_INTEGER_SCALE_OFFSET / 100;
+
+
+//---------------------------------------------------------------------------------------------------
+//    Snap to Integer Scale
+//---------------------------------------------------------------------------------------------------
+
+#pragma parameter HSM_SNAP_NONINTEGER_TITLE							"[ SNAP NON-INTEGER TO CLOSEST INTEGER SCALE ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_USE_SNAP_TO_CLOSEST_INT_SCALE 				"          Snap to Closest Integer Scale: OFF | ON" 0 0 1 1
 float HSM_USE_SNAP_TO_CLOSEST_INT_SCALE = global.HSM_USE_SNAP_TO_CLOSEST_INT_SCALE;
@@ -210,20 +256,6 @@ float HSM_USE_SNAP_TO_CLOSEST_INT_SCALE = global.HSM_USE_SNAP_TO_CLOSEST_INT_SCA
 #pragma parameter HSM_SNAP_TO_CLOSEST_INT_SCALE_TOLERANCE 			"          Snap To Closest Integer Scale Tolerance" 20 0 300 1
 float HSM_SNAP_TO_CLOSEST_INT_SCALE_TOLERANCE = HSM_USE_SNAP_TO_CLOSEST_INT_SCALE > 0.5 ? global.HSM_SNAP_TO_CLOSEST_INT_SCALE_TOLERANCE / 100 : 0;
 
-
-//---------------------------------------------------------------------------------------------------
-//    Extended Scale
-//---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_SCREEN_EXTENDED_SCALE_TITLE					"[ EXTENDED CRT SCREEN SCALING ]:" 0 0 0.01 0.01
-
-#pragma parameter HSM_USE_IMAGE_FOR_PLACEMENT 						"          Use Image For Placement (Scale & Y Pos)" 0 0 1 1
-float HSM_USE_IMAGE_FOR_PLACEMENT = global.HSM_USE_IMAGE_FOR_PLACEMENT;
-
-#pragma parameter HSM_PLACEMENT_IMAGE_MODE 						    "          Placement Image Mode: TRANSPARENCY : WHITE ON BLACK" 0 0 1 1
-float HSM_PLACEMENT_IMAGE_MODE = global.HSM_PLACEMENT_IMAGE_MODE;
-
-#pragma parameter HSM_NON_INTEGER_SCALE_OFFSET 						"          Non-Integer Scale Offset" 100 5 400 0.1
-float HSM_NON_INTEGER_SCALE_OFFSET = global.HSM_NON_INTEGER_SCALE_OFFSET / 100;
 
 
 //---------------------------------------------------------------------------------------------------

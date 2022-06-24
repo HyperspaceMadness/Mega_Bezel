@@ -27,9 +27,6 @@
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_REFLECTION_TITLE			                "[ REFLECTION ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_REFLECT_MASK_MODE                         "  Mask - ALL | Screen | Tube | Bz- | Bz | Bz+ | Frm | Frm+ | BG"   4 0 8 1
-float HSM_REFLECT_MASK_MODE = global.HSM_REFLECT_MASK_MODE;
-
 #pragma parameter HSM_REFLECT_GLOBAL_AMOUNT 				    "          Global Amount" 40 0 1000 1
 float HSM_REFLECT_GLOBAL_AMOUNT = global.HSM_REFLECT_GLOBAL_AMOUNT / 100;
 
@@ -113,15 +110,15 @@ float HSM_REFLECT_NOISE_SAMPLES = global.HSM_REFLECT_NOISE_SAMPLES;
 #pragma parameter HSM_REFLECT_NOISE_SAMPLE_DISTANCE 			    "          Sample Distance" 100 0 500 5
 float HSM_REFLECT_NOISE_SAMPLE_DISTANCE = global.HSM_REFLECT_NOISE_SAMPLE_DISTANCE / 500;
 
-
+//TODO Reflection Mask is disabled at the moment because it really needs the layer scaling sof it can follow the device or other layers
 // Reflection Mask
-#pragma parameter HSM_REFLECT_MASK_TITLE			                "[ REFLECTION MASK IMAGE ]:" 0 0 0.01 0.01
+// #pragma parameter HSM_REFLECT_MASK_TITLE			                "[ REFLECTION MASK IMAGE ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_REFLECT_MASK_IMG_AMOUNT 		                "          Reflection Image Mask Amount" 0 0 100 1
-float HSM_REFLECT_MASK_IMG_AMOUNT = global.HSM_REFLECT_MASK_IMG_AMOUNT / 100;
+// #pragma parameter HSM_REFLECT_MASK_IMG_AMOUNT 		                "          Reflection Image Mask Amount" 0 0 100 1
+// float HSM_REFLECT_MASK_IMG_AMOUNT = global.HSM_REFLECT_MASK_IMG_AMOUNT / 100;
 
-#pragma parameter HSM_REFLECT_MASK_SCALE_MODE 			            "       Scaling Mode (Image Layers Only)- FullScreen | Bezel Img" 0 0 1 1
-float HSM_REFLECT_MASK_SCALE_MODE = global.HSM_REFLECT_MASK_SCALE_MODE;
+// #pragma parameter HSM_REFLECT_MASK_SCALE_MODE 			            "       Scaling Mode (Image Layers Only)- FullScreen | Bezel Img" 0 0 1 1
+// float HSM_REFLECT_MASK_SCALE_MODE = global.HSM_REFLECT_MASK_SCALE_MODE;
 
 #pragma parameter HSM_GLASS_BORDER_ON               "          Glass Border ON (For Glass Preset)" 0 0 1 1
 float HSM_GLASS_BORDER_ON = global.HSM_GLASS_BORDER_ON;

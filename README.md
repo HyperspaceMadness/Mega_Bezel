@@ -325,28 +325,34 @@ Parameter Descriptions
   * **Explicit Aspect Ratio** - Ratio used when [Aspect Ratio] Type is set to Explicit or if Auto is chosen and no matching resolution can be found
 
 -----------------------------------------------------------------------------------------------
-**[ CRT SCREEN SCALING ]:**
+**[ CRT SCREEN SCALING GENERAL ]:**
 
-- **Show Resolution Info**
 - **Integer Scale Mode**
   - **0 - Off,** Use Non-Integer Scale
   - **1 - ShortAxis Integer Scale On** - for the viewport (monitor) in landscape mode this is the vertical axis, If the screen/tube aspect ratio is vertical then integer scale is used for both horizontal and vertical axes
   - **2 - Integer Scale on both axes**
+
+- **Preset is for Monitor Portrait Mode (Smaller CRT Screen)**
+  - Turn on if this preset is to be used on monitor in Portrait mode, E.G. if your physical monitor is turned vertical
+
+**[ INTEGER SCALE ]:**
 
 - **Base Integer Scale Max Height %**
   - The maximum screen height of the default integer scale when integer scale is on
 
 - **Integer Scale Multiple Offset**
   - Adjusts the size of the screen by increasing the multiple of the core resolution (on both axes) when using integer scale, to make the screen larger or smaller
+
 - **Integer Scale Multiple Offset Long Axis**
   - Adds an additional multiple offset but for only the long axis, with a horizontal aspect ratio this is the horizontal axis
-- **Preset is for Monitor Portrait Mode (Smaller CRT Screen)**
-  - Turn on if this preset is to be used on monitor in Portrait mode, E.G. if your physical monitor is turned vertical
+
+**[ NON-INTEGER SCALE PERCENT  ]:**
+
 - **Non-Integer Scale %**
   - If integer scale isn't used, this sets the vertical size of the vertical percentage of the full viewport. The default is 82.97 which corresponds to an exact integer scale of 224p content
 
 -----------------------------------------------------------------------------------------------
-**[ PHYSICAL SIZES FOR NON INTEGER ]:**
+**[ NON INTEGER - PHYSICAL SIZES ]:**
 
 - **Use Physical Monitor and Tube Sizes for Non-Integer**
   - Use these physical sizes instead of the integer scale percentage
@@ -362,23 +368,30 @@ Parameter Descriptions
 
 
 -----------------------------------------------------------------------------------------------
+**[ NON-INTEGER - AUTOMATIC SCREEN SCALE & PLACEMENT ]:**
+
+- **Use Image For Automatic Placement (Scale and Y Pos)**
+  - When on the placement image is inspected to find where to place and scale the screen image
+- **Auto Place Horizontal (X Pos)**
+  - **0 - OFF** Screen placed in the center 
+  - **1 - ON** Tries to place the screen in the center of the hole in the placement image
+- **Placement Image Mode: TRANSPARENCY : WHITE ON BLACK**
+  - What channel of the texture to look at to find the hole in the image, either the transparent part, or a white rectangle on top of a black background
+
+-----------------------------------------------------------------------------------------------
+**[ NON-INTEGER SCALE OFFSET ]:**
+
+- **Non-Integer Scale Offset**
+  - Additional scale offset added on top of the non-integer scale, including image placement scale
+
+
+-----------------------------------------------------------------------------------------------
 **[ SNAP NON-INTEGER TO INTEGER SCALE ]:**
 
 - **Snap to Closest Integer Scale**
   - Takes the current Non-Integer scale and snaps to the closest integer scale within a tolerance
 - **Snap To Closest Integer Scale Tolerance**
   - Tolerance of how far away from the current integer scale we will snap to an integer scale
-
-
------------------------------------------------------------------------------------------------
-**[ EXTENDED CRT SCREEN SCALING ]:**
-
-- **Use Image For Placement (Scale & Y Pos)**
-  - When on the placement image is inspected to find where to place and scale the screen image
-- **Placement Image Mode: TRANSPARENCY : WHITE ON BLACK**
-  - What channel of the texture to look at to find the hole in the image, either the transparent part, or a white rectangle on top of a black background
-- **Non-Integer Scale Offset**
-  - Additional scale offset added on top of the non-integer scale, including image placement scale
 
 
 -----------------------------------------------------------------------------------------------
@@ -396,7 +409,7 @@ Cropping removes parts of the game image at the edges of the screen which were n
   - **0 - Off,** No Cropping applied
   - **1 - Crop Black Only** Only apply the cropping amount within the black areas of the core image
   - **2 - Crop Any** Apply full crop amount
-- **Crop Zoom %**
+- **Crop Zoom %** Add Cropping on all sides at once
 - **Crop Overscan Top**
 - **Crop Overscan Bottom**
 - **Crop Overscan Left**
@@ -498,7 +511,7 @@ Blend parts of the image which flicker on/off repeatedly between frames often us
 - **Compare Area:  LEFT | RIGHT | TOP | BOTTOM**
   - Which part of the screen should we show the comparison image
 - **Splitscreen Position**
-  - Shift the split in the middle of the screen towards the left or right
+  - Shift the split in the middle of the screen towards the one side or the other
 - **Freeze CRT Tube (Freeze Left, New changes on Right)**
   - Freeze an image of the CRT tube at the current time on one side of the screen, while the area on the other side keeps updating to user changes
 - **Freeze Graphics (Freeze Left, New changes on Right)**

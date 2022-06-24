@@ -379,7 +379,7 @@ vec3 HSM_GetScreenPlacementAndHeight(sampler2D in_sampler_2D, float num_samples)
 			float y_pos = i * 1 / num_samples;
 			vec4 sample_color = texture(in_sampler_2D, vec2(0.5, y_pos));
 			float test_value = 0;
-			if (HSM_PLACEMENT_IMAGE_MODE == 1)
+			if (HSM_PLACEMENT_IMAGE_MODE > 0)
 				test_value = (sample_color.r + sample_color.b + sample_color.g) / 3;
 			else
 				test_value = 1 - sample_color.a;
@@ -394,22 +394,23 @@ vec3 HSM_GetScreenPlacementAndHeight(sampler2D in_sampler_2D, float num_samples)
 		float screen_left_x_pos = 0.75;
 		float screen_right_x_pos = 0.25;
 
-		for (int i=0; i < num_samples; i++)
-		{
-			float x_pos = 0.25 + i * 0.5 / num_samples;
-			vec4 sample_color = texture(in_sampler_2D, vec2(x_pos, 0.5));
-			float test_value = 0;
-			if (HSM_PLACEMENT_IMAGE_MODE == 1)
-				test_value = (sample_color.r + sample_color.b + sample_color.g) / 3;
-			else
-				test_value = 1 - sample_color.a;
-
-			if (test_value > 0.5)
+		if (HSM_PLACEMENT_IMAGE_USE_HORIZONTAL == 1)
+			for (int i=0; i < num_samples; i++)
 			{
-				screen_left_x_pos = min(screen_left_x_pos, x_pos);
-				screen_right_x_pos = max(screen_right_x_pos, x_pos);
+				float x_pos = 0.25 + i * 0.5 / num_samples;
+				vec4 sample_color = texture(in_sampler_2D, vec2(x_pos, 0.5));
+				float test_value = 0;
+				if (HSM_PLACEMENT_IMAGE_MODE == 1)
+					test_value = (sample_color.r + sample_color.b + sample_color.g) / 3;
+				else
+					test_value = 1 - sample_color.a;
+
+				if (test_value > 0.5)
+				{
+					screen_left_x_pos = min(screen_left_x_pos, x_pos);
+					screen_right_x_pos = max(screen_right_x_pos, x_pos);
+				}
 			}
-		}
 
 		return vec3((screen_left_x_pos + screen_right_x_pos) / 2, (screen_top_y_pos + screen_bottom_y_pos) / 2, screen_bottom_y_pos - screen_top_y_pos);
 	}
