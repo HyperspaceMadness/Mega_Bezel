@@ -1,33 +1,9 @@
 ![Mega_Bezel_Logo|512x256, 75%](upload://6PNkvcMF9Go9Wnk6OJXfYR1opXI.png) 
 
-Mega Bezel is updated to V 0.9.109 2022-06-24 Rev 1
+Mega Bezel is updated to V 1.0.001 2022-06-24 Rev 1
 
 Changes:
-  * Update to crt-guest-advanced-2022-06-18-release1
-    * Includes @guest's new NTSC filtering and sharpening magic
-  * Added **Post CRT Brightness Affects Grade Black Level**
-    * This is 100 by default, so Post CRT Brightness affects the increase in black level added in Grade
-    * If you set this to a low value e.g. 10 then as you increase Post CRT Brightness the black areas will not get brighter
-  * Ambient Lighting controls for image layers
-    * Added Ambient Lighting Multiplier (0-100) for each of the Image layers
-    * Added Apply Ambient Lighting in ADD Blend Mode
-    * This replaces the disable ambient lighting controls that used to be there
-  * Separate color for the frame (Optional)
-    * Use Bezel Color controls if the frame color follows the bezel or not
-  * Fixed Reflection when using the CRT Curvature multiplier
-    * Now  the game image can look flat and the reflection will not show seams
-  * Made Adjusted Diffuse Shadow smaller and less curved to be more natural
-  * Screen Size by setting inches and monitor size, did some fixing to the screen size when in portrait mode
-  * Auto Placement now has an additional parameter to choose if you want it placed horizontally
- * Fixed POTATO Background Brightness
-  * HSM_POTATO_SHOW_SCREEN_OVER_BG renamed to HSM_POTATO_SHOW_BG_OVER_SCREEN
-    * Defaults to 1 (ON)
-  * The Reflection Mask texture parameters have been removed until the feature can be put back in (It has been gone for months)
-  * Community CRT Presets have now moved to the examples package
-    * Updated Cyberlab presets
-    * Updated Nesguy presets (fixed the dark appearance in the Mega Bezel)
-  * Updated a lot of the readme description of parameters
-
+  * Mega Bezel V1
 ----------------------------------------------------
 --- V1 TODO  ---------------------------------------
 ----------------------------------------------------
