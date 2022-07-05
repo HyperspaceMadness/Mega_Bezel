@@ -156,7 +156,10 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
     col += GetChar(ch_dsh, uv);
     
     col += GetChar(ch_spc, uv);
-    col += print_number(int_mult.y, uv, 3);
+    if (fract(int_mult.y) < 0.01 || fract(int_mult.y) > 0.99)
+        col += print_number(int_mult.y, uv, 0);
+    else
+        col += print_number(int_mult.y, uv, 3);
 
 
     // Line 09 Int Scale Horizontal ----------------------------------------------------------
@@ -180,7 +183,10 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
     col += GetChar(ch_dsh, uv);
     
     col += GetChar(ch_spc, uv);
-    col += print_number(int_mult.x, uv, 3);
+    if (fract(int_mult.x) < 0.01 || fract(int_mult.x) > 0.99)
+        col += print_number(int_mult.x, uv, 0);
+    else
+        col += print_number(int_mult.x, uv, 3);
 
 
     // Line 08 Sampling Resolution ----------------------------------------------------------

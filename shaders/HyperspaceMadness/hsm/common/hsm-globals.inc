@@ -588,6 +588,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 	float glow;
 	float bloom;
+float mask_bloom;
 	float bloom_dist;
 	float halation;
 

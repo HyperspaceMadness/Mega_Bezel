@@ -82,7 +82,7 @@ float HSM_BZL_AMBIENT_LIGHTING_MULTIPLIER = global.HSM_BZL_AMBIENT_LIGHTING_MULT
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_FRM_COLOR_TITLE		"[ FRAME COLOR ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_FRM_USE_INDEPENDENT_COLOR				"          Use Inependent Frame Color" 0 0 1 1
+#pragma parameter HSM_FRM_USE_INDEPENDENT_COLOR				"          Use Independent Frame Color" 0 0 1 1
 float HSM_FRM_USE_INDEPENDENT_COLOR = global.HSM_FRM_USE_INDEPENDENT_COLOR;
 
 #pragma parameter HSM_FRM_COLOR_HUE					"          Hue" 0 0 360 1

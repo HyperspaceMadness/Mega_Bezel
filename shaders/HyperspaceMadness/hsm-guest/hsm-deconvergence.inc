@@ -30,6 +30,9 @@
 #pragma parameter bloom "          Bloom Strength -- bloom" 0.0 -2.0 2.0 0.05
 #define bloom         global.bloom     // bloom effect
 
+#pragma parameter mask_bloom "          Mask Bloom -- mask_bloom" 0.0 0.0 2.0 0.05
+#define mask_bloom         global.mask_bloom     // bloom effect
+
 #pragma parameter bloom_dist "          Bloom Distribution -- bloom_dist" 0.0 0.0 3.0 0.05
 #define bloom_dist         global.bloom_dist     // bloom effect distribution
 
@@ -696,6 +699,19 @@ void main()
 	cmask*= Mask(maskcoord, mx);
 	
 	if (mask_layout > 0.5) cmask = cmask.rbg;
+
+	vec3 cmask1 = cmask;
+	float smask1 = smask;
+
+	if (mask_bloom > 0.025)
+	{
+		float maxb = max(max(Bloom.r,Bloom.g),Bloom.b);
+		maxb = pow(sqrt(maxb*mix(maxb, colmx, 0.75)),0.275);
+		vec3 mBloom = 0.5*(1.5*Bloom+0.5*maxb) * mix(1.0, 2.0-colmx, (bloom_dist + 1.0));
+		float maskmx = 1.0; if (shadowMask > 0.5 || shadowMask < 4.5) maskmx = maskLight; else if (shadowMask > 6.5 && shadowMask < 10.5) maskmx = 1.0; else maskmx = max(max(cmask.r,cmask.g),cmask.b);
+		cmask = min(cmask + maxb*mBloom*mask_bloom, maskmx);
+		smask = min(smask + 0.9*maxb*max(max(mBloom.r,mBloom.g),mBloom.b)*mask_bloom, 1.0);
+	}
 	
 	color = pow(color, vec3(mask_gamma/gamma_in));
 	color = color*cmask;
@@ -704,6 +720,7 @@ void main()
 	color = pow(color, vec3(gamma_in/mask_gamma));
 
 	cmask = min(cmask*smask, 1.0);
+	cmask1 = min(cmask1*smask1, 1.0);
 
 	float bb = mix(brightboost, brightboost1, colmx);
 	if (interb) bb = (abs(intera-0.5)<0.1) ? pow(0.80*bb, 0.65) : pow(bb, 0.70);
@@ -731,13 +748,13 @@ void main()
 
 	color = color + abs(bloom) * Bloom1;
 
-	color = min(color, mix(one, cmask, mclip));
+	color = min(color, mix(one, cmask1, mclip));
 
 	if (!interb) color = declip(color, mix(1.0, w3, 0.6)); else w3 = 1.0;
 
 	if (halation > 0.01) {
 		Bloom = mix(0.5*(Bloom + Bloom*Bloom), 0.75*Bloom*Bloom, colmx);	
-		color = color + 2.0*max((maxb+maxb*maxb-0.5*max(max(Ref.r,Ref.g),Ref.b)),0.25)*mix(1.0,w3,0.5*colmx)*mix(one,cmask,0.6)*Bloom*halation; }
+		color = color + 2.0*max((2.0*mix(maxb*maxb, maxb, colmx)-0.5*max(max(Ref.r,Ref.g),Ref.b)),0.25)*mix(1.0,w3,0.5*colmx)*mix(one,cmask,0.6)*Bloom*halation; }
  
 
 	Glow = mix(Glow, 0.25*color, 0.7*colmx);
