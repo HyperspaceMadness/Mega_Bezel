@@ -157,7 +157,16 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 		out_color *= vignette_factor;
 	}
 
-	vec4 ambient_lighting_image = HSM_GetNightLightingMultiplyColor( HSM_AMBIENT_LIGHTING_SCALE_MODE > 0.5 ? VIEWPORT_UNSCALED_COORD : VIEWPORT_COORD, NightLightingImage );
+	vec4 ambient_lighting_image = vec4(1);
+	// vec2 lighting_coord = HSM_AMBIENT_LIGHTING_SCALE_WITH_ZOOM > 0.5 ? VIEWPORT_UNSCALED_COORD : VIEWPORT_COORD;
+	// vec4 ambient_lighting_image = HSM_GetNightLightingMultiplyColor( lighting_coord, 
+	// 																HSM_AMBIENT_LIGHTING_SCALE, 
+	// 																HSM_AMBIENT_LIGHTING_ROTATE,
+	// 																HSM_AMBIENT_LIGHTING_MIRROR_HORZ,
+	// 																HSM_AMBIENT_LIGHTING_HUE,
+	// 																HSM_AMBIENT_LIGHTING_SATURATION,
+	// 																HSM_AMBIENT_LIGHTING_VALUE,
+	// 																NightLightingImage );
 
 	// float screen_edge_mask = HSM_GetCornerMask(screen_curved_coord, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS, HSM_TUBE_BLACK_EDGE_SHARPNESS);
 	// screen_edge_mask = 1 - ((1 - screen_edge_mask) * screen_mask);

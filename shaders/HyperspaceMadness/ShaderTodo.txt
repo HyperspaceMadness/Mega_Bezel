@@ -2,13 +2,16 @@
 
 Mega Bezel is updated to V 1.0.001 2022-06-24 Rev 1
 
-* Fixed Resolution Printing to show even integers when scaling should be at integer scale
+  * Fixed Resolution Printing to show even integers when scaling should be at integer scale
+  * Fixed Frame Color so it always uses it's own noise amount
+
 
 Changes:
   * Mega Bezel V1
 ----------------------------------------------------
---- V1 TODO  ---------------------------------------
+--- TODO  ---------------------------------------
 ----------------------------------------------------
+  * Fix Non-Rotated Halation
   * Megatron HDR Combination at end of chain
   * Fix Tube Diffuse Shadow in 3D Curvature
   * Add .params #reference to with all parameters commented out

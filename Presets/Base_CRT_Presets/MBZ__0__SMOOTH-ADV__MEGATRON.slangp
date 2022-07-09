@@ -251,7 +251,7 @@ shader41 = ../../shaders/HyperspaceMadness/hsm/hsm-combine-passes.slang
 scale_type41 = viewport
 alias41 = "CombinePass"
 // Define textures to be used by the different passes
-textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;LEDImage;TopLayerImage;"
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
 SamplerLUT1 = ../../shaders/HyperspaceMadness/hsm-guest/lut/trinitron-lut.png
 SamplerLUT1_linear = true 
@@ -320,6 +320,10 @@ DecalImage_mipmap = 1
 NightLightingImage = ../../shaders/HyperspaceMadness/textures/NightLighting_1920x1080.png
 NightLightingImage_linear = true
 NightLightingImage_mipmap = 1
+
+NightLighting2Image = ../../shaders/HyperspaceMadness/textures/NightLighting2.png
+NightLighting2Image_linear = true
+NightLighting2Image_mipmap = 1
 
 LEDImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 LEDImage_linear = true

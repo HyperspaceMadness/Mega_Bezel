@@ -735,7 +735,7 @@ void main()
 
 	vec3  Glow = HSM_GetCroppedTexSample(GlowPass, pos).rgb;
 	vec3  Ref = HSM_GetCroppedTexSample(LinearizePass, pos).rgb;
-	float maxb = COMPAT_TEXTURE(BloomPass, pos).a;
+	float maxb = HSM_GetCroppedTexSample(BloomPass, pos).a;
 
 	vec3 Bloom1 = Bloom;
 

@@ -297,20 +297,21 @@ layout(set = 0, binding = 3) uniform sampler2D TubeDiffuseImage;
 layout(set = 0, binding = 4) uniform sampler2D BackgroundImage;
 layout(set = 0, binding = 5) uniform sampler2D BackgroundVertImage;
 layout(set = 0, binding = 6) uniform sampler2D NightLightingImage;
+layout(set = 0, binding = 7) uniform sampler2D NightLighting2Image;
 
-layout(set = 0, binding = 7) uniform sampler2D LEDImage;
-layout(set = 0, binding = 8) uniform sampler2D FrameTextureImage;
-layout(set = 0, binding = 9) uniform sampler2D DeviceImage;
-layout(set = 0, binding = 10) uniform sampler2D DeviceVertImage;
-layout(set = 0, binding = 11) uniform sampler2D DecalImage;
-layout(set = 0, binding = 12) uniform sampler2D CabinetGlassImage;
-layout(set = 0, binding = 13) uniform sampler2D TopLayerImage;
+layout(set = 0, binding = 8) uniform sampler2D LEDImage;
+layout(set = 0, binding = 9) uniform sampler2D FrameTextureImage;
+layout(set = 0, binding = 10) uniform sampler2D DeviceImage;
+layout(set = 0, binding = 11) uniform sampler2D DeviceVertImage;
+layout(set = 0, binding = 12) uniform sampler2D DecalImage;
+layout(set = 0, binding = 13) uniform sampler2D CabinetGlassImage;
+layout(set = 0, binding = 14) uniform sampler2D TopLayerImage;
 
 #ifdef LAYERS_OVER_CRT
-layout(set = 0, binding = 14) uniform sampler2D BR_LayersOverCRTPassFeedback;
+layout(set = 0, binding = 15) uniform sampler2D BR_LayersOverCRTPassFeedback;
 #define PassFeedback BR_LayersOverCRTPassFeedback
 #else
-layout(set = 0, binding = 14) uniform sampler2D BR_LayersUnderCRTPassFeedback;
+layout(set = 0, binding = 15) uniform sampler2D BR_LayersUnderCRTPassFeedback;
 #define PassFeedback BR_LayersUnderCRTPassFeedback
 #endif
 
@@ -531,7 +532,7 @@ void main()
 		frame_base_color_with_noise = mix(frame_base_color, 1.5 * frame_base_color * noise_mask, HSM_FRM_NOISE);
 	}
 
-	vec3 frame_color = hmbz_frame_brightness / 100 * mix(frame_base_color, 1.5 * frame_base_color * noise_mask, 0.6 * HSM_BZL_NOISE);;
+	vec3 frame_color = hmbz_frame_brightness / 100 * mix(frame_base_color, 1.5 * frame_base_color * noise_mask, 0.6 * HSM_FRM_NOISE);
 	vec3 outside_frame_color = hmbz_brightness_shadow * base_color_with_noise;
 
 	vec3 bezel_diffuse_color = mix(sides_color, top_color, top_mask);
@@ -602,6 +603,12 @@ void main()
 													 HSM_BZL_AMBIENT_LIGHTING_MULTIPLIER,
 													 1,
 													 HSM_BZL_BLEND_MODE);
+
+		// bezel_and_frame_rgba.rgb = ApplyAmbientImage(bezel_and_frame_rgba.rgb, 
+		// 											 ambient2_lighting_image.rgb,
+		// 											 HSM_BZL_AMBIENT2_LIGHTING_MULTIPLIER,
+		// 											 1,
+		// 											 HSM_BZL_BLEND_MODE);
 
 		float FRAME_AND_BEZEL_MASK = outside_tube_mask * (1 - OUTSIDE_FRAME_MASK);
 
@@ -677,6 +684,12 @@ void main()
 										HSM_BG_AMBIENT_LIGHTING_MULTIPLIER,
 										HSM_BG_APPLY_AMBIENT_IN_ADD_MODE,
 										HSM_BG_BLEND_MODE);
+
+		// bg_image.rgb = ApplyAmbientImage(bg_image.rgb, 
+		// 								ambient2_lighting_image.rgb,
+		// 								HSM_BG_AMBIENT2_LIGHTING_MULTIPLIER,
+		// 								HSM_BG_APPLY_AMBIENT_IN_ADD_MODE,
+		// 								HSM_BG_BLEND_MODE);
 	}
 
 	//----------------------------------------------------
@@ -718,6 +731,12 @@ void main()
 											HSM_DEVICE_AMBIENT_LIGHTING_MULTIPLIER,
 											HSM_DEVICE_APPLY_AMBIENT_IN_ADD_MODE,
 											HSM_DEVICE_BLEND_MODE);
+
+		// device_image.rgb = ApplyAmbientImage(device_image.rgb, 
+		// 									ambient2_lighting_image.rgb,
+		// 									HSM_DEVICE_AMBIENT2_LIGHTING_MULTIPLIER,
+		// 									HSM_DEVICE_APPLY_AMBIENT_IN_ADD_MODE,
+		// 									HSM_DEVICE_BLEND_MODE);
 	}
 
 	//----------------------------------------------------
@@ -759,6 +778,12 @@ void main()
 											HSM_LED_AMBIENT_LIGHTING_MULTIPLIER,
 											HSM_LED_APPLY_AMBIENT_IN_ADD_MODE,
 											HSM_LED_BLEND_MODE);
+
+		// led_image.rgb = ApplyAmbientImage(led_image.rgb, 
+		// 									ambient2_lighting_image.rgb,
+		// 									HSM_LED_AMBIENT2_LIGHTING_MULTIPLIER,
+		// 									HSM_LED_APPLY_AMBIENT_IN_ADD_MODE,
+		// 									HSM_LED_BLEND_MODE);
 	}
 
 	//----------------------------------------------------
@@ -799,6 +824,12 @@ void main()
 											HSM_DECAL_AMBIENT_LIGHTING_MULTIPLIER,
 											HSM_DECAL_APPLY_AMBIENT_IN_ADD_MODE,
 											HSM_DECAL_BLEND_MODE);
+
+		// decal_image.rgb = ApplyAmbientImage(decal_image.rgb, 
+		// 									ambient2_lighting_image.rgb,
+		// 									HSM_DECAL_AMBIENT2_LIGHTING_MULTIPLIER,
+		// 									HSM_DECAL_APPLY_AMBIENT_IN_ADD_MODE,
+		// 									HSM_DECAL_BLEND_MODE);
 	}
 
 //----------------------------------------------------
@@ -844,6 +875,12 @@ void main()
 											HSM_TOP_AMBIENT_LIGHTING_MULTIPLIER,
 											HSM_TOP_APPLY_AMBIENT_IN_ADD_MODE,
 											HSM_TOP_BLEND_MODE);
+
+		// top_image.rgb = ApplyAmbientImage(top_image.rgb, 
+		// 									ambient2_lighting_image.rgb,
+		// 									HSM_TOP_AMBIENT2_LIGHTING_MULTIPLIER,
+		// 									HSM_TOP_APPLY_AMBIENT_IN_ADD_MODE,
+		// 									HSM_TOP_BLEND_MODE);
 	}
 
 	//----------------------------------------------------
@@ -890,6 +927,12 @@ void main()
 												HSM_CAB_GLASS_AMBIENT_LIGHTING_MULTIPLIER,
 												HSM_CAB_GLASS_APPLY_AMBIENT_IN_ADD_MODE,
 												HSM_CAB_GLASS_BLEND_MODE);
+
+		// cab_glass_image.rgb = ApplyAmbientImage(cab_glass_image.rgb, 
+		// 										ambient2_lighting_image.rgb,
+		// 										HSM_CAB_GLASS_AMBIENT2_LIGHTING_MULTIPLIER,
+		// 										HSM_CAB_GLASS_APPLY_AMBIENT_IN_ADD_MODE,
+		// 										HSM_CAB_GLASS_BLEND_MODE);
 	}
 
 
