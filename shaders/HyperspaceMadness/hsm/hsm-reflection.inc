@@ -37,7 +37,6 @@ layout(push_constant) uniform Push
 	
 } params;
 
-
 //TODO remove this and replace with simpler calls
 float GetFade(float current_position, float corner_position, float fade_distance)
 {
@@ -81,18 +80,19 @@ layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
 layout(set = 0, binding = 2) uniform sampler2D InfoCachePassFeedback;
 
 layout(set = 0, binding = 3) uniform sampler2D NightLightingImage;
-layout(set = 0, binding = 4) uniform sampler2D BackgroundImage;
-layout(set = 0, binding = 5) uniform sampler2D ReflectionMaskImage;
+layout(set = 0, binding = 4) uniform sampler2D NightLighting2Image;
+layout(set = 0, binding = 5) uniform sampler2D BackgroundImage;
+layout(set = 0, binding = 6) uniform sampler2D ReflectionMaskImage;
 
-layout(set = 0, binding = 6) uniform sampler2D TubeStaticReflectionImage;
-layout(set = 0, binding = 7) uniform sampler2D TubeColoredGelImage;
+layout(set = 0, binding = 7) uniform sampler2D TubeStaticReflectionImage;
+layout(set = 0, binding = 8) uniform sampler2D TubeColoredGelImage;
 
-layout(set = 0, binding = 8) uniform sampler2D MBZ_PostCRTPass;
-layout(set = 0, binding = 9) uniform sampler2D BR_MirrorBlurredPass;
-layout(set = 0, binding = 10) uniform sampler2D BR_MirrorReflectionDiffusedPass;
-layout(set = 0, binding = 11) uniform sampler2D BR_MirrorFullscreenGlowPass;
+layout(set = 0, binding = 9) uniform sampler2D MBZ_PostCRTPass;
+layout(set = 0, binding = 10) uniform sampler2D BR_MirrorBlurredPass;
+layout(set = 0, binding = 11) uniform sampler2D BR_MirrorReflectionDiffusedPass;
+layout(set = 0, binding = 12) uniform sampler2D BR_MirrorFullscreenGlowPass;
 
-layout(set = 0, binding = 12) uniform sampler2D BR_CRTAndReflectionPassFeedback;
+layout(set = 0, binding = 13) uniform sampler2D BR_CRTAndReflectionPassFeedback;
 #define PassFeedback BR_CRTAndReflectionPassFeedback
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -418,8 +418,8 @@ void main()
 		// }
 	}
 
-	if (HSM_TUBE_BLACK_EDGE_LAYERING_MODE > 0.5)
-		crt_linear.rgb *= (1 - HSM_TUBE_BLACK_EDGE_LAYERING_MODE) + HSM_TUBE_BLACK_EDGE_LAYERING_MODE * HSM_Get_Screen_Black_Edge_Mask(BLACK_EDGE_COORD, false);
+	// if (HSM_TUBE_BLACK_EDGE_LAYERING_MODE > 0.5)
+	// 	crt_linear.rgb *= (1 - HSM_TUBE_BLACK_EDGE_LAYERING_MODE) + HSM_TUBE_BLACK_EDGE_LAYERING_MODE * HSM_Get_Screen_Black_Edge_Mask(BLACK_EDGE_COORD, false);
 
 	crt_linear.rgb *= TUBE_MASK;
 
@@ -428,25 +428,19 @@ void main()
 	crt_linear = HSM_PreMultAlphaBlend(vec4(0, 0, 0, 1 - outside_tube_mask_wider), crt_linear);
 
 	// TUBE HIGHLIGHT
-	if (HSM_GetUseTubeStaticReflection())
-	{
-		vec4 ambient_lighting_image = vec4(1);
-		if (HSM_AMBIENT_LIGHTING_OPACITY > 0)
-		{
-			vec2 lighting_coord = HSM_AMBIENT_LIGHTING_SCALE_WITH_ZOOM > 0.5 ? VIEWPORT_UNSCALED_COORD : VIEWPORT_COORD;
-			ambient_lighting_image = HSM_GetNightLightingMultiplyColor( lighting_coord, 
-																		HSM_AMBIENT_LIGHTING_SCALE, 
-																		HSM_AMBIENT_LIGHTING_ROTATE,
-																		HSM_AMBIENT_LIGHTING_MIRROR_HORZ,
-																		HSM_AMBIENT_LIGHTING_HUE,
-																		HSM_AMBIENT_LIGHTING_SATURATION,
-																		HSM_AMBIENT_LIGHTING_VALUE,
-																		NightLightingImage );
+	// if (HSM_GetUseTubeStaticReflection())
+	// {
+	// 	// AMBIENT LIGHTING IMAGES
+	// 	vec4 ambient_lighting_image = vec4(1);
+	// 	vec4 ambient2_lighting_image = vec4(1);
+	// 	HSM_Fill_Ambient_Images(VIEWPORT_COORD, VIEWPORT_UNSCALED_COORD, HSM_AMBIENT_LIGHTING_SWAP_IMAGES, NightLightingImage, NightLighting2Image, ambient_lighting_image, ambient2_lighting_image);
 
-		}
-		crt_linear += HSM_GetTubeHighlight(tube_curved_coord, false, TubeStaticReflectionImage, ambient_lighting_image);
-	}
-
+	// 	vec3 tube_highlight_image = vec2(0);
+	// 	tube_highlight_image = HSM_GetTubeHighlight(tube_curved_coord, false, TubeStaticReflectionImage);
+	// 	tube_highlight_image = ApplyAmbientImage(tube_highlight_image.rgb, ambient_lighting_image.rgb, HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING);
+	// 	tube_highlight_image = ApplyAmbientImage(tube_highlight_image.rgb, ambient2_lighting_image.rgb, HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT2_LIGHTING);
+	// 	crt_linear += tube_highlight * HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY;
+	// }
 	// Clamp otherwise we get artifacts (blue overlays of brighter parts of image)
 	crt_linear = clamp(crt_linear, 0, 1);
 

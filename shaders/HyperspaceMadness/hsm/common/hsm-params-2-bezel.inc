@@ -77,6 +77,10 @@ float HSM_BZL_NOISE = global.HSM_BZL_NOISE / 100;
 #pragma parameter HSM_BZL_AMBIENT_LIGHTING_MULTIPLIER         "          Bezel Ambient Lighting Multiplier"  100 0 100 1
 float HSM_BZL_AMBIENT_LIGHTING_MULTIPLIER = global.HSM_BZL_AMBIENT_LIGHTING_MULTIPLIER / 100;
 
+#pragma parameter HSM_BZL_AMBIENT2_LIGHTING_MULTIPLIER         "          Ambient Image 2 Lighting Multiplier"  0 0 100 1
+float HSM_BZL_AMBIENT2_LIGHTING_MULTIPLIER = global.HSM_BZL_AMBIENT2_LIGHTING_MULTIPLIER / 100;
+
+
 //---------------------------------------------------------------------------------------------------
 // Frame Color
 //---------------------------------------------------------------------------------------------------

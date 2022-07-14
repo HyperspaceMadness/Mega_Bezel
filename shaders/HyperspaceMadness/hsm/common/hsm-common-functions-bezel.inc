@@ -97,19 +97,6 @@ float HSM_GetBezelCoords(vec2 screen_coord,
 	return 0;
 }
 
-// Change Transforms for Scale
-
-// Applies the position before scaling from the center
-// Should allow having an image where the center of the tube in the graphic is off center
-// the position offset moves it so the screen is centered, then the graphic is scaled from the center 
-vec2 HSM_AddPosScaleToCoord(vec2 in_base_coord, vec2 in_base_scale, vec2 in_pos, vec2 in_scale)
-{
-	// out_coord += in_base_scale * in_transform.zw;
-	vec2 positioned_coord = in_base_coord + in_pos;
-	vec2 out_coord = HSM_GetInverseScaledCoord(positioned_coord, in_scale);
-	return out_coord;
-}
-
 float MAX_LAYER_ORDER = 12;
 
 bool HSM_GetUseTubeStaticReflection()
@@ -127,7 +114,7 @@ bool HSM_GetUseTubeColoredGelImage()
 	return HSM_TUBE_COLORED_GEL_IMAGE_ON > 0.5 && HSM_GetUseOnCurrentScreenIndex(HSM_TUBE_COLORED_GEL_IMAGE_DUALSCREEN_VIS_MODE);
 }
 
-vec4 HSM_GetTubeHighlight(vec2 tube_curved_coord, bool apply_to_mirror, in sampler2D TubeStaticReflectionImage, vec4 ambient_lighting_image)
+vec4 HSM_GetTubeHighlight(vec2 tube_curved_coord, bool apply_to_mirror, in sampler2D TubeStaticReflectionImage)
 {
 	tube_curved_coord = HSM_GetViewportCoordWithFlip(tube_curved_coord);
 	vec4 out_color = vec4(0);
@@ -156,12 +143,6 @@ vec4 HSM_GetTubeHighlight(vec2 tube_curved_coord, bool apply_to_mirror, in sampl
 	vec4 tube_highlight_image = HSM_GetMipmappedTexSample(TubeStaticReflectionImage, tube_highlight_coord, TUBE_SCALE, 0);
 
 	tube_highlight_image = HSM_Linearize(tube_highlight_image, DEFAULT_SRGB_GAMMA) * tube_highlight_mask;
-
-	if (HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING > 0)
-	{
-		ambient_lighting_image.rgb = (1 - HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING) * vec3(1) + HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING * ambient_lighting_image.rgb;
-		tube_highlight_image.rgb *= ambient_lighting_image.rgb;
-	}
 
 	out_color = HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY * tube_highlight_image * tube_highlight_image.a;
 	out_color.rgb *= HSM_GLOBAL_GRAPHICS_BRIGHTNESS;

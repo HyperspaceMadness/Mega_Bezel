@@ -300,7 +300,7 @@ shader44 = ../../shaders/HyperspaceMadness/hsm/hsm-reflection-glass.slang
 scale_type44 = viewport
 alias44 = "BR_CRTAndReflectionPass"
 // Define textures to be used by the different passes
-textures = "Dirt;Sprite;SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;LEDImage;TopLayerImage;"
+textures = "Dirt;Sprite;SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
 Dirt = ../../../../reshade/shaders/bloom/LensDB.png
 Dirt_wrap_mode = "clamp_to_border"
@@ -374,9 +374,13 @@ DecalImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16
 DecalImage_linear = true
 DecalImage_mipmap = 1
 
-NightLightingImage = ../../shaders/HyperspaceMadness/textures/NightLighting_1920x1080.png
+NightLightingImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 NightLightingImage_linear = true
 NightLightingImage_mipmap = 1
+
+NightLighting2Image = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+NightLighting2Image_linear = true
+NightLighting2Image_mipmap = 1
 
 LEDImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 LEDImage_linear = true

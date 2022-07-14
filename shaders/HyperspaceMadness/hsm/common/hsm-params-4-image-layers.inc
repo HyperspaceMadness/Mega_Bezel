@@ -124,6 +124,9 @@ float HSM_BG_GAMMA = global.HSM_BG_GAMMA;
 #pragma parameter HSM_BG_AMBIENT_LIGHTING_MULTIPLIER         "          Ambient Lighting Multiplier"  100 0 100 1
 float HSM_BG_AMBIENT_LIGHTING_MULTIPLIER = global.HSM_BG_AMBIENT_LIGHTING_MULTIPLIER / 100;
 
+#pragma parameter HSM_BG_AMBIENT2_LIGHTING_MULTIPLIER         "          Ambient 2nd Image Lighting Multiplier"  0 0 100 1
+float HSM_BG_AMBIENT2_LIGHTING_MULTIPLIER = global.HSM_BG_AMBIENT2_LIGHTING_MULTIPLIER / 100;
+
 #pragma parameter HSM_BG_APPLY_AMBIENT_IN_ADD_MODE         "          Apply Ambient Lighting in ADD Blend Mode"  0 0 1 1
 float HSM_BG_APPLY_AMBIENT_IN_ADD_MODE = global.HSM_BG_APPLY_AMBIENT_IN_ADD_MODE;
 
@@ -230,6 +233,9 @@ float HSM_LED_GAMMA = global.HSM_LED_GAMMA;
 #pragma parameter HSM_LED_AMBIENT_LIGHTING_MULTIPLIER   "          Ambient Lighting Multiplier"  100 0 100 1
 float HSM_LED_AMBIENT_LIGHTING_MULTIPLIER = global.HSM_LED_AMBIENT_LIGHTING_MULTIPLIER / 100;
 
+#pragma parameter HSM_LED_AMBIENT2_LIGHTING_MULTIPLIER         "          Ambient 2nd Image Lighting Multiplier"  0 0 100 1
+float HSM_LED_AMBIENT2_LIGHTING_MULTIPLIER = global.HSM_LED_AMBIENT2_LIGHTING_MULTIPLIER / 100;
+
 #pragma parameter HSM_LED_APPLY_AMBIENT_IN_ADD_MODE     "          Apply Ambient Lighting in ADD Blend Mode"  0 0 1 1
 float HSM_LED_APPLY_AMBIENT_IN_ADD_MODE = global.HSM_LED_APPLY_AMBIENT_IN_ADD_MODE;
 
@@ -301,6 +307,9 @@ float HSM_DEVICE_GAMMA = global.HSM_DEVICE_GAMMA;
 
 #pragma parameter HSM_DEVICE_AMBIENT_LIGHTING_MULTIPLIER         "          Ambient Lighting Multiplier"  100 0 100 1
 float HSM_DEVICE_AMBIENT_LIGHTING_MULTIPLIER = global.HSM_DEVICE_AMBIENT_LIGHTING_MULTIPLIER / 100;
+
+#pragma parameter HSM_DEVICE_AMBIENT2_LIGHTING_MULTIPLIER         "          Ambient 2nd Image Lighting Multiplier"  0 0 100 1
+float HSM_DEVICE_AMBIENT2_LIGHTING_MULTIPLIER = global.HSM_DEVICE_AMBIENT2_LIGHTING_MULTIPLIER / 100;
 
 #pragma parameter HSM_DEVICE_APPLY_AMBIENT_IN_ADD_MODE         "          Apply Ambient Lighting in ADD Blend Mode"  0 0 1 1
 float HSM_DEVICE_APPLY_AMBIENT_IN_ADD_MODE = global.HSM_DEVICE_APPLY_AMBIENT_IN_ADD_MODE;
@@ -378,6 +387,9 @@ float HSM_DECAL_GAMMA = global.HSM_DECAL_GAMMA;
 #pragma parameter HSM_DECAL_AMBIENT_LIGHTING_MULTIPLIER         "          Ambient Lighting Multiplier"  100 0 100 1
 float HSM_DECAL_AMBIENT_LIGHTING_MULTIPLIER = global.HSM_DECAL_AMBIENT_LIGHTING_MULTIPLIER / 100;
 
+#pragma parameter HSM_DECAL_AMBIENT2_LIGHTING_MULTIPLIER         "          Ambient 2nd Image Lighting Multiplier"  0 0 100 1
+float HSM_DECAL_AMBIENT2_LIGHTING_MULTIPLIER = global.HSM_DECAL_AMBIENT2_LIGHTING_MULTIPLIER / 100;
+
 #pragma parameter HSM_DECAL_APPLY_AMBIENT_IN_ADD_MODE         "          Apply Ambient Lighting in ADD Blend Mode"  0 0 1 1
 float HSM_DECAL_APPLY_AMBIENT_IN_ADD_MODE = global.HSM_DECAL_APPLY_AMBIENT_IN_ADD_MODE;
 
@@ -450,6 +462,9 @@ float HSM_CAB_GLASS_GAMMA = global.HSM_CAB_GLASS_GAMMA;
 #pragma parameter HSM_CAB_GLASS_AMBIENT_LIGHTING_MULTIPLIER         "          Ambient Lighting Multiplier"  100 0 100 1
 float HSM_CAB_GLASS_AMBIENT_LIGHTING_MULTIPLIER = global.HSM_CAB_GLASS_AMBIENT_LIGHTING_MULTIPLIER / 100;
 
+#pragma parameter HSM_CAB_GLASS_AMBIENT2_LIGHTING_MULTIPLIER         "          Ambient 2nd Image Lighting Multiplier"  0 0 100 1
+float HSM_CAB_GLASS_AMBIENT2_LIGHTING_MULTIPLIER = global.HSM_CAB_GLASS_AMBIENT2_LIGHTING_MULTIPLIER / 100;
+
 #pragma parameter HSM_CAB_GLASS_APPLY_AMBIENT_IN_ADD_MODE         "          Apply Ambient Lighting in ADD Blend Mode"  0 0 1 1
 float HSM_CAB_GLASS_APPLY_AMBIENT_IN_ADD_MODE = global.HSM_CAB_GLASS_APPLY_AMBIENT_IN_ADD_MODE;
 
@@ -519,10 +534,13 @@ float HSM_TOP_BRIGHTNESS = global.HSM_TOP_BRIGHTNESS / 100;
 #pragma parameter HSM_TOP_GAMMA                     "          Gamma Adjust" 1 0 5 0.01
 float HSM_TOP_GAMMA = global.HSM_TOP_GAMMA;
 
-#pragma parameter HSM_TOP_AMBIENT_LIGHTING_MULTIPLIER "          Ambient Lighting Multiplier"  100 0 100 1
+#pragma parameter HSM_TOP_AMBIENT_LIGHTING_MULTIPLIER   "          Ambient Lighting Multiplier"  100 0 100 1
 float HSM_TOP_AMBIENT_LIGHTING_MULTIPLIER = global.HSM_TOP_AMBIENT_LIGHTING_MULTIPLIER / 100;
 
-#pragma parameter HSM_TOP_APPLY_AMBIENT_IN_ADD_MODE "          Apply Ambient Lighting in ADD Blend Mode"  0 0 1 1
+#pragma parameter HSM_TOP_AMBIENT2_LIGHTING_MULTIPLIER  "          Ambient 2nd Image Lighting Multiplier"  0 0 100 1
+float HSM_TOP_AMBIENT2_LIGHTING_MULTIPLIER = global.HSM_TOP_AMBIENT2_LIGHTING_MULTIPLIER / 100;
+
+#pragma parameter HSM_TOP_APPLY_AMBIENT_IN_ADD_MODE     "          Apply Ambient Lighting in ADD Blend Mode"  0 0 1 1
 float HSM_TOP_APPLY_AMBIENT_IN_ADD_MODE = global.HSM_TOP_APPLY_AMBIENT_IN_ADD_MODE;
 
 #pragma parameter HSM_TOP_BLEND_MODE                    "          Blend Mode - OFF | NORMAL | ADD | MULTIPLY"  1 0 3 1
