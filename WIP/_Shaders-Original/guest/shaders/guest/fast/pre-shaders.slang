@@ -73,7 +73,7 @@ layout(push_constant) uniform Push
 
 #pragma parameter sega_fix "          Sega Brightness Fix" 0.0 0.0 1.0 1.0
 
-#pragma parameter BP "          Raise Black Level" 0.0 0.0 25.0 1.0
+#pragma parameter BP "          Raise Black Level" 0.0 -100.0 25.0 1.0
 #define BP params.BP
 
 #pragma parameter vigstr "          Vignette Strength" 0.0 0.0 2.0 0.05
@@ -238,9 +238,7 @@ void main()
    vec4 imgColor = COMPAT_TEXTURE(Source, vTexCoord.xy);
    
    float w = float ((imgColor.r + imgColor.g + imgColor.b) < 1.5/255.0);
-   float bp = w * BP/255.0; 
-
-   imgColor.rgb = imgColor.rgb * params.pre_bb;
+   float bp = w * BP/255.0;
    
    if (params.sega_fix > 0.5) imgColor.rgb = imgColor.rgb * (255.0 / 239.0);
    
@@ -352,7 +350,12 @@ void main()
 	color = mix(color, comp, m);
 	color = pow(max(color, 0.0), vec3(1.0/p));
 	
-	color = color + bp;
+	if (BP > -0.5) color = color + bp; else
+	{ 
+		color = max(color + BP/255.0, 0.0) / (1.0 + BP/255.0*step(- BP/255.0, max(max(color.r,color.g),color.b)));
+	}
+	
+	color = min(color * params.pre_bb, 1.0);
 	
 	FragColor = vec4(color, vignette(vTexCoord.xy)); 
 } 

@@ -23,7 +23,7 @@
 */
 
 // Screen Scale Required Parameters
-#pragma parameter HSM_MEGA_BEZEL_TITLE								"[ --- HSM MEGA BEZEL V 1.0.001 2022-06-24 Rev 1 --- ]" 0 0 0.01 0.01
+#pragma parameter HSM_MEGA_BEZEL_TITLE								"[ --- HSM MEGA BEZEL V 1.0.002 2022-07-14 Rev 1 --- ]" 0 0 0.01 0.01
 
 #pragma parameter HSM_RESOLUTION_DEBUG_ON							"          Show Resolution Info" 0 0 1 1
 float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
@@ -801,7 +801,7 @@ float HSM_AMBIENT2_LIGHTING_HUE = global.HSM_AMBIENT2_LIGHTING_HUE / 360;
 #pragma parameter HSM_AMBIENT2_LIGHTING_SATURATION          	        "          Saturation"  100 0 300 1
 float HSM_AMBIENT2_LIGHTING_SATURATION = global.HSM_AMBIENT2_LIGHTING_SATURATION / 100;
 
-#pragma parameter HSM_AMBIENT2_LIGHTING_VALUE               	        "          Value"  100 0 400 1
+#pragma parameter HSM_AMBIENT2_LIGHTING_VALUE               	        "          Value"  200 0 400 1
 float HSM_AMBIENT2_LIGHTING_VALUE = global.HSM_AMBIENT2_LIGHTING_VALUE / 100;
 
 #pragma parameter HSM_AMBIENT2_LIGHTING_CONTRAST               	        "          Contrast"  100 0 200 0.5

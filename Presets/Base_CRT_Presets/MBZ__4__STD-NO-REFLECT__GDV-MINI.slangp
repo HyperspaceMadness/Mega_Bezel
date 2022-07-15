@@ -193,7 +193,7 @@ NightLightingImage = ../../shaders/HyperspaceMadness/textures/NightLighting_1920
 NightLightingImage_linear = true
 NightLightingImage_mipmap = 1
 
-NightLighting2Image = ../../shaders/HyperspaceMadness/textures/NightLighting2.png
+NightLighting2Image = ../../shaders/HyperspaceMadness/textures/NightLighting_1920x1080.png
 NightLighting2Image_linear = true
 NightLighting2Image_mipmap = 1
 

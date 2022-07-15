@@ -48,8 +48,6 @@ layout(push_constant) uniform Push
 #pragma parameter sat            "          Afterglow Saturation  -- sat" 0.33 0.0 1.0 0.01
 #define sat params.sat
 
-// #pragma parameter BP          "          Brighten Black (For Scanlines on Black) -- BP" 0.0 0.0 100.0 1.0
-
 #pragma parameter bogus_color    "[ COLOR TWEAKS ]:" 0.0 0.0 1.0 1.0
 
 #pragma parameter CS             "       Display Gamut: sRGB, Modern, DCI, Adobe, Rec.2020 -- CS" 0.0 0.0 4.0 1.0 
@@ -74,9 +72,11 @@ layout(push_constant) uniform Push
 
 #pragma parameter pre_bb         "          Brightness Adjustment" 1.0 0.0 2.0 0.01
 
-#pragma parameter contr "          Contrast Adjustment" 0.0 -1.0 1.0 0.05
+#pragma parameter contr          "          Contrast Adjustment" 0.0 -1.0 1.0 0.05
 
 #pragma parameter sega_fix       "          Sega Brightness Fix" 0.0 0.0 1.0 1.0
+
+#pragma parameter BP             "          Raise Black Level" 0.0 -100.0 25.0 1.0
 
 // #pragma parameter vigstr "          Vignette Strength" 0.0 0.0 2.0 0.025
 
@@ -84,7 +84,7 @@ layout(push_constant) uniform Push
 
 #define WP params.WP
 #define wp_saturation params.wp_saturation
-#define BP 0
+#define BP params.BP
 
 layout(std140, set = 0, binding = 0) uniform UBO
 {
@@ -257,8 +257,6 @@ void main()
    aftglow.rgb = AS*w*normalize(pow(aftglow.rgb + 0.01, vec3(sat)))*l;
    float bp = w * BP/255.0;
    
-   imgColor.rgb = imgColor.rgb * params.pre_bb;
-   
    // Retro Sega Systems: Genesis, 32x, CD and Saturn 2D had color palettes designed in TV levels to save on transformations.
    if (params.sega_fix > 0.5) imgColor.rgb = imgColor.rgb * (255.0 / 239.0);
    
@@ -370,7 +368,12 @@ void main()
 	color = mix(color, comp, m);
 	color = pow(max(color, 0.0), vec3(1.0/p));
 	
-	color = color + aftglow.rgb + bp;
+	if (BP > -0.5) color = color + aftglow.rgb + bp; else
+	{ 
+		color = max(color + BP/255.0, 0.0) / (1.0 + BP/255.0*step(- BP/255.0, max(max(color.r,color.g),color.b))) + aftglow.rgb;
+	}
+	
+	color = min(color * params.pre_bb, 1.0);
 
    /* HSM Removed
 	FragColor = vec4(color, vignette(vTexCoord.xy)); 

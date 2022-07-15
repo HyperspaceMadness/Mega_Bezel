@@ -639,7 +639,7 @@ void main()
 	{
 		float maxb = max(max(Bloom.r,Bloom.g),Bloom.b);
 		maxb = pow(sqrt(maxb*mix(maxb, colmx, 0.75)),0.275);
-		vec3 mBloom = 0.5*(1.5*Bloom+0.5*maxb) * mix(1.0, 2.0-colmx, (bloom_dist + 1.0));
+		vec3 mBloom = 0.5*(1.5*Bloom+0.5*maxb) * mix(1.0, 2.0-colmx, (bloom_dist + 0.5));
 		float maskmx = 1.0; if (shadowMask > 0.5 || shadowMask < 4.5) maskmx = maskLight; else if (shadowMask > 6.5 && shadowMask < 10.5) maskmx = 1.0; else maskmx = max(max(cmask.r,cmask.g),cmask.b);
 		cmask = min(cmask + maxb*mBloom*mask_bloom, maskmx);
 		smask = min(smask + 0.9*maxb*max(max(mBloom.r,mBloom.g),mBloom.b)*mask_bloom, 1.0);
