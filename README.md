@@ -62,11 +62,11 @@ Installation
   * Some users have run it with a very long load time in **D3D11** (Not Recommended)
   * Restart after changing the video driver
 * Open the **Settings** Menu and Set:
+  * **User Interface / Show Advanced Settings** to **ON**
   * **Video / Scaling / Aspect Ratio** to **Full**
     * This will match your monitor aspect aspect ratio
   * **Video / Scaling / Integer Scale** to **OFF**
   * **Video / Output / Video Rotation** to **Normal**
-  * **User Interface / Show Advanced Settings** to **ON**
   * **Core / Allow Rotation** to **OFF** -- **Important for FB Neo**
   * Do this Before loading content 
 * **Load a preset** in the shaders menu, Mega Bezel shader presets are found in:
@@ -184,16 +184,21 @@ NTSC Processing is only included in NTSC Presets, and GTU Horizontal blurring is
         * Load the shader
         * If the shader loads correctly then the shader is working.
         
-     * When the shader works in imageviewer, but doesn’t work when using a core, it is probably related to the core, or the graphics card being overwhelmed by resource usage with both the core requirements and the shader requirements
-     * If it is the core resolution overwhelming the resources, try a STD preset, or a STD-DREZ preset to reduce the resolution used within the shader chain
+     * If Retroarch crashes this is usually the core resolution overwhelming the graphics card's resources, try a STD preset, or a STD-DREZ preset to reduce the resolution used within the shader chain
+     * When the shader works in imageviewer, but doesn’t work when using a core, it is probably related to the core
      * If you still have difficulties loading the shader with a specific core, try updating the core
      * If you still have difficulties download a new separate version of Retroarch and try it there. Sometimes problems lurk in a random config file which is very hard to track down
  * **To see errors** coming from Retroarch you need to set up your logging settings:
     * **Logging - Logging Verbosity - ON**
       * **Frontend Logging - 0(Debug)**
-      * **Log to File - Off**
+      * **Log to File - ON**
+      * **Restart Retroarch**
+      * **Load your shader**
+      * **Close Retroarch**
+      * These last steps allow you to have a short log for us to look at
+      * If you want to see the errors as they happen you can set Log to File to OFF and an additional console window will open when retroarch opens and show errors here
     
-* These settings will **cause a log window to come up** when you launch, and you should see any Retroarch errors, and shader loading details
+
 ---
 **If the Screen is changing size unexpectedly**
 
@@ -209,6 +214,12 @@ NTSC Processing is only included in NTSC Presets, and GTU Horizontal blurring is
     * Set the Aspect Ratio Type to Explicit (1) This will use the explicit aspect ratio number instead of guessing
     
     * If this solves your issue please consider posting on the thread at the top of this document the issue you had so that we can improve the auto aspect ratio in the future
+
+---
+**If the Screen is shown in a vertical aspect for a horizontal game:**
+
+  * Set The **[ Aspect Ratio ] / Orientation** to **Horizontal**
+
 ---
 **If you see artifacts on the game image like circles or interference patterns**
   * These artifacts which look like round swirls or circles like tree trunk rings are called a Moiré patterns which happen when a high frequency pattern is sampled at a lower frequency - https://en.wikipedia.org/wiki/Moiré_pattern

@@ -279,13 +279,6 @@ float HSM_CROP_BLACK_THRESHOLD = global.HSM_CROP_BLACK_THRESHOLD / 100;
 
 
 //---------------------------------------------------------------------------------------------------
-//    SHADERFX
-//---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_SCALEFX_TITLE	                                "[ --- SMOOTHING - SCALEFX - SMOOTH-ADV Presets Only ---- ]:" 0 0 0.01 0.01
-#pragma parameter HSM_SCALEFX_ON 	                                "          ScaleFx ON - Must Increase Core Res Sampling" 0 0 1 1
-
-
-//---------------------------------------------------------------------------------------------------
 //    SCANLINES
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_SCANLINE_TITLE								"[ SCANLINE DIRECTION ]:" 0 0 0.01 0.01
