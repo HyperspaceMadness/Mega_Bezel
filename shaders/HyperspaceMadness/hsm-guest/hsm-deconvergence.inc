@@ -105,7 +105,7 @@
 #pragma parameter shadowMask "CRT Mask: -1:None|0:CGWG|1-4:Lottes|5-12:Trinitrn -- shadowMask" 0.0 -1.0 12.0 1.0
 #define shadowMask   global.shadowMask     // Mask Style
 
-#pragma parameter masksize "          Mask Size - 0:Auto | 2K | 4k -- masksize" 0.0 0.0 4 1.0
+#pragma parameter masksize "          Mask Size - 0:Auto | 2K | 4k -- masksize" 1.0 0.0 4 1.0
 #define masksize     global.masksize     // Mask Size
 
 #pragma parameter maskstr "          Mask Strength (0, 5-12) -- maskstr" 0.3 -0.5 1.0 0.025
@@ -141,7 +141,7 @@
 #pragma parameter double_slot "          Slot Mask Height: 2x1 or 4x1... -- double_slot" 1.0 1.0 4.0 1.0
 #define double_slot  global.double_slot     // Slot Mask Height
 
-#pragma parameter slotms "          Slot Mask Size - Auto | 2K | 4k -- slotms" 0.0 0.0 4.0 1.0
+#pragma parameter slotms "          Slot Mask Size - Auto | 2K | 4k -- slotms" 1.0 0.0 4.0 1.0
 #define slotms  global.slotms       // Slot Mask Size
 
 #pragma parameter mclip "          Keep Mask effect with clipping -- mclip" 0.50 0.0 1.0 0.05
@@ -234,7 +234,7 @@ vec3 Mask(vec2 pos, float mx)
 
 	// If using automatic Mask Size
 	if (masksize < 0.5)
-		final_mask_size = (global.FinalViewportSize.x + global.FinalViewportSize.y) / 3 > 1900 ? 2 : 1;
+		final_mask_size = global.FinalViewportSize.y > 2000 ? 2 : 1;
 	
 	final_mask_size = max(1, floor(((1 - HSM_VIEWPORT_ZOOM_MASK) + HSM_VIEWPORT_ZOOM_MASK * VIEWPORT_SCALE.y) * final_mask_size + 0.2));
 

@@ -117,7 +117,7 @@ vec3 Mask(vec2 pos, vec3 c)
 
 	// If using automatic Mask Size
 	if (masksize < 0.5)
-		final_mask_size = (global.FinalViewportSize.x + global.FinalViewportSize.y) / 3 > 1900 ? 2 : 1;
+		final_mask_size = global.FinalViewportSize.y > 2000 ? 2 : 1;
 	
 	final_mask_size = max(1, floor(((1 - HSM_VIEWPORT_ZOOM_MASK) + HSM_VIEWPORT_ZOOM_MASK * VIEWPORT_SCALE.y) * final_mask_size + 0.2));
 
