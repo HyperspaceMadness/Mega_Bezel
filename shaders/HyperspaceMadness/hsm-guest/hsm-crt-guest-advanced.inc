@@ -84,7 +84,10 @@
 #define spike global.spike
 
 #pragma parameter rolling_scan "          Rolling Scanlines -- rolling_scan" 0.0 -1.0 1.0 0.01
-#define rolling_scan        global.rolling_scan     // rolling scanlines
+#define rolling_scan	global.rolling_scan     // rolling scanlines
+
+#pragma parameter scangamma "          Scanline Gamma" 2.40 0.5 5.0 0.05
+#define scangamma 	global.scangamma
 
 #pragma parameter bogus_filtering "[ FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
 
@@ -442,6 +445,8 @@ void main()
 	
 	float fscolor1 = (lm2*swl2 + lm1*swl1 + rm1*swr1 + rm2*swr2)/(swl2+swl1+swr1+swr2);
 	vec3 scolor1 = vec3(clamp(mix(max(max(color1.r,color1.g),color1.b), fscolor1, spike), 0.0, 1.0));
+
+	if(!interb) color1 = pow(color1, vec3(scangamma/gamma_in));
 	
 	vec3 scolor2;
 	
@@ -484,6 +489,9 @@ void main()
 	
 	float fscolor2 = (lm2*swl2 + lm1*swl1 + rm1*swr1 + rm2*swr2)/(swl2+swl1+swr1+swr2);
 	scolor2 = vec3(clamp(mix(max(max(color2.r,color2.g),color2.b), fscolor2, spike), 0.0, 1.0));
+	
+	color2 = pow(color2, vec3(scangamma/gamma_in)); 
+	
 }
 
 	vec3 ctmp = color1; float w3 = 1.0; vec3 color = color1;
@@ -585,8 +593,7 @@ if (!interb)
 
 	float colmx = pow(max(max(ctmp.r,ctmp.g),ctmp.b), 1.40/gamma_in);
 
-	// TODO Don't add gamma, output from pass should be linear
-	// color = pow(color, vec3(1.0/gamma_out));
-
+	if(!interb) color = pow( color, vec3(gamma_in/scangamma) );
+   
 	FragColor = vec4(color, colmx);
 }

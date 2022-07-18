@@ -605,7 +605,8 @@ void main()
 	// color and bloom fetching
 	vec3 color = COMPAT_TEXTURE(Source,pos1).rgb;
 	vec3  Bloom = COMPAT_TEXTURE(BloomPass, pos).rgb;
-	fetch_pixel(color, Bloom, pos1, pos);
+	
+	fetch_pixel(color, Bloom, pos1, pos); // deconvergence
 
 	float cm = max(max(color.r,color.g),color.b);
 	float mx1 = COMPAT_TEXTURE(Source, pos1     ).a;

@@ -673,7 +673,7 @@ void main()
 
 	// HSM Added
 	if (GDV_DECONVERGENCE_ON > 0.5)
-		fetch_pixel(color, Bloom, pos1, pos);
+		fetch_pixel(color, Bloom, pos1, pos); // deconvergence
 
 	float cm = max(max(color.r,color.g),color.b);
 	float mx1 = COMPAT_TEXTURE(Source, pos1     ).a;
