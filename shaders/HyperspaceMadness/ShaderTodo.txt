@@ -10,11 +10,13 @@ Changes:
     * HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR = 0
     * HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = 0
   * The ScaleFx settings now only appear on the SMOOTH-ADV preset nearer the bottom of the parameter list
+  * Fixed Double image when using cropping in NTSC presets reported by @JHorbach1
 
+
+  
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
-  * Fix Non-Rotated Halation
   * Megatron HDR Combination at end of chain
   * Fix Tube Diffuse Shadow in 3D Curvature
   * Add .params #reference to with all parameters commented out

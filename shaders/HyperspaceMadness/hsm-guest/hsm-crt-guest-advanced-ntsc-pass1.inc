@@ -62,12 +62,7 @@ layout(push_constant) uniform Push
 #pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader) -- prescalex" 1.0 1.0 4.0 1.0  // Joint parameter with main pass, values must match
 #define prescalex        params.prescalex     // prescale-x factor 
 
-/// HSM Removed
-// #define COMPAT_TEXTURE(c,d) texture(c,d)
-
-// HSM Added
-#define COMPAT_TEXTURE(c,d) HSM_GetCroppedTexSample(c,d)
-// End Addition
+#define COMPAT_TEXTURE(c,d) texture(c,d)
 
 #define TEX0 vTexCoord
 
