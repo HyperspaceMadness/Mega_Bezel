@@ -868,9 +868,6 @@ void main()
 											CAB_GLASS_COORD,
 											CAB_GLASS_SCALE);
 
-		// Add Scaling
-		CAB_GLASS_CURVED_COORD = (CAB_GLASS_CURVED_COORD - 0.5) * 1 / HSM_CAB_GLASS_SCALE + 0.5;
-
 		// Sample Texture
 		cab_glass_image = HSM_GetMipmappedTexSample(CabinetGlassImage, CAB_GLASS_CURVED_COORD, CAB_GLASS_SCALE, HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS);
 

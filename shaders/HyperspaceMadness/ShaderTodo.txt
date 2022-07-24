@@ -13,7 +13,15 @@ Changes:
   * Fixed Double image when using cropping in NTSC presets reported by @JHorbach1
   * Updated to crt-guest-advanced-2022-07-17-release1
     * Includes Scanline Gamma
-
+  * Tube Gel and Diffuse Fixes
+    * Gel is now mapped to the tube, independent of the black edge
+    * Added a feature to add a bit of tube diffuse shading to the GEL this should make it look a little more natural
+      * [ TUBE COLORED GEL IMAGE ] > Normal Multiply by Tube Diffuse Shading
+    * HSM_TUBE_BLACK_EDGE_LAYERING_MODE has been removed as it's not needed anymore
+    * CRT Multiply blend mode now works better when there is extra tube thickness
+  * Changed HSM_TUBE_DIFFUSE_IMAGE_SCALE to 120 by default to have a less rounded look
+    * If you want a stronger rounded shaded look reset it to 100
+  * Fixed Scale discrepancy when using the Cab Glass Image 
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------

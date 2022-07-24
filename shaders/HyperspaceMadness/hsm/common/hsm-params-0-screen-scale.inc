@@ -503,13 +503,13 @@ float HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS = global.HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNE
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_GAMMA                      "          Gamma Adjust" 1 0 5 0.01
 float HSM_TUBE_DIFFUSE_IMAGE_GAMMA = global.HSM_TUBE_DIFFUSE_IMAGE_GAMMA;
 
-#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING           "          Ambient Lighting Multiplier" 100 0 100 1
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING           "          Ambient Lighting Multiplier" 100 0 200 1
 float HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING = global.HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING / 100;
 
-#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_AMBIENT2_LIGHTING           "          Ambient 2nd Image Lighting Multiplier" 0 0 100 1
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_AMBIENT2_LIGHTING           "          Ambient 2nd Image Lighting Multiplier" 0 0 200 1
 float HSM_TUBE_DIFFUSE_IMAGE_AMBIENT2_LIGHTING = global.HSM_TUBE_DIFFUSE_IMAGE_AMBIENT2_LIGHTING / 100;
 
-#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_SCALE  			        "          Scale" 100 0 1000 1
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_SCALE  			        "          Scale" 120 0 1000 1
 float HSM_TUBE_DIFFUSE_IMAGE_SCALE = global.HSM_TUBE_DIFFUSE_IMAGE_SCALE / 100;
 
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_SCALE_X  			        "          Scale X" 100 0 1000 1
@@ -520,6 +520,9 @@ float HSM_TUBE_DIFFUSE_IMAGE_SCALE_X = global.HSM_TUBE_DIFFUSE_IMAGE_SCALE_X / 1
 
 #pragma parameter HSM_TUBE_EMPTY_THICKNESS_X_SCALE 			"          Empty Tube Thicknes X Scale" 100 0 3000 1
 #define HSM_TUBE_EMPTY_THICKNESS_X_SCALE (global.HSM_TUBE_EMPTY_THICKNESS_X_SCALE / 100)
+
+#pragma parameter HSM_SCREEN_CORNER_RADIUS_SCALE 			"          Screen (Game Image) Corner Radius Scale" 100 5 3000 1
+#define HSM_SCREEN_CORNER_RADIUS_SCALE (global.HSM_SCREEN_CORNER_RADIUS_SCALE / 100)
 
 
 //---------------------------------------------------------------------------------------------------
@@ -563,33 +566,6 @@ float HSM_TUBE_SHADOW_CURVATURE_SCALE = global.HSM_TUBE_SHADOW_CURVATURE_SCALE /
 
 
 //---------------------------------------------------------------------------------------------------
-//    TUBE STATIC REFLECTION
-//---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_TITLE			"[ TUBE STATIC REFLECTION IMAGE ]:" 0 0 0.01 0.01
-
-#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_ON  				"          Use Tube Static Reflection Image - OFF | ON" 0 0 1 1
-float HSM_TUBE_STATIC_REFLECTION_IMAGE_ON = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_ON;
-
-#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_DUALSCREEN_VIS_MODE    "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
-float HSM_TUBE_STATIC_REFLECTION_IMAGE_DUALSCREEN_VIS_MODE = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_DUALSCREEN_VIS_MODE;
-
-#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY  		"          Opacity" 10 0 100 0.1
-float HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY / 100;
-
-#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING "          Ambient Lighting Multiplier" 100 0 100 1
-float HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING / 100;
-
-#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT2_LIGHTING "          Ambient 2nd Image Lighting Multiplier" 0 0 100 1
-float HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT2_LIGHTING = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT2_LIGHTING / 100;
-
-#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE  			"          Scale" 110 0 1000 1
-float HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE / 100;
-
-// #pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_DITHERING_SAMPLES  "[ TUBE IMAGES ]   Tube Static Reflection Noise Samples (Reduces Banding)" 0 0 10 1
-// float HSM_TUBE_STATIC_REFLECTION_IMAGE_DITHERING_SAMPLES = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_DITHERING_SAMPLES;
-
-
-//---------------------------------------------------------------------------------------------------
 //    TUBE COLORED GEL
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_TUBE_IMAGES_TITLE								"[ TUBE COLORED GEL IMAGE ]:" 0 0 0.01 0.01
@@ -609,16 +585,19 @@ float HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT = global.HSM_TUBE_COLORED_GEL_I
 #pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT  		"          Normal Blend Amount" 15 0 100 1
 float HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT = global.HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT / 100;
 
-#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_BRIGHTNESS  	"          Normal Blend Brightness" 100 0 200 1
-float HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_BRIGHTNESS = global.HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_BRIGHTNESS / 100;
-
 #pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD "          Normal Blend Transparency Threshold" 23 0 100 1
 float HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD = global.HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD / 100;
 
-#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING       "          Ambient Lighting Multiplier" 100 0 100 1
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_BRIGHTNESS  	"          Normal Blend Brightness" 100 0 200 1
+float HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_BRIGHTNESS = global.HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_BRIGHTNESS / 100;
+
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_MULTIPLY_BY_DIFFUSE  		"          Normal Multiply by Tube Diffuse Shading" 0 0 100 1
+float HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_MULTIPLY_BY_DIFFUSE = global.HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_MULTIPLY_BY_DIFFUSE / 100;
+
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING       "          Ambient Lighting Multiplier" 100 0 200 1
 float HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING = global.HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING / 100;
 
-#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT2_LIGHTING       "          Ambient 2nd Image Lighting Multiplier" 0 0 100 1
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT2_LIGHTING       "          Ambient 2nd Image Lighting Multiplier" 0 0 200 1
 float HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT2_LIGHTING = global.HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT2_LIGHTING / 100;
 
 #pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_SCALE  			    "          Scale" 100 0 1000 1
@@ -630,8 +609,36 @@ float HSM_TUBE_COLORED_GEL_IMAGE_FLIP_HORIZONTAL = -(global.HSM_TUBE_COLORED_GEL
 #pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_FLIP_VERTICAL  		"          Flip Vertical" 0 0 1 1
 float HSM_TUBE_COLORED_GEL_IMAGE_FLIP_VERTICAL = -(global.HSM_TUBE_COLORED_GEL_IMAGE_FLIP_VERTICAL * 2 - 1);
 
-#pragma parameter HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL				"          Show CRT on Top of Colored Gel Normal" 0 0 1 1
-float HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL = global.HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL;
+// #pragma parameter HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL				"          Show CRT on Top of Colored Gel Normal" 0 0 1 1
+// float HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL = global.HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL;
+float HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL = 0;
+
+
+//---------------------------------------------------------------------------------------------------
+//    TUBE STATIC REFLECTION
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_TITLE			"[ TUBE STATIC REFLECTION IMAGE ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_ON  				"          Use Tube Static Reflection Image - OFF | ON" 0 0 1 1
+float HSM_TUBE_STATIC_REFLECTION_IMAGE_ON = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_ON;
+
+#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_DUALSCREEN_VIS_MODE    "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
+float HSM_TUBE_STATIC_REFLECTION_IMAGE_DUALSCREEN_VIS_MODE = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_DUALSCREEN_VIS_MODE;
+
+#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY  		"          Opacity" 10 0 100 0.1
+float HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY / 100;
+
+#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING "          Ambient Lighting Multiplier" 100 0 200 1
+float HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING / 100;
+
+#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT2_LIGHTING "          Ambient 2nd Image Lighting Multiplier" 0 0 200 1
+float HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT2_LIGHTING = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT2_LIGHTING / 100;
+
+#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE  			"          Scale" 110 0 1000 1
+float HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE / 100;
+
+// #pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_DITHERING_SAMPLES  "[ TUBE IMAGES ]   Tube Static Reflection Noise Samples (Reduces Banding)" 0 0 10 1
+// float HSM_TUBE_STATIC_REFLECTION_IMAGE_DITHERING_SAMPLES = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_DITHERING_SAMPLES;
 
 
 //---------------------------------------------------------------------------------------------------
@@ -639,19 +646,16 @@ float HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL = global.HSM_SHOW_CRT_ON_TOP_OF_COLORED
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_SCREEN_EDGE_TITLE								"[ SCREEN BLACK EDGE ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_TUBE_BLACK_EDGE_LAYERING_MODE		            "          Show Black Edge:  OFF | OVER DIFFUSE & GEL" 1 0 1 1
-float HSM_TUBE_BLACK_EDGE_LAYERING_MODE = global.HSM_TUBE_BLACK_EDGE_LAYERING_MODE;
-
 #pragma parameter HSM_GLOBAL_CORNER_RADIUS 							"          Global Corner Radius - Def 10" 10 4 500 2
 #define HSM_GLOBAL_CORNER_RADIUS global.HSM_GLOBAL_CORNER_RADIUS
 
-#pragma parameter HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE 			"          Black Edge Corner Radius Scale" 100 100 8000 10
+#pragma parameter HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE 			"          Black Edge Corner Radius Scale" 100 10 8000 10
 #define HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE global.HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE / 100
 
 #pragma parameter HSM_TUBE_BLACK_EDGE_SHARPNESS 					"          Black Edge Sharpness - Def 70" 70 0 90 1
 #define HSM_TUBE_BLACK_EDGE_SHARPNESS global.HSM_TUBE_BLACK_EDGE_SHARPNESS / 100
 
-#pragma parameter HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE 				"          Black Edge Curvature Scale Multiplier" 100 100 8000 10
+#pragma parameter HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE 				"          Black Edge Curvature Scale Multiplier" 100 20 8000 10
 #define HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE global.HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE / 100
 
 #pragma parameter HSM_TUBE_BLACK_EDGE_THICKNESS 					"          Black Edge Thickness" 100 -800 6000 5

@@ -1289,7 +1289,7 @@ float HSM_Get_Screen_Black_Edge_Mask(vec2 screen_coord, bool apply_to_mirror)
 	return SCREEN_MASK;
 }
 
-vec3 ApplyAmbientImage(vec3 base_image, vec3 ambient_image, float layer_blend_amount) 
+vec3 HSM_ApplyAmbientImage(vec3 base_image, vec3 ambient_image, float layer_blend_amount) 
 {
 	if (layer_blend_amount > 0)
 		return (1 - layer_blend_amount) * base_image.rgb + layer_blend_amount * base_image.rgb * ambient_image.rgb;

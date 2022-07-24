@@ -418,30 +418,12 @@ void main()
 		// }
 	}
 
-	// if (HSM_TUBE_BLACK_EDGE_LAYERING_MODE > 0.5)
-	// 	crt_linear.rgb *= (1 - HSM_TUBE_BLACK_EDGE_LAYERING_MODE) + HSM_TUBE_BLACK_EDGE_LAYERING_MODE * HSM_Get_Screen_Black_Edge_Mask(BLACK_EDGE_COORD, false);
-
 	crt_linear.rgb *= TUBE_MASK;
 
 	// Put the frame and bezel over top a black tube
 	// It must be a little wider than the inside of the bezel so we don't see a gap
 	crt_linear = HSM_PreMultAlphaBlend(vec4(0, 0, 0, 1 - outside_tube_mask_wider), crt_linear);
 
-	// TUBE HIGHLIGHT
-	// if (HSM_GetUseTubeStaticReflection())
-	// {
-	// 	// AMBIENT LIGHTING IMAGES
-	// 	vec4 ambient_lighting_image = vec4(1);
-	// 	vec4 ambient2_lighting_image = vec4(1);
-	// 	HSM_Fill_Ambient_Images(VIEWPORT_COORD, VIEWPORT_UNSCALED_COORD, HSM_AMBIENT_LIGHTING_SWAP_IMAGES, NightLightingImage, NightLighting2Image, ambient_lighting_image, ambient2_lighting_image);
-
-	// 	vec3 tube_highlight_image = vec2(0);
-	// 	tube_highlight_image = HSM_GetTubeHighlight(tube_curved_coord, false, TubeStaticReflectionImage);
-	// 	tube_highlight_image = ApplyAmbientImage(tube_highlight_image.rgb, ambient_lighting_image.rgb, HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING);
-	// 	tube_highlight_image = ApplyAmbientImage(tube_highlight_image.rgb, ambient2_lighting_image.rgb, HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT2_LIGHTING);
-	// 	crt_linear += tube_highlight * HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY;
-	// }
-	// Clamp otherwise we get artifacts (blue overlays of brighter parts of image)
 	crt_linear = clamp(crt_linear, 0, 1);
 
 	FragColor = vec4(0);

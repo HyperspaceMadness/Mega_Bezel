@@ -589,14 +589,15 @@ Adds a shadow on top of the tube diffuse image and colored gel
 - **Scale Y** - Scales shadow from the top of the tube
 - **Curvature Scale** - How much curvature is applied to the shadow, more curvature has the effect of making it look like the light is higher relative to the tube/bezel
 
-
 -----------------------------------------------------------------------------------------------
-**[ TUBE STATIC REFLECTION IMAGE  ]:**
-- **Use Tube Static Reflection Image - OFF | ON** --- Apply the effect or not
-- **Opacity** --- This is the shine on the tube which imitates reflection from the environment
-- **Ambient Lighting Multiplier** --- How much of the global ambient lighting image to apply, default is 100
-- **Scale** --- Scales the tube reflection image from the center of the tube
+**[ CRT ON TUBE DIFFUSE BLENDING ]:**
 
+How to apply the CRT (Game Image) on top of the tube
+- **CRT On Tube Diffuse Blend Mode** 
+  - 0: OFF - Don't apply the game image
+  - 1: ADD - Apply the game image additively this is the normal behavior
+  - 2: Multiply - Darken the tube diffuse image with the game image 
+- **CRT On Tube Diffuse Blend Amount** - Opacity or how much of the image to apply to the tube
 
 -----------------------------------------------------------------------------------------------
 **[ TUBE COLORED GEL IMAGE ]:**
@@ -612,21 +613,32 @@ Adds a shadow on top of the tube diffuse image and colored gel
 - **Additive Blend Amount** - Image applied as a brightening of the tube area
   - Used to add color to the screen as if it was the gel being diffusely lit from outside the monitor
 - **Normal Blend Amount** - Used for the more opaque parts of a gel image like for the Vectrex
+- **Normal Blend Transparency Threshold** - Adjusts at what transparency of the image the area should be appear fully transparent
+- **Normal Multiply by Tube Diffuse Shading** - Darken the gel with the tube diffuse image, allows you to add shading to the gel image
 - **Normal Blend Brightness** - Brightness for these more opaque parts
-- **Normal Blend Transparency Threshold** - Adjusts at what transparency of the image the area should be fully transparent
 - **Ambient Lighting Multiplier** - How much of the global ambient lighting to apply
+- **Ambient 2nd Image Lighting Multiplier** - How much of the global 2nd ambient lighting to apply
 - **Scale** - Scale the colored gel image
 - **Flip Horizontal** - Flip the colored gel image Horizontally
 - **Flip Vertical** - Flip the colored gel image Vertically
 - **Show CRT on Top of Colored Gel Normal** - Put the CRT image on top of the gel image so it is not color shifted or obscured.
 
+-----------------------------------------------------------------------------------------------
+**[ TUBE STATIC REFLECTION IMAGE  ]:**
+- **Use Tube Static Reflection Image - OFF | ON** --- Apply the effect or not
+- **Opacity** --- This is the shine on the tube which imitates reflection from the environment
+- **Dual Screen Visibility** --- Which screen the static reflection is shown
+  - 0: Both Screens
+  - 1: Only the First Screen
+  - 2: Only the Second Screen
+- **Ambient Lighting Multiplier** --- How much of the global ambient lighting image to apply, default is 100
+- **Ambient Lighting Multiplier** --- How much of the global 2nd ambient lighting image to apply, default is 0
+- **Scale** --- Scales the tube reflection image from the center of the tube
+
 
 -----------------------------------------------------------------------------------------------
 **[ SCREEN BLACK EDGE ]:**
 
-- **Show Black Edge** --- Show the black edge at the edge of the tube
-  - 0: Don't show any black edge
-  - 1: Show the black edge overtop the tube diffuse and gel
 - **Global Corner Radius** --- Global radius of all corners before their own multipliers are applied
 - **Black Edge Corner Radius Scale** --- the roundness of the corner of the screen area
 - **Black Edge Sharpness** --- Blends the edge of the game screen image to black, lower values will fade the edge
