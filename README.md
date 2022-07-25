@@ -3,7 +3,7 @@ HyperspaceMadness Mega Bezel Shader Readme
 ------------------------------------------------------------------------------------------------------------
 ![Mega Bezel Logo](MegaBezelLogo.png)
 
-Version 1.0.001 2022-06-24 Rev 1
+Version 1.0.003 2022-07-24 Rev 1
 ----------------------------------------
 ----------------------------------------
 
@@ -184,7 +184,7 @@ NTSC Processing is only included in NTSC Presets, and GTU Horizontal blurring is
         * Load the shader
         * If the shader loads correctly then the shader is working.
         
-     * If Retroarch crashes this is usually the core resolution overwhelming the graphics card's resources, try a STD preset, or a STD-DREZ preset to reduce the resolution used within the shader chain
+     * If Retroarch crashes this is usually the core resolution overwhelming the graphics card's resources. This more often happens when you are using a SMOOTH-ADV preset. Try a STD, or STD-DREZ preset to reduce the resolution used within the shader chain
      * When the shader works in imageviewer, but doesn’t work when using a core, it is probably related to the core
      * If you still have difficulties loading the shader with a specific core, try updating the core
      * If you still have difficulties download a new separate version of Retroarch and try it there. Sometimes problems lurk in a random config file which is very hard to track down
@@ -282,23 +282,12 @@ Parameter Descriptions
 
 -----------------------------------------------------------------------------------------------
 **[ AMBIENT LIGHTING ]:** - Usually used to apply night lighting on all graphics
-- **Opacity**
-  - How much of the ambient lighting darkening effect is applied
-- **Hue**
-  - Shift the hue of the color of the image
-- **Value**
-  - How dark or bright the ambient lighting is
-- **Saturation**
-  - How saturated the night lighting is
-- **Scale Mode**
-  - **VIEW WITH ZOOM** Scale to the full view, but scale with the viewport Zoom
-  - **FULL** Scale the image to the full window
-- **Scale Offset**
-  - Scale the lighting image
-- **Rotate**
-  - Rotate the lighting image
-- **Mirror Horizontal**
-  - Mirror the ambient lighting image
+- **Ambient 1st Image Opacity**
+  - How much of the ambient lighting darkening effect is applied when using the first image
+- **Ambient 2nd Image Opacity**
+  - How much of the ambient lighting darkening effect is applied when using the second image
+  - **Swap Ambient Images** - Switch which image appears for number 1 to 2, and switch 2 to 1 
+
 
 -----------------------------------------------------------------------------------------------
 **[ VIEWPORT ZOOM ]:** 
@@ -339,7 +328,7 @@ Parameter Descriptions
 **[ CRT SCREEN SCALING GENERAL ]:**
 
 - **Integer Scale Mode**
-  - **0 - Off,** Use Non-Integer Scale
+  - **0 - OFF** Use Non-Integer Scale
   - **1 - ShortAxis Integer Scale On** - for the viewport (monitor) in landscape mode this is the vertical axis, If the screen/tube aspect ratio is vertical then integer scale is used for both horizontal and vertical axes
   - **2 - Integer Scale on both axes**
 
@@ -384,8 +373,8 @@ Parameter Descriptions
 - **Use Image For Automatic Placement (Scale and Y Pos)**
   - When on the placement image is inspected to find where to place and scale the screen image
 - **Auto Place Horizontal (X Pos)**
-  - **0 - OFF** Screen placed in the center 
-  - **1 - ON** Tries to place the screen in the center of the hole in the placement image
+  - 0 - OFF  Screen placed in the center 
+  - 1 - ON Tries to place the screen in the center of the hole in the placement image
 - **Placement Image Mode: TRANSPARENCY : WHITE ON BLACK**
   - What channel of the texture to look at to find the hole in the image, either the transparent part, or a white rectangle on top of a black background
 
@@ -416,8 +405,8 @@ Parameter Descriptions
 **[ CROPPING CORE IMAGE ]:** ---
 Cropping removes parts of the game image at the edges of the screen which were never meant to be seen. Negative values can add more black area at the edges of the screen
 
-- **Crop Mode  -  OFF | CROP BLACK ONLY | CROP ANY**
-  - **0 - Off,** No Cropping applied
+- **Crop Mode**
+  - **0 - OFF** No Cropping applied
   - **1 - Crop Black Only** Only apply the cropping amount within the black areas of the core image
   - **2 - Crop Any** Apply full crop amount
 - **Crop Zoom %** Add Cropping on all sides at once
@@ -440,9 +429,9 @@ Cropping removes parts of the game image at the edges of the screen which were n
 **[ SCANLINE DIRECTION ]:**
 
 - **Scanline Direction** - Direction of the scanlines
-  - **0 - Auto** --- Chooses horizontal or vertical scanline direction based on aspect ratio
-  - **1 - Horizontal**
-  - **2 - Vertical**
+  - 0 - Auto --- Chooses horizontal or vertical scanline direction based on aspect ratio
+  - 1 - Horizontal
+  - 2 - Vertical
 
 
 -----------------------------------------------------------------------------------------------
@@ -542,10 +531,10 @@ Blend parts of the image which flicker on/off repeatedly between frames often us
 **[ MONOCHROME ]:** --- Have the screen act as if it is a monochrome CRT
 
 - **Monochrome Color:** 
-  - **0: OFF**
-  - **1: BLACK & WHITE**
-  - **1: AMBER**
-  - **1: GREEN**
+  - 0: OFF
+  - 1: BLACK & WHITE
+  - 2: AMBER
+  - 3: GREEN
 
 - **Monochrome Gamma** 
 - **Monochrome Hue Offset** 
@@ -628,12 +617,13 @@ How to apply the CRT (Game Image) on top of the tube
 - **Use Tube Static Reflection Image - OFF | ON** --- Apply the effect or not
 - **Opacity** --- This is the shine on the tube which imitates reflection from the environment
 - **Dual Screen Visibility** --- Which screen the static reflection is shown
-  - 0: Both Screens
+  - 0: Both Screens**
   - 1: Only the First Screen
   - 2: Only the Second Screen
 - **Ambient Lighting Multiplier** --- How much of the global ambient lighting image to apply, default is 100
-- **Ambient Lighting Multiplier** --- How much of the global 2nd ambient lighting image to apply, default is 0
+- **Ambient 2nd Image Lighting Multiplier** --- How much of the global 2nd ambient lighting image to apply, default is 0
 - **Scale** --- Scales the tube reflection image from the center of the tube
+- **Shadow Opacity** --- How much of the shadow should appear on the static reflection image
 
 
 -----------------------------------------------------------------------------------------------
@@ -651,14 +641,14 @@ How to apply the CRT (Game Image) on top of the tube
 **[ DUAL SCREEN ]:**
 
 - **Dual Screen Mode**
-  - **0 - OFF** - Single Screen
-  - **1 - VERTICAL** - Split into 2 screens one on the top and one on the bottom
-  - **2 - HORIZONTAL** - Split into 2 screens one on the left and one on the right
+  - 0 - OFF - Single Screen
+  - 1 - VERTICAL - Split into 2 screens one on the top and one on the bottom
+  - 2 - HORIZONTAL - Split into 2 screens one on the left and one on the right
   
 - **Core Image Split Mode**
-  - **0 - AUTO** - Split in the same direction as the dual screen mode
-  - **1 - VERTICAL**
-  - **2 - HORIZONTAL**
+  - 0 - AUTO - Split in the same direction as the dual screen mode
+  - 1 - VERTICAL
+  - 2 - HORIZONTAL
 - **Core Image Split Offset**
   - Adjusts where we split the core image into two
   - This is an offset in pixels from the center
@@ -676,15 +666,11 @@ How to apply the CRT (Game Image) on top of the tube
 - **2nd Screen Aspect Ratio Mode**
   - 0 - Use the same Aspect ratio as the first Screen
   - 1 - PAR (Uses the square pixel aspect of the bottom screen's resolution)
-- **2nd Screen Use Independent Scale**
-  - Don't affect the second screen with the scale of the first
-- **2nd Screen Scale Offset**
-  - Increase or Decrease scale of second screen
-- **2nd Screen Pos X**
-  - Move the second screen Horizontally
-- **2nd Screen Pos Y**
-  - Move the second screen Vertically
-- **2nd Screen Crop Zoom %** 
+- **2nd Screen Use Independent Scale** - Don't affect the second screen with the scale of the first
+- **2nd Screen Scale Offset** - Increase or Decrease scale of second screen
+- **2nd Screen Pos X** - Move the second screen Horizontally
+- **2nd Screen Pos Y** - Move the second screen Vertically
+- **2nd Screen Crop Zoom %** - Crop on all sides at once
 - **2nd Screen Crop Overscan Top**
 - **2nd Screen Crop Overscan Bottom**
 - **2nd Screen Crop Overscan Left**
@@ -700,6 +686,41 @@ How to apply the CRT (Game Image) on top of the tube
   - Shift the reflection left or right
 - **Screen Reflection Pos Y**
   - Shift the reflection up or down
+
+-----------------------------------------------------------------------------------------------
+**[ AMBIENT LIGHTING IMAGE 1 ]:**
+
+- **Hue**
+  - Shift the hue of the color of the image
+- **Saturation**
+  - How saturated the ambient lighting is
+- **Value**
+  - How dark or bright the ambient lighting is
+- **Contrast**
+  - Contrast in the ambient lighting
+- **Scale Aspect**
+  - **MATCH VIEWPORT** - Stretch the width of the image to the full viewport
+  - **USE TEXURE ASPECT** - The base aspect of the image will match the image file aspect
+- **Scale With Zoom**
+  - **OFF** Don't scale the ambient lighting with the viewport Zoom
+  - **ON** Scale with the viewport Zoom
+- **Scale Offset**
+  - Scale the lighting image in both directions
+- **Scale Offset X**
+  - Scale the lighting image in the horizontal direction
+- **Rotate**
+  - Rotate the lighting image
+- **Mirror Horizontal**
+  - Flip the ambient lighting left to right
+- **Position X**
+  - Move the image left and right
+- **Position Y**
+  - Move the image up and down
+
+
+-----------------------------------------------------------------------------------------------
+**[ AMBIENT LIGHTING IMAGE 2 ]:** - Has the same parameters as Ambiend Image 1
+
 
 
 -----------------------------------------------------------------------------------------------
@@ -764,6 +785,9 @@ How to apply the CRT (Game Image) on top of the tube
 - **Highlight**
   - The highlight or shininess in the middle of the bezel
 
+- **Noise**
+  - Noise or speckles in the color, default is 30
+
 - **Opacity of Shadow from Bezel on Tube**
   - How much of a darkness from the bezel onto the illuminated screen
   - Only visible when the black ring around the screen is reduced so that the bezel is almost on top of the screen
@@ -777,8 +801,6 @@ How to apply the CRT (Game Image) on top of the tube
   - How saturated or strong the color is
 - **Value/Brightness**
   - The brightness of the color, default is 10 which is 10%
-- **Noise**
-  - Noise or speckles in the color, default is 30
 
 -----------------------------------------------------------------------------------------------
 **[ FRAME COLOR ]:**
@@ -791,8 +813,6 @@ How to apply the CRT (Game Image) on top of the tube
   - How saturated or strong the color is
 - **Value/Brightness**
   - The brightness of the color, default is 10 which is 10%
-- **Noise**
-  - Noise or speckles in the color, default is 30
 
 -----------------------------------------------------------------------------------------------
 **[ FRAME GENERAL ]:**
@@ -807,6 +827,8 @@ How to apply the CRT (Game Image) on top of the tube
   - **1 - Normal Blending**
   - **2 - Additive Blending** - Added on as added with a projector
   - **3 - Multiply Blending** - Applied by darkening what is underneath
+- **Noise**
+  - Noise or speckles in the color, default is 30
 - **Inner Edge Thickness**
   - Thickness of the inner edge of the frame
 - **Inner Corner Radius Scale**
@@ -930,6 +952,7 @@ How to apply the CRT (Game Image) on top of the tube
 
 
 
+-----------------------------------------------------------------------------------------------
 ## **POTATO Presets Only**
 
 -----------------------------------------------------------------------------------------------
@@ -953,6 +976,7 @@ How to apply the CRT (Game Image) on top of the tube
 
     
 
+-----------------------------------------------------------------------------------------------
 ## **GLASS Presets Only**
 
 -----------------------------------------------------------------------------------------------
@@ -966,9 +990,9 @@ How to apply the CRT (Game Image) on top of the tube
 
   - **Normal**
 
-  - **Additive** - Adds the image as if it is being projected on top
+  - **Additive** adds the image as if it is being projected on top
 
-  - **Multiply** - Image is applied as if it was a colored plastic film
+  - **Multiply** applies as if it was a colored plastic film
 
 
 -----------------------------------------------------------------------------------------------

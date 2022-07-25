@@ -22,6 +22,7 @@ Changes:
   * Changed HSM_TUBE_DIFFUSE_IMAGE_SCALE to 120 by default to have a less rounded look
     * If you want a stronger rounded shaded look reset it to 100
   * Fixed Scale discrepancy when using the Cab Glass Image 
+  * Added Shadow Opacity param to control shadow being applied to the static tube highlight 
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------

@@ -988,8 +988,7 @@ void main()
 													SHOW_ON_DUALSCREEN_MODE_BOTH,
 													HSM_VIEWPORT_VIGNETTE_OPACITY);
 		// LED IMAGE
-		if (HSM_LED_LAYER_ORDER == i)
-			if (HSM_LED_OPACITY > 0)
+		if (HSM_LED_LAYER_ORDER == i && HSM_LED_OPACITY > 0)
 				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
 														led_image, 
 														HSM_LED_BLEND_MODE, 
@@ -999,8 +998,7 @@ void main()
 														HSM_LED_OPACITY);
 
 		// DEVICE IMAGE
-		if (HSM_DEVICE_LAYER_ORDER == i)
-			if (HSM_DEVICE_OPACITY > 0)
+		if (HSM_DEVICE_LAYER_ORDER == i && HSM_DEVICE_OPACITY > 0)
 				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
 														device_image, 
 														HSM_DEVICE_BLEND_MODE, 
@@ -1010,8 +1008,7 @@ void main()
 														HSM_DEVICE_OPACITY);
 
 		// DECAL IMAGE
-		if (HSM_DECAL_LAYER_ORDER == i)
-			if (HSM_DECAL_OPACITY > 0)
+		if (HSM_DECAL_LAYER_ORDER == i && HSM_DECAL_OPACITY > 0)
 				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
 														decal_image, 
 														HSM_DECAL_BLEND_MODE, 
@@ -1021,8 +1018,7 @@ void main()
 														HSM_DECAL_OPACITY);
 
 		// CABINET GLASS
-		if (HSM_CAB_GLASS_LAYER_ORDER == i)
-			if (HSM_CAB_GLASS_OPACITY > 0)
+		if (HSM_CAB_GLASS_LAYER_ORDER == i && HSM_CAB_GLASS_OPACITY > 0)
 				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
 														cab_glass_image, 
 														HSM_CAB_GLASS_BLEND_MODE, 
@@ -1033,8 +1029,7 @@ void main()
 
 
 		// Top Layer
-		if (HSM_TOP_LAYER_ORDER == i)
-			if (HSM_TOP_OPACITY > 0)
+		if (HSM_TOP_LAYER_ORDER == i && HSM_TOP_OPACITY > 0)
 				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
 														top_image, 
 														HSM_TOP_BLEND_MODE, 

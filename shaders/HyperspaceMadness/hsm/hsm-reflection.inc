@@ -281,7 +281,6 @@ void main()
 
 	edge_highlight_mask = hmbz_bezel_highlight_edge * edge_mask * (edge_top_center_highlight_mask + edge_bottom_center_highlight_mask + edge_sides_highlight_mask);
 
-
 	//----------------------------------------------------
 	// Reflection
 	//----------------------------------------------------

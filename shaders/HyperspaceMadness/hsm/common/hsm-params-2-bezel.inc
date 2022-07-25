@@ -53,6 +53,9 @@ float HSM_BZL_BRIGHTNESS = global.HSM_BZL_BRIGHTNESS / 100;
 #pragma parameter HSM_BZL_HIGHLIGHT 					"          Highlight" 1 0 100 0.2
 float HSM_BZL_HIGHLIGHT = global.HSM_BZL_HIGHLIGHT / 100;
 
+#pragma parameter HSM_BZL_NOISE 					"          Noise - Def 30" 30 0 100 1
+float HSM_BZL_NOISE = global.HSM_BZL_NOISE / 100;
+
 #pragma parameter HSM_BZL_INNER_EDGE_SHADOW             "          Opacity of Shadow from Bezel on Tube" 70 0 200 5
 float HSM_BZL_INNER_EDGE_SHADOW = global.HSM_BZL_INNER_EDGE_SHADOW / 100;
 
@@ -70,9 +73,6 @@ float HSM_BZL_COLOR_SATURATION = global.HSM_BZL_COLOR_SATURATION / 100;
 
 #pragma parameter HSM_BZL_COLOR_VALUE				"          Value/Brightness - Def 10" 10 0 100 0.2
 float HSM_BZL_COLOR_VALUE = global.HSM_BZL_COLOR_VALUE / 100;
-
-#pragma parameter HSM_BZL_NOISE 					"          Noise - Def 30" 30 0 100 1
-float HSM_BZL_NOISE = global.HSM_BZL_NOISE / 100;
 
 #pragma parameter HSM_BZL_AMBIENT_LIGHTING_MULTIPLIER         "          Bezel Ambient Lighting Multiplier"  100 0 100 1
 float HSM_BZL_AMBIENT_LIGHTING_MULTIPLIER = global.HSM_BZL_AMBIENT_LIGHTING_MULTIPLIER / 100;
@@ -98,8 +98,6 @@ float HSM_FRM_COLOR_SATURATION = global.HSM_FRM_COLOR_SATURATION / 100;
 #pragma parameter HSM_FRM_COLOR_VALUE				"          Value/Brightness - Def 10" 10 0 100 0.2
 float HSM_FRM_COLOR_VALUE = global.HSM_FRM_COLOR_VALUE / 100;
 
-#pragma parameter HSM_FRM_NOISE 					"          Noise - Def 30" 30 0 100 1
-float HSM_FRM_NOISE = global.HSM_FRM_NOISE / 100;
 
 //---------------------------------------------------------------------------------------------------
 //    FRAME
@@ -119,6 +117,9 @@ float HSM_FRM_TEXTURE_OPACITY = global.HSM_FRM_TEXTURE_OPACITY / 100;
 
 #pragma parameter HSM_FRM_TEXTURE_BLEND_MODE            "         Texture Overlay Blend Mode - Off | Normal | Add | Mult"  2 0 3 1
 float HSM_FRM_TEXTURE_BLEND_MODE = global.HSM_FRM_TEXTURE_BLEND_MODE;
+
+#pragma parameter HSM_FRM_NOISE 					"          Noise - Def 30" 30 0 100 1
+float HSM_FRM_NOISE = global.HSM_FRM_NOISE / 100;
 
 #pragma parameter HSM_FRM_INNER_EDGE_THICKNESS 		    "          Inner Edge Thickness" 100 0 5000 5
 float HSM_FRM_INNER_EDGE_THICKNESS = global.HSM_FRM_INNER_EDGE_THICKNESS * 0.00003;

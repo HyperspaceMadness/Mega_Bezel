@@ -185,7 +185,6 @@ bool HSM_ResolutionIsEqual(vec2 in_res, vec2 match_res)
 
 float HSM_GetScreenAspect(float screen_index, vec2 cropped_size)
 {
-	float epsilon = 0.002;
 	vec2 original_size = HSM_GetRotatedCoreOriginalSize();
 	vec2 rotated_original_size = HSM_GetRotatedCoreOriginalSize();
 	float core_aspect_ratio = rotated_original_size.x / rotated_original_size.y;
@@ -363,7 +362,6 @@ void HSM_GetCroppedRotatedSizeAndPixelSampleAreaStart(float screen_index, sample
 {
 	screen_index = HSM_GetSwappedScreenIndex(screen_index);
 	vec2 rotated_negative_crop_added_size = HSM_GetRotatedNegativeCropAddedSize();
-	float prepped_size_aspect = rotated_negative_crop_added_size.y / rotated_negative_crop_added_size.x;
 
 	float default_crop_left_px = floor(MAX_NEGATIVE_CROP * rotated_negative_crop_added_size.x);
 	float default_crop_top_px = floor(MAX_NEGATIVE_CROP * rotated_negative_crop_added_size.y);
@@ -430,7 +428,6 @@ void HSM_GetCroppedRotatedSizeAndPixelSampleAreaStart(float screen_index, sample
 		}
 
 		vec2 base_cropped_size = rotated_negative_crop_added_size - vec2(final_crop_left_px + final_crop_right_px, final_crop_top_px + final_crop_bottom_px);
-		float crop_percent_zoom = 0;
 
 		if (HSM_GetCoreImageSplitDirection() == 1)
 		{
