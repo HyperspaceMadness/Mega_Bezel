@@ -23,7 +23,8 @@ Changes:
     * If you want a stronger rounded shaded look reset it to 100
   * Fixed Scale discrepancy when using the Cab Glass Image 
   * Added Shadow Opacity param to control shadow being applied to the static tube highlight 
-
+  * Added **Shift Sampling Relative to Scanlines** to shift the image relative to the scanlines
+  
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------

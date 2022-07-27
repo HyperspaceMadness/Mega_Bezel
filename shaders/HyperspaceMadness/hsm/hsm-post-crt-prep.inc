@@ -232,7 +232,9 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 		// TubeDiffuseImage
 		if (HSM_TUBE_DIFFUSE_MODE == 1 || HSM_CRT_BLEND_MODE == 2)
 		{
-			vec2 diffuse_coord = HSM_GetMirrorWrappedCoord(tube_diffuse_curved_coord);
+			vec2 diffuse_coord = tube_diffuse_curved_coord;
+
+			diffuse_coord = HSM_GetMirrorWrappedCoord(diffuse_coord);
 			diffuse_coord.x = HSM_FLIP_VIEWPORT_HORIZONTAL * (diffuse_coord.x - 0.5) + 0.5;
 			diffuse_coord.y = HSM_FLIP_VIEWPORT_VERTICAL * (diffuse_coord.y - 0.5) + 0.5;
 

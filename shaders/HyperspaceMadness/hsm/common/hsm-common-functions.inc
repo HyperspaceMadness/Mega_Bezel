@@ -682,10 +682,13 @@ vec2 HSM_GetCRTShaderCurvedCoord(vec2 in_coord)
 {	
 	vec2 out_coord = HSM_GetCurvedCoord(in_coord, 1, SCREEN_ASPECT);
 	
-	if (HSM_CRT_CURVATURE_SCALE < 100 && !HHLP_IsOutsideCoordSpace(out_coord))
+	if (HHLP_IsOutsideCoordSpace(out_coord))
 	{
-		out_coord = HSM_GetCurvedCoord(in_coord, HSM_CRT_CURVATURE_SCALE, SCREEN_ASPECT);
+		vec2 tube_scale_ratio = TUBE_SCALE / SCREEN_SCALE;
+		out_coord = (out_coord - 0.5) / tube_scale_ratio + 0.5;
 	}
+	else if (HSM_CRT_CURVATURE_SCALE < 100)
+		out_coord = HSM_GetCurvedCoord(in_coord, HSM_CRT_CURVATURE_SCALE, SCREEN_ASPECT);
 
 	return out_coord;
 }
@@ -1085,7 +1088,10 @@ vec4 HSM_GetMipmappedTexSample(sampler2D in_sampler, vec2 in_coord, vec2 in_scal
 vec4 HSM_GetCroppedTexSample(sampler2D in_sampler, vec2 in_screen_coord)
 {
 	vec2 core_prepped_size = HSM_GetRotatedNegativeCropAddedSize();
-
+	if (HSM_GetUseVerticalScanlines(SCREEN_ASPECT) > 0.5)
+		in_screen_coord.x += HSM_CORE_RES_SAMPLING_SHIFT_OPPOSITE_DIR /CROPPED_ROTATED_SIZE_WITH_RES_MULT.x;
+	else
+		in_screen_coord.y += HSM_CORE_RES_SAMPLING_SHIFT_OPPOSITE_DIR /CROPPED_ROTATED_SIZE_WITH_RES_MULT.y;
 	vec4 out_color = HSM_GetTexSampleFromSampleStartAndSize(in_sampler, in_screen_coord, SAMPLE_AREA_START_PIXEL_COORD, CROPPED_ROTATED_SIZE);
 
 	return out_color;

@@ -304,6 +304,10 @@ float HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR = global.HSM_CORE_RES_SAMPLING_MUL
 #pragma parameter HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR 					"          Opposite Dir Downsample Blur" 0 0 200 1
 float HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = global.HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR / 100;
 
+#pragma parameter HSM_CORE_RES_SAMPLING_SHIFT_OPPOSITE_DIR 			"          Shift Sampling Relative to Scanlines" 0 -100 100 5
+float HSM_CORE_RES_SAMPLING_SHIFT_OPPOSITE_DIR = global.HSM_CORE_RES_SAMPLING_SHIFT_OPPOSITE_DIR / 100;
+
+
 
 //---------------------------------------------------------------------------------------------------
 //    INTERLACING
@@ -515,7 +519,7 @@ float HSM_TUBE_DIFFUSE_IMAGE_SCALE = global.HSM_TUBE_DIFFUSE_IMAGE_SCALE / 100;
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_SCALE_X  			        "          Scale X" 100 0 1000 1
 float HSM_TUBE_DIFFUSE_IMAGE_SCALE_X = global.HSM_TUBE_DIFFUSE_IMAGE_SCALE_X / 100;
 
-#pragma parameter HSM_TUBE_EMPTY_THICKNESS 				"          Empty Tube Thickness" 0 0 6000 5
+#pragma parameter HSM_TUBE_EMPTY_THICKNESS 				"          Empty Tube Thickness" 0 0 6000 10
 #define HSM_TUBE_EMPTY_THICKNESS (0.7 * global.HSM_TUBE_EMPTY_THICKNESS / 100)
 
 #pragma parameter HSM_TUBE_EMPTY_THICKNESS_X_SCALE 			"          Empty Tube Thicknes X Scale" 100 0 3000 1
@@ -732,6 +736,9 @@ float HSM_2ND_SCREEN_CROP_PERCENT_RIGHT = global.HSM_2ND_SCREEN_CROP_PERCENT_RIG
 //    Reflection Transform
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_REFLECTIONAPPEARANCE_TITLE					"[ REFLECTION POSITION & SCALE ]:" 0 0 0.01 0.01
+
+// #pragma parameter HSM_SCREEN_REFLECTION_FOLLOW_DIFFUSE_THICKNESS    "          Follow Tube Diffuse Extra Thickness" 0 1 200 1
+// float HSM_SCREEN_REFLECTION_FOLLOW_DIFFUSE_THICKNESS = global.HSM_SCREEN_REFLECTION_FOLLOW_DIFFUSE_THICKNESS / 100;
 
 #pragma parameter HSM_SCREEN_REFLECTION_SCALE     					"          Screen Reflection Scale" 100 1 300 1
 float HSM_SCREEN_REFLECTION_SCALE = global.HSM_SCREEN_REFLECTION_SCALE / 100;
