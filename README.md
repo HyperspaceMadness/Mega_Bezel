@@ -3,7 +3,7 @@ HyperspaceMadness Mega Bezel Shader Readme
 ------------------------------------------------------------------------------------------------------------
 ![Mega Bezel Logo](MegaBezelLogo.png)
 
-Version 1.0.003 2022-07-24 Rev 1
+Version 1.0.003 2022-07-27 Rev 1
 ----------------------------------------
 ----------------------------------------
 
@@ -50,30 +50,34 @@ Installation
 ----------------------------------------
 
 * **You MUST use Retroarch Version 1.9.8 or Later** (It will fail to load on earlier versions)
-* If you have previous versions of the Mega Bezel installed:
-  * Delete the old Mega Bezel stuff from shaders/shaders_slang/bezel
-* Inside the .zip is a bezel folder, copy the bezel folder into your Retroarch/shaders/shaders_slang folder
-  * The final path to the Mega bezel should be `Retroarch/shaders/shaders_slang/bezel/Mega_Bezel`
-* If you are using any community packages (including the examples) place them in:
-  * `Retroarch/shaders/Mega_Bezel_Community_Collections`
-  * E.G. the examples go here `Retroarch/shaders/Mega_Bezel_Community_Collections/HSM-Mega-Bezel-Examples`
-* Set video driver to **Vulcan**
-  * It will run in **GLCore** but seems faster in **Vulcan**
-  * Some users have run it with a very long load time in **D3D11** (Not Recommended)
-  * Restart after changing the video driver
-* Open the **Settings** Menu and Set:
-  * **User Interface / Show Advanced Settings** to **ON**
-  * **Video / Scaling / Aspect Ratio** to **Full**
-    * This will match your monitor aspect aspect ratio
-  * **Video / Scaling / Integer Scale** to **OFF**
-  * **Video / Output / Video Rotation** to **Normal**
-  * **Core / Allow Rotation** to **OFF** -- **Important for FB Neo**
-  * Do this Before loading content 
-* **Load a preset** in the shaders menu, Mega Bezel shader presets are found in:
-  * shaders/shaders_slang/bezel/Mega_Bezel/Presets
-* When you **save a preset** make sure you have the **Simple Presets** feature set to **ON**
-  * This will save a preset with a reference to the preset you loaded plus whatever parameter changes you made
-  * This will keep your presets loading properly when the shader updates in the future
+  * If you have a previous Mega Bezel install:
+    * Delete the old Mega Bezel from shaders/shaders_slang/bezel
+  * Inside the .zip is a bezel folder, copy the bezel folder into your Retroarch/shaders/shaders_slang folder
+    * The final path to the Mega bezel should be `Retroarch/shaders/shaders_slang/bezel/Mega_Bezel`
+    * The final path to the examples should be `Retroarch/shaders/Mega_Bezel_Community_Collections/HSM_Mega_Bezel_Examples`
+* **Retroarch Setup**
+  * Set video driver to **Vulcan**
+    * It will run in **GLCore** but seems faster in **Vulcan**
+    * **D3D IS NOT RECOMMENDED**. If it loads in D3D it has a VERY slow load time
+    * Restart Retroarch after changing the video driver
+  * Open the **Settings** Menu and Set:
+    * **User Interface > Show Advanced Settings** to **ON**
+    * **Video > Scaling > Aspect Ratio** to **Full**
+      * This will match your monitor aspect aspect ratio
+    * **Video > Scaling > Integer Scale** to **OFF**
+    * **Video > Output > Video Rotation** to **Normal**
+    * **Core > Allow Rotation** to **OFF** -- **Important for FB Neo**
+    * For **FB Neo**
+      * Turn **vertical mode OFF** in **Quick Menu > Core Options** if it was previously turned on
+    * **Do all of this before loading content**
+  * For **FB Neo**
+    * **If your game is vertical** set the Rotate CRT Tube parameter to 1. If it is now upside down set Flip Core Image Vertical and Horizontal to 1
+
+  * **Load a preset** in the shaders menu, Mega Bezel shader presets are found in:
+    * `shaders/shaders_slang/bezel/Mega_Bezel/Presets`
+  * When you save a preset make sure you have the **Simple Presets** feature set to **ON**
+    * This will save a preset with a reference to the preset you loaded plus whatever parameter changes you made
+    * This will keep your presets loading properly when the shader updates in the future
 
 
 ----------------------------------------
