@@ -109,7 +109,7 @@ layout(push_constant) uniform Push
 #pragma parameter scan_falloff "          Scanline Falloff -- scan_falloff" 1.0 0.25 2.0 0.05
 #define scan_falloff        global.scan_falloff     // scanline falloff
 
-#pragma parameter scangamma "          Scanline Gamma -- scangamma" 2.40 0.5 5.0 0.05
+#pragma parameter scangamma "          Scanline Gamma -- scangamma" 2.40 0.5 10.0 0.05
 #define scangamma global.scangamma
 
 #pragma parameter rolling_scan "          Rolling Scanlines -- rolling_scan" 0.0 -1.0 1.0 0.01

@@ -45,7 +45,7 @@ layout(push_constant) uniform Push
 #pragma parameter AS             "          Afterglow Strength -- AS" 0.20 0.0 0.60 0.01
 #define AS params.AS
 
-#pragma parameter sat            "          Afterglow Saturation  -- sat" 0.33 0.0 1.0 0.01
+#pragma parameter sat            "          Afterglow Saturation  -- sat" 0.50 0.0 1.0 0.01
 #define sat params.sat
 
 #pragma parameter bogus_color    "[ COLOR TWEAKS ]:" 0.0 0.0 1.0 1.0

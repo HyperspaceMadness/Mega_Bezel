@@ -26,10 +26,15 @@ layout(push_constant) uniform Push
    float PR, PG, PB;
 } params;
 
+#pragma parameter bogus_resolution "[ INTERNAL RESOLUTION (Quick setup) ]:" 0.0 0.0 1.0 1.0
+#pragma parameter internal_res "          Internal Resolution" 1.0 1.0 8.0 0.10
+
 #pragma parameter bogus_afterglow "[ AFTERGLOW SETTINGS ]:" 0.0 0.0 1.0 1.0
-#pragma parameter PR "          Persistence Red" 0.32 0.0 0.50 0.01
-#pragma parameter PG "          Persistence Green"  0.32 0.0 0.50 0.01
-#pragma parameter PB "          Persistence Blue"  0.32 0.0 0.50 0.01
+#pragma parameter PR  "          Persistence Red" 0.32 0.0 0.50 0.01
+#pragma parameter PG  "          Persistence Green"  0.32 0.0 0.50 0.01
+#pragma parameter PB  "          Persistence Blue"  0.32 0.0 0.50 0.01
+#pragma parameter AS  "          Afterglow Strength" 0.20 0.0 0.60 0.01
+#pragma parameter sat "          Afterglow saturation" 0.50 0.0 1.0 0.01
 
 #define PR params.PR
 #define PG params.PG

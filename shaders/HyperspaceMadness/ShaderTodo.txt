@@ -1,14 +1,16 @@
 ![Mega_Bezel_Logo|512x256, 75%](upload://6PNkvcMF9Go9Wnk6OJXfYR1opXI.png) 
 
-Mega Bezel is updated to V 1.0.002 2022-07-14 Rev 1
+Mega Bezel is updated to V 1.0.003 2022-07-27 Rev 1
 
 Changes:
+  * Updated to the latest guest release: crt-guest-advanced-2022-07-27-release1
   * Changed Guest mask size to 1 by default so that there isn't inconsistency using guest settings in the Mega Bezel
   * Adjusted the default SMOOTH-ADV scaling parameters for a sharper smooth look:
     * HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = 300
     * HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR = 125
     * HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR = 0
     * HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = 0
+  * Added **Shift Sampling Relative to Scanlines** to shift the image relative to the scanlines
   * The ScaleFx settings now only appear on the SMOOTH-ADV preset nearer the bottom of the parameter list
   * Fixed Double image when using cropping in NTSC presets reported by @JHorbach1
   * Updated to crt-guest-advanced-2022-07-17-release1
@@ -23,7 +25,6 @@ Changes:
     * If you want a stronger rounded shaded look reset it to 100
   * Fixed Scale discrepancy when using the Cab Glass Image 
   * Added Shadow Opacity param to control shadow being applied to the static tube highlight 
-  * Added **Shift Sampling Relative to Scanlines** to shift the image relative to the scanlines
   
 ----------------------------------------------------
 --- TODO  ---------------------------------------

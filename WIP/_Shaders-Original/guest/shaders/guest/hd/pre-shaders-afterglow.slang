@@ -1,7 +1,7 @@
 #version 450
 
 /*
-   CRT Advanced color altering
+   CRT Advanced Afterglow, color altering
    
    Copyright (C) 2019-2022 guest(r) and Dr. Venom
    
@@ -31,20 +31,22 @@ layout(push_constant) uniform Push
    float LS;
    float LUTLOW, LUTBR;   
    float CP, CS;
-   float BP;   
    float WP;
    float wp_saturation;
+   float AS, sat;
+   float BP;
    float vigstr;
    float vigdef;
    float sega_fix;
    float pre_bb;
-   float internal_res;
    float contr;
 } params;
 
-#pragma parameter bogus_resolution "[ INTERNAL RESOLUTION (Quick setup) ]:" 0.0 0.0 1.0 1.0
+#pragma parameter AS "          Afterglow Strength" 0.20 0.0 0.60 0.01
+#define AS params.AS
 
-#pragma parameter internal_res "          Internal Resolution" 1.0 1.0 8.0 0.10 
+#pragma parameter sat "          Afterglow saturation" 0.50 0.0 1.0 0.01
+#define sat params.sat
 
 #pragma parameter bogus_color "[ COLOR TWEAKS ]:" 0.0 0.0 1.0 1.0
 
@@ -64,27 +66,26 @@ layout(push_constant) uniform Push
 #define LUTLOW 5.0  // "Fix LUT Dark - Range" from 0.0 to 50.0 - RGB singletons
 
 #define LUTBR 1.0   // "Fix LUT Brightness" from 0.0 to 1.0
- 
+
 #pragma parameter WP "          Color Temperature %" 0.0 -100.0 100.0 5.0 
 
-#pragma parameter wp_saturation "          Saturation Adjustment" 1.0 0.0 2.0 0.05 
+#pragma parameter wp_saturation "          Saturation Adjustment" 1.0 0.0 2.0 0.05
 
 #pragma parameter pre_bb "          Brightness Adjustment" 1.0 0.0 2.0 0.01
 
 #pragma parameter contr "          Contrast Adjustment" 0.0 -1.0 1.0 0.05
 
-#define WP params.WP
-#define wp_saturation params.wp_saturation
-
 #pragma parameter sega_fix "          Sega Brightness Fix" 0.0 0.0 1.0 1.0
 
 #pragma parameter BP "          Raise Black Level" 0.0 -100.0 25.0 1.0
-#define BP params.BP
 
 #pragma parameter vigstr "          Vignette Strength" 0.0 0.0 2.0 0.05
 
 #pragma parameter vigdef "          Vignette Size" 1.0 0.5 3.0 0.10
 
+#define WP params.WP
+#define wp_saturation params.wp_saturation
+#define BP params.BP
 
 layout(std140, set = 0, binding = 0) uniform UBO
 {
@@ -105,11 +106,12 @@ void main()
 #pragma stage fragment
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
-layout(set = 0, binding = 2) uniform sampler2D Source;
-layout(set = 0, binding = 3) uniform sampler2D SamplerLUT1;
-layout(set = 0, binding = 4) uniform sampler2D SamplerLUT2;
-layout(set = 0, binding = 5) uniform sampler2D SamplerLUT3;
-layout(set = 0, binding = 6) uniform sampler2D SamplerLUT4;
+layout(set = 0, binding = 2) uniform sampler2D StockPass;
+layout(set = 0, binding = 3) uniform sampler2D AfterglowPass;
+layout(set = 0, binding = 4) uniform sampler2D SamplerLUT1;
+layout(set = 0, binding = 5) uniform sampler2D SamplerLUT2;
+layout(set = 0, binding = 6) uniform sampler2D SamplerLUT3;
+layout(set = 0, binding = 7) uniform sampler2D SamplerLUT4;
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
 
@@ -216,6 +218,7 @@ vec3 fix_lut(vec3 lutcolor, vec3 ref)
 	return mix(lutcolor, ref, LUTBR);
 }
 
+
 float vignette(vec2 pos) {
 	vec2 b = vec2(params.vigdef, params.vigdef) *  vec2(1.0, params.OriginalSize.x/params.OriginalSize.y) * 0.125;
 	pos = clamp(pos, 0.0, 1.0);
@@ -224,6 +227,7 @@ float vignette(vec2 pos) {
 	res = pow(res, 0.70.xx);	
 	return max(mix(1.0, sqrt(res.x*res.y), params.vigstr), 0.0);
 }
+
 
 vec3 plant (vec3 tar, float r)
 {
@@ -240,17 +244,21 @@ float contrast(float x)
 
 void main()
 {
-   vec4 imgColor = COMPAT_TEXTURE(Source, vTexCoord.xy);
+   vec4 imgColor = COMPAT_TEXTURE(StockPass, vTexCoord.xy);
+   vec4 aftglow = COMPAT_TEXTURE(AfterglowPass, vTexCoord.xy);
    
-   float w = float ((imgColor.r + imgColor.g + imgColor.b) < 1.5/255.0);
-   float bp = w * BP/255.0; 
+   float w = 1.0-aftglow.w;
+
+   float l = length(aftglow.rgb);
+   aftglow.rgb = AS*w*normalize(pow(aftglow.rgb + 0.01, vec3(sat)))*l;
+   float bp = w * BP/255.0;
    
    if (params.sega_fix > 0.5) imgColor.rgb = imgColor.rgb * (255.0 / 239.0);
    
    imgColor.rgb = min(imgColor.rgb, 1.0);
-  
-   vec3 color = imgColor.rgb;
    
+   vec3 color = imgColor.rgb;
+ 
    if (int(TNTC) == 0)
    {
       color.rgb = imgColor.rgb;
@@ -354,10 +362,10 @@ void main()
 	
 	color = mix(color, comp, m);
 	color = pow(max(color, 0.0), vec3(1.0/p));
-	
-	if (BP > -0.5) color = color + bp; else
+
+	if (BP > -0.5) color = color + aftglow.rgb + bp; else
 	{ 
-		color = max(color + BP/255.0, 0.0) / (1.0 + BP/255.0*step(- BP/255.0, max(max(color.r,color.g),color.b)));
+		color = max(color + BP/255.0, 0.0) / (1.0 + BP/255.0*step(- BP/255.0, max(max(color.r,color.g),color.b))) + aftglow.rgb;
 	}
 	
 	color = min(color * params.pre_bb, 1.0);

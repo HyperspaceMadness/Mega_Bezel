@@ -13,10 +13,12 @@ layout(std140, set = 0, binding = 0) uniform UBO
    float ntsc_scale;
    float ntsc_phase;
    float auto_res;
+   float ntsc_ring;
 } global;
 
-#pragma parameter ntsc_scale "NTSC Resolution Scaling" 1.0 0.20 2.25 0.01
+#pragma parameter ntsc_scale "NTSC Resolution Scaling" 1.0 0.20 2.5 0.01
 #pragma parameter ntsc_phase "NTSC Phase: Auto | 2 phase | 3 phase" 1.0 1.0 3.0 1.0
+#pragma parameter ntsc_ring  "NTSC Anti-Ringing" 0.0 0.0 1.0 1.0
 
 #pragma stage vertex
 layout(location = 0) in vec4 Position;
@@ -278,7 +280,19 @@ void main()
          vec3(luma_filter_3_phase[TAPS_3_phase], chroma_filter_3_phase[TAPS_3_phase], chroma_filter_3_phase[TAPS_3_phase]);
    }
 
-   signal.x = clamp(signal.x, -1.0, 1.0);   
+   
+   if (global.ntsc_ring > 0.5)
+   {
+      vec2 dx = vec2(global.OriginalSize.z / min(res, 1.0), 0.0);
+	  float a = texture(Source, vTexCoord - 1.5*dx).a;
+	  float b = texture(Source, vTexCoord - 0.5*dx).a;
+	  float c = texture(Source, vTexCoord + 1.5*dx).a;
+	  float d = texture(Source, vTexCoord + 0.5*dx).a;
+      float e = texture(Source, vTexCoord         ).a;	  
+      signal.x = clamp(signal.x, min(min(min(a,b),min(c,d)),e), max(max(max(a,b),max(c,d)),e));
+   }
+   
+   signal.x = clamp(signal.x, -1.0, 1.0);
    vec3 rgb = signal;
    
    FragColor = vec4(rgb, 1.0);

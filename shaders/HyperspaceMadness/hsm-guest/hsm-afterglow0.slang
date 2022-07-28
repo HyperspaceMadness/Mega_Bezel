@@ -73,7 +73,7 @@ void main()
 	vec3 accumulate = COMPAT_TEXTURE(AfterglowPassFeedback, TEX0.xy).rgb;
 
 	float w = 1.0;
-	if ((color.r + color.g + color.b < GDV_AFTERGLOW_THRESHOLD)) { w = 0.0; }
+	if ((color.r + color.g + color.b < 5.0/255.0)) { w = 0.0; }
 
 	vec3 result = mix( max(mix(color, accumulate, 0.49 + vec3(PR, PG, PB))- 3.0/255.0, 0.0), color, w);
 

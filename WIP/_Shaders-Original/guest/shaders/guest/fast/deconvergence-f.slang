@@ -589,7 +589,7 @@ void main()
 	float colmx = max(mx1, cm);
 	float w3 = min((c0 + 0.0005) / (pow(colmx, gamma_in/1.4) + 0.0005), 1.0);
 	
-	vec2 dx = vec2(0.00075, 0.0);
+	vec2 dx = vec2(0.001, 0.0);
 	float mx0 = COMPAT_TEXTURE(Source, pos1 - dx).a;
 	float mx2 = COMPAT_TEXTURE(Source, pos1 + dx).a;
 	float mx = max(max(mx0,mx1),max(mx2,cm));

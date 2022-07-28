@@ -19,7 +19,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter quality           "   NTSC Preset: S-Video | Composite | RF | Custom:-1 -- quality" 1.0 -1.0 2.0 1.0
 #pragma parameter ntsc_fields       "          NTSC Merge Fields" 0.0 0.0 1.0 1.0
 #pragma parameter ntsc_phase        "          NTSC Phase: Auto | 2 phase | 3 phase" 1.0 1.0 3.0 1.0
-#pragma parameter ntsc_scale        "          NTSC Resolution Scaling" 1.0 0.20 2.25 0.01
+#pragma parameter ntsc_scale        "          NTSC Resolution Scaling" 1.0 0.20 2.5 0.01
 #pragma parameter ntsc_sat          "          NTSC Color Saturation" 1.0 0.0 2.0 0.01
 #pragma parameter ntsc_bright       "          NTSC Brightness" 1.0 0.0 1.5 0.01
 #pragma parameter cust_fringing     "          NTSC Custom Fringing Value (When NTSC Preset = -1)" 0.0 0.0 5.0 0.1
