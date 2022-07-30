@@ -519,13 +519,16 @@ float HSM_TUBE_DIFFUSE_IMAGE_SCALE = global.HSM_TUBE_DIFFUSE_IMAGE_SCALE / 100;
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_SCALE_X  			        "          Scale X" 100 0 1000 1
 float HSM_TUBE_DIFFUSE_IMAGE_SCALE_X = global.HSM_TUBE_DIFFUSE_IMAGE_SCALE_X / 100;
 
-#pragma parameter HSM_TUBE_EMPTY_THICKNESS 				"          Empty Tube Thickness" 0 0 6000 10
+#pragma parameter HSM_TUBE_EMPTY_THICKNESS 				            "          Empty Tube Thickness" 0 0 6000 10
 #define HSM_TUBE_EMPTY_THICKNESS (0.7 * global.HSM_TUBE_EMPTY_THICKNESS / 100)
 
-#pragma parameter HSM_TUBE_EMPTY_THICKNESS_X_SCALE 			"          Empty Tube Thicknes X Scale" 100 0 3000 1
+#pragma parameter HSM_TUBE_EMPTY_THICKNESS_X_SCALE 			        "          Empty Tube Thicknes X Scale" 100 0 3000 1
 #define HSM_TUBE_EMPTY_THICKNESS_X_SCALE (global.HSM_TUBE_EMPTY_THICKNESS_X_SCALE / 100)
 
-#pragma parameter HSM_SCREEN_CORNER_RADIUS_SCALE 			"          Screen (Game Image) Corner Radius Scale" 100 5 3000 1
+#pragma parameter HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT 			"          Force Tube Aspect - OFF | 4:3 | 3:2 | 16:9"  0 0 3 1
+#define HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT (global.HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT / 100)
+
+#pragma parameter HSM_SCREEN_CORNER_RADIUS_SCALE 			        "          Screen (Game Image) Corner Radius Scale" 100 5 3000 1
 #define HSM_SCREEN_CORNER_RADIUS_SCALE (global.HSM_SCREEN_CORNER_RADIUS_SCALE / 100)
 
 
@@ -572,10 +575,19 @@ float HSM_TUBE_SHADOW_CURVATURE_SCALE = global.HSM_TUBE_SHADOW_CURVATURE_SCALE /
 //---------------------------------------------------------------------------------------------------
 //    TUBE COLORED GEL
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_TUBE_IMAGES_TITLE								"[ TUBE COLORED GEL IMAGE ]:" 0 0 0.01 0.01
+#pragma parameter HSM_TUBE_COLORED_GEL_TITLE						"[ TUBE COLORED GEL IMAGE GENERAL ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_ON  					"          Use Tube Colored Gel - OFF | ON" 0 0 1 1
 float HSM_TUBE_COLORED_GEL_IMAGE_ON = global.HSM_TUBE_COLORED_GEL_IMAGE_ON;
+
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_SCALE  			    "          Scale" 100 0 1000 1
+float HSM_TUBE_COLORED_GEL_IMAGE_SCALE = global.HSM_TUBE_COLORED_GEL_IMAGE_SCALE / 100;
+
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_FLIP_HORIZONTAL  		"          Flip Horizontal" 0 0 1 1
+float HSM_TUBE_COLORED_GEL_IMAGE_FLIP_HORIZONTAL = -(global.HSM_TUBE_COLORED_GEL_IMAGE_FLIP_HORIZONTAL * 2 - 1);
+
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_FLIP_VERTICAL  		"          Flip Vertical" 0 0 1 1
+float HSM_TUBE_COLORED_GEL_IMAGE_FLIP_VERTICAL = -(global.HSM_TUBE_COLORED_GEL_IMAGE_FLIP_VERTICAL * 2 - 1);
 
 #pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_DUALSCREEN_VIS_MODE    "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
 float HSM_TUBE_COLORED_GEL_IMAGE_DUALSCREEN_VIS_MODE = global.HSM_TUBE_COLORED_GEL_IMAGE_DUALSCREEN_VIS_MODE;
@@ -586,32 +598,32 @@ float HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT = global.HSM_TUBE_COLORED_GEL_I
 #pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT  		"          Additive Blend Amount" 0 0 100 0.05
 float HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT = global.HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT / 100;
 
-#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT  		"          Normal Blend Amount" 15 0 100 1
+
+//---------------------------------------------------------------------------------------------------
+//    TUBE COLORED GEL
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_TUBE_COLORED_GEL_NORMAL_TITLE					"[ TUBE COLORED GEL NORMAL BLEND ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT  		"          Blend Amount" 15 0 100 1
 float HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT = global.HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT / 100;
 
-#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD "          Normal Blend Transparency Threshold" 23 0 100 1
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD "          Transparency Threshold" 23 0 100 1
 float HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD = global.HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD / 100;
 
-#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_BRIGHTNESS  	"          Normal Blend Brightness" 100 0 200 1
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_BRIGHTNESS  	"          Brightness" 100 0 200 1
 float HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_BRIGHTNESS = global.HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_BRIGHTNESS / 100;
 
-#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_MULTIPLY_BY_DIFFUSE  		"          Normal Multiply by Tube Diffuse Shading" 0 0 100 1
-float HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_MULTIPLY_BY_DIFFUSE = global.HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_MULTIPLY_BY_DIFFUSE / 100;
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_VIGNETTE  		"          Vignette Amount" 0 0 100 1
+float HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_VIGNETTE = global.HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_VIGNETTE / 100;
+
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_FAKE_SCANLINE_AMOUNT   "          Fake Scanline Amount" 0 0 100 1
+float HSM_TUBE_COLORED_GEL_IMAGE_FAKE_SCANLINE_AMOUNT = global.HSM_TUBE_COLORED_GEL_IMAGE_FAKE_SCANLINE_AMOUNT / 100;
 
 #pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING       "          Ambient Lighting Multiplier" 100 0 100 1
 float HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING = global.HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING / 100;
 
-#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT2_LIGHTING       "          Ambient 2nd Image Lighting Multiplier" 0 0 100 1
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT2_LIGHTING      "          Ambient 2nd Image Lighting Multiplier" 0 0 100 1
 float HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT2_LIGHTING = global.HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT2_LIGHTING / 100;
-
-#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_SCALE  			    "          Scale" 100 0 1000 1
-float HSM_TUBE_COLORED_GEL_IMAGE_SCALE = global.HSM_TUBE_COLORED_GEL_IMAGE_SCALE / 100;
-
-#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_FLIP_HORIZONTAL  		"          Flip Horizontal" 0 0 1 1
-float HSM_TUBE_COLORED_GEL_IMAGE_FLIP_HORIZONTAL = -(global.HSM_TUBE_COLORED_GEL_IMAGE_FLIP_HORIZONTAL * 2 - 1);
-
-#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_FLIP_VERTICAL  		"          Flip Vertical" 0 0 1 1
-float HSM_TUBE_COLORED_GEL_IMAGE_FLIP_VERTICAL = -(global.HSM_TUBE_COLORED_GEL_IMAGE_FLIP_VERTICAL * 2 - 1);
 
 // #pragma parameter HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL				"          Show CRT on Top of Colored Gel Normal" 0 0 1 1
 // float HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL = global.HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL;
