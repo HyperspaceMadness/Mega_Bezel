@@ -129,7 +129,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	vec2 mirrored_screen_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
 	float screen_mask = HSM_GetCornerMask((screen_curved_coord - 0.5) * 0.999 + 0.5, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS * HSM_SCREEN_CORNER_RADIUS_SCALE, 0.9);
 						
-	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(SCREEN_COORD, 1, SCREEN_SCALE, TUBE_SCALE, SCREEN_ASPECT, 1);
+	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 1, TUBE_DIFFUSE_SCALE, TUBE_SCALE, SCREEN_ASPECT, 1);
 	vec2 mirrored_tube_coord = HSM_GetMirrorWrappedCoord(tube_curved_coord);
 	
 		float vignette_factor = HSM_GetScreenVignetteFactor(mirrored_tube_coord);
@@ -178,9 +178,10 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	float screen_to_tube_mask_invert = 1 - (tube_mask - screen_mask);
 
 	float black_edge_corner_radius = HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
-	vec2 tube_diffuse_curved_coord = HSM_GetTubeCurvedCoord(SCREEN_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, SCREEN_SCALE, BLACK_EDGE_SCALE, SCREEN_ASPECT, 1);
+	vec2 tube_diffuse_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, TUBE_DIFFUSE_SCALE, TUBE_SCALE, SCREEN_ASPECT, 0);
 	float tube_diffuse_mask =  HSM_GetCornerMask(tube_diffuse_curved_coord, SCREEN_ASPECT, black_edge_corner_radius, 0.99);
 
+	// float black_edge_mask_invert = 1 - (tube_mask - tube_diffuse_mask);
 	float black_edge_mask_invert = 1 - (tube_mask - tube_diffuse_mask);
 
 	out_color *= screen_to_tube_mask_invert;
@@ -217,7 +218,6 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	// If the crt blend mode is multiply then use the diffuse image
 	float tube_diffuse_mode = HSM_CRT_BLEND_MODE == 2 ? 1 : HSM_TUBE_DIFFUSE_MODE;
 	vec4 tube_diffuse = vec4(0, 0, 0, 1);
-	vec4 diffuse_unshaded = vec4(0, 0, 0, 1);
 	if (tube_diffuse_mode == 1)
 	{
 		// TubeDiffuseImage
@@ -231,9 +231,8 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 
 			diffuse_coord = (diffuse_coord - 0.5) / (HSM_TUBE_DIFFUSE_IMAGE_SCALE * vec2(HSM_TUBE_DIFFUSE_IMAGE_SCALE_X, 1)) + 0.5;
 
-			diffuse_unshaded = HSM_GetMipmappedTexSample(TubeDiffuseImage, diffuse_coord, TUBE_SCALE * HSM_TUBE_DIFFUSE_IMAGE_SCALE, 0);
-			tube_diffuse = diffuse_unshaded;
-			tube_diffuse *= HSM_GLOBAL_GRAPHICS_BRIGHTNESS * HSM_GetPreMultipliedColorLinear(tube_diffuse, SOURCE_MATTE_PREMULTIPLIED, DEFAULT_SRGB_GAMMA);
+			tube_diffuse = HSM_GetMipmappedTexSample(TubeDiffuseImage, diffuse_coord, TUBE_SCALE * HSM_TUBE_DIFFUSE_IMAGE_SCALE, 0);
+			tube_diffuse.rgb = HSM_GLOBAL_GRAPHICS_BRIGHTNESS * HSM_GetPreMultipliedColorLinear(vec4(tube_diffuse.rgb, 1), SOURCE_MATTE_PREMULTIPLIED, DEFAULT_SRGB_GAMMA).rgb;
 			tube_diffuse.rgb = HSM_ApplyHSVAdjustment(tube_diffuse.rgb, HSM_TUBE_DIFFUSE_IMAGE_HUE, HSM_TUBE_DIFFUSE_IMAGE_SATURATION, HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS, HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON, HSM_TUBE_DIFFUSE_IMAGE_GAMMA);
 
 			tube_diffuse.rgb *= tube_shadow;
@@ -253,6 +252,8 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	// Apply the CRT image additively to the tube diffuse color
 	if (HSM_CRT_BLEND_MODE == 1)
 		out_color = HSM_BlendModeLayerMix(tube_diffuse, out_color, BLEND_MODE_ADD, HSM_CRT_BLEND_AMOUNT);
+
+
 
 	// Apply the CRT image with multiply blending
 	if (HSM_CRT_BLEND_MODE == 2)
@@ -349,8 +350,8 @@ void main()
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
 	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
-	HSM_GetBezelCoords(SCREEN_COORD, 
-						SCREEN_SCALE, 
+	HSM_GetBezelCoords(TUBE_DIFFUSE_COORD, 
+						TUBE_DIFFUSE_SCALE, 
 						TUBE_SCALE, 
 						SCREEN_ASPECT, 
 						false,

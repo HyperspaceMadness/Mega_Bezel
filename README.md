@@ -13,18 +13,45 @@ Find more conversation about the shader here:
 https://forums.libretro.com/t/hsm-mega-bezel-reflection-shader-feedback-and-updates
 
 
+----------------------------------------
+----------------------------------------
+----------------------------------------
+Latest Releases
+----------------------------------------
+
+[Shader Package Approx. 15 MB](https://github.com/HyperspaceMadness/Mega_Bezel/releases)
+
+[Extra Examples Package]( https://github.com/HyperspaceMadness/HSM_Mega_Bezel_Examples/releases)
+
 Github Repo
 ----------------------------------------
 https://github.com/HyperspaceMadness/Mega_Bezel
 
-[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://github.com/HyperspaceMadness/Mega_Bezel)
+----------------------------------------
+----------------------------------------
+----------------------------------------
+Community Collections / Packs
+----------------------------------------
 
+@Duimon: Awesome graphics and presets for the different historical consoles & computers:: 
+* [Releases · Duimon/Duimon-Mega-Bezel (github.com)](https://github.com/Duimon/Duimon-Mega-Bezel/releases/)
+* https://forums.libretro.com/t/duimon-hsm-reflection-shader-graphics-feedback-and-updates
+
+@TheNamec: Really amazing graphics for the Commodore & Amiga systems and PVMs: 
+  * [Releases · TheNamec/megabezel-commodore-pack (github.com)](https://github.com/TheNamec/megabezel-commodore-pack/releases)
+  * https://forums.libretro.com/t/thenamec-mega-bezel-commodore-pack-announcement
+  
+----------------------------------------
+----------------------------------------
 ----------------------------------------
 Licensing
 ----------------------------------------
 
-Licensing of package components which incude licensing are LGPL3
+Licensing of the base Mega_Bezel package and included components are LGPL3
+Licensing of Community Collections/Packs is independent of this
 
+----------------------------------------
+----------------------------------------
 ----------------------------------------
 What does it do?
 ----------------------------------------
@@ -46,40 +73,46 @@ How does it work?
 
 
 ----------------------------------------
+----------------------------------------
+----------------------------------------
 Installation
 ----------------------------------------
 
+***
 * **You MUST use Retroarch Version 1.9.8 or Later** (It will fail to load on earlier versions)
-  * If you have a previous Mega Bezel install:
-    * Delete the old Mega Bezel from shaders/shaders_slang/bezel
-  * Inside the .zip is a bezel folder, copy the bezel folder into your Retroarch/shaders/shaders_slang folder
-    * The final path to the Mega bezel should be `Retroarch/shaders/shaders_slang/bezel/Mega_Bezel`
-    * The final path to the examples should be `Retroarch/shaders/Mega_Bezel_Community_Collections/HSM_Mega_Bezel_Examples`
-* **Retroarch Setup**
-  * Set video driver to **Vulcan**
-    * It will run in **GLCore** but seems faster in **Vulcan**
-    * **D3D IS NOT RECOMMENDED**. If it loads in D3D it has a VERY slow load time
-    * Restart Retroarch after changing the video driver
-  * Open the **Settings** Menu and Set:
-    * **User Interface > Show Advanced Settings** to **ON**
-    * **Video > Scaling > Aspect Ratio** to **Full**
-      * This will match your monitor aspect aspect ratio
-    * **Video > Scaling > Integer Scale** to **OFF**
-    * **Video > Output > Video Rotation** to **Normal**
-    * **Core > Allow Rotation** to **OFF** -- **Important for FB Neo**
-    * For **FB Neo**
-      * Turn **vertical mode OFF** in **Quick Menu > Core Options** if it was previously turned on
-    * **Do all of this before loading content**
+* If you have a previous Mega Bezel install:
+  * Delete the old Mega Bezel from shaders/shaders_slang/bezel
+* Inside the .zip is a **Mega_Bezel** folder. Copy the Mega_Bezel folder into your `Retroarch/shaders/shaders_slang/bezel` folder (If the bezel folder isn't there you can create it)
+  * The final path to the Mega bezel should be `Retroarch/shaders/shaders_slang/bezel/Mega_Bezel`
+* When installing the additional collections:
+  * Create a folder named `Mega_Bezel_Packs` in the root of the shaders folder
+  * Place any of the additional collections inside this folder
+  * For example the final path to the examples pack should be `Retroarch/shaders/Mega_Bezel_Packs/HSM_Mega_Bezel_Examples`
+* Set video driver to **Vulkan** (Or GLCore if Vulkan is not available)
+  * It will run in **GLCore** but seems faster in **Vulkan**
+  * D3D IS NOT RECOMMENDED. If it loads in D3D it has a VERY slow load time
+  * Restart Retroarch after changing the video driver
+* Open the **Settings** Menu and Set:
+  * **User Interface / Show Advanced Settings** to **ON**
+  * **Video / Scaling / Aspect Ratio** to **Full**
+    * This will match your monitor aspect aspect ratio
+  * **Video / Scaling / Integer Scale** to **OFF**
+  * **Video / Output / Video Rotation** to **Normal**
+  * **Core / Allow Rotation** to **OFF** -- **Important for FB Neo**
   * For **FB Neo**
-    * **If your game is vertical** set the Rotate CRT Tube parameter to 1. If it is now upside down set Flip Core Image Vertical and Horizontal to 1
+    * Turn **vertical mode OFF** in **Quick Menu > Core Options** if it was previously turned on
+  * **Do all of this before loading content**
+* For **FB Neo**
+  * **If your game is vertical** set the Rotate CRT Tube parameter to 1. If it is now upside down set Flip Core Image Vertical and Horizontal to 1 
 
-  * **Load a preset** in the shaders menu, Mega Bezel shader presets are found in:
-    * `shaders/shaders_slang/bezel/Mega_Bezel/Presets`
-  * When you save a preset make sure you have the **Simple Presets** feature set to **ON**
-    * This will save a preset with a reference to the preset you loaded plus whatever parameter changes you made
-    * This will keep your presets loading properly when the shader updates in the future
+* **Load a preset** in the shaders menu, Mega Bezel shader presets are found in:
+  * `shaders/shaders_slang/bezel/Mega_Bezel/Presets`
+* When you save a preset make sure you have the **Simple Presets** feature set to **ON**
+  * This will save a preset with a reference to the preset you loaded plus whatever parameter changes you made
+  * This will keep your presets loading properly when the shader updates in the future
+***
 
-
+----------------------------------------
 ----------------------------------------
 Choosing a Preset
 ----------------------------------------
@@ -177,6 +210,8 @@ Presets in Mega_Bezel / Presets
 NTSC Processing is only included in NTSC Presets, and GTU Horizontal blurring isincluded in non-NTSC presets
 
 ----------------------------------------
+----------------------------------------
+----------------------------------------
 **Troubleshooting**
 ----------------------------------------
 ---
@@ -237,20 +272,19 @@ NTSC Processing is only included in NTSC Presets, and GTU Horizontal blurring is
     * Use a higher resolution monitor if available
 
 ----------------------------------------
----
-
+----------------------------------------
+----------------------------------------
 Bug Reporting
 ----------------------------------------
 
-- **Please post images** of the issue if it is at all visual in nature. This often helps communicate the issue better & quicker, **even if the issue seems simple**.
-- Please make sure to **Use the latest version of the shader** when reporting bugs
-- If you are having any issues with the shader not loading or crashing please include a log (See above for turning on logs)
-- Please include info about your setup
-  - Preset
-  - Core and Internal Res 1x, 2x etc?
-  - GPU
+* When reporting a bug, it is VERY IMPORTANT to post images of the issue. This helps communicate the issue better & quicker, even if the issue seems simple.
+*  Please make sure you are using the latest version of the shader
+* Please include info about your setup
+  * Preset, Core, Core Internal Res 1x, 2x etc?, Monitor resolution, GPU
+*  If you are having any issues with the shader not loading or crashing please include a log. See the readme for how to get a log
+  * If loading the shader crashes Retroarch your core internal res is probably too high. Try native resolution or one of the DREZ presets which reduce the resolution in the first pass. 
 
-
+-----------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------
 ----
 Parameter Descriptions

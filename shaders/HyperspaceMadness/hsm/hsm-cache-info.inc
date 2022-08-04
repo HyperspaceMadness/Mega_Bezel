@@ -23,12 +23,12 @@
 */
 
 vec2 HSM_GetScreenScaleWithEdgeHeight(vec2 edge_thickness, vec2 screen_scale)
-// Edge Height is a 0 to 1 percentage of the screen height
+// Edge thickness is a 0 to 1 percentage of the screen height
 {
 	float output_aspect_ratio = global.FinalViewportSize.x / global.FinalViewportSize.y;
 	
 	float aspect_ratio = screen_scale.x / screen_scale.y;
-	//TODO need separate tube width
+	
 	vec2 edge_width_height_as_scale = vec2(0, 0);
 	edge_width_height_as_scale.x = 1 + (edge_thickness.x / screen_scale.y) / aspect_ratio / output_aspect_ratio;
 	edge_width_height_as_scale.y = 1 + edge_thickness.y / screen_scale.y;
@@ -37,7 +37,7 @@ vec2 HSM_GetScreenScaleWithEdgeHeight(vec2 edge_thickness, vec2 screen_scale)
 }
 
 // Same as the HSM_GetScreenScale, but adds the width of the black edge
-// Used for scaling the overlay outside the black edge
+// Used for adding thickness around the screen like the black edge
 vec2 HSM_GetTubeScale(vec2 screen_scale, float image_placement_screen_height, vec2 edge_thickness)
 {
 	// Add switch for independent scale
@@ -935,8 +935,33 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	vec3 screen_pos_and_height = HSM_GetScreenPlacementAndHeight(screen_placement_image, 60);
 	float screen_aspect = HSM_GetScreenAspect(1, cropped_rotated_size);
 	vec2 screen_scale = HSM_GetScreenScale(screen_aspect, screen_pos_and_height.z, cropped_rotated_size);
-	vec2 tube_scale = HSM_GetTubeScale(screen_scale, screen_pos_and_height.z, vec2(HSM_TUBE_EMPTY_THICKNESS * HSM_TUBE_EMPTY_THICKNESS_X_SCALE + HSM_TUBE_BLACK_EDGE_THICKNESS * HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE, HSM_TUBE_EMPTY_THICKNESS + HSM_TUBE_BLACK_EDGE_THICKNESS));	
-	vec2 black_edge_scale = HSM_GetTubeScale(screen_scale, screen_pos_and_height.z, vec2(HSM_TUBE_EMPTY_THICKNESS) * vec2(HSM_TUBE_EMPTY_THICKNESS_X_SCALE, 1));
+
+	vec2 tube_diffuse_scale = HSM_GetTubeScale(screen_scale, screen_pos_and_height.z, vec2(HSM_TUBE_EMPTY_THICKNESS * HSM_TUBE_EMPTY_THICKNESS_X_SCALE, HSM_TUBE_EMPTY_THICKNESS));	
+
+	vec2 tube_scale = 	HSM_GetTubeScale(tube_diffuse_scale, screen_pos_and_height.z, vec2(HSM_TUBE_BLACK_EDGE_THICKNESS * HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE, HSM_TUBE_BLACK_EDGE_THICKNESS));	
+
+// vec2( screen_scale.y * (1 + HSM_TUBE_EMPTY_THICKNESS * HSM_TUBE_EMPTY_THICKNESS_X_SCALE + HSM_TUBE_BLACK_EDGE_THICKNESS * HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE), screen_scale.y * (1 + HSM_TUBE_EMPTY_THICKNESS + HSM_TUBE_BLACK_EDGE_THICKNESS));
+// 	HSM_GetTubeScale(tube_diffuse_scale, screen_pos_and_height.z, vec2(HSM_TUBE_BLACK_EDGE_THICKNESS * HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE, HSM_TUBE_BLACK_EDGE_THICKNESS));	
+	
+// 	if (HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT > 0)
+// 	{
+// 		float tube_aspect = screen_aspect;
+// 		if ( HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT == 2)
+// 			tube_aspect = screen_aspect > 1 ? 4/3 : 3/4;
+// 		if ( HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT == 2)
+// 			tube_aspect = screen_aspect > 1 ? 3/2 : 2/3;
+// 		if ( HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT == 2)
+// 			tube_aspect = screen_aspect > 1 ? 16/9 : 9/16;
+
+// 		float output_aspect = global.FinalViewportSize.x / global.FinalViewportSize.y;
+// 		tube_diffuse_scale = vec2( screen_scale.y * (HSM_TUBE_EMPTY_THICKNESS * HSM_TUBE_EMPTY_THICKNESS_X_SCALE) * tube_aspect / output_aspect, screen_scale.y * (HSM_TUBE_EMPTY_THICKNESS));
+// 		tube_scale = HSM_GetTubeScale(tube_diffuse_scale, screen_pos_and_height.z, vec2(HSM_TUBE_BLACK_EDGE_THICKNESS * HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE, HSM_TUBE_BLACK_EDGE_THICKNESS));	
+// 	}
+
+	// vec2 black_edge_scale = HSM_GetTubeScale(screen_scale, screen_pos_and_height.z, vec2(HSM_TUBE_EMPTY_THICKNESS) * vec2(HSM_TUBE_EMPTY_THICKNESS_X_SCALE, 1));
+	vec2 black_edge_scale = tube_diffuse_scale; //HSM_GetTubeScale(tube_diffuse_scale, screen_pos_and_height.z * (1 + HSM_TUBE_EMPTY_THICKNESS), vec2(1, 1));
+	// vec2 black_edge_scale = HSM_GetTubeScale(screen_scale, screen_pos_and_height.z, vec2(HSM_TUBE_EMPTY_THICKNESS) * vec2(HSM_TUBE_EMPTY_THICKNESS_X_SCALE, 1));
+	// vec2 black_edge_scale = tube_diffuse_scale;
 	
 	vec2 pos_offset = HSM_GetScreenPositionOffset(screen_pos_and_height.xy, screen_scale, 1);
 
@@ -1092,7 +1117,7 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	}
 
 	// Sample 3, 4
-	// rg BLACK_EDGE_SCALE
+	// rg TUBE_DIFFUSE_SCALE
 	// rg BLACK_EDGE_SCALE_2ND_SCREEN
 	sample_2d_range = HSM_GetCacheSampleRange(3, 4);
 	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)

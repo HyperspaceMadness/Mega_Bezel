@@ -759,9 +759,6 @@ vec2 HSM_GetTubeCurvedCoord(vec2 screen_coord, float curvature_scale, vec2 scree
 {
 	vec2 black_edge_scale_offset = tube_scale / screen_scale;
 
-	// Get the tube coord with the black edge added
-	// vec2 tube_coord = HSM_GetInverseScaledCoord(screen_coord, black_edge_scale_offset);
-
 	// Get the curved coordinate
 	vec2 tube_curved_coord = vec2(0.5, 0.5);
 
@@ -893,10 +890,10 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 		SCREEN_POS_OFFSET_FEEDBACK = texture_sample.ba;
 
 		// Sample 3, 4
-		// rg BLACK_EDGE_SCALE 
+		// rg TUBE_DIFFUSE_SCALE 
 		sample_coord = HSM_GetCacheSampleCoord(3, 4);
 		texture_sample = texture(in_cache_pass, sample_coord);
-		BLACK_EDGE_SCALE = texture_sample.rg;
+		TUBE_DIFFUSE_SCALE = texture_sample.rg;
 
 		// Sample 4, 1
 		// rg CROPPED_ROTATED_SIZE_WITH_RES_MULT
@@ -915,7 +912,7 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 	// If we are in the section of the viewport which is the second screen
 	if (SCREEN_INDEX == 2)
 	{
-		// Sample 2, 1 Sample - 2nd Screen
+		// Sample 2, 2 Sample - 2nd Screen
 		// r SCREEN_ASPECT
 		// ba SCREEN_SCALE
 		sample_coord = HSM_GetCacheSampleCoord(2, 2);
@@ -944,10 +941,10 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 		SCREEN_POS_OFFSET_FEEDBACK = texture_sample.ba;
 
 		// Sample 3, 4
-		// rg BLACK_EDGE_SCALE 
+		// ba TUBE_DIFFUSE_SCALE 
 		sample_coord = HSM_GetCacheSampleCoord(3, 4);
 		texture_sample = texture(in_cache_pass, sample_coord);
-		BLACK_EDGE_SCALE = texture_sample.ba;
+		TUBE_DIFFUSE_SCALE = texture_sample.ba;
 
 		// Sample 4, 2
 		// rg CROPPED_ROTATED_SIZE_WITH_RES_MULT
@@ -1032,7 +1029,7 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 
 	USE_VERTICAL_SCANLINES = HSM_GetUseVerticalScanlines(SCREEN_ASPECT);
 	SCREEN_COORD = HSM_GetVTexCoordWithArgs(flipped_viewport_coord, SCREEN_SCALE, SCREEN_POS_OFFSET);
-	BLACK_EDGE_COORD = HSM_GetVTexCoordWithArgs(flipped_viewport_coord, BLACK_EDGE_SCALE, SCREEN_POS_OFFSET);
+	TUBE_DIFFUSE_COORD = HSM_GetVTexCoordWithArgs(flipped_viewport_coord, TUBE_DIFFUSE_SCALE, SCREEN_POS_OFFSET);
 
 	float param_sum_epsilon = 0.0000001;
 	CACHE_INFO_PARAM_SUM_CHANGED = (abs(parameter_sum - parameter_sum_feedback) > param_sum_epsilon);
@@ -1289,10 +1286,10 @@ float HSM_Get_Screen_Black_Edge_Mask(vec2 screen_coord, bool apply_to_mirror)
 	if (apply_to_mirror)
 		screen_coord = HSM_GetMirrorWrappedCoord(screen_coord);
 
-	SCREEN_BLACK_EDGE_CURVED_COORD = HSM_GetCurvedCoord(screen_coord, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, SCREEN_ASPECT);
-	SCREEN_MASK = HSM_GetCornerMask(((SCREEN_BLACK_EDGE_CURVED_COORD - 0.5) * 1.001) + 0.5, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS * HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE, HSM_TUBE_BLACK_EDGE_SHARPNESS);
+	TUBE_DIFFUSE_CURVED_COORD = HSM_GetCurvedCoord(screen_coord, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, SCREEN_ASPECT);
+	TUBE_DIFFUSE_MASK = HSM_GetCornerMask(((TUBE_DIFFUSE_CURVED_COORD - 0.5) * 1.001) + 0.5, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS * HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE, HSM_TUBE_BLACK_EDGE_SHARPNESS);
 
-	return SCREEN_MASK;
+	return TUBE_DIFFUSE_MASK;
 }
 
 vec3 HSM_ApplyAmbientImage(vec3 base_image, vec3 ambient_image, float layer_blend_amount) 

@@ -84,8 +84,8 @@ void main()
 
 
 	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
-	HSM_GetBezelCoords(SCREEN_COORD, 
-						SCREEN_SCALE, 
+	HSM_GetBezelCoords(TUBE_DIFFUSE_COORD, 
+						TUBE_DIFFUSE_COORD, 
 						TUBE_SCALE, 
 						SCREEN_ASPECT,
 						false, 
@@ -118,7 +118,7 @@ void main()
 	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
 	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
 		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
-	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(SCREEN_COORD, 1, SCREEN_SCALE, TUBE_SCALE, SCREEN_ASPECT, 1);
+	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 1, TUBE_DIFFUSE_SCALE, TUBE_SCALE, SCREEN_ASPECT, 1);
 
 	if (HSM_RENDER_SIMPLE_MODE < 0.5)
 		out_color.rgb += crt_layer.rgb;
@@ -131,8 +131,8 @@ void main()
 
 	if (HSM_RENDER_SIMPLE_MODE > 0.5)
 	{
-		SCREEN_BLACK_EDGE_CURVED_COORD = HSM_GetCurvedCoord(SCREEN_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, SCREEN_ASPECT);
-		SCREEN_MASK = HSM_GetCornerMask(((SCREEN_BLACK_EDGE_CURVED_COORD - 0.5) * 1.001) + 0.5, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS * HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE, HSM_TUBE_BLACK_EDGE_SHARPNESS);
+		TUBE_DIFFUSE_CURVED_COORD = HSM_GetCurvedCoord(TUBE_DIFFUSE_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, SCREEN_ASPECT);
+		TUBE_DIFFUSE_MASK = HSM_GetCornerMask(((TUBE_DIFFUSE_CURVED_COORD - 0.5) * 1.001) + 0.5, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS * HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE, HSM_TUBE_BLACK_EDGE_SHARPNESS);
 
 		TUBE_MASK =  HSM_GetCornerMask(tube_curved_coord, SCREEN_ASPECT, bezel_corner_radius, 0.99);
 		// float TUBE_MASK_TRIM = HSM_GetCornerMask((tube_curved_coord - 0.5) * 1.003 + 0.5, SCREEN_ASPECT, bezel_corner_radius, 0.99);
@@ -154,7 +154,7 @@ void main()
 		if ( HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_PINK_MASK )
 		{
 			if ( HSM_RENDER_SIMPLE_MASK_TYPE == RENDER_SIMPLE_MASK_TYPE_SCREEN )
-				FragColor = HSM_PreMultAlphaBlend(FragColor, vec4(1, 0, 1, 1) * (SCREEN_MASK));
+				FragColor = HSM_PreMultAlphaBlend(FragColor, vec4(1, 0, 1, 1) * (TUBE_DIFFUSE_MASK));
 
 			if ( HSM_RENDER_SIMPLE_MASK_TYPE == RENDER_SIMPLE_MASK_TYPE_TUBE )
 				FragColor = HSM_PreMultAlphaBlend(FragColor, vec4(1, 0, 1, 1) * (TUBE_MASK));
@@ -171,7 +171,7 @@ void main()
 		if ( HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_BLACK_WHITE_MASK )
 		{
 			if ( HSM_RENDER_SIMPLE_MASK_TYPE == RENDER_SIMPLE_MASK_TYPE_SCREEN )
-				FragColor = vec4(1 - SCREEN_MASK);
+				FragColor = vec4(1 - TUBE_DIFFUSE_MASK);
 
 			if ( HSM_RENDER_SIMPLE_MASK_TYPE == RENDER_SIMPLE_MASK_TYPE_TUBE )
 				FragColor = vec4(1 - TUBE_MASK);

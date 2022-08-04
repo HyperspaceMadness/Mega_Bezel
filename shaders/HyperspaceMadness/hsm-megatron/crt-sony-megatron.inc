@@ -429,8 +429,8 @@ void main()
 #ifndef IS_POTATO_PRESET
 #ifndef IS_NO_REFLECT_PRESET
 	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
-	HSM_GetBezelCoords(SCREEN_COORD, 
-                     SCREEN_SCALE, 
+	HSM_GetBezelCoords(TUBE_DIFFUSE_COORD, 
+						   TUBE_DIFFUSE_SCALE, 
                      TUBE_SCALE, 
                      SCREEN_ASPECT, 
                      false,

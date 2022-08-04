@@ -112,8 +112,8 @@ void main()
 
 
 	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
-	HSM_GetBezelCoords(SCREEN_COORD, 
-						SCREEN_SCALE, 
+	HSM_GetBezelCoords(TUBE_DIFFUSE_COORD, 
+						TUBE_DIFFUSE_SCALE, 
 						TUBE_SCALE, 
 						SCREEN_ASPECT, 
 						true,
@@ -139,9 +139,7 @@ void main()
 
 	vec4 blurred_reflection_color = HHLP_GetBilinearTextureSample(BR_MirrorBlurredPass, UNFLIPPED_VIEWPORT_COORD.xy, params.BR_MirrorBlurredPassSize);
 
-	SCREEN_BLACK_EDGE_CURVED_COORD = HSM_GetCurvedCoord(SCREEN_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, SCREEN_ASPECT);
-
-	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(SCREEN_COORD, 1, SCREEN_SCALE, TUBE_SCALE, SCREEN_ASPECT, 1);
+	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 1, TUBE_DIFFUSE_SCALE, TUBE_SCALE, SCREEN_ASPECT, 1);
 	vec2 tube_curved_coord_ctr = tube_curved_coord - 0.5;
 	vec2 edge_mask_coord = tube_curved_coord_ctr * (1 - (HSM_BZL_INNER_EDGE_THICKNESS / vec2(SCREEN_ASPECT, 1))) + 0.5;
 

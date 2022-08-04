@@ -58,7 +58,7 @@ vec2 VIEWPORT_COORD = vec2(0.5);
 float GetMask(float mask_mode)
 {
 	float mask = 	(mask_mode == MASK_MODE_ALL) ? 1 :
-					(mask_mode == MASK_MODE_SCREEN) ? SCREEN_MASK :
+					(mask_mode == MASK_MODE_SCREEN) ? TUBE_DIFFUSE_MASK :
 					(mask_mode == MASK_MODE_TUBE) ? TUBE_MASK :
 					(mask_mode == MASK_MODE_INSIDE_BEZEL) ? INSIDE_BEZEL_MASK :
 					(mask_mode == MASK_MODE_BEZEL) ? BEZEL_MASK :
@@ -144,11 +144,11 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 		inherited_scale = vec2(1, 1);
 		default_offset_scale = vec2(1);
 	}
-	else if (inherited_scale_mode == INHERITED_SCALE_MODE_SCREEN)
+	else if (inherited_scale_mode == INHERITED_SCALE_MODE_TUBE_DIFFUSE)
 	{
-		inherited_scale = SCREEN_SCALE;
-		inherited_coord = use_inherited_curved_coord == 1 ? SCREEN_BLACK_EDGE_CURVED_COORD : SCREEN_COORD;
-		inherited_placement_coord = SCREEN_COORD;
+		inherited_scale = TUBE_DIFFUSE_SCALE;
+		inherited_coord = use_inherited_curved_coord == 1 ? TUBE_DIFFUSE_CURVED_COORD : TUBE_DIFFUSE_COORD;
+		inherited_placement_coord = TUBE_DIFFUSE_COORD;
 
 		default_offset_scale = vec2(1) / DEFAULT_UNCORRECTED_SCREEN_SCALE.y;
 		default_offset_scale.x *= explicit_texture_aspect / DEFAULT_SCREEN_ASPECT;
@@ -327,9 +327,11 @@ void main()
 	vec4 ambient2_image = vec4(1);
 	HSM_Fill_Ambient_Images(VIEWPORT_COORD, VIEWPORT_UNSCALED_COORD, HSM_AMBIENT_LIGHTING_SWAP_IMAGES, NightLightingImage, NightLighting2Image, ambient_image, ambient2_image);
 
-	SCREEN_BLACK_EDGE_CURVED_COORD = HSM_GetCurvedCoord(SCREEN_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, SCREEN_ASPECT);
+	TUBE_DIFFUSE_CURVED_COORD = HSM_GetCurvedCoord(SCREEN_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, SCREEN_ASPECT);
 
-	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(SCREEN_COORD, 1, SCREEN_SCALE, TUBE_SCALE, SCREEN_ASPECT, 1);
+	// TODO this should probably just use TUBE_COORD
+	// TODO should probably use TUBE_ASPECT
+	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 1, TUBE_DIFFUSE_SCALE, TUBE_SCALE, SCREEN_ASPECT, 1);
 	vec2 tube_curved_coord_ctr = tube_curved_coord - 0.5;
 	vec2 edge_mask_coord = tube_curved_coord_ctr * (1 - (HSM_BZL_INNER_EDGE_THICKNESS / vec2(SCREEN_ASPECT, 1))) + 0.5;
 
@@ -339,11 +341,10 @@ void main()
 	
 	float edge_mask =  HSM_GetCornerMask(edge_mask_coord, SCREEN_ASPECT, bezel_corner_radius, HSM_BZL_INNER_EDGE_SHARPNESS);
 
-	float outside_tube_mask = 1 - HSM_GetCornerMask(tube_curved_coord, SCREEN_ASPECT, bezel_corner_radius, 0.99);
-	TUBE_MASK = 1 - outside_tube_mask;
+	TUBE_MASK = HSM_GetCornerMask(tube_curved_coord, SCREEN_ASPECT, bezel_corner_radius, 0.99);
 
 	// Shrink the mask by 0.001 to clip off outer edge
-	SCREEN_MASK = HSM_GetCornerMask(((SCREEN_BLACK_EDGE_CURVED_COORD - 0.5) * 1.001) + 0.5, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS * HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE, HSM_TUBE_BLACK_EDGE_SHARPNESS);
+	TUBE_DIFFUSE_MASK = HSM_GetCornerMask(((TUBE_DIFFUSE_CURVED_COORD - 0.5) * 1.001) + 0.5, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS * HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE, HSM_TUBE_BLACK_EDGE_SHARPNESS);
 
 	//----------------------------------------------------
 	//  Calculate Outside mapping Coords
@@ -371,8 +372,8 @@ void main()
 	vec2 outermap_coord_warped_ctr_at_screen_corner = abs(tube_curved_coord_ctr) - vec2(0.5);
 
 	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
-	HSM_GetBezelCoords(SCREEN_COORD, 
-						SCREEN_SCALE, 
+	HSM_GetBezelCoords(TUBE_DIFFUSE_COORD, 
+						TUBE_DIFFUSE_SCALE, 
 						TUBE_SCALE, 
 						SCREEN_ASPECT, 
 						true,
@@ -390,7 +391,7 @@ void main()
 	OUTSIDE_FRAME_MASK_FOR_IMAGE = 1 - HSM_GetCornerMask(frame_outside_coord_ctr * 0.999 + 0.5, SCREEN_ASPECT, HSM_FRM_OUTER_CORNER_RADIUS, 1);
 	// Get masks for shadows, from frame as well as sides and top and bottom of viewport
 	INSIDE_BEZEL_MASK = 1 - OUTSIDE_BEZEL_MASK;
-	BEZEL_MASK = INSIDE_BEZEL_MASK * outside_tube_mask;
+	BEZEL_MASK = INSIDE_BEZEL_MASK * (1 - TUBE_MASK);
 	FRAME_MASK = OUTSIDE_BEZEL_MASK * (1 - OUTSIDE_FRAME_MASK);
 
 #ifdef LAYERS_UNDER_CRT
@@ -400,7 +401,7 @@ void main()
 	const float pi = 3.1415;
 
 	// Get amount to shift the point at the outer corner to match the overall position offset
-	vec2 pos_shift_offset = vec2(0, HSM_BZL_OUTER_POSITION_Y) * SCREEN_SCALE.y / outermap_scale;
+	vec2 pos_shift_offset = vec2(0, HSM_BZL_OUTER_POSITION_Y) * TUBE_DIFFUSE_SCALE.y / outermap_scale;
 	pos_shift_offset *= tube_curved_coord.y > 0.5 ? 1 : -1;
 
 	// Get the direction vector from the inner corner of the bezel pointing at the outer corner 
@@ -430,8 +431,8 @@ void main()
 
 	float fade_out_to_corner = HHLP_QuadraticBezier(clamp(length(outermap_warped_outside_screen_vector) / (corner_crease_length * 2), 0, 1), vec2(0.5, HSM_REFLECT_CORNER_SPREAD_FALLOFF / 100));
 
-	float corner_fade_width_inner = HSM_REFLECT_CORNER_INNER_SPREAD * (SCREEN_SCALE.x + SCREEN_SCALE.y) * bezel_corner_radius / 10 / 250 * 1.2;
-	float corner_fade_width_outer = HSM_REFLECT_CORNER_OUTER_SPREAD * (SCREEN_SCALE.x + SCREEN_SCALE.y) * HSM_GLOBAL_CORNER_RADIUS * HSM_BZL_OUTER_CORNER_RADIUS_SCALE / 10 / 250 * 1.6;
+	float corner_fade_width_inner = HSM_REFLECT_CORNER_INNER_SPREAD * (TUBE_DIFFUSE_SCALE.x + TUBE_DIFFUSE_SCALE.y) * bezel_corner_radius / 10 / 250 * 1.2;
+	float corner_fade_width_outer = HSM_REFLECT_CORNER_OUTER_SPREAD * (TUBE_DIFFUSE_SCALE.x + TUBE_DIFFUSE_SCALE.y) * HSM_GLOBAL_CORNER_RADIUS * HSM_BZL_OUTER_CORNER_RADIUS_SCALE / 10 / 250 * 1.6;
 	float corner_fade_width = (corner_fade_width_inner + fade_out_to_corner * (corner_fade_width_outer - corner_fade_width_inner));
 
 	// Get a vector perpendicular to the crease that we can shift the crease to blend between bottom/top and sides
@@ -587,7 +588,7 @@ void main()
 															HSM_BZL_BLEND_MODE,
 															HSM_AMBIENT_LIGHTING_SWAP_IMAGES);
 
-		float FRAME_AND_BEZEL_MASK = outside_tube_mask * (1 - OUTSIDE_FRAME_MASK);
+		float FRAME_AND_BEZEL_MASK = (1 - TUBE_MASK) * (1 - OUTSIDE_FRAME_MASK);
 
 		if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
 			bezel_layer = clamp(bezel_and_frame_rgba * FRAME_AND_BEZEL_MASK, 0, 1);

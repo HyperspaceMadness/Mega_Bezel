@@ -22,7 +22,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-vec2 HSM_GetOuterBezelScale(vec2 screen_scale, float screen_aspect)
+vec2 HSM_GetOuterBezelScale(vec2 tube_diffuse_scale, float screen_aspect)
 {
 	vec2 bezel_outer_scale_offset = vec2(HSM_BZL_WIDTH / screen_aspect + 1, HSM_BZL_HEIGHT + 1);
 	return bezel_outer_scale_offset;
@@ -44,8 +44,8 @@ vec2 GetDefaultBezelScale()
 	return out_placement_scale;
 }
 
-float HSM_GetBezelCoords(vec2 screen_coord, 
-							vec2 screen_scale, 
+float HSM_GetBezelCoords(vec2 tube_diffuse_coord, 
+							vec2 tube_diffuse_scale, 
 							vec2 tube_scale, 
 							float screen_aspect, 
 							bool curve_coords_on,
@@ -57,9 +57,9 @@ float HSM_GetBezelCoords(vec2 screen_coord,
 	float output_aspect = global.OutputSize.x / global.OutputSize.y;
 
 	vec2 bezel_outer_pos_offset = vec2(0, HSM_BZL_OUTER_POSITION_Y);
-	vec2 bezel_outer_scale_offset = HSM_GetOuterBezelScale(screen_scale, screen_aspect);
+	vec2 bezel_outer_scale_offset = HSM_GetOuterBezelScale(tube_diffuse_scale, screen_aspect);
 
-	bezel_outside_coord = screen_coord + bezel_outer_pos_offset;
+	bezel_outside_coord = tube_diffuse_coord + bezel_outer_pos_offset;
 	bezel_outside_curved_coord = bezel_outside_coord;
 
 	// Only run curved coordinates if requested or we are using tilt
@@ -67,10 +67,10 @@ float HSM_GetBezelCoords(vec2 screen_coord,
 		if ((HSM_CURVATURE_MODE > 0) && ((HSM_CURVATURE_3D_TILT_ANGLE_X != 0) || (HSM_CURVATURE_3D_TILT_ANGLE_Y != 0)))
 			bezel_outside_curved_coord = HSM_GetCurvedCoord(bezel_outside_curved_coord, 0, bezel_outer_scale_offset.x * output_aspect / bezel_outer_scale_offset.y);
 
-	vec2 black_edge_scale_offset = tube_scale / screen_scale;
+	vec2 black_edge_scale_offset = tube_scale / tube_diffuse_scale;
 
-	bezel_outside_scale.xy = screen_scale * black_edge_scale_offset * bezel_outer_scale_offset;
-	// bezel_outside_transform.zw = -vec2(HSM_SCREEN_POSITION_X, HSM_SCREEN_POSITION_Y) + bezel_outer_pos_offset * screen_scale;
+	bezel_outside_scale.xy = tube_diffuse_scale * black_edge_scale_offset * bezel_outer_scale_offset;
+	// bezel_outside_transform.zw = -vec2(HSM_SCREEN_POSITION_X, HSM_SCREEN_POSITION_Y) + bezel_outer_pos_offset * tube_diffuse_scale;
 
 	bezel_outside_coord = HSM_GetInverseScaledCoord(bezel_outside_curved_coord, black_edge_scale_offset * bezel_outer_scale_offset) + vec2(0, HSM_BZL_OUTER_POSITION_Y);
 	bezel_outside_curved_coord = HSM_GetInverseScaledCoord(bezel_outside_curved_coord, black_edge_scale_offset * bezel_outer_scale_offset) + vec2(0, HSM_BZL_OUTER_POSITION_Y);
@@ -78,17 +78,17 @@ float HSM_GetBezelCoords(vec2 screen_coord,
 	frame_outside_coord = (bezel_outside_curved_coord + 
 							vec2(0, HSM_FRM_OUTER_POS_Y) - 0.5) / 
 							vec2((HSM_FRM_THICKNESS * HSM_FRM_THICKNESS_SCALE_X) / 
-							(screen_scale.x / screen_scale.y * output_aspect) + 1, 
+							(tube_diffuse_scale.x / tube_diffuse_scale.y * output_aspect) + 1, 
 							HSM_FRM_THICKNESS + 1) + 0.5;
 
 	if (HSM_BZL_OUTER_CURVATURE_SCALE > 0)
 	{
 		if (curve_coords_on)
-			bezel_outside_curved_coord = HSM_GetTubeCurvedCoord(bezel_outside_curved_coord, HSM_BZL_OUTER_CURVATURE_SCALE, screen_scale, tube_scale, bezel_outer_scale_offset.x * global.OutputSize.x / global.OutputSize.y / bezel_outer_scale_offset.y, 0);
+			bezel_outside_curved_coord = HSM_GetTubeCurvedCoord(bezel_outside_curved_coord, HSM_BZL_OUTER_CURVATURE_SCALE, tube_diffuse_scale, tube_scale, bezel_outer_scale_offset.x * global.OutputSize.x / global.OutputSize.y / bezel_outer_scale_offset.y, 0);
 
 		if (curve_coords_on)
 			if ( HSM_FRM_OUTER_CURVATURE_SCALE > 0)
-				frame_outside_coord = HSM_GetTubeCurvedCoord(frame_outside_coord, HSM_BZL_OUTER_CURVATURE_SCALE * HSM_FRM_OUTER_CURVATURE_SCALE, screen_scale, tube_scale, bezel_outer_scale_offset.x * global.OutputSize.x / global.OutputSize.y / bezel_outer_scale_offset.y, 0);
+				frame_outside_coord = HSM_GetTubeCurvedCoord(frame_outside_coord, HSM_BZL_OUTER_CURVATURE_SCALE * HSM_FRM_OUTER_CURVATURE_SCALE, tube_diffuse_scale, tube_scale, bezel_outer_scale_offset.x * global.OutputSize.x / global.OutputSize.y / bezel_outer_scale_offset.y, 0);
 	}
 	
 	DEFAULT_SCREEN_SCALE = GetDefaultScreenScale();
