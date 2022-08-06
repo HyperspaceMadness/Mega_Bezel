@@ -3,79 +3,35 @@ HyperspaceMadness Mega Bezel Shader Readme
 ------------------------------------------------------------------------------------------------------------
 ![Mega Bezel Logo](MegaBezelLogo.png)
 
-Version V1.0.003_2022-07-28_Rev-1
+**Version V1.0.003_2022-07-28_Rev-1**
 ----------------------------------------
 ----------------------------------------
 
 This file is best viewed in a markdown editor/viewer if possible.
 
 Find more conversation about the shader here:
+
 https://forums.libretro.com/t/hsm-mega-bezel-reflection-shader-feedback-and-updates
 
 
 ----------------------------------------
 ----------------------------------------
 ----------------------------------------
-Latest Releases
+**Latest Releases**
 ----------------------------------------
 
 [Shader Package Approx. 15 MB](https://github.com/HyperspaceMadness/Mega_Bezel/releases)
 
 [Extra Examples Package]( https://github.com/HyperspaceMadness/HSM_Mega_Bezel_Examples/releases)
 
-Github Repo
+**Github Repo**
 ----------------------------------------
 https://github.com/HyperspaceMadness/Mega_Bezel
 
 ----------------------------------------
 ----------------------------------------
 ----------------------------------------
-Community Collections / Packs
-----------------------------------------
-
-@Duimon: Awesome graphics and presets for the different historical consoles & computers:: 
-* [Releases · Duimon/Duimon-Mega-Bezel (github.com)](https://github.com/Duimon/Duimon-Mega-Bezel/releases/)
-* https://forums.libretro.com/t/duimon-hsm-reflection-shader-graphics-feedback-and-updates
-
-@TheNamec: Really amazing graphics for the Commodore & Amiga systems and PVMs: 
-  * [Releases · TheNamec/megabezel-commodore-pack (github.com)](https://github.com/TheNamec/megabezel-commodore-pack/releases)
-  * https://forums.libretro.com/t/thenamec-mega-bezel-commodore-pack-announcement
-  
-----------------------------------------
-----------------------------------------
-----------------------------------------
-Licensing
-----------------------------------------
-
-Licensing of the base Mega_Bezel package and included components are LGPL3
-Licensing of Community Collections/Packs is independent of this
-
-----------------------------------------
-----------------------------------------
-----------------------------------------
-What does it do?
-----------------------------------------
-
-  * Adds an auto-generated bezel around the screen with reflection
-  * Enable easier use of bezels and more "natural" presentation
-  * Ease of use for screen scaling and automatic aspect ratio with existing shaders
-  * Provide a consistent set of enhanced features wrapped around the core crt shaders
-  * Layering images to add artwork and visual effects
-
-----------------------------------------
-How does it work?
-----------------------------------------
-
-  * In general there is a background image which fills the screen, then the scaled down game screen with an automatically generated bezel image is drawn on top. 
-  * The bezel and frame you see around the screen is auto generated and not part of the background image
-  * Additional Images can be layered on top to augment the look
-  * Most things can be changed to your taste with adjustment of the parameters, so try them out!
-
-
-----------------------------------------
-----------------------------------------
-----------------------------------------
-Installation
+**Installation - VERY IMPORTANT, PLEASE READ**
 ----------------------------------------
 
 ***
@@ -110,11 +66,101 @@ Installation
 * When you save a preset make sure you have the **Simple Presets** feature set to **ON**
   * This will save a preset with a reference to the preset you loaded plus whatever parameter changes you made
   * This will keep your presets loading properly when the shader updates in the future
-***
+
+**Editing Presets**
+  * You can then open this Simple Preset file and add other parameter adjustments or set textures as you see fit. E.G. add the following lines to change the background image: 
+    * `BackgroundImage = "MyImage.jpg"`
+    * `BackgroundVertImage = "MyImage.jpg"`
+  * Or change the path indicated on the `#reference` line to point at a different base preset
+
 
 ----------------------------------------
 ----------------------------------------
-Choosing a Preset
+----------------------------------------
+**Community Collections / Packs**
+----------------------------------------
+
+@Duimon: Awesome graphics and presets for the different historical consoles & computers:: 
+* [Releases · Duimon/Duimon-Mega-Bezel (github.com)](https://github.com/Duimon/Duimon-Mega-Bezel/releases/)
+* https://forums.libretro.com/t/duimon-hsm-reflection-shader-graphics-feedback-and-updates
+
+@TheNamec: Really amazing graphics for the Commodore & Amiga systems and PVMs: 
+  * [Releases · TheNamec/megabezel-commodore-pack (github.com)](https://github.com/TheNamec/megabezel-commodore-pack/releases)
+  * https://forums.libretro.com/t/thenamec-mega-bezel-commodore-pack-announcement
+
+
+----------------------------------------
+----------------------------------------
+----------------------------------------
+**Licensing**
+----------------------------------------
+
+Licensing of the base Mega_Bezel package and included components are LGPL3
+Licensing of Community Collections/Packs is independent of this
+
+
+----------------------------------------
+----------------------------------------
+----------------------------------------
+**Acknowledgements**
+----------------------------------------
+***
+**THANKS TO THE SHADER WRITERS!**
+
+The Mega Bezel sits atop the shoulders of giants and uses a number of amazing shaders written by shader writers from the community:
+  * Guest.r (Guest-Advanced crt shader)
+  * EasyMode
+  * CGCW (LCD Grid)
+  * DariusG (GDV Mini)
+  * Dogway (Grade Color Correction)
+  * Hyllian (SGENDPT)
+  * Aliaspider (GTU)
+  * Sp00kyFox (MDAPT & ScaleFX)
+  * Trogglemonkey (Royale 3D Curvature)
+  * Flyguy (Text Shadertoy)
+  * Special thanks to Hunterk for porting a number of these and helping me with his expertise along the way!
+
+
+***
+**THANKS TO THE MEGA BEZEL GRAPHICS ARTISTS PUSHING THE FEATURES DURING DEVELOPMENT**
+
+The Mega Bezel would also not have gotten to this level of sophistication without some intense feedback from graphics experts pushing the features and finding the holes.
+
+  * @Duimon
+  * @TheNamec
+  * @Soqueroeu
+
+***
+**THANKS TO THE GRAPHICS ARTISTS WHO HAVE INSPIRED US**
+
+And of course I probably would never have started this without seeing the great overlays created previously 
+  * @OrionsAngel
+  * @exodus123456
+
+----------------------------------------
+----------------------------------------
+----------------------------------------
+**What does it do?**
+----------------------------------------
+
+  * Adds an auto-generated bezel around the screen with reflection
+  * Enable easier use of bezels and more "natural" presentation
+  * Ease of use for screen scaling and automatic aspect ratio with existing shaders
+  * Provide a consistent set of enhanced features wrapped around the core crt shaders
+  * Layering images to add artwork and visual effects
+
+----------------------------------------
+**How does it work?**
+----------------------------------------
+
+  * In general there is a background image which fills the screen, then the scaled down game screen with an automatically generated bezel image is drawn on top. 
+  * The bezel and frame you see around the screen is auto generated and not part of the background image
+  * Additional Images can be layered on top to augment the look
+  * Most things can be changed to your taste with adjustment of the parameters, so try them out!
+
+----------------------------------------
+----------------------------------------
+**Choosing a Preset**
 ----------------------------------------
 
   * Presets are named/sorted by performance
@@ -126,10 +172,10 @@ Choosing a Preset
     * MBZ__5__POTATO__GDV-MINI - This has no Dynamic Bezel and no Reflections
 ----------------------------------------
 
-Presets in Mega_Bezel / Presets
+**Presets in Mega_Bezel / Presets**
 ----------------------------------------
 
-- All in the root of the Presets folder use @guest.r's awesome Guest-DrVenom-Advanced CRT shader which is considered the default CRT shader for the Mega Bezel, the only exception to this is the POTATO preset which uses GDV-MINI for performance reasons.
+- All in the root of the Presets folder use @guest.r's awesome Guest-Advanced CRT shader which is considered the default CRT shader for the Mega Bezel, the only exception to this is the POTATO preset which uses GDV-MINI for performance reasons.
 
 |                        |Reflection  |Image Layering |Tube Effects  |Pre-CRT Chain  Preset
 |------------------------|------------|---------------|--------------|---------------
@@ -274,7 +320,7 @@ NTSC Processing is only included in NTSC Presets, and GTU Horizontal blurring is
 ----------------------------------------
 ----------------------------------------
 ----------------------------------------
-Bug Reporting
+**Bug Reporting**
 ----------------------------------------
 
 * When reporting a bug, it is VERY IMPORTANT to post images of the issue. This helps communicate the issue better & quicker, even if the issue seems simple.
@@ -287,7 +333,7 @@ Bug Reporting
 -----------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------
 ----
-Parameter Descriptions
+**Parameter Descriptions**
 -----------------------------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------------------------
