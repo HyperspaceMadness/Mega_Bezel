@@ -927,6 +927,7 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	MAX_NEGATIVE_CROP = ((1 - (1 / NEGATIVE_CROP_EXPAND_MULTIPLIER)) / 2);
 
 	vec4 out_color = vec4(0);
+	float output_aspect = global.FinalViewportSize.x / global.FinalViewportSize.y;
 	vec2 rotated_derezed_size = HSM_GetRotatedScreenDerezedSize();
 	vec2 cropped_rotated_size_with_res_mult = vec2(100);
 	vec2 cropped_rotated_size = vec2(100);
@@ -939,34 +940,26 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	vec2 screen_scale = HSM_GetScreenScale(screen_aspect, screen_pos_and_height.z, cropped_rotated_size);
 
 	vec2 tube_diffuse_scale = HSM_GetTubeScale(screen_scale, screen_pos_and_height.z, vec2(HSM_TUBE_EMPTY_THICKNESS * HSM_TUBE_EMPTY_THICKNESS_X_SCALE, HSM_TUBE_EMPTY_THICKNESS));	
+	float tube_diffuse_aspect = tube_diffuse_scale.x / tube_diffuse_scale.y * output_aspect;
 
-	float output_aspect = global.FinalViewportSize.x / global.FinalViewportSize.y;
+	// TODO need to adjust height in screen_pos_and_height with the tube extra thickness
+
+	if (HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT > 0)
+	{
+		if ( HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT == 1)
+			tube_diffuse_aspect = screen_aspect;
+		if ( HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT == 2)
+			tube_diffuse_aspect = screen_aspect > 1 ? 4.0/3.0 : 3.0/4.0;
+		if ( HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT == 3)
+			tube_diffuse_aspect = screen_aspect > 1 ? 3.0/2.0 : 2.0/3.0;
+		if ( HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT == 4)
+			tube_diffuse_aspect = screen_aspect > 1 ? 16.0/9.0 : 9.0/16.0;
+
+		tube_diffuse_scale = vec2( tube_diffuse_scale.y * tube_diffuse_aspect / output_aspect, tube_diffuse_scale.y );
+	}
+
 	vec2 tube_scale = HSM_GetTubeScale(tube_diffuse_scale, screen_pos_and_height.z, vec2(HSM_TUBE_BLACK_EDGE_THICKNESS * HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE, HSM_TUBE_BLACK_EDGE_THICKNESS));	
-	float tube_aspect = tube_diffuse_scale.x / tube_diffuse_scale.y * output_aspect;
 
-// vec2( screen_scale.y * (1 + HSM_TUBE_EMPTY_THICKNESS * HSM_TUBE_EMPTY_THICKNESS_X_SCALE + HSM_TUBE_BLACK_EDGE_THICKNESS * HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE), screen_scale.y * (1 + HSM_TUBE_EMPTY_THICKNESS + HSM_TUBE_BLACK_EDGE_THICKNESS));
-// 	HSM_GetTubeScale(tube_diffuse_scale, screen_pos_and_height.z, vec2(HSM_TUBE_BLACK_EDGE_THICKNESS * HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE, HSM_TUBE_BLACK_EDGE_THICKNESS));	
-
-
-// 	if (HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT > 0)
-// 	{
-// 		if ( HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT == 2)
-// 			tube_aspect = screen_aspect > 1 ? 4/3 : 3/4;
-// 		if ( HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT == 2)
-// 			tube_aspect = screen_aspect > 1 ? 3/2 : 2/3;
-// 		if ( HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT == 2)
-// 			tube_aspect = screen_aspect > 1 ? 16/9 : 9/16;
-
-// 		float output_aspect = global.FinalViewportSize.x / global.FinalViewportSize.y;
-// 		tube_diffuse_scale = vec2( screen_scale.y * (HSM_TUBE_EMPTY_THICKNESS * HSM_TUBE_EMPTY_THICKNESS_X_SCALE) * tube_aspect / output_aspect, screen_scale.y * (HSM_TUBE_EMPTY_THICKNESS));
-// 		tube_scale = HSM_GetTubeScale(tube_diffuse_scale, screen_pos_and_height.z, vec2(HSM_TUBE_BLACK_EDGE_THICKNESS * HSM_TUBE_BLACK_EDGE_THICKNESS_X_SCALE, HSM_TUBE_BLACK_EDGE_THICKNESS));	
-// 	}
-
-	// vec2 black_edge_scale = HSM_GetTubeScale(screen_scale, screen_pos_and_height.z, vec2(HSM_TUBE_EMPTY_THICKNESS) * vec2(HSM_TUBE_EMPTY_THICKNESS_X_SCALE, 1));
-	// vec2 black_edge_scale = tube_diffuse_scale; //HSM_GetTubeScale(tube_diffuse_scale, screen_pos_and_height.z * (1 + HSM_TUBE_EMPTY_THICKNESS), vec2(1, 1));
-	// vec2 black_edge_scale = HSM_GetTubeScale(screen_scale, screen_pos_and_height.z, vec2(HSM_TUBE_EMPTY_THICKNESS) * vec2(HSM_TUBE_EMPTY_THICKNESS_X_SCALE, 1));
-	// vec2 black_edge_scale = tube_diffuse_scale;
-	
 	vec2 pos_offset = HSM_GetScreenPositionOffset(screen_pos_and_height.xy, screen_scale, 1);
 
 	vec2 rotated_core_preppezd_size = HSM_GetRotatedScreenCorePreppedSize(1);

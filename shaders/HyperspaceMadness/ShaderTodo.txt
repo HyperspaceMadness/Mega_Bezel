@@ -6,12 +6,12 @@ Changes:
   * Fixed Potato Black Edge Corner
   * Added Fake Scanlines option to colored Gel
   * Changed Gel to use Vignette for shading
+  * Added control for tube aspect, should work much better now
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
   * test Vert image and fall back to BG Image
-  * Investigate if Mipmapping should be on in the first pass for DREZ
   * Megatron HDR Combination at end of chain
   * Fix Tube Diffuse Shadow in 3D Curvature
   * Add .params #reference to with all parameters commented out
