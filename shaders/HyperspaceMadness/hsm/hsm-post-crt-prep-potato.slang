@@ -101,33 +101,39 @@ vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_CO
 		// Background
 		//-----------------------------------------------------------------------------------------
 		vec2 bg_coord = VIEWPORT_COORD_TRANSFORMED;
-		// Correct image coordinate for image aspect ratio
-		vec2 bg_size = textureSize(BackgroundImage, 0);
-		bg_coord.x = (bg_coord.x - 0.5) / ((bg_size.x / bg_size.y) / (global.FinalViewportSize.x/global.FinalViewportSize.y)) + 0.5;
+		bool bg_use_vert_image = SCREEN_ASPECT < 1 && textureSize(BackgroundVertImage, 0).y > 16 ? true : false; 
+		vec2 bg_size = bg_use_vert_image ? textureSize(BackgroundVertImage, 0) : textureSize(BackgroundImage, 0);
 
 		vec4 bg_layer = vec4(0);
-		if (SCREEN_ASPECT > 1) 
-			bg_layer = texture(BackgroundImage, bg_coord);
-		else
-			bg_layer = texture(BackgroundVertImage, bg_coord);
-		bg_layer = HSM_Linearize(bg_layer, DEFAULT_SRGB_GAMMA);
 
-		bg_layer.rgb *= HSM_GLOBAL_GRAPHICS_BRIGHTNESS;
-		bg_layer.rgb = pow(bg_layer.rgb, vec3(1/HSM_STATIC_LAYERS_GAMMA));
-
-		if (HSM_CRT_SCREEN_BLEND_MODE == 1)
-			bg_layer *= (1 - TUBE_MASK);
-
-		bg_layer *= HSM_BG_BRIGHTNESS;
-
-		if (HSM_CRT_SCREEN_BLEND_MODE > 0)
+		if (bg_size.y > 16)
 		{
-			if (HSM_POTATO_SHOW_BG_OVER_SCREEN == 1)
-				out_color = HSM_BlendModeLayerMix(out_color, bg_layer, HSM_BG_BLEND_MODE, HSM_BG_OPACITY);
+			// Correct image coordinate for image aspect ratio
+			bg_coord.x = (bg_coord.x - 0.5) / ((bg_size.x / bg_size.y) / (global.FinalViewportSize.x/global.FinalViewportSize.y)) + 0.5;
+
+			if (bg_use_vert_image)
+				bg_layer = texture(BackgroundVertImage, bg_coord);
 			else
+				bg_layer = texture(BackgroundImage, bg_coord);
+			bg_layer = HSM_Linearize(bg_layer, DEFAULT_SRGB_GAMMA);
+
+			bg_layer.rgb *= HSM_GLOBAL_GRAPHICS_BRIGHTNESS;
+			bg_layer.rgb = pow(bg_layer.rgb, vec3(1/HSM_STATIC_LAYERS_GAMMA));
+
+			if (HSM_CRT_SCREEN_BLEND_MODE == 1)
+				bg_layer *= (1 - TUBE_MASK);
+
+			bg_layer *= HSM_BG_BRIGHTNESS;
+
+			if (HSM_CRT_SCREEN_BLEND_MODE > 0)
 			{
-				bg_layer.rgb *= HSM_BG_OPACITY;
-				out_color = HSM_BlendModeLayerMix(bg_layer, out_color, HSM_CRT_SCREEN_BLEND_MODE, 1);
+				if (HSM_POTATO_SHOW_BG_OVER_SCREEN == 1)
+					out_color = HSM_BlendModeLayerMix(out_color, bg_layer, HSM_BG_BLEND_MODE, HSM_BG_OPACITY);
+				else
+				{
+					bg_layer.rgb *= HSM_BG_OPACITY;
+					out_color = HSM_BlendModeLayerMix(bg_layer, out_color, HSM_CRT_SCREEN_BLEND_MODE, 1);
+				}
 			}
 		}
 	}

@@ -620,7 +620,8 @@ void main()
 	//-----------------------------------------------------------------------------------------
 	// Background
 	//-----------------------------------------------------------------------------------------
-	vec2 bg_size = SCREEN_ASPECT < 1 ? textureSize(BackgroundVertImage, 0) : textureSize(BackgroundImage, 0);
+	bool bg_use_vert_image = SCREEN_ASPECT < 1 && textureSize(BackgroundVertImage, 0).y > 16 ? true : false; 
+	vec2 bg_size = bg_use_vert_image ? textureSize(BackgroundVertImage, 0) : textureSize(BackgroundImage, 0);
 	BACKGROUND_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
 												VIEWPORT_UNSCALED_COORD,
 												TEXTURE_ASPECT_MODE_EXPLICIT,
@@ -640,12 +641,12 @@ void main()
 		BACKGROUND_CURVED_COORD = HSM_GetMirrorWrapCoord(BACKGROUND_CURVED_COORD);
 
 	vec4 bg_image = vec4(0);
-	if (HSM_BG_OPACITY > 0)
+	if (HSM_BG_OPACITY > 0 && bg_size.y > 16)
 	{
-		if (SCREEN_ASPECT > 1) 
-			bg_image = HSM_GetMipmappedTexSample(BackgroundImage, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
-		else
+		if (bg_use_vert_image)
 			bg_image = HSM_GetMipmappedTexSample(BackgroundVertImage, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
+		else
+			bg_image = HSM_GetMipmappedTexSample(BackgroundImage, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
 
 		// Premultiply Alpha
 		bg_image = HSM_GetPreMultipliedColorLinear(bg_image, HSM_BG_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
@@ -669,7 +670,8 @@ void main()
 	//----------------------------------------------------
 	// Device Image
 	//----------------------------------------------------
-	vec2 device_size = SCREEN_ASPECT < 1 ? textureSize(DeviceVertImage, 0) : textureSize(DeviceImage, 0);
+	bool device_use_vert_image = SCREEN_ASPECT < 1 && textureSize(BackgroundVertImage, 0).y > 16 ? true : false; 
+	vec2 device_size = device_use_vert_image ? textureSize(DeviceVertImage, 0) : textureSize(DeviceImage, 0);
 	DEVICE_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
 											VIEWPORT_UNSCALED_COORD,
 											TEXTURE_ASPECT_MODE_EXPLICIT,
@@ -686,9 +688,9 @@ void main()
 											DEVICE_SCALE);
 
 	vec4 device_image = vec4(0);
-	if (HSM_DEVICE_OPACITY > 0)
+	if (HSM_DEVICE_OPACITY > 0 && device_size.y > 16)
 	{
-		device_image = SCREEN_ASPECT < 1 ? 	HSM_GetMipmappedTexSample(DeviceVertImage, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS) :
+		device_image = device_use_vert_image ? 	HSM_GetMipmappedTexSample(DeviceVertImage, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS) :
 											HSM_GetMipmappedTexSample(DeviceImage, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS);
 
 		// Premultiply Alpha
@@ -732,26 +734,29 @@ void main()
 											LED_COORD,
 											LED_SCALE);
 
-		led_image = HSM_GetMipmappedTexSample(LEDImage, LED_CURVED_COORD, LED_SCALE, HSM_LED_MIPMAPPING_BLEND_BIAS);
+		if (HSM_LED_OPACITY > 0 && led_size.y > 16)
+		{
+			led_image = HSM_GetMipmappedTexSample(LEDImage, LED_CURVED_COORD, LED_SCALE, HSM_LED_MIPMAPPING_BLEND_BIAS);
 
-		// Premultiply Alpha
-		led_image = HSM_GetPreMultipliedColorLinear(led_image, HSM_LED_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
+			// Premultiply Alpha
+			led_image = HSM_GetPreMultipliedColorLinear(led_image, HSM_LED_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
 
-		// HSV Adjustments
-		led_image.rgb = HSM_ApplyHSVAdjustment(led_image.rgb, HSM_LED_HUE, HSM_LED_SATURATION, HSM_LED_BRIGHTNESS, HSM_LED_COLORIZE_ON, HSM_LED_GAMMA);
+			// HSV Adjustments
+			led_image.rgb = HSM_ApplyHSVAdjustment(led_image.rgb, HSM_LED_HUE, HSM_LED_SATURATION, HSM_LED_BRIGHTNESS, HSM_LED_COLORIZE_ON, HSM_LED_GAMMA);
 
-		// STATIC GAMMA
-		if (HSM_STATIC_LAYERS_GAMMA != 1)
-			led_image = HSM_ApplyGamma(led_image, HSM_STATIC_LAYERS_GAMMA);
+			// STATIC GAMMA
+			if (HSM_STATIC_LAYERS_GAMMA != 1)
+				led_image = HSM_ApplyGamma(led_image, HSM_STATIC_LAYERS_GAMMA);
 
-		led_image.rgb = ApplyAmbientImages(led_image.rgb, 
-												ambient_image.rgb,
-												ambient2_image.rgb,
-												HSM_LED_AMBIENT_LIGHTING_MULTIPLIER,
-												HSM_LED_AMBIENT2_LIGHTING_MULTIPLIER,
-												HSM_LED_APPLY_AMBIENT_IN_ADD_MODE,
-												HSM_LED_BLEND_MODE,
-												HSM_AMBIENT_LIGHTING_SWAP_IMAGES);
+			led_image.rgb = ApplyAmbientImages(led_image.rgb, 
+													ambient_image.rgb,
+													ambient2_image.rgb,
+													HSM_LED_AMBIENT_LIGHTING_MULTIPLIER,
+													HSM_LED_AMBIENT2_LIGHTING_MULTIPLIER,
+													HSM_LED_APPLY_AMBIENT_IN_ADD_MODE,
+													HSM_LED_BLEND_MODE,
+													HSM_AMBIENT_LIGHTING_SWAP_IMAGES);
+		}
 	}
 
 	//----------------------------------------------------
@@ -773,7 +778,7 @@ void main()
 											DECAL_COORD,
 											DECAL_SCALE);
 	vec4 decal_image = vec4(0);
-	if (HSM_DECAL_OPACITY > 0)
+	if (HSM_DECAL_OPACITY > 0 && decal_size.y > 16)
 	{
 		decal_image = HSM_GetMipmappedTexSample(DecalImage, DECAL_CURVED_COORD, DECAL_SCALE, HSM_DECAL_MIPMAPPING_BLEND_BIAS);
 		
@@ -820,7 +825,7 @@ void main()
 		TOP_IMAGE_CURVED_COORD = HSM_GetMirrorWrapCoord(TOP_IMAGE_CURVED_COORD);
 
 	vec4 top_image = vec4(0);
-	if (HSM_TOP_OPACITY > 0)
+	if (HSM_TOP_OPACITY > 0 && top_size.y > 16)
 	{
 		// Get the top image color and masking values if needed
 		top_image = HSM_GetMipmappedTexSample(TopLayerImage, TOP_IMAGE_CURVED_COORD, TOP_IMAGE_SCALE, HSM_TOP_MIPMAPPING_BLEND_BIAS);
@@ -868,27 +873,30 @@ void main()
 											CAB_GLASS_COORD,
 											CAB_GLASS_SCALE);
 
-		// Sample Texture
-		cab_glass_image = HSM_GetMipmappedTexSample(CabinetGlassImage, CAB_GLASS_CURVED_COORD, CAB_GLASS_SCALE, HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS);
+		if (HSM_CAB_GLASS_OPACITY > 0 && cab_glass_size.y > 16)
+		{
+			// Sample Texture
+			cab_glass_image = HSM_GetMipmappedTexSample(CabinetGlassImage, CAB_GLASS_CURVED_COORD, CAB_GLASS_SCALE, HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS);
 
-		// Premultiply Alpha
-		cab_glass_image = HSM_GetPreMultipliedColorLinear(cab_glass_image, HSM_CAB_GLASS_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
+			// Premultiply Alpha
+			cab_glass_image = HSM_GetPreMultipliedColorLinear(cab_glass_image, HSM_CAB_GLASS_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
 
-		// HSV Adjustments
-		cab_glass_image.rgb = HSM_ApplyHSVAdjustment(cab_glass_image.rgb, HSM_CAB_GLASS_HUE, HSM_CAB_GLASS_SATURATION, HSM_CAB_GLASS_BRIGHTNESS, HSM_CAB_GLASS_COLORIZE_ON, HSM_CAB_GLASS_GAMMA);
+			// HSV Adjustments
+			cab_glass_image.rgb = HSM_ApplyHSVAdjustment(cab_glass_image.rgb, HSM_CAB_GLASS_HUE, HSM_CAB_GLASS_SATURATION, HSM_CAB_GLASS_BRIGHTNESS, HSM_CAB_GLASS_COLORIZE_ON, HSM_CAB_GLASS_GAMMA);
 
-		// STATIC GAMMA
-		if (HSM_STATIC_LAYERS_GAMMA != 1)
-			cab_glass_image = HSM_ApplyGamma(cab_glass_image, HSM_STATIC_LAYERS_GAMMA);
+			// STATIC GAMMA
+			if (HSM_STATIC_LAYERS_GAMMA != 1)
+				cab_glass_image = HSM_ApplyGamma(cab_glass_image, HSM_STATIC_LAYERS_GAMMA);
 
-		cab_glass_image.rgb = ApplyAmbientImages(cab_glass_image.rgb, 
-													ambient_image.rgb,
-													ambient2_image.rgb,
-													HSM_CAB_GLASS_AMBIENT_LIGHTING_MULTIPLIER,
-													HSM_CAB_GLASS_AMBIENT2_LIGHTING_MULTIPLIER,
-													HSM_CAB_GLASS_APPLY_AMBIENT_IN_ADD_MODE,
-													HSM_CAB_GLASS_BLEND_MODE,
-													HSM_AMBIENT_LIGHTING_SWAP_IMAGES);
+			cab_glass_image.rgb = ApplyAmbientImages(cab_glass_image.rgb, 
+														ambient_image.rgb,
+														ambient2_image.rgb,
+														HSM_CAB_GLASS_AMBIENT_LIGHTING_MULTIPLIER,
+														HSM_CAB_GLASS_AMBIENT2_LIGHTING_MULTIPLIER,
+														HSM_CAB_GLASS_APPLY_AMBIENT_IN_ADD_MODE,
+														HSM_CAB_GLASS_BLEND_MODE,
+														HSM_AMBIENT_LIGHTING_SWAP_IMAGES);
+		}
 	}
 
 

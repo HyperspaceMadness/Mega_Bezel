@@ -7,11 +7,12 @@ Changes:
   * Added Fake Scanlines option to colored Gel
   * Changed Gel to use Vignette for shading
   * Added control for tube aspect, should work much better now
+  * If Vert BG or Device image is the placeholder (16px tall or less) then fall back to horizontal BG or Device Image
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
-  * test Vert image and fall back to BG Image
+  * Make checks for POTATO and Vert vs Horz image
   * Megatron HDR Combination at end of chain
   * Fix Tube Diffuse Shadow in 3D Curvature
   * Add .params #reference to with all parameters commented out

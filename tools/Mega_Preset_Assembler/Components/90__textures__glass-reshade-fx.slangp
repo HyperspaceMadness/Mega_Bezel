@@ -45,7 +45,7 @@ ReflectionMaskImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/Hyperspac
 ReflectionMaskImage_linear = true
 ReflectionMaskImage_mipmap = 1
 
-FrameTextureImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/FrameTexture_2800x2120.png
+FrameTextureImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 FrameTextureImage_linear = true
 FrameTextureImage_mipmap = 1
 
@@ -53,7 +53,7 @@ BackgroundImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMad
 BackgroundImage_linear = true
 BackgroundImage_mipmap = 1
 
-BackgroundVertImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/TopLayerImageGradient_3840x2160.png
+BackgroundVertImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 BackgroundVertImage_linear = true
 BackgroundVertImage_mipmap = 1
 

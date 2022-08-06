@@ -249,7 +249,7 @@ BackgroundImage = ../../shaders/HyperspaceMadness/textures/BackgroundImage_Carbo
 BackgroundImage_linear = true
 BackgroundImage_mipmap = 1
 
-BackgroundVertImage = ../../shaders/HyperspaceMadness/textures/BackgroundImage_Carbon_3840x2160.png
+BackgroundVertImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
 BackgroundVertImage_linear = true
 BackgroundVertImage_mipmap = 1
 
