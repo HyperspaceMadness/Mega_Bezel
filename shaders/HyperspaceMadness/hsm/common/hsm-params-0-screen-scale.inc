@@ -519,14 +519,17 @@ float HSM_TUBE_DIFFUSE_IMAGE_SCALE = global.HSM_TUBE_DIFFUSE_IMAGE_SCALE / 100;
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_SCALE_X  			        "          Image Scale X" 100 0 1000 1
 float HSM_TUBE_DIFFUSE_IMAGE_SCALE_X = global.HSM_TUBE_DIFFUSE_IMAGE_SCALE_X / 100;
 
+#pragma parameter HSM_TUBE_DIFFUSE_FORCE_ASPECT 			        "          Tube Diffuse Aspect - EVEN | SCREEN | Explicit"  1 0 2 1
+#define HSM_TUBE_DIFFUSE_FORCE_ASPECT global.HSM_TUBE_DIFFUSE_FORCE_ASPECT
+
+#pragma parameter HSM_TUBE_EXPLICIT_ASPECT 			                "          Explicit Tube DiIffuse Aspect"  1.3333 0.5 3 0.01
+#define HSM_TUBE_EXPLICIT_ASPECT global.HSM_TUBE_EXPLICIT_ASPECT
+
 #pragma parameter HSM_TUBE_EMPTY_THICKNESS 				            "          Empty Tube Thickness" 0 0 6000 10
 #define HSM_TUBE_EMPTY_THICKNESS (0.7 * global.HSM_TUBE_EMPTY_THICKNESS / 100)
 
 #pragma parameter HSM_TUBE_EMPTY_THICKNESS_X_SCALE 			        "          Empty Tube Thicknes X Scale" 100 0 3000 1
 #define HSM_TUBE_EMPTY_THICKNESS_X_SCALE (global.HSM_TUBE_EMPTY_THICKNESS_X_SCALE / 100)
-
-#pragma parameter HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT 			"          Tube Aspect - EVEN | SCREEN | 4:3 | 3:2 | 16:9"  1 0 4 1
-#define HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT global.HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT
 
 #pragma parameter HSM_SCREEN_CORNER_RADIUS_SCALE 			        "          Screen (Game Image) Corner Radius Scale" 100 5 3000 1
 #define HSM_SCREEN_CORNER_RADIUS_SCALE (global.HSM_SCREEN_CORNER_RADIUS_SCALE / 100)

@@ -599,7 +599,8 @@ float HSM_GetParameterSum()
 					// + HSM_TUBE_DIFFUSE_IMAGE_GAMMA
 					+ HSM_TUBE_EMPTY_THICKNESS
 					+ HSM_TUBE_EMPTY_THICKNESS_X_SCALE
-					+ HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT
+					+ HSM_TUBE_DIFFUSE_FORCE_ASPECT
+					+ HSM_TUBE_EXPLICIT_ASPECT
 
 					// SCREEN BLACK EDGE
 					+ HSM_GLOBAL_CORNER_RADIUS
@@ -944,16 +945,12 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 
 	// TODO need to adjust height in screen_pos_and_height with the tube extra thickness
 
-	if (HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT > 0)
+	if (HSM_TUBE_DIFFUSE_FORCE_ASPECT > 0)
 	{
-		if ( HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT == 1)
+		if ( HSM_TUBE_DIFFUSE_FORCE_ASPECT == 1)
 			tube_diffuse_aspect = screen_aspect;
-		if ( HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT == 2)
-			tube_diffuse_aspect = screen_aspect > 1 ? 4.0/3.0 : 3.0/4.0;
-		if ( HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT == 3)
-			tube_diffuse_aspect = screen_aspect > 1 ? 3.0/2.0 : 2.0/3.0;
-		if ( HSM_TUBE_EMPTY_THICKNESS_FORCE_ASPECT == 4)
-			tube_diffuse_aspect = screen_aspect > 1 ? 16.0/9.0 : 9.0/16.0;
+		if ( HSM_TUBE_DIFFUSE_FORCE_ASPECT == 2)
+			tube_diffuse_aspect = screen_aspect > 1 ? HSM_TUBE_EXPLICIT_ASPECT : 1.0 / HSM_TUBE_EXPLICIT_ASPECT;
 
 		tube_diffuse_scale = vec2( tube_diffuse_scale.y * tube_diffuse_aspect / output_aspect, tube_diffuse_scale.y );
 	}

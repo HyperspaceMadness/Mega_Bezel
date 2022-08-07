@@ -7,12 +7,19 @@ Changes:
   * Added Fake Scanlines option to colored Gel
   * Changed Gel to use Vignette for shading
   * Added control for tube aspect, should work much better now
+    * 0 - Add even thickness on all sides
+    * 1 - Tube aspect ratio will match the game screen aspect
+    * 2 - Explicit Aspect
+    * A new explicit parameter has been added to set it explicitly
   * If Vert BG or Device image is the placeholder (16px tall or less) then fall back to horizontal BG or Device Image
+  * Image processing was not done on images which haven't been supplied
+    * All images are actually always supplied, but by default they are supplied with 16x16px transparent images
+    * If an image is smaller than 16px tall then it will not be processed
+
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
-  * Make checks for POTATO and Vert vs Horz image
   * Megatron HDR Combination at end of chain
   * Fix Tube Diffuse Shadow in 3D Curvature
   * Add .params #reference to with all parameters commented out
