@@ -15,7 +15,7 @@ Changes:
   * Image processing was not done on images which haven't been supplied
     * All images are actually always supplied, but by default they are supplied with 16x16px transparent images
     * If an image is smaller than 16px tall then it will not be processed
-
+  * Set srome sharpening on by default in DREZ presets which should make them slightly less blurry
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
@@ -31,15 +31,11 @@ Changes:
 --- Examples  --------------------------------------
 ----------------------------------------------------
   * Punch Out - Dual Screen
-  * Vector Preset
-
-
 
 ----------------------------------------------------
 --- Post V1  ---------------------------------------
 ----------------------------------------------------
   * Auto Rotate
-  * Investigate Higher Ambient Light Multiplier on BG
   * Original scaling mode to deal with black final viewport in Parallel RDP in both mupen and Parallel cores.
   * Compensate for Negative Crop, 
     * User crop values should be relative to original core image, not core image + negative crop area 

@@ -392,3 +392,6 @@ HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = 0
 // NTSC Parameters
 GAMMA_INPUT = 2.0
 gamma_out = 1.95
+
+// DREZ Parameters
+SHARPEN = 1

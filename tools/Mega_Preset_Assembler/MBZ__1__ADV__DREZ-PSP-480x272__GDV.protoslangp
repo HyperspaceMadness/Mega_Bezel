@@ -19,3 +19,4 @@
 #reference "Components/85__combine-passes.slangp"
 #reference "Components/90__textures__all.slangp"
 #reference "Components/90__parameters__PSP.slangp"
+#reference "Components/90__parameters__drez.slangp"

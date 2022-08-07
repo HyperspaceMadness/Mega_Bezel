@@ -27,8 +27,11 @@ preset_keys = [ 'shader',
                 'scale_type_x', 
                 'scale_type_y']
 
+num_presets = 0
+
 # Go through all template files
 for template_path in [p for p in template_paths if os.path.splitext(p)[1] == '.protoslangp'] :
+    num_presets += 1
     # print('\n' + os.path.split(template_path)[1])
     template_path = os.path.join(dir_path, template_path)
     template_contents = open(template_path, "r").read()
@@ -107,4 +110,4 @@ if errors:
     for error in errors:
         print('    ' + error)
 else:
-    print('Completed without Errors!!!') 
+    print('All (' + str(num_presets) + ') Presets Completed Successfully!!!')

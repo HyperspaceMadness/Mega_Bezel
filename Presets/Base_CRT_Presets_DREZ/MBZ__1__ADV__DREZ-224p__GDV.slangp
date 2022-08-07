@@ -326,3 +326,6 @@ TopLayerImage_mipmap = 1
 // Use for matching vanilla GDV-Advanced
 // HSM_ASPECT_RATIO_MODE = 6
 // HSM_CURVATURE_MODE = 0
+
+// DREZ Parameters
+SHARPEN = 1
