@@ -410,7 +410,7 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
     col += GetChar(ch_per, uv);
     col += GetChar(ch_0, uv);
     col += GetChar(ch_0, uv);
-    col += GetChar(ch_3, uv);
+    col += GetChar(ch_4, uv);
     col += GetChar(ch_spc, uv);
 
     // Date
@@ -420,9 +420,9 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
     col += GetChar(ch_2, uv);
     col += GetChar(ch_dsh, uv);
     col += GetChar(ch_0, uv);
-    col += GetChar(ch_7, uv);
+    col += GetChar(ch_8, uv);
     col += GetChar(ch_dsh, uv);
-    col += GetChar(ch_2, uv);
+    col += GetChar(ch_0, uv);
     col += GetChar(ch_8, uv);
 
     // Revision

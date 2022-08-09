@@ -1,18 +1,36 @@
 ------------------------------------------------------------------------------------------------------------
-HyperspaceMadness Mega Bezel Shader Readme
+Mega Bezel Shader Readme
 ------------------------------------------------------------------------------------------------------------
 ![Mega Bezel Logo](MegaBezelLogo.png)
 
-**Version V1.0.003_2022-07-28_Rev-1**
+**Version V1.0.004_2022-08-08_Rev-1**
 ----------------------------------------
 ----------------------------------------
 
 This file is best viewed in a markdown editor/viewer if possible.
 
-Find more conversation about the shader here:
+If you are wondering **"What is this thing?"** here's a little overview sharing our ideas around the project and some of the Mega Bezel features:
+[RetroArch – Introducing the Mega Bezel Reflection Shader – Libretro](https://www.libretro.com/index.php/retroarch-introducing-the-mega-bezel/)
+
+Find more conversation about the shader here on the Libretro forum:
 
 https://forums.libretro.com/t/hsm-mega-bezel-reflection-shader-feedback-and-updates
 
+----------------------------------------
+----------------------------------------
+----------------------------------------
+**!!!IMPORTANT!!! - Please be sure to read the INSTALLATION and RETROARCH SETUP instructions Below**
+----------------------------------------
+
+----------------------------------------
+----------------------------------------
+----------------------------------------
+**Licensing**
+----------------------------------------
+
+The base Mega_Bezel package and included components licensing are GPL
+
+Community Collections/Packs are licensing is independent of this. Please consult each package details.
 
 ----------------------------------------
 ----------------------------------------
@@ -20,7 +38,7 @@ https://forums.libretro.com/t/hsm-mega-bezel-reflection-shader-feedback-and-upda
 **Latest Releases**
 ----------------------------------------
 
-[Shader Package Approx. 15 MB](https://github.com/HyperspaceMadness/Mega_Bezel/releases)
+[Shader Package Approx. 12 MB](https://github.com/HyperspaceMadness/Mega_Bezel/releases)
 
 [Extra Examples Package]( https://github.com/HyperspaceMadness/HSM_Mega_Bezel_Examples/releases)
 
@@ -28,25 +46,32 @@ https://forums.libretro.com/t/hsm-mega-bezel-reflection-shader-feedback-and-upda
 ----------------------------------------
 https://github.com/HyperspaceMadness/Mega_Bezel
 
+**Intro**
+----------------------------------------
+
+This shader package is meant for you to experiment with and make your own creations if you like. Try adjusting the shader parameters to change the look, as most things are adjustable for personal taste. The base package is now part of the Libretro repo but there will also be updates coming periodically which may get a pre-release here before they go into the main repo. 
+
 ----------------------------------------
 ----------------------------------------
-----------------------------------------
+---------------------------------------- 
 **Installation - VERY IMPORTANT, PLEASE READ**
 ----------------------------------------
 
 ***
+**INSTALLING THE BASE MEGA BEZEL PACKAGE**
 * **You MUST use Retroarch Version 1.9.8 or Later** (It will fail to load on earlier versions)
-* If you have a previous Mega Bezel install:
-  * Delete the old Mega Bezel from shaders/shaders_slang/bezel
-* Inside the .zip is a **Mega_Bezel** folder. Copy the Mega_Bezel folder into your `Retroarch/shaders/shaders_slang/bezel` folder (If the bezel folder isn't there you can create it)
+* **If you want to use the default Mega Bezel included with Retroarch:**
+  * Use **Online Updater -> Update Slang Shaders** to update the shaders, the shaders will be added here `Retroarch/shaders/shaders_slang/bezel/Mega_Bezel`
+* **If you want to install from a zipped release from the link above:**
+  * If the `shaders/shaders_slang/bezel/Mega_Bezel` folder exists delete it
+  * Inside the .zip is a **Mega_Bezel** folder. Copy the Mega_Bezel folder into your `Retroarch/shaders/shaders_slang/bezel` folder (If the bezel folder isn't there you can create it)
   * The final path to the Mega bezel should be `Retroarch/shaders/shaders_slang/bezel/Mega_Bezel`
-* When installing the additional collections:
-  * Create a folder named `Mega_Bezel_Packs` in the root of the shaders folder
-  * Place any of the additional collections inside this folder
-  * For example the final path to the examples pack should be `Retroarch/shaders/Mega_Bezel_Packs/HSM_Mega_Bezel_Examples`
-* Set video driver to **Vulkan** (Or GLCore if Vulkan is not available)
+
+***
+**RETROARCH SETUP**
+  * Set video driver to **Vulkan** or GLCore if Vulkan is not available
   * It will run in **GLCore** but seems faster in **Vulkan**
-  * D3D IS NOT RECOMMENDED. If it loads in D3D it has a VERY slow load time
+  * **D3D IS NOT RECOMMENDED**. If it loads in D3D it has a VERY slow load time
   * Restart Retroarch after changing the video driver
 * Open the **Settings** Menu and Set:
   * **User Interface / Show Advanced Settings** to **ON**
@@ -61,18 +86,26 @@ https://github.com/HyperspaceMadness/Mega_Bezel
 * For **FB Neo**
   * **If your game is vertical** set the Rotate CRT Tube parameter to 1. If it is now upside down set Flip Core Image Vertical and Horizontal to 1 
 
-* **Load a preset** in the shaders menu, Mega Bezel shader presets are found in:
-  * `shaders/shaders_slang/bezel/Mega_Bezel/Presets`
-* When you save a preset make sure you have the **Simple Presets** feature set to **ON**
-  * This will save a preset with a reference to the preset you loaded plus whatever parameter changes you made
-  * This will keep your presets loading properly when the shader updates in the future
+***
+**LOADING AND SAVING PRESETS**
+  * **Load a preset** in the shaders menu. 
+      * The Mega Bezel shader presets are found in: `Retroarch/shaders/shaders_slang/bezel/Mega_Bezel/Presets`
+  * **IMPORTANT!!** When saving a preset make sure you have the **Simple Presets** feature set to **ON**
+    * This will save a preset with a reference to the preset you loaded plus whatever parameter changes you made
+    * This will keep your presets loading properly when the shader updates in the future
 
-**Editing Presets**
+***
+**EDITING PRESETS**
   * You can then open this Simple Preset file and add other parameter adjustments or set textures as you see fit. E.G. add the following lines to change the background image: 
     * `BackgroundImage = "MyImage.jpg"`
     * `BackgroundVertImage = "MyImage.jpg"`
   * Or change the path indicated on the `#reference` line to point at a different base preset
 
+***
+**INSTALLING ADDITIONAL PRESET/GRAPHIC COLLECTIONS**
+  * Create a folder named `Mega_Bezel_Packs` in the root of the shaders folder, the final path of this should be `Retroarch/shaders/Mega_Bezel_Packs
+  * Place any of the additional collections inside this folder
+  * For example the final path to the examples pack should be `Retroarch/shaders/Mega_Bezel_Packs/HSM_Mega_Bezel_Examples`
 
 ----------------------------------------
 ----------------------------------------
@@ -88,16 +121,11 @@ https://github.com/HyperspaceMadness/Mega_Bezel
   * [Releases · TheNamec/megabezel-commodore-pack (github.com)](https://github.com/TheNamec/megabezel-commodore-pack/releases)
   * https://forums.libretro.com/t/thenamec-mega-bezel-commodore-pack-announcement
 
-
 ----------------------------------------
 ----------------------------------------
 ----------------------------------------
-**Licensing**
-----------------------------------------
-
-Licensing of the base Mega_Bezel package and included components are LGPL3
-Licensing of Community Collections/Packs is independent of this
-
+The Mega Bezel is coded and maintained by HyperspaceMadness, but leverages some amazing work from the community.
+HyperspaceMadness@outlook.com
 
 ----------------------------------------
 ----------------------------------------
