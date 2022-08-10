@@ -1,13 +1,13 @@
 // Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
 
-SamplerLUT1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/lut/trinitron-lut.png
+SamplerLUT1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/guest/lut/trinitron-lut.png
 SamplerLUT1_linear = true 
-SamplerLUT2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/lut/inv-trinitron-lut.png
+SamplerLUT2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/guest/lut/inv-trinitron-lut.png
 SamplerLUT2_linear = true 
-SamplerLUT3 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/lut/nec-lut.png
+SamplerLUT3 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/guest/lut/nec-lut.png
 SamplerLUT3_linear = true
-SamplerLUT4 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/lut/ntsc-lut.png
+SamplerLUT4 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/guest/lut/ntsc-lut.png
 SamplerLUT4_linear = true
 
 ScreenPlacementImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png

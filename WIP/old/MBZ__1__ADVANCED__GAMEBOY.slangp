@@ -1,14 +1,14 @@
 // Add Mega Bezel parameters at the beginning of the list for easy access
 // A very small pass at 1/8th scale to cache values which are consistent across the frame
 // Read back these values later for better performance
-shader0 = ../../shaders/HyperspaceMadness/hsm/hsm-cache-info.slang
+shader0 = ../../shaders/HyperspaceMadness/base/cache-info.slang
 float_framebuffer0 = true
 scale_type0 = source
 scale_y0 = 0.25
 alias0  = "InfoCachePass"
 
 // Add Intro Animation
-shader1 = ../../shaders/HyperspaceMadness/hsm/hsm-intro.slang
+shader1 = ../../shaders/HyperspaceMadness/base/intro.slang
 float_framebuffer1 = true
 scale_type1 = source
 scale_y1 = 4
@@ -49,7 +49,7 @@ alias6 = "MBZ_PostCRTPass"
 //      Reduce the resolution to a small static size regardless of final resolution
 //      Allows consistent look and faster at different final resolutions for blur
 //      Mipmap option allows downscaling without artifacts
-shader7 = ../../shaders/HyperspaceMadness/hsm/hsm-linearize-crt.slang
+shader7 = ../../shaders/HyperspaceMadness/base/linearize-crt.slang
 mipmap_input7 = true
 filter_linear7 = true
 scale_type7 = absolute
@@ -60,14 +60,14 @@ float_framebuffer7 = true
 alias7 = BR_MirrorLowResPass
 
 // Add Blur for the Reflection (Horizontal) ----------------------------------------------------------------
-shader8 = ../../shaders/HyperspaceMadness/hsm/hsm-blur-outside-screen-horiz.slang
+shader8 = ../../shaders/HyperspaceMadness/base/blur-outside-screen-horiz.slang
 mipmap_input8 = true
 filter_linear8 = true
 float_framebuffer8 = true
 scale_type8 = source
 
 // Add Blur for the Reflection (Vertical) ----------------------------------------------------------------
-shader9 = ../../shaders/HyperspaceMadness/hsm/hsm-blur-outside-screen-vert.slang
+shader9 = ../../shaders/HyperspaceMadness/base/blur-outside-screen-vert.slang
 filter_linear9 = false
 scale_type9 = source
 float_framebuffer9 = true
@@ -98,7 +98,7 @@ scale_y11 = 12
 alias11 = BR_MirrorFullscreenGlowPass
 
 // Bezel Reflection ----------------------------------------------------------------
-shader12 = ../../shaders/HyperspaceMadness/hsm/hsm-reflection.slang
+shader12 = ../../shaders/HyperspaceMadness/base/reflection.slang
 mipmap_input12 = true
 filter_linear12 = true
 scale_type12 = viewport
@@ -107,7 +107,7 @@ alias12 = BR_CRTAndReflectionPass
 
 // Bezel Reflection ----------------------------------------------------------------
 
-shader13 = ../../shaders/HyperspaceMadness/hsm/hsm-bezel-image-layers.slang
+shader13 = ../../shaders/HyperspaceMadness/base/bezel-image-layers.slang
 mipmap_input13 = true
 filter_linear13 = true
 scale_type13 = viewport

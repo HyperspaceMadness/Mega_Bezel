@@ -115,7 +115,7 @@ This shader package is meant for you to experiment with and make your own creati
 
 @Duimon: Awesome graphics and presets for the different historical consoles & computers:: 
 * [Releases · Duimon/Duimon-Mega-Bezel (github.com)](https://github.com/Duimon/Duimon-Mega-Bezel/releases/)
-* https://forums.libretro.com/t/duimon-hsm-reflection-shader-graphics-feedback-and-updates
+* https://forums.libretro.com/t/duimon-reflection-shader-graphics-feedback-and-updates
 
 @TheNamec: Really amazing graphics for the Commodore & Amiga systems and PVMs: 
   * [Releases · TheNamec/megabezel-commodore-pack (github.com)](https://github.com/TheNamec/megabezel-commodore-pack/releases)

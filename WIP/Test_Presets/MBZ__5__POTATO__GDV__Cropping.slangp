@@ -1,9 +1,9 @@
 shaders = 20
 
-shader0 = ../../shaders/HyperspaceMadness/hsm/hsm-add-params-potato.slang
+shader0 = ../../shaders/HyperspaceMadness/base/add-params-potato.slang
 alias0 = "CorePass"
 
-shader1 =  ../../../../stock.slang // ../../shaders/HyperspaceMadness/hsm-guest/g-sharp_resampler.slang
+shader1 =  ../../../../stock.slang // ../../shaders/HyperspaceMadness/guest/g-sharp_resampler.slang
 filter_linear1 = false
 srgb_framebuffer1 = true
 scale_type1 = source
@@ -11,7 +11,7 @@ scale_x1 = 1
 scale_y1 = 1
 alias1 = "DerezedPass"
 
-shader2 = ../../shaders/HyperspaceMadness/hsm/hsm-add-negative-crop-area.slang
+shader2 = ../../shaders/HyperspaceMadness/base/add-negative-crop-area.slang
 filter_linear2 = false
 mipmap_input2 = false
 srgb_framebuffer2 = true
@@ -20,40 +20,40 @@ scale_x2 = 4
 scale_y2 = 4
 alias2 = "NegativeCropAddedPass"
 
-shader3 = ../../shaders/HyperspaceMadness/hsm/hsm-cache-info-screen-scale-params.slang
+shader3 = ../../shaders/HyperspaceMadness/base/cache-info-screen-scale-params.slang
 filter_linear3 = false
 scale_type3 = source
 scale3 = 1.0
 alias3 = "InfoCachePass"
 
-shader4 = ../../shaders/HyperspaceMadness/hsm/hsm-text-potato.slang
+shader4 = ../../shaders/HyperspaceMadness/base/text-potato.slang
 filter_linear4 = false
 float_framebuffer4 = true
 scale_type4 = source
 scale4 = 1.0
 alias4 = "TextPass"
 
-shader5 = ../../shaders/HyperspaceMadness/hsm/hsm-intro-potato.slang
+shader5 = ../../shaders/HyperspaceMadness/base/intro-potato.slang
 filter_linear5 = false
 float_framebuffer5 = true
 scale_type5 = source
 scale5 = 1.0
 alias5 = "IntroPass"
 
-shader6 =  ../../shaders/HyperspaceMadness/hsm-guest/hsm-custom-fast-sharpen.slang // ../../shaders/HyperspaceMadness/hsm-guest/g-sharp_resampler.slang
+shader6 =  ../../shaders/HyperspaceMadness/guest/hsm-custom-fast-sharpen.slang // ../../shaders/HyperspaceMadness/guest/g-sharp_resampler.slang
 filter_linear6 = false
 srgb_framebuffer6 = true
 
 shader7 = ../../../../stock.slang
 alias7 = "PreCRTPass"
 
-shader8 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-afterglow0.slang
+shader8 = ../../shaders/HyperspaceMadness/guest/hsm-afterglow0.slang
 filter_linear8 = false
 scale_type8 = source
 scale8 = 1.0
 alias8 = "AfterglowPass"
 
-shader9 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-pre-shaders-afterglow.slang
+shader9 = ../../shaders/HyperspaceMadness/guest/hsm-pre-shaders-afterglow.slang
 filter_linear9 = false
 scale_type9 = source
 mipmap_input9 = true
@@ -61,10 +61,10 @@ scale9 = 1.0
 
 // Color Correction with Dogway's awesome Grade shader
 // Grade is after Afterglow so that brightening the black level does not break the afterglow
-shader10 = ../../shaders/HyperspaceMadness/hsm-dogway/hsm-grade.slang
+shader10 = ../../shaders/HyperspaceMadness/dogway/hsm-grade.slang
 alias10 = "PrePass"
 
-shader11 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-avg-lum.slang
+shader11 = ../../shaders/HyperspaceMadness/guest/hsm-avg-lum.slang
 filter_linear11 = true
 scale_type11 = source
 scale11 = 1.0
@@ -72,14 +72,14 @@ mipmap_input11 = true
 alias11 = "AvgLumPass"
 
 // Pass referenced by subsequent blurring passes and crt pass
-shader12 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-interlace-and-linearize.slang
+shader12 = ../../shaders/HyperspaceMadness/guest/hsm-interlace-and-linearize.slang
 filter_linear12 = true
 scale_type12 = source
 scale12 = 1.0
 float_framebuffer12 = true
 alias12 = "LinearizePass"
 
-shader13 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-gaussian_horizontal.slang
+shader13 = ../../shaders/HyperspaceMadness/guest/hsm-gaussian_horizontal.slang
 filter_linear13 = true
 scale_type_x13 = absolute
 scale_x13 = 800.0
@@ -87,7 +87,7 @@ scale_type_y13 = source
 scale_y13 = 1.0 
 float_framebuffer13 = true
 
-shader14 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-gaussian_vertical.slang
+shader14 = ../../shaders/HyperspaceMadness/guest/hsm-gaussian_vertical.slang
 filter_linear14 = true
 scale_type_x14 = absolute
 scale_x14 = 800.0
@@ -96,7 +96,7 @@ scale_y14 = 600.0
 float_framebuffer14 = true
 alias14 = GlowPass
 
-shader15 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-bloom_horizontal.slang
+shader15 = ../../shaders/HyperspaceMadness/guest/hsm-bloom_horizontal.slang
 filter_linear15 = true
 scale_type_x15 = absolute
 scale_x15 = 800.0
@@ -104,7 +104,7 @@ scale_type_y15 = absolute
 scale_y15 = 600.0 
 float_framebuffer15 = true
 
-shader16 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-bloom_vertical.slang
+shader16 = ../../shaders/HyperspaceMadness/guest/hsm-bloom_vertical.slang
 filter_linear16 = true
 scale_type_x16 = source
 scale_x16 = 1.0
@@ -113,30 +113,30 @@ scale_y16 = 1.0
 float_framebuffer16 = true
 alias16 = BloomPass
 
-shader17 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-crt-guest-advanced-potato.slang
+shader17 = ../../shaders/HyperspaceMadness/guest/hsm-crt-guest-advanced-potato.slang
 filter_linear17 = true
 scale_type17 = viewport
 scale_x17 = 1.0
 scale_y17 = 1.0
 
-shader18 = ../../shaders/HyperspaceMadness/hsm-guest/hsm-deconvergence.slang
+shader18 = ../../shaders/HyperspaceMadness/guest/hsm-deconvergence.slang
 filter_linear18 = true
 scale_type18 = viewport
 scale_x18 = 1.0
 scale_y18 = 1.0
 
-shader19 = ../../shaders/HyperspaceMadness/hsm/hsm-post-crt-prep-potato.slang
+shader19 = ../../shaders/HyperspaceMadness/base/post-crt-prep-potato.slang
 alias19 = "MBZ_PostCRTPass"
 // Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
 
-SamplerLUT1 = ../../shaders/HyperspaceMadness/hsm-guest/lut/trinitron-lut.png
+SamplerLUT1 = ../../shaders/HyperspaceMadness/guest/lut/trinitron-lut.png
 SamplerLUT1_linear = true 
-SamplerLUT2 = ../../shaders/HyperspaceMadness/hsm-guest/lut/inv-trinitron-lut.png
+SamplerLUT2 = ../../shaders/HyperspaceMadness/guest/lut/inv-trinitron-lut.png
 SamplerLUT2_linear = true 
-SamplerLUT3 = ../../shaders/HyperspaceMadness/hsm-guest/lut/nec-lut.png
+SamplerLUT3 = ../../shaders/HyperspaceMadness/guest/lut/nec-lut.png
 SamplerLUT3_linear = true
-SamplerLUT4 = ../../shaders/HyperspaceMadness/hsm-guest/lut/ntsc-lut.png
+SamplerLUT4 = ../../shaders/HyperspaceMadness/guest/lut/ntsc-lut.png
 SamplerLUT4_linear = true
 
 ScreenPlacementImage = ../../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png

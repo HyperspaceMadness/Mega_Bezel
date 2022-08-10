@@ -1,4 +1,4 @@
 shaders = 1
 
-shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm/hsm-add-params-potato.slang
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/base/add-params-potato.slang
 alias0 = "CorePass"

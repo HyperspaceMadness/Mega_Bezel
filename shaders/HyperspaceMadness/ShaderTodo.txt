@@ -4,6 +4,8 @@ Mega Bezel is updated to V1.0.004_2022-XX-XX_Rev-1
 
 Changes:
   * Updated license date
+  * Renamed LOTS of shader files, Removed hsm on directories and base files
+    * No preset names have changed so you should notice no change
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------

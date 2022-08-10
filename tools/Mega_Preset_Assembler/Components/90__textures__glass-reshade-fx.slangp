@@ -9,13 +9,13 @@ Sprite = :/shaders/shaders_slang/reshade/shaders/bloom/LensSprite.png
 Sprite_wrap_mode = "clamp_to_border"
 Sprite_mipmap = "false"
 
-SamplerLUT1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/lut/trinitron-lut.png
+SamplerLUT1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/guest/lut/trinitron-lut.png
 SamplerLUT1_linear = true 
-SamplerLUT2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/lut/inv-trinitron-lut.png
+SamplerLUT2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/guest/lut/inv-trinitron-lut.png
 SamplerLUT2_linear = true 
-SamplerLUT3 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/lut/nec-lut.png
+SamplerLUT3 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/guest/lut/nec-lut.png
 SamplerLUT3_linear = true
-SamplerLUT4 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/lut/ntsc-lut.png
+SamplerLUT4 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/guest/lut/ntsc-lut.png
 SamplerLUT4_linear = true
 
 IntroImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/IntroImage_MegaBezelLogo.png

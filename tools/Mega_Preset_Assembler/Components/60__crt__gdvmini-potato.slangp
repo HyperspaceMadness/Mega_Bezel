@@ -1,6 +1,6 @@
 shaders = 1
 
-shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-guest/hsm-crt-dariusg-gdv-mini-potato.slang
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/guest/hsm-crt-dariusg-gdv-mini-potato.slang
 scale_type0 = viewport
 scale_x0 = 1.0
 scale_y0 = 1.0
