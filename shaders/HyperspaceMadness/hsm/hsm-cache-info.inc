@@ -1,6 +1,6 @@
 /*
     Mega Bezel - Creates a graphic treatment for the game play area to give a retro feel
-    Copyright (C) 2019-2021 HyperspaceMadness - HyperspaceMadness@outlook.com
+    Copyright (C) 2019-2022 HyperspaceMadness - HyperspaceMadness@outlook.com
 
     Incorporates much great feedback from the libretro forum, and thanks 
     to Hunterk who helped me get started
@@ -19,7 +19,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    along with this program.  If not, see [http://www.gnu.org/licenses/].
 */
 
 vec2 HSM_GetScreenScaleWithEdgeHeight(vec2 edge_thickness, vec2 screen_scale)

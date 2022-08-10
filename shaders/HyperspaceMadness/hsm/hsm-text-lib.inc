@@ -1,6 +1,6 @@
 /*
     Mega Bezel - Creates a graphic treatment for the game play area to give a retro feel
-    Copyright (C) 2019-2021 HyperspaceMadness - HyperspaceMadness@outlook.com
+    Copyright (C) 2019-2022 HyperspaceMadness - HyperspaceMadness@outlook.com
 
     Text code is from the Shadertoy "96-bit 8x12" Font by Flyguy
 

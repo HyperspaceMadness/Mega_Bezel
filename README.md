@@ -28,7 +28,7 @@ https://forums.libretro.com/t/hsm-mega-bezel-reflection-shader-feedback-and-upda
 **Licensing**
 ----------------------------------------
 
-The base Mega_Bezel package and included components licensing are GPL
+The base Mega_Bezel package and included components licensing are GPLv3
 
 Community Collections/Packs are licensing is independent of this. Please consult each package details.
 
