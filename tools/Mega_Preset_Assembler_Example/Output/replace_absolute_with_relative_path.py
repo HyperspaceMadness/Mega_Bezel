@@ -24,7 +24,7 @@ for preset_path in [p for p in preset_paths if os.path.splitext(p)[1] == '.slang
     template_errors = []
     if template_lines:
         for line in template_lines:
-            line = line.replace(':/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/', '../../shaders/HyperspaceMadness/')
+            line = line.replace(':/shaders/shaders_slang/bezel/Mega_Bezel/shaders/', '../../shaders/')
             line = line.replace(':/shaders/shaders_slang/', '../../../../')
             out_preset_contents += line + '\n'
 

@@ -3,7 +3,7 @@ shaders = 4
 shader0 = :/shaders/shaders_slang/stock.slang
 alias0 = "PrePass0"
 
-shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/guest/ntsc/hsm-ntsc-pass1.slang
+shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/ntsc/hsm-ntsc-pass1.slang
 filter_linear1 = false
 float_framebuffer1 = true
 scale_type_x1 = source
@@ -13,14 +13,14 @@ scale_y1 = 1.0
 frame_count_mod1 = 2
 alias1 = NPass1
 
-shader2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/guest/ntsc/hsm-ntsc-pass2.slang
+shader2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/ntsc/hsm-ntsc-pass2.slang
 float_framebuffer2 = true
 filter_linear2 = true
 scale_type2 = source
 scale_x2 = 0.5
 scale_y2 = 1.0
 
-shader3 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/guest/ntsc/hsm-ntsc-pass3.slang
+shader3 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/ntsc/hsm-ntsc-pass3.slang
 filter_linear3 = true
 scale_type3 = source
 scale_x3 = 1.0

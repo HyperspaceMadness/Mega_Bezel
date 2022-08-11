@@ -1,28 +1,28 @@
-shader0 = ../shaders/HyperspaceMadness/hsm-gameboy/hsm-gb-pass0.slang
+shader0 = ../shaders/hsm-gameboy/hsm-gb-pass0.slang
 filter_linear0 = false
 scale_type0 = viewport
 scale0 = 1.0
 alias0 = "PASS0"
 
-shader1 = ../shaders/HyperspaceMadness/hsm-gameboy/hsm-gb-pass1.slang
+shader1 = ../shaders/hsm-gameboy/hsm-gb-pass1.slang
 filter_linear1 = false
 scale_type1 = source
 scale1 = 1.0
 alias1 = "PASS1"
 
-shader2 = ../shaders/HyperspaceMadness/hsm-gameboy/hsm-gb-pass2.slang
+shader2 = ../shaders/hsm-gameboy/hsm-gb-pass2.slang
 filter_linear2 = false
 scale_type2 = source
 scale2 = 1.0
 alias2 = "PASS2"
 
-shader3 = ../shaders/HyperspaceMadness/hsm-gameboy/hsm-gb-pass3.slang
+shader3 = ../shaders/hsm-gameboy/hsm-gb-pass3.slang
 filter_linear3 = false
 scale_type3 = source
 scale3 = 1.0
 alias3 = "PASS3"
 
-shader4 = ../shaders/HyperspaceMadness/hsm-gameboy/hsm-gb-pass4.slang
+shader4 = ../shaders/hsm-gameboy/hsm-gb-pass4.slang
 filter_linear4 = false
 scale_type4 = source
 scale4 = 1.0
@@ -34,73 +34,73 @@ shaders = 5
 // Define textures to be used by the different passes
 textures = "DMG0ColorPaletteImage;DMG1ColorPaletteImage;DMG2ColorPaletteImage;PocketColorPaletteImage;LightColorPaletteImage;CustomColorPaletteImage;LCDBackgroundImage;IntroImage;ScreenPlacementImage;TubeColoredGelImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;LEDImage;TopLayerImage;"
 
-DMG0ColorPaletteImage = ../shaders/HyperspaceMadness/hsm-gameboy/palette-gameboy-dmg-0.png
+DMG0ColorPaletteImage = ../shaders/hsm-gameboy/palette-gameboy-dmg-0.png
 DMG0ColorPaletteImage_linear = false
 
-DMG1ColorPaletteImage = ../shaders/HyperspaceMadness/hsm-gameboy/palette-gameboy-dmg-1.png
+DMG1ColorPaletteImage = ../shaders/hsm-gameboy/palette-gameboy-dmg-1.png
 DMG1ColorPaletteImage_linear = false
 
-DMG2ColorPaletteImage = ../shaders/HyperspaceMadness/hsm-gameboy/palette-gameboy-dmg-2.png
+DMG2ColorPaletteImage = ../shaders/hsm-gameboy/palette-gameboy-dmg-2.png
 DMG2ColorPaletteImage_linear = false
 
-PocketColorPaletteImage = ../shaders/HyperspaceMadness/hsm-gameboy/palette-gameboy-pocket.png
+PocketColorPaletteImage = ../shaders/hsm-gameboy/palette-gameboy-pocket.png
 PocketColorPaletteImage_linear = false
 
-LightColorPaletteImage = ../shaders/HyperspaceMadness/hsm-gameboy/palette-gameboy-light.png
+LightColorPaletteImage = ../shaders/hsm-gameboy/palette-gameboy-light.png
 LightColorPaletteImage_linear = false
 
-CustomColorPaletteImage = ../shaders/HyperspaceMadness/hsm-gameboy/palette-gameboy-custom.png
+CustomColorPaletteImage = ../shaders/hsm-gameboy/palette-gameboy-custom.png
 CustomColorPaletteImage_linear = false
 
-LCDBackgroundImage = ../shaders/HyperspaceMadness/hsm-gameboy/bg-gameboy-dmg.png
+LCDBackgroundImage = ../shaders/hsm-gameboy/bg-gameboy-dmg.png
 LCDBackgroundImage_linear = true
 BackgroundImage_mipmap = 1
 
-IntroImage = ../shaders/HyperspaceMadness/textures/IntroImage_MegaBezelLogo.png
+IntroImage = ../shaders/textures/IntroImage_MegaBezelLogo.png
 IntroImage_linear = true
 IntroImage_mipmap = 1
 
-TubeColoredGelImage = ../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+TubeColoredGelImage = ../shaders/textures/Placeholder_Transparent_16x16.png
 TubeColoredGelImage_linear = true
 TubeColoredGelImage_mipmap = 1
 
-TubeStaticReflectionImage = ../shaders/HyperspaceMadness/textures/TubeGlassOverlayImage_3840x2160.png
+TubeStaticReflectionImage = ../shaders/textures/TubeGlassOverlayImage_3840x2160.png
 TubeStaticReflectionImage_linear = true
 TubeStaticReflectionImage_mipmap = 1
 
-BackgroundImage = ../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+BackgroundImage = ../shaders/textures/Placeholder_Transparent_16x16.png
 BackgroundImage_linear = true
 BackgroundImage_mipmap = 1
 
-FrameTextureImage = ../shaders/HyperspaceMadness/textures/FrameTexture_2800x2120.png
+FrameTextureImage = ../shaders/textures/FrameTexture_2800x2120.png
 FrameTextureImage_linear = true
 FrameTextureImage_mipmap = 1
 
-CabinetGlassImage = ../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+CabinetGlassImage = ../shaders/textures/Placeholder_Transparent_16x16.png
 CabinetGlassImage_linear = true
 CabinetGlassImage_mipmap = 1
 
-DeviceImage = ../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+DeviceImage = ../shaders/textures/Placeholder_Transparent_16x16.png
 DeviceImage_linear = true
 DeviceImage_mipmap = 1
 
-DeviceVertImage = ../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+DeviceVertImage = ../shaders/textures/Placeholder_Transparent_16x16.png
 DeviceVertImage_linear = true
 DeviceVertImage_mipmap = 1
 
-DecalImage = ../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+DecalImage = ../shaders/textures/Placeholder_Transparent_16x16.png
 DecalImage_linear = true
 DecalImage_mipmap = 1
 
-NightLightingImage = ../shaders/HyperspaceMadness/textures/NightLighting_1920x1080.png
+NightLightingImage = ../shaders/textures/NightLighting_1920x1080.png
 NightLightingImage_linear = true
 NightLightingImage_mipmap = 1
 
-LEDImage = ../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+LEDImage = ../shaders/textures/Placeholder_Transparent_16x16.png
 LEDImage_linear = true
 LEDImage_mipmap = 1
 
-TopLayerImage = ../shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+TopLayerImage = ../shaders/textures/Placeholder_Transparent_16x16.png
 TopLayerImage_linear = true
 TopLayerImage_mipmap = 1
 

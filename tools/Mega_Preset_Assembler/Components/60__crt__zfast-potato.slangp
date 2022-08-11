@@ -1,6 +1,6 @@
 shaders = 1
 
-shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-zfast/hsm-zfast_crt.slang
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/hsm-zfast/hsm-zfast_crt.slang
 scale_type0 = viewport
 scale_x0 = 1.0
 scale_y0 = 1.0

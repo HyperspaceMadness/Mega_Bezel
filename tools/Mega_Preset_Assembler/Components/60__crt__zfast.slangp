@@ -1,8 +1,8 @@
 shaders = 2
 
-shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/base/delinearize.slang
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/delinearize.slang
 
-shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/hsm-zfast/hsm-zfast_crt.slang
+shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/hsm-zfast/hsm-zfast_crt.slang
 scale_type1 = viewport
 scale_x1 = 1.0
 scale_y1 = 1.0

@@ -2,13 +2,13 @@ shaders = 2
 
 // Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 
-shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/base/bezel-images-under-crt.slang
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/bezel-images-under-crt.slang
 filter_linear0 = true
 scale_type0 = viewport
 float_framebuffer0 = true
 alias0 = "BR_LayersUnderCRTPass"
 
-shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/base/bezel-images-over-crt.slang
+shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/bezel-images-over-crt.slang
 filter_linear1 = true
 scale_type1 = viewport
 float_framebuffer1 = true

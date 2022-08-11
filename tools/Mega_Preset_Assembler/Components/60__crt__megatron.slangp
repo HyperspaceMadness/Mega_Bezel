@@ -2,7 +2,7 @@ shaders = 3
 feedback_pass = "0"
 
 // Sony Megatron Colour Video Monitor by Major Pain The Cactus
-shader0 = ":/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/megatron/crt-sony-megatron-source-pass.slang"
+shader0 = ":/shaders/shaders_slang/bezel/Mega_Bezel/shaders/megatron/crt-sony-megatron-source-pass.slang"
 filter_linear0 = "false"
 scale_type0 = "source"
 scale0 = "1.0"
@@ -10,7 +10,7 @@ wrap_mode0 = "clamp_to_border"
 mipmap_input0 = "false"
 alias0 = "SourceSDR"
 
-shader1 = ":/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/megatron/crt-sony-megatron-hdr-pass.slang"
+shader1 = ":/shaders/shaders_slang/bezel/Mega_Bezel/shaders/megatron/crt-sony-megatron-hdr-pass.slang"
 filter_linear1 = "false"
 scale_type1 = "source"
 scale1 = "1.0"
@@ -18,7 +18,7 @@ wrap_mode1 = "clamp_to_border"
 mipmap_input1 = "false"
 alias1 = "SourceHDR"
 
-shader2 = ":/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/megatron/crt-sony-megatron.slang"
+shader2 = ":/shaders/shaders_slang/bezel/Mega_Bezel/shaders/megatron/crt-sony-megatron.slang"
 filter_linear2 = "false"
 wrap_mode2 = "clamp_to_border"
 mipmap_input2 = "false"

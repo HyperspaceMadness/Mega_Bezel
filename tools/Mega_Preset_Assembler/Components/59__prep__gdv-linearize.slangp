@@ -8,7 +8,7 @@ scale_y0 = 1.0
 alias0 = "PrePass"
 mipmap_input0 = true
 
-shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/guest/hsm-avg-lum.slang
+shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/hsm-avg-lum.slang
 filter_linear1 = true
 scale_type1 = source
 scale1 = 1.0
@@ -16,7 +16,7 @@ mipmap_input1 = true
 alias1 = "AvgLumPass"
 
 // Pass referenced by subsequent blurring passes and crt pass
-shader2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/guest/hsm-interlace-and-linearize.slang
+shader2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/hsm-interlace-and-linearize.slang
 filter_linear2 = true
 scale_type2 = source
 scale2 = 1.0

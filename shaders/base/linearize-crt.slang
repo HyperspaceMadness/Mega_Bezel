@@ -34,7 +34,7 @@ layout(push_constant) uniform Push
 	uint FrameCount;
 } params;
 
-#include "../../../../../include/compat_macros.inc"
+#include "../../../../include/compat_macros.inc"
 
 #pragma stage vertex
 layout(location = 0) in vec4 Position;
@@ -57,7 +57,7 @@ layout(location = 1) in vec2 blur_dxdy;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 2) uniform sampler2D MBZ_PostCRTPass;
 
-#include "../../../../../include/blur-functions.h"
+#include "../../../../include/blur-functions.h"
 
 void main()
 {

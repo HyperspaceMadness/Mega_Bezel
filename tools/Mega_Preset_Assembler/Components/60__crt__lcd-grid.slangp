@@ -1,8 +1,8 @@
 shaders = 2
 
-shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/base/delinearize.slang
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/delinearize.slang
 
-shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/lcd-cgwg/hsm-lcd-grid-v2.slang
+shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/lcd-cgwg/hsm-lcd-grid-v2.slang
 filter_linear1 = "false"
 scale_type1 = "viewport"
 scale1 = "1.0"

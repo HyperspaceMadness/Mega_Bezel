@@ -1,6 +1,6 @@
 shaders = 1
 
-shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/base/text-adv.slang
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/text-adv.slang
 filter_linear0 = false
 float_framebuffer0 = true
 scale_type0 = source

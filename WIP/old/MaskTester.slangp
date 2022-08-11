@@ -1,6 +1,6 @@
 #reference "../presets/base/MBZ__2__STANDARD__GUEST-DrVENOM.slangp"
 
-BackgroundImage = ../shaders/HyperspaceMadness/textures/Placeholder_White_16x16.png
+BackgroundImage = ../shaders/textures/Placeholder_White_16x16.png
 
 // Parameters
 HSM_ASPECT_RATIO_MODE = 2

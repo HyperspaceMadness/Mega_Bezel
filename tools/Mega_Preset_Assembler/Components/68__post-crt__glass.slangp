@@ -1,4 +1,4 @@
 shaders = 1
 
-shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/base/post-crt-prep-glass.slang
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/post-crt-prep-glass.slang
 alias0 = "MBZ_PostCRTPass"

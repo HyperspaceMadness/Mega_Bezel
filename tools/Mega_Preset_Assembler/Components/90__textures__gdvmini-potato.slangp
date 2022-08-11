@@ -1,14 +1,14 @@
 // Define textures to be used by the different passes
 textures = "ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
 
-ScreenPlacementImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Placeholder_Transparent_16x16.png
+ScreenPlacementImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Placeholder_Transparent_16x16.png
 ScreenPlacementImage_linear = false
 
-BackgroundImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Baked_Frame_Carbonfiber_Background.png
+BackgroundImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Baked_Frame_Carbonfiber_Background.png
 BackgroundImage_linear = true
 BackgroundImage_mipmap = 1
 
-BackgroundVertImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/HyperspaceMadness/textures/Baked_Frame_Carbonfiber_Background_Vert.png
+BackgroundVertImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Baked_Frame_Carbonfiber_Background_Vert.png
 BackgroundVertImage_linear = true
 BackgroundVertImage_mipmap = 1
 
