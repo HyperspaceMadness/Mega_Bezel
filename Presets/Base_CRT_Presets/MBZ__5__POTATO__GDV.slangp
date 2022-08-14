@@ -3,7 +3,7 @@ shaders = 21
 shader0 = ../../shaders/base/add-params-potato.slang
 alias0 = "CorePass"
 
-shader1 =  ../../../../stock.slang // ../../shaders/guest/g-sharp_resampler.slang
+shader1 =  ../../../../stock.slang
 filter_linear1 = false
 srgb_framebuffer1 = true
 scale_type1 = source
@@ -62,7 +62,7 @@ filter_linear9 = true
 scale_type9 = source
 scale9 = 1.0
 
-shader10 =  ../../shaders/guest/hsm-custom-fast-sharpen.slang // ../../shaders/guest/g-sharp_resampler.slang
+shader10 =  ../../shaders/guest/hsm-custom-fast-sharpen.slang
 filter_linear10 = true
 scale_type10 = source
 scale_x10 = 1.0

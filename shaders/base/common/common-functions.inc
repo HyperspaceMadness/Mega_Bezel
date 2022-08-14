@@ -306,12 +306,22 @@ vec2 HSM_AddPosScaleToCoord(vec2 in_base_coord, vec2 in_pos, vec2 in_scale)
 	return out_coord;
 }
 
-vec2 GetSimpleImageScaledCoord(vec2 in_coord, vec2 in_viewport_unscaled_coord, in sampler2D in_sampler, vec2 in_pos, vec2 in_scale, float in_zoom_with_full, float in_keep_aspect, float in_mirror_horz, float in_rotate )
+vec2 GetSimpleImageScaledCoord(vec2 in_viewport_coord, vec2 in_viewport_unscaled_coord, float in_tube_height, in sampler2D in_sampler, vec2 in_pos, vec2 in_scale, float in_scale_inherit_mode, float in_keep_aspect, float in_mirror_horz, float in_rotate )
 {
-	vec2 coord_ctr = (in_zoom_with_full == 1 ? in_coord : in_viewport_unscaled_coord) - 0.5;
+	vec2 coord_ctr = vec2(1);
+
+	if (in_scale_inherit_mode == 0)
+		coord_ctr = in_viewport_unscaled_coord - 0.5;
+
+	if (in_scale_inherit_mode == 1)
+		coord_ctr = in_viewport_coord - 0.5;
+
+	if (in_scale_inherit_mode == 2)
+		coord_ctr = (in_viewport_unscaled_coord - 0.5) / (in_tube_height / DEFAULT_SCREEN_HEIGHT);
+
 	coord_ctr.x = in_mirror_horz == 1 ? -1 * coord_ctr.x : coord_ctr.x;
 	
-	in_coord = HSM_RotateCoordinate(in_coord, in_rotate);
+	in_viewport_coord = HSM_RotateCoordinate(in_viewport_coord, in_rotate);
 
 	vec2 tex_size = textureSize(in_sampler, 0);
 	float tex_aspect = in_rotate == 1 ? tex_size.y / tex_size.x : tex_size.x / tex_size.y;
@@ -1088,12 +1098,12 @@ bool HSM_GetUseScreenVignette()
 vec4 HSM_GetNightLightingMultiplyColor( vec2 in_coord, float hue, float saturation, float value, float contrast, float global_ambient_opacity, in sampler2D NightLightingImage )
 {
 	vec4 lighting_image = vec4(0);
-	// if (HSM_AMBIENT_LIGHTING_DITHERING_SAMPLES > 0.5)
+	// if (HSM_AMBIENT1_LIGHTING_DITHERING_SAMPLES > 0.5)
 	// {
 	// 	// Dithering if needed to reduce banding
 	// 	float blur_max_size = 1;
 	// 	float blur_amount = 0.2;
-	// 	lighting_image = HSM_GetStoichaicBlurredSample(NightLightingImage, in_coord.xy, HSM_AMBIENT_LIGHTING_DITHERING_SAMPLES, blur_max_size, blur_amount);
+	// 	lighting_image = HSM_GetStoichaicBlurredSample(NightLightingImage, in_coord.xy, HSM_AMBIENT1_LIGHTING_DITHERING_SAMPLES, blur_max_size, blur_amount);
 	// }
 	// else
 	lighting_image = HSM_GetMipmappedTexSample(NightLightingImage, in_coord.xy, vec2(1), 0);
@@ -1116,40 +1126,42 @@ vec4 HSM_GetNightLightingMultiplyColor( vec2 in_coord, float hue, float saturati
 	return lighting_image;
 }
 
-bool HSM_Fill_Ambient_Images(vec2 VIEWPORT_COORD, vec2 VIEWPORT_UNSCALED_COORD, float in_swap_images, in sampler2D in_ambient_sampler, in sampler2D in_ambient2_sampler, inout vec4 ambient_lighting_image, inout vec4 ambient2_lighting_image)
+bool HSM_Fill_Ambient_Images(vec2 in_viewport_coord, vec2 in_viewport_unscaled_coord, float in_tube_height, float in_swap_images, in sampler2D in_ambient_sampler, in sampler2D in_ambient2_sampler, inout vec4 ambient_lighting_image, inout vec4 ambient2_lighting_image)
 {
 		ambient_lighting_image = vec4(1);
 		ambient2_lighting_image = vec4(1);
 
-		if (HSM_AMBIENT_LIGHTING_OPACITY > 0)
+		if (HSM_AMBIENT1_LIGHTING_OPACITY > 0)
 		{
-			vec2 lighting_coord = GetSimpleImageScaledCoord(VIEWPORT_COORD, 
-															VIEWPORT_UNSCALED_COORD, 
+			vec2 lighting_coord = GetSimpleImageScaledCoord(in_viewport_coord, 
+															in_viewport_unscaled_coord,
+															in_tube_height,
 															in_ambient_sampler,
-															vec2(HSM_AMBIENT_LIGHTING_POSITION_X, HSM_AMBIENT_LIGHTING_POSITION_Y),
-															vec2(HSM_AMBIENT_LIGHTING_SCALE * HSM_AMBIENT_LIGHTING_SCALE_X, HSM_AMBIENT_LIGHTING_SCALE), 
-															HSM_AMBIENT_LIGHTING_SCALE_WITH_ZOOM, 
-															HSM_AMBIENT_LIGHTING_SCALE_KEEP_ASPECT,
-															HSM_AMBIENT_LIGHTING_MIRROR_HORZ,
-															HSM_AMBIENT_LIGHTING_ROTATE );
+															vec2(HSM_AMBIENT1_LIGHTING_POSITION_X, HSM_AMBIENT1_LIGHTING_POSITION_Y),
+															vec2(HSM_AMBIENT1_LIGHTING_SCALE * HSM_AMBIENT1_LIGHTING_SCALE_X, HSM_AMBIENT1_LIGHTING_SCALE), 
+															HSM_AMBIENT1_LIGHTING_SCALE_INHERIT_MODE, 
+															HSM_AMBIENT1_LIGHTING_SCALE_KEEP_ASPECT,
+															HSM_AMBIENT1_LIGHTING_MIRROR_HORZ,
+															HSM_AMBIENT1_LIGHTING_ROTATE );
 
 			ambient_lighting_image = HSM_GetNightLightingMultiplyColor( lighting_coord,
-																		HSM_AMBIENT_LIGHTING_HUE,
-																		HSM_AMBIENT_LIGHTING_SATURATION,
-																		HSM_AMBIENT_LIGHTING_VALUE,
-																		HSM_AMBIENT_LIGHTING_CONTRAST,
-																		HSM_AMBIENT_LIGHTING_OPACITY,
+																		HSM_AMBIENT1_LIGHTING_HUE,
+																		HSM_AMBIENT1_LIGHTING_SATURATION,
+																		HSM_AMBIENT1_LIGHTING_VALUE,
+																		HSM_AMBIENT1_LIGHTING_CONTRAST,
+																		HSM_AMBIENT1_LIGHTING_OPACITY,
 																		in_ambient_sampler );
 		}
 
 		if (HSM_AMBIENT2_LIGHTING_OPACITY > 0)
 		{
-			vec2 lighting2_coord = GetSimpleImageScaledCoord(VIEWPORT_COORD, 
-															VIEWPORT_UNSCALED_COORD, 
+			vec2 lighting2_coord = GetSimpleImageScaledCoord(in_viewport_coord, 
+															in_viewport_unscaled_coord,
+															in_tube_height,
 															in_ambient2_sampler,
 															vec2(HSM_AMBIENT2_LIGHTING_POSITION_X, HSM_AMBIENT2_LIGHTING_POSITION_Y),
 															vec2(HSM_AMBIENT2_LIGHTING_SCALE * HSM_AMBIENT2_LIGHTING_SCALE_X, HSM_AMBIENT2_LIGHTING_SCALE), 
-															HSM_AMBIENT2_LIGHTING_SCALE_WITH_ZOOM, 
+															HSM_AMBIENT2_LIGHTING_SCALE_INHERIT_MODE, 
 															HSM_AMBIENT2_LIGHTING_SCALE_KEEP_ASPECT,
 															HSM_AMBIENT2_LIGHTING_MIRROR_HORZ,
 															HSM_AMBIENT2_LIGHTING_ROTATE );
@@ -1184,7 +1196,7 @@ vec3 ApplyAmbientImages(vec3 base_image, vec3 ambient_image, vec3 ambient2_image
 		ambient2_image = temp_image;
 	}
 
-	if ( (HSM_AMBIENT_LIGHTING_OPACITY > 0 || HSM_AMBIENT2_LIGHTING_OPACITY > 0) && (blend_ambient > 0 || blend_ambient2 > 0) )
+	if ( (HSM_AMBIENT1_LIGHTING_OPACITY > 0 || HSM_AMBIENT2_LIGHTING_OPACITY > 0) && (blend_ambient > 0 || blend_ambient2 > 0) )
 	{
 		if(	apply_in_add_mode == 1 || layer_blend_mode != BLEND_MODE_ADD)
 		{

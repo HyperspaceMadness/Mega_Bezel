@@ -3,7 +3,7 @@ shaders = 20
 shader0 = ../../shaders/base/add-params-potato.slang
 alias0 = "CorePass"
 
-shader1 =  ../../../../stock.slang // ../../shaders/guest/g-sharp_resampler.slang
+shader1 =  ../../../../stock.slang
 filter_linear1 = false
 srgb_framebuffer1 = true
 scale_type1 = source
@@ -40,7 +40,7 @@ scale_type5 = source
 scale5 = 1.0
 alias5 = "IntroPass"
 
-shader6 =  ../../shaders/guest/hsm-custom-fast-sharpen.slang // ../../shaders/guest/g-sharp_resampler.slang
+shader6 =  ../../shaders/guest/hsm-custom-fast-sharpen.slang
 filter_linear6 = false
 srgb_framebuffer6 = true
 

@@ -3,7 +3,7 @@ shaders = 36
 shader0 = ../../shaders/base/add-params-all.slang
 alias0 = "CorePass"
 
-shader1 =  ../../../../stock.slang // ../../shaders/guest/g-sharp_resampler.slang
+shader1 =  ../../../../stock.slang
 filter_linear1 = false
 srgb_framebuffer1 = true
 scale_type1 = source
@@ -88,7 +88,7 @@ filter_linear18 = true
 scale_type18 = source
 scale18 = 1.0
 
-shader19 =  ../../shaders/guest/hsm-custom-fast-sharpen.slang // ../../shaders/guest/g-sharp_resampler.slang
+shader19 =  ../../shaders/guest/hsm-custom-fast-sharpen.slang
 filter_linear19 = true
 scale_type19 = source
 scale_x19 = 1.0
@@ -286,11 +286,11 @@ DecalImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
 DecalImage_linear = true
 DecalImage_mipmap = 1
 
-NightLightingImage = ../../shaders/textures/NightLighting_1920x1080.png
+NightLightingImage = ../../shaders/textures/NightLightingClose_1920x1080.png
 NightLightingImage_linear = true
 NightLightingImage_mipmap = 1
 
-NightLighting2Image = ../../shaders/textures/NightLighting_1920x1080.png
+NightLighting2Image = ../../shaders/textures/NightLightingFar_1920x1080.png
 NightLighting2Image_linear = true
 NightLighting2Image_mipmap = 1
 

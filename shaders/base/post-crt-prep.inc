@@ -191,7 +191,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	// AMBIENT LIGHTING IMAGES
 	vec4 ambient_lighting_image = vec4(1);
 	vec4 ambient2_lighting_image = vec4(1);
-	HSM_Fill_Ambient_Images(VIEWPORT_COORD, VIEWPORT_UNSCALED_COORD, HSM_AMBIENT_LIGHTING_SWAP_IMAGES, NightLightingImage, NightLighting2Image, ambient_lighting_image, ambient2_lighting_image);
+	HSM_Fill_Ambient_Images(VIEWPORT_COORD, VIEWPORT_UNSCALED_COORD, TUBE_DIFFUSE_SCALE.y, HSM_AMBIENT_LIGHTING_SWAP_IMAGES, NightLightingImage, NightLighting2Image, ambient_lighting_image, ambient2_lighting_image);
 
 	vec3 tube_shadow = vec3(1);
 	if (HSM_TUBE_SHADOW_IMAGE_ON > 0.5 && (HSM_GetUseTubeDiffuseImage() || HSM_GetUseTubeColoredGelImage() || HSM_GetUseTubeStaticReflection()))

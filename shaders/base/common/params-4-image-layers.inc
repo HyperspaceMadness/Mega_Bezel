@@ -121,10 +121,10 @@ float HSM_BG_BRIGHTNESS = global.HSM_BG_BRIGHTNESS / 100;
 #pragma parameter HSM_BG_GAMMA                     "          Gamma Adjust" 1 0 5 0.01
 float HSM_BG_GAMMA = global.HSM_BG_GAMMA;
 
-#pragma parameter HSM_BG_AMBIENT_LIGHTING_MULTIPLIER         "          Ambient Lighting Multiplier"  100 0 100 1
+#pragma parameter HSM_BG_AMBIENT_LIGHTING_MULTIPLIER         "          Ambient Lighting Multiplier"  0 0 100 1
 float HSM_BG_AMBIENT_LIGHTING_MULTIPLIER = global.HSM_BG_AMBIENT_LIGHTING_MULTIPLIER / 100;
 
-#pragma parameter HSM_BG_AMBIENT2_LIGHTING_MULTIPLIER         "          Ambient 2nd Image Lighting Multiplier"  0 0 100 1
+#pragma parameter HSM_BG_AMBIENT2_LIGHTING_MULTIPLIER         "          Ambient 2nd Image Lighting Multiplier"  100 0 100 1
 float HSM_BG_AMBIENT2_LIGHTING_MULTIPLIER = global.HSM_BG_AMBIENT2_LIGHTING_MULTIPLIER / 100;
 
 #pragma parameter HSM_BG_APPLY_AMBIENT_IN_ADD_MODE         "          Apply Ambient Lighting in ADD Blend Mode"  0 0 1 1

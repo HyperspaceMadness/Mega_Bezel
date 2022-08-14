@@ -108,16 +108,15 @@ vec4 BlendModeMaskLayerMix(vec4 color_under, vec4 color_over, float blend_mode, 
 // Takes into account the default sizes of each scale mode
 vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 						vec2 in_viewport_coord_unscaled,
-						float texture_aspect_mode, 
-						float explicit_texture_aspect, 
+						float texture_aspect_mode,
+						float explicit_texture_aspect,
 						vec2 offset_pos,
 						vec2 offset_scale,
-						float inherited_scale_mode, 
-						float scale_full_with_zoom, 
+						float inherited_scale_mode,
+						float scale_full_with_zoom,
 						float image_aspect_mode,
 						float image_fill_mode,
 						bool apply_default_scale_offset,
-						float use_inherited_curved_coord,
 						inout vec2 out_placement_coord,
 						inout vec2 out_placement_scale)
 {
@@ -147,7 +146,7 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 	else if (inherited_scale_mode == INHERITED_SCALE_MODE_TUBE_DIFFUSE)
 	{
 		inherited_scale = TUBE_DIFFUSE_SCALE;
-		inherited_coord = use_inherited_curved_coord == 1 ? TUBE_DIFFUSE_CURVED_COORD : TUBE_DIFFUSE_COORD;
+		inherited_coord = TUBE_DIFFUSE_COORD;
 		inherited_placement_coord = TUBE_DIFFUSE_COORD;
 
 		default_offset_scale = vec2(1) / DEFAULT_UNCORRECTED_SCREEN_SCALE.y;
@@ -156,7 +155,7 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 	else if (inherited_scale_mode == INHERITED_SCALE_MODE_BEZEL_OUTSIDE)
 	{
 		inherited_scale = BEZEL_OUTSIDE_SCALE;
-		inherited_coord = use_inherited_curved_coord == 1 ? BEZEL_OUTSIDE_CURVED_COORD : BEZEL_OUTSIDE_COORD;
+		inherited_coord = BEZEL_OUTSIDE_COORD;
 		inherited_placement_coord = BEZEL_OUTSIDE_COORD;
 
 		default_offset_scale = vec2(1) / DEFAULT_UNCORRECTED_BEZEL_SCALE.y;
@@ -164,21 +163,21 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 	}
 	else if (inherited_scale_mode == INHERITED_SCALE_MODE_BG)
 	{
-		inherited_coord = use_inherited_curved_coord == 1 ? BACKGROUND_CURVED_COORD : BACKGROUND_COORD;
+		inherited_coord = BACKGROUND_COORD;
 		inherited_placement_coord = BACKGROUND_COORD;
 		inherited_scale = BACKGROUND_SCALE;
 		default_offset_scale = vec2(1);
 	}
 	else if (inherited_scale_mode == INHERITED_SCALE_MODE_DEVICE)
 	{
-		inherited_coord = use_inherited_curved_coord == 1 ? DEVICE_CURVED_COORD : DEVICE_COORD;
+		inherited_coord = DEVICE_COORD;
 		inherited_placement_coord = DEVICE_COORD;
 		inherited_scale = DEVICE_SCALE;
 		default_offset_scale = vec2(1);
 	}
 	else if (inherited_scale_mode == INHERITED_SCALE_MODE_DECAL)
 	{
-		inherited_coord = use_inherited_curved_coord == 1 ? DECAL_CURVED_COORD : DECAL_COORD;
+		inherited_coord = DECAL_COORD;
 		inherited_placement_coord = DECAL_COORD;
 		inherited_scale = DECAL_SCALE;
 		default_offset_scale = vec2(1);
@@ -206,35 +205,28 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 
 	vec2 out_coord = vec2(0.5);
 
-	if (use_inherited_curved_coord == 1)
+	vec2 drawing_scale = out_placement_scale;
+	float slide_x = 0;
+
+	if ( image_fill_mode == FILL_MODE_SPLIT_FILL_HORIZONTAL )
 	{
-		out_coord = HSM_AddPosScaleToCoord(inherited_coord, offset_pos, offset_scale);
+		// Correct the aspect so it matches the texture and is never stretched
+		float placement_aspect = out_placement_scale.x / out_placement_scale.y * output_aspect;
+		float placement_aspect_difference = explicit_texture_aspect / placement_aspect;
+		drawing_scale.x *= placement_aspect_difference;
+
+		slide_x = (out_placement_scale.x - drawing_scale.x) / 2;// * out_placement_scale.x; 
+
+		if ( out_placement_coord.x < 0.5 )
+			slide_x *= -1;
+
+		inherited_coord.x -= slide_x;
 	}
-	else
-	{
-		vec2 drawing_scale = out_placement_scale;
-		float slide_x = 0;
 
-		if ( image_fill_mode == FILL_MODE_SPLIT_FILL_HORIZONTAL )
-		{
-			// Correct the aspect so it matches the texture and is never stretched
-			float placement_aspect = out_placement_scale.x / out_placement_scale.y * output_aspect;
-			float placement_aspect_difference = explicit_texture_aspect / placement_aspect;
-			drawing_scale.x *= placement_aspect_difference;
-
-			slide_x = (out_placement_scale.x - drawing_scale.x) / 2;// * out_placement_scale.x; 
-
-			if ( out_placement_coord.x < 0.5 )
-				slide_x *= -1;
-
-			inherited_coord.x -= slide_x;
-		}
-
-		// The inherited_coord is already the coord from the inherited space
-		// We only need to apply an offset from this
-		out_coord = HSM_AddPosScaleToCoord(inherited_coord, offset_pos, drawing_scale / inherited_scale);
-		// out_coord.x -= slide_x;
-	}
+	// The inherited_coord is already the coord from the inherited space
+	// We only need to apply an offset from this
+	out_coord = HSM_AddPosScaleToCoord(inherited_coord, offset_pos, drawing_scale / inherited_scale);
+	// out_coord.x -= slide_x;
 
 	return out_coord;
 }
@@ -324,7 +316,7 @@ void main()
 	// AMBIENT LIGHTING IMAGES
 	vec4 ambient_image = vec4(1);
 	vec4 ambient2_image = vec4(1);
-	HSM_Fill_Ambient_Images(VIEWPORT_COORD, VIEWPORT_UNSCALED_COORD, HSM_AMBIENT_LIGHTING_SWAP_IMAGES, NightLightingImage, NightLighting2Image, ambient_image, ambient2_image);
+	HSM_Fill_Ambient_Images(VIEWPORT_COORD, VIEWPORT_UNSCALED_COORD, TUBE_DIFFUSE_SCALE.y, HSM_AMBIENT_LIGHTING_SWAP_IMAGES, NightLightingImage, NightLighting2Image, ambient_image, ambient2_image);
 
 	TUBE_DIFFUSE_CURVED_COORD = HSM_GetCurvedCoord(SCREEN_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, TUBE_DIFFUSE_ASPECT);
 
@@ -633,7 +625,6 @@ void main()
 												HSM_BG_SCALE_KEEP_ASPECT,
 												HSM_BG_FILL_MODE,
 												true,
-												USE_INHERITED_COORD_OFF,
 												BACKGROUND_COORD,
 												BACKGROUND_SCALE);
 
@@ -683,7 +674,6 @@ void main()
 											HSM_DEVICE_SCALE_KEEP_ASPECT,
 											HSM_DEVICE_FILL_MODE,
 											true,
-											HSM_DEVICE_COPY_INHERITED_COORD,
 											DEVICE_COORD,
 											DEVICE_SCALE);
 
@@ -730,7 +720,6 @@ void main()
 											HSM_LED_SCALE_KEEP_ASPECT, 
 											HSM_LED_FILL_MODE,
 											true,
-											USE_INHERITED_COORD_OFF,
 											LED_COORD,
 											LED_SCALE);
 
@@ -774,7 +763,6 @@ void main()
 											HSM_DECAL_SCALE_KEEP_ASPECT, 
 											HSM_DECAL_FILL_MODE,
 											true,
-											USE_INHERITED_COORD_OFF,
 											DECAL_COORD,
 											DECAL_SCALE);
 	vec4 decal_image = vec4(0);
@@ -817,7 +805,6 @@ void main()
 												HSM_TOP_SCALE_KEEP_ASPECT, 
 												HSM_TOP_FILL_MODE,
 												true,
-												USE_INHERITED_COORD_OFF,
 												TOP_IMAGE_COORD,
 												TOP_IMAGE_SCALE);
 
@@ -841,13 +828,13 @@ void main()
 			top_image = HSM_ApplyGamma(top_image, HSM_STATIC_LAYERS_GAMMA);
 
 		top_image.rgb = ApplyAmbientImages(top_image.rgb, 
-												ambient_image.rgb,
-												ambient2_image.rgb,
-												HSM_TOP_AMBIENT_LIGHTING_MULTIPLIER,
-												HSM_TOP_AMBIENT2_LIGHTING_MULTIPLIER,
-												HSM_TOP_APPLY_AMBIENT_IN_ADD_MODE,
-												HSM_TOP_BLEND_MODE,
-												HSM_AMBIENT_LIGHTING_SWAP_IMAGES);
+											ambient_image.rgb,
+											ambient2_image.rgb,
+											HSM_TOP_AMBIENT_LIGHTING_MULTIPLIER,
+											HSM_TOP_AMBIENT2_LIGHTING_MULTIPLIER,
+											HSM_TOP_APPLY_AMBIENT_IN_ADD_MODE,
+											HSM_TOP_BLEND_MODE,
+											HSM_AMBIENT_LIGHTING_SWAP_IMAGES);
 	}
 
 	//----------------------------------------------------
@@ -859,19 +846,18 @@ void main()
 	{
 		vec2 cab_glass_size = textureSize(CabinetGlassImage, 0);
 		CAB_GLASS_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
-											VIEWPORT_UNSCALED_COORD,
-											TEXTURE_ASPECT_MODE_EXPLICIT,
-											cab_glass_size.x / cab_glass_size.y,
-											vec2(HSM_CAB_GLASS_POS_X, HSM_CAB_GLASS_POS_Y), 
-											vec2(HSM_CAB_GLASS_SCALE * HSM_CAB_GLASS_SCALE_X, HSM_CAB_GLASS_SCALE),
-											HSM_CAB_GLASS_SCALE_MODE,
-											HSM_CAB_GLASS_SCALE_FULL_WITH_ZOOM,
-											HSM_CAB_GLASS_SCALE_KEEP_ASPECT, 
-											HSM_CAB_GLASS_FILL_MODE,
-											true,
-											USE_INHERITED_COORD_OFF,
-											CAB_GLASS_COORD,
-											CAB_GLASS_SCALE);
+													VIEWPORT_UNSCALED_COORD,
+													TEXTURE_ASPECT_MODE_EXPLICIT,
+													cab_glass_size.x / cab_glass_size.y,
+													vec2(HSM_CAB_GLASS_POS_X, HSM_CAB_GLASS_POS_Y), 
+													vec2(HSM_CAB_GLASS_SCALE * HSM_CAB_GLASS_SCALE_X, HSM_CAB_GLASS_SCALE),
+													HSM_CAB_GLASS_SCALE_MODE,
+													HSM_CAB_GLASS_SCALE_FULL_WITH_ZOOM,
+													HSM_CAB_GLASS_SCALE_KEEP_ASPECT, 
+													HSM_CAB_GLASS_FILL_MODE,
+													true,
+													CAB_GLASS_COORD,
+													CAB_GLASS_SCALE);
 
 		if (HSM_CAB_GLASS_OPACITY > 0 && cab_glass_size.y > 16)
 		{
@@ -924,7 +910,6 @@ void main()
 											HSM_CUTOUT_KEEP_ASPECT,
 											FILL_MODE_STRETCH,
 											false,
-											USE_INHERITED_COORD_OFF,
 											temp_coord,
 											temp_scale);
 	
@@ -947,7 +932,6 @@ void main()
 												0,
 												FILL_MODE_STRETCH,
 												false,
-												USE_INHERITED_COORD_OFF,
 												temp_coord,
 												temp_scale);
 

@@ -65,11 +65,11 @@ DecalImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Placehold
 DecalImage_linear = true
 DecalImage_mipmap = 1
 
-NightLightingImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/NightLighting_1920x1080.png
+NightLightingImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/NightLightingClose_1920x1080.png
 NightLightingImage_linear = true
 NightLightingImage_mipmap = 1
 
-NightLighting2Image = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/NightLighting_1920x1080.png
+NightLighting2Image = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/NightLightingFar_1920x1080.png
 NightLighting2Image_linear = true
 NightLighting2Image_mipmap = 1
 

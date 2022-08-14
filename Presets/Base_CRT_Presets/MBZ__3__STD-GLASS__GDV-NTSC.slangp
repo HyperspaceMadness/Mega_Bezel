@@ -3,7 +3,7 @@ shaders = 32
 shader0 = ../../shaders/base/add-params-glass.slang
 alias0 = "CorePass"
 
-shader1 =  ../../../../stock.slang // ../../shaders/guest/g-sharp_resampler.slang
+shader1 =  ../../../../stock.slang
 filter_linear1 = false
 srgb_framebuffer1 = true
 scale_type1 = source
@@ -88,7 +88,7 @@ scale_type13 = source
 scale_x13 = 1.0
 scale_y13 = 1.0
 
-shader14 =  ../../shaders/guest/hsm-custom-fast-sharpen.slang // ../../shaders/guest/g-sharp_resampler.slang
+shader14 =  ../../shaders/guest/hsm-custom-fast-sharpen.slang
 filter_linear14 = true
 scale_type14 = source
 scale_x14 = 1.0
