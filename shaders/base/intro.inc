@@ -295,7 +295,8 @@ void main()
 	if (show_update_indicator)
 	{
 		float final_aspect = SCREEN_ASPECT;
-		vec2 corner_offset = vec2(MAX_NEGATIVE_CROP * 2 * 0.8, MAX_NEGATIVE_CROP * 2 * 0.8);
+		// vec2 corner_offset = vec2(MAX_NEGATIVE_CROP * 2 * 0.8, MAX_NEGATIVE_CROP * 2 * 0.8);
+		vec2 corner_offset = vec2(0.1, 0.1);
 		vec2 center_coord = vec2(1 - corner_offset.x * final_aspect, 1 - corner_offset.y);
 		vec2 test_coord = vec2(1 - (1 - viewport_coord_adjusted.x) * final_aspect, viewport_coord_adjusted.y);
 		float distance =  length(test_coord - center_coord);

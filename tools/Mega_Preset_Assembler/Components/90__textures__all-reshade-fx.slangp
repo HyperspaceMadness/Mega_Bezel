@@ -37,7 +37,7 @@ TubeShadowImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Tube
 TubeShadowImage_linear = true
 TubeShadowImage_mipmap = 1
 
-TubeStaticReflectionImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/TubeGlassOverlayImage_3840x2160.png
+TubeStaticReflectionImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/TubeGlassOverlayImageCropped_1440x1080.png
 TubeStaticReflectionImage_linear = true
 TubeStaticReflectionImage_mipmap = 1
 

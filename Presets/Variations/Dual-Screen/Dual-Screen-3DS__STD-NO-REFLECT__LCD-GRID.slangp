@@ -1,7 +1,7 @@
-#reference "../Base_CRT_Presets/MBZ__4__STD-NO-REFLECT__GDV.slangp"
+#reference "../../Base_CRT_Presets/MBZ__4__STD-NO-REFLECT__LCD-GRID.slangp"
 
-BackgroundImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
-BackgroundVertImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
+// BackgroundImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+// BackgroundVertImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 
 HSM_FLIP_VIEWPORT_VERTICAL = 1
 HSM_ASPECT_RATIO_MODE = 5
@@ -22,3 +22,5 @@ HSM_TUBE_BLACK_EDGE_THICKNESS = 50
 HSM_BZL_WIDTH = 160
 HSM_BZL_HEIGHT = 150
 HSM_FRM_THICKNESS = 100
+
+HSM_SCREEN_VIGNETTE_ON = "0.000000"

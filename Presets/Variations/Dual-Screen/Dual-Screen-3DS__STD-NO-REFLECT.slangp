@@ -1,4 +1,7 @@
-#reference "../Base_CRT_Presets/MBZ__3__STD__GDV.slangp"
+#reference "../../Base_CRT_Presets/MBZ__4__STD-NO-REFLECT__GDV.slangp"
+
+// BackgroundImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+// BackgroundVertImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 
 HSM_FLIP_VIEWPORT_VERTICAL = 1
 HSM_ASPECT_RATIO_MODE = 5

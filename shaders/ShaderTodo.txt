@@ -6,10 +6,31 @@ Changes:
   * Updated license date
   * Renamed LOTS of shader files, Removed hsm on directories and base files
     * No preset names have changed so you should notice no change
+  * Ambient Lighting
+    * Default ambient lighting has changed so that the first lighting image will affect everything but the background
+      * The background will be affected by the second ambient image
+      * The first image has changed to one with the lights closer to the middle and brighter
+        * This brightening up the monitor graphic and helps separate it from the background
+    * Added a mode to decide which images with these modes
+      * Use Both
+      * Only 1
+      * Only 2
+      * Swap the Images
+    * Changed Ambient Lighting Scale with viewport to be a scale inheritance mode
+      * It will now be able to follow the tube or the viewport scale
+    * Added a `Multiply Opacity by Diffuse Amount`, this helps adust the highlight when the diffuse image is turned on
+    * `HSM_TUBE_STATIC_REFLECTION_IMAGE_` parameters renamed to `HSM_TUBE_STATIC_`
+    * Added Position X and Y and Scale x
+    * Added Black Level for Static Image, helps to adjust how much how sharp the highlights are
+    * Added Optional Noise, good for getting rid of banding 
+
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
+
+* Scale should follow first screen only so we don't have incontinuities, or have some toggle if really needed
+
   * Megatron HDR Combination at end of chain
   * Fix Tube Diffuse Shadow in 3D Curvature
   * Add .params #reference to with all parameters commented out

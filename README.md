@@ -7,7 +7,7 @@ Mega Bezel Shader Readme
 ----------------------------------------
 ----------------------------------------
 
-This file is best viewed in a markdown editor/viewer if possible.
+This file is best viewed in a markdown editor/viewer. You can also view it here https://github.com/HyperspaceMadness/Mega_Bezel with correct formatting
 
 If you are wondering **"What is this thing?"** here's a little overview sharing our ideas around the project and some of the Mega Bezel features:
 [RetroArch – Introducing the Mega Bezel Reflection Shader – Libretro](https://www.libretro.com/index.php/retroarch-introducing-the-mega-bezel/)
@@ -398,8 +398,11 @@ NTSC Processing is only included in NTSC Presets, and GTU Horizontal blurring is
   - How much of the ambient lighting darkening effect is applied when using the first image
 - **Ambient 2nd Image Opacity**
   - How much of the ambient lighting darkening effect is applied when using the second image
-  - **Swap Ambient Images** - Switch which image appears for number 1 to 2, and switch 2 to 1 
-
+* **Which Images to Use** 
+  * **0 - BOTH** - Normal Mode, Use Both Images
+  * **1 - 1 ONLY** - Use the first image for both slots
+  * **2 - 2 ONLY** - Use the second image for both slots
+  * **3 - Swap** - Swap the Images
 
 -----------------------------------------------------------------------------------------------
 **[ VIEWPORT ZOOM ]:** 

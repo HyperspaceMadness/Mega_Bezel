@@ -262,7 +262,7 @@ TubeShadowImage = ../../shaders/textures/Tube_Shadow_1600x1200.png
 TubeShadowImage_linear = true
 TubeShadowImage_mipmap = 1
 
-TubeStaticReflectionImage = ../../shaders/textures/TubeGlassOverlayImage_3840x2160.png
+TubeStaticReflectionImage = ../../shaders/textures/TubeGlassOverlayImageCropped_1440x1080.png
 TubeStaticReflectionImage_linear = true
 TubeStaticReflectionImage_mipmap = 1
 

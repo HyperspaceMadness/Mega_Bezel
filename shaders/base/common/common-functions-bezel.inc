@@ -127,21 +127,26 @@ vec4 HSM_GetTubeHighlight(vec2 tube_curved_coord, bool apply_to_mirror, in sampl
 	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
 		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
 
-	vec2 tube_highlight_coord = (mirrored_tube_coord - 0.5) / HSM_TUBE_STATIC_REFLECTION_IMAGE_SCALE + 0.5;
+	vec2 tube_highlight_coord = (mirrored_tube_coord - 0.5) / vec2(HSM_TUBE_STATIC_SCALE * HSM_TUBE_STATIC_SCALE_X, HSM_TUBE_STATIC_SCALE) + 0.5;
+	tube_highlight_coord = (tube_highlight_coord - 0.5) / vec2(HSM_TUBE_STATIC_SCALE_X, 1) + 0.5;
 
-	tube_highlight_coord.x = (tube_highlight_coord.x - 0.5) * HSM_FLIP_VIEWPORT_HORIZONTAL + 0.5;
-	tube_highlight_coord.y = (tube_highlight_coord.y - 0.5) * HSM_FLIP_VIEWPORT_VERTICAL + 0.5;
-/*
-	// Dithering for the glass reflection if needed to reduce banding
-	float blur_max_size = 1;
-	float blur_amount = 0.2;
-	vec4 tube_highlight_image = HSM_GetStoichaicBlurredSample(TubeStaticReflectionImage, tube_highlight_coord, HSM_TUBE_STATIC_REFLECTION_IMAGE_DITHERING_SAMPLES, blur_max_size, blur_amount);
-*/
+	tube_highlight_coord.x = (tube_highlight_coord.x + HSM_TUBE_STATIC_POS_X - 0.5) * HSM_FLIP_VIEWPORT_HORIZONTAL + 0.5;
+	tube_highlight_coord.y = (tube_highlight_coord.y + HSM_TUBE_STATIC_POS_Y - 0.5) * HSM_FLIP_VIEWPORT_VERTICAL + 0.5;
+
 	// Mask the very outer edge of the tube for a very small shadowing effect
 	float tube_highlight_mask = HSM_GetCornerMask((tube_curved_coord - 0.5) + 0.5 , TUBE_DIFFUSE_ASPECT, HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS, 0.9);
 
-	vec4 tube_highlight_image = HSM_GetMipmappedTexSample(TubeStaticReflectionImage, tube_highlight_coord, TUBE_SCALE, 0);
+	vec4 tube_highlight_image = vec4(0);
 
+	if (HSM_TUBE_STATIC_DITHER_SAMPLES > 0)
+	{
+		// Dithering for the glass reflection if needed to reduce banding
+		tube_highlight_image = HSM_GetStoichaicBlurredSample(TubeStaticReflectionImage, tube_highlight_coord, HSM_TUBE_STATIC_DITHER_SAMPLES, HSM_TUBE_STATIC_DITHER_DISTANCE, HSM_TUBE_STATIC_DITHER_AMOUNT);
+	}
+	else
+	{
+		tube_highlight_image = HSM_GetMipmappedTexSample(TubeStaticReflectionImage, tube_highlight_coord, TUBE_SCALE, 0);
+	}
 	tube_highlight_image = HSM_Linearize(tube_highlight_image, DEFAULT_SRGB_GAMMA) * tube_highlight_mask;
 
 	out_color = HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY * tube_highlight_image * tube_highlight_image.a;

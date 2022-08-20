@@ -134,10 +134,9 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 1, TUBE_DIFFUSE_SCALE, TUBE_SCALE, TUBE_DIFFUSE_ASPECT, 1);
 	vec2 mirrored_tube_coord = HSM_GetMirrorWrappedCoord(tube_curved_coord);
 	
-		float vignette_factor = HSM_GetScreenVignetteFactor(mirrored_tube_coord);
+	float vignette_factor = HSM_GetScreenVignetteFactor(mirrored_tube_coord);
 	if (HSM_GetUseScreenVignette())
 	{
-
 		float vignette_factor_outside_screen = HSM_SCREEN_VIGNETTE_IN_REFLECTION * vignette_factor + (1 - HSM_SCREEN_VIGNETTE_IN_REFLECTION) * 1;
 		vignette_factor = screen_mask * vignette_factor + (1 - screen_mask) * vignette_factor_outside_screen;
 
@@ -191,7 +190,15 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	// AMBIENT LIGHTING IMAGES
 	vec4 ambient_lighting_image = vec4(1);
 	vec4 ambient2_lighting_image = vec4(1);
-	HSM_Fill_Ambient_Images(VIEWPORT_COORD, VIEWPORT_UNSCALED_COORD, TUBE_DIFFUSE_SCALE.y, HSM_AMBIENT_LIGHTING_SWAP_IMAGES, NightLightingImage, NightLighting2Image, ambient_lighting_image, ambient2_lighting_image);
+	HSM_Fill_Ambient_Images(VIEWPORT_COORD, 
+							VIEWPORT_UNSCALED_COORD, 
+							TUBE_DIFFUSE_COORD, 
+							TUBE_DIFFUSE_SCALE, 
+							HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE, 
+							NightLightingImage, 
+							NightLighting2Image, 
+							ambient_lighting_image, 
+							ambient2_lighting_image);
 
 	vec3 tube_shadow = vec3(1);
 	if (HSM_TUBE_SHADOW_IMAGE_ON > 0.5 && (HSM_GetUseTubeDiffuseImage() || HSM_GetUseTubeColoredGelImage() || HSM_GetUseTubeStaticReflection()))
@@ -220,10 +227,16 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	// If the crt blend mode is multiply then use the diffuse image
 	float tube_diffuse_mode = HSM_CRT_BLEND_MODE == 2 ? 1 : HSM_TUBE_DIFFUSE_MODE;
 	vec4 tube_diffuse = vec4(0, 0, 0, 1);
+	float adjusted_tube_diffuse_amount = HSM_TUBE_DIFFUSE_MODE == 0 ? 0 : HSM_TUBE_DIFFUSE_IMAGE_AMOUNT;
+
+	if (tube_diffuse_mode == 2)
+	{
+		// Do something if the tube is supposed to be transparent here
+	}
 	if (tube_diffuse_mode == 1)
 	{
 		// TubeDiffuseImage
-		if (HSM_TUBE_DIFFUSE_MODE == 1 || HSM_CRT_BLEND_MODE == 2)
+		if (adjusted_tube_diffuse_amount > 0 || HSM_CRT_BLEND_MODE == 2)
 		{
 			vec2 diffuse_coord = tube_diffuse_curved_coord;
 
@@ -236,6 +249,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 			tube_diffuse = HSM_GetMipmappedTexSample(TubeDiffuseImage, diffuse_coord, TUBE_SCALE * HSM_TUBE_DIFFUSE_IMAGE_SCALE, 0);
 			tube_diffuse.rgb = HSM_GLOBAL_GRAPHICS_BRIGHTNESS * HSM_GetPreMultipliedColorLinear(vec4(tube_diffuse.rgb, 1), SOURCE_MATTE_PREMULTIPLIED, DEFAULT_SRGB_GAMMA).rgb;
 			tube_diffuse.rgb = HSM_ApplyHSVAdjustment(tube_diffuse.rgb, HSM_TUBE_DIFFUSE_IMAGE_HUE, HSM_TUBE_DIFFUSE_IMAGE_SATURATION, HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS, HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON, HSM_TUBE_DIFFUSE_IMAGE_GAMMA);
+			tube_diffuse.rgb *= HSM_TUBE_DIFFUSE_IMAGE_AMOUNT;
 
 			tube_diffuse.rgb *= tube_shadow;
 		}
@@ -244,6 +258,8 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 		tube_diffuse *= HSM_GetTubeDiffuseOpacity();
 		tube_diffuse.rgb = HSM_ApplyAmbientImage(tube_diffuse.rgb, ambient_lighting_image.rgb, HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING);
 		tube_diffuse.rgb = HSM_ApplyAmbientImage(tube_diffuse.rgb, ambient2_lighting_image.rgb, HSM_TUBE_DIFFUSE_IMAGE_AMBIENT2_LIGHTING);
+
+		// TODO see what to do when its transparent
 	}
 	out_color.a = in_color_with_gamma.a;
 
@@ -321,10 +337,14 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	if (HSM_GetUseTubeStaticReflection())
 	{
 		vec3 tube_highlight_image = HSM_GetTubeHighlight(tube_curved_coord, false, TubeStaticReflectionImage).rgb;
-		tube_highlight_image = HSM_ApplyAmbientImage(tube_highlight_image.rgb, ambient_lighting_image.rgb, HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT_LIGHTING);
-		tube_highlight_image = HSM_ApplyAmbientImage(tube_highlight_image.rgb, ambient2_lighting_image.rgb, HSM_TUBE_STATIC_REFLECTION_IMAGE_AMBIENT2_LIGHTING);
+		tube_highlight_image = HSM_ApplyAmbientImage(tube_highlight_image.rgb, ambient_lighting_image.rgb, HSM_TUBE_STATIC_AMBIENT_LIGHTING);
+		tube_highlight_image = HSM_ApplyAmbientImage(tube_highlight_image.rgb, ambient2_lighting_image.rgb, HSM_TUBE_STATIC_AMBIENT2_LIGHTING);
 
-		tube_highlight_image.rgb *= HSM_TUBE_STATIC_REFLECTION_IMAGE_SHADOW_OPACITY * tube_shadow + (1 - HSM_TUBE_STATIC_REFLECTION_IMAGE_SHADOW_OPACITY);
+		tube_highlight_image.rgb *= HSM_TUBE_STATIC_SHADOW_OPACITY * tube_shadow + (1 - HSM_TUBE_STATIC_SHADOW_OPACITY);
+
+		tube_highlight_image = clamp(HSM_TUBE_STATIC_BLACK_LEVEL * (tube_highlight_image - 1) + 1, 0, 1);
+
+		tube_highlight_image *= 1 - HSM_TUBE_STATIC_OPACITY_DIFFUSE_MULTIPLY + HSM_TUBE_STATIC_OPACITY_DIFFUSE_MULTIPLY * adjusted_tube_diffuse_amount;
 
 		out_color.rgb += tube_highlight_image * HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY;
 	}

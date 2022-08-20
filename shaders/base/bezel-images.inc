@@ -316,7 +316,7 @@ void main()
 	// AMBIENT LIGHTING IMAGES
 	vec4 ambient_image = vec4(1);
 	vec4 ambient2_image = vec4(1);
-	HSM_Fill_Ambient_Images(VIEWPORT_COORD, VIEWPORT_UNSCALED_COORD, TUBE_DIFFUSE_SCALE.y, HSM_AMBIENT_LIGHTING_SWAP_IMAGES, NightLightingImage, NightLighting2Image, ambient_image, ambient2_image);
+	HSM_Fill_Ambient_Images(VIEWPORT_COORD, VIEWPORT_UNSCALED_COORD, TUBE_DIFFUSE_COORD, TUBE_DIFFUSE_SCALE, HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE, NightLightingImage, NightLighting2Image, ambient_image, ambient2_image);
 
 	TUBE_DIFFUSE_CURVED_COORD = HSM_GetCurvedCoord(SCREEN_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, TUBE_DIFFUSE_ASPECT);
 
@@ -577,7 +577,7 @@ void main()
 															HSM_BZL_AMBIENT2_LIGHTING_MULTIPLIER,
 															1,
 															HSM_BZL_BLEND_MODE,
-															HSM_AMBIENT_LIGHTING_SWAP_IMAGES);
+															HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
 
 		float FRAME_AND_BEZEL_MASK = (1 - TUBE_MASK) * (1 - OUTSIDE_FRAME_MASK);
 
@@ -655,7 +655,7 @@ void main()
 												HSM_BG_AMBIENT2_LIGHTING_MULTIPLIER,
 												HSM_BG_APPLY_AMBIENT_IN_ADD_MODE,
 												HSM_BG_BLEND_MODE,
-												HSM_AMBIENT_LIGHTING_SWAP_IMAGES);
+												HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
 	}
 
 	//----------------------------------------------------
@@ -699,7 +699,7 @@ void main()
 													HSM_DEVICE_AMBIENT2_LIGHTING_MULTIPLIER,
 													HSM_DEVICE_APPLY_AMBIENT_IN_ADD_MODE,
 													HSM_DEVICE_BLEND_MODE,
-													HSM_AMBIENT_LIGHTING_SWAP_IMAGES);
+													HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
 	}
 
 	//----------------------------------------------------
@@ -744,7 +744,7 @@ void main()
 													HSM_LED_AMBIENT2_LIGHTING_MULTIPLIER,
 													HSM_LED_APPLY_AMBIENT_IN_ADD_MODE,
 													HSM_LED_BLEND_MODE,
-													HSM_AMBIENT_LIGHTING_SWAP_IMAGES);
+													HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
 		}
 	}
 
@@ -787,7 +787,7 @@ void main()
 												HSM_DECAL_AMBIENT2_LIGHTING_MULTIPLIER,
 												HSM_DECAL_APPLY_AMBIENT_IN_ADD_MODE,
 												HSM_DECAL_BLEND_MODE,
-												HSM_AMBIENT_LIGHTING_SWAP_IMAGES);
+												HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
 	}
 
 //----------------------------------------------------
@@ -834,7 +834,7 @@ void main()
 											HSM_TOP_AMBIENT2_LIGHTING_MULTIPLIER,
 											HSM_TOP_APPLY_AMBIENT_IN_ADD_MODE,
 											HSM_TOP_BLEND_MODE,
-											HSM_AMBIENT_LIGHTING_SWAP_IMAGES);
+											HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
 	}
 
 	//----------------------------------------------------
@@ -881,7 +881,7 @@ void main()
 														HSM_CAB_GLASS_AMBIENT2_LIGHTING_MULTIPLIER,
 														HSM_CAB_GLASS_APPLY_AMBIENT_IN_ADD_MODE,
 														HSM_CAB_GLASS_BLEND_MODE,
-														HSM_AMBIENT_LIGHTING_SWAP_IMAGES);
+														HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
 		}
 	}
 
