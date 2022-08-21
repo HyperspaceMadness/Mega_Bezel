@@ -88,7 +88,7 @@ void main()
 {
    vec3 source = COMPAT_TEXTURE(Source, vTexCoord).rgb;
 
-   // Put the source back in the original gamma space
+   // Put the source back in the original gamma space as is expected by Megatron
    source = HSM_Delinearize(vec4(source, 1), GAMMA_INPUT).rgb;
 
    const vec3 colour   = ColourGrade(source);

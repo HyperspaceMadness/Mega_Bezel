@@ -457,15 +457,16 @@ void main()
    const uint crt_resolution        = uint(HCRT_CRT_RESOLUTION);
    const uint lcd_resolution        = uint(HCRT_LCD_RESOLUTION);
    const uint lcd_subpixel_layout   = uint(HCRT_LCD_SUBPIXEL);
-   const vec2 source_resolution     = CROPPED_ROTATED_SIZE_WITH_RES_MULT;
+   const vec2 source_size           = CROPPED_ROTATED_SIZE_WITH_RES_MULT;
+   const vec2 output_size           = global.OutputSize.xy;
 
    vec2 tex_coord                   = screen_curved_coord - vec2(0.5f);
    tex_coord                        = tex_coord * vec2(1.0f + (HCRT_PIN_PHASE * tex_coord.y), 1.0f);
    tex_coord                        = tex_coord * vec2(HCRT_H_SIZE, HCRT_V_SIZE);
    tex_coord                        = tex_coord + vec2(0.5f);
-   tex_coord                        = tex_coord + vec2(HCRT_H_CENT, HCRT_V_CENT) / global.OutputSize.xy; 
+   tex_coord                        = tex_coord + (vec2(HCRT_H_CENT, HCRT_V_CENT) / output_size); 
 
-   const vec2 current_position      = vTexCoord * global.OutputSize.xy;
+   const vec2 current_position      = vTexCoord * output_size;
 
    uint colour_mask;
 
@@ -514,7 +515,7 @@ void main()
       }
    }
 
-   const float scanline_size           = global.OutputSize.y / global.SourceSize.y;
+   const float scanline_size           = output_size.y / source_size.y;
 
    const vec3 horizontal_convergence   = vec3(HCRT_RED_HORIZONTAL_CONVERGENCE, HCRT_GREEN_HORIZONTAL_CONVERGENCE, HCRT_BLUE_HORIZONTAL_CONVERGENCE);
    const vec3 vertical_convergence     = vec3(HCRT_RED_VERTICAL_CONVERGENCE, HCRT_GREEN_VERTICAL_CONVERGENCE, HCRT_BLUE_VERTICAL_CONVERGENCE);
@@ -534,7 +535,7 @@ void main()
 
       const float scanline_channel_0   = GenerateScanline(  channel_0,
                                                             tex_coord,
-                                                            source_resolution, 
+                                                            source_size.xy, 
                                                             scanline_size, 
                                                             horizontal_convergence[channel_0], 
                                                             vertical_convergence[channel_0], 
@@ -553,7 +554,7 @@ void main()
 
       const float scanline_channel_1   = GenerateScanline(channel_1,
                                                           tex_coord,
-                                                          source_resolution, 
+                                                          source_size.xy, 
                                                           scanline_size, 
                                                           horizontal_convergence[channel_1], 
                                                           vertical_convergence[channel_1], 
@@ -572,7 +573,7 @@ void main()
 
       const float scanline_channel_2   = GenerateScanline(channel_2,
                                                           tex_coord,
-                                                          source_resolution, 
+                                                          source_size.xy, 
                                                           scanline_size, 
                                                           horizontal_convergence[channel_2], 
                                                           vertical_convergence[channel_2], 
@@ -585,7 +586,9 @@ void main()
       scanline_colour += scanline_channel_2 * kColourMask[channel_2];
    }
 
-   const vec3 hdr10 = GammaCorrect(scanline_colour);
+   vec3 hdr10; 
+   
+   GammaCorrect(scanline_colour, hdr10);
 
    FragColor = vec4(hdr10, 1.0f);
 }

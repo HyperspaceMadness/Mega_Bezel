@@ -24,12 +24,12 @@
 #pragma parameter hcrt_crt_screen_type               "    Screen Type: APERTURE GRILLE | SHADOW MASK | SLOT MASK"   0.0      0.0   3.0      1.0
 #pragma parameter hcrt_crt_resolution                "    Resolution: 300TVL | 600TVL | 800TVL | 1000TVL"           1.0      0.0   3.0      1.0
 #pragma parameter hcrt_colour_system                 "    Colour System: r709 | PAL | NTSC-U | NTSC-J"              2.0      0.0   3.0      1.0
-#pragma parameter hcrt_white_temperature             "    White Temperature Offset (Kelvin)"                        0.0      -5000.0  12000.0      100.0
-#pragma parameter hcrt_brightness                    "    Brightness"                                               0.0      -1.0  1.0      0.01
-#pragma parameter hcrt_contrast                      "    Contrast"                                                 0.0      -1.0  1.0      0.01
-#pragma parameter hcrt_saturation                    "    Saturation"                                               0.0      -1.0   1.0     0.01
-#pragma parameter hcrt_gamma_in                      "    Gamma In"                                                 0.0      -1.0   1.0     0.01
-#pragma parameter hcrt_gamma_out                     "    Gamma Out"                                                0.0      -0.4   0.4     0.005
+#pragma parameter hcrt_white_temperature             "    White Temperature Offset (Kelvin)"                        0.0     -5000.0  12000.0      100.0
+#pragma parameter hcrt_brightness                    "    Brightness"                                               0.0     -1.0   1.0      0.01
+#pragma parameter hcrt_contrast                      "    Contrast"                                                 0.0     -1.0   1.0      0.01
+#pragma parameter hcrt_saturation                    "    Saturation"                                               0.0     -1.0   1.0      0.01
+#pragma parameter hcrt_gamma_in                      "    Gamma In"                                                 2.22     1.22  3.22     0.01
+#pragma parameter hcrt_gamma_out                     "    Gamma Out"                                                2.4      2.0   2.8      0.005
 #pragma parameter hcrt_pin_phase                     "    Pin Phase"                                                0.00    -0.2   0.2      0.01
 #pragma parameter hcrt_pin_amp                       "    Pin Amp"                                                  0.00    -0.2   0.2      0.01
 #pragma parameter hcrt_space3                        " "                                                            0.0      0.0   0.0001   0.0001

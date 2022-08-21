@@ -12,7 +12,7 @@ const mat3 kXYZ_to_DCIP3 = mat3 (
 
 float LinearTosRGB_1(const float channel)
 {
-	return (channel > 0.0031308f) ? (1.055f * pow(channel, (1.0f / 2.4f) + HCRT_GAMMA_OUT)) - 0.055f : channel * 12.92f;
+	return (channel > 0.0031308f) ? (1.055f * pow(channel, 1.0f / HCRT_GAMMA_OUT)) - 0.055f : channel * 12.92f; 
 }
 
 vec3 LinearTosRGB(const vec3 colour)
@@ -22,7 +22,7 @@ vec3 LinearTosRGB(const vec3 colour)
 
 float LinearTo709_1(const float channel)
 {
-	return (channel >= 0.018f) ? pow(channel * 1.099f, 0.45f + HCRT_GAMMA_OUT) - 0.099f : channel * 4.5f;
+	return (channel >= 0.018f) ? pow(channel * 1.099f, 1.0f / (HCRT_GAMMA_OUT - 0.18f)) - 0.099f : channel * 4.5f;  // Gamma: 2.4 - 0.18 = 2.22
 }
 
 vec3 LinearTo709(const vec3 colour)
@@ -32,29 +32,29 @@ vec3 LinearTo709(const vec3 colour)
 
 vec3 LinearToDCIP3(const vec3 colour)
 {
-	return clamp(pow(colour, vec3((1.0f / 2.6f)  + HCRT_GAMMA_OUT)), 0.0f, 1.0f);
+	return clamp(pow(colour, vec3(1.0f / (HCRT_GAMMA_OUT + 0.2f))), 0.0f, 1.0f);   // Gamma: 2.4 + 0.2 = 2.6
 }
 
-vec3 GammaCorrect(const vec3 scanline_colour)
+void GammaCorrect(const vec3 scanline_colour, inout vec3 gamma_out)
 {
    if(HCRT_HDR < 1.0f)
    {
       if(HCRT_OUTPUT_COLOUR_SPACE == 0.0f)
       {
-         return LinearTo709(scanline_colour);
+         gamma_out = LinearTo709(scanline_colour);
       }
       else if(HCRT_OUTPUT_COLOUR_SPACE == 1.0f)
       {
-         return LinearTosRGB(scanline_colour);
+         gamma_out = LinearTosRGB(scanline_colour);
       }
       else
       {
          const vec3 dcip3_colour = (scanline_colour * k709_to_XYZ) * kXYZ_to_DCIP3; 
-         return LinearToDCIP3(dcip3_colour);
+         gamma_out = LinearToDCIP3(dcip3_colour);
       }
    }
    else
    {
-      return Hdr10(scanline_colour, HCRT_PAPER_WHITE_NITS, HCRT_EXPAND_GAMUT);
+      gamma_out = Hdr10(scanline_colour, HCRT_PAPER_WHITE_NITS, HCRT_EXPAND_GAMUT);
    }
 }

@@ -24,7 +24,7 @@ Changes:
     * Added Black Level for Static Image, helps to adjust how much how sharp the highlights are
     * Added Optional Noise, good for getting rid of banding 
   * Updated Reflect-Only presets to use Glass as a base to use less resources
-
+  * Megatron updated to V3.4.1
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------

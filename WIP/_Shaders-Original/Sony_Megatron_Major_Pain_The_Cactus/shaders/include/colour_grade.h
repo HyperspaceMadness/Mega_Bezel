@@ -168,7 +168,7 @@ vec3 ColourGrade(const vec3 colour)
 
    const vec3 white_point     = WhiteBalance(kTemperatures[colour_system] + HCRT_WHITE_TEMPERATURE, colour);
 
-   const vec3 linear          = pow(white_point, vec3((1.0f / 0.45f) + HCRT_GAMMA_IN));
+   const vec3 linear          = pow(white_point, vec3(HCRT_GAMMA_IN));
 
    const vec3 xyz             = linear * kColourGamut[colour_system];
 
