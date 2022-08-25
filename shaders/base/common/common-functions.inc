@@ -314,17 +314,20 @@ vec2 GetSimpleImageScaledCoord(vec2 in_viewport_coord, vec2 in_viewport_unscaled
 
 	if (in_scale_inherit_mode == 0)
 		coord_ctr = in_viewport_unscaled_coord - 0.5;
-
 	if (in_scale_inherit_mode == 1)
 		coord_ctr = in_viewport_coord - 0.5;
 
-	// TODO the non inherit position seems wrong, scaled too big
 	if (in_scale_inherit_mode == 2)
 	{
-		if (in_inherit_pos > 0.5)
-			coord_ctr = (in_tube_coord - 0.5) / DEFAULT_SCREEN_HEIGHT / vec2( 1 / (in_tube_scale.x / in_tube_scale.y), 1) ;
+		if (in_inherit_pos < 0.5 || HSM_DUALSCREEN_MODE > 0.5)
+			coord_ctr = (in_viewport_coord - 0.5) / in_tube_scale * vec2((in_tube_scale.x / in_tube_scale.y), 1) * DEFAULT_SCREEN_HEIGHT; //in_tube_scale.y / (in_tube_scale.y / DEFAULT_SCREEN_HEIGHT);
 		else
-			coord_ctr = (in_viewport_unscaled_coord - 0.5) / in_tube_scale.y / DEFAULT_SCREEN_HEIGHT / DEFAULT_SCREEN_HEIGHT;
+		 	coord_ctr = (in_tube_coord - 0.5) * vec2((in_tube_scale.x / in_tube_scale.y), 1) * DEFAULT_SCREEN_HEIGHT; // / vec2( 1 / (in_tube_scale.x / in_tube_scale.y), 1);
+
+		// If it's dual screen is on, then the screens are at least half the size,
+		// so scale up the image so it covers the whole viewport by default
+		if (HSM_DUALSCREEN_MODE > 0.5)
+			coord_ctr *= 0.5;
 	}
 
 	coord_ctr.x = in_mirror_horz == 1 ? -1 * coord_ctr.x : coord_ctr.x;
@@ -979,6 +982,38 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 		SAMPLE_AREA_START_PIXEL_COORD = texture_sample.ba;
 	}
 
+	// Sample 3, 1
+	// rg TUBE_SCALE 
+	// ba SCREEN_POS_OFFSET
+	sample_coord = HSM_GetCacheSampleCoord(3, 1);
+	texture_sample = texture(in_cache_pass, sample_coord);
+	// TUBE_SCALE_1ST_SCREEN = texture_sample.rg;
+	SCREEN_POS_OFFSET_1ST_SCREEN = texture_sample.ba;
+
+	// Sample 3, 4
+	// rg TUBE_DIFFUSE_SCALE_1ST_SCREEN 
+	sample_coord = HSM_GetCacheSampleCoord(3, 4);
+	texture_sample = texture(in_cache_pass, sample_coord);
+	TUBE_DIFFUSE_SCALE_1ST_SCREEN = texture_sample.rg;
+	// TUBE_DIFFUSE_ASPECT_1ST_SCREEN = TUBE_DIFFUSE_SCALE_1ST_SCREEN.x / TUBE_DIFFUSE_SCALE_1ST_SCREEN.y * output_aspect;
+
+	// Sample 3, 2 - 2nd Screen
+	// rg TUBE_SCALE_2ND_SCREEN
+	// ba SCREEN_POS_OFFSET_2ND_SCREEN
+	sample_coord = HSM_GetCacheSampleCoord(3, 2);
+	texture_sample = texture(in_cache_pass, sample_coord);
+	// TUBE_SCALE_2ND_SCREEN = 		texture_sample.rg;
+	SCREEN_POS_OFFSET_2ND_SCREEN = texture_sample.ba;
+
+	// TODO need to add TUBE_DIFFUSE_ASPECT & deal with 2nd Screen
+	// Sample 3, 4
+	// ba TUBE_DIFFUSE_SCALE_2ND_SCREEN 
+	sample_coord = HSM_GetCacheSampleCoord(3, 4);
+	texture_sample = texture(in_cache_pass, sample_coord);
+	TUBE_DIFFUSE_SCALE_2ND_SCREEN = texture_sample.ba;
+	// TUBE_DIFFUSE_ASPECT_2ND_SCREEN = TUBE_DIFFUSE_SCALE_2ND_SCREEN.x / TUBE_DIFFUSE_SCALE_2ND_SCREEN.y * output_aspect;
+
+
 	// Sample 2, 3 Sample
 	// rg CORE_SIZE
 	sample_coord = HSM_GetCacheSampleCoord(2, 3);
@@ -1025,6 +1060,8 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 	USE_VERTICAL_SCANLINES = HSM_GetUseVerticalScanlines(SCREEN_ASPECT);
 	SCREEN_COORD = HSM_GetVTexCoordWithArgs(flipped_viewport_coord, SCREEN_SCALE, SCREEN_POS_OFFSET);
 	TUBE_DIFFUSE_COORD = HSM_GetVTexCoordWithArgs(flipped_viewport_coord, TUBE_DIFFUSE_SCALE, SCREEN_POS_OFFSET);
+
+	TUBE_DIFFUSE_COORD_MIXED_POS = HSM_GetVTexCoordWithArgs(flipped_viewport_coord, TUBE_DIFFUSE_SCALE_1ST_SCREEN, (SCREEN_POS_OFFSET_1ST_SCREEN + SCREEN_POS_OFFSET_2ND_SCREEN) / 2.0);
 
 	float param_sum_epsilon = 0.0000001;
 

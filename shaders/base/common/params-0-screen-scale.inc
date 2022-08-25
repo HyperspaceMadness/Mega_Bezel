@@ -816,7 +816,7 @@ float HSM_AMBIENT1_SCALE_KEEP_ASPECT = global.HSM_AMBIENT1_SCALE_KEEP_ASPECT;
 #pragma parameter HSM_AMBIENT1_SCALE_INHERIT_MODE         	"          Scale Inheritance - OFF | ZOOM | TUBE"  2 0 2 1
 float HSM_AMBIENT1_SCALE_INHERIT_MODE = global.HSM_AMBIENT1_SCALE_INHERIT_MODE;
 
-#pragma parameter HSM_AMBIENT1_SCALE             	        "          Scale Offset"  230 10 1000 1
+#pragma parameter HSM_AMBIENT1_SCALE             	        "          Scale Offset"  250 10 1000 1
 float HSM_AMBIENT1_SCALE = global.HSM_AMBIENT1_SCALE / 100;
 
 #pragma parameter HSM_AMBIENT1_SCALE_X             	        "          Scale Offset X"  100 10 1000 0.5
@@ -832,10 +832,10 @@ float HSM_AMBIENT1_MIRROR_HORZ = global.HSM_AMBIENT1_MIRROR_HORZ;
 float HSM_AMBIENT1_POS_INHERIT_MODE = global.HSM_AMBIENT1_POS_INHERIT_MODE;
 
 #pragma parameter HSM_AMBIENT1_POSITION_X 					"          Position X" 0 -1000 1000 1
-float HSM_AMBIENT1_POSITION_X = global.HSM_AMBIENT1_POSITION_X / 1000;
+float HSM_AMBIENT1_POSITION_X = global.HSM_AMBIENT1_POSITION_X / -1000;
 
 #pragma parameter HSM_AMBIENT1_POSITION_Y 					"          Position Y" 0 -1000 1000 1
-float HSM_AMBIENT1_POSITION_Y = -1 * global.HSM_AMBIENT1_POSITION_Y / 1000;
+float HSM_AMBIENT1_POSITION_Y = -1 * global.HSM_AMBIENT1_POSITION_Y / -1000;
 
 // Commented out because I don't think anyone is using this
 // #pragma parameter HSM_AMBIENT1_DITHERING_SAMPLES   "          Dithering Noise Samples (Reduces Banding)" 0 0 10 1
@@ -883,7 +883,7 @@ float HSM_AMBIENT2_MIRROR_HORZ = global.HSM_AMBIENT2_MIRROR_HORZ;
 float HSM_AMBIENT2_POS_INHERIT_MODE = global.HSM_AMBIENT2_POS_INHERIT_MODE;
 
 #pragma parameter HSM_AMBIENT2_POSITION_X 						"          Position X" 0 -1000 1000 1
-float HSM_AMBIENT2_POSITION_X = global.HSM_AMBIENT2_POSITION_X / 1000;
+float HSM_AMBIENT2_POSITION_X = global.HSM_AMBIENT2_POSITION_X / -1000;
 
 #pragma parameter HSM_AMBIENT2_POSITION_Y 						"          Position Y" 0 -1000 1000 1
 float HSM_AMBIENT2_POSITION_Y = -1 * global.HSM_AMBIENT2_POSITION_Y / -1000;

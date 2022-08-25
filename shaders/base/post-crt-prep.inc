@@ -192,8 +192,8 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	vec4 ambient2_lighting_image = vec4(1);
 	HSM_Fill_Ambient_Images(VIEWPORT_COORD, 
 							VIEWPORT_UNSCALED_COORD, 
-							TUBE_DIFFUSE_COORD, 
-							TUBE_DIFFUSE_SCALE, 
+							TUBE_DIFFUSE_COORD_MIXED_POS, 
+							TUBE_DIFFUSE_SCALE_1ST_SCREEN, 
 							HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE, 
 							NightLightingImage, 
 							NightLighting2Image, 
@@ -271,13 +271,10 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	if (HSM_CRT_BLEND_MODE == 1)
 		out_color = HSM_BlendModeLayerMix(tube_diffuse, out_color, BLEND_MODE_ADD, HSM_CRT_BLEND_AMOUNT);
 
-
-
 	// Apply the CRT image with multiply blending
 	if (HSM_CRT_BLEND_MODE == 2)
 	{	
 		out_color = clamp(out_color, 0, 1);
-		out_color *= screen_mask; 
 		out_color = HSM_BlendModeLayerMix(tube_diffuse, out_color, BLEND_MODE_MULTIPLY, HSM_CRT_BLEND_AMOUNT);
 	}
 
