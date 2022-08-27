@@ -1,23 +1,18 @@
 ![Mega_Bezel_Logo|512x256, 75%](upload://6PNkvcMF9Go9Wnk6OJXfYR1opXI.png) 
 
-Mega Bezel is updated to V1.0.005_2022-XX-XX_Rev-1
+Mega Bezel is updated to V1.0.005_2022-08-26_Rev-1
 
 Changes:
-  * 
-
+  * Adjusted Megatron parameters to remove HDR params in Mega Bezel to be simpler
+  * Added additional DREZ presets
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
   * Try Leveraging Fake Scanlines for Gameboy type effect
-  * Fix position ranges
-  * Adjust Versioning Scheme similar to semantic version method
   * DREZ versions
     * DREZ-1080p & DREZ-3DS ADV versions
-    * GDV-Mini DREZ 240p, 480p, 1080p
-    * DREZ LCD-GRID for STD and ADV
-    * DREZ GDV 1080p STD and ADV
 
   * Megatron HDR Combination at end of chain
   * Fix Tube Diffuse Shadow in 3D Curvature
