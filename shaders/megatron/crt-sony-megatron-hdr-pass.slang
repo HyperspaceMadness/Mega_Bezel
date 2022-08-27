@@ -44,9 +44,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #include "include/parameters.h"
 
-#define HCRT_HDR                            params.hcrt_hdr
-#define HCRT_MAX_NITS                       params.hcrt_max_nits
-#define HCRT_PAPER_WHITE_NITS               params.hcrt_paper_white_nits
+#define HCRT_HDR                            0
+#define HCRT_MAX_NITS                       700
+#define HCRT_PAPER_WHITE_NITS               700
 
 #define COMPAT_TEXTURE(c, d) texture(c, d)
 

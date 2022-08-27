@@ -23,7 +23,7 @@
 */
 
 // Screen Scale Required Parameters
-#pragma parameter HSM_MEGA_BEZEL_TITLE								"[ --- HSM MEGA BEZEL V1.0.004_2022-08-08_Rev-1 --- ]" 0 0 0.01 0.01
+#pragma parameter HSM_MEGA_BEZEL_TITLE								"[ --- HSM MEGA BEZEL V1.0.006_2022-08-26_Rev-1 --- ]" 0 0 0.01 0.01
 
 #pragma parameter HSM_RESOLUTION_DEBUG_ON							"          Show Resolution Info" 0 0 1 1
 float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
@@ -310,6 +310,9 @@ float HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = global.HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR
 #pragma parameter HSM_CORE_RES_SAMPLING_SHIFT_OPPOSITE_DIR 			"          Shift Sampling Relative to Scanlines" 0 -100 100 5
 float HSM_CORE_RES_SAMPLING_SHIFT_OPPOSITE_DIR = global.HSM_CORE_RES_SAMPLING_SHIFT_OPPOSITE_DIR / 100;
 
+//---------------------------------------------------------------------------------------------------
+//    SHARPEN
+//---------------------------------------------------------------------------------------------------
 #pragma parameter SHARPEN_TITLE  	"[ FAST SHARPEN - GUEST.R ]:"         			0.00 0.0 2.00 0.05
 #pragma parameter SHARPEN  			"          Sharpen Strength"    0.00 0.0 4.00 0.10 
 #pragma parameter CONTR    			"          Amount of Sharpening"  	0.05 0.0 0.25 0.01
@@ -831,10 +834,10 @@ float HSM_AMBIENT1_MIRROR_HORZ = global.HSM_AMBIENT1_MIRROR_HORZ;
 #pragma parameter HSM_AMBIENT1_POS_INHERIT_MODE         	"          Position Inheritance - OFF | ON"  1 0 1 1
 float HSM_AMBIENT1_POS_INHERIT_MODE = global.HSM_AMBIENT1_POS_INHERIT_MODE;
 
-#pragma parameter HSM_AMBIENT1_POSITION_X 					"          Position X" 0 -1000 1000 1
+#pragma parameter HSM_AMBIENT1_POSITION_X 					"          Position X" 0 -1500 1500 1
 float HSM_AMBIENT1_POSITION_X = global.HSM_AMBIENT1_POSITION_X / -1000;
 
-#pragma parameter HSM_AMBIENT1_POSITION_Y 					"          Position Y" 0 -1000 1000 1
+#pragma parameter HSM_AMBIENT1_POSITION_Y 					"          Position Y" 0 -1500 1500 1
 float HSM_AMBIENT1_POSITION_Y = -1 * global.HSM_AMBIENT1_POSITION_Y / -1000;
 
 // Commented out because I don't think anyone is using this

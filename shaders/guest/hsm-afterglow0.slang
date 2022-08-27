@@ -27,7 +27,7 @@ layout(push_constant) uniform Push
    float PR, PG, PB;
 } params;
 
-#pragma parameter GDV_GDV_ADV_TITLE 		"[ --- GUEST-DrVenom Advanced --- ]:" 0.0 0.0 1.0 1.0
+#pragma parameter GDV_GDV_ADV_TITLE 		"[ --- GUEST ADVANCED --- ]:" 0.0 0.0 1.0 1.0
 
 #pragma parameter bogus_afterglow         "[ AFTERGLOW ]:" 0.0 0.0 1.0 1.0
 #pragma parameter GDV_AFTERGLOW_THRESHOLD "          Threshold ( Afterglow Appears Under Threshold )" 0.5 0.0 100 0.5

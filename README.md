@@ -3,7 +3,7 @@ Mega Bezel Shader Readme
 ------------------------------------------------------------------------------------------------------------
 ![Mega Bezel Logo](MegaBezelLogo.png)
 
-**Version V1.0.005_2022-08-24_Rev-1**
+**Version V1.0.005_2022-08-26_Rev-1**
 ----------------------------------------
 ----------------------------------------
 
@@ -532,13 +532,6 @@ Cropping removes parts of the game image at the edges of the screen which were n
 - **Black Threshold for 'CROP BLACK ONLY'** - The brightness threshold of the black area to be cropped
 
 
------------------------------------------------------------------------------------------------
-**[ --- SMOOTHING - SCALEFX - SMOOTH-ADV Presets Only ---- ]:**
-
-**ScaleFX ON** applies a shape smoothing on the core image and creates a higher resolution smoothed image
-  - After you turn this on you must increase **Core Res Sampling**, or **Downsample Blur** in the next section to see a difference
-  - ScaleFX only works well when the it's input is the native res from the core
-  To see the contour smoothing coming from **ScaleFX** either **Core Res Sampling**, or **Downsample Blur** must be increased from their default value.
 
 -----------------------------------------------------------------------------------------------
 **[ SCANLINE DIRECTION ]:**
@@ -1543,3 +1536,10 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Solid Black Fade Out Frames**
   - How many frames to fade out
 
+-----------------------------------------------------------------------------------------------
+**[ --- SMOOTHING - SCALEFX ---- ]:**
+
+**ScaleFX ON** applies a shape smoothing on the core image and creates a higher resolution smoothed image
+  - After you turn this on you must increase **Core Res Sampling**, or **Downsample Blur** in the next section to see a difference
+  - ScaleFX only works well when the it's input is the native res from the core
+  To see the contour smoothing coming from **ScaleFX** either **Core Res Sampling**, or **Downsample Blur** must be increased from their default value.

@@ -90,11 +90,11 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #include "include/parameters.h"
 
-#define HCRT_HDR                             params.hcrt_hdr
+#define HCRT_HDR                             0
 #define HCRT_OUTPUT_COLOUR_SPACE             params.hcrt_colour_space
-#define HCRT_MAX_NITS                        params.hcrt_max_nits
-#define HCRT_PAPER_WHITE_NITS                params.hcrt_paper_white_nits
-#define HCRT_EXPAND_GAMUT                    params.hcrt_expand_gamut
+#define HCRT_MAX_NITS                        700
+#define HCRT_PAPER_WHITE_NITS                700
+#define HCRT_EXPAND_GAMUT                    0
 #define HCRT_GAMMA_OUT                       params.hcrt_gamma_out
 
 #define HCRT_LCD_RESOLUTION                  params.hcrt_lcd_resolution 
