@@ -3,8 +3,8 @@
 Mega Bezel is updated to V1.0.006_2022-08-26_Rev-1
 
 Changes:
-  * Adjusted Megatron parameters to remove HDR params in Mega Bezel to be simpler
-  * Added additional DREZ presets
+  * Renamed DREZ Presets so the DREZ appears at the end
+  * Added additional STD DREZ presets for NDS, 3DS and PSP
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
