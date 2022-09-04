@@ -16,18 +16,21 @@ layout(push_constant) uniform Push
 	uint FrameCount;
 	float MODE;
 	float PWR;
+    float HSM_DEDITHER_MODE;
 } params;
 
 
 layout(std140, set = 0, binding = 0) uniform UBO
 {
 	mat4 MVP;
-    float MDAPT_MODE;
 } global;
 
-#pragma parameter HSM_DEDITHERING_TITLE "[ --- MDAPT DE-DITHERING --- ]:" 0 0 0.01 0.01
-#pragma parameter MDAPT_MODE "          Mode -  OFF | Strict | Relaxed | Stripes"	0 0 3 1
+#pragma parameter HSM_DEDITHERING_TITLE "[ --- MDAPT & HYLLIAN DE-DITHERING --- ]:" 0 0 0.01 0.01
 
+#pragma parameter HSM_DEDITHER_MODE "Mode: OFF| STRICT | RELAXED | HYLLIAN | HYL + STRIPES | STRIPES"	0 0 5 1
+#define HSM_DEDITHER_MODE  params.HSM_DEDITHER_MODE
+
+// OFF | STRICT | RELAXED | HYLLIAN | HYL + Stripes | Stripes
 // #pragma parameter MODE "MDAPT Monochrome Analysis"	0.0 0.0 1.0 1.0
 // #pragma parameter PWR  "MDAPT Color Metric Exp"		2.0 0.0 10.0 0.1
 
@@ -75,7 +78,7 @@ void main()
 		  D	
 	*/
 
-	if (global.MDAPT_MODE < 1)
+	if (HSM_DEDITHER_MODE < 1 || HSM_DEDITHER_MODE == 3)
 	{
 		FragColor = texture(Source, vTexCoord);
 		return;
@@ -90,7 +93,7 @@ void main()
 
 	vec3 res = vec3(0.0);
 
-	if(global.MDAPT_MODE == 1){
+	if(HSM_DEDITHER_MODE == 1){
 		res.x = float((L == R) && (C != L));
 		res.y = float((U == D) && (C != U));
 		res.z = float(bool(res.x) && bool(res.y) && (L == U));

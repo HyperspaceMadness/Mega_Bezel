@@ -18,6 +18,7 @@ layout(push_constant) uniform Push
 	float VL_HI;
 	float CB_LO;
 	float CB_HI;
+    float HSM_DEDITHER_MODE;
 } params;
 
 // #pragma parameter VL_LO "MDAPT VL LO Thresh" 1.25 0.0 10.0 0.05
@@ -33,11 +34,10 @@ const float CB_HI = 5.75;
 layout(std140, set = 0, binding = 0) uniform UBO
 {
 	mat4 MVP;
-    float MDAPT_MODE;
 } global;
 
-#pragma parameter MDAPT_MODE "          Mode -  OFF | Strict | Relaxed | Stripes"	0 0 3 1
-
+#pragma parameter HSM_DEDITHER_MODE "Mode: OFF| STRICT | RELAXED | HYLLIAN | HYL + STRIPES | STRIPES"	0 0 5 1
+#define HSM_DEDITHER_MODE  params.HSM_DEDITHER_MODE
 
 #define TEX(dx,dy) texture(Source, vTexCoord+vec2((dx),(dy))*params.SourceSize.zw)
 #define and(x,y) min(x,y)
@@ -73,11 +73,12 @@ void main()
 		SW  DDL D2 DDR SE
 	*/
 
-	if (global.MDAPT_MODE < 1)
+	if (HSM_DEDITHER_MODE < 1 || HSM_DEDITHER_MODE == 3)
 	{
 		FragColor = texture(Source, vTexCoord);
 		return;
 	}
+
 
 	vec2 C = TEX( 0., 0.).xy;
 	vec2 hits = vec2(0.0);

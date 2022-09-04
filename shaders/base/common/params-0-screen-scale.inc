@@ -291,6 +291,14 @@ float HSM_SCANLINE_DIRECTION = global.HSM_SCANLINE_DIRECTION;
 
 
 //---------------------------------------------------------------------------------------------------
+//    DREZ Filter
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_DREZ_TITLE "[ DREZ DOWNSAMPLE FILTER - HYLLIAN ]:" 0 0 0.01 0.01
+
+#pragma parameter C_FILTER_MODE "          DREZ Filter Type:  B-SPLINE | CATMULL-ROM | HERMITE" 0.0 0.0 2.0 1.0
+
+
+//---------------------------------------------------------------------------------------------------
 //    CORE RES SAMPLING
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_SAMPLING_TITLE								"[ CORE RES SAMPLING]:" 0 0 0.01 0.01

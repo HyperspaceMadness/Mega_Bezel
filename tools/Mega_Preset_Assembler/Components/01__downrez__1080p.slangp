@@ -1,10 +1,17 @@
-shaders = 1
+shaders = 2
 
-shader0 =  :/shaders/shaders_slang/stock.slang
-filter_linear0 = true
-mipmap_input0 = true
-srgb_framebuffer0 = true
-scale_type0 = absolute
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/hyllian/cubic/hsm-b-spline-x.slang
+filter_linear0 = false
+scale_type_x0 = absolute
 scale_x0 = 1440
-scale_y0 = 1080
-alias0 = "DerezedPass"
+scale_type_y0 = viewport
+scaley0 = 1.0
+wrap_mode0 = "clamp_to_edge"
+
+shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/hyllian/cubic/hsm-b-spline-y.slang
+filter_linear1 = false
+scale_type1 = absolute
+scale_x1 = 1440
+scale_y1 = 1080
+wrap_mode1 = "clamp_to_edge"
+alias1 = "DerezedPass"

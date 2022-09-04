@@ -18,6 +18,8 @@ layout(push_constant) uniform Push
 	float CB;
 	float DEBUG;
 	float linear_gamma;
+    float HSM_DEDITHER_MODE;
+    float CD_BLEND_LEVEL;
 } params;
 
 // #pragma parameter VL    "[DE-DITHERING]    MDAPT Vertical Lines"	0.0 0.0 1.0 1.0
@@ -33,11 +35,13 @@ const float linear_gamma = 0;
 layout(std140, set = 0, binding = 0) uniform UBO
 {
 	mat4 MVP;
-    float MDAPT_MODE;
 } global;
 
-#pragma parameter MDAPT_MODE "          Mode -  OFF | Strict | Relaxed | Stripes"	0 0 3 1
+#pragma parameter HSM_DEDITHER_MODE "Mode: OFF| STRICT | RELAXED | HYLLIAN | HYL + STRIPES | STRIPES"	0 0 5 1
+#define HSM_DEDITHER_MODE  params.HSM_DEDITHER_MODE
 
+#pragma parameter CD_BLEND_LEVEL              "          Dedither Blend Amount"                1.0  0.0 1.0  0.02
+#define CD_BLEND_LEVEL             params.CD_BLEND_LEVEL
 
 #pragma stage vertex
 layout(location = 0) in vec4 Position;
@@ -105,11 +109,12 @@ void main()
 		DL D DR	
 	*/
 
-	if (global.MDAPT_MODE < 1)
+	if (HSM_DEDITHER_MODE < 1 || HSM_DEDITHER_MODE == 3)
 	{
 		FragColor = texture(Source, vTexCoord);
 		return;
 	}
+
 
 	vec4 C = TEX( 0., 0.);		vec3 c = TEXt0( 0., 0.).xyz;
 	vec2 L = TEX(-1., 0.).xy;	vec3 l = TEXt0(-1., 0.).xyz;
@@ -124,8 +129,8 @@ void main()
 	// Backpropagation
 	C.xy = or_(C.xy, and_(C.zw, or_(L.xy, R.xy, U.xy, D.xy)));
 
-
-	if(global.MDAPT_MODE == 3){
+	// Modes 4 and 5 blend the Stripe/Jailbar dithering
+	if(HSM_DEDITHER_MODE > 3.5){
 		float prSum = L.x + R.x;		
 
 		prVL = max(L.x, R.x);
@@ -173,5 +178,10 @@ void main()
 		FragColor = vec4(prVL, prCB, 0.0, 0.0);
 		
 	vec4 final = (prCB >= prVL) ? vec4(mix(c, fCB, prCB), 1.0) : vec4(mix(c, fVL, prVL), 1.0);
+
+	final = CD_BLEND_LEVEL * final + (1 - CD_BLEND_LEVEL) * texture(PreDeDitheringPass, vTexCoord);
+
 	FragColor = (linear_gamma > 0.5) ? pow(final, vec4(1.0 / 2.2)) : final;
+
+
 }

@@ -14,17 +14,17 @@ layout(push_constant) uniform Push
 	vec4 OriginalSize;
 	vec4 OutputSize;
 	uint FrameCount;
+    float HSM_DEDITHER_MODE;
 } params;
 
 
 layout(std140, set = 0, binding = 0) uniform UBO
 {
 	mat4 MVP;
-    float MDAPT_MODE;
 } global;
 
-#pragma parameter MDAPT_MODE "          Mode -  OFF | Strict | Relaxed | Stripes"	0 0 3 1
-
+#pragma parameter HSM_DEDITHER_MODE "Mode: OFF| STRICT | RELAXED | HYLLIAN | HYL + STRIPES | STRIPES"	0 0 5 1
+#define HSM_DEDITHER_MODE  params.HSM_DEDITHER_MODE
 
 #define TEX(dx,dy)   texture(Source, vTexCoord+vec2((dx),(dy))*params.SourceSize.zw)
 #define TEXt0(dx,dy) texture(PreDeDitheringPass, vTexCoord+vec2((dx),(dy))*params.SourceSize.zw)
@@ -78,11 +78,12 @@ void main()
 		DL D DR
 	*/
 
-	if (global.MDAPT_MODE < 1)
+	if (HSM_DEDITHER_MODE < 1 || HSM_DEDITHER_MODE == 3)
 	{
 		FragColor = texture(Source, vTexCoord);
 		return;
 	}
+
 
 	vec4 C  = TEX( 0., 0.);		vec3 c  = TEXt0( 0., 0.).xyz;
 	vec2 L  = TEX(-1., 0.).xy;	vec3 l  = TEXt0(-1., 0.).xyz;

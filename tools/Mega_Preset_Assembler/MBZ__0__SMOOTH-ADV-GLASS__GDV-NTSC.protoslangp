@@ -4,6 +4,7 @@
 #reference "Components/10__info-cache-screen-scale-params.slangp"
 #reference "Components/11__text__adv-glass.slangp"
 #reference "Components/12__intro.slangp"
+#reference "Components/30__dedithering__0-checkerboard.slangp"
 #reference "Components/30__dedithering__0-mdapt.slangp"
 #reference "Components/30__dedithering__2-ps1-box-blur.slangp"
 #reference "Components/45__upscale__scalefx.slangp"

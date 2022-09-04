@@ -45,12 +45,16 @@ for file_name in [p for p in preset_paths if os.path.splitext(p)[1] == '.slangp'
     for i in range(3):
         presets_base_path = os.path.split(presets_base_path)[0]
 
+    test_presets_base_path = os.path.join(presets_base_path, 'WIP/_Test_Presets')
     presets_base_path = os.path.join(presets_base_path, 'Presets')
 
-    if 'DREZ' in file_name:
-        new_preset_path = os.path.join(presets_base_path, "Base_CRT_Presets_DREZ", file_name)
+    if '_TEST' in file_name:
+        new_preset_path = os.path.join(test_presets_base_path, file_name)
     else:
-        new_preset_path = os.path.join(presets_base_path, "Base_CRT_Presets", file_name)
+        if 'DREZ' in file_name:
+            new_preset_path = os.path.join(presets_base_path, "Base_CRT_Presets_DREZ", file_name)
+        else:
+            new_preset_path = os.path.join(presets_base_path, "Base_CRT_Presets", file_name)
 
     if os.path.exists(new_preset_path):
         os.replace(old_preset_path, new_preset_path)
