@@ -1,9 +1,9 @@
-shaders = 37
+shaders = 36
 
 shader0 = ../../shaders/base/add-params-no-reflect.slang
 alias0 = "CorePass"
 
-shader1 =  ../../../../stock.slang
+shader1 =  ../../shaders/base/stock.slang
 filter_linear1 = false
 srgb_framebuffer1 = true
 scale_type1 = source
@@ -40,163 +40,149 @@ scale_type5 = source
 scale5 = 1.0
 alias5 = "IntroPass"
 
-shader6 = ../../shaders/hyllian/checkerboard-dedither/linearize.slang
-filter_linear6 = false
-scale_type6 = source
-scale6 = 1.0
+shader6 = ../../shaders/base/linearize.slang
 alias6 = LinearGamma
 
 shader7 = ../../shaders/hyllian/checkerboard-dedither/checkerboard-dedither-pass1.slang
-filter_linear7 = false
-scale_type7 = source
-scale7 = 1.0
-
 shader8 = ../../shaders/hyllian/checkerboard-dedither/checkerboard-dedither-pass2.slang
-filter_linear8 = false
-scale_type8 = source
-scale8 = 1.0
-
 shader9 = ../../shaders/hyllian/checkerboard-dedither/checkerboard-dedither-pass3.slang
-filter_linear9 = false
-
-shader10 = ../../shaders/base/linearize.slang
-alias10 = "PreDeDitheringPass"
+alias9 = "PreMdaptPass"
 
 // De-Dithering - Mdapt
-shader11 = ../../shaders/mdapt/hsm-mdapt-pass0.slang
-shader12 = ../../shaders/mdapt/hsm-mdapt-pass1.slang
-shader13 = ../../shaders/mdapt/hsm-mdapt-pass2.slang
-shader14 = ../../shaders/mdapt/hsm-mdapt-pass3.slang
-shader15 = ../../shaders/mdapt/hsm-mdapt-pass4.slang
-shader16 = ../../shaders/base/delinearize.slang
+shader10 = ../../shaders/mdapt/hsm-mdapt-pass0.slang
+shader11 = ../../shaders/mdapt/hsm-mdapt-pass1.slang
+shader12 = ../../shaders/mdapt/hsm-mdapt-pass2.slang
+shader13 = ../../shaders/mdapt/hsm-mdapt-pass3.slang
+shader14 = ../../shaders/mdapt/hsm-mdapt-pass4.slang
+shader15 = ../../shaders/base/delinearize.slang
 
-shader17 = ../../shaders/ps1dither/hsm-PS1-Undither-BoxBlur.slang
+shader16 = ../../shaders/ps1dither/hsm-PS1-Undither-BoxBlur.slang
 
-shader18 = ../../../../stock.slang
-alias18 = "PreCRTPass"
+shader17 = ../../shaders/base/stock.slang
+alias17 = "PreCRTPass"
 
-shader19 = ../../shaders/guest/hsm-afterglow0.slang
+shader18 = ../../shaders/guest/hsm-afterglow0.slang
+filter_linear18 = true
+scale_type18 = source
+scale18 = 1.0
+alias18 = "AfterglowPass"
+
+shader19 = ../../shaders/guest/hsm-pre-shaders-afterglow.slang
 filter_linear19 = true
 scale_type19 = source
+mipmap_input19 = true
 scale19 = 1.0
-alias19 = "AfterglowPass"
-
-shader20 = ../../shaders/guest/hsm-pre-shaders-afterglow.slang
-filter_linear20 = true
-scale_type20 = source
-mipmap_input20 = true
-scale20 = 1.0
 
 // Color Correction with Dogway's awesome Grade shader
 // Grade is after Afterglow so that brightening the black level does not break the afterglow
-shader21 = ../../shaders/dogway/hsm-grade.slang
-filter_linear21 = true
-scale_type21 = source
-scale21 = 1.0
+shader20 = ../../shaders/dogway/hsm-grade.slang
+filter_linear20 = true
+scale_type20 = source
+scale20 = 1.0
 
-shader22 = ../../../../stock.slang
-alias22 = "PrePass0"
+shader21 = ../../shaders/base/stock.slang
+alias21 = "PrePass0"
 
-shader23 = ../../shaders/guest/ntsc/hsm-ntsc-pass1.slang
-filter_linear23 = false
+shader22 = ../../shaders/guest/ntsc/hsm-ntsc-pass1.slang
+filter_linear22 = false
+float_framebuffer22 = true
+scale_type_x22 = source
+scale_type_y22 = source
+scale_x22 = 4.0
+scale_y22 = 1.0
+frame_count_mod22 = 2
+alias22 = NPass1
+
+shader23 = ../../shaders/guest/ntsc/hsm-ntsc-pass2.slang
 float_framebuffer23 = true
-scale_type_x23 = source
-scale_type_y23 = source
-scale_x23 = 4.0
+filter_linear23 = true
+scale_type23 = source
+scale_x23 = 0.5
 scale_y23 = 1.0
-frame_count_mod23 = 2
-alias23 = NPass1
 
-shader24 = ../../shaders/guest/ntsc/hsm-ntsc-pass2.slang
-float_framebuffer24 = true
+shader24 = ../../shaders/guest/ntsc/hsm-ntsc-pass3.slang
 filter_linear24 = true
 scale_type24 = source
-scale_x24 = 0.5
+scale_x24 = 1.0
 scale_y24 = 1.0
 
-shader25 = ../../shaders/guest/ntsc/hsm-ntsc-pass3.slang
+shader25 =  ../../shaders/guest/hsm-custom-fast-sharpen.slang
 filter_linear25 = true
 scale_type25 = source
 scale_x25 = 1.0
 scale_y25 = 1.0
 
-shader26 =  ../../shaders/guest/hsm-custom-fast-sharpen.slang
+shader26 = ../../shaders/base/stock.slang
 filter_linear26 = true
 scale_type26 = source
 scale_x26 = 1.0
 scale_y26 = 1.0
+alias26 = "PrePass"
+mipmap_input26 = true
 
-shader27 = ../../../../stock.slang
+shader27 = ../../shaders/guest/hsm-avg-lum.slang
 filter_linear27 = true
 scale_type27 = source
-scale_x27 = 1.0
-scale_y27 = 1.0
-alias27 = "PrePass"
+scale27 = 1.0
 mipmap_input27 = true
+alias27 = "AvgLumPass"
 
-shader28 = ../../shaders/guest/hsm-avg-lum.slang
+// Pass referenced by subsequent blurring passes and crt pass
+shader28 = ../../shaders/guest/hsm-interlace-and-linearize.slang
 filter_linear28 = true
 scale_type28 = source
 scale28 = 1.0
-mipmap_input28 = true
-alias28 = "AvgLumPass"
-
-// Pass referenced by subsequent blurring passes and crt pass
-shader29 = ../../shaders/guest/hsm-interlace-and-linearize.slang
-filter_linear29 = true
-scale_type29 = source
-scale29 = 1.0
-float_framebuffer29 = true
-alias29 = "LinearizePass"
+float_framebuffer28 = true
+alias28 = "LinearizePass"
 feedback_pass = "0"
 
 // Sony Megatron Colour Video Monitor by Major Pain The Cactus
-shader30 = "../../shaders/megatron/crt-sony-megatron-source-pass.slang"
+shader29 = "../../shaders/megatron/crt-sony-megatron-source-pass.slang"
+filter_linear29 = "false"
+scale_type29 = "source"
+scale29 = "1.0"
+wrap_mode29 = "clamp_to_border"
+mipmap_input29 = "false"
+alias29 = "SourceSDR"
+
+shader30 = "../../shaders/megatron/crt-sony-megatron-hdr-pass.slang"
 filter_linear30 = "false"
 scale_type30 = "source"
 scale30 = "1.0"
 wrap_mode30 = "clamp_to_border"
 mipmap_input30 = "false"
-alias30 = "SourceSDR"
+alias30 = "SourceHDR"
 
-shader31 = "../../shaders/megatron/crt-sony-megatron-hdr-pass.slang"
+shader31 = "../../shaders/megatron/crt-sony-megatron-no-reflect.slang"
 filter_linear31 = "false"
-scale_type31 = "source"
-scale31 = "1.0"
 wrap_mode31 = "clamp_to_border"
 mipmap_input31 = "false"
-alias31 = "SourceHDR"
+alias31 = ""
+float_framebuffer31 = "false"
+srgb_framebuffer31 = "false"
+scale_type31 = "viewport"
 
-shader32 = "../../shaders/megatron/crt-sony-megatron-no-reflect.slang"
-filter_linear32 = "false"
-wrap_mode32 = "clamp_to_border"
-mipmap_input32 = "false"
-alias32 = ""
-float_framebuffer32 = "false"
-srgb_framebuffer32 = "false"
-scale_type32 = "viewport"
-
-shader33 = ../../shaders/base/post-crt-prep-no-reflect.slang
-alias33 = "MBZ_PostCRTPass"
+shader32 = ../../shaders/base/post-crt-prep-no-reflect.slang
+alias32 = "MBZ_PostCRTPass"
 
 // Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 
-shader34 = ../../shaders/base/bezel-images-under-crt.slang
+shader33 = ../../shaders/base/bezel-images-under-crt.slang
+filter_linear33 = true
+scale_type33 = viewport
+float_framebuffer33 = true
+alias33 = "BR_LayersUnderCRTPass"
+
+shader34 = ../../shaders/base/bezel-images-over-crt.slang
 filter_linear34 = true
 scale_type34 = viewport
 float_framebuffer34 = true
-alias34 = "BR_LayersUnderCRTPass"
-
-shader35 = ../../shaders/base/bezel-images-over-crt.slang
-filter_linear35 = true
-scale_type35 = viewport
-float_framebuffer35 = true
-alias35 = "BR_LayersOverCRTPass"
+alias34 = "BR_LayersOverCRTPass"
 
 // Combine Passes ----------------------------------------------------------------
-shader36 = ../../shaders/base/combine-passes-no-reflect.slang
-scale_type36 = viewport
-alias36 = "CombinePass"
+shader35 = ../../shaders/base/combine-passes-no-reflect.slang
+scale_type35 = viewport
+alias35 = "CombinePass"
 // Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 

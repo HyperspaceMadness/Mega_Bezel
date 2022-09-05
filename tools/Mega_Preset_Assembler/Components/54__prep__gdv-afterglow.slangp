@@ -1,6 +1,6 @@
 shaders = 3
 
-shader0 = :/shaders/shaders_slang/stock.slang
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/stock.slang
 alias0 = "PreCRTPass"
 
 shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/hsm-afterglow0.slang

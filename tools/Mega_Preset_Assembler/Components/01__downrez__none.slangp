@@ -1,6 +1,6 @@
 shaders = 1
 
-shader0 =  :/shaders/shaders_slang/stock.slang
+shader0 =  :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/stock.slang
 filter_linear0 = false
 srgb_framebuffer0 = true
 scale_type0 = source

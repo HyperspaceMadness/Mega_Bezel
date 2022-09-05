@@ -48,7 +48,7 @@ scale_type6 = source
 scale6 = 1.0
 alias6 = "IntroPass"
 
-shader7 = ../../../../stock.slang
+shader7 = ../../shaders/base/stock.slang
 alias7 = "PreCRTPass"
 
 shader8 = ../../shaders/guest/hsm-afterglow0.slang
@@ -76,7 +76,7 @@ scale_type11 = source
 scale_x11 = 1.0
 scale_y11 = 1.0
 
-shader12 = ../../../../stock.slang
+shader12 = ../../shaders/base/stock.slang
 filter_linear12 = true
 scale_type12 = source
 scale_x12 = 1.0

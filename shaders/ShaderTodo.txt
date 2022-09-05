@@ -1,11 +1,24 @@
 ![Mega_Bezel_Logo|512x256, 75%](upload://6PNkvcMF9Go9Wnk6OJXfYR1opXI.png) 
 
-Mega Bezel is updated to V1.0.007_2022-08-29_Rev-1
+Mega Bezel is updated to V1.1.0_2022-09-04
 
 Changes:
-  * Renamed DREZ Presets so the DREZ appears at the end
-  * Added additional STD DREZ presets for NDS, 3DS and PSP, 
-    * This includes high res presets for NDS and 3DS
+  * Versioning changed to standard semantic versioning 
+    * First number is the major version
+    * Second number is incremented when new features are Added
+    * Third number is for bug fixes only
+  * DREZ presets updated to use Hyllian's bspline for a much cleaner downscaling
+    * Thank Hyllian, this are looking really 
+  * Integrated Hyllian's Checkerboard Dedithering 
+    * This is now controlled by a general dedithering parameter `HSM_DEDITHER_MODE` which will switch between different methods
+      * 0: OFF
+      * 1: STRICT (MDAPT)
+      * 2: RELAXED (MDAPT)
+      * 3: HYLLIAN Checkerboard
+      * 4: HYLLIAN Checkerboard + STRIPES (MDAPT)
+      * 5: STRIPES (MDAPT)
+
+
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------

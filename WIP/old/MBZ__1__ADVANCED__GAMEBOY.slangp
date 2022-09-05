@@ -13,7 +13,7 @@ float_framebuffer1 = true
 scale_type1 = source
 scale_y1 = 4
 alias1 = "IntroPass"
-alias1  = "PreDeDitheringPass"
+alias1  = "PreMdaptPass"
 
 shader2 = ../../shaders/hsm-gameboy/hsm-gb-pass0.slang
 filter_linear2 = false

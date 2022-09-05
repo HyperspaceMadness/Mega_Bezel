@@ -127,5 +127,6 @@ void main()
 
 	color = mix(color, vec3(luma_diff), CD_ADJUST_VIEW);
 
-	FragColor = vec4(GAMMA_OUT(color), 1.0);
+	// FragColor = vec4(GAMMA_OUT(color), 1.0);
+	FragColor = vec4(color, 1.0);
 }

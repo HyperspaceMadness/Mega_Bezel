@@ -3,7 +3,7 @@ shaders = 13
 shader0 = ../../shaders/base/add-params-potato.slang
 alias0 = "CorePass"
 
-shader1 =  ../../../../stock.slang
+shader1 =  ../../shaders/base/stock.slang
 filter_linear1 = false
 srgb_framebuffer1 = true
 scale_type1 = source
@@ -47,7 +47,7 @@ filter_linear6 = true
 scale_type6 = source
 scale6 = 1.0
 
-shader7 = ../../../../stock.slang
+shader7 = ../../shaders/base/stock.slang
 alias7 = "PrePass0"
 
 shader8 = ../../shaders/guest/ntsc/hsm-ntsc-pass1.slang

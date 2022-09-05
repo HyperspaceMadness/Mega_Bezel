@@ -1,6 +1,6 @@
 shaders = 6
 
-shader0 = :/shaders/shaders_slang/stock.slang
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/stock.slang
 alias0 = refpass
 
 shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/scalefx/hsm-scalefx-pass0.slang

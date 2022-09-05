@@ -40,7 +40,7 @@ scale_y7 = 1.0
 filter_linear7 = true
 float_framebuffer7 = true
 
-shader8 = :/shaders/shaders_slang/stock.slang
+shader8 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/stock.slang
 filter_linear8 = false
 scale_type8 = source
 scale8 = 1.0

@@ -1,6 +1,6 @@
 shaders = 4
 
-shader0 = :/shaders/shaders_slang/stock.slang
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/stock.slang
 alias0 = "PrePass0"
 
 shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/ntsc/hsm-ntsc-pass1.slang

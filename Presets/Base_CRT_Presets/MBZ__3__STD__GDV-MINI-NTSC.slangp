@@ -3,7 +3,7 @@ shaders = 30
 shader0 = ../../shaders/base/add-params-all.slang
 alias0 = "CorePass"
 
-shader1 =  ../../../../stock.slang
+shader1 =  ../../shaders/base/stock.slang
 filter_linear1 = false
 srgb_framebuffer1 = true
 scale_type1 = source
@@ -40,7 +40,7 @@ scale_type5 = source
 scale5 = 1.0
 alias5 = "IntroPass"
 
-shader6 = ../../../../stock.slang
+shader6 = ../../shaders/base/stock.slang
 alias6 = "PreCRTPass"
 
 shader7 = ../../shaders/guest/hsm-afterglow0.slang
@@ -62,7 +62,7 @@ filter_linear9 = true
 scale_type9 = source
 scale9 = 1.0
 
-shader10 = ../../../../stock.slang
+shader10 = ../../shaders/base/stock.slang
 alias10 = "PrePass0"
 
 shader11 = ../../shaders/guest/ntsc/hsm-ntsc-pass1.slang
@@ -94,7 +94,7 @@ scale_type14 = source
 scale_x14 = 1.0
 scale_y14 = 1.0
 
-shader15 = ../../../../stock.slang
+shader15 = ../../shaders/base/stock.slang
 filter_linear15 = true
 scale_type15 = source
 scale_x15 = 1.0
