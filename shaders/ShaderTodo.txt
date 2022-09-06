@@ -3,27 +3,17 @@
 Mega Bezel is updated to V1.1.0_2022-09-04
 
 Changes:
-  * Versioning changed to standard semantic versioning 
-    * First number is the major version
-    * Second number is incremented when new features are Added
-    * Third number is for bug fixes only
-  * DREZ presets updated to use Hyllian's bspline for a much cleaner downscaling
-    * Thank Hyllian, this are looking really 
-  * Integrated Hyllian's Checkerboard Dedithering 
-    * This is now controlled by a general dedithering parameter `HSM_DEDITHER_MODE` which will switch between different methods
-      * 0: OFF
-      * 1: STRICT (MDAPT)
-      * 2: RELAXED (MDAPT)
-      * 3: HYLLIAN Checkerboard
-      * 4: HYLLIAN Checkerboard + STRIPES (MDAPT)
-      * 5: STRIPES (MDAPT)
-
+  * Added Split Preserve Center %
+  * Fixed Split mode when following wider horizontal aspect 
+  * Fixed some corner parameters not forcing update of the graphics cache
 
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+
+  * Fix missing corner cache parameters
   * Try Leveraging Fake Scanlines for Gameboy type effect
 
   * Megatron HDR Combination at end of chain

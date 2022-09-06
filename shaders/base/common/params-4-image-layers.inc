@@ -157,6 +157,9 @@ float HSM_BG_SCALE_KEEP_ASPECT = global.HSM_BG_SCALE_KEEP_ASPECT;
 #pragma parameter HSM_BG_FILL_MODE                "          Image Fill Mode - STRETCH | SPLIT HORIZONTAL"  0 0 1 1
 float HSM_BG_FILL_MODE = global.HSM_BG_FILL_MODE;
 
+#pragma parameter HSM_BG_SPLIT_PRESERVE_CENTER    "          Split Mode Preserve Center %"  0 0 1000 1
+float HSM_BG_SPLIT_PRESERVE_CENTER = global.HSM_BG_SPLIT_PRESERVE_CENTER / 1000;
+
 #pragma parameter HSM_BG_SCALE                    "          Scale" 100 0 1000 0.1
 float HSM_BG_SCALE = global.HSM_BG_SCALE / 100;
 
@@ -266,6 +269,9 @@ float HSM_LED_SCALE_KEEP_ASPECT = global.HSM_LED_SCALE_KEEP_ASPECT;
 #pragma parameter HSM_LED_FILL_MODE                     "          Image Fill Mode - STRETCH | SPLIT HORIZONTAL"  0 0 1 1
 float HSM_LED_FILL_MODE = global.HSM_LED_FILL_MODE;
 
+#pragma parameter HSM_LED_SPLIT_PRESERVE_CENTER         "          Split Mode Preserve Center %"  0 0 1000 1
+float HSM_LED_SPLIT_PRESERVE_CENTER = global.HSM_LED_SPLIT_PRESERVE_CENTER / 1000;
+
 #pragma parameter HSM_LED_SCALE                         "          Scale" 100 0 1000 0.1
 float HSM_LED_SCALE = global.HSM_LED_SCALE / 100;
 
@@ -344,6 +350,9 @@ float HSM_DEVICE_SCALE_KEEP_ASPECT = global.HSM_DEVICE_SCALE_KEEP_ASPECT;
 #pragma parameter HSM_DEVICE_FILL_MODE                 "          Image Fill Mode - STRETCH | SPLIT HORIZONTAL"  0 0 1 1
 float HSM_DEVICE_FILL_MODE = global.HSM_DEVICE_FILL_MODE;
 
+#pragma parameter HSM_DEVICE_SPLIT_PRESERVE_CENTER    "          Split Mode Preserve Center %"  0 0 1000 1
+float HSM_DEVICE_SPLIT_PRESERVE_CENTER = global.HSM_DEVICE_SPLIT_PRESERVE_CENTER / 1000;
+
 #pragma parameter HSM_DEVICE_SCALE                     "          Scale" 100 0 1000 0.1
 float HSM_DEVICE_SCALE = global.HSM_DEVICE_SCALE / 100;
 
@@ -411,7 +420,7 @@ float HSM_DECAL_DUALSCREEN_VIS_MODE = global.HSM_DECAL_DUALSCREEN_VIS_MODE;
 #pragma parameter HSM_DECAL_SCALE_MODE                  "       Inherit Scale - FULL | TUBE | BEZEL | BG | DEVICE"  0 0 4 1
 float HSM_DECAL_SCALE_MODE = global.HSM_DECAL_SCALE_MODE;
 
-#pragma parameter HSM_DECAL_SCALE_FULL_WITH_ZOOM      "          Zoom FULL Scale Mode" 1 0 1 1
+#pragma parameter HSM_DECAL_SCALE_FULL_WITH_ZOOM        "          Zoom FULL Scale Mode" 1 0 1 1
 float HSM_DECAL_SCALE_FULL_WITH_ZOOM = global.HSM_DECAL_SCALE_FULL_WITH_ZOOM;
 
 #pragma parameter HSM_DECAL_SCALE_KEEP_ASPECT           "        Scale Aspect - INHERIT FROM SCALE MODE | USE TEX ASPECT"  1 0 1 1
@@ -419,6 +428,9 @@ float HSM_DECAL_SCALE_KEEP_ASPECT = global.HSM_DECAL_SCALE_KEEP_ASPECT;
 
 #pragma parameter HSM_DECAL_FILL_MODE                   "          Image Fill Mode - STRETCH | SPLIT HORIZONTAL"  0 0 1 1
 float HSM_DECAL_FILL_MODE = global.HSM_DECAL_FILL_MODE;
+
+#pragma parameter HSM_DECAL_SPLIT_PRESERVE_CENTER       "          Split Mode Preserve Center %"  0 0 1000 1
+float HSM_DECAL_SPLIT_PRESERVE_CENTER = global.HSM_DECAL_SPLIT_PRESERVE_CENTER / 1000;
 
 #pragma parameter HSM_DECAL_SCALE                       "          Scale"  100 1 500 0.1
 float HSM_DECAL_SCALE = global.HSM_DECAL_SCALE / 100;
@@ -495,6 +507,9 @@ float HSM_CAB_GLASS_SCALE_KEEP_ASPECT = global.HSM_CAB_GLASS_SCALE_KEEP_ASPECT;
 #pragma parameter HSM_CAB_GLASS_FILL_MODE                   "          Image Fill Mode - STRETCH | SPLIT HORIZONTAL"  0 0 1 1
 float HSM_CAB_GLASS_FILL_MODE = global.HSM_CAB_GLASS_FILL_MODE;
 
+#pragma parameter HSM_CAB_GLASS_SPLIT_PRESERVE_CENTER       "          Split Mode Preserve Center %"  0 0 1000 1
+float HSM_CAB_GLASS_SPLIT_PRESERVE_CENTER = global.HSM_CAB_GLASS_SPLIT_PRESERVE_CENTER / 1000;
+
 #pragma parameter HSM_CAB_GLASS_SCALE                       "          Scale" 100 10 500 0.1
 float HSM_CAB_GLASS_SCALE = global.HSM_CAB_GLASS_SCALE / 100;
 
@@ -569,6 +584,9 @@ float HSM_TOP_SCALE_KEEP_ASPECT = global.HSM_TOP_SCALE_KEEP_ASPECT;
 
 #pragma parameter HSM_TOP_FILL_MODE                     "          Image Fill Mode - STRETCH | SPLIT HORIZONTAL"  0 0 1 1
 float HSM_TOP_FILL_MODE = global.HSM_TOP_FILL_MODE;
+
+#pragma parameter HSM_TOP_SPLIT_PRESERVE_CENTER       "          Split Mode Preserve Center %"  0 0 1000 1
+float HSM_TOP_SPLIT_PRESERVE_CENTER = global.HSM_TOP_SPLIT_PRESERVE_CENTER / 1000;
 
 #pragma parameter HSM_TOP_SCALE                         "          Scale" 100 0 1000 0.1
 float HSM_TOP_SCALE = global.HSM_TOP_SCALE / 100;

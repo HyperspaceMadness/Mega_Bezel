@@ -116,6 +116,7 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 						float scale_full_with_zoom,
 						float image_aspect_mode,
 						float image_fill_mode,
+						float split_preserve_center,
 						bool apply_default_scale_offset,
 						inout vec2 out_placement_coord,
 						inout vec2 out_placement_scale)
@@ -215,7 +216,10 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 		float placement_aspect_difference = explicit_texture_aspect / placement_aspect;
 		drawing_scale.x *= placement_aspect_difference;
 
-		slide_x = (out_placement_scale.x - drawing_scale.x) / 2;// * out_placement_scale.x; 
+		if ( abs(out_placement_coord.x - 0.5) > split_preserve_center)
+		{
+			slide_x = ((placement_aspect - explicit_texture_aspect) / placement_aspect) / 2;
+		}
 
 		if ( out_placement_coord.x < 0.5 )
 			slide_x *= -1;
@@ -624,6 +628,7 @@ void main()
 												HSM_BG_SCALE_FULL_WITH_ZOOM,
 												HSM_BG_SCALE_KEEP_ASPECT,
 												HSM_BG_FILL_MODE,
+												HSM_BG_SPLIT_PRESERVE_CENTER,
 												true,
 												BACKGROUND_COORD,
 												BACKGROUND_SCALE);
@@ -673,6 +678,7 @@ void main()
 											HSM_DEVICE_SCALE_FULL_WITH_ZOOM,
 											HSM_DEVICE_SCALE_KEEP_ASPECT,
 											HSM_DEVICE_FILL_MODE,
+											HSM_DEVICE_SPLIT_PRESERVE_CENTER,
 											true,
 											DEVICE_COORD,
 											DEVICE_SCALE);
@@ -719,6 +725,7 @@ void main()
 											HSM_LED_SCALE_FULL_WITH_ZOOM,
 											HSM_LED_SCALE_KEEP_ASPECT, 
 											HSM_LED_FILL_MODE,
+											HSM_LED_SPLIT_PRESERVE_CENTER,
 											true,
 											LED_COORD,
 											LED_SCALE);
@@ -762,6 +769,7 @@ void main()
 											HSM_DECAL_SCALE_FULL_WITH_ZOOM,
 											HSM_DECAL_SCALE_KEEP_ASPECT, 
 											HSM_DECAL_FILL_MODE,
+											HSM_DECAL_SPLIT_PRESERVE_CENTER,
 											true,
 											DECAL_COORD,
 											DECAL_SCALE);
@@ -804,6 +812,7 @@ void main()
 												HSM_TOP_SCALE_FULL_WITH_ZOOM,
 												HSM_TOP_SCALE_KEEP_ASPECT, 
 												HSM_TOP_FILL_MODE,
+												HSM_TOP_SPLIT_PRESERVE_CENTER,
 												true,
 												TOP_IMAGE_COORD,
 												TOP_IMAGE_SCALE);
@@ -855,6 +864,7 @@ void main()
 													HSM_CAB_GLASS_SCALE_FULL_WITH_ZOOM,
 													HSM_CAB_GLASS_SCALE_KEEP_ASPECT, 
 													HSM_CAB_GLASS_FILL_MODE,
+													HSM_CAB_GLASS_SPLIT_PRESERVE_CENTER,
 													true,
 													CAB_GLASS_COORD,
 													CAB_GLASS_SCALE);
@@ -909,6 +919,7 @@ void main()
 											HSM_CUTOUT_SCALE_FULL_WITH_ZOOM,
 											HSM_CUTOUT_KEEP_ASPECT,
 											FILL_MODE_STRETCH,
+											0,
 											false,
 											temp_coord,
 											temp_scale);
@@ -931,6 +942,7 @@ void main()
 												INHERITED_SCALE_MODE_VIEWPORT,
 												0,
 												FILL_MODE_STRETCH,
+												0,
 												false,
 												temp_coord,
 												temp_scale);
