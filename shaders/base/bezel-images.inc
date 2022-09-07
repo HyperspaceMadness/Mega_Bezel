@@ -216,7 +216,7 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 		float placement_aspect_difference = explicit_texture_aspect / placement_aspect;
 		drawing_scale.x *= placement_aspect_difference;
 
-		if ( abs(out_placement_coord.x - 0.5) > split_preserve_center)
+		if ( abs(out_placement_coord.x - 0.5) > split_preserve_center * placement_aspect_difference)
 		{
 			slide_x = ((placement_aspect - explicit_texture_aspect) / placement_aspect) / 2;
 		}
