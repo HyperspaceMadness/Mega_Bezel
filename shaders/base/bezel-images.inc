@@ -439,6 +439,7 @@ void main()
 	float distance_from_crease_shifted = HHLP_GetDistanceToLine(corner_coord_shifted.x, corner_coord_shifted.y, 1, corner_crease_dir_shifted.y / corner_crease_dir_shifted.x, 0 );
 
 	float top_half_mask = smoothstep(0.55, 0.5, tube_curved_coord.y);
+	float left_half_mask = smoothstep(0.55, 0.5, tube_curved_coord.x);
 
 	// Get a mask which transitions between sides and top/bottom at the corner crease  
 	float top_bottom_vs_sides_mask = dot(normalize(corner_coord_shifted), normalize(corner_crease_dir_shifted)) > 0 ? 1 - smoothstep(0, corner_fade_width / 2, distance_from_crease_shifted) : 1;
@@ -473,9 +474,6 @@ void main()
 	So instead of trying to use the coordinates from the screen/tube we use a larger space 
 	and subtract the screen space to see how far we are outside of the sreen
 	*/
-	float hmbz_bezel_brightness_top = 0.5;
-	float hmbz_bezel_brightness_sides = 1;
-	float hmbz_bezel_brightness_bottom = 2;
 
 	float hmbz_bezel_highlight_edge = 0.9;
 	float hmbz_bezel_highlight_top = 0.2;
@@ -496,9 +494,11 @@ void main()
 	vec3 base_color = HSM_Linearize(vec4(HSM_HSVtoRGB(vec3(HSM_BZL_COLOR_HUE, HSM_BZL_COLOR_SATURATION, HSM_BZL_COLOR_VALUE)), 1), DEFAULT_SRGB_GAMMA).rgb;
 	float noise_mask = clamp(fract(sin(dot(tube_curved_coord_ctr + vec2(0.5, 0.5) + 1, vec2(12.9898, 78.233))) * 43758.5453), 0, 1);
 	vec3 base_color_with_noise = mix(base_color, 1.5 * base_color * noise_mask, HSM_BZL_NOISE);
-	vec3 top_color = hmbz_bezel_brightness_top * HSM_BZL_BRIGHTNESS * base_color_with_noise;
-	vec3 bottom_color = hmbz_bezel_brightness_bottom * HSM_BZL_BRIGHTNESS * base_color_with_noise;
-	vec3 sides_color = hmbz_bezel_brightness_sides * HSM_BZL_BRIGHTNESS * base_color_with_noise;
+	vec3 top_color = HSM_BZL_BRIGHTNESS_MULT_TOP * HSM_BZL_BRIGHTNESS * base_color_with_noise;
+	vec3 bottom_color = HSM_BZL_BRIGHTNESS_MULT_BOTTOM * HSM_BZL_BRIGHTNESS * base_color_with_noise;
+	vec3 sides_color = mix(HSM_BZL_BRIGHTNESS_MULT_SIDES * HSM_BZL_BRIGHTNESS_MULT_SIDE_RIGHT * HSM_BZL_BRIGHTNESS * base_color_with_noise,
+							HSM_BZL_BRIGHTNESS_MULT_SIDES * HSM_BZL_BRIGHTNESS_MULT_SIDE_LEFT * HSM_BZL_BRIGHTNESS * base_color_with_noise,
+							left_half_mask);
 
 	vec3 frame_base_color = base_color;
 	vec3 frame_base_color_with_noise = base_color_with_noise;

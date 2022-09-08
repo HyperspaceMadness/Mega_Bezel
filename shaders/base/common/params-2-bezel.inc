@@ -47,17 +47,37 @@ float HSM_BZL_OUTER_CURVATURE_SCALE = global.HSM_BZL_OUTER_CURVATURE_SCALE / 100
 #pragma parameter HSM_BZL_OUTER_CORNER_RADIUS_SCALE 	"          Outer Corner Radius Scale - Def 60" 60 0 4000 1
 float HSM_BZL_OUTER_CORNER_RADIUS_SCALE = 0.9 * global.HSM_BZL_OUTER_CORNER_RADIUS_SCALE / 100;
 
-#pragma parameter HSM_BZL_BRIGHTNESS 				    "          Brightness - Def 30" 30 0 300 2
-float HSM_BZL_BRIGHTNESS = global.HSM_BZL_BRIGHTNESS / 100;
-
-#pragma parameter HSM_BZL_HIGHLIGHT 					"          Highlight" 1 0 100 0.2
-float HSM_BZL_HIGHLIGHT = global.HSM_BZL_HIGHLIGHT / 100;
-
 #pragma parameter HSM_BZL_NOISE 					"          Noise - Def 30" 30 0 100 1
 float HSM_BZL_NOISE = global.HSM_BZL_NOISE / 100;
 
 #pragma parameter HSM_BZL_INNER_EDGE_SHADOW             "          Opacity of Shadow from Bezel on Tube" 70 0 200 5
 float HSM_BZL_INNER_EDGE_SHADOW = global.HSM_BZL_INNER_EDGE_SHADOW / 100;
+
+//---------------------------------------------------------------------------------------------------
+// Bezel Brightness
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_BEZEL_BRIGHTNESS_TITLE		    "[ BEZEL BRIGHTNESS ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_BZL_BRIGHTNESS 				    "          Global Brightness - Def 30" 30 0 600 2
+float HSM_BZL_BRIGHTNESS = global.HSM_BZL_BRIGHTNESS / 100;
+
+#pragma parameter HSM_BZL_BRIGHTNESS_MULT_TOP 	        "          Top Multiplier - Def 50" 50 0 1000 2
+float HSM_BZL_BRIGHTNESS_MULT_TOP = global.HSM_BZL_BRIGHTNESS_MULT_TOP / 100;
+
+#pragma parameter HSM_BZL_BRIGHTNESS_MULT_BOTTOM 	    "          Bottom Multiplier - Def 200" 200 0 1000 2
+float HSM_BZL_BRIGHTNESS_MULT_BOTTOM = global.HSM_BZL_BRIGHTNESS_MULT_BOTTOM / 100;
+
+#pragma parameter HSM_BZL_BRIGHTNESS_MULT_SIDES 	    "          Sides Multiplier" 100 0 1000 2
+float HSM_BZL_BRIGHTNESS_MULT_SIDES = global.HSM_BZL_BRIGHTNESS_MULT_SIDES / 100;
+
+#pragma parameter HSM_BZL_BRIGHTNESS_MULT_SIDE_LEFT 	"          Left Side Multiplier" 100 0 1000 2
+float HSM_BZL_BRIGHTNESS_MULT_SIDE_LEFT = global.HSM_BZL_BRIGHTNESS_MULT_SIDE_LEFT / 100;
+
+#pragma parameter HSM_BZL_BRIGHTNESS_MULT_SIDE_RIGHT 	"          Right Side Multiplier" 100 0 1000 2
+float HSM_BZL_BRIGHTNESS_MULT_SIDE_RIGHT = global.HSM_BZL_BRIGHTNESS_MULT_SIDE_RIGHT / 100;
+
+#pragma parameter HSM_BZL_HIGHLIGHT 					"          Highlight" 1 0 100 0.2
+float HSM_BZL_HIGHLIGHT = global.HSM_BZL_HIGHLIGHT / 100;
 
 
 //---------------------------------------------------------------------------------------------------

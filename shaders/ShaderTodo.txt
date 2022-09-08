@@ -4,20 +4,17 @@ Mega Bezel is updated to V1.1.0_2022-09-04
 
 Changes:
   * Added Split Preserve Center %
-  * Fixed Split mode when following wider horizontal aspect 
+  * Fixed Split mode scaling when following wider horizontal aspect 
   * Fixed some corner parameters not forcing update of the graphics cache
-
+  * Added Brightness parameters for the different sides of the bezel to help create directional lighting
+  
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
-
-  * Fix missing corner cache parameters
   * Try Leveraging Fake Scanlines for Gameboy type effect
 
-  * Megatron HDR Combination at end of chain
-  * Fix Tube Diffuse Shadow in 3D Curvature
   * Add .params #reference to with all parameters commented out
 
   * Bezel shadow on Potato Tube / Game Image
