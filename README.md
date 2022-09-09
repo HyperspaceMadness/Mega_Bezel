@@ -3,7 +3,7 @@ Mega Bezel Shader Readme
 ------------------------------------------------------------------------------------------------------------
 ![Mega Bezel Logo](MegaBezelLogo.png)
 
-**Version V1.1.0_2022-09-04**
+**Version V1.2.0_2022-09-07**
 ----------------------------------------
 ----------------------------------------
 
@@ -541,6 +541,13 @@ Cropping removes parts of the game image at the edges of the screen which were n
   - 1 - Horizontal
   - 2 - Vertical
 
+-----------------------------------------------------------------------------------------------
+**[ DREZ DOWNSAMPLE FILTER - HYLLIAN - DREZ PRESETS ONLY ]:**
+- **DREZ Filter** - Filter to use in the DREZ downsampling pass 
+  - 0 - B-Spline
+  - 1 - Bicubic
+  - 2 - Catmull-Rom
+  - 3 - Bicubic H
 
 -----------------------------------------------------------------------------------------------
 **[ CORE RES SAMPLING ]:**
@@ -887,18 +894,39 @@ How to apply the CRT (Game Image) on top of the tube
 - **Outer Edge Position Y**
   - This moves the outer edge of the bezel and the frame up and down
 
-- **Brightness**
-  - Brightness of the bezel, the default is 30 so only 30% brightness
-
-- **Highlight**
-  - The highlight or shininess in the middle of the bezel
-
 - **Noise**
   - Noise or speckles in the color, default is 30
 
 - **Opacity of Shadow from Bezel on Tube**
   - How much of a darkness from the bezel onto the illuminated screen
   - Only visible when the black ring around the screen is reduced so that the bezel is almost on top of the screen
+
+
+-----------------------------------------------------------------------------------------------
+**[ BEZEL BRIGHTNESS ]:**
+
+- **Base Brightness**
+  - Brightness of the bezel, the default is 30 so only 30% brightness
+
+- **Top Multiplier**
+  - An adjustment over the base brightness for the top
+
+- **Bottom Multiplier**
+  - An adjustment over the base brightness for the bottom
+
+- **Sides Multiplier**
+  - An adjustment over the base brightness for both sides
+
+- **Left Side Multiplier**
+  - An adjustment over the base brightness for the left side
+
+- **Right Side Multiplier**
+  - An adjustment over the base brightness for the right side
+
+- **Highlight**
+  - The highlight or shininess in the middle of the bezel
+
+
 
 -----------------------------------------------------------------------------------------------
 **[ BEZEL COLOR ]:**
@@ -1229,7 +1257,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Zoom FULL Scale Mode**
   - When the layer Inherit Scale is in **FULL** mode this controls if the layer should scale with the global zoom or not, this defaults to ON
 
-- **Scale Aspect (Mode)** 
+- **Scale Aspect**
   - Controls how the texture's aspect reacts to the inherited scale
   - **0 - INHERIT FROM SCALE MODE** --- The texture's aspect will scale as what it follows is scaled
   - **1 - USE TEXURE ASPECT** --- The layer's image stays the same aspect as what it follows is scaled
@@ -1241,6 +1269,9 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Image Fill Mode**
   - **0 - STRETCH** --- Stretch the image across the whole area
   - **1 - SPLIT HORIZONTAL** --- Splits the image in the center and slide it out until it hits the outer edge
+
+- **Split Mode Preserve Center %** --- Preserves a part of the center of the graphic when split is used
+  - One usage is to have a logo in the center of the bottom of the monitor graphic and reserve space for this
 
 - **Scale** --- *Scales image layer equally in both directions*
 - **Scale X** --- *Scales image layer horizontally*
@@ -1273,6 +1304,8 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Inherit Scale**
 - **Zoom FULL Scale Mode**
 - **Scale Aspect**
+- **Image Fill Mode**
+- **Split Mode Preserve Center %**
 - **Scale**
 - **Scale X**
 - **Position X**
@@ -1321,6 +1354,8 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Inherit Scale**
 - **Zoom FULL Scale Mode**
 - **Scale Aspect**
+- **Image Fill Mode**
+- **Split Mode Preserve Center %**
 - **Scale**
 - **Scale X**
 - **Position X**
@@ -1351,6 +1386,8 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Inherit Scale**
 - **Zoom FULL Scale Mode**
 - **Scale Aspect**
+- **Image Fill Mode**
+- **Split Mode Preserve Center %**
 - **Scale**
 - **Scale X**
 - **Position X**
@@ -1382,6 +1419,8 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Inherit Scale**
 - **Zoom FULL Scale Mode**
 - **Scale Aspect**
+- **Image Fill Mode**
+- **Split Mode Preserve Center %**
 - **Scale**
 - **Scale X**
 - **Position X**
@@ -1410,10 +1449,12 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
   - **2 - Bezel**
   - **3 - BG**
   - **4 - Device**
-  - **4 - Decal**
+  - **5 - Decal**
 - **Inherit Scale**
 - **Zoom FULL Scale Mode**
 - **Scale Aspect**
+- **Image Fill Mode**
+- **Split Mode Preserve Center %**
 - **Scale**
 - **Scale X**
 - **Position X**
@@ -1444,10 +1485,12 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
   - **2 - Bezel**
   - **3 - BG**
   - **4 - Device**
-  - **4 - Decal**
+  - **5 - Decal**
 - **Inherit Scale**
 - **Zoom FULL Scale Mode**
 - **Scale Aspect**
+- **Image Fill Mode**
+- **Split Mode Preserve Center %**
 - **Scale**
 - **Scale X**
 - **Position X**

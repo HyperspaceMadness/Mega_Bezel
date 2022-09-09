@@ -1,18 +1,19 @@
 ![Mega_Bezel_Logo|512x256, 75%](upload://6PNkvcMF9Go9Wnk6OJXfYR1opXI.png) 
 
-Mega Bezel is updated to V1.1.0_2022-09-04
+Mega Bezel is updated to V1.2.0_2022-09-07
 
 Changes:
   * Added Split Preserve Center %
   * Fixed Split mode scaling when following wider horizontal aspect 
   * Fixed some corner parameters not forcing update of the graphics cache
   * Added Brightness parameters for the different sides of the bezel to help create directional lighting
-  
+
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Should we change SMOOTH-ADV sampling multiplier
   * Try Leveraging Fake Scanlines for Gameboy type effect
 
   * Add .params #reference to with all parameters commented out

@@ -40,13 +40,13 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	mat4 MVP;
 } global;
 
-#pragma parameter HSM_DREZ_TITLE "[ DREZ DOWNSAMPLE FILTER - HYLLIAN ]:" 0 0 0.01 0.01
+#pragma parameter HSM_DREZ_TITLE "[ DREZ DOWNSAMPLE FILTER - HYLLIAN - DREZ PRESETS ONLY ]:" 0 0 0.01 0.01
 
-#pragma parameter C_FILTER_MODE "          DREZ Filter Type:  B-SPLINE | CATMULL-ROM | HERMITE" 0.0 0.0 2.0 1.0
+#pragma parameter C_FILTER_MODE "     DREZ Filter: B-SPLINE | BICUBIC | CATMULL-ROM | BICUBIC H" 0.0 0.0 3.0 1.0
 #define C_FILTER_MODE params.C_FILTER_MODE
 
 // #pragma parameter C_ANTI_RINGING "          Catmull-Rom Anti-Ringing [ OFF | ON ]" 1.0 0.0 1.0 1.0
-#define C_ANTI_RINGING 1
+// #define C_ANTI_RINGING params.C_ANTI_RINGING
 
 #pragma stage vertex
 layout(location = 0) in vec4 Position;
@@ -79,20 +79,29 @@ layout(set = 0, binding = 2) uniform sampler2D Source;
 
 void main()
 {
-   // B-Spline bicubic parameters
-   float  B =  1.0; 
+   // B-Spline
+   float  B =  1.0;
    float  C =  0.0;
 
    if (C_FILTER_MODE == 1)
    {
-      B =  0.0; 
-      C =  0.5; 
+      // Bicubic
+      B =  1.0/3.0; 
+      C =  1.0/3.0;
    }
    if (C_FILTER_MODE == 2)
    {
-      B =  0.0; 
-      C =  0.0; 
+      // Catmull-Rom
+      B =  0.0;
+      C =  0.5;
    }
+   if (C_FILTER_MODE == 3)
+   {
+      // Bicubic Hyllian
+      B =  0.0;
+      C =  1.0;
+   }
+
 
    const mat4 INV  = mat4(            (-B - 6.0*C)/6.0,         (3.0*B + 12.0*C)/6.0,     (-3.0*B - 6.0*C)/6.0,             B/6.0,
                                           (12.0 - 9.0*B - 6.0*C)/6.0, (-18.0 + 12.0*B + 6.0*C)/6.0,                      0.0, (6.0 - 2.0*B)/6.0,
@@ -109,15 +118,15 @@ void main()
   vec4 Px    = vec4(fp.x*fp.x*fp.x, fp.x*fp.x, fp.x, 1.0) * INV;
   vec3 color = mat4x3(C0, C1, C2, C3) * Px;
 
-   // Anti-ringing
-   if (C_FILTER_MODE == 1 && C_ANTI_RINGING == 1)
-   {
-      vec3 aux = color;
-      vec3 min_sample = min(min(C0, C1), min(C2, C3));
-      vec3 max_sample = max(max(C0, C1), max(C2, C3));
-      color = clamp(color, min_sample, max_sample);
-      color = mix(aux, color, step(0.0, (C0-C1)*(C2-C3)));
-   }
+   // // Anti-ringing
+   // if (C_ANTI_RINGING == 1)
+   // {
+   //    vec3 aux = color;
+   //    vec3 min_sample = min(min(C0, C1), min(C2, C3));
+   //    vec3 max_sample = max(max(C0, C1), max(C2, C3));
+   //    color = clamp(color, min_sample, max_sample);
+   //    color = mix(aux, color, step(0.0, (C0-C1)*(C2-C3)));
+   // }
 
    FragColor = vec4(color, 1.0);
 }

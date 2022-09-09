@@ -348,4 +348,4 @@ GAMMA_INPUT = 2.0
 gamma_out = 1.95
 
 // DREZ Parameters
-SHARPEN = 1
+SHARPEN = 0

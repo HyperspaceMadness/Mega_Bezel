@@ -53,12 +53,13 @@ float HSM_BZL_NOISE = global.HSM_BZL_NOISE / 100;
 #pragma parameter HSM_BZL_INNER_EDGE_SHADOW             "          Opacity of Shadow from Bezel on Tube" 70 0 200 5
 float HSM_BZL_INNER_EDGE_SHADOW = global.HSM_BZL_INNER_EDGE_SHADOW / 100;
 
+
 //---------------------------------------------------------------------------------------------------
 // Bezel Brightness
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_BEZEL_BRIGHTNESS_TITLE		    "[ BEZEL BRIGHTNESS ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_BZL_BRIGHTNESS 				    "          Global Brightness - Def 30" 30 0 600 2
+#pragma parameter HSM_BZL_BRIGHTNESS 				    "          Base Brightness - Def 30" 30 0 600 2
 float HSM_BZL_BRIGHTNESS = global.HSM_BZL_BRIGHTNESS / 100;
 
 #pragma parameter HSM_BZL_BRIGHTNESS_MULT_TOP 	        "          Top Multiplier - Def 50" 50 0 1000 2
@@ -175,7 +176,6 @@ float HSM_FRM_SHADOW_WIDTH = global.HSM_FRM_SHADOW_WIDTH / 1000;
 
 #pragma parameter HSM_REFLECT_CORNER_TITLE			            "[ CORNER CREASE - ALSO CONTROLS REFLECTION]:" 0 0 0.01 0.01
 
-// TODO how this is being used is strange
 #pragma parameter HSM_REFLECT_CORNER_FADE 						"          Corner Fade" 10 1 100 0.5
 float HSM_REFLECT_CORNER_FADE = global.HSM_REFLECT_CORNER_FADE / 100;
 
