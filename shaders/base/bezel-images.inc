@@ -117,6 +117,7 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 						float image_aspect_mode,
 						float image_fill_mode,
 						float split_preserve_center,
+						float split_repeat_width,
 						bool apply_default_scale_offset,
 						inout vec2 out_placement_coord,
 						inout vec2 out_placement_scale)
@@ -216,15 +217,29 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 		float placement_aspect_difference = explicit_texture_aspect / placement_aspect;
 		drawing_scale.x *= placement_aspect_difference;
 
-		if ( abs(out_placement_coord.x - 0.5) > split_preserve_center * placement_aspect_difference)
+		float center_width = split_preserve_center * placement_aspect_difference;
+		if ( abs(out_placement_coord.x - 0.5) > center_width)
 		{
-			slide_x = ((placement_aspect - explicit_texture_aspect) / placement_aspect) / 2;
+			slide_x = ((placement_aspect - explicit_texture_aspect) / placement_aspect) / 2.0;
 		}
 
-		if ( out_placement_coord.x < 0.5 )
-			slide_x *= -1;
+		float repeat_width = split_repeat_width * placement_aspect_difference;
+		if (abs(out_placement_coord.x - 0.5) > center_width && 
+			abs(out_placement_coord.x - 0.5) < center_width + slide_x && 
+			repeat_width > 0)
+		{	
+			slide_x = (abs(out_placement_coord.x - 0.5) - center_width) - mod(clamp(abs(out_placement_coord.x - 0.5) - center_width, 0, 1), repeat_width);
 
-		inherited_coord.x -= slide_x;
+			if ( out_placement_coord.x < 0.5 )
+				slide_x *= -1;
+			inherited_coord.x -= slide_x;
+		}
+		else
+		{
+			if ( out_placement_coord.x < 0.5 )
+				slide_x *= -1;
+			inherited_coord.x -= slide_x;
+		}
 	}
 
 	// The inherited_coord is already the coord from the inherited space
@@ -629,6 +644,7 @@ void main()
 												HSM_BG_SCALE_KEEP_ASPECT,
 												HSM_BG_FILL_MODE,
 												HSM_BG_SPLIT_PRESERVE_CENTER,
+												HSM_BG_SPLIT_REPEAT_WIDTH,
 												true,
 												BACKGROUND_COORD,
 												BACKGROUND_SCALE);
@@ -679,6 +695,7 @@ void main()
 											HSM_DEVICE_SCALE_KEEP_ASPECT,
 											HSM_DEVICE_FILL_MODE,
 											HSM_DEVICE_SPLIT_PRESERVE_CENTER,
+											HSM_DEVICE_SPLIT_REPEAT_WIDTH,
 											true,
 											DEVICE_COORD,
 											DEVICE_SCALE);
@@ -726,6 +743,7 @@ void main()
 											HSM_LED_SCALE_KEEP_ASPECT, 
 											HSM_LED_FILL_MODE,
 											HSM_LED_SPLIT_PRESERVE_CENTER,
+											HSM_LED_SPLIT_REPEAT_WIDTH,
 											true,
 											LED_COORD,
 											LED_SCALE);
@@ -770,6 +788,7 @@ void main()
 											HSM_DECAL_SCALE_KEEP_ASPECT, 
 											HSM_DECAL_FILL_MODE,
 											HSM_DECAL_SPLIT_PRESERVE_CENTER,
+											HSM_DECAL_SPLIT_REPEAT_WIDTH,
 											true,
 											DECAL_COORD,
 											DECAL_SCALE);
@@ -813,6 +832,7 @@ void main()
 												HSM_TOP_SCALE_KEEP_ASPECT, 
 												HSM_TOP_FILL_MODE,
 												HSM_TOP_SPLIT_PRESERVE_CENTER,
+												HSM_TOP_SPLIT_REPEAT_WIDTH,
 												true,
 												TOP_IMAGE_COORD,
 												TOP_IMAGE_SCALE);
@@ -865,6 +885,7 @@ void main()
 													HSM_CAB_GLASS_SCALE_KEEP_ASPECT, 
 													HSM_CAB_GLASS_FILL_MODE,
 													HSM_CAB_GLASS_SPLIT_PRESERVE_CENTER,
+													HSM_CAB_GLASS_SPLIT_REPEAT_WIDTH,
 													true,
 													CAB_GLASS_COORD,
 													CAB_GLASS_SCALE);
@@ -920,6 +941,7 @@ void main()
 											HSM_CUTOUT_KEEP_ASPECT,
 											FILL_MODE_STRETCH,
 											0,
+											0,
 											false,
 											temp_coord,
 											temp_scale);
@@ -942,6 +964,7 @@ void main()
 												INHERITED_SCALE_MODE_VIEWPORT,
 												0,
 												FILL_MODE_STRETCH,
+												0,
 												0,
 												false,
 												temp_coord,
