@@ -212,34 +212,32 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 
 	if ( image_fill_mode == FILL_MODE_SPLIT_FILL_HORIZONTAL )
 	{
+		float abs_ctr_coord_x = abs(out_placement_coord.x - 0.5);
 		// Correct the aspect so it matches the texture and is never stretched
 		float placement_aspect = out_placement_scale.x / out_placement_scale.y * output_aspect;
 		float placement_aspect_difference = explicit_texture_aspect / placement_aspect;
 		drawing_scale.x *= placement_aspect_difference;
 
 		float center_width = split_preserve_center * placement_aspect_difference;
-		if ( abs(out_placement_coord.x - 0.5) > center_width)
+		if ( abs_ctr_coord_x > center_width)
 		{
 			slide_x = ((placement_aspect - explicit_texture_aspect) / placement_aspect) / 2.0;
 		}
 
 		float repeat_width = split_repeat_width * placement_aspect_difference;
-		if (abs(out_placement_coord.x - 0.5) > center_width && 
-			abs(out_placement_coord.x - 0.5) < center_width + slide_x && 
+		if (abs_ctr_coord_x > center_width && 
+			abs_ctr_coord_x < center_width + slide_x && 
 			repeat_width > 0)
-		{	
-			slide_x = (abs(out_placement_coord.x - 0.5) - center_width) - mod(clamp(abs(out_placement_coord.x - 0.5) - center_width, 0, 1), repeat_width);
-
-			if ( out_placement_coord.x < 0.5 )
-				slide_x *= -1;
-			inherited_coord.x -= slide_x;
-		}
-		else
 		{
-			if ( out_placement_coord.x < 0.5 )
-				slide_x *= -1;
-			inherited_coord.x -= slide_x;
+			if (clamp(split_repeat_width - 0.001, 0, 1) == 0)
+				slide_x = (abs_ctr_coord_x - center_width);
+			else
+				slide_x = (abs_ctr_coord_x - 0.001 - center_width) - mod(clamp(abs_ctr_coord_x - 0.01 - center_width, 0, 1), repeat_width);
 		}
+
+		if ( out_placement_coord.x < 0.5 )
+			slide_x *= -1;
+		inherited_coord.x -= slide_x;
 	}
 
 	// The inherited_coord is already the coord from the inherited space
