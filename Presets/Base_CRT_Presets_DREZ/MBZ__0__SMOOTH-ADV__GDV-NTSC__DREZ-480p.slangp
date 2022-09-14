@@ -48,7 +48,7 @@ scale_type6 = source
 scale6 = 1.0
 alias6 = "IntroPass"
 
-shader7 = ../../shaders/base/linearize.slang
+shader7 = ../../shaders/dedither/dedither-gamma-prep-1-before.slang
 alias7 = LinearGamma
 
 shader8 = ../../shaders/hyllian/checkerboard-dedither/checkerboard-dedither-pass1.slang
@@ -62,7 +62,8 @@ shader12 = ../../shaders/mdapt/hsm-mdapt-pass1.slang
 shader13 = ../../shaders/mdapt/hsm-mdapt-pass2.slang
 shader14 = ../../shaders/mdapt/hsm-mdapt-pass3.slang
 shader15 = ../../shaders/mdapt/hsm-mdapt-pass4.slang
-shader16 = ../../shaders/base/delinearize.slang
+
+shader16 = ../../shaders/dedither/dedither-gamma-prep-2-after.slang
 
 shader17 = ../../shaders/ps1dither/hsm-PS1-Undither-BoxBlur.slang
 

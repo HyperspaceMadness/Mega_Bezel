@@ -1,6 +1,6 @@
 shaders = 10
 
-shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/linearize.slang
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/dedither/dedither-gamma-prep-1-before.slang
 alias0 = LinearGamma
 
 shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/hyllian/checkerboard-dedither/checkerboard-dedither-pass1.slang
@@ -14,4 +14,5 @@ shader5 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/mdapt/hsm-mdapt-pass1
 shader6 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/mdapt/hsm-mdapt-pass2.slang
 shader7 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/mdapt/hsm-mdapt-pass3.slang
 shader8 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/mdapt/hsm-mdapt-pass4.slang
-shader9 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/delinearize.slang
+
+shader9 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/dedither/dedither-gamma-prep-2-after.slang
