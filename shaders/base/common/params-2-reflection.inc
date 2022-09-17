@@ -117,8 +117,8 @@ float HSM_REFLECT_NOISE_SAMPLE_DISTANCE = global.HSM_REFLECT_NOISE_SAMPLE_DISTAN
 // #pragma parameter HSM_REFLECT_MASK_IMG_AMOUNT 		                "          Reflection Image Mask Amount" 0 0 100 1
 // float HSM_REFLECT_MASK_IMG_AMOUNT = global.HSM_REFLECT_MASK_IMG_AMOUNT / 100;
 
-// #pragma parameter HSM_REFLECT_MASK_SCALE_MODE 			            "       Scaling Mode (Image Layers Only)- FullScreen | Bezel Img" 0 0 1 1
-// float HSM_REFLECT_MASK_SCALE_MODE = global.HSM_REFLECT_MASK_SCALE_MODE;
+// #pragma parameter HSM_REFLECT_MASK_FOLLOW_LAYER 			            "       Scaling Mode (Image Layers Only)- FullScreen | Bezel Img" 0 0 1 1
+// float HSM_REFLECT_MASK_FOLLOW_LAYER = global.HSM_REFLECT_MASK_FOLLOW_LAYER;
 
 #pragma parameter HSM_GLASS_BORDER_ON               "          Glass Border ON (For Glass Preset)" 0 0 1 1
 float HSM_GLASS_BORDER_ON = global.HSM_GLASS_BORDER_ON;

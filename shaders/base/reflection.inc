@@ -404,7 +404,7 @@ void main()
 		// 	vec2 reflection_image_coord = BACKGROUND_CURVED_COORD;
 		// 	vec2 reflection_image_scale = BACKGROUND_SCALE;
 
-		// 	if (HSM_REFLECT_MASK_SCALE_MODE == 1)
+		// 	if (HSM_REFLECT_MASK_FOLLOW_LAYER == 1)
 		// 	{
 		// 		reflection_image_coord = DEVICE_CURVED_COORD;
 		// 		reflection_image_scale = DEVICE_SCALE;

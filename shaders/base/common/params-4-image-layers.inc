@@ -29,28 +29,28 @@
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_LAYER_ORDER_TITLE			  "[ LAYER ORDER ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_BG_LAYER_ORDER              "          Background Image"  0 0 12 1
+#pragma parameter HSM_BG_LAYER_ORDER              "          Background Layer"  0 0 12 1
 float HSM_BG_LAYER_ORDER = global.HSM_BG_LAYER_ORDER;
 
 #pragma parameter HSM_VIEWPORT_VIGNETTE_LAYER_ORDER "          Viewport Vignette"  1 0 12 1
 float HSM_VIEWPORT_VIGNETTE_LAYER_ORDER = global.HSM_VIEWPORT_VIGNETTE_LAYER_ORDER;
 
-#pragma parameter HSM_LED_LAYER_ORDER             "          LED Image"  2 0 12 1
+#pragma parameter HSM_LED_LAYER_ORDER             "          LED Layer"  2 0 12 1
 float HSM_LED_LAYER_ORDER = global.HSM_LED_LAYER_ORDER;
 
-#pragma parameter HSM_DEVICE_LAYER_ORDER         "          Device Image"  3 0 12 1
+#pragma parameter HSM_DEVICE_LAYER_ORDER         "          Device Layer"  3 0 12 1
 float HSM_DEVICE_LAYER_ORDER = global.HSM_DEVICE_LAYER_ORDER;
 
 #pragma parameter HSM_CRT_LAYER_ORDER             "          CRT Screen Bezel & Frame"  5 0 12 1
 float HSM_CRT_LAYER_ORDER = global.HSM_CRT_LAYER_ORDER;
 
-#pragma parameter HSM_DECAL_LAYER_ORDER           "          DECAL Image"  7 0 12 1
+#pragma parameter HSM_DECAL_LAYER_ORDER           "          DECAL Layer"  7 0 12 1
 float HSM_DECAL_LAYER_ORDER = global.HSM_DECAL_LAYER_ORDER;
 
-#pragma parameter HSM_CAB_GLASS_LAYER_ORDER       "          Cabinet Glass Image"  9 0 12 1
+#pragma parameter HSM_CAB_GLASS_LAYER_ORDER       "          Cabinet Glass Layer"  9 0 12 1
 float HSM_CAB_GLASS_LAYER_ORDER = global.HSM_CAB_GLASS_LAYER_ORDER;
 
-#pragma parameter HSM_TOP_LAYER_ORDER             "          Top Image"  12 0 12 1
+#pragma parameter HSM_TOP_LAYER_ORDER             "          Top Layer"  12 0 12 1
 float HSM_TOP_LAYER_ORDER = global.HSM_TOP_LAYER_ORDER;
 
 
@@ -65,11 +65,11 @@ float HSM_CUTOUT_ASPECT_MODE = global.HSM_CUTOUT_ASPECT_MODE;
 #pragma parameter HSM_CUTOUT_EXPLICIT_ASPECT  "          Explicit Aspect" 1.33333 0.01 3 0.01
 float HSM_CUTOUT_EXPLICIT_ASPECT = global.HSM_CUTOUT_EXPLICIT_ASPECT;
 
-#pragma parameter HSM_CUTOUT_SCALE_MODE               " Inherit Scale - FULL | TUBE | BZL | BG | DEVICE | DECAL"  0 0 5 1
-float HSM_CUTOUT_SCALE_MODE = global.HSM_CUTOUT_SCALE_MODE;
+#pragma parameter HSM_CUTOUT_FOLLOW_LAYER               " Follow Layer - FULL | TUBE | BZL | BG | DEVICE | DECAL"  0 0 5 1
+float HSM_CUTOUT_FOLLOW_LAYER = global.HSM_CUTOUT_FOLLOW_LAYER;
 
-#pragma parameter HSM_CUTOUT_SCALE_FULL_WITH_ZOOM     "          Zoom FULL Scale Mode" 1 0 1 1
-float HSM_CUTOUT_SCALE_FULL_WITH_ZOOM = global.HSM_CUTOUT_SCALE_FULL_WITH_ZOOM;
+#pragma parameter HSM_CUTOUT_FOLLOW_FULL_USES_ZOOM     "          Follow Full also follows Zoom" 1 0 1 1
+float HSM_CUTOUT_FOLLOW_FULL_USES_ZOOM = global.HSM_CUTOUT_FOLLOW_FULL_USES_ZOOM;
 
 #pragma parameter HSM_CUTOUT_KEEP_ASPECT        "        Scale Aspect - INHERIT FROM SCALE MODE | KEEP ASPECT"  1 0 1 1
 float HSM_CUTOUT_KEEP_ASPECT = global.HSM_CUTOUT_KEEP_ASPECT;
@@ -136,6 +136,9 @@ float HSM_BG_BLEND_MODE = global.HSM_BG_BLEND_MODE;
 #pragma parameter HSM_BG_SOURCE_MATTE_TYPE        "          Source Matte Color - BLACK | WHITE | NONE"  0 0 2 1
 float HSM_BG_SOURCE_MATTE_TYPE = global.HSM_BG_SOURCE_MATTE_TYPE;
 
+#pragma parameter HSM_BG_MIPMAPPING_BLEND_BIAS    "          Mipmapping Blend Bias (Affects Sharpness)" 0 -5 5 0.1
+float HSM_BG_MIPMAPPING_BLEND_BIAS = global.HSM_BG_MIPMAPPING_BLEND_BIAS;
+
 #pragma parameter HSM_BG_MASK_MODE                "    Mask - ALL | SCRN | TUBE | BZ- | BZ | BZ+ | FRM | FRM+ | BG" 0 0 8 1
 float HSM_BG_MASK_MODE = global.HSM_BG_MASK_MODE;
 
@@ -145,13 +148,19 @@ float HSM_BG_CUTOUT_MODE = global.HSM_BG_CUTOUT_MODE;
 #pragma parameter HSM_BG_DUALSCREEN_VIS_MODE      "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
 float HSM_BG_DUALSCREEN_VIS_MODE = global.HSM_BG_DUALSCREEN_VIS_MODE;
 
-#pragma parameter HSM_BG_SCALE_MODE               "          Inherit Scale - FULL | TUBE | BEZEL" 0 0 2 1
-float HSM_BG_SCALE_MODE = global.HSM_BG_SCALE_MODE;
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_BG_TITLE2			           "[ BACKGROUND SCALE & FOLLOW ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_BG_SCALE_FULL_WITH_ZOOM     "          Zoom FULL Scale Mode" 1 0 1 1
-float HSM_BG_SCALE_FULL_WITH_ZOOM = global.HSM_BG_SCALE_FULL_WITH_ZOOM;
+#pragma parameter HSM_BG_FOLLOW_LAYER               "          Follow Layer - FULL | TUBE | BEZEL" 0 0 2 1
+float HSM_BG_FOLLOW_LAYER = global.HSM_BG_FOLLOW_LAYER;
 
-#pragma parameter HSM_BG_SCALE_KEEP_ASPECT        "        Scale Aspect - INHERIT FROM SCALE MODE | USE TEX ASPECT"  1 0 1 1
+#pragma parameter HSM_BG_FOLLOW_MODE              "          Follow Mode - FOLLOW SCALE & POS | FOLLOW EXACTLY" 0 0 1 1
+float HSM_BG_FOLLOW_MODE = global.HSM_BG_FOLLOW_MODE;
+
+#pragma parameter HSM_BG_FOLLOW_FULL_USES_ZOOM     "          Follow Full also follows Zoom" 1 0 1 1
+float HSM_BG_FOLLOW_FULL_USES_ZOOM = global.HSM_BG_FOLLOW_FULL_USES_ZOOM;
+
+#pragma parameter HSM_BG_SCALE_KEEP_ASPECT        "          Scale Aspect - INHERIT FROM LAYER | USE TEX ASPECT"  1 0 1 1
 float HSM_BG_SCALE_KEEP_ASPECT = global.HSM_BG_SCALE_KEEP_ASPECT;
 
 #pragma parameter HSM_BG_FILL_MODE                "          Image Fill Mode - STRETCH | SPLIT HORIZONTAL"  0 0 1 1
@@ -178,10 +187,6 @@ float HSM_BG_POS_Y = global.HSM_BG_POS_Y / 100;
 #pragma parameter HSM_BG_MIRROR_WRAP              "          Mirror Wrap" 1 0 1 1
 float HSM_BG_MIRROR_WRAP = global.HSM_BG_MIRROR_WRAP;
 
-#pragma parameter HSM_BG_MIPMAPPING_BLEND_BIAS    "          Mipmapping Blend Bias" 0 -5 5 0.1
-float HSM_BG_MIPMAPPING_BLEND_BIAS = global.HSM_BG_MIPMAPPING_BLEND_BIAS;
-
-
 
 //---------------------------------------------------------------------------------------------------
 //    VIEWPORT VIGNETTE
@@ -197,8 +202,8 @@ float HSM_VIEWPORT_VIGNETTE_MASK_MODE = global.HSM_VIEWPORT_VIGNETTE_MASK_MODE;
 #pragma parameter HSM_VIEWPORT_VIGNETTE_CUTOUT_MODE  "          Cutout Mask - OFF | ON | INVERT" 0 0 2 1
 float HSM_VIEWPORT_VIGNETTE_CUTOUT_MODE = global.HSM_VIEWPORT_VIGNETTE_CUTOUT_MODE;
 
-#pragma parameter HSM_VIEWPORT_VIGNETTE_SCALE_MODE   "          Inherit Scale- FULL | BG | TUBE | BZL" 0 0 5 1
-float HSM_VIEWPORT_VIGNETTE_SCALE_MODE = global.HSM_VIEWPORT_VIGNETTE_SCALE_MODE;
+#pragma parameter HSM_VIEWPORT_VIGNETTE_FOLLOW_LAYER   "          Follow Layer- FULL | BG | TUBE | BZL" 0 0 5 1
+float HSM_VIEWPORT_VIGNETTE_FOLLOW_LAYER = global.HSM_VIEWPORT_VIGNETTE_FOLLOW_LAYER;
 
 #pragma parameter HSM_VIEWPORT_VIGNETTE_SCALE        "          Scale" 100 0 1000 0.1
 float HSM_VIEWPORT_VIGNETTE_SCALE = global.HSM_VIEWPORT_VIGNETTE_SCALE / 100;
@@ -254,19 +259,28 @@ float HSM_LED_SOURCE_MATTE_TYPE = global.HSM_LED_SOURCE_MATTE_TYPE;
 #pragma parameter HSM_LED_MASK_MODE                     "    Mask - ALL | SCRN | TUBE | BZ- | BZ | BZ+ | FRM | FRM+ | BG"   0 0 8 1
 float HSM_LED_MASK_MODE = global.HSM_LED_MASK_MODE;
 
+#pragma parameter HSM_LED_MIPMAPPING_BLEND_BIAS         "          Mipmapping Blend Bias (Affects Sharpness)" 0 -5 5 0.1
+float HSM_LED_MIPMAPPING_BLEND_BIAS = global.HSM_LED_MIPMAPPING_BLEND_BIAS;
+
 #pragma parameter HSM_LED_CUTOUT_MODE                   "          Cutout Mask - OFF | ON | INVERT" 0 0 2 1
 float HSM_LED_CUTOUT_MODE = global.HSM_LED_CUTOUT_MODE;
 
 #pragma parameter HSM_LED_DUALSCREEN_VIS_MODE           "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
 float HSM_LED_DUALSCREEN_VIS_MODE = global.HSM_LED_DUALSCREEN_VIS_MODE;
 
-#pragma parameter HSM_LED_SCALE_MODE                    "       Inherit Scale - FULL | TUBE | BEZEL | BG | DEVICE"  3 0 4 1
-float HSM_LED_SCALE_MODE = global.HSM_LED_SCALE_MODE;
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_LED_TITLE2		                "[ LED SCALE & FOLLOW]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_LED_SCALE_FULL_WITH_ZOOM          "          Zoom FULL Scale Mode" 1 0 1 1
-float HSM_LED_SCALE_FULL_WITH_ZOOM = global.HSM_LED_SCALE_FULL_WITH_ZOOM;
+#pragma parameter HSM_LED_FOLLOW_LAYER                  "          Follow Layer - FULL | TUBE | BEZEL | BG | DEVICE"  3 0 4 1
+float HSM_LED_FOLLOW_LAYER = global.HSM_LED_FOLLOW_LAYER;
 
-#pragma parameter HSM_LED_SCALE_KEEP_ASPECT             "        Scale Aspect - INHERIT FROM SCALE MODE | USE TEX ASPECT"  1 0 1 1
+#pragma parameter HSM_LED_FOLLOW_MODE                   "          Follow Mode - FOLLOW SCALE & POS | FOLLOW EXACTLY" 0 0 1 1
+float HSM_LED_FOLLOW_MODE = global.HSM_LED_FOLLOW_MODE;
+
+#pragma parameter HSM_LED_FOLLOW_FULL_USES_ZOOM          "          Follow Full also follows Zoom" 1 0 1 1
+float HSM_LED_FOLLOW_FULL_USES_ZOOM = global.HSM_LED_FOLLOW_FULL_USES_ZOOM;
+
+#pragma parameter HSM_LED_SCALE_KEEP_ASPECT             "          Scale Aspect - INHERIT FROM LAYER | USE TEX ASPECT"  1 0 1 1
 float HSM_LED_SCALE_KEEP_ASPECT = global.HSM_LED_SCALE_KEEP_ASPECT;
 
 #pragma parameter HSM_LED_FILL_MODE                     "          Image Fill Mode - STRETCH | SPLIT HORIZONTAL"  0 0 1 1
@@ -289,9 +303,6 @@ float HSM_LED_POS_X = global.HSM_LED_POS_X / -100;
 
 #pragma parameter HSM_LED_POS_Y                         "          Position Y"  0 -1000 1000 0.05
 float HSM_LED_POS_Y = global.HSM_LED_POS_Y / 100;
-
-#pragma parameter HSM_LED_MIPMAPPING_BLEND_BIAS         "          Mipmapping Blend Bias" 0 -5 5 0.1
-float HSM_LED_MIPMAPPING_BLEND_BIAS = global.HSM_LED_MIPMAPPING_BLEND_BIAS;
 
 
 //---------------------------------------------------------------------------------------------------
@@ -335,22 +346,28 @@ float HSM_DEVICE_SOURCE_MATTE_TYPE = global.HSM_DEVICE_SOURCE_MATTE_TYPE;
 #pragma parameter HSM_DEVICE_MASK_MODE                 "    Mask - ALL | SCRN | TUBE | BZ- | BZ | BZ+ | FRM | FRM+ | BG" 0 0 8 1
 float HSM_DEVICE_MASK_MODE = global.HSM_DEVICE_MASK_MODE;
 
+#pragma parameter HSM_DEVICE_MIPMAPPING_BLEND_BIAS          "          Mipmapping Blend Bias (Affects Sharpness)" 0 -5 5 0.1
+float HSM_DEVICE_MIPMAPPING_BLEND_BIAS = global.HSM_DEVICE_MIPMAPPING_BLEND_BIAS;
+
 #pragma parameter HSM_DEVICE_CUTOUT_MODE               "          Cutout Mask - OFF | ON | INVERT" 0 0 2 1
 float HSM_DEVICE_CUTOUT_MODE = global.HSM_DEVICE_CUTOUT_MODE;
 
 #pragma parameter HSM_DEVICE_DUALSCREEN_VIS_MODE           "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
 float HSM_DEVICE_DUALSCREEN_VIS_MODE = global.HSM_DEVICE_DUALSCREEN_VIS_MODE;
 
-#pragma parameter HSM_DEVICE_SCALE_MODE                "          Inherit Scale - FULL | TUBE | BEZEL | BG"  1 0 3 1
-float HSM_DEVICE_SCALE_MODE = global.HSM_DEVICE_SCALE_MODE;
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_DEVICE_TITLE2			           "[ DEVICE SCALE & FOLLOW ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_DEVICE_SCALE_FULL_WITH_ZOOM      "          Zoom FULL Scale Mode" 1 0 1 1
-float HSM_DEVICE_SCALE_FULL_WITH_ZOOM = global.HSM_DEVICE_SCALE_FULL_WITH_ZOOM;
+#pragma parameter HSM_DEVICE_FOLLOW_LAYER                "          Follow Layer - FULL | TUBE | BEZEL | BG"  1 0 3 1
+float HSM_DEVICE_FOLLOW_LAYER = global.HSM_DEVICE_FOLLOW_LAYER;
 
-#pragma parameter HSM_DEVICE_COPY_INHERITED_COORD      "      Copy Inherited Coord (Keeps Curvature, No Aspect or Fill)"  0 0 1 1
-float HSM_DEVICE_COPY_INHERITED_COORD = global.HSM_DEVICE_COPY_INHERITED_COORD;
+#pragma parameter HSM_DEVICE_FOLLOW_MODE                    "          Follow Mode - FOLLOW SCALE & POS | FOLLOW EXACTLY" 0 0 1 1
+float HSM_DEVICE_FOLLOW_MODE = global.HSM_DEVICE_FOLLOW_MODE;
 
-#pragma parameter HSM_DEVICE_SCALE_KEEP_ASPECT         "        Scale Aspect - INHERIT FROM SCALE MODE | USE TEX ASPECT"  1 0 1 1
+#pragma parameter HSM_DEVICE_FOLLOW_FULL_USES_ZOOM      "          Follow Full also follows Zoom" 1 0 1 1
+float HSM_DEVICE_FOLLOW_FULL_USES_ZOOM = global.HSM_DEVICE_FOLLOW_FULL_USES_ZOOM;
+
+#pragma parameter HSM_DEVICE_SCALE_KEEP_ASPECT         "          Scale Aspect - INHERIT FROM LAYER | USE TEX ASPECT"  1 0 1 1
 float HSM_DEVICE_SCALE_KEEP_ASPECT = global.HSM_DEVICE_SCALE_KEEP_ASPECT;
 
 #pragma parameter HSM_DEVICE_FILL_MODE                 "          Image Fill Mode - STRETCH | SPLIT HORIZONTAL"  0 0 1 1
@@ -374,15 +391,12 @@ float HSM_DEVICE_POS_X = global.HSM_DEVICE_POS_X / -100;
 #pragma parameter HSM_DEVICE_POS_Y                     "          Position Y"  0 -1000 1000 0.05
 float HSM_DEVICE_POS_Y = global.HSM_DEVICE_POS_Y / 100;
 
-#pragma parameter HSM_DEVICE_MIPMAPPING_BLEND_BIAS          "          Mipmapping Blend Bias" 0 -5 5 0.1
-float HSM_DEVICE_MIPMAPPING_BLEND_BIAS = global.HSM_DEVICE_MIPMAPPING_BLEND_BIAS;
-
 
 
 //---------------------------------------------------------------------------------------------------
 //    DECAL IMAGE
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_DECAL_TITLE			          "[ DECAL LAYER ]:" 0 0 0.01 0.01
+#pragma parameter HSM_DECAL_TITLE			          "[ DECAL LAYER ] (Also used for Device LEDs) :" 0 0 0.01 0.01
 
 #pragma parameter HSM_DECAL_OPACITY                   "          Opacity"  100 0 100 0.1
 float HSM_DECAL_OPACITY = global.HSM_DECAL_OPACITY / 100;
@@ -417,6 +431,9 @@ float HSM_DECAL_BLEND_MODE = global.HSM_DECAL_BLEND_MODE;
 #pragma parameter HSM_DECAL_SOURCE_MATTE_TYPE           "          Source Matte Color - BLACK | WHITE | NONE"  0 0 2 1
 float HSM_DECAL_SOURCE_MATTE_TYPE = global.HSM_DECAL_SOURCE_MATTE_TYPE;
 
+#pragma parameter HSM_DECAL_MIPMAPPING_BLEND_BIAS       "          Mipmapping Blend Bias (Affects Sharpness)" 0 -5 5 0.1
+float HSM_DECAL_MIPMAPPING_BLEND_BIAS = global.HSM_DECAL_MIPMAPPING_BLEND_BIAS;
+
 #pragma parameter HSM_DECAL_MASK_MODE                   "    Mask - ALL | SCRN | TUBE | BZ- | BZ | BZ+ | FRM | FRM+ | BG"   0 0 8 1
 float HSM_DECAL_MASK_MODE = global.HSM_DECAL_MASK_MODE;
 
@@ -426,13 +443,19 @@ float HSM_DECAL_CUTOUT_MODE = global.HSM_DECAL_CUTOUT_MODE;
 #pragma parameter HSM_DECAL_DUALSCREEN_VIS_MODE         "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
 float HSM_DECAL_DUALSCREEN_VIS_MODE = global.HSM_DECAL_DUALSCREEN_VIS_MODE;
 
-#pragma parameter HSM_DECAL_SCALE_MODE                  "       Inherit Scale - FULL | TUBE | BEZEL | BG | DEVICE"  0 0 4 1
-float HSM_DECAL_SCALE_MODE = global.HSM_DECAL_SCALE_MODE;
+#pragma parameter HSM_DECAL_FOLLOW_LAYER                  "       Follow Layer - FULL | TUBE | BEZEL | BG | DEVICE"  0 0 4 1
+float HSM_DECAL_FOLLOW_LAYER = global.HSM_DECAL_FOLLOW_LAYER;
 
-#pragma parameter HSM_DECAL_SCALE_FULL_WITH_ZOOM        "          Zoom FULL Scale Mode" 1 0 1 1
-float HSM_DECAL_SCALE_FULL_WITH_ZOOM = global.HSM_DECAL_SCALE_FULL_WITH_ZOOM;
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_DECAL_TITLE2			           "[ DECAL SCALE & FOLLOW ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_DECAL_SCALE_KEEP_ASPECT           "        Scale Aspect - INHERIT FROM SCALE MODE | USE TEX ASPECT"  1 0 1 1
+#pragma parameter HSM_DECAL_FOLLOW_MODE                 "          Follow Mode - FOLLOW SCALE & POS | FOLLOW EXACTLY" 0 0 1 1
+float HSM_DECAL_FOLLOW_MODE = global.HSM_DECAL_FOLLOW_MODE;
+
+#pragma parameter HSM_DECAL_FOLLOW_FULL_USES_ZOOM        "          Follow Full also follows Zoom" 1 0 1 1
+float HSM_DECAL_FOLLOW_FULL_USES_ZOOM = global.HSM_DECAL_FOLLOW_FULL_USES_ZOOM;
+
+#pragma parameter HSM_DECAL_SCALE_KEEP_ASPECT           "          Scale Aspect - INHERIT FROM LAYER | USE TEX ASPECT"  1 0 1 1
 float HSM_DECAL_SCALE_KEEP_ASPECT = global.HSM_DECAL_SCALE_KEEP_ASPECT;
 
 #pragma parameter HSM_DECAL_FILL_MODE                   "          Image Fill Mode - STRETCH | SPLIT HORIZONTAL"  0 0 1 1
@@ -456,14 +479,11 @@ float HSM_DECAL_POS_X = global.HSM_DECAL_POS_X / -100;
 #pragma parameter HSM_DECAL_POS_Y                       "          Position Y"  0 -1000 1000 0.05
 float HSM_DECAL_POS_Y = global.HSM_DECAL_POS_Y / 100;
 
-#pragma parameter HSM_DECAL_MIPMAPPING_BLEND_BIAS       "          Mipmapping Blend Bias" 0 -5 5 0.1
-float HSM_DECAL_MIPMAPPING_BLEND_BIAS = global.HSM_DECAL_MIPMAPPING_BLEND_BIAS;
-
 
 //---------------------------------------------------------------------------------------------------
 //    CAB GLS IMAGE
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_CAB_GLASS_TITLE			            "[ CABINET OR CABINET GLASS LAYER ]:" 0 0 0.01 0.01
+#pragma parameter HSM_CAB_GLASS_TITLE			            "[ CABINET GLASS LAYER ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_CAB_GLASS_OPACITY                     "          Opacity" 100 0 100 1
 float HSM_CAB_GLASS_OPACITY = global.HSM_CAB_GLASS_OPACITY / 100;
@@ -498,6 +518,9 @@ float HSM_CAB_GLASS_BLEND_MODE = global.HSM_CAB_GLASS_BLEND_MODE;
 #pragma parameter HSM_CAB_GLASS_SOURCE_MATTE_TYPE           "          Source Matte Color - BLACK | WHITE | NONE"  0 0 2 1
 float HSM_CAB_GLASS_SOURCE_MATTE_TYPE = global.HSM_CAB_GLASS_SOURCE_MATTE_TYPE;
 
+#pragma parameter HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS          "          Mipmapping Blend Bias (Affects Sharpness)" 0 -5 5 0.1
+float HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS = global.HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS;
+
 #pragma parameter HSM_CAB_GLASS_MASK_MODE                   "    Mask - ALL | SCRN | TUBE | BZ- | BZ | BZ+ | FRM | FRM+ | BG" 0 0 8 1
 float HSM_CAB_GLASS_MASK_MODE = global.HSM_CAB_GLASS_MASK_MODE;
 
@@ -507,13 +530,19 @@ float HSM_CAB_GLASS_CUTOUT_MODE = global.HSM_CAB_GLASS_CUTOUT_MODE;
 #pragma parameter HSM_CAB_GLASS_DUALSCREEN_VIS_MODE         "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
 float HSM_CAB_GLASS_DUALSCREEN_VIS_MODE = global.HSM_CAB_GLASS_DUALSCREEN_VIS_MODE;
 
-#pragma parameter HSM_CAB_GLASS_SCALE_MODE                  "Inherit Scale- FULL | TUBE | BEZEL | BG | DEVICE | DECAL" 0 0 5 1
-float HSM_CAB_GLASS_SCALE_MODE = global.HSM_CAB_GLASS_SCALE_MODE;
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_CAB_GLASS_TITLE2			           "[ CABINET GLASS SCALE & FOLLOW ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_CAB_GLASS_SCALE_FULL_WITH_ZOOM      "          Zoom FULL Scale Mode" 1 0 1 1
-float HSM_CAB_GLASS_SCALE_FULL_WITH_ZOOM = global.HSM_CAB_GLASS_SCALE_FULL_WITH_ZOOM;
+#pragma parameter HSM_CAB_GLASS_FOLLOW_LAYER                "        Follow Layer- FULL | TUBE | BEZEL | BG | DEVICE | DECAL" 0 0 5 1
+float HSM_CAB_GLASS_FOLLOW_LAYER = global.HSM_CAB_GLASS_FOLLOW_LAYER;
 
-#pragma parameter HSM_CAB_GLASS_SCALE_KEEP_ASPECT           "        Scale Aspect - INHERIT FROM SCALE MODE | USE TEX ASPECT"  1 0 1 1
+#pragma parameter HSM_CAB_GLASS_FOLLOW_MODE                 "          Follow Mode - FOLLOW SCALE & POS | FOLLOW EXACTLY" 0 0 1 1
+float HSM_CAB_GLASS_FOLLOW_MODE = global.HSM_CAB_GLASS_FOLLOW_MODE;
+
+#pragma parameter HSM_CAB_GLASS_FOLLOW_FULL_USES_ZOOM        "          Follow Full also follows Zoom" 1 0 1 1
+float HSM_CAB_GLASS_FOLLOW_FULL_USES_ZOOM = global.HSM_CAB_GLASS_FOLLOW_FULL_USES_ZOOM;
+
+#pragma parameter HSM_CAB_GLASS_SCALE_KEEP_ASPECT           "          Scale Aspect - INHERIT FROM LAYER | USE TEX ASPECT"  1 0 1 1
 float HSM_CAB_GLASS_SCALE_KEEP_ASPECT = global.HSM_CAB_GLASS_SCALE_KEEP_ASPECT;
 
 #pragma parameter HSM_CAB_GLASS_FILL_MODE                   "          Image Fill Mode - STRETCH | SPLIT HORIZONTAL"  0 0 1 1
@@ -536,9 +565,6 @@ float HSM_CAB_GLASS_POS_X = global.HSM_CAB_GLASS_POS_X / -100;
 
 #pragma parameter HSM_CAB_GLASS_POS_Y                       "          Position Y"  0 -1000 1000 0.05
 float HSM_CAB_GLASS_POS_Y = global.HSM_CAB_GLASS_POS_Y / 100;
-
-#pragma parameter HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS          "          Mipmapping Blend Bias" 0 -5 5 0.1
-float HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS = global.HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS;
 
 
 //---------------------------------------------------------------------------------------------------
@@ -579,6 +605,9 @@ float HSM_TOP_BLEND_MODE = global.HSM_TOP_BLEND_MODE;
 #pragma parameter HSM_TOP_SOURCE_MATTE_TYPE             "          Source Matte Color - BLACK | WHITE | NONE"  0 0 2 1
 float HSM_TOP_SOURCE_MATTE_TYPE = global.HSM_TOP_SOURCE_MATTE_TYPE;
 
+#pragma parameter HSM_TOP_MIPMAPPING_BLEND_BIAS         "          Mipmapping Blend Bias (Affects Sharpness)" 0 -5 5 0.1
+float HSM_TOP_MIPMAPPING_BLEND_BIAS = global.HSM_TOP_MIPMAPPING_BLEND_BIAS;
+
 #pragma parameter HSM_TOP_MASK_MODE                     "    Mask - ALL | SCRN | TUBE | BZ- | BZ | BZ+ | FRM | FRM+ | BG"   0 0 8 1
 float HSM_TOP_MASK_MODE = global.HSM_TOP_MASK_MODE;
 
@@ -588,13 +617,19 @@ float HSM_TOP_CUTOUT_MODE = global.HSM_TOP_CUTOUT_MODE;
 #pragma parameter HSM_TOP_DUALSCREEN_VIS_MODE           "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
 float HSM_TOP_DUALSCREEN_VIS_MODE = global.HSM_TOP_DUALSCREEN_VIS_MODE;
 
-#pragma parameter HSM_TOP_SCALE_MODE                    "Inherit Scale- FULL | TUBE | BEZEL | BG | DEVICE | DECAL" 0 0 5 1
-float HSM_TOP_SCALE_MODE = global.HSM_TOP_SCALE_MODE;
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_TOP_TITLE2			           "[ TOP SCALE & FOLLOW ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_TOP_SCALE_FULL_WITH_ZOOM      "          Zoom FULL Scale Mode" 1 0 1 1
-float HSM_TOP_SCALE_FULL_WITH_ZOOM = global.HSM_TOP_SCALE_FULL_WITH_ZOOM;
+#pragma parameter HSM_TOP_FOLLOW_LAYER                  "Follow Layer- FULL | TUBE | BEZEL | BG | DEVICE | DECAL" 0 0 5 1
+float HSM_TOP_FOLLOW_LAYER = global.HSM_TOP_FOLLOW_LAYER;
 
-#pragma parameter HSM_TOP_SCALE_KEEP_ASPECT             "        Scale Aspect - INHERIT FROM SCALE MODE | USE TEX ASPECT"  1 0 1 1
+#pragma parameter HSM_TOP_FOLLOW_MODE                   "          Follow Mode - FOLLOW SCALE & POS | FOLLOW EXACTLY" 0 0 1 1
+float HSM_TOP_FOLLOW_MODE = global.HSM_TOP_FOLLOW_MODE;
+
+#pragma parameter HSM_TOP_FOLLOW_FULL_USES_ZOOM          "          Follow Full also follows Zoom" 1 0 1 1
+float HSM_TOP_FOLLOW_FULL_USES_ZOOM = global.HSM_TOP_FOLLOW_FULL_USES_ZOOM;
+
+#pragma parameter HSM_TOP_SCALE_KEEP_ASPECT             "          Scale Aspect - INHERIT FROM LAYER | USE TEX ASPECT"  1 0 1 1
 float HSM_TOP_SCALE_KEEP_ASPECT = global.HSM_TOP_SCALE_KEEP_ASPECT;
 
 #pragma parameter HSM_TOP_FILL_MODE                     "          Image Fill Mode - STRETCH | SPLIT HORIZONTAL"  0 0 1 1
@@ -621,10 +656,10 @@ float HSM_TOP_POS_Y = global.HSM_TOP_POS_Y / 100;
 #pragma parameter HSM_TOP_MIRROR_WRAP                   "          Mirror Wrap" 1 0 1 1
 float HSM_TOP_MIRROR_WRAP = global.HSM_TOP_MIRROR_WRAP;
 
-#pragma parameter HSM_TOP_MIPMAPPING_BLEND_BIAS         "          Mipmapping Blend Bias" 0 -5 5 0.1
-float HSM_TOP_MIPMAPPING_BLEND_BIAS = global.HSM_TOP_MIPMAPPING_BLEND_BIAS;
 
-
+//---------------------------------------------------------------------------------------------------
+//    RENDER FOR SIMPLIFIED PRESETS
+//---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_RENDER_FOR_SIMPLIFIED_TITLE       "[ RENDER FOR SIMPLIFIED PRESETS ]:" 1 0 1 1
 
 #pragma parameter HSM_RENDER_SIMPLE_MODE                "     Mode:  NORM | BLACK-SCREEN | BLACK-BG | PINK-MASK| BW-MASK" 0 0 4 1

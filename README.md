@@ -1244,7 +1244,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
   - ***1 - Show only on Screen 1***
   - ***2 - Show only on Screen 2***
 
-- ***Inherit Scale***
+- ***Follow Layer***
   - *Controls if this layer follows another layer's scaling* 
   - ***Full / Fullscreen*** *- Scale to the viewport*
   - ***Tube*** *- Follow the Tube Scaling*
@@ -1254,8 +1254,8 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
   - ***Decal Image*** *- Follow the Decal Image Scaling*
   - ***Top Extra Image*** *- Follow the Top Extra Image Scaling*
 
-- **Zoom FULL Scale Mode**
-  - When the layer Inherit Scale is in **FULL** mode this controls if the layer should scale with the global zoom or not, this defaults to ON
+- **Follow Full also follows Zoom**
+  - When the layer Follow Layer is in **FULL** mode this controls if the layer should scale with the global zoom or not, this defaults to ON
 
 - **Scale Aspect**
   - Controls how the texture's aspect reacts to the inherited scale
@@ -1297,12 +1297,12 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Mask**
 - **Cutout Mask**
 - **Dual Screen Visibility**
-- **Inherit Scale**
+- **Follow Layer**
   - **0 - FullScreen**
   - **1 - Tube**
   - **2 - Bezel**
-- **Inherit Scale**
-- **Zoom FULL Scale Mode**
+- **Follow Layer**
+- **Follow Full also follows Zoom**
 - **Scale Aspect**
 - **Image Fill Mode**
 - **Split Mode Preserve Center %**
@@ -1320,7 +1320,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Opacity**
 - **Mask**
 - **Cutout Mask**
-- **Inherit Scale**
+- **Follow Layer**
   - **0 - Full**
   - **1 - Background**
   - **2 - Tube**
@@ -1345,14 +1345,14 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Mask**
 - **Cutout Mask**
 - **Dual Screen Visibility**
-- **Inherit Scale**
+- **Follow Layer**
   - **0 - FullScreen**
   - **1 - Tube**
   - **2 - Bezel**
   - **3 - BG**
   - **4 - Device**
-- **Inherit Scale**
-- **Zoom FULL Scale Mode**
+- **Follow Layer**
+- **Follow Full also follows Zoom**
 - **Scale Aspect**
 - **Image Fill Mode**
 - **Split Mode Preserve Center %**
@@ -1378,13 +1378,13 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Mask**
 - **Cutout Mask**
 - **Dual Screen Visibility**
-- **Inherit Scale**
+- **Follow Layer**
   - **0 - FullScreen**
   - **1 - Tube**
   - **2 - Bezel**
   - **3 - BG**
-- **Inherit Scale**
-- **Zoom FULL Scale Mode**
+- **Follow Layer**
+- **Follow Full also follows Zoom**
 - **Scale Aspect**
 - **Image Fill Mode**
 - **Split Mode Preserve Center %**
@@ -1410,14 +1410,14 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Mask**
 - **Cutout Mask**
 - **Dual Screen Visibility**
-- **Inherit Scale**
+- **Follow Layer**
   - **0 - FullScreen**
   - **1 - Tube**
   - **2 - Bezel**
   - **3 - BG**
   - **4 - Device**
-- **Inherit Scale**
-- **Zoom FULL Scale Mode**
+- **Follow Layer**
+- **Follow Full also follows Zoom**
 - **Scale Aspect**
 - **Image Fill Mode**
 - **Split Mode Preserve Center %**
@@ -1443,15 +1443,15 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Mask**
 - **Cutout Mask**
 - **Dual Screen Visibility**
-- **Inherit Scale**
+- **Follow Layer**
   - **0 - FullScreen**
   - **1 - Tube**
   - **2 - Bezel**
   - **3 - BG**
   - **4 - Device**
   - **5 - Decal**
-- **Inherit Scale**
-- **Zoom FULL Scale Mode**
+- **Follow Layer**
+- **Follow Full also follows Zoom**
 - **Scale Aspect**
 - **Image Fill Mode**
 - **Split Mode Preserve Center %**
@@ -1479,15 +1479,15 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Mask**
 - **Cutout Mask**
 - **Dual Screen Visibility**
-- **Inherit Scale**
+- **Follow Layer**
   - **0 - FullScreen**
   - **1 - Tube**
   - **2 - Bezel**
   - **3 - BG**
   - **4 - Device**
   - **5 - Decal**
-- **Inherit Scale**
-- **Zoom FULL Scale Mode**
+- **Follow Layer**
+- **Follow Full also follows Zoom**
 - **Scale Aspect**
 - **Image Fill Mode**
 - **Split Mode Preserve Center %**

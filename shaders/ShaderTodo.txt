@@ -3,14 +3,28 @@
 Mega Bezel is updated to V1.2.0_2022-09-11
 
 Changes:
-  * Split Scaliing
+  * *Split Scaliing*
     * Added Split Preserve Center %
+    * Added Follow Mode
+      * You can now follow the position and scale of a layer or follow it exactly
+      * the follow exactly mode reuses the coordinate from the layer it follows
   * Updated Hyllian's Checkerboard Dedither
     * Now includes his error control parameters
     * Default values set to avoid errors
       * Reduce Neighbor Errors = 4
       * Reduce Region Errors = 1
-      
+  * *Renamed Parameters*
+    * `_FOLLOW_LAYER` in each image layer has been renamed to `_FOLLOW_LAYER`
+      *  E.G. HSM_BG_FOLLOW_LAYER -> HSM_BG_FOLLOW_LAYER
+    * `_FOLLOW_FULL_USES_ZOOM` has been renamed to `_FOLLOW_FULL_USES_ZOOM`
+      * E.G. HSM_BG_SCALE_FULL_WITH_ZOOM -> HSM_BG_FOLLOW_FULL_USES_ZOOM
+    * If you do search and replace through your files you will want to watch out for `HSM_INT_SCALE_MODE`
+      * To handle this you can do the following:
+        * Search and replace `HSM_INT_SCALE_MODE` to `XXX_UniqueReplace_XXX` or something else unique
+        * Search and replace `_SCALE_MODE` with `_FOLLOW_LAYER`
+        * Search and replace `XXX_UniqueReplace_XXX` with `HSM_INT_SCALE_MODE` to put it back
+      * VSCode is recommended for an easy search and replace through files
+
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------

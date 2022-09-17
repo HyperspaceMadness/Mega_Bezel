@@ -112,7 +112,8 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 						float explicit_texture_aspect,
 						vec2 offset_pos,
 						vec2 offset_scale,
-						float inherited_scale_mode,
+						float layer_to_follow,
+						float follow_mode,
 						float scale_full_with_zoom,
 						float image_aspect_mode,
 						float image_fill_mode,
@@ -126,10 +127,11 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 
 	vec2 inherited_coord = in_viewport_coord / 0.5;
 	vec2 inherited_placement_coord = in_viewport_coord / 0.5;
+	vec2 inherited_final_coord = in_viewport_coord / 0.5;
 	vec2 inherited_scale = vec2(0.5);
 	vec2 default_offset_scale = vec2(0.5);
 
-	if (inherited_scale_mode == INHERITED_SCALE_MODE_VIEWPORT)
+	if (layer_to_follow == FOLLOW_LAYER_VIEWPORT)
 	{
 		if (scale_full_with_zoom > 0.5)	
 		{
@@ -142,47 +144,68 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 			inherited_placement_coord = in_viewport_coord_unscaled;
 		}
 
+		inherited_final_coord = inherited_coord;
+
 		inherited_scale = vec2(1, 1);
 		default_offset_scale = vec2(1);
 	}
-	else if (inherited_scale_mode == INHERITED_SCALE_MODE_TUBE_DIFFUSE)
+	else if (layer_to_follow == FOLLOW_LAYER_TUBE_DIFFUSE)
 	{
-		inherited_scale = TUBE_DIFFUSE_SCALE;
 		inherited_coord = TUBE_DIFFUSE_COORD;
 		inherited_placement_coord = TUBE_DIFFUSE_COORD;
+		inherited_final_coord = TUBE_DIFFUSE_CURVED_COORD;
 
+		inherited_scale = TUBE_DIFFUSE_SCALE;
 		default_offset_scale = vec2(1) / DEFAULT_UNCORRECTED_SCREEN_SCALE.y;
 		default_offset_scale.x *= explicit_texture_aspect / DEFAULT_SCREEN_ASPECT;
 	}
-	else if (inherited_scale_mode == INHERITED_SCALE_MODE_BEZEL_OUTSIDE)
+	else if (layer_to_follow == FOLLOW_LAYER_BEZEL_OUTSIDE)
 	{
-		inherited_scale = BEZEL_OUTSIDE_SCALE;
 		inherited_coord = BEZEL_OUTSIDE_COORD;
 		inherited_placement_coord = BEZEL_OUTSIDE_COORD;
+
+		inherited_scale = BEZEL_OUTSIDE_SCALE;
+		inherited_final_coord = BEZEL_OUTSIDE_CURVED_COORD;
 
 		default_offset_scale = vec2(1) / DEFAULT_UNCORRECTED_BEZEL_SCALE.y;
 		default_offset_scale.x *= explicit_texture_aspect / DEFAULT_BEZEL_ASPECT;
 	}
-	else if (inherited_scale_mode == INHERITED_SCALE_MODE_BG)
+	else if (layer_to_follow == FOLLOW_LAYER_BG)
 	{
 		inherited_coord = BACKGROUND_COORD;
 		inherited_placement_coord = BACKGROUND_COORD;
+		inherited_final_coord = BACKGROUND_CURVED_COORD;
+
 		inherited_scale = BACKGROUND_SCALE;
 		default_offset_scale = vec2(1);
 	}
-	else if (inherited_scale_mode == INHERITED_SCALE_MODE_DEVICE)
+	else if (layer_to_follow == FOLLOW_LAYER_DEVICE)
 	{
 		inherited_coord = DEVICE_COORD;
 		inherited_placement_coord = DEVICE_COORD;
+		inherited_final_coord = DEVICE_CURVED_COORD;
+
 		inherited_scale = DEVICE_SCALE;
 		default_offset_scale = vec2(1);
 	}
-	else if (inherited_scale_mode == INHERITED_SCALE_MODE_DECAL)
+	else if (layer_to_follow == FOLLOW_LAYER_DECAL)
 	{
 		inherited_coord = DECAL_COORD;
 		inherited_placement_coord = DECAL_COORD;
+		inherited_final_coord = DECAL_CURVED_COORD;
+
 		inherited_scale = DECAL_SCALE;
 		default_offset_scale = vec2(1);
+	}
+
+	//--------------------------------
+	// RETURN if we want to use the exact same coordinate of the layer we follow
+	//--------------------------------
+	if (follow_mode == FOLLOW_MODE_EXACT)
+	{
+		out_placement_coord = inherited_placement_coord;
+		out_placement_scale = inherited_scale;
+		return inherited_final_coord;
 	}
 
 	if (apply_default_scale_offset)
@@ -203,6 +226,7 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 		out_placement_scale.x *= inherited_aspect_difference;
 	out_placement_scale = out_placement_scale * offset_scale;
 
+	// inherited_coord = out_placement_coord;
 	out_placement_coord = HSM_AddPosScaleToCoord(inherited_placement_coord, offset_pos, out_placement_scale / inherited_scale);
 
 	vec2 out_coord = vec2(0.5);
@@ -637,8 +661,9 @@ void main()
 												bg_size.x / bg_size.y,
 												vec2(HSM_BG_POS_X, HSM_BG_POS_Y),
 												vec2(HSM_BG_SCALE * HSM_BG_SCALE_X, HSM_BG_SCALE),
-												HSM_BG_SCALE_MODE,
-												HSM_BG_SCALE_FULL_WITH_ZOOM,
+												HSM_BG_FOLLOW_LAYER,
+												HSM_BG_FOLLOW_MODE,
+												HSM_BG_FOLLOW_FULL_USES_ZOOM,
 												HSM_BG_SCALE_KEEP_ASPECT,
 												HSM_BG_FILL_MODE,
 												HSM_BG_SPLIT_PRESERVE_CENTER,
@@ -688,8 +713,9 @@ void main()
 											device_size.x / device_size.y,
 											vec2(HSM_DEVICE_POS_X, HSM_DEVICE_POS_Y),
 											vec2(HSM_DEVICE_SCALE * HSM_DEVICE_SCALE_X, HSM_DEVICE_SCALE),
-											HSM_DEVICE_SCALE_MODE,
-											HSM_DEVICE_SCALE_FULL_WITH_ZOOM,
+											HSM_DEVICE_FOLLOW_LAYER,
+											HSM_DEVICE_FOLLOW_MODE,
+											HSM_DEVICE_FOLLOW_FULL_USES_ZOOM,
 											HSM_DEVICE_SCALE_KEEP_ASPECT,
 											HSM_DEVICE_FILL_MODE,
 											HSM_DEVICE_SPLIT_PRESERVE_CENTER,
@@ -736,8 +762,9 @@ void main()
 											led_size.x / led_size.y, 
 											vec2(HSM_LED_POS_X, HSM_LED_POS_Y), 
 											vec2(HSM_LED_SCALE * HSM_LED_SCALE_X, HSM_LED_SCALE),
-											HSM_LED_SCALE_MODE,
-											HSM_LED_SCALE_FULL_WITH_ZOOM,
+											HSM_LED_FOLLOW_LAYER,
+											HSM_LED_FOLLOW_MODE,
+											HSM_LED_FOLLOW_FULL_USES_ZOOM,
 											HSM_LED_SCALE_KEEP_ASPECT, 
 											HSM_LED_FILL_MODE,
 											HSM_LED_SPLIT_PRESERVE_CENTER,
@@ -781,8 +808,9 @@ void main()
 											decal_size.x / decal_size.y,
 											vec2(HSM_DECAL_POS_X, HSM_DECAL_POS_Y), 
 											vec2(HSM_DECAL_SCALE * HSM_DECAL_SCALE_X, HSM_DECAL_SCALE),
-											HSM_DECAL_SCALE_MODE,
-											HSM_DECAL_SCALE_FULL_WITH_ZOOM,
+											HSM_DECAL_FOLLOW_LAYER,
+											HSM_DECAL_FOLLOW_MODE,
+											HSM_DECAL_FOLLOW_FULL_USES_ZOOM,
 											HSM_DECAL_SCALE_KEEP_ASPECT, 
 											HSM_DECAL_FILL_MODE,
 											HSM_DECAL_SPLIT_PRESERVE_CENTER,
@@ -825,8 +853,9 @@ void main()
 												top_size.x / top_size.y,
 												vec2(HSM_TOP_POS_X, HSM_TOP_POS_Y), 
 												vec2(HSM_TOP_SCALE * HSM_TOP_SCALE_X, HSM_TOP_SCALE),
-												HSM_TOP_SCALE_MODE,
-												HSM_TOP_SCALE_FULL_WITH_ZOOM,
+												HSM_TOP_FOLLOW_LAYER,
+												HSM_TOP_FOLLOW_MODE,
+												HSM_TOP_FOLLOW_FULL_USES_ZOOM,
 												HSM_TOP_SCALE_KEEP_ASPECT, 
 												HSM_TOP_FILL_MODE,
 												HSM_TOP_SPLIT_PRESERVE_CENTER,
@@ -878,8 +907,9 @@ void main()
 													cab_glass_size.x / cab_glass_size.y,
 													vec2(HSM_CAB_GLASS_POS_X, HSM_CAB_GLASS_POS_Y), 
 													vec2(HSM_CAB_GLASS_SCALE * HSM_CAB_GLASS_SCALE_X, HSM_CAB_GLASS_SCALE),
-													HSM_CAB_GLASS_SCALE_MODE,
-													HSM_CAB_GLASS_SCALE_FULL_WITH_ZOOM,
+													HSM_CAB_GLASS_FOLLOW_LAYER,
+													HSM_CAB_GLASS_FOLLOW_MODE,
+													HSM_CAB_GLASS_FOLLOW_FULL_USES_ZOOM,
 													HSM_CAB_GLASS_SCALE_KEEP_ASPECT, 
 													HSM_CAB_GLASS_FILL_MODE,
 													HSM_CAB_GLASS_SPLIT_PRESERVE_CENTER,
@@ -925,7 +955,7 @@ void main()
 
 	vec2 cutout_base_scale_offset = vec2(0.5);
 
-	if ( HSM_CUTOUT_SCALE_MODE == INHERITED_SCALE_MODE_VIEWPORT )
+	if ( HSM_CUTOUT_FOLLOW_LAYER == FOLLOW_LAYER_VIEWPORT )
 		cutout_base_scale_offset *= vec2(DEFAULT_UNCORRECTED_BEZEL_SCALE.y * TUBE_DIFFUSE_ASPECT / output_aspect, DEFAULT_BEZEL_SCALE.y);
 
 	vec2 cutout_coord = HSM_GetScaledCoord(VIEWPORT_COORD,
@@ -934,8 +964,9 @@ void main()
 											HSM_CUTOUT_EXPLICIT_ASPECT,
 											vec2(HSM_CUTOUT_POS_X, HSM_CUTOUT_POS_Y),
 											vec2(vec2(HSM_CUTOUT_SCALE * HSM_CUTOUT_SCALE_X, HSM_CUTOUT_SCALE) * cutout_base_scale_offset),
-											HSM_CUTOUT_SCALE_MODE,
-											HSM_CUTOUT_SCALE_FULL_WITH_ZOOM,
+											HSM_CUTOUT_FOLLOW_LAYER,
+											FOLLOW_MODE_SCALE_AND_POS,
+											HSM_CUTOUT_FOLLOW_FULL_USES_ZOOM,
 											HSM_CUTOUT_KEEP_ASPECT,
 											FILL_MODE_STRETCH,
 											0,
@@ -958,8 +989,9 @@ void main()
 												1,
 												vec2(HSM_VIEWPORT_VIGNETTE_POS_X, HSM_VIEWPORT_VIGNETTE_POS_Y), 
 												vec2(vec2(HSM_VIEWPORT_VIGNETTE_SCALE * HSM_VIEWPORT_VIGNETTE_SCALE_X, HSM_VIEWPORT_VIGNETTE_SCALE)), 
-												HSM_VIEWPORT_VIGNETTE_SCALE_MODE,
-												INHERITED_SCALE_MODE_VIEWPORT,
+												HSM_VIEWPORT_VIGNETTE_FOLLOW_LAYER,
+												FOLLOW_MODE_SCALE_AND_POS,
+												FOLLOW_LAYER_VIEWPORT,
 												0,
 												FILL_MODE_STRETCH,
 												0,
