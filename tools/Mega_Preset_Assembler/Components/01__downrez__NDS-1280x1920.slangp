@@ -1,6 +1,6 @@
 shaders = 2
 
-shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/hyllian/cubic/hsm-b-spline-x.slang
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/hyllian/cubic/hsm-drez-b-spline-x.slang
 filter_linear0 = false
 scale_type_x0 = absolute
 scale_x0 = 1280
@@ -8,7 +8,7 @@ scale_type_y0 = viewport
 scaley0 = 1.0
 wrap_mode0 = "clamp_to_edge"
 
-shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/hyllian/cubic/hsm-b-spline-y.slang
+shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/hyllian/cubic/hsm-drez-b-spline-y.slang
 filter_linear1 = false
 scale_type1 = absolute
 scale_x1 = 1280
