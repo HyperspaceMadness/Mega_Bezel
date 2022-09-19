@@ -141,6 +141,12 @@ layout(set = 0, binding = 2) uniform sampler2D Source;
 
 void main()
 {
+   if (SUPERXBR_ON < 0.5)
+	{
+		FragColor = texture(Source, vTexCoord);
+		return;
+	}
+
 // settings //
 	float wp1, wp2, wp3, wp4, wp5, wp6, weight1, weight2;
 	if (MODE == 1.0)

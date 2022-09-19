@@ -1,5 +1,9 @@
 #version 450
 
+#include "../../base/common/globals-and-screen-scale-params.inc"
+#include "../../base/common/params-2-bezel.inc"
+#include "../../base/common/common-functions-bezel.inc"
+
 layout(push_constant) uniform Push
 {
     float BEAM_MIN_WIDTH;
@@ -20,36 +24,34 @@ layout(push_constant) uniform Push
    float CRT_cornersmooth;
 } param;
 
-#pragma parameter CRT_HYLLIAN_SINC "[CRT-HYLLIAN-SINC PARAMS]" 0.0 0.0 0.0 0.0
-#pragma parameter BEAM_MIN_WIDTH "    MIN BEAM WIDTH" 1.0 0.0 1.0 0.01
-#pragma parameter BEAM_MAX_WIDTH "    MAX BEAM WIDTH" 1.0 0.0 1.0 0.01
-#pragma parameter SCANLINES_STRENGTH "    SCANLINES STRENGTH" 0.67 0.0 1.0 0.01
-#pragma parameter COLOR_BOOST "    COLOR BOOST" 1.20 1.0 2.0 0.05
-#pragma parameter SHARPNESS_HACK "    SHARPNESS_HACK" 1.0 1.0 4.0 1.0
-#pragma parameter PHOSPHOR_LAYOUT "    PHOSPHOR LAYOUT" 12.0 0.0 24.0 1.0
-#pragma parameter MASK_INTENSITY "    MASK INTENSITY" 0.7 0.0 1.0 0.1
-#pragma parameter VSCANLINES "    SCANLINES DIRECTION" 0.0 0.0 1.0 1.0
-#pragma parameter CRT_CURVATURE "CRT-Curvature" 1.0 0.0 1.0 1.0
-#pragma parameter CRT_warpX "CRT-Curvature X-Axis" 0.010 0.0 0.125 0.01
-#pragma parameter CRT_warpY "CRT-Curvature Y-Axis" 0.020 0.0 0.125 0.01
+#pragma parameter CRT_HYLLIAN_SINC      "[ CRT-HYLLIAN-SINC PARAMS ]:" 0.0 0.0 0.0 0.0
+#pragma parameter BEAM_MIN_WIDTH        "          MIN BEAM WIDTH" 1.0 0.0 1.0 0.01
+#pragma parameter BEAM_MAX_WIDTH        "          MAX BEAM WIDTH" 1.0 0.0 1.0 0.01
+#pragma parameter SCANLINES_STRENGTH    "          SCANLINES STRENGTH" 0.67 0.0 1.0 0.01
+#pragma parameter COLOR_BOOST           "          COLOR BOOST" 1.20 1.0 2.0 0.05
+#pragma parameter SHARPNESS_HACK        "          SHARPNESS_HACK" 1.0 1.0 4.0 1.0
+#pragma parameter PHOSPHOR_LAYOUT       "          PHOSPHOR LAYOUT" 12.0 0.0 24.0 1.0
+#pragma parameter MASK_INTENSITY        "          MASK INTENSITY" 0.7 0.0 1.0 0.1
+#pragma parameter VSCANLINES            "          SCANLINES DIRECTION" 0.0 0.0 1.0 1.0
+#pragma parameter CRT_CURVATURE         "          CRT-Curvature" 1.0 0.0 1.0 1.0
+#pragma parameter CRT_warpX             "          CRT-Curvature X-Axis" 0.010 0.0 0.125 0.01
+#pragma parameter CRT_warpY             "          CRT-Curvature Y-Axis" 0.020 0.0 0.125 0.01
 vec2 CRT_Distortion = vec2(param.CRT_warpX, param.CRT_warpY) * 15.;
-#pragma parameter CRT_cornersize "CRT-Corner Size" 0.01 0.001 1.0 0.005
+#pragma parameter CRT_cornersize        "          CRT-Corner Size" 0.01 0.001 1.0 0.005
 #define cornersize param.CRT_cornersize
-#pragma parameter CRT_cornersmooth "CRT-Corner Smoothness" 280.0 80.0 2080.0 100.0
+#pragma parameter CRT_cornersmooth      "          CRT-Corner Smoothness" 280.0 80.0 2080.0 100.0
 #define cornersmooth param.CRT_cornersmooth
 
-
-#pragma parameter CRT_ANTI_RINGING "CRT Anti-Ringing [ OFF | ON ]" 1.0 0.0 1.0 1.0
-
+#pragma parameter CRT_ANTI_RINGING      "          CRT Anti-Ringing [ OFF | ON ]" 1.0 0.0 1.0 1.0
 #define CRT_ANTI_RINGING param.CRT_ANTI_RINGING
 
-layout(std140, set = 0, binding = 0) uniform UBO
-{
-   mat4 MVP;
-   vec4 OutputSize;
-   vec4 OriginalSize;
-   vec4 SourceSize;
-} global;
+// layout(std140, set = 0, binding = 0) uniform UBO
+// {
+//    mat4 MVP;
+//    vec4 OutputSize;
+//    vec4 OriginalSize;
+//    vec4 SourceSize;
+// } global;
 
 #pragma stage vertex
 layout(location = 0) in vec4 Position;
@@ -67,6 +69,8 @@ layout(location = 0) in vec2 vTexCoord;
 layout(location = 1) in vec2 FragCoord;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 2) uniform sampler2D Source;
+layout(set = 0, binding = 3) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 4) uniform sampler2D InfoCachePassFeedback;
 
 /*
     Hyllian's CRT Shader - Sinc/Spline16 version
@@ -92,7 +96,7 @@ layout(set = 0, binding = 2) uniform sampler2D Source;
     THE SOFTWARE.
 */
 
-#include "../../include/subpixel_masks.h"
+#include "../../../../../include/subpixel_masks.h"
 
 
 #define scanlines_strength (2.0*param.SCANLINES_STRENGTH)
@@ -179,28 +183,69 @@ vec3 resampler3(vec3 x)
 
 void main()
 {
-    vec2 TextureSize = mix(vec2(global.SourceSize.x * param.SHARPNESS_HACK, global.SourceSize.y), vec2(global.SourceSize.x, global.SourceSize.y * param.SHARPNESS_HACK), param.VSCANLINES);
+	// HSM Added
+	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
-    vec2 dx = mix(vec2(1.0/TextureSize.x, 0.0), vec2(0.0, 1.0/TextureSize.y), param.VSCANLINES);
-    vec2 dy = mix(vec2(0.0, 1.0/TextureSize.y), vec2(1.0/TextureSize.x, 0.0), param.VSCANLINES);
+	vec2 cache_bounds_coord = SCREEN_COORD;
 
-    vec2 pp = vTexCoord.xy;
-    pp = (param.CRT_CURVATURE > 0.5) ? Warp(pp) : pp;
+// If it's the potato preset render the whole frame
+#ifndef IS_POTATO_PRESET
+#ifndef IS_NO_REFLECT_PRESET
+	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
+	HSM_GetBezelCoords(TUBE_DIFFUSE_COORD, 
+						TUBE_DIFFUSE_SCALE, 
+						TUBE_SCALE, 
+						SCREEN_ASPECT, 
+						false,
+						BEZEL_OUTSIDE_SCALE,
+						BEZEL_OUTSIDE_COORD, 
+						BEZEL_OUTSIDE_CURVED_COORD, 
+						FRAME_OUTSIDE_CURVED_COORD);
+	cache_bounds_coord = (FRAME_OUTSIDE_CURVED_COORD - 0.5) * 0.9 + 0.5;
+#endif
+#endif
+
+	if (HHLP_IsOutsideCoordSpace(cache_bounds_coord))
+	{
+        FragColor = vec4(0);
+        return;
+	}
+
+	// HSM Added
+	vec4 SourceSize = vec4(CROPPED_ROTATED_SIZE_WITH_RES_MULT, 1/CROPPED_ROTATED_SIZE_WITH_RES_MULT);
+
+	// float TATE = USE_VERTICAL_SCANLINES;
+    
+    // HSM Removed
+    // vec2 TextureSize = mix(vec2(global.SourceSize.x * param.SHARPNESS_HACK, global.SourceSize.y), vec2(global.SourceSize.x, global.SourceSize.y * param.SHARPNESS_HACK), USE_VERTICAL_SCANLINES);
+
+    vec2 TextureSize = mix(vec2(SourceSize.x * param.SHARPNESS_HACK, SourceSize.y), vec2(SourceSize.x, SourceSize.y * param.SHARPNESS_HACK), USE_VERTICAL_SCANLINES);
+
+    vec2 dx = mix(vec2(1.0/TextureSize.x, 0.0), vec2(0.0, 1.0/TextureSize.y), USE_VERTICAL_SCANLINES);
+    vec2 dy = mix(vec2(0.0, 1.0/TextureSize.y), vec2(1.0/TextureSize.x, 0.0), USE_VERTICAL_SCANLINES);
+
+    // HSM Removed
+    // vec2 pp = vTexCoord.xy;
+    // pp = (param.CRT_CURVATURE > 0.5) ? Warp(pp) : pp;
+
+    vec2 screen_curved_coord = HSM_GetCRTShaderCurvedCoord(SCREEN_COORD);
+	vec2 pp = HSM_GetMirrorWrappedCoord(screen_curved_coord);
  
     vec2 pix_coord = pp.xy*TextureSize + vec2(-0.5, 0.5);
 
-    vec2 tc = mix((floor(pix_coord) + vec2(0.5, 0.5))/TextureSize, (floor(pix_coord) + vec2(1.5, -0.5))/TextureSize, param.VSCANLINES);
+    vec2 tc = mix((floor(pix_coord) + vec2(0.5, 0.5))/TextureSize, (floor(pix_coord) + vec2(1.5, -0.5))/TextureSize, USE_VERTICAL_SCANLINES);
 
-    vec2 fp = mix(fract(pix_coord), fract(pix_coord.yx), param.VSCANLINES);
+    vec2 fp = mix(fract(pix_coord), fract(pix_coord.yx), USE_VERTICAL_SCANLINES);
 
-    vec3 c00 = texture(Source, tc     - dx - dy).xyz;
-    vec3 c01 = texture(Source, tc          - dy).xyz;
-    vec3 c02 = texture(Source, tc     + dx - dy).xyz;
-    vec3 c03 = texture(Source, tc + 2.0*dx - dy).xyz;
-    vec3 c10 = texture(Source, tc     - dx     ).xyz;
-    vec3 c11 = texture(Source, tc              ).xyz;
-    vec3 c12 = texture(Source, tc     + dx     ).xyz;
-    vec3 c13 = texture(Source, tc + 2.0*dx     ).xyz;
+    vec3 c00 = HSM_GetCroppedTexSample(Source, tc     - dx - dy).xyz;
+    vec3 c01 = HSM_GetCroppedTexSample(Source, tc          - dy).xyz;
+    vec3 c02 = HSM_GetCroppedTexSample(Source, tc     + dx - dy).xyz;
+    vec3 c03 = HSM_GetCroppedTexSample(Source, tc + 2.0*dx - dy).xyz;
+    vec3 c10 = HSM_GetCroppedTexSample(Source, tc     - dx     ).xyz;
+    vec3 c11 = HSM_GetCroppedTexSample(Source, tc              ).xyz;
+    vec3 c12 = HSM_GetCroppedTexSample(Source, tc     + dx     ).xyz;
+    vec3 c13 = HSM_GetCroppedTexSample(Source, tc + 2.0*dx     ).xyz;
 
     mat4x3 color_matrix0 = mat4x3(c00, c01, c02, c03);
     mat4x3 color_matrix1 = mat4x3(c10, c11, c12, c13);
@@ -244,7 +289,7 @@ void main()
 
     vec2 mask_coords = vTexCoord.xy * global.OutputSize.xy;
 
-    mask_coords = mix(mask_coords.xy, mask_coords.yx, param.VSCANLINES);
+    mask_coords = mix(mask_coords.xy, mask_coords.yx, USE_VERTICAL_SCANLINES);
 
     color.rgb*=mask_weights(mask_coords,  param.MASK_INTENSITY, int(param.PHOSPHOR_LAYOUT));
 

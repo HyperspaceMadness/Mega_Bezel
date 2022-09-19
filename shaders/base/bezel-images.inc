@@ -311,19 +311,18 @@ layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
 layout(set = 0, binding = 2) uniform sampler2D InfoCachePassFeedback;
 
-layout(set = 0, binding = 3) uniform sampler2D TubeDiffuseImage;
-layout(set = 0, binding = 4) uniform sampler2D BackgroundImage;
-layout(set = 0, binding = 5) uniform sampler2D BackgroundVertImage;
-layout(set = 0, binding = 6) uniform sampler2D NightLightingImage;
-layout(set = 0, binding = 7) uniform sampler2D NightLighting2Image;
+layout(set = 0, binding = 3) uniform sampler2D BackgroundImage;
+layout(set = 0, binding = 4) uniform sampler2D BackgroundVertImage;
+layout(set = 0, binding = 5) uniform sampler2D NightLightingImage;
+layout(set = 0, binding = 6) uniform sampler2D NightLighting2Image;
 
-layout(set = 0, binding = 8) uniform sampler2D LEDImage;
-layout(set = 0, binding = 9) uniform sampler2D FrameTextureImage;
-layout(set = 0, binding = 10) uniform sampler2D DeviceImage;
-layout(set = 0, binding = 11) uniform sampler2D DeviceVertImage;
-layout(set = 0, binding = 12) uniform sampler2D DecalImage;
-layout(set = 0, binding = 13) uniform sampler2D CabinetGlassImage;
-layout(set = 0, binding = 14) uniform sampler2D TopLayerImage;
+layout(set = 0, binding = 7) uniform sampler2D LEDImage;
+layout(set = 0, binding = 8) uniform sampler2D FrameTextureImage;
+layout(set = 0, binding = 9) uniform sampler2D DeviceImage;
+layout(set = 0, binding = 10) uniform sampler2D DeviceVertImage;
+layout(set = 0, binding = 11) uniform sampler2D DecalImage;
+layout(set = 0, binding = 12) uniform sampler2D CabinetGlassImage;
+layout(set = 0, binding = 13) uniform sampler2D TopLayerImage;
 
 #ifdef LAYERS_OVER_CRT
 layout(set = 0, binding = 15) uniform sampler2D BR_LayersOverCRTPassFeedback;

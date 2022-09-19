@@ -83,6 +83,35 @@ layout(set = 0, binding = 3) uniform sampler2D XbrSource;
 
 void main()
 {
+// 	// HSM Added
+// 	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
+// 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+
+// 	vec2 cache_bounds_coord = SCREEN_COORD;
+
+// // If it's the potato preset render the whole frame
+// #ifndef IS_POTATO_PRESET
+// #ifndef IS_NO_REFLECT_PRESET
+// 	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
+// 	HSM_GetBezelCoords(TUBE_DIFFUSE_COORD, 
+// 						TUBE_DIFFUSE_SCALE, 
+// 						TUBE_SCALE, 
+// 						SCREEN_ASPECT, 
+// 						false,
+// 						BEZEL_OUTSIDE_SCALE,
+// 						BEZEL_OUTSIDE_COORD, 
+// 						BEZEL_OUTSIDE_CURVED_COORD, 
+// 						FRAME_OUTSIDE_CURVED_COORD);
+// 	cache_bounds_coord = (FRAME_OUTSIDE_CURVED_COORD - 0.5) * 0.9 + 0.5;
+// #endif
+// #endif
+
+// 	if (HHLP_IsOutsideCoordSpace(cache_bounds_coord))
+// 	{
+//         FragColor = vec4(0);
+//         return;
+// 	}
+
    if (SUPERXBR_ON < 0.5)
 	{
 		FragColor = texture(XbrSource, vTexCoord);

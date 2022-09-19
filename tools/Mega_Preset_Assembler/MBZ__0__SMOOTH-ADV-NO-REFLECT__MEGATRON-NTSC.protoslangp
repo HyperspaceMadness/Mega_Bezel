@@ -6,6 +6,7 @@
 #reference "Components/12__intro.slangp"
 #reference "Components/30__dedithering__0-checkerboard-and-mdapt.slangp"
 #reference "Components/30__dedithering__2-ps1-box-blur.slangp"
+#reference "Components/30__dedithering__3-sharpsmoother.slangp"
 #reference "Components/45__upscale__scalefx.slangp"
 #reference "Components/54__prep__gdv-afterglow.slangp"
 #reference "Components/55__color-correct__grade.slangp"

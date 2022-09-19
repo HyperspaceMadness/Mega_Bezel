@@ -506,6 +506,8 @@ float HSM_GetParameterSum()
 	float out_sum = (0
 					+ HSM_GLOBAL_GRAPHICS_BRIGHTNESS * 100
 					+ HSM_STATIC_LAYERS_GAMMA
+
+					+ HSM_CACHE_GRAPHICS_ON
 					
 					// Night Lighting
 					+ HSM_AMBIENT_LIGHTING_OPACITY * 100
@@ -523,7 +525,7 @@ float HSM_GetParameterSum()
 					+ HSM_FLIP_VIEWPORT_HORIZONTAL
 					// + HSM_FLIP_CORE_VERTICAL
 					// + HSM_FLIP_CORE_HORIZONTAL
-					// + HSM_ROTATE_CORE_IMAGE
+					+ HSM_ROTATE_CORE_IMAGE
 
 					//    ASPECT RATIO
 					+ HSM_ASPECT_RATIO_ORIENTATION

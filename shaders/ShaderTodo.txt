@@ -3,6 +3,11 @@
 Mega Bezel is updated to V1.2.0_2022-09-11
 
 Changes:
+  * Added SUPER-XBR-GDV presets includes SUPER-XBR by Hyllian
+    * These presets create a rounded look to the pixels while maintaining more of the original pixel look
+    * Vertical resolution of the signal stays the same as the original
+    * Uses Guest Advanced (GDV) crt shader on top
+    * Also uses Guest's SharpSmoother shader before XBR to smooth out some dithering/shading
   * *Split Scaliing*
     * Added Split Preserve Center %
     * Added Follow Mode
@@ -13,6 +18,8 @@ Changes:
     * Default values set to avoid errors
       * Reduce Neighbor Errors = 4
       * Reduce Region Errors = 1
+  * DeDithering / Pixel Blending
+    * Guest.r's SharpSmoother is added to ADV presets
   * *Renamed Parameters*
     * `_FOLLOW_LAYER` in each image layer has been renamed to `_FOLLOW_LAYER`
       *  E.G. HSM_BG_FOLLOW_LAYER -> HSM_BG_FOLLOW_LAYER
@@ -30,7 +37,11 @@ Changes:
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Add DeviceLED image
+  * Add Rotate for Device Image
+  * Add 270 Rotate
   * Try Leveraging Fake Scanlines for Gameboy type effect
+  * Integer Scale Mode not affecting tube scale
 
   * Add .params #reference to with all parameters commented out
   * Add XBR to ADV
@@ -40,6 +51,23 @@ Changes:
 --- Examples  --------------------------------------
 ----------------------------------------------------
   * Punch Out - Dual Screen
+
+Recent Performance 2022-09-18
+Spec RTX-2060, at 4K:
+  240p image
+    ADV 175
+    XBR-ADV 170
+    POTATO 422
+    POTATO-XBR 390
+
+  2K image
+    ADV 105
+    XBR-ADV 66
+
+  4K image
+    ADV 48
+    XBR-ADV Crashed
+
 
 ----------------------------------------------------
 --- Post V1  ---------------------------------------
