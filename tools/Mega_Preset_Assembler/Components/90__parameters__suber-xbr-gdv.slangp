@@ -13,6 +13,8 @@ mtric = 0.3
 
 SUPERXBR_ON = 1
 
+ntsc_scale = 0.55
+
 SHARPEN = 0
 
 HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = 300

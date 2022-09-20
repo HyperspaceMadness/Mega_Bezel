@@ -34,7 +34,7 @@ layout(push_constant) uniform Push
 // #pragma parameter GAMMA_OUTPUT          "    Gamma Output" 2.2 0.1 5.0 0.01
 #pragma parameter ESM_EASYMODE_TITLE        "[ --- EASYMODE--- ]:" 0 0 0 1
 #pragma parameter ESM_SCANLINE_TITLE        "[ SCANLINE ]:" 0 0 0 1
-#pragma parameter ESM_INTERLACING_TOGGLE    "[EASYMODE SCANLINE]  Interlace ON" 0 0.0 1.0 1.0
+// #pragma parameter ESM_INTERLACING_TOGGLE    "[EASYMODE SCANLINE]  Interlace ON" 0 0.0 1.0 1.0
 #pragma parameter ESM_SCANLINE_STRENGTH_MIN "          Strength Min." 0.2 0.0 1.0 0.05
 #pragma parameter ESM_SCANLINE_STRENGTH_MAX "          Strength Max." 0.4 0.0 1.0 0.05
 #pragma parameter ESM_SCANLINE_BEAM_MIN     "          Beam Min." 1.0 0.25 5.0 0.05
@@ -62,7 +62,7 @@ layout(push_constant) uniform Push
 // #pragma parameter GEOM_CORNER_SMOOTH "Geom Corner Smoothness" 150.0 50.0 1000.0 25.0
 // #pragma parameter ESM_INTERLACING_TOGGLE    "    Interlacing Toggle" 1.0 0.0 1.0 1.0
 
-// REMOVED FOR MEGA SCREEN SCALE because MEGA SCREEN SCALE has its own globals, required variables moved to params
+// HSM REMOVED
 /* Removed the following
 layout(std140, set = 0, binding = 0) uniform UBO
 {
@@ -182,13 +182,11 @@ void main()
     // End Addition
 
     vec2 midpoint = vec2(0.5, 0.5);
-    float scan_offset = 0.0;
+    float scan_offset = 0;
     float timer = vec2(global.FrameCount, global.FrameCount).x;
 
-    // HSM Removed
-    // if (params.ESM_INTERLACING_TOGGLE > 0.5 && global.SourceSize.y >= 400)
-
-    if (params.ESM_INTERLACING_TOGGLE > 0.5 && tex_size.y >= HSM_INTERLACE_TRIGGER_RES)
+    /* HSM Removed
+    if (params.ESM_INTERLACING_TOGGLE > 0.5 && global.SourceSize.y >= 400)
     {
         tex_size.y *= 0.5;
 
@@ -200,7 +198,6 @@ void main()
         else midpoint.y = 0.25;
     }
 
-    /* HSM Removed
     vec2 co = vTexCoord * tex_size * global.SourceSize.zw;
     vec2 xy = curve_coordinate(co, params.GEOM_WARP);
     float corner_weight = get_corner_weight(curve_coordinate(co, params.GEOM_CURVATURE), vec2(params.GEOM_CORNER_SIZE), params.GEOM_CORNER_SMOOTH);

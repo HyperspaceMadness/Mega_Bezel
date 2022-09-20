@@ -16,8 +16,8 @@ layout(std140, set = 0, binding = 0) uniform UBO
    float auto_res;
 } global;
 
-#pragma parameter ntsc_scale        "          NTSC Resolution Scaling" 1.0 0.20 2.5 0.01
-#pragma parameter ntsc_phase        "          NTSC Phase: Auto | 2 phase | 3 phase" 1.0 1.0 3.0 1.0
+#pragma parameter ntsc_phase        "          Phase: Auto | 2 phase | 3 phase" 1.0 1.0 3.0 1.0
+#pragma parameter ntsc_scale        "          Resolution Scaling" 1.0 0.20 2.5 0.01
 
 #pragma stage vertex
 layout(location = 0) in vec4 Position;

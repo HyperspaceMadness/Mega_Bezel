@@ -1,6 +1,6 @@
-shaders = 50
+shaders = 53
 
-shader0 = ../../shaders/base/add-params-glass.slang
+shader0 = ../../shaders/base/add-params-all.slang
 alias0 = "CorePass"
 
 shader1 =  ../../shaders/base/stock.slang
@@ -20,13 +20,13 @@ scale_x2 = 1
 scale_y2 = 1
 alias2 = "NegativeCropAddedPass"
 
-shader3 = ../../shaders/base/cache-info-screen-scale-params.slang
+shader3 = ../../shaders/base/cache-info-all-params.slang
 filter_linear3 = false
 scale_type3 = source
 scale3 = 1.0
 alias3 = "InfoCachePass"
 
-shader4 = ../../shaders/base/text-adv-glass.slang
+shader4 = ../../shaders/base/text-adv.slang
 filter_linear4 = false
 float_framebuffer4 = true
 scale_type4 = source
@@ -62,35 +62,63 @@ shader16 = ../../shaders/ps1dither/hsm-PS1-Undither-BoxBlur.slang
 shader17 = ../../shaders/guest/extras/hsm-sharpsmoother.slang
 
 shader18 = ../../shaders/base/stock.slang
-alias18 = refpass
+// filter_linear18 = "false"
+// wrap_mode18 = "clamp_to_border"
+// mipmap_input18 = "false"
+// float_framebuffer18 = "false"
+// srgb_framebuffer18 = "true"
+alias18 = XbrSource
 
-shader19 = ../../shaders/scalefx/hsm-scalefx-pass0.slang
-filter_linear19 = false
-scale_type19 = source
-scale19 = 1.0
-float_framebuffer19 = true
-alias19 = scalefx_pass0
+shader19 = ../../shaders/hyllian/crt-super-xbr/super-xbr-pass0.slang
+filter_linear19 = "false"
+wrap_mode19 = "clamp_to_border"
+mipmap_input19 = "false"
+float_framebuffer19 = "false"
+srgb_framebuffer19 = "true"
 
-shader20 = ../../shaders/scalefx/hsm-scalefx-pass1.slang
-filter_linear20 = false
-scale_type20 = source
-scale20 = 1.0
-float_framebuffer12 = true
+shader20 = ../../shaders/hyllian/crt-super-xbr/super-xbr-pass1.slang
+filter_linear20 = "false"
+wrap_mode20 = "clamp_to_border"
+mipmap_input20 = "false"
+alias20 = ""
+float_framebuffer20 = "false"
+srgb_framebuffer20 = "true"
+scale_type_x20 = "source"
+scale_x20 = "2.000000"
+scale_type_y20 = "source"
+scale_y20 = "2.000000"
 
-shader21 = ../../shaders/scalefx/hsm-scalefx-pass2.slang
-filter_linear21 = false
-scale_type21 = source
-scale21 = 1.0
+shader21 = ../../shaders/hyllian/crt-super-xbr/super-xbr-pass2.slang
+filter_linear21 = "false"
+wrap_mode21 = "clamp_to_border"
+mipmap_input21 = "false"
+alias21 = ""
+float_framebuffer21 = "false"
+srgb_framebuffer21 = "true"
+scale_type_x21 = "source"
+scale_x21 = "1.000000"
+scale_type_y21 = "source"
+scale_y21 = "1.000000"
 
-shader22 = ../../shaders/scalefx/hsm-scalefx-pass3.slang
-filter_linear22 = false
-scale_type22 = source
-scale22 = 1.0
+shader22 = ../../shaders/hyllian/crt-super-xbr/custom-bicubic-X.slang
+filter_linear22 = "false"
+wrap_mode22 = "clamp_to_border"
+mipmap_input22 = "false"
+alias22 = ""
+float_framebuffer22 = "false"
+srgb_framebuffer22 = "true"
+scale_type_x22 = "source"
+scale_x22 = "1.000000"
+scale_type_y22 = "source"
+scale_y22 = "1.000000"
 
-shader23 = ../../shaders/scalefx/hsm-scalefx-pass4.slang
+shader23 = ../../shaders/hyllian/crt-super-xbr/custom-bicubic-y.slang
 filter_linear23 = false
-scale_type23 = source
-scale23 = 3
+scale_type_x23 = source
+scale_x23 = 1
+scale_type_y23 = source
+scale_y23 = 0.5
+wrap_mode23 = "clamp_to_edge"
 
 shader24 = ../../shaders/base/stock.slang
 alias24 = "PreCRTPass"
@@ -225,7 +253,7 @@ scale_type42 = viewport
 scale_x42 = 1.0
 scale_y42 = 1.0
 
-shader43 = ../../shaders/base/post-crt-prep-glass.slang
+shader43 = ../../shaders/base/post-crt-prep-image-layers.slang
 alias43 = "MBZ_PostCRTPass"
 
 // Reduce Resolution  ----------------------------------------------------------------
@@ -277,9 +305,29 @@ scale_y48 = 12
 alias48 = "BR_MirrorFullscreenGlowPass"
 
 // Bezel Reflection ----------------------------------------------------------------
-shader49 = ../../shaders/base/reflection-glass.slang
+shader49 = ../../shaders/base/reflection.slang
 scale_type49 = viewport
+float_framebuffer49 = true
 alias49 = "BR_CRTAndReflectionPass"
+
+// Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
+
+shader50 = ../../shaders/base/bezel-images-under-crt.slang
+filter_linear50 = true
+scale_type50 = viewport
+float_framebuffer50 = true
+alias50 = "BR_LayersUnderCRTPass"
+
+shader51 = ../../shaders/base/bezel-images-over-crt.slang
+filter_linear51 = true
+scale_type51 = viewport
+float_framebuffer51 = true
+alias51 = "BR_LayersOverCRTPass"
+
+// Combine Passes ----------------------------------------------------------------
+shader52 = ../../shaders/base/combine-passes.slang
+scale_type52 = viewport
+alias52 = "CombinePass"
 // Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
@@ -299,31 +347,31 @@ IntroImage_mipmap = 1
 ScreenPlacementImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
 ScreenPlacementImage_linear = false
 
-TubeStaticReflectionImage = ../../shaders/textures/TubeGlassOverlayImageCropped_1440x1080.png
-TubeStaticReflectionImage_linear = true
-TubeStaticReflectionImage_mipmap = 1
-
 TubeDiffuseImage = ../../shaders/textures/Tube_Diffuse_2390x1792.png
 TubeDiffuseImage_linear = true
 TubeDiffuseImage_mipmap = 1
-
-TubeShadowImage = ../../shaders/textures/Tube_Shadow_1600x1200.png
-TubeShadowImage_linear = true
-TubeShadowImage_mipmap = 1
 
 TubeColoredGelImage = ../../shaders/textures/Colored_Gel_Rainbow.png
 TubeColoredGelImage_linear = true
 TubeColoredGelImage_mipmap = 1
 
+TubeShadowImage = ../../shaders/textures/Tube_Shadow_1600x1200.png
+TubeShadowImage_linear = true
+TubeShadowImage_mipmap = 1
+
+TubeStaticReflectionImage = ../../shaders/textures/TubeGlassOverlayImageCropped_1440x1080.png
+TubeStaticReflectionImage_linear = true
+TubeStaticReflectionImage_mipmap = 1
+
 ReflectionMaskImage = ../../shaders/textures/Placeholder_White_16x16.png
 ReflectionMaskImage_linear = true
 ReflectionMaskImage_mipmap = 1
 
-FrameTextureImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
+FrameTextureImage = ../../shaders/textures/FrameTexture_2800x2120.png
 FrameTextureImage_linear = true
 FrameTextureImage_mipmap = 1
 
-BackgroundImage = ../../shaders/textures/TopLayerImageGradient_3840x2160.png
+BackgroundImage = ../../shaders/textures/BackgroundImage_Carbon_3840x2160.png
 BackgroundImage_linear = true
 BackgroundImage_mipmap = 1
 
@@ -347,11 +395,11 @@ DecalImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
 DecalImage_linear = true
 DecalImage_mipmap = 1
 
-NightLightingImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
+NightLightingImage = ../../shaders/textures/NightLightingClose_1920x1080.png
 NightLightingImage_linear = true
 NightLightingImage_mipmap = 1
 
-NightLighting2Image = ../../shaders/textures/Placeholder_Transparent_16x16.png
+NightLighting2Image = ../../shaders/textures/NightLightingFar_1920x1080.png
 NightLighting2Image_linear = true
 NightLighting2Image_mipmap = 1
 
@@ -367,56 +415,37 @@ TopLayerImage_mipmap = 1
 // HSM_ASPECT_RATIO_MODE = 6
 // HSM_CURVATURE_MODE = 0
 
-// Parameters
-HSM_TUBE_BLACK_EDGE_SHARPNESS = "90.0000"
-HSM_TUBE_BLACK_EDGE_THICKNESS = -7
-HSM_BG_OPACITY = "1.000000"
-HSM_GLASS_BORDER_ON = "1.000000"
-HSM_BZL_WIDTH = 3000
-HSM_BZL_HEIGHT = 3000
-HSM_BZL_INNER_EDGE_THICKNESS = 350
-HSM_BZL_INNER_EDGE_SHARPNESS = 30
-HSM_BZL_INNER_CORNER_RADIUS_SCALE = "100.000000"
-HSM_BZL_INNER_EDGE_SHADOW = "0.000000"
-HSM_FRM_OPACITY = "100.000000"
-HSM_REFLECT_GLOBAL_AMOUNT = "35.00000"
-HSM_REFLECT_GLOBAL_GAMMA_ADJUST = "0.900000"
-HSM_REFLECT_BEZEL_INNER_EDGE_AMOUNT = "60.0000"
-HSM_REFLECT_BEZEL_INNER_EDGE_FULLSCREEN_GLOW = "40.0000"
-HSM_REFLECT_FULLSCREEN_GLOW = "30.000000"
-HSM_REFLECT_FULLSCREEN_GLOW_GAMMA = "1.500000"
-HSM_REFLECT_FADE_AMOUNT = "20.0000"
-HSM_REFLECT_RADIAL_FADE_WIDTH = "500.000000"
-HSM_REFLECT_RADIAL_FADE_HEIGHT = "300.000000"
-HSM_REFLECT_LATERAL_OUTER_FADE_POSITION = "500.000000"
-HSM_REFLECT_CORNER_FADE = "0.000000"
-HSM_REFLECT_BLUR_MIN = "30.0000"
-HSM_REFLECT_BLUR_MAX = "60.0000"
-HSM_REFLECT_NOISE_AMOUNT = "100.000000"
-HSM_REFLECT_NOISE_SAMPLES = "4.000000"
-HSM_REFLECT_NOISE_SAMPLE_DISTANCE = "15.0000"
-HSM_REFLECT_NOISE_SAMPLE_DISTANCE = "15.0000"
-HSM_BG_BRIGHTNESS = "0.000000"
-HSM_SCREEN_VIGNETTE_STRENGTH = "20.000000"
-HSM_SCREEN_VIGNETTE_POWER = "4.000000"
-HSM_SCREEN_VIGNETTE_IN_REFLECTION = "0.000000"
-
-g_vignette = "0.0"
-
-// SMOOTH-ADV
-HSM_DEDITHER_MODE = 1
-
-HSM_SCALEFX_ON = 1
-
-HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = 300
-HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR = 125
-HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR = 0
-HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = 0
-
-ntsc_scale = 0.4
-
-shadowMask = 3
-
 // NTSC Parameters
 GAMMA_INPUT = 2.0
 gamma_out = 1.95
+
+// SMOOTH-ADV
+HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = 600
+
+HSM_DEDITHER_MODE = 3
+
+SHARPSMOOTHER_ON = 1
+max_w = 0.05
+min_w = 0
+smoot = 0.4
+lumad = 0.5
+mtric = 0.3
+
+SUPERXBR_ON = 1
+
+ntsc_scale = 0.55
+
+SHARPEN = 0
+
+HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = 300
+HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR = 100
+HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR = 0
+HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = 0
+
+gamma_c = 0.9
+gsl = -1
+scanline1 = 3
+shadowMask = 3
+maskDark = 0.4
+maskLight = 1.2
+mask_gamma = 4
