@@ -38,7 +38,8 @@ Changes:
 ----------------------------------------------------
 
   * Add DeviceLED image
-  * Add Rotate for Device Image
+  * Add GLASS__SUPER-XBR presets
+  * Add Rotate for Diffuse Image
   * Add 270 Rotate
   * Try Leveraging Fake Scanlines for Gameboy type effect
   * Integer Scale Mode not affecting tube scale

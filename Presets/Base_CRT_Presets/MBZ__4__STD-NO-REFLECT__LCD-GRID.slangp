@@ -120,7 +120,7 @@ shader19 = ../../shaders/base/combine-passes-no-reflect.slang
 scale_type19 = viewport
 alias19 = "CombinePass"
 // Define textures to be used by the different passes
-textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
 SamplerLUT1 = ../../shaders/guest/lut/trinitron-lut.png
 SamplerLUT1_linear = true 
@@ -181,6 +181,10 @@ DeviceImage_mipmap = 1
 DeviceVertImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
 DeviceVertImage_linear = true
 DeviceVertImage_mipmap = 1
+
+DeviceLEDImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
+DeviceLEDImage_linear = true
+DeviceLEDImage_mipmap = 1
 
 DecalImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
 DecalImage_linear = true

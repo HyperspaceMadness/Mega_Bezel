@@ -308,21 +308,22 @@ layout(location = 8) in vec3 BEZEL_FRAME_ORIGINAL_COLOR_RGB;
 layout(location = 0) out vec4 FragColor;
 
 // Pass Framebuffer Textures
-layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
-layout(set = 0, binding = 2) uniform sampler2D InfoCachePassFeedback;
+layout(set = 0, binding = 1)  uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 2)  uniform sampler2D InfoCachePassFeedback;
 
-layout(set = 0, binding = 3) uniform sampler2D BackgroundImage;
-layout(set = 0, binding = 4) uniform sampler2D BackgroundVertImage;
-layout(set = 0, binding = 5) uniform sampler2D NightLightingImage;
-layout(set = 0, binding = 6) uniform sampler2D NightLighting2Image;
+layout(set = 0, binding = 3)  uniform sampler2D BackgroundImage;
+layout(set = 0, binding = 4)  uniform sampler2D BackgroundVertImage;
+layout(set = 0, binding = 5)  uniform sampler2D NightLightingImage;
+layout(set = 0, binding = 6)  uniform sampler2D NightLighting2Image;
 
-layout(set = 0, binding = 7) uniform sampler2D LEDImage;
-layout(set = 0, binding = 8) uniform sampler2D FrameTextureImage;
-layout(set = 0, binding = 9) uniform sampler2D DeviceImage;
+layout(set = 0, binding = 7)  uniform sampler2D LEDImage;
+layout(set = 0, binding = 8)  uniform sampler2D FrameTextureImage;
+layout(set = 0, binding = 9)  uniform sampler2D DeviceImage;
 layout(set = 0, binding = 10) uniform sampler2D DeviceVertImage;
-layout(set = 0, binding = 11) uniform sampler2D DecalImage;
-layout(set = 0, binding = 12) uniform sampler2D CabinetGlassImage;
-layout(set = 0, binding = 13) uniform sampler2D TopLayerImage;
+layout(set = 0, binding = 11) uniform sampler2D DeviceLEDImage;
+layout(set = 0, binding = 12) uniform sampler2D DecalImage;
+layout(set = 0, binding = 13) uniform sampler2D CabinetGlassImage;
+layout(set = 0, binding = 14) uniform sampler2D TopLayerImage;
 
 #ifdef LAYERS_OVER_CRT
 layout(set = 0, binding = 15) uniform sampler2D BR_LayersOverCRTPassFeedback;
@@ -749,6 +750,51 @@ void main()
 	}
 
 	//----------------------------------------------------
+	// DeviceLED Image
+	//----------------------------------------------------
+	vec2 deviceled_size = textureSize(DeviceLEDImage, 0);
+	DEVICELED_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
+											VIEWPORT_UNSCALED_COORD,
+											TEXTURE_ASPECT_MODE_EXPLICIT,
+											deviceled_size.x / deviceled_size.y,
+											vec2(HSM_DEVICELED_POS_X, HSM_DEVICELED_POS_Y),
+											vec2(HSM_DEVICELED_SCALE * HSM_DEVICELED_SCALE_X, HSM_DEVICELED_SCALE),
+											HSM_DEVICELED_FOLLOW_LAYER,
+											HSM_DEVICELED_FOLLOW_MODE,
+											HSM_DEVICELED_FOLLOW_FULL_USES_ZOOM,
+											HSM_DEVICELED_SCALE_KEEP_ASPECT,
+											HSM_DEVICELED_FILL_MODE,
+											HSM_DEVICELED_SPLIT_PRESERVE_CENTER,
+											HSM_DEVICELED_SPLIT_REPEAT_WIDTH,
+											true,
+											DEVICELED_COORD,
+											DEVICELED_SCALE);
+
+	vec4 deviceled_image = vec4(0);
+	if (HSM_DEVICELED_OPACITY > 0 && deviceled_size.y > 16)
+	{
+		deviceled_image = HSM_GetMipmappedTexSample(DeviceLEDImage, DEVICELED_CURVED_COORD, DEVICELED_SCALE, HSM_DEVICELED_MIPMAPPING_BLEND_BIAS);
+
+		// Premultiply Alpha
+		deviceled_image = HSM_GetPreMultipliedColorLinear(deviceled_image, HSM_DEVICELED_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
+
+		// HSV Adjustments
+		deviceled_image.rgb = HSM_ApplyHSVAdjustment(deviceled_image.rgb, HSM_DEVICELED_HUE, HSM_DEVICELED_SATURATION, HSM_DEVICELED_BRIGHTNESS, HSM_DEVICELED_COLORIZE_ON, HSM_DEVICELED_GAMMA);
+
+		if (HSM_STATIC_LAYERS_GAMMA != 1)
+			deviceled_image = HSM_ApplyGamma(deviceled_image, HSM_STATIC_LAYERS_GAMMA);
+
+		deviceled_image.rgb = ApplyAmbientImages(deviceled_image.rgb, 
+													ambient_image.rgb,
+													ambient2_image.rgb,
+													HSM_DEVICELED_AMBIENT_LIGHTING_MULTIPLIER,
+													HSM_DEVICELED_AMBIENT2_LIGHTING_MULTIPLIER,
+													HSM_DEVICELED_APPLY_AMBIENT_IN_ADD_MODE,
+													HSM_DEVICELED_BLEND_MODE,
+													HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
+	}
+
+	//----------------------------------------------------
 	// LED Image
 	//----------------------------------------------------
 	vec4 led_image = vec4(0);
@@ -1062,6 +1108,16 @@ void main()
 														HSM_DEVICE_CUTOUT_MODE, 
 														HSM_DEVICE_DUALSCREEN_VIS_MODE,
 														HSM_DEVICE_OPACITY);
+
+		// DEVICELED IMAGE
+		if (HSM_DEVICELED_LAYER_ORDER == i && HSM_DEVICELED_OPACITY > 0)
+				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+														deviceled_image, 
+														HSM_DEVICELED_BLEND_MODE, 
+														HSM_DEVICELED_MASK_MODE, 
+														HSM_DEVICELED_CUTOUT_MODE, 
+														HSM_DEVICELED_DUALSCREEN_VIS_MODE,
+														HSM_DEVICELED_OPACITY);
 
 		// DECAL IMAGE
 		if (HSM_DECAL_LAYER_ORDER == i && HSM_DECAL_OPACITY > 0)
