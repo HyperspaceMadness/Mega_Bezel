@@ -98,7 +98,6 @@ vec4 GetColorWithIntro(vec4 in_color, vec2 in_coord, in sampler2D in_logo_image_
    in_coord.y = HSM_FLIP_VIEWPORT_VERTICAL * HSM_FLIP_CORE_VERTICAL * in_coord.y;
    in_coord.x = HSM_FLIP_VIEWPORT_HORIZONTAL * HSM_FLIP_CORE_HORIZONTAL * in_coord.x;
 
-   // in_coord = HSM_RotateCoordinate(in_coord, HSM_ROTATE_CORE_IMAGE);
    if (HSM_ROTATE_CORE_IMAGE > 0.5)
    {
       in_coord.xy = in_coord.yx;

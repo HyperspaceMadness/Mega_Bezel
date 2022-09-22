@@ -8,11 +8,6 @@ Changes:
     * Vertical resolution of the signal stays the same as the original
     * Uses Guest Advanced (GDV) crt shader on top
     * Also uses Guest's SharpSmoother shader before XBR to smooth out some dithering/shading
-  * *Split Scaliing*
-    * Added Split Preserve Center %
-    * Added Follow Mode
-      * You can now follow the position and scale of a layer or follow it exactly
-      * the follow exactly mode reuses the coordinate from the layer it follows
   * Updated Hyllian's Checkerboard Dedither
     * Now includes his error control parameters
     * Default values set to avoid errors
@@ -20,6 +15,12 @@ Changes:
       * Reduce Region Errors = 1
   * DeDithering / Pixel Blending
     * Guest.r's SharpSmoother is added to ADV presets
+  * *Split Scaliing Fluidvision ;)*
+    * Added Split Preserve Center %
+    * Added Follow Mode
+      * You can now follow the position and scale of a layer or follow it exactly
+      * the follow exactly mode reuses the coordinate from the layer it follows
+      * Now the newly exposed areas can now be filled in with a repeated texture
   * *Renamed Parameters*
     * `_FOLLOW_LAYER` in each image layer has been renamed to `_FOLLOW_LAYER`
       *  E.G. HSM_BG_FOLLOW_LAYER -> HSM_BG_FOLLOW_LAYER
@@ -31,16 +32,21 @@ Changes:
         * Search and replace `_SCALE_MODE` with `_FOLLOW_LAYER`
         * Search and replace `XXX_UniqueReplace_XXX` with `HSM_INT_SCALE_MODE` to put it back
       * VSCode is recommended for an easy search and replace through files
-
+  * New Follow Mode added for each layer
+    * Gives the option to follow scale and position, or follow exactly
+    * When Follow Exactly is on it uses the same coordinates as the other layer, splits included
+  * Added Device LED layer
+      * The texture is named DeviceLEDImage
+      * By Default the Device LED layer
+        * Follows the Device layer
+        * Follow Exactly is set to on
+        * Uses add blend Mode
+  * Added Tube Diffuse Image Rotation
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
-  * Add DeviceLED image
-  * Add GLASS__SUPER-XBR presets
-  * Add Rotate for Diffuse Image
-  * Add 270 Rotate
   * Try Leveraging Fake Scanlines for Gameboy type effect
   * Integer Scale Mode not affecting tube scale
 

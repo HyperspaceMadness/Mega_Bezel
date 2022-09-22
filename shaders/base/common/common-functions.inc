@@ -189,10 +189,14 @@ vec2 HSM_GetRotatedScreenDerezedSize()
 	return HSM_ROTATE_CORE_IMAGE * pass_size.yx + (1 - HSM_ROTATE_CORE_IMAGE) * pass_size.xy;
 }
 
-vec2 HSM_RotateCoordinate(vec2 in_coord, float rotation_on)
+vec2 HSM_RotateCoordinate(vec2 in_coord, float rotation)
 {
 	vec2 ctr_coord = in_coord - 0.5;
-	ctr_coord = (1 - rotation_on) * ctr_coord + rotation_on * vec2(-ctr_coord.y, ctr_coord.x);
+
+	ctr_coord = (1 - abs(rotation)) * ctr_coord
+				+ clamp(rotation, 0, 1) * rotation * vec2(-ctr_coord.y, ctr_coord.x)
+				+ abs(clamp(rotation, -1, 0)) * abs(rotation) * vec2(ctr_coord.y, -ctr_coord.x);
+
 	return ctr_coord + 0.5;
 }
 
