@@ -1,3 +1,5 @@
+#include "hdr10.h"
+
 // SDR Colour output spaces
 
 const mat3 k709_to_XYZ = mat3(
@@ -30,31 +32,35 @@ vec3 LinearTo709(const vec3 colour)
 	return vec3(LinearTo709_1(colour.r), LinearTo709_1(colour.g), LinearTo709_1(colour.b));
 }
 
-vec3 LinearToDCIP3(const vec3 colour)
+float LinearToDCIP3_1(const float channel)
 {
-	return clamp(pow(colour, vec3(1.0f / (HCRT_GAMMA_OUT + 0.2f))), 0.0f, 1.0f);   // Gamma: 2.4 + 0.2 = 2.6
+	return pow(channel, 1.0f / (HCRT_GAMMA_OUT + 0.2f));   // Gamma: 2.4 + 0.2 = 2.6
 }
 
-void GammaCorrect(const vec3 scanline_colour, inout vec3 gamma_out)
+vec3 LinearToDCIP3(const vec3 colour)
+{
+	return vec3(LinearToDCIP3_1(colour.r), LinearToDCIP3_1(colour.g), LinearToDCIP3_1(colour.b));
+}
+
+void GammaCorrect(const vec3 scanline_colour, inout vec3 gamma_corrected)
 {
    if(HCRT_HDR < 1.0f)
    {
       if(HCRT_OUTPUT_COLOUR_SPACE == 0.0f)
       {
-         gamma_out = LinearTo709(scanline_colour);
+         gamma_corrected = LinearTo709(scanline_colour);
       }
       else if(HCRT_OUTPUT_COLOUR_SPACE == 1.0f)
       {
-         gamma_out = LinearTosRGB(scanline_colour);
+         gamma_corrected = LinearTosRGB(scanline_colour);
       }
       else
       {
-         const vec3 dcip3_colour = (scanline_colour * k709_to_XYZ) * kXYZ_to_DCIP3; 
-         gamma_out = LinearToDCIP3(dcip3_colour);
+         gamma_corrected = LinearToDCIP3(scanline_colour);
       }
    }
    else
    {
-      gamma_out = Hdr10(scanline_colour, HCRT_PAPER_WHITE_NITS, HCRT_EXPAND_GAMUT);
+      gamma_corrected = LinearToST2084(scanline_colour);
    }
 }

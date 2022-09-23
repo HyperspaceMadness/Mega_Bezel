@@ -13,6 +13,7 @@
 #pragma parameter hcrt_space1                        " "                                                            0.0      0.0   0.0001   0.0001
 #pragma parameter hcrt_user_settings                 "[ YOUR DISPLAY'S SETTINGS ]:"                                     0.0      0.0   0.0001   0.0001
 // #pragma parameter hcrt_hdr                           "    SDR | HDR"                                                1.0      0.0   1.0      1.0
+#pragma parameter hcrt_colour_accurate               "    Mask Accurate/Colour Accurate"                            1.0      0.0   1.0      1.0
 #pragma parameter hcrt_colour_space                  "         Display's Colour Space: r709 | sRGB | DCI-P3"        1.0      0.0   2.0      1.0
 // #pragma parameter hcrt_max_nits                      "    HDR: Display's Peak Luminance"                            700.0    0.0   10000.0  10.0
 // #pragma parameter hcrt_paper_white_nits              "    HDR: Display's Paper White Luminance"                     700.0    0.0   10000.0  10.0

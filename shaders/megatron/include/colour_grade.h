@@ -27,6 +27,11 @@ const mat3 kXYZ_to_709 = mat3(
    -0.969244f,  1.875968f,  0.041555f,
     0.055630f, -0.203977f,  1.056972f);
 
+const mat3 kXYZ_to_DCIP3 = mat3 (
+    2.4934969119f, -0.9313836179f, -0.4027107845f,
+   -0.8294889696f,  1.7626640603f,  0.0236246858f,
+    0.0358458302f, -0.0761723893f,  0.9568845240f);   
+
 const mat3 kColourGamut[kColourSystems] = { k709_to_XYZ, kPAL_to_XYZ, kNTSC_to_XYZ, kNTSC_to_XYZ };
 
 const float kTemperatures[kColourSystems] = { kD65, kD65, kD65, kD93 }; 

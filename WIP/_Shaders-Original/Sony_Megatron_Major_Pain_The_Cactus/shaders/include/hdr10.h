@@ -14,19 +14,25 @@ const mat3 kExpanded709_to_2020 = mat3 (
 
 const mat3 k2020Gamuts[2] = { k709_to_2020, kExpanded709_to_2020 };
 
-vec3 LinearToST2084(vec3 normalizedLinearValue)
+float LinearToST2084_1(const float channel)
 {
-   vec3 ST2084 = pow((0.8359375f + 18.8515625f * pow(abs(normalizedLinearValue), vec3(0.1593017578f))) / (1.0f + 18.6875f * pow(abs(normalizedLinearValue), vec3(0.1593017578f))), vec3(78.84375f));
+   float ST2084 = pow((0.8359375f + 18.8515625f * pow(abs(channel), 0.1593017578f)) / (1.0f + 18.6875f * pow(abs(channel), 0.1593017578f)), 78.84375f);
    return ST2084;  /* Don't clamp between [0..1], so we can still perform operations on scene values higher than 10,000 nits */
 }
+
+vec3 LinearToST2084(const vec3 colour)
+{
+	return vec3(LinearToST2084_1(colour.r), LinearToST2084_1(colour.g), LinearToST2084_1(colour.b));
+}
+
 /* END Converted from (Copyright (c) Microsoft Corporation - Licensed under the MIT License.)  https://github.com/microsoft/Xbox-ATG-Samples/tree/master/Kits/ATGTK/HDR */
 
 /* Convert into HDR10 */
-vec3 Hdr10(vec3 hdr_linear, float paper_white_nits, float expand_gamut)
+vec3 Hdr10(const vec3 hdr_linear, float paper_white_nits, float expand_gamut)
 {
-   vec3 rec2020       = hdr_linear * k2020Gamuts[uint(expand_gamut)];
-   vec3 linearColour  = rec2020 * (paper_white_nits / kMaxNitsFor2084);
-   vec3 hdr10         = LinearToST2084(linearColour);
+   const vec3 rec2020       = hdr_linear * k2020Gamuts[uint(expand_gamut)];
+   const vec3 linearColour  = rec2020 * (paper_white_nits / kMaxNitsFor2084);
+   vec3 hdr10               = LinearToST2084(linearColour);
 
    return hdr10;
 }

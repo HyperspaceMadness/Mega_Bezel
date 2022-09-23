@@ -23,7 +23,8 @@ Dont use this shader directly - use the hdr\crt-make-model-hdr.slangp where make
 THIS SHADER DOES NOT SUPPORT WRGB OLED (Due to the sub pixel layout of WRGB - RGB QD-OLED or LCD (and variants thereof screens are fine)
 */
 
-#pragma format A2B10G10R10_UNORM_PACK32
+//#pragma format A2B10G10R10_UNORM_PACK32
+#pragma format R16G16B16A16_SFLOAT
 
 layout(push_constant) uniform Push
 {
@@ -31,6 +32,8 @@ layout(push_constant) uniform Push
    float hcrt_hdr;
    float hcrt_max_nits;
    float hcrt_paper_white_nits;
+   float hcrt_expand_gamut;
+   float hcrt_colour_accurate;
 } params;
 
 layout(std140, set = 0, binding = 0) uniform UBO
@@ -47,6 +50,8 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #define HCRT_HDR                            0
 #define HCRT_MAX_NITS                       700
 #define HCRT_PAPER_WHITE_NITS               700
+#define HCRT_EXPAND_GAMUT                   0
+#define HCRT_COLOUR_ACCURATE                params.hcrt_colour_accurate
 
 #define COMPAT_TEXTURE(c, d) texture(c, d)
 
@@ -67,6 +72,7 @@ layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 2) uniform sampler2D Source;
 
 #include "include/inverse_tonemap.h"
+#include "include/hdr10.h"
 
 vec3 InverseTonemapConditional(const vec3 linear)
 {
@@ -84,7 +90,19 @@ void main()
 {
    vec3 source = COMPAT_TEXTURE(Source, vTexCoord).rgb;
 
-   const vec3 hdr_colour   = InverseTonemapConditional(source);
+   vec3 hdr_colour   = InverseTonemapConditional(source);
 
-   FragColor = vec4(hdr_colour, 1.0);
+   vec3 transformed_colour;
+
+   if((HCRT_HDR >= 1.0f) && (HCRT_COLOUR_ACCURATE < 1.0f))
+   {
+      const vec3 rec2020  = hdr_colour * k2020Gamuts[uint(HCRT_EXPAND_GAMUT)];
+      transformed_colour  = rec2020 * (HCRT_PAPER_WHITE_NITS / kMaxNitsFor2084);
+   }
+   else
+   {      
+      transformed_colour = hdr_colour;
+   }
+
+   FragColor = vec4(transformed_colour, 1.0);
 }

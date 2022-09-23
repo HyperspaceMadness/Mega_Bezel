@@ -23,6 +23,8 @@ Dont use this shader directly - use the hdr\crt-make-model-hdr.slangp where make
 THIS SHADER DOES NOT SUPPORT WRGB OLED (Due to the sub pixel layout of WRGB - RGB QD-OLED or LCD (and variants thereof screens are fine)
 */
 
+#pragma format R16G16B16A16_SFLOAT
+
 layout(push_constant) uniform Push
 {
    float hcrt_hdr;
@@ -38,6 +40,7 @@ layout(push_constant) uniform Push
    float hcrt_contrast;
    float hcrt_saturation;
    float hcrt_gamma_in;
+   float hcrt_colour_accurate;
 } params;
 
 layout(std140, set = 0, binding = 0) uniform UBO
@@ -59,6 +62,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #define HCRT_CONTRAST                       params.hcrt_contrast
 #define HCRT_SATURATION                     params.hcrt_saturation
 #define HCRT_GAMMA_IN                       params.hcrt_gamma_in
+#define HCRT_COLOUR_ACCURATE                params.hcrt_colour_accurate
 
 #define COMPAT_TEXTURE(c, d) texture(c, d)
 
@@ -86,5 +90,23 @@ void main()
 
    const vec3 colour   = ColourGrade(source);
 
-   FragColor = vec4(colour, 1.0);
+   vec3 transformed_colour;
+
+   if((HCRT_HDR < 1.0f) && (HCRT_COLOUR_ACCURATE < 1.0f))
+   {
+      if(HCRT_OUTPUT_COLOUR_SPACE == 2.0f)
+      {
+         transformed_colour = (colour * k709_to_XYZ) * kXYZ_to_DCIP3; 
+      }
+      else
+      {
+         transformed_colour = colour;
+      }
+   }
+   else
+   {
+      transformed_colour = colour;
+   }
+
+   FragColor = vec4(transformed_colour, 1.0);
 }

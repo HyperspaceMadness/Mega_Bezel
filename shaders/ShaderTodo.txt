@@ -15,7 +15,8 @@ Changes:
       * Reduce Region Errors = 1
   * DeDithering / Pixel Blending
     * Guest.r's SharpSmoother is added to ADV presets
-  * *Split Scaliing Fluidvision ;)*
+  * Megatron CRT Shader updated to V4.1
+  * *Split Scaling Fluidvision ;)*
     * Added Split Preserve Center %
     * Added Follow Mode
       * You can now follow the position and scale of a layer or follow it exactly
@@ -51,7 +52,6 @@ Changes:
   * Integer Scale Mode not affecting tube scale
 
   * Add .params #reference to with all parameters commented out
-  * Add XBR to ADV
   * Bezel shadow on Potato Tube / Game Image
 
 ----------------------------------------------------
