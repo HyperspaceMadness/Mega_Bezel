@@ -203,9 +203,9 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 	//--------------------------------
 	if (follow_mode == FOLLOW_MODE_EXACT)
 	{
-		out_placement_coord = inherited_placement_coord;
-		out_placement_scale = inherited_scale;
-		return inherited_final_coord;
+		out_placement_coord = HSM_AddPosScaleToCoord(inherited_placement_coord, offset_pos, offset_scale);
+		out_placement_scale = inherited_scale * offset_scale;
+		return HSM_AddPosScaleToCoord(inherited_final_coord, offset_pos, offset_scale);
 	}
 
 	if (apply_default_scale_offset)

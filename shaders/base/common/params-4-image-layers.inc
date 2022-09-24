@@ -47,7 +47,7 @@ float HSM_DEVICELED_LAYER_ORDER = global.HSM_DEVICELED_LAYER_ORDER;
 #pragma parameter HSM_CRT_LAYER_ORDER             "          CRT Screen Bezel & Frame"  5 0 12 1
 float HSM_CRT_LAYER_ORDER = global.HSM_CRT_LAYER_ORDER;
 
-#pragma parameter HSM_DECAL_LAYER_ORDER           "          DECAL Layer"  7 0 12 1
+#pragma parameter HSM_DECAL_LAYER_ORDER           "          Decal Layer"  7 0 12 1
 float HSM_DECAL_LAYER_ORDER = global.HSM_DECAL_LAYER_ORDER;
 
 #pragma parameter HSM_CAB_GLASS_LAYER_ORDER       "          Cabinet Glass Layer"  9 0 12 1
@@ -274,7 +274,7 @@ float HSM_LED_DUALSCREEN_VIS_MODE = global.HSM_LED_DUALSCREEN_VIS_MODE;
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_LED_TITLE2		                "[ LED SCALE & FOLLOW]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_LED_FOLLOW_LAYER                  "          Follow Layer - FULL | TUBE | BEZEL | BG | DEVICE"  3 0 4 1
+#pragma parameter HSM_LED_FOLLOW_LAYER                  "             Follow Layer - FULL | TUBE | BEZEL | BG | DEVICE"  3 0 4 1
 float HSM_LED_FOLLOW_LAYER = global.HSM_LED_FOLLOW_LAYER;
 
 #pragma parameter HSM_LED_FOLLOW_MODE                   "          Follow Mode - FOLLOW SCALE & POS | FOLLOW EXACTLY" 0 0 1 1
@@ -376,10 +376,10 @@ float HSM_DEVICE_SCALE_KEEP_ASPECT = global.HSM_DEVICE_SCALE_KEEP_ASPECT;
 #pragma parameter HSM_DEVICE_FILL_MODE                 "          Image Fill Mode - STRETCH | SPLIT HORIZONTAL"  0 0 1 1
 float HSM_DEVICE_FILL_MODE = global.HSM_DEVICE_FILL_MODE;
 
-#pragma parameter HSM_DEVICE_SPLIT_PRESERVE_CENTER    "          Split Mode Preserve Center %"  0 0 500 1
+#pragma parameter HSM_DEVICE_SPLIT_PRESERVE_CENTER     "          Split Mode Preserve Center %"  0 0 500 1
 float HSM_DEVICE_SPLIT_PRESERVE_CENTER = global.HSM_DEVICE_SPLIT_PRESERVE_CENTER / 1000;
 
-#pragma parameter HSM_DEVICE_SPLIT_REPEAT_WIDTH     "          Split Mode Repeat Width %"  0 0 100 1
+#pragma parameter HSM_DEVICE_SPLIT_REPEAT_WIDTH        "          Split Mode Repeat Width %"  0 0 100 1
 float HSM_DEVICE_SPLIT_REPEAT_WIDTH = global.HSM_DEVICE_SPLIT_REPEAT_WIDTH / 1000;
 
 #pragma parameter HSM_DEVICE_SCALE                     "          Scale" 100 0 1000 0.1
@@ -399,7 +399,7 @@ float HSM_DEVICE_POS_Y = global.HSM_DEVICE_POS_Y / 100;
 //---------------------------------------------------------------------------------------------------
 //    DEVICELED IMAGE
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_DEVICELED_TITLE			           "[ DEVICELED IMAGE LAYER ]:" 0 0 0.01 0.01
+#pragma parameter HSM_DEVICELED_TITLE			           "[ DEVICE LED IMAGE LAYER ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_DEVICELED_OPACITY                   "          Opacity" 100 0 100 1
 float HSM_DEVICELED_OPACITY = global.HSM_DEVICELED_OPACITY / 100;
@@ -419,13 +419,13 @@ float HSM_DEVICELED_BRIGHTNESS = global.HSM_DEVICELED_BRIGHTNESS / 100;
 #pragma parameter HSM_DEVICELED_GAMMA                     "          Gamma Adjust" 1 0 5 0.01
 float HSM_DEVICELED_GAMMA = global.HSM_DEVICELED_GAMMA;
 
-#pragma parameter HSM_DEVICELED_AMBIENT_LIGHTING_MULTIPLIER         "          Ambient Lighting Multiplier"  100 0 100 1
+#pragma parameter HSM_DEVICELED_AMBIENT_LIGHTING_MULTIPLIER "          Ambient Lighting Multiplier"  100 0 100 1
 float HSM_DEVICELED_AMBIENT_LIGHTING_MULTIPLIER = global.HSM_DEVICELED_AMBIENT_LIGHTING_MULTIPLIER / 100;
 
-#pragma parameter HSM_DEVICELED_AMBIENT2_LIGHTING_MULTIPLIER         "          Ambient 2nd Image Lighting Multiplier"  0 0 100 1
+#pragma parameter HSM_DEVICELED_AMBIENT2_LIGHTING_MULTIPLIER "          Ambient 2nd Image Lighting Multiplier"  0 0 100 1
 float HSM_DEVICELED_AMBIENT2_LIGHTING_MULTIPLIER = global.HSM_DEVICELED_AMBIENT2_LIGHTING_MULTIPLIER / 100;
 
-#pragma parameter HSM_DEVICELED_APPLY_AMBIENT_IN_ADD_MODE         "          Apply Ambient Lighting in ADD Blend Mode"  0 0 1 1
+#pragma parameter HSM_DEVICELED_APPLY_AMBIENT_IN_ADD_MODE "          Apply Ambient Lighting in ADD Blend Mode"  0 0 1 1
 float HSM_DEVICELED_APPLY_AMBIENT_IN_ADD_MODE = global.HSM_DEVICELED_APPLY_AMBIENT_IN_ADD_MODE;
 
 #pragma parameter HSM_DEVICELED_BLEND_MODE                "          Blend Mode - OFF | NORMAL | ADD | MULTIPLY"  2 0 3 1
@@ -443,19 +443,19 @@ float HSM_DEVICELED_MIPMAPPING_BLEND_BIAS = global.HSM_DEVICELED_MIPMAPPING_BLEN
 #pragma parameter HSM_DEVICELED_CUTOUT_MODE               "          Cutout Mask - OFF | ON | INVERT" 0 0 2 1
 float HSM_DEVICELED_CUTOUT_MODE = global.HSM_DEVICELED_CUTOUT_MODE;
 
-#pragma parameter HSM_DEVICELED_DUALSCREEN_VIS_MODE           "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
+#pragma parameter HSM_DEVICELED_DUALSCREEN_VIS_MODE       "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
 float HSM_DEVICELED_DUALSCREEN_VIS_MODE = global.HSM_DEVICELED_DUALSCREEN_VIS_MODE;
 
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_DEVICELED_TITLE2			           "[ DEVICELED SCALE & FOLLOW ]:" 0 0 0.01 0.01
+#pragma parameter HSM_DEVICELED_TITLE2			          "[ DEVICE LED SCALE & FOLLOW ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_DEVICELED_FOLLOW_LAYER                "       Follow Layer - FULL | TUBE | BEZEL | BG | DEVICE"  4 0 4 1
+#pragma parameter HSM_DEVICELED_FOLLOW_LAYER              "          Follow Layer - FULL | TUBE | BEZEL | BG | DEVICE"  4 0 4 1
 float HSM_DEVICELED_FOLLOW_LAYER = global.HSM_DEVICELED_FOLLOW_LAYER;
 
-#pragma parameter HSM_DEVICELED_FOLLOW_MODE                 "          Follow Mode - FOLLOW SCALE & POS | FOLLOW EXACTLY" 1 0 1 1
+#pragma parameter HSM_DEVICELED_FOLLOW_MODE               "          Follow Mode - FOLLOW SCALE & POS | FOLLOW EXACTLY" 1 0 1 1
 float HSM_DEVICELED_FOLLOW_MODE = global.HSM_DEVICELED_FOLLOW_MODE;
 
-#pragma parameter HSM_DEVICELED_FOLLOW_FULL_USES_ZOOM      "          Follow Full also follows Zoom" 1 0 1 1
+#pragma parameter HSM_DEVICELED_FOLLOW_FULL_USES_ZOOM     "          Follow Full also follows Zoom" 1 0 1 1
 float HSM_DEVICELED_FOLLOW_FULL_USES_ZOOM = global.HSM_DEVICELED_FOLLOW_FULL_USES_ZOOM;
 
 #pragma parameter HSM_DEVICELED_SCALE_KEEP_ASPECT         "          Scale Aspect - INHERIT FROM LAYER | USE TEX ASPECT"  1 0 1 1
@@ -464,10 +464,10 @@ float HSM_DEVICELED_SCALE_KEEP_ASPECT = global.HSM_DEVICELED_SCALE_KEEP_ASPECT;
 #pragma parameter HSM_DEVICELED_FILL_MODE                 "          Image Fill Mode - STRETCH | SPLIT HORIZONTAL"  0 0 1 1
 float HSM_DEVICELED_FILL_MODE = global.HSM_DEVICELED_FILL_MODE;
 
-#pragma parameter HSM_DEVICELED_SPLIT_PRESERVE_CENTER    "          Split Mode Preserve Center %"  0 0 500 1
+#pragma parameter HSM_DEVICELED_SPLIT_PRESERVE_CENTER     "          Split Mode Preserve Center %"  0 0 500 1
 float HSM_DEVICELED_SPLIT_PRESERVE_CENTER = global.HSM_DEVICELED_SPLIT_PRESERVE_CENTER / 1000;
 
-#pragma parameter HSM_DEVICELED_SPLIT_REPEAT_WIDTH     "          Split Mode Repeat Width %"  0 0 100 1
+#pragma parameter HSM_DEVICELED_SPLIT_REPEAT_WIDTH        "          Split Mode Repeat Width %"  0 0 100 1
 float HSM_DEVICELED_SPLIT_REPEAT_WIDTH = global.HSM_DEVICELED_SPLIT_REPEAT_WIDTH / 1000;
 
 #pragma parameter HSM_DEVICELED_SCALE                     "          Scale" 100 0 1000 0.1
@@ -486,33 +486,33 @@ float HSM_DEVICELED_POS_Y = global.HSM_DEVICELED_POS_Y / 100;
 //---------------------------------------------------------------------------------------------------
 //    DECAL IMAGE
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_DECAL_TITLE			          "[ DECAL LAYER ] (Also used for Device LEDs) :" 0 0 0.01 0.01
+#pragma parameter HSM_DECAL_TITLE			            "[ DECAL LAYER ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_DECAL_OPACITY                   "          Opacity"  100 0 100 0.1
+#pragma parameter HSM_DECAL_OPACITY                     "          Opacity"  100 0 100 0.1
 float HSM_DECAL_OPACITY = global.HSM_DECAL_OPACITY / 100;
 
-#pragma parameter HSM_DECAL_COLORIZE_ON               "          Colorize" 0 0 1 1
+#pragma parameter HSM_DECAL_COLORIZE_ON                 "          Colorize" 0 0 1 1
 float HSM_DECAL_COLORIZE_ON = global.HSM_DECAL_COLORIZE_ON;
 
-#pragma parameter HSM_DECAL_HUE                       "          Hue Offset" 0 0 360 1
+#pragma parameter HSM_DECAL_HUE                         "          Hue Offset" 0 0 360 1
 float HSM_DECAL_HUE = global.HSM_DECAL_HUE / 360;
 
-#pragma parameter HSM_DECAL_SATURATION                "          Saturation" 100 0 200 1
+#pragma parameter HSM_DECAL_SATURATION                  "          Saturation" 100 0 200 1
 float HSM_DECAL_SATURATION = global.HSM_DECAL_SATURATION / 100;
 
-#pragma parameter HSM_DECAL_BRIGHTNESS                "          Brightness" 100 0 200 1
+#pragma parameter HSM_DECAL_BRIGHTNESS                  "          Brightness" 100 0 200 1
 float HSM_DECAL_BRIGHTNESS = global.HSM_DECAL_BRIGHTNESS / 100;
 
-#pragma parameter HSM_DECAL_GAMMA               "          Gamma Adjust" 1 0 5 0.01
+#pragma parameter HSM_DECAL_GAMMA                       "          Gamma Adjust" 1 0 5 0.01
 float HSM_DECAL_GAMMA = global.HSM_DECAL_GAMMA;
 
-#pragma parameter HSM_DECAL_AMBIENT_LIGHTING_MULTIPLIER         "          Ambient Lighting Multiplier"  100 0 100 1
+#pragma parameter HSM_DECAL_AMBIENT_LIGHTING_MULTIPLIER "          Ambient Lighting Multiplier"  100 0 100 1
 float HSM_DECAL_AMBIENT_LIGHTING_MULTIPLIER = global.HSM_DECAL_AMBIENT_LIGHTING_MULTIPLIER / 100;
 
-#pragma parameter HSM_DECAL_AMBIENT2_LIGHTING_MULTIPLIER         "          Ambient 2nd Image Lighting Multiplier"  0 0 100 1
+#pragma parameter HSM_DECAL_AMBIENT2_LIGHTING_MULTIPLIER "          Ambient 2nd Image Lighting Multiplier"  0 0 100 1
 float HSM_DECAL_AMBIENT2_LIGHTING_MULTIPLIER = global.HSM_DECAL_AMBIENT2_LIGHTING_MULTIPLIER / 100;
 
-#pragma parameter HSM_DECAL_APPLY_AMBIENT_IN_ADD_MODE         "          Apply Ambient Lighting in ADD Blend Mode"  0 0 1 1
+#pragma parameter HSM_DECAL_APPLY_AMBIENT_IN_ADD_MODE   "          Apply Ambient Lighting in ADD Blend Mode"  0 0 1 1
 float HSM_DECAL_APPLY_AMBIENT_IN_ADD_MODE = global.HSM_DECAL_APPLY_AMBIENT_IN_ADD_MODE;
 
 #pragma parameter HSM_DECAL_BLEND_MODE                  "          Blend Mode -  OFF | NORMAL | ADD | MULTIPLY"  1 0 3 1
@@ -533,16 +533,16 @@ float HSM_DECAL_CUTOUT_MODE = global.HSM_DECAL_CUTOUT_MODE;
 #pragma parameter HSM_DECAL_DUALSCREEN_VIS_MODE         "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
 float HSM_DECAL_DUALSCREEN_VIS_MODE = global.HSM_DECAL_DUALSCREEN_VIS_MODE;
 
-#pragma parameter HSM_DECAL_FOLLOW_LAYER                  "       Follow Layer - FULL | TUBE | BEZEL | BG | DEVICE"  0 0 4 1
-float HSM_DECAL_FOLLOW_LAYER = global.HSM_DECAL_FOLLOW_LAYER;
-
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_DECAL_TITLE2			           "[ DECAL SCALE & FOLLOW ]:" 0 0 0.01 0.01
+#pragma parameter HSM_DECAL_TITLE2			            "[ DECAL SCALE & FOLLOW ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_DECAL_FOLLOW_LAYER                "          Follow Layer - FULL | TUBE | BEZEL | BG | DEVICE"  0 0 4 1
+float HSM_DECAL_FOLLOW_LAYER = global.HSM_DECAL_FOLLOW_LAYER;
 
 #pragma parameter HSM_DECAL_FOLLOW_MODE                 "          Follow Mode - FOLLOW SCALE & POS | FOLLOW EXACTLY" 0 0 1 1
 float HSM_DECAL_FOLLOW_MODE = global.HSM_DECAL_FOLLOW_MODE;
 
-#pragma parameter HSM_DECAL_FOLLOW_FULL_USES_ZOOM        "          Follow Full also follows Zoom" 1 0 1 1
+#pragma parameter HSM_DECAL_FOLLOW_FULL_USES_ZOOM       "          Follow Full also follows Zoom" 1 0 1 1
 float HSM_DECAL_FOLLOW_FULL_USES_ZOOM = global.HSM_DECAL_FOLLOW_FULL_USES_ZOOM;
 
 #pragma parameter HSM_DECAL_SCALE_KEEP_ASPECT           "          Scale Aspect - INHERIT FROM LAYER | USE TEX ASPECT"  1 0 1 1
@@ -578,25 +578,25 @@ float HSM_DECAL_POS_Y = global.HSM_DECAL_POS_Y / 100;
 #pragma parameter HSM_CAB_GLASS_OPACITY                     "          Opacity" 100 0 100 1
 float HSM_CAB_GLASS_OPACITY = global.HSM_CAB_GLASS_OPACITY / 100;
 
-#pragma parameter HSM_CAB_GLASS_COLORIZE_ON               "          Colorize" 0 0 1 1
+#pragma parameter HSM_CAB_GLASS_COLORIZE_ON                 "          Colorize" 0 0 1 1
 float HSM_CAB_GLASS_COLORIZE_ON = global.HSM_CAB_GLASS_COLORIZE_ON;
 
-#pragma parameter HSM_CAB_GLASS_HUE                       "          Hue Offset" 0 0 360 1
+#pragma parameter HSM_CAB_GLASS_HUE                         "          Hue Offset" 0 0 360 1
 float HSM_CAB_GLASS_HUE = global.HSM_CAB_GLASS_HUE / 360;
 
-#pragma parameter HSM_CAB_GLASS_SATURATION                "          Saturation" 100 0 200 1
+#pragma parameter HSM_CAB_GLASS_SATURATION                  "          Saturation" 100 0 200 1
 float HSM_CAB_GLASS_SATURATION = global.HSM_CAB_GLASS_SATURATION / 100;
 
 #pragma parameter HSM_CAB_GLASS_BRIGHTNESS                  "          Brightness" 100 0 400 1
 float HSM_CAB_GLASS_BRIGHTNESS = global.HSM_CAB_GLASS_BRIGHTNESS / 100;
 
-#pragma parameter HSM_CAB_GLASS_GAMMA                     "          Gamma Adjust" 1 0 5 0.01
+#pragma parameter HSM_CAB_GLASS_GAMMA                       "          Gamma Adjust" 1 0 5 0.01
 float HSM_CAB_GLASS_GAMMA = global.HSM_CAB_GLASS_GAMMA;
 
-#pragma parameter HSM_CAB_GLASS_AMBIENT_LIGHTING_MULTIPLIER         "          Ambient Lighting Multiplier"  100 0 100 1
+#pragma parameter HSM_CAB_GLASS_AMBIENT_LIGHTING_MULTIPLIER "          Ambient Lighting Multiplier"  100 0 100 1
 float HSM_CAB_GLASS_AMBIENT_LIGHTING_MULTIPLIER = global.HSM_CAB_GLASS_AMBIENT_LIGHTING_MULTIPLIER / 100;
 
-#pragma parameter HSM_CAB_GLASS_AMBIENT2_LIGHTING_MULTIPLIER         "          Ambient 2nd Image Lighting Multiplier"  0 0 100 1
+#pragma parameter HSM_CAB_GLASS_AMBIENT2_LIGHTING_MULTIPLIER "          Ambient 2nd Image Lighting Multiplier"  0 0 100 1
 float HSM_CAB_GLASS_AMBIENT2_LIGHTING_MULTIPLIER = global.HSM_CAB_GLASS_AMBIENT2_LIGHTING_MULTIPLIER / 100;
 
 #pragma parameter HSM_CAB_GLASS_APPLY_AMBIENT_IN_ADD_MODE         "          Apply Ambient Lighting in ADD Blend Mode"  0 0 1 1
@@ -608,7 +608,7 @@ float HSM_CAB_GLASS_BLEND_MODE = global.HSM_CAB_GLASS_BLEND_MODE;
 #pragma parameter HSM_CAB_GLASS_SOURCE_MATTE_TYPE           "          Source Matte Color - BLACK | WHITE | NONE"  0 0 2 1
 float HSM_CAB_GLASS_SOURCE_MATTE_TYPE = global.HSM_CAB_GLASS_SOURCE_MATTE_TYPE;
 
-#pragma parameter HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS          "          Mipmapping Blend Bias (Affects Sharpness)" 0 -5 5 0.1
+#pragma parameter HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS       "          Mipmapping Blend Bias (Affects Sharpness)" 0 -5 5 0.1
 float HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS = global.HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS;
 
 #pragma parameter HSM_CAB_GLASS_MASK_MODE                   "    Mask - ALL | SCRN | TUBE | BZ- | BZ | BZ+ | FRM | FRM+ | BG" 0 0 8 1
@@ -621,7 +621,7 @@ float HSM_CAB_GLASS_CUTOUT_MODE = global.HSM_CAB_GLASS_CUTOUT_MODE;
 float HSM_CAB_GLASS_DUALSCREEN_VIS_MODE = global.HSM_CAB_GLASS_DUALSCREEN_VIS_MODE;
 
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_CAB_GLASS_TITLE2			           "[ CABINET GLASS SCALE & FOLLOW ]:" 0 0 0.01 0.01
+#pragma parameter HSM_CAB_GLASS_TITLE2			            "[ CABINET GLASS SCALE & FOLLOW ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_CAB_GLASS_FOLLOW_LAYER                "        Follow Layer- FULL | TUBE | BEZEL | BG | DEVICE | DECAL" 0 0 5 1
 float HSM_CAB_GLASS_FOLLOW_LAYER = global.HSM_CAB_GLASS_FOLLOW_LAYER;
@@ -629,7 +629,7 @@ float HSM_CAB_GLASS_FOLLOW_LAYER = global.HSM_CAB_GLASS_FOLLOW_LAYER;
 #pragma parameter HSM_CAB_GLASS_FOLLOW_MODE                 "          Follow Mode - FOLLOW SCALE & POS | FOLLOW EXACTLY" 0 0 1 1
 float HSM_CAB_GLASS_FOLLOW_MODE = global.HSM_CAB_GLASS_FOLLOW_MODE;
 
-#pragma parameter HSM_CAB_GLASS_FOLLOW_FULL_USES_ZOOM        "          Follow Full also follows Zoom" 1 0 1 1
+#pragma parameter HSM_CAB_GLASS_FOLLOW_FULL_USES_ZOOM       "          Follow Full also follows Zoom" 1 0 1 1
 float HSM_CAB_GLASS_FOLLOW_FULL_USES_ZOOM = global.HSM_CAB_GLASS_FOLLOW_FULL_USES_ZOOM;
 
 #pragma parameter HSM_CAB_GLASS_SCALE_KEEP_ASPECT           "          Scale Aspect - INHERIT FROM LAYER | USE TEX ASPECT"  1 0 1 1
@@ -665,19 +665,19 @@ float HSM_CAB_GLASS_POS_Y = global.HSM_CAB_GLASS_POS_Y / 100;
 #pragma parameter HSM_TOP_OPACITY                       "          Opacity"  100 0 100 0.1
 float HSM_TOP_OPACITY = global.HSM_TOP_OPACITY / 100;
 
-#pragma parameter HSM_TOP_COLORIZE_ON               "          Colorize" 0 0 1 1
+#pragma parameter HSM_TOP_COLORIZE_ON                   "          Colorize" 0 0 1 1
 float HSM_TOP_COLORIZE_ON = global.HSM_TOP_COLORIZE_ON;
 
-#pragma parameter HSM_TOP_HUE                       "          Hue Offset" 0 0 360 1
+#pragma parameter HSM_TOP_HUE                           "          Hue Offset" 0 0 360 1
 float HSM_TOP_HUE = global.HSM_TOP_HUE / 360;
 
-#pragma parameter HSM_TOP_SATURATION                "          Saturation" 100 0 200 1
+#pragma parameter HSM_TOP_SATURATION                    "          Saturation" 100 0 200 1
 float HSM_TOP_SATURATION = global.HSM_TOP_SATURATION / 100;
 
-#pragma parameter HSM_TOP_BRIGHTNESS                "          Brightness" 100 0 200 1
+#pragma parameter HSM_TOP_BRIGHTNESS                    "          Brightness" 100 0 200 1
 float HSM_TOP_BRIGHTNESS = global.HSM_TOP_BRIGHTNESS / 100;
 
-#pragma parameter HSM_TOP_GAMMA                     "          Gamma Adjust" 1 0 5 0.01
+#pragma parameter HSM_TOP_GAMMA                         "          Gamma Adjust" 1 0 5 0.01
 float HSM_TOP_GAMMA = global.HSM_TOP_GAMMA;
 
 #pragma parameter HSM_TOP_AMBIENT_LIGHTING_MULTIPLIER   "          Ambient Lighting Multiplier"  100 0 100 1
@@ -710,7 +710,7 @@ float HSM_TOP_DUALSCREEN_VIS_MODE = global.HSM_TOP_DUALSCREEN_VIS_MODE;
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_TOP_TITLE2			           "[ TOP SCALE & FOLLOW ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_TOP_FOLLOW_LAYER                  "Follow Layer- FULL | TUBE | BEZEL | BG | DEVICE | DECAL" 0 0 5 1
+#pragma parameter HSM_TOP_FOLLOW_LAYER                  "      Follow Layer - FULL | TUBE | BEZEL | BG | DEVICE | DECAL" 0 0 5 1
 float HSM_TOP_FOLLOW_LAYER = global.HSM_TOP_FOLLOW_LAYER;
 
 #pragma parameter HSM_TOP_FOLLOW_MODE                   "          Follow Mode - FOLLOW SCALE & POS | FOLLOW EXACTLY" 0 0 1 1

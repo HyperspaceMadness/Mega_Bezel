@@ -330,7 +330,7 @@ float HSM_CORE_RES_SAMPLING_SHIFT_OPPOSITE_DIR = global.HSM_CORE_RES_SAMPLING_SH
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_INTERLACE_TITLE								"[ INTERLACING From Guest.r :) ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_INTERLACE_TRIGGER_RES 						"          Interlacing and Fake Scanlines Trigger Res" 600 100 2000 25
+#pragma parameter HSM_INTERLACE_TRIGGER_RES 						"          Interlacing and Fake Scanlines Trigger Res" 650 100 2000 25
 #define HSM_INTERLACE_TRIGGER_RES global.HSM_INTERLACE_TRIGGER_RES
 
 #pragma parameter HSM_INTERLACE_MODE 								"         Interlacing Mode: OFF | Normal 1-3 | Interpolation 4-5" 4 0.0 5.0 1.0

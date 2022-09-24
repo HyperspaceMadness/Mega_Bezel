@@ -1140,6 +1140,7 @@ Layer order adjusts the order in which the layers are composited or "layered" on
 - **Viewport Vignette**
 - **LED Image**
 - **Device Image**
+- **Device LED Image**
 - **CRT Screen**
 - **Decal Image**
 - **Cabinet Glass Image**
@@ -1272,6 +1273,9 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 
 - **Split Mode Preserve Center %** --- Preserves a part of the center of the graphic when split is used
   - One usage is to have a logo in the center of the bottom of the monitor graphic and reserve space for this
+
+- **Split Mode Repeat Width %** --- Width of repeating texture in exposed area 
+  - When this is 0 repeat is off
 
 - **Scale** --- *Scales image layer equally in both directions*
 - **Scale X** --- *Scales image layer horizontally*
