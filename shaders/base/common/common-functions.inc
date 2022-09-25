@@ -63,7 +63,7 @@ vec2 HSM_GetViewportCoordWithZoomAndPan(vec2 viewport_coord)
 }
 
 float HSM_GetAspectRatioFromMode(float in_aspect_ratio_mode, float in_explicit_aspect)
-{
+{                                                  
 	float out_explicit_aspect = in_explicit_aspect;
 
 	if (in_aspect_ratio_mode == TEXTURE_ASPECT_MODE_VIEWPORT)
@@ -1042,6 +1042,8 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 
 	// Sample 1, 4 
 	// r parameter_sum
+	// g CURRENT_FRAME_FROM_CACHE_INFO
+	// b ROTATED_DEREZED_SIZE
 	sample_coord = HSM_GetCacheSampleCoord(1, 4);
 	texture_sample = texture(in_cache_pass, sample_coord);
 	float parameter_sum = texture_sample.r;
@@ -1061,18 +1063,17 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 	NEGATIVE_CROP_EXPAND_MULTIPLIER = texture_sample.r;
 	MAX_NEGATIVE_CROP = texture_sample.g;
 
+	// Sample 2, 4 
+	// r NEGATIVE_CROP_EXPAND_MULTIPLIER
+	// g MAX_NEGATIVE_CROP
+	sample_coord = HSM_GetCacheSampleCoord(4, 4);
+	texture_sample = texture(in_cache_pass, sample_coord);
+	CACHE_INFO_PARAM_SUM_CHANGED = texture_sample.r > 0.5 ? true : false;
+
 	USE_VERTICAL_SCANLINES = HSM_GetUseVerticalScanlines(SCREEN_ASPECT);
 	SCREEN_COORD = HSM_GetVTexCoordWithArgs(flipped_viewport_coord, SCREEN_SCALE, SCREEN_POS_OFFSET);
 	TUBE_DIFFUSE_COORD = HSM_GetVTexCoordWithArgs(flipped_viewport_coord, TUBE_DIFFUSE_SCALE, SCREEN_POS_OFFSET);
-
 	TUBE_DIFFUSE_COORD_MIXED_POS = HSM_GetVTexCoordWithArgs(flipped_viewport_coord, TUBE_DIFFUSE_SCALE_1ST_SCREEN, (SCREEN_POS_OFFSET_1ST_SCREEN + SCREEN_POS_OFFSET_2ND_SCREEN) / 2.0);
-
-	float param_sum_epsilon = 0.0000001;
-
-	// Need to check croped sample resolutions of both screens
-	CACHE_INFO_PARAM_SUM_CHANGED = false;
-	CACHE_INFO_PARAM_SUM_CHANGED = res_mult_size_sum != res_mult_size_sum_feedback || res_mult_size2_sum != res_mult_size2_sum_feedback ? true : CACHE_INFO_PARAM_SUM_CHANGED;
-	CACHE_INFO_PARAM_SUM_CHANGED = (abs((parameter_sum) - (parameter_sum_feedback)) > param_sum_epsilon) ? true : CACHE_INFO_PARAM_SUM_CHANGED;
 
 	return vec4(0);
 }

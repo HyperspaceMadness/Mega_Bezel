@@ -1036,6 +1036,7 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	vec2 pos_offset_2nd_screen = HSM_GetScreenPositionOffset(vec2(0.5, 0.5), screen_scale_2nd_screen, 2);
 
 	vec4 sample_2d_range = vec4(0);
+	float parameter_sum = HSM_GetParameterSum();
 
 	// Sample 1, 1
 	// r AVERAGE_LUMA
@@ -1154,7 +1155,7 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	sample_2d_range = HSM_GetCacheSampleRange(1, 4);
 	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
 	{
-		out_color.r = HSM_GetParameterSum();
+		out_color.r = parameter_sum;
 
 		vec2 sample_coord = HSM_GetCacheSampleCoord(1, 4);
 		vec4 texture_sample = texture(feedback_pass, sample_coord);
@@ -1183,6 +1184,44 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	{
 		out_color.rg = tube_diffuse_scale;
 		out_color.ba = tube_diffuse_scale_2nd_screen;
+	}
+
+	vec2 sample_coord = vec2(0); 
+	vec4 texture_sample = vec4(0); 
+
+	// Check the difference in parameter sum values to see if the cache has changed
+	// Sample 1, 4 Feedback
+	// r parameter_sum_feedback
+	sample_coord = HSM_GetCacheSampleCoord(1, 4);
+	texture_sample = texture(feedback_pass, sample_coord);
+	float parameter_sum_feedback = texture_sample.r;
+
+	float res_mult_size_sum = cropped_rotated_size_with_res_mult.x + cropped_rotated_size_with_res_mult.y;
+
+	sample_coord = HSM_GetCacheSampleCoord(4, 1);
+	texture_sample = texture(feedback_pass, sample_coord);
+	CROPPED_ROTATED_SIZE_WITH_RES_MULT_FEEDBACK = texture_sample.rg;
+	float res_mult_size_sum_feedback = CROPPED_ROTATED_SIZE_WITH_RES_MULT_FEEDBACK.x + CROPPED_ROTATED_SIZE_WITH_RES_MULT_FEEDBACK.y;
+
+	float res_mult_size2_sum = cropped_size_with_res_mult_2nd_screen.x + cropped_size_with_res_mult_2nd_screen.y;
+
+	sample_coord = HSM_GetCacheSampleCoord(4, 2);
+	texture_sample = texture(feedback_pass, sample_coord);
+	CROPPED_ROTATED_SIZE_WITH_RES_MULT_FEEDBACK = texture_sample.rg;
+	float res_mult_size2_sum_feedback = CROPPED_ROTATED_SIZE_WITH_RES_MULT_FEEDBACK.x + CROPPED_ROTATED_SIZE_WITH_RES_MULT_FEEDBACK.y;
+
+	float param_sum_epsilon = 0.0000001;
+
+	// Need to check croped sample resolutions of both screens
+	bool cache_changed = res_mult_size_sum != res_mult_size_sum_feedback || res_mult_size2_sum != res_mult_size2_sum_feedback ? true : false;
+	cache_changed = (abs((parameter_sum) - (parameter_sum_feedback)) > param_sum_epsilon) ? true : cache_changed;
+
+	// Sample 1, 4
+	// r CACHE_INFO_PARAM_SUM_CHANGED
+	sample_2d_range = HSM_GetCacheSampleRange(4, 4);
+	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
+	{
+		out_color.r = cache_changed ? 1 : 0;
 	}
 
 	return out_color;
