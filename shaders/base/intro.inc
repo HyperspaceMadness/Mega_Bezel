@@ -287,7 +287,7 @@ void main()
       FragColor = GetColorWithIntro(FragColor, viewport_coord_adjusted, IntroImage);
 #endif
 
-   bool cache_info_changed = HSM_CheckCacheInfoChanged();
+   bool cache_info_changed = CACHE_INFO_CHANGED;
    bool cache_updated = cache_info_changed || HSM_CACHE_GRAPHICS_ON == 0;
    bool show_update_indicator = (HSM_CACHE_UPDATE_INDICATOR_MODE == 2 && HSM_CACHE_GRAPHICS_ON == 0) || (HSM_CACHE_UPDATE_INDICATOR_MODE == 1 && cache_info_changed);
 

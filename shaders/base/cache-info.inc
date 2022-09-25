@@ -1173,6 +1173,7 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	{
 		out_color.r = NEGATIVE_CROP_EXPAND_MULTIPLIER;
 		out_color.g = MAX_NEGATIVE_CROP;
+		out_color.b = HSM_GetUseVerticalScanlines(screen_aspect);
 	}
 
 	// TODO need to add TUBE_DIFFUSE_ASPECT & deal with 2nd Screen
@@ -1196,13 +1197,20 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	texture_sample = texture(feedback_pass, sample_coord);
 	float parameter_sum_feedback = texture_sample.r;
 
+	//-----------------------------------------------------
+	// Screen 1 resolution
 	float res_mult_size_sum = cropped_rotated_size_with_res_mult.x + cropped_rotated_size_with_res_mult.y;
 
+	// Sample 4, 1 Feedback
+	// rg parameter_sum_feedback
 	sample_coord = HSM_GetCacheSampleCoord(4, 1);
 	texture_sample = texture(feedback_pass, sample_coord);
 	CROPPED_ROTATED_SIZE_WITH_RES_MULT_FEEDBACK = texture_sample.rg;
 	float res_mult_size_sum_feedback = CROPPED_ROTATED_SIZE_WITH_RES_MULT_FEEDBACK.x + CROPPED_ROTATED_SIZE_WITH_RES_MULT_FEEDBACK.y;
 
+	//-----------------------------------------------------
+	// Screen 2 resolution
+	// r res_mult_size2_sum
 	float res_mult_size2_sum = cropped_size_with_res_mult_2nd_screen.x + cropped_size_with_res_mult_2nd_screen.y;
 
 	sample_coord = HSM_GetCacheSampleCoord(4, 2);
@@ -1210,14 +1218,15 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	CROPPED_ROTATED_SIZE_WITH_RES_MULT_FEEDBACK = texture_sample.rg;
 	float res_mult_size2_sum_feedback = CROPPED_ROTATED_SIZE_WITH_RES_MULT_FEEDBACK.x + CROPPED_ROTATED_SIZE_WITH_RES_MULT_FEEDBACK.y;
 
-	float param_sum_epsilon = 0.0000001;
-
 	// Need to check croped sample resolutions of both screens
-	bool cache_changed = res_mult_size_sum != res_mult_size_sum_feedback || res_mult_size2_sum != res_mult_size2_sum_feedback ? true : false;
-	cache_changed = (abs((parameter_sum) - (parameter_sum_feedback)) > param_sum_epsilon) ? true : cache_changed;
+	bool cache_changed = res_mult_size_sum != res_mult_size_sum_feedback || 
+						 res_mult_size2_sum != res_mult_size2_sum_feedback ||
+						 abs((parameter_sum) - (parameter_sum_feedback)) > 0.0000001 ? true : false;
 
-	// Sample 1, 4
-	// r CACHE_INFO_PARAM_SUM_CHANGED
+	//-----------------------------------------------------
+	// Store if the cache has changed since last frame
+	// Sample 4, 4
+	// r CACHE_INFO_CHANGED
 	sample_2d_range = HSM_GetCacheSampleRange(4, 4);
 	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
 	{

@@ -95,7 +95,7 @@ void main()
    FragColor = vec4(0);
 
    vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
-   if (feedback_color_test.a < 0 && !HSM_CheckCacheInfoChanged())
+   if (feedback_color_test.a < 0 && !CACHE_INFO_CHANGED)
    {
       FragColor = texture(PassFeedback, UNFLIPPED_VIEWPORT_COORD);
       return;

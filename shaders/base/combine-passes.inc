@@ -97,7 +97,7 @@ void main()
 	if (BEZEL_OUTSIDE_COORD.x < -0.01 || BEZEL_OUTSIDE_COORD.x > 1.01 || BEZEL_OUTSIDE_COORD.y < -0.01 || BEZEL_OUTSIDE_COORD.y > 1.01)
 	{
 		vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
-		if (HSM_CACHE_GRAPHICS_ON > 0.5 && feedback_color_test.a < 0 && !HSM_CheckCacheInfoChanged() && HSM_RENDER_SIMPLE_MODE < 0.5)
+		if (HSM_CACHE_GRAPHICS_ON > 0.5 && feedback_color_test.a < 0 && !CACHE_INFO_CHANGED && HSM_RENDER_SIMPLE_MODE < 0.5)
 		{
 			FragColor = texture(PassFeedback, UNFLIPPED_VIEWPORT_COORD);
 			return;

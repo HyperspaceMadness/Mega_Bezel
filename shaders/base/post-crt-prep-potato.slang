@@ -151,7 +151,7 @@ void main()
 	if (SCREEN_COORD.x < -0.01 || SCREEN_COORD.x > 1.01 || SCREEN_COORD.y < -0.01 || SCREEN_COORD.y > 1.01)
 	{
 		vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
-		if (HSM_CACHE_GRAPHICS_ON > 0.5 && feedback_color_test.a < 0 && !HSM_CheckCacheInfoChanged())
+		if (HSM_CACHE_GRAPHICS_ON > 0.5 && feedback_color_test.a < 0 && !CACHE_INFO_CHANGED)
 		{
 			FragColor = texture(PassFeedback, UNFLIPPED_VIEWPORT_COORD);
 			return;
