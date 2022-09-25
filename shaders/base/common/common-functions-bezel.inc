@@ -44,6 +44,31 @@ vec2 GetDefaultBezelScale()
 	return out_placement_scale;
 }
 
+float HSM_GetSimpleBezelCoords(vec2 tube_diffuse_coord, 
+								vec2 tube_diffuse_scale, 
+								vec2 tube_scale, 
+								float screen_aspect,
+								inout vec2 bezel_outside_coord, 
+								inout vec2 frame_outside_coord)
+{
+	float output_aspect = global.OutputSize.x / global.OutputSize.y;
+
+	vec2 bezel_outer_pos_offset = vec2(0, HSM_BZL_OUTER_POSITION_Y);
+	vec2 bezel_outer_scale_offset = HSM_GetOuterBezelScale(tube_diffuse_scale, screen_aspect);
+
+	bezel_outside_coord = tube_diffuse_coord + bezel_outer_pos_offset;
+
+	vec2 black_edge_scale_offset = tube_scale / tube_diffuse_scale;
+
+	bezel_outside_coord = HSM_GetInverseScaledCoord(bezel_outside_coord, black_edge_scale_offset * bezel_outer_scale_offset) + vec2(0, HSM_BZL_OUTER_POSITION_Y);
+	frame_outside_coord = (bezel_outside_coord + 
+							vec2(0, HSM_FRM_OUTER_POS_Y) - 0.5) / 
+							vec2((HSM_FRM_THICKNESS * HSM_FRM_THICKNESS_SCALE_X) / 
+							(tube_diffuse_scale.x / tube_diffuse_scale.y * output_aspect) + 1, 
+							HSM_FRM_THICKNESS + 1) + 0.5;
+	return 0;
+}
+
 float HSM_GetBezelCoords(vec2 tube_diffuse_coord, 
 							vec2 tube_diffuse_scale, 
 							vec2 tube_scale, 

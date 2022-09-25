@@ -260,21 +260,19 @@ void main()
 // If it's the potato preset render the whole frame
 #ifndef IS_POTATO_PRESET
 #ifndef IS_NO_REFLECT_PRESET
-	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
-	HSM_GetBezelCoords(TUBE_DIFFUSE_COORD, 
-						TUBE_DIFFUSE_SCALE, 
-						TUBE_SCALE, 
-						SCREEN_ASPECT, 
-						false,
-						BEZEL_OUTSIDE_SCALE,
-						BEZEL_OUTSIDE_COORD, 
-						BEZEL_OUTSIDE_CURVED_COORD, 
-						FRAME_OUTSIDE_CURVED_COORD);
-	cache_bounds_coord = (FRAME_OUTSIDE_CURVED_COORD - 0.5) * 0.9 + 0.5;
+	vec2 bezel_outside_flat_coord;
+	vec2 frame_outside_flat_coord;
+	HSM_GetSimpleBezelCoords(TUBE_DIFFUSE_COORD, 
+							TUBE_DIFFUSE_SCALE, 
+							TUBE_SCALE, 
+							SCREEN_ASPECT,
+							bezel_outside_flat_coord, 
+							frame_outside_flat_coord);
+	cache_bounds_coord = (frame_outside_flat_coord - 0.5) * 0.9 + 0.5;
 #endif
 #endif
 
-	if (cache_bounds_coord.x < -0.01 || cache_bounds_coord.x > 1.01 || cache_bounds_coord.y < -0.01 || cache_bounds_coord.y > 1.01)
+	if (HHLP_IsOutsideCoordSpace(cache_bounds_coord))
 	{
 			FragColor = vec4(0);
 			return;
