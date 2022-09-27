@@ -107,26 +107,26 @@ void main()
 
 	vec2 cache_bounds_coord = SCREEN_COORD;
 
-// If it's the potato preset render the whole frame
-#ifndef IS_POTATO_PRESET
-#ifndef IS_NO_REFLECT_PRESET
-	vec2 bezel_outside_flat_coord;
-	vec2 frame_outside_flat_coord;
-	HSM_GetSimpleBezelCoords(TUBE_DIFFUSE_COORD, 
-							TUBE_DIFFUSE_SCALE, 
-							TUBE_SCALE, 
-							SCREEN_ASPECT,
-							bezel_outside_flat_coord, 
-							frame_outside_flat_coord);
-	cache_bounds_coord = (frame_outside_flat_coord - 0.5) * 0.9 + 0.5;
-#endif
-#endif
+// // If it's the potato preset render the whole frame
+// #ifndef IS_POTATO_PRESET
+// #ifndef IS_NO_REFLECT_PRESET
+// 	vec2 bezel_outside_flat_coord;
+// 	vec2 frame_outside_flat_coord;
+// 	HSM_GetSimpleBezelCoords(TUBE_DIFFUSE_COORD, 
+// 							TUBE_DIFFUSE_SCALE, 
+// 							TUBE_SCALE, 
+// 							SCREEN_ASPECT,
+// 							bezel_outside_flat_coord, 
+// 							frame_outside_flat_coord);
+// 	cache_bounds_coord = (frame_outside_flat_coord - 0.5) * 0.9 + 0.5;
+// #endif
+// #endif
 
-	if (HHLP_IsOutsideCoordSpace(cache_bounds_coord))
-	{
-			FragColor = vec4(0);
-			return;
-	}
+// 	if (HHLP_IsOutsideCoordSpace(cache_bounds_coord))
+// 	{
+// 			FragColor = vec4(0);
+// 			return;
+// 	}
 
     vec2 screen_curved_coord = HSM_GetCRTShaderCurvedCoord(SCREEN_COORD);
 	vec2 curved_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
