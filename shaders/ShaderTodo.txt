@@ -1,48 +1,10 @@
 ![Mega_Bezel_Logo|512x256, 75%](upload://6PNkvcMF9Go9Wnk6OJXfYR1opXI.png) 
 
-Mega Bezel is updated to V1.3.0_2022-09-24
+Mega Bezel is updated to V1.4.0_2022-09-26
 
 Changes:
-  * Added SUPER-XBR-GDV presets includes SUPER-XBR by Hyllian
-    * These presets create a rounded look to the pixels while maintaining more of the original pixel look
-    * Vertical resolution of the signal stays the same as the original
-    * Uses Guest Advanced (GDV) crt shader on top
-    * Also uses Guest's SharpSmoother shader before XBR to smooth out some dithering/shading
-  * Updated Hyllian's Checkerboard Dedither
-    * Now includes his error control parameters
-    * Default values set to avoid errors
-      * Reduce Neighbor Errors = 4
-      * Reduce Region Errors = 1
-  * DeDithering / Pixel Blending
-    * Guest.r's SharpSmoother is added to ADV presets
-  * Megatron CRT Shader updated to V4.1
-  * *Split Scaling Fluidvision ;)*
-    * Added Split Preserve Center %
-    * Added Follow Mode
-      * You can now follow the position and scale of a layer or follow it exactly
-      * the follow exactly mode reuses the coordinate from the layer it follows
-      * Now the newly exposed areas can now be filled in with a repeated texture
-  * *Renamed Parameters*
-    * `_FOLLOW_LAYER` in each image layer has been renamed to `_FOLLOW_LAYER`
-      *  E.G. HSM_BG_FOLLOW_LAYER -> HSM_BG_FOLLOW_LAYER
-    * `_FOLLOW_FULL_USES_ZOOM` has been renamed to `_FOLLOW_FULL_USES_ZOOM`
-      * E.G. HSM_BG_SCALE_FULL_WITH_ZOOM -> HSM_BG_FOLLOW_FULL_USES_ZOOM
-    * If you do search and replace through your files you will want to watch out for `HSM_INT_SCALE_MODE`
-      * To handle this you can do the following:
-        * Search and replace `HSM_INT_SCALE_MODE` to `XXX_UniqueReplace_XXX` or something else unique
-        * Search and replace `_SCALE_MODE` with `_FOLLOW_LAYER`
-        * Search and replace `XXX_UniqueReplace_XXX` with `HSM_INT_SCALE_MODE` to put it back
-      * VSCode is recommended for an easy search and replace through files
-  * New Follow Mode added for each layer
-    * Gives the option to follow scale and position, or follow exactly
-    * When Follow Exactly is on it uses the same coordinates as the other layer, splits included
-  * Added Device LED layer
-      * The texture is named DeviceLEDImage
-      * By Default the Device LED layer
-        * Follows the Device layer
-        * Follow Exactly is set to on
-        * Uses add blend Mode
-  * Added Tube Diffuse Image Rotation
+  * Updated all the blur paths to match the new paths in the libretro repo 
+  * Adjusted some caching to be slightly faster
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
