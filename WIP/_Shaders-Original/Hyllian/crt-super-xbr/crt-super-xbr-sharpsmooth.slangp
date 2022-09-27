@@ -1,6 +1,6 @@
 shaders = "12"
 
-shader0 = ../../../../../../blurs/sharpsmoother.slang
+shader0 = ../../../../../../blurs/shaders/royale/sharpsmoother.slang
 filter_linear0 = false
 scale_type0 = source
 scale0 = 1.0
