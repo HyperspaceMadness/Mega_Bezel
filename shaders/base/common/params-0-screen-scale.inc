@@ -502,9 +502,6 @@ float HSM_MONOCHROME_DUALSCREEN_VIS_MODE = global.HSM_MONOCHROME_DUALSCREEN_VIS_
 #pragma parameter HSM_TUBE_DIFFUSE_MODE  					        "          Tube Diffuse Color - BLACK | IMAGE | TRANSPARENT" 0 0 2 1
 float HSM_TUBE_DIFFUSE_MODE = global.HSM_TUBE_DIFFUSE_MODE;
 
-#pragma parameter HSM_TUBE_DIFFUSE_OPACITY                          "          Opacity" 100 0 100 0.1
-float HSM_TUBE_DIFFUSE_OPACITY = global.HSM_TUBE_DIFFUSE_OPACITY / 100;
-
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_AMOUNT                     "          Amount" 100 0 100 1
 float HSM_TUBE_DIFFUSE_IMAGE_AMOUNT = global.HSM_TUBE_DIFFUSE_IMAGE_AMOUNT / 100;
 
@@ -639,12 +636,15 @@ float HSM_TUBE_STATIC_DITHER_AMOUNT = global.HSM_TUBE_STATIC_DITHER_AMOUNT;
 //    CRT Blend Over Diffuse
 //---------------------------------------------------------------------------------------------------
 
-#pragma parameter HSM_CRT_BLEND_TITLE						"[ CRT ON TUBE DIFFUSE BLENDING ]:" 0 0 0.01 0.01
+#pragma parameter HSM_CRT_BLEND_TITLE						"[ CRT & TUBE BLENDING ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_CRT_BLEND_MODE                        "          CRT On Tube Diffuse Blend Mode: OFF | ADD | MULTIPLY" 1 0 2 1
+#pragma parameter HSM_TUBE_OPACITY                          "          Tube Opacity" 100 0 100 0.1
+float HSM_TUBE_OPACITY = global.HSM_TUBE_OPACITY / 100;
+
+#pragma parameter HSM_CRT_BLEND_MODE                        "          CRT Blend Mode: OFF | ADD | MULTIPLY" 1 0 2 1
 #define HSM_CRT_BLEND_MODE global.HSM_CRT_BLEND_MODE
 
-#pragma parameter HSM_CRT_BLEND_AMOUNT                      "          CRT On Tube Diffuse Blend Amount" 100 0 100 1
+#pragma parameter HSM_CRT_BLEND_AMOUNT                      "          CRT Blend Amount" 100 0 100 1
 #define HSM_CRT_BLEND_AMOUNT global.HSM_CRT_BLEND_AMOUNT / 100
 
 

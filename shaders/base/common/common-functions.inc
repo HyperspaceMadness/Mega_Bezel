@@ -1291,9 +1291,9 @@ vec4 HSM_ApplyMonochrome(vec4 in_color)
 	return out_color;
 }
 
-float HSM_GetTubeDiffuseOpacity()
+float HSM_GetTubeOpacity()
 {
-	float tube_diffuse_opacity = HSM_TUBE_DIFFUSE_MODE < 1.5 ? HSM_TUBE_DIFFUSE_OPACITY : 0;
+	float tube_diffuse_opacity = HSM_TUBE_DIFFUSE_MODE < 1.5 ? HSM_TUBE_OPACITY : 0;
 
 	// If CRT Blend Mode is Multiply (2) then the tube must be fully opaque
 	if (HSM_CRT_BLEND_MODE == 2)

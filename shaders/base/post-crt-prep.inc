@@ -123,8 +123,8 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	if (HSM_MONOCHROME_MODE > 0.5 && HSM_GetUseOnCurrentScreenIndex(HSM_MONOCHROME_DUALSCREEN_VIS_MODE))
 		in_color_with_gamma = HSM_ApplyMonochrome(in_color_with_gamma);
 
-	vec4 out_color = HSM_Linearize(in_color_with_gamma, DEFAULT_SRGB_GAMMA);
-	out_color *= HSM_POST_CRT_BRIGHTNESS;
+	vec4 crt_color = HSM_Linearize(in_color_with_gamma, DEFAULT_SRGB_GAMMA);
+	crt_color *= HSM_POST_CRT_BRIGHTNESS;
 
 	vec2 mirrored_screen_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
 
@@ -140,8 +140,10 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 		float vignette_factor_outside_screen = HSM_SCREEN_VIGNETTE_IN_REFLECTION * vignette_factor + (1 - HSM_SCREEN_VIGNETTE_IN_REFLECTION) * 1;
 		vignette_factor = screen_mask * vignette_factor + (1 - screen_mask) * vignette_factor_outside_screen;
 
-		out_color *= vignette_factor;
+		crt_color *= vignette_factor;
 	}
+
+	// TODO Try to get rid of vignette lines at the edges outside of the screen
 
 	if (HSM_AB_COMPARE_SHOW_MODE == 1 && HSM_GetIsInABCompareArea(VIEWPORT_COORD))
 	{
@@ -154,21 +156,21 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 		source_color = HSM_Delinearize(source_color, HSM_GAMMA_OUT_CRT);
 		source_color = HSM_Linearize(source_color, DEFAULT_SRGB_GAMMA);
 
-		out_color = source_color;
+		crt_color = source_color;
 	}
 
 	float scan_axis_res = USE_VERTICAL_SCANLINES * CROPPED_ROTATED_SIZE_WITH_RES_MULT.x + (1 - USE_VERTICAL_SCANLINES) * CROPPED_ROTATED_SIZE_WITH_RES_MULT.y;
 
 	if (HSM_FAKE_SCANLINE_OPACITY > 0.001 && (HSM_FAKE_SCANLINE_MODE == 1 || (HSM_FAKE_SCANLINE_MODE == 2 && scan_axis_res > HSM_INTERLACE_TRIGGER_RES)))
 	{
-		vec4 scanline_masked_color = HSM_ApplyScanlineMask(out_color, SCREEN_SCALE, SCREEN_COORD, screen_curved_coord, HSM_FAKE_SCANLINE_OPACITY);
+		vec4 scanline_masked_color = HSM_ApplyScanlineMask(crt_color, SCREEN_SCALE, SCREEN_COORD, screen_curved_coord, HSM_FAKE_SCANLINE_OPACITY);
 		
 		// Darken the outside image a bit
-		out_color = mix(out_color, out_color * 0.9, HSM_FAKE_SCANLINE_OPACITY);
+		crt_color = mix(crt_color, crt_color * 0.9, HSM_FAKE_SCANLINE_OPACITY);
 
 		// Show scanlines only in the tube area
 		float tube_highlight_mask = HSM_GetCornerMask((tube_curved_coord - 0.5) * 0.995 + 0.5 , TUBE_DIFFUSE_ASPECT, HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS, 0.05);
-		out_color = mix(out_color, scanline_masked_color, tube_highlight_mask);
+		crt_color = mix(crt_color, scanline_masked_color, tube_highlight_mask);
 	}
 	
 	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
@@ -182,10 +184,9 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	vec2 tube_diffuse_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, TUBE_DIFFUSE_SCALE, TUBE_SCALE, TUBE_DIFFUSE_ASPECT, 0);
 	float tube_diffuse_mask =  HSM_GetCornerMask(tube_diffuse_curved_coord, TUBE_DIFFUSE_ASPECT, black_edge_corner_radius, 0.99);
 
-	// float black_edge_mask_invert = 1 - (tube_mask - tube_diffuse_mask);
 	float black_edge_mask_invert = 1 - (tube_mask - tube_diffuse_mask);
 
-	out_color *= screen_to_tube_mask_invert;
+	crt_color.rgb *= screen_to_tube_mask_invert;
 
 	// AMBIENT LIGHTING IMAGES
 	vec4 ambient_lighting_image = vec4(1);
@@ -226,7 +227,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 
 	// If the crt blend mode is multiply then use the diffuse image
 	float tube_diffuse_mode = HSM_CRT_BLEND_MODE == 2 ? 1 : HSM_TUBE_DIFFUSE_MODE;
-	vec4 tube_diffuse = vec4(0, 0, 0, 1);
+	vec4 tube_diffuse = vec4(0, 0, 0, tube_mask);
 	float adjusted_tube_diffuse_amount = HSM_TUBE_DIFFUSE_MODE == 0 ? 0 : HSM_TUBE_DIFFUSE_IMAGE_AMOUNT;
 
 	if (tube_diffuse_mode == 2)
@@ -256,13 +257,15 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 		}
 
 		// If CRT Blend Mode is Multiply (2) then the tube must be fully opaque
-		tube_diffuse *= HSM_GetTubeDiffuseOpacity();
 		tube_diffuse.rgb = HSM_ApplyAmbientImage(tube_diffuse.rgb, ambient_lighting_image.rgb, HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING);
 		tube_diffuse.rgb = HSM_ApplyAmbientImage(tube_diffuse.rgb, ambient2_lighting_image.rgb, HSM_TUBE_DIFFUSE_IMAGE_AMBIENT2_LIGHTING);
-
-		// TODO see what to do when its transparent
 	}
-	out_color.a = in_color_with_gamma.a;
+
+	tube_diffuse *= HSM_GetTubeOpacity();
+	tube_diffuse.a *= tube_mask;
+
+	vec4 out_color = tube_diffuse;
+	out_color.rgb += crt_color.rgb;
 
 	// Don't apply the CRT images
 	if (HSM_CRT_BLEND_MODE == 0)
@@ -270,7 +273,8 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 
 	// Apply the CRT image additively to the tube diffuse color
 	if (HSM_CRT_BLEND_MODE == 1)
-		out_color = HSM_BlendModeLayerMix(tube_diffuse, out_color, BLEND_MODE_ADD, HSM_CRT_BLEND_AMOUNT);
+		// out_color = HSM_BlendModeLayerMix(tube_diffuse, out_color, BLEND_MODE_ADD, HSM_CRT_BLEND_AMOUNT);
+		out_color.rgb += tube_diffuse.rgb;
 
 	// Apply the CRT image with multiply blending
 	if (HSM_CRT_BLEND_MODE == 2)
@@ -324,7 +328,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 
 	#ifndef IS_NO_REFLECT_PRESET
 
-	out_color *= black_edge_mask_invert;
+	out_color.rgb *= black_edge_mask_invert;
 
 	#else
 

@@ -4,16 +4,19 @@ Mega Bezel is updated to V1.4.2_2022-09-27
 
 Changes:
   * Adjusted SUPER-XBR settings to be more like the latest SUPER-XBR
+  * Added Tube Opacity
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
-  * Try Leveraging Fake Scanlines for Gameboy type effect
-  * Integer Scale Mode not affecting tube scale
+  * Tube Transparent mode
+  * Integer Scale Mode X & Y not affecting tube scale
 
   * Add .params #reference to with all parameters commented out
   * Bezel shadow on Potato Tube / Game Image
+  * Get CRT image to composite on top of the BG, so effects can affect the BG
+  * We should have a middle pass which has the device behind the CRT tube
 
 ----------------------------------------------------
 --- Examples  --------------------------------------

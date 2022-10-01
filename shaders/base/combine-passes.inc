@@ -108,6 +108,7 @@ void main()
 	out_color.rgb *= HSM_GLOBAL_GRAPHICS_BRIGHTNESS;
 
 	vec4 crt_layer = texture(MiddlePass, vTexCoord);
+
 	#ifdef IS_NO_REFLECT_PRESET
 		crt_layer = HSM_Linearize(crt_layer, DEFAULT_SRGB_GAMMA);
 	#endif
@@ -118,10 +119,10 @@ void main()
 	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
 	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
 		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
-	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 1, TUBE_DIFFUSE_SCALE, TUBE_SCALE, TUBE_DIFFUSE_ASPECT, 1);
 
 	if (HSM_RENDER_SIMPLE_MODE < 0.5)
-		out_color.rgb += crt_layer.rgb;
+		out_color = HSM_PreMultAlphaBlend(out_color, crt_layer);
+
 
 	vec4 over_layer = texture(BR_LayersOverCRTPass, vTexCoord);
 	over_layer.rgb *= HSM_GLOBAL_GRAPHICS_BRIGHTNESS;
@@ -131,6 +132,8 @@ void main()
 
 	if (HSM_RENDER_SIMPLE_MODE > 0.5)
 	{
+		vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 1, TUBE_DIFFUSE_SCALE, TUBE_SCALE, TUBE_DIFFUSE_ASPECT, 1);
+
 		TUBE_DIFFUSE_CURVED_COORD = HSM_GetCurvedCoord(TUBE_DIFFUSE_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, TUBE_DIFFUSE_ASPECT);
 		TUBE_DIFFUSE_MASK = HSM_GetCornerMask(((TUBE_DIFFUSE_CURVED_COORD - 0.5) * 1.001) + 0.5, TUBE_DIFFUSE_ASPECT, HSM_GLOBAL_CORNER_RADIUS * HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE, HSM_TUBE_BLACK_EDGE_SHARPNESS);
 

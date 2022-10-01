@@ -250,7 +250,6 @@ void main()
 	float tube_edge_shadow_mult = HSM_BZL_INNER_EDGE_SHADOW * (tube_shadow_mask) + (1 - HSM_BZL_INNER_EDGE_SHADOW);
 
 	crt_linear.rgb *= tube_edge_shadow_mult * (1 - outside_tube_mask_wider);
-	crt_linear.a = TUBE_MASK;
 
 	float edge_highlight_mask = 0;
 
@@ -417,14 +416,7 @@ void main()
 	}
 
 	crt_linear.rgb *= TUBE_MASK;
-
-	// Put the frame and bezel over top a black tube
-	// It must be a little wider than the inside of the bezel so we don't see a gap
-	crt_linear = HSM_PreMultAlphaBlend(vec4(0, 0, 0, 1 - outside_tube_mask_wider), crt_linear);
-
 	crt_linear = clamp(crt_linear, 0, 1);
-
-	FragColor = vec4(0);
 
 #ifdef IS_GLASS_PRESET
 	vec4 bg_image = HSM_GetMipmappedTexSample(BackgroundImage, VIEWPORT_COORD, vec2(1), 0);
@@ -441,12 +433,9 @@ void main()
 	return;
 #endif
 
-vec4 crt_and_reflect_layer = vec4(0);
-crt_and_reflect_layer = HSM_BlendModeLayerMix(crt_and_reflect_layer, crt_linear, BLEND_MODE_NORMAL, 1);
-crt_and_reflect_layer.rgb += reflection_color.rgb;
-crt_and_reflect_layer *= 1 - OUTSIDE_BEZEL_MASK;
-
-FragColor = crt_and_reflect_layer;
+FragColor = crt_linear;
+FragColor.rgb += reflection_color.rgb;
+FragColor *= 1 - OUTSIDE_BEZEL_MASK;
 return;
 
 }
