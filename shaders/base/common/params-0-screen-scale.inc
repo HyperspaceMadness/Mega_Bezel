@@ -30,7 +30,7 @@ float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
 
 
 //---------------------------------------------------------------------------------------------------
-//    CRT Layer
+//    CRT BRIGHTNESS & GAMMA
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_CRT_TITLE                             "[ CRT BRIGHTNESS & GAMMA ]:" 0 0 0.01 0.01
 
@@ -145,7 +145,7 @@ float HSM_ASPECT_RATIO_EXPLICIT = global.HSM_ASPECT_RATIO_EXPLICIT;
 
 
 //---------------------------------------------------------------------------------------------------
-//    SCALING
+//    CRT SCREEN SCALING GENERAL
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_SCALING_TITLE									"[ CRT SCREEN SCALING GENERAL ]:" 0 0 0.01 0.01
 
@@ -242,7 +242,7 @@ float HSM_SNAP_TO_CLOSEST_INT_SCALE_TOLERANCE = HSM_USE_SNAP_TO_CLOSEST_INT_SCAL
 
 
 //---------------------------------------------------------------------------------------------------
-//    Position
+//    POSITION OFFSET
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_SCREEN_POSITION_TITLE							"[ POSITION OFFSET ]:" 0 0 0.01 0.01
 
@@ -282,7 +282,7 @@ float HSM_CROP_BLACK_THRESHOLD = global.HSM_CROP_BLACK_THRESHOLD / 100;
 
 
 //---------------------------------------------------------------------------------------------------
-//    SCANLINES
+//    SCANLINE DIRECTION
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_SCANLINE_TITLE								"[ SCANLINE DIRECTION ]:" 0 0 0.01 0.01
 
@@ -295,12 +295,12 @@ float HSM_SCANLINE_DIRECTION = global.HSM_SCANLINE_DIRECTION;
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_DREZ_TITLE "[ DREZ DOWNSAMPLE FILTER - HYLLIAN - DREZ PRESETS ONLY ]:" 0 0 0.01 0.01
 
-#pragma parameter C_FILTER_MODE "     DREZ Filter: B-SPLINE | BICUBIC | CATMULL-ROM | BICUBIC H" 0.0 0.0 3.0 1.0
+#pragma parameter C_FILTER_MODE "     DREZ Filter: B-SPLINE | BICUBIC | CATMULL-ROM | BICUBIC H" 0 0 3 1
 
 //---------------------------------------------------------------------------------------------------
 //    CORE RES SAMPLING
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_SAMPLING_TITLE								"[ CORE RES SAMPLING]:" 0 0 0.01 0.01
+#pragma parameter HSM_SAMPLING_TITLE								"[ CORE RES SAMPLING ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR			"          Scanline Dir Multiplier (X-Prescale for H Scanline)"  100 25 1600 25
 float HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = global.HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR / 100;
@@ -318,7 +318,7 @@ float HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = global.HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR
 float HSM_CORE_RES_SAMPLING_SHIFT_OPPOSITE_DIR = global.HSM_CORE_RES_SAMPLING_SHIFT_OPPOSITE_DIR / 100;
 
 //---------------------------------------------------------------------------------------------------
-//    SHARPEN
+//    FAST SHARPEN - GUEST.R
 //---------------------------------------------------------------------------------------------------
 #pragma parameter SHARPEN_TITLE  	"[ FAST SHARPEN - GUEST.R ]:"         			0.00 0.0 2.00 0.05
 #pragma parameter SHARPEN  			"          Sharpen Strength"    0.00 0.0 4.00 0.10 
@@ -429,7 +429,7 @@ float HSM_CRT_CURVATURE_SCALE = global.HSM_CRT_CURVATURE_SCALE / 100;
 
 
 //---------------------------------------------------------------------------------------------------
-//    CRT vs ORIGINAL A/B TESTING
+//    A/B SPLITSCREEN COMPARE
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_CRT_AB_COMPARE_TITLE							"[ A/B SPLITSCREEN COMPARE ]:" 0 0 0.01 0.01
 
@@ -450,7 +450,7 @@ float HSM_AB_COMPARE_FREEZE_GRAPHICS = global.HSM_AB_COMPARE_FREEZE_GRAPHICS;
 
 
 //---------------------------------------------------------------------------------------------------
-//    Screen Vignette
+//    SCREEN VIGNETTE
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_SCREEN_VIGNETTE_TITLE							"[ SCREEN VIGNETTE ]:" 0 0 0.01 0.01
 
@@ -471,7 +471,7 @@ float HSM_SCREEN_VIGNETTE_DUALSCREEN_VIS_MODE = global.HSM_SCREEN_VIGNETTE_DUALS
 
 
 //---------------------------------------------------------------------------------------------------
-//    Monochrome
+//    MONOCHROME
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_MONOCHROME_TITLE 								"[ MONOCHROME ]:" 0 0 0.01 0.01
 
@@ -495,7 +495,7 @@ float HSM_MONOCHROME_DUALSCREEN_VIS_MODE = global.HSM_MONOCHROME_DUALSCREEN_VIS_
 
 
 //---------------------------------------------------------------------------------------------------
-//    TUBE DIFFUSE COLOR
+//    TUBE DIFFUSE IMAGE
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_TITLE						"[ TUBE DIFFUSE IMAGE ]:" 0 0 0.01 0.01
 
@@ -582,9 +582,9 @@ float HSM_TUBE_SHADOW_CURVATURE_SCALE = global.HSM_TUBE_SHADOW_CURVATURE_SCALE /
 
 
 //---------------------------------------------------------------------------------------------------
-//    TUBE STATIC REFLECTION
+//    TUBE GLASS STATIC REFLECTION IMAGE
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_TUBE_STATIC_TITLE			"[ TUBE STATIC REFLECTION IMAGE ]:" 0 0 0.01 0.01
+#pragma parameter HSM_TUBE_STATIC_TITLE			"[ TUBE GLASS STATIC REFLECTION IMAGE ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_ON  				"          Use Tube Static Reflection Image - OFF | ON" 0 0 1 1
 float HSM_TUBE_STATIC_REFLECTION_IMAGE_ON = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_ON;
