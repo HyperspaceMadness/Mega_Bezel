@@ -7,6 +7,7 @@ Changes:
   * Added Tube Opacity
   * Updated Text to faster compiling and rendering
   * Fixed D3D11 bugs, Shaders now load, Compilation is still much slower than Vulkan or GlCore
+  * Added SCREEN-ONLY presets for those users which don't use the Refletion, Bezel or Graphics
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------

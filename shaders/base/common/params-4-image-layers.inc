@@ -750,7 +750,7 @@ float HSM_TOP_MIRROR_WRAP = global.HSM_TOP_MIRROR_WRAP;
 //---------------------------------------------------------------------------------------------------
 //    RENDER FOR SIMPLIFIED PRESETS
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_RENDER_FOR_SIMPLIFIED_TITLE       "[ RENDER FOR SIMPLIFIED PRESETS ]:" 1 0 1 1
+#pragma parameter HSM_RENDER_FOR_SIMPLIFIED_TITLE       "[ MEGA BEZEL DEV RENDER FOR SIMPLIFIED PRESETS ]:" 1 0 1 1
 
 #pragma parameter HSM_RENDER_SIMPLE_MODE                "     Mode:  NORM | BLACK-SCREEN | BLACK-BG | PINK-MASK| BW-MASK" 0 0 4 1
 float HSM_RENDER_SIMPLE_MODE = global.HSM_RENDER_SIMPLE_MODE;
