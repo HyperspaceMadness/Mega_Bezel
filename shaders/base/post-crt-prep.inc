@@ -118,6 +118,47 @@ vec4 HSM_ApplyScanlineMask(vec4 in_color, vec2 screen_scale, vec2 in_coord, vec2
 	return clamp(masked_color, 0, 1);
 }
 
+vec4 HSM_GetTubeHighlight(vec2 tube_curved_coord, bool apply_to_mirror, in sampler2D TubeStaticReflectionImage)
+{
+	tube_curved_coord = HSM_GetViewportCoordWithFlip(tube_curved_coord);
+	vec4 out_color = vec4(0);
+
+	vec2 mirrored_tube_coord = tube_curved_coord;
+	if (apply_to_mirror)
+		mirrored_tube_coord = HSM_GetMirrorWrappedCoord(tube_curved_coord);
+
+	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
+	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
+		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
+
+	vec2 tube_highlight_coord = (mirrored_tube_coord - 0.5) / vec2(HSM_TUBE_STATIC_SCALE * HSM_TUBE_STATIC_SCALE_X, HSM_TUBE_STATIC_SCALE) + 0.5;
+	tube_highlight_coord = (tube_highlight_coord - 0.5) / vec2(HSM_TUBE_STATIC_SCALE_X, 1) + 0.5;
+
+	tube_highlight_coord.x = (tube_highlight_coord.x + HSM_TUBE_STATIC_POS_X - 0.5) * HSM_FLIP_VIEWPORT_HORIZONTAL + 0.5;
+	tube_highlight_coord.y = (tube_highlight_coord.y + HSM_TUBE_STATIC_POS_Y - 0.5) * HSM_FLIP_VIEWPORT_VERTICAL + 0.5;
+
+	// Mask the very outer edge of the tube for a very small shadowing effect
+	float tube_highlight_mask = HSM_GetCornerMask((tube_curved_coord - 0.5) + 0.5 , TUBE_DIFFUSE_ASPECT, HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS, 0.9);
+
+	vec4 tube_highlight_image = vec4(0);
+
+	if (HSM_TUBE_STATIC_DITHER_SAMPLES > 0)
+	{
+		// Dithering for the glass reflection if needed to reduce banding
+		tube_highlight_image = HSM_GetStoichaicBlurredSample(TubeStaticReflectionImage, tube_highlight_coord, HSM_TUBE_STATIC_DITHER_SAMPLES, HSM_TUBE_STATIC_DITHER_DISTANCE, HSM_TUBE_STATIC_DITHER_AMOUNT);
+	}
+	else
+	{
+		tube_highlight_image = HSM_GetMipmappedTexSample(TubeStaticReflectionImage, tube_highlight_coord, TUBE_SCALE, 0);
+	}
+	tube_highlight_image = HSM_Linearize(tube_highlight_image, DEFAULT_SRGB_GAMMA) * tube_highlight_mask;
+
+	out_color = HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY * tube_highlight_image * tube_highlight_image.a;
+	out_color.rgb *= HSM_GLOBAL_GRAPHICS_BRIGHTNESS;
+
+	return out_color;
+}
+
 vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, vec2 screen_curved_coord, in sampler2D source_pass, bool source_is_linear, in sampler2D TubeDiffuseImage, in sampler2D TubeColoredGelImage, in sampler2D TubeStaticReflectionImage, in sampler2D BackgroundImage, in sampler2D BackgroundVertImage, in sampler2D NightLightingImage, in sampler2D NightLighting2Image)
 {
 	if (HSM_MONOCHROME_MODE > 0.5 && HSM_GetUseOnCurrentScreenIndex(HSM_MONOCHROME_DUALSCREEN_VIS_MODE))
@@ -127,6 +168,8 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	crt_color *= HSM_POST_CRT_BRIGHTNESS;
 
 	vec2 mirrored_screen_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
+
+	vec4 out_color = vec4(0);
 
 	// TODO we see artifacts of the reflection at the edge of the screen when there is extra tube thickness and the reflection is scaled
 	float screen_mask = HSM_GetCornerMask((screen_curved_coord - 0.5) * 0.999 + 0.5, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS * HSM_SCREEN_CORNER_RADIUS_SCALE, 0.9);
@@ -264,7 +307,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	tube_diffuse *= HSM_GetTubeOpacity();
 	tube_diffuse.a *= tube_mask;
 
-	vec4 out_color = tube_diffuse;
+	out_color = tube_diffuse;
 	out_color.rgb += crt_color.rgb;
 
 	// Don't apply the CRT images
@@ -358,7 +401,6 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 	
 	return out_color;
 }
-
 
 void main()
 {

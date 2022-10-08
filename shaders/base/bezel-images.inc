@@ -1189,8 +1189,5 @@ void main()
 
 	FragColor = frag_color_linear;
 
-	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
-		FragColor = vec4(0.01, 0.01, 0.01, -1);
-
 	return;
 }

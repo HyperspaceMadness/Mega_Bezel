@@ -315,5 +315,19 @@ void main()
 
    //////// Draw text to show out_colorolutions ////////// 
    if (HSM_RESOLUTION_DEBUG_ON == 1)
-      FragColor = HSM_PreMultAlphaBlend(FragColor, texture(TextPass, vTexCoord));
+   {
+      vec2 ps = global.OutputSize.zw;
+      vec4 text_rgba = vec4(0);
+      text_rgba.a += texture(TextPass, vTexCoord + ps * vec2(1, 0)).a;
+      text_rgba.a += texture(TextPass, vTexCoord + ps * vec2(0, 1)).a;
+      text_rgba.a += texture(TextPass, vTexCoord + ps * vec2(1, 1)).a;
+      text_rgba.a += texture(TextPass, vTexCoord + ps * vec2(-1, 1)).a;
+      text_rgba.a += texture(TextPass, vTexCoord + ps * vec2(-1, 0)).a;
+      text_rgba.a += texture(TextPass, vTexCoord + ps * vec2(0, -1)).a;
+      text_rgba.a += texture(TextPass, vTexCoord + ps * vec2(-1, -1)).a;
+      text_rgba.a += texture(TextPass, vTexCoord + ps * vec2(1, -1)).a;
+      text_rgba += texture(TextPass, vTexCoord);
+      text_rgba = clamp(text_rgba, 0, 1);
+      FragColor = HSM_PreMultAlphaBlend(FragColor, text_rgba);
+   }
 }

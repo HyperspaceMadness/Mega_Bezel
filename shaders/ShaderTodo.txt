@@ -5,6 +5,8 @@ Mega Bezel is updated to V1.4.2_2022-09-27
 Changes:
   * Adjusted SUPER-XBR settings to be more like the latest SUPER-XBR
   * Added Tube Opacity
+  * Updated Text to faster compiling and rendering
+  * Fixed D3D11 bugs, Shaders now load, Compilation is still much slower than Vulkan or GlCore
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
@@ -12,6 +14,7 @@ Changes:
 
   * Tube Transparent mode
   * Integer Scale Mode X & Y not affecting tube scale
+  * Move Global Variable Update to separate file for compile speed
 
   * Add .params #reference to with all parameters commented out
   * Bezel shadow on Potato Tube / Game Image

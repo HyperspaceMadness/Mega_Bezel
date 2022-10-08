@@ -123,7 +123,6 @@ void main()
 	if (HSM_RENDER_SIMPLE_MODE < 0.5)
 		out_color = HSM_PreMultAlphaBlend(out_color, crt_layer);
 
-
 	vec4 over_layer = texture(BR_LayersOverCRTPass, vTexCoord);
 	over_layer.rgb *= HSM_GLOBAL_GRAPHICS_BRIGHTNESS;
 	out_color = HSM_PreMultAlphaBlend(out_color, over_layer);
@@ -189,9 +188,6 @@ void main()
 				FragColor = vec4(FRAME_MASK);
 		}
 	}
-	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
-		FragColor = vec4(0.01, 0.01, 0.01, -1);
-		
 	return;
 }
 

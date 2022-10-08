@@ -847,14 +847,108 @@ vec4 HSM_GetStoichaicBlurredSample(sampler2D in_sampler, vec2 in_coord, float nu
 	float radius = sin(dot(in_coord, vec2(1233.224, 1743.335)));
 	vec2 radius_vector;
 	
-	for(int i=0; i < num_samples; i++)
+	vec2 sample_coord = vec2(0);
+
+	// The following are all unrolled otherwise they won't compile in D3D11
+	if (num_samples < 1.5)
 	{
 		radius_vector.x = HSM_rand(radius);
 		radius_vector.y = HSM_rand(radius);
-		vec2 sample_coord = in_coord + radius_vector * p;
+		sample_coord = in_coord + radius_vector * p;
 
-		blurred_color += texture(in_sampler, sample_coord) / num_samples;
+		blurred_color += texture(in_sampler, abs(sample_coord)) / 1;
 	}
+
+	if (num_samples < 2.5)
+	{
+		radius_vector.x = HSM_rand(radius);
+		radius_vector.y = HSM_rand(radius);
+		sample_coord = in_coord + radius_vector * p;
+
+		blurred_color += texture(in_sampler, abs(sample_coord)) / 2;
+
+		radius_vector.x = HSM_rand(radius);
+		radius_vector.y = HSM_rand(radius);
+		sample_coord = in_coord + radius_vector * p;
+
+		blurred_color += texture(in_sampler, abs(sample_coord)) / 2;
+	}
+
+	if (num_samples > 2.5)
+	{
+		radius_vector.x = HSM_rand(radius);
+		radius_vector.y = HSM_rand(radius);
+		sample_coord = in_coord + radius_vector * p;
+
+		blurred_color += texture(in_sampler, abs(sample_coord)) / 12;
+
+		radius_vector.x = HSM_rand(radius);
+		radius_vector.y = HSM_rand(radius);
+		sample_coord = in_coord + radius_vector * p;
+
+		blurred_color += texture(in_sampler, abs(sample_coord)) / 12;
+
+		radius_vector.x = HSM_rand(radius);
+		radius_vector.y = HSM_rand(radius);
+		sample_coord = in_coord + radius_vector * p;
+
+		blurred_color += texture(in_sampler, abs(sample_coord)) / 12;
+
+		radius_vector.x = HSM_rand(radius);
+		radius_vector.y = HSM_rand(radius);
+		sample_coord = in_coord + radius_vector * p;
+
+		blurred_color += texture(in_sampler, abs(sample_coord)) / 12;
+
+		radius_vector.x = HSM_rand(radius);
+		radius_vector.y = HSM_rand(radius);
+		sample_coord = in_coord + radius_vector * p;
+
+		blurred_color += texture(in_sampler, abs(sample_coord)) / 12;
+
+		radius_vector.x = HSM_rand(radius);
+		radius_vector.y = HSM_rand(radius);
+		sample_coord = in_coord + radius_vector * p;
+
+		blurred_color += texture(in_sampler, abs(sample_coord)) / 12;
+
+		radius_vector.x = HSM_rand(radius);
+		radius_vector.y = HSM_rand(radius);
+		sample_coord = in_coord + radius_vector * p;
+
+		blurred_color += texture(in_sampler, abs(sample_coord)) / 12;
+
+		radius_vector.x = HSM_rand(radius);
+		radius_vector.y = HSM_rand(radius);
+		sample_coord = in_coord + radius_vector * p;
+
+		blurred_color += texture(in_sampler, abs(sample_coord)) / 12;
+
+		radius_vector.x = HSM_rand(radius);
+		radius_vector.y = HSM_rand(radius);
+		sample_coord = in_coord + radius_vector * p;
+
+		blurred_color += texture(in_sampler, abs(sample_coord)) / 12;
+
+		radius_vector.x = HSM_rand(radius);
+		radius_vector.y = HSM_rand(radius);
+		sample_coord = in_coord + radius_vector * p;
+
+		blurred_color += texture(in_sampler, abs(sample_coord)) / 12;
+
+		radius_vector.x = HSM_rand(radius);
+		radius_vector.y = HSM_rand(radius);
+		sample_coord = in_coord + radius_vector * p;
+
+		blurred_color += texture(in_sampler, abs(sample_coord)) / 12;
+
+		radius_vector.x = HSM_rand(radius);
+		radius_vector.y = HSM_rand(radius);
+		sample_coord = in_coord + radius_vector * p;
+
+		blurred_color += texture(in_sampler, abs(sample_coord)) / 12;
+	}
+
 	return blurred_color;
 }
 

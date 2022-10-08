@@ -78,12 +78,48 @@ vec4 AddText(vec2 in_coord, vec4 in_color)
    vec2 canvas_size = global.DerezedPassSize.xy;
 
    vec4 out_color = in_color;
-   out_color = mix(out_color, vec4(0, 0, 0, 1), GetTextMask(in_coord + 2 * vec2(1/global.OutputSize.x, 0), global.FinalViewportSize.xy, screen_size, ROTATED_DEREZED_SIZE, ROTATED_CORE_PREPPED_SIZE, CROPPED_ROTATED_SIZE, CROPPED_ROTATED_SIZE_WITH_RES_MULT, int_scale_mult, canvas_size));
-   out_color = mix(out_color, vec4(0, 0, 0, 1), GetTextMask(in_coord - 2 * vec2(1/global.OutputSize.x, 0), global.FinalViewportSize.xy, screen_size, ROTATED_DEREZED_SIZE, ROTATED_CORE_PREPPED_SIZE, CROPPED_ROTATED_SIZE, CROPPED_ROTATED_SIZE_WITH_RES_MULT, int_scale_mult, canvas_size));
-   out_color = mix(out_color, vec4(0, 0, 0, 1), GetTextMask(in_coord + 1 * vec2(0, 1/global.OutputSize.y), global.FinalViewportSize.xy, screen_size, ROTATED_DEREZED_SIZE, ROTATED_CORE_PREPPED_SIZE, CROPPED_ROTATED_SIZE, CROPPED_ROTATED_SIZE_WITH_RES_MULT, int_scale_mult, canvas_size));
-   out_color = mix(out_color, vec4(0, 0, 0, 1), GetTextMask(in_coord - 1 * vec2(0, 1/global.OutputSize.y), global.FinalViewportSize.xy, screen_size, ROTATED_DEREZED_SIZE, ROTATED_CORE_PREPPED_SIZE, CROPPED_ROTATED_SIZE, CROPPED_ROTATED_SIZE_WITH_RES_MULT, int_scale_mult, canvas_size));
    out_color = mix(out_color, vec4(1, 1, 0, 1), GetTextMask(in_coord,                                      global.FinalViewportSize.xy, screen_size, ROTATED_DEREZED_SIZE, ROTATED_CORE_PREPPED_SIZE, CROPPED_ROTATED_SIZE, CROPPED_ROTATED_SIZE_WITH_RES_MULT, int_scale_mult, canvas_size));
    return clamp(out_color, 0, 1);
+}
+
+float Text(vec2 uv)
+{
+    float col = 0.0;
+    
+    print_pos = vec2(res.x/2.0 - STRWIDTH(17.0)/2.0,res.y/2.0 - STRHEIGHT(1.0)/2.0);
+    print_pos = floor(print_pos);
+       
+    col += char(ch_H,uv);
+    col += char(ch_e,uv);
+    col += char(ch_l,uv);
+    col += char(ch_l,uv);
+    col += char(ch_o,uv);
+    col += char(ch_com,uv);
+    
+    col += char(ch_spc,uv);
+    
+    col += char(ch_S,uv);
+    col += char(ch_h,uv);
+    col += char(ch_a,uv);
+    col += char(ch_d,uv);
+    col += char(ch_e,uv);
+    col += char(ch_r,uv);
+    col += char(ch_t,uv);
+    col += char(ch_o,uv);
+    col += char(ch_y,uv);
+    col += char(ch_exc,uv);
+    
+    print_pos = vec2(2);
+    
+    col += char(ch_T,uv);
+    col += char(ch_i,uv);
+    col += char(ch_m,uv);
+    col += char(ch_e,uv);
+    col += char(ch_col,uv);
+    
+   //  col += print_number(iTime,print_pos,uv); 
+    
+    return col;
 }
 
 void main()
@@ -92,10 +128,8 @@ void main()
    vec2 VIEWPORT_COORD = vTexCoord;
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
 
-   FragColor = vec4(0);
-
-   vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
-   if (feedback_color_test.a < 0 && !CACHE_INFO_CHANGED)
+   // vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
+   if (!CACHE_INFO_CHANGED)
    {
       FragColor = texture(PassFeedback, UNFLIPPED_VIEWPORT_COORD);
       return;
@@ -107,7 +141,4 @@ void main()
 
    //////// Draw text to show resolutions //////////
    FragColor = AddText(VIEWPORT_COORD - vec2(MAX_NEGATIVE_CROP, -MAX_NEGATIVE_CROP), FragColor);
-
-	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
-		FragColor = vec4(0.01, 0.01, 0.01, -1);
 }
