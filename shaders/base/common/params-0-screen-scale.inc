@@ -257,7 +257,7 @@ float HSM_SCREEN_POSITION_Y = -1 * global.HSM_SCREEN_POSITION_Y / 1000;
 //    CROPPING
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_CROPPING_TITLE								"[ CROPPING CORE IMAGE ]:" 0 0 0.01 0.01
-#pragma parameter HSM_CROP_FYI 									"!!! FYI !!! Negative Crop is currently Disabled :(" 2 0 2 1
+#pragma parameter HSM_CROP_FYI 									    "    FYI !!! Negative Crop is currently Disabled" 0 0 0.001 0.001
 
 #pragma parameter HSM_CROP_MODE 									"          Crop Mode  -  OFF | CROP BLACK ONLY | CROP ANY" 2 0 2 1
 float HSM_CROP_MODE = global.HSM_CROP_MODE;

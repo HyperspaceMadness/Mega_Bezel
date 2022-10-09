@@ -972,9 +972,6 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 	float output_aspect = global.FinalViewportSize.x / global.FinalViewportSize.y;
 	vec2 flipped_viewport_coord = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	SCREEN_INDEX = HSM_GetScreenIndex(flipped_viewport_coord);
-	CORE_SIZE = global.CorePassSize.xy;
-	ROTATED_CORE_PREPPED_SIZE = HSM_GetRotatedNegativeCropAddedSize();
-	ROTATED_CORE_ORIGINAL_SIZE = HSM_GetRotatedCoreOriginalSize();
 	vec2 sample_coord = vec2(0);
 	vec4 texture_sample = vec4(0);
 
@@ -1020,6 +1017,7 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 		texture_sample = texture(in_cache_pass, sample_coord);
 		CROPPED_ROTATED_SIZE_WITH_RES_MULT = texture_sample.rg;
 		res_mult_size_sum = CROPPED_ROTATED_SIZE_WITH_RES_MULT.x + CROPPED_ROTATED_SIZE_WITH_RES_MULT.y;
+		ROTATED_CORE_PREPPED_SIZE = texture_sample.ba;
 
 		texture_sample = texture(in_cache_feedback_pass, sample_coord);
 		CROPPED_ROTATED_SIZE_WITH_RES_MULT_FEEDBACK = texture_sample.rg;
@@ -1109,14 +1107,13 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 	sample_coord = HSM_GetCacheSampleCoord(3, 4);
 	texture_sample = texture(in_cache_pass, sample_coord);
 	TUBE_DIFFUSE_SCALE_2ND_SCREEN = texture_sample.ba;
-	// TUBE_DIFFUSE_ASPECT_2ND_SCREEN = TUBE_DIFFUSE_SCALE_2ND_SCREEN.x / TUBE_DIFFUSE_SCALE_2ND_SCREEN.y * output_aspect;
-
 
 	// Sample 2, 3 Sample
 	// rg CORE_SIZE
 	sample_coord = HSM_GetCacheSampleCoord(2, 3);
 	texture_sample = texture(in_cache_pass, sample_coord);
 	CORE_SIZE = texture_sample.rg;
+	ROTATED_CORE_ORIGINAL_SIZE = texture_sample.ba;
 
 	// Sample 3, 3
 	// rg VIEWPORT_SCALE
@@ -1156,9 +1153,8 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, sampler2D in
 	MAX_NEGATIVE_CROP = texture_sample.g;
 	USE_VERTICAL_SCANLINES = texture_sample.b;
 
-	// Sample 2, 4 
-	// r NEGATIVE_CROP_EXPAND_MULTIPLIER
-	// g MAX_NEGATIVE_CROP
+	// Sample 4, 4 
+	// r CACHE_INFO_CHANGED
 	sample_coord = HSM_GetCacheSampleCoord(4, 4);
 	texture_sample = texture(in_cache_pass, sample_coord);
 	CACHE_INFO_CHANGED = texture_sample.r > 0.5 ? true : false;
