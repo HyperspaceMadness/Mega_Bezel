@@ -309,7 +309,6 @@ layout(location = 0) out vec4 FragColor;
 
 // Pass Framebuffer Textures
 layout(set = 0, binding = 1)  uniform sampler2D InfoCachePass;
-layout(set = 0, binding = 2)  uniform sampler2D InfoCachePassFeedback;
 
 layout(set = 0, binding = 3)  uniform sampler2D BackgroundImage;
 layout(set = 0, binding = 4)  uniform sampler2D BackgroundVertImage;
@@ -345,7 +344,7 @@ void main()
 	VIEWPORT_UNSCALED_COORD = HSM_GetViewportCoordWithFlip(vTexCoord);
 	VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 
 	vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
 	if (HSM_CACHE_GRAPHICS_ON > 0.5 && feedback_color_test.a < 0 && !CACHE_INFO_CHANGED)

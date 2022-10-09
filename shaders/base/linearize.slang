@@ -25,6 +25,7 @@
 */
 
 #include "common/globals-and-screen-scale-params.inc"
+#include "common/helper-functions.inc"
 
 layout(push_constant) uniform Push
 {
@@ -33,6 +34,11 @@ layout(push_constant) uniform Push
 	vec4 OutputSize;
 	uint FrameCount;
 } params;
+
+layout(std140, set = 0, binding = 0) uniform UBO
+{
+	mat4 MVP;
+} global;
 
 #pragma stage vertex
 layout(location = 0) in vec4 Position;

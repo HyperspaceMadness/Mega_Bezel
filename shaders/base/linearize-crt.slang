@@ -25,6 +25,7 @@
 */
 
 #include "common/globals-and-screen-scale-params.inc"
+#include "common/helper-functions.inc"
 
 layout(push_constant) uniform Push
 {

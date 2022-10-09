@@ -459,7 +459,5 @@ float GetTextMask(vec2 in_coord, vec2 viewport_size, vec2 screen_size, vec2 dere
     pixel *= (1 - distance(mod(uv, vec2(1.0)), vec2(0.65))) * 1.2;
     col *= mix(vec3(0), vec3(1, 1, 1), pixel);
 
-
-
 	return col.r;
 }

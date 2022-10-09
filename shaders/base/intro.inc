@@ -24,8 +24,6 @@
 
 // Import so all the mega bezel parameters are the first in the parameter list
 
-#include "text-resolution.inc"
-
 #pragma stage vertex
 layout(location = 0) in vec4 Position;
 layout(location = 1) in vec2 TexCoord;
@@ -50,7 +48,6 @@ layout(set = 0, binding = 7) uniform sampler2D IntroImage;
 #endif
 
 layout(set = 0, binding = 8) uniform sampler2D InfoCachePass;
-layout(set = 0, binding = 9) uniform sampler2D InfoCachePassFeedback;
 
 layout(set = 0, binding = 10) uniform sampler2D TextPass;
 
@@ -270,7 +267,7 @@ vec4 GetColorWithIntro(vec4 in_color, vec2 in_coord, in sampler2D in_logo_image_
 void main()
 {
 	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 
 	// Flip the coordinate vertically if desired
    vec2 viewport_coord_adjusted = vTexCoord;

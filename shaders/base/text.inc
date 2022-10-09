@@ -126,7 +126,7 @@ void main()
 {
 	vec2 UNFLIPPED_VIEWPORT_COORD = vTexCoord;
    vec2 VIEWPORT_COORD = vTexCoord;
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 
    // vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
    if (!CACHE_INFO_CHANGED)

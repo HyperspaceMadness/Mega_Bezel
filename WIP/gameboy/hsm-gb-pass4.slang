@@ -134,7 +134,6 @@ layout(set = 0, binding = 12) uniform sampler2D TubeColoredGelImage;
 layout(set = 0, binding = 13) uniform sampler2D TubeStaticReflectionImage;
 
 layout(set = 0, binding = 14) uniform sampler2D InfoCachePass;
-layout(set = 0, binding = 15) uniform sampler2D InfoCachePassFeedback;
 
 // #define bg_color texture(DMG0ColorPaletteImage, vec2(0.25, 0.5)) 
 
@@ -155,7 +154,7 @@ void main()
 {
     // HSM Added
 	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 
     vec4 bg_color = vec4(0, 0, 0, 1);
     if (params.gameboy_color_palette == 0)

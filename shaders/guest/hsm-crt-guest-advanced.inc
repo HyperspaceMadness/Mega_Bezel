@@ -176,7 +176,6 @@ layout(set = 0, binding = 4) uniform sampler2D PrePass;
 
 // HSM Added
 layout(set = 0, binding = 6) uniform sampler2D InfoCachePass;
-layout(set = 0, binding = 7) uniform sampler2D InfoCachePassFeedback;
 
 #define eps 1e-10 
 
@@ -240,7 +239,7 @@ void main()
 {
 	// HSM Added
 	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 
 	bool ntsc_processing_on = false;
 	#ifdef IS_NTSC

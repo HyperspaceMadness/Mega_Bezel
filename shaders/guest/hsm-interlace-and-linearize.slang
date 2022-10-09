@@ -22,6 +22,7 @@
 */  
 
 #include "../base/common/globals-and-screen-scale-params.inc"
+#include "../base/common/common-functions.inc"
 
 layout(push_constant) uniform Push
 {
@@ -106,7 +107,6 @@ layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 
 layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
-layout(set = 0, binding = 2) uniform sampler2D InfoCachePassFeedback;
 layout(set = 0, binding = 3) uniform sampler2D PrePass;
 layout(set = 0, binding = 4) uniform sampler2D NegativeCropAddedPass;
 
@@ -162,7 +162,7 @@ void main()
 	vec3  c2 = vec3(0);
 	
 	// HSM Added
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 
 	use_vert_scanlines_bool = (USE_VERTICAL_SCANLINES > 0.5);
 

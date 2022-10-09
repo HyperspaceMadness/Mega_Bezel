@@ -24,6 +24,7 @@
 
 /////////////// IMPORTS ///////////////
 #include "common/globals-and-image-layers-params.inc"
+#include "common/common-functions.inc"
 #include "common/common-functions-bezel.inc"
 
 
@@ -58,7 +59,6 @@ layout(location = 0) out vec4 FragColor;
 
 // Pass Framebuffer Textures
 layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
-layout(set = 0, binding = 2) uniform sampler2D InfoCachePassFeedback;
 
 layout(set = 0, binding = 3) uniform sampler2D BR_LayersUnderCRTPass;
 
@@ -80,7 +80,7 @@ void main()
 {
 	UNFLIPPED_VIEWPORT_COORD = vTexCoord;
 	vec2 VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 
 
 	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 

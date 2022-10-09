@@ -23,6 +23,15 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+float SOURCE_MATTE_PREMULTIPLIED = 0;
+float SOURCE_MATTE_WHITE = 1;
+float SOURCE_MATTE_NONE = 2;
+
+float BLEND_MODE_OFF = 0;
+float BLEND_MODE_NORMAL = 1;
+float BLEND_MODE_ADD = 2;
+float BLEND_MODE_MULTIPLY = 3;
+
 vec4 HSM_ApplyGamma(vec4 in_color, float in_gamma)
 {
 	vec3 out_color = pow(in_color.rgb, vec3(1 / in_gamma));

@@ -160,7 +160,6 @@ layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 2) uniform sampler2D SourceSDR;
 layout(set = 0, binding = 3) uniform sampler2D SourceHDR;
 layout(set = 0, binding = 4) uniform sampler2D InfoCachePass;
-layout(set = 0, binding = 5) uniform sampler2D InfoCachePassFeedback;
 
 
 #define kChannelMask          3
@@ -1149,7 +1148,7 @@ void main()
 {
 // HSM Added
 	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 
 	vec2 cache_bounds_coord = SCREEN_COORD;
 

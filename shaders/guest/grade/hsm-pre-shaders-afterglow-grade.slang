@@ -228,7 +228,6 @@ layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 
 layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
-layout(set = 0, binding = 2) uniform sampler2D InfoCachePassFeedback;
 
 layout(set = 0, binding = 3) uniform sampler2D Source;
 layout(set = 0, binding = 4) uniform sampler2D PreCRTPass;
@@ -898,7 +897,7 @@ vec3 vcolor = adj;
 
     // HSM Added
 	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
     vec2 derezed_size = HSM_GetNegativeCropAddedSize();
     vec2 cur_pixel_pos = vTexCoord * derezed_size;
     vec2 cropped_size = HSM_ROTATE_CORE_IMAGE > 0.5 ? vec2(CROPPED_ROTATED_SIZE.y, CROPPED_ROTATED_SIZE.x) : CROPPED_ROTATED_SIZE;

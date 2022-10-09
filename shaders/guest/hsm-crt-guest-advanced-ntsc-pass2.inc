@@ -177,7 +177,6 @@ layout(set = 0, binding = 2) uniform sampler2D LinearizePass;
 layout(set = 0, binding = 3) uniform sampler2D AvgLumPass;
 layout(set = 0, binding = 4) uniform sampler2D Pass1;
 layout(set = 0, binding = 6) uniform sampler2D InfoCachePass;
-layout(set = 0, binding = 7) uniform sampler2D InfoCachePassFeedback;
 
 #define eps 1e-8
 
@@ -242,7 +241,7 @@ void main()
 {
 		// HSM Added
 	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 
 	vec2 cache_bounds_coord = SCREEN_COORD;
 

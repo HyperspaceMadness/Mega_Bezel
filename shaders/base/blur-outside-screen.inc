@@ -23,6 +23,7 @@
 */
 
 #include "common/globals-and-reflection-params.inc"
+#include "common/common-functions.inc"
 #include "common/common-functions-bezel.inc"
 
 #pragma stage vertex
@@ -48,7 +49,6 @@ layout(set = 0, binding = 2) uniform sampler2D Source;
 layout(set = 0, binding = 3) uniform sampler2D BR_MirrorLowResPass;
 
 layout(set = 0, binding = 4) uniform sampler2D InfoCachePass;
-layout(set = 0, binding = 5) uniform sampler2D InfoCachePassFeedback;
 
 float clamp_0_1(float in_value)
 {
@@ -60,7 +60,7 @@ void main()
 	if (HSM_REFLECT_BLUR_NUM_SAMPLES > 0)
 	{
 		vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
-		HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+		HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 
 		vec2 tube_curved_coord_ctr = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 1, TUBE_DIFFUSE_SCALE, TUBE_SCALE, TUBE_DIFFUSE_ASPECT, 1) - 0.5;
 

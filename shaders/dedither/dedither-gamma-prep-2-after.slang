@@ -24,7 +24,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "../base/common/globals-and-screen-scale-params.inc"
+#include "../base/common/helper-functions.inc"
 
 layout(push_constant) uniform Push
 {
@@ -35,6 +35,11 @@ layout(push_constant) uniform Push
    float HSM_DEDITHER_MODE;
    float HSM_DEDITHER_BRIGHTNESS_BIAS;
 } params;
+
+layout(std140, set = 0, binding = 0) uniform UBO
+{
+	mat4 MVP;
+} global;
 
 #pragma parameter HSM_DEDITHERING_TITLE "[ --- MDAPT & HYLLIAN DE-DITHERING --- ]:" 0 0 0.01 0.01
 

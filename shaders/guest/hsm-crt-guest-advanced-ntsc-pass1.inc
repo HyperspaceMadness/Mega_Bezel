@@ -85,7 +85,6 @@ layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 2) uniform sampler2D LinearizePass;
 layout(set = 0, binding = 3) uniform sampler2D InfoCachePass;
-layout(set = 0, binding = 4) uniform sampler2D InfoCachePassFeedback;
 
 float invsqrsigma = 1.0/(2.0*SIGMA_HOR*SIGMA_HOR);
 
@@ -98,7 +97,7 @@ void main()
 {	
 		// HSM Added
 	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 
 // If it's the potato preset render the whole frame
 #ifndef IS_POTATO_PRESET

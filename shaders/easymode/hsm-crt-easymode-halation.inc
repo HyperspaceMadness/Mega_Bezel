@@ -164,7 +164,6 @@ layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 1) uniform sampler2D Source;
 
 layout(set = 0, binding = 2) uniform sampler2D InfoCachePass;
-layout(set = 0, binding = 3) uniform sampler2D InfoCachePassFeedback;
 
 layout(set = 0, binding = 4) uniform sampler2D LinearizePass;
 
@@ -177,7 +176,7 @@ void main()
     // TODO implement Cropping
     // HSM Added
 	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
     vec2 tex_size = CROPPED_ROTATED_SIZE_WITH_RES_MULT;
     // End Addition
 

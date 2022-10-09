@@ -77,7 +77,6 @@ layout(location = 0) out vec4 FragColor;
 
 // Pass Framebuffer Textures
 layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
-layout(set = 0, binding = 2) uniform sampler2D InfoCachePassFeedback;
 
 layout(set = 0, binding = 3) uniform sampler2D NightLightingImage;
 layout(set = 0, binding = 4) uniform sampler2D NightLighting2Image;
@@ -108,7 +107,7 @@ void main()
 	VIEWPORT_UNSCALED_COORD = HSM_GetViewportCoordWithFlip(vTexCoord);
 	VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 
 
 	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 

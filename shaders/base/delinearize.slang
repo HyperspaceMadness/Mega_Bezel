@@ -25,7 +25,7 @@
 */
 
 #include "common/globals-and-screen-scale-params.inc"
-
+#include "common/common-functions.inc"
 #pragma stage vertex
 layout(location = 0) in vec4 Position;
 layout(location = 1) in vec2 TexCoord;

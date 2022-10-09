@@ -85,7 +85,7 @@ void main()
 {
 // 	// HSM Added
 // 	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
-// 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+// 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 
 // 	vec2 cache_bounds_coord = SCREEN_COORD;
 

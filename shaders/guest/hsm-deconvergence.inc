@@ -221,7 +221,6 @@ layout(set = 0, binding = 7) uniform sampler2D Source;
 
 // HSM Added
 layout(set = 0, binding = 8) uniform sampler2D InfoCachePass;
-layout(set = 0, binding = 9) uniform sampler2D InfoCachePassFeedback;
 
 #define eps 1e-10 
 
@@ -596,7 +595,7 @@ void main()
 
 	// HSM Added
 	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, InfoCachePassFeedback, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 	vec2 SourceSize = CROPPED_ROTATED_SIZE_WITH_RES_MULT;
 	float TATE = USE_VERTICAL_SCANLINES;
 
