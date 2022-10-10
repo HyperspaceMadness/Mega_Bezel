@@ -374,7 +374,8 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 
 	#else
 
-	out_color *= tube_diffuse_mask;
+	out_color.rgb *= tube_diffuse_mask;
+	out_color *= tube_mask;
 
 	#endif
 
