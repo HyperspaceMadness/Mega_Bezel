@@ -90,7 +90,18 @@ vec4 GetColorWithIntro(vec4 in_color, vec2 in_coord, in sampler2D in_logo_image_
 {
    vec4 out_color = in_color;
 
-   // in_coord.y = HSM_INTRO_LOGO_FLIP_VERTICAL > 0.5 ? 1 - in_coord.y : in_coord.y;
+   // If we are out of the region of time the intro plays just give back the same color
+   if (CURRENT_FRAME_FROM_CACHE_INFO > (HSM_INTRO_SOLID_COLOR_HOLD + 
+                                       HSM_INTRO_SOLID_COLOR_FADE_OUT + 
+                                       HSM_INTRO_LOGO_WAIT + 
+                                       HSM_INTRO_LOGO_FADE_IN +
+                                       HSM_INTRO_LOGO_HOLD +
+                                       HSM_INTRO_LOGO_FADE_OUT +
+                                       HSM_INTRO_NOISE_HOLD +
+                                       HSM_INTRO_NOISE_FADE_OUT + 
+                                       HSM_INTRO_SOLID_BLACK_HOLD +
+                                       HSM_INTRO_SOLID_BLACK_FADE_OUT) / HSM_INTRO_SPEED)
+      return out_color;
 
    in_coord.y = HSM_FLIP_VIEWPORT_VERTICAL * HSM_FLIP_CORE_VERTICAL * in_coord.y;
    in_coord.x = HSM_FLIP_VIEWPORT_HORIZONTAL * HSM_FLIP_CORE_HORIZONTAL * in_coord.x;
@@ -266,7 +277,6 @@ vec4 GetColorWithIntro(vec4 in_color, vec2 in_coord, in sampler2D in_logo_image_
 
 void main()
 {
-	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 
 	// Flip the coordinate vertically if desired
@@ -310,7 +320,7 @@ void main()
    // FragColor *= 1 - 0.7 * overlay_color.a;
    // FragColor += 1 * 0.7 * overlay_color;
 
-   //////// Draw text to show out_colorolutions ////////// 
+   //////// Draw text to show resolutions ////////// 
    if (HSM_RESOLUTION_DEBUG_ON == 1)
    {
       vec2 ps = global.OutputSize.zw;

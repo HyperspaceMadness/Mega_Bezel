@@ -414,6 +414,10 @@ void main()
 	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 
+	vec2 cache_bounds_coord = TUBE_COORD;
+
+// If it's the potato preset render the whole frame
+#ifndef IS_NO_REFLECT_PRESET
 	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
 	vec2 bezel_outside_flat_coord;
 	vec2 frame_outside_flat_coord;
@@ -423,26 +427,25 @@ void main()
 							SCREEN_ASPECT,
 							bezel_outside_flat_coord, 
 							frame_outside_flat_coord);
-	vec2 cache_bounds_coord = (frame_outside_flat_coord - 0.5) * 0.9 + 0.5;
+	cache_bounds_coord = (frame_outside_flat_coord - 0.5) * 0.9 + 0.5;
+#endif
 
 	if (HHLP_IsOutsideCoordSpace(cache_bounds_coord))
 	{
 			FragColor = vec4(0);
 			return;
 	}
-	else
-	{
-		// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
-		HSM_GetBezelCoords(TUBE_DIFFUSE_COORD, 
-							TUBE_DIFFUSE_SCALE, 
-							TUBE_SCALE, 
-							SCREEN_ASPECT, 
-							false,
-							BEZEL_OUTSIDE_SCALE,
-							BEZEL_OUTSIDE_COORD, 
-							BEZEL_OUTSIDE_CURVED_COORD, 
-							FRAME_OUTSIDE_CURVED_COORD);
-	}
+
+	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
+	HSM_GetBezelCoords(TUBE_DIFFUSE_COORD, 
+						TUBE_DIFFUSE_SCALE, 
+						TUBE_SCALE, 
+						SCREEN_ASPECT, 
+						false,
+						BEZEL_OUTSIDE_SCALE,
+						BEZEL_OUTSIDE_COORD, 
+						BEZEL_OUTSIDE_CURVED_COORD, 
+						FRAME_OUTSIDE_CURVED_COORD);
 
 	vec2 screen_curved_coord = HSM_GetCurvedCoord(SCREEN_COORD, 1, SCREEN_ASPECT);
 

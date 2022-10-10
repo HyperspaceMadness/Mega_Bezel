@@ -121,7 +121,7 @@ void main()
 						BEZEL_OUTSIDE_CURVED_COORD, 
 						FRAME_OUTSIDE_CURVED_COORD);
 
-	if (BEZEL_OUTSIDE_COORD.x < -0.01 || BEZEL_OUTSIDE_COORD.x > 1.01 || BEZEL_OUTSIDE_COORD.y < -0.01 || BEZEL_OUTSIDE_COORD.y > 1.01)
+	if (HHLP_IsOutsideCoordSpace(BEZEL_OUTSIDE_COORD))
 	{
 		FragColor = vec4(0);
 		return;

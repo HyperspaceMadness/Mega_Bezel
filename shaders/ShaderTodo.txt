@@ -15,6 +15,7 @@ Changes:
 ----------------------------------------------------
 
   * Fix Blur Noise Samples
+  * Fix No Reflect Tube Edge Mask (Can see through right now)
   * Integer Scale Mode X & Y not affecting tube scale
   * Move Global Variable Update to separate file for compile speed
 

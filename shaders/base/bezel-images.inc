@@ -1188,5 +1188,9 @@ void main()
 
 	FragColor = frag_color_linear;
 
+	// If we have calculated an image then set -1 as a flag to show that we have
+	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
+		FragColor.a = -1;
+
 	return;
 }

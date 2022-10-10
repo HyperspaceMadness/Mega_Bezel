@@ -94,7 +94,7 @@ void main()
 						BEZEL_OUTSIDE_CURVED_COORD, 
 						FRAME_OUTSIDE_CURVED_COORD);
 
-	if (BEZEL_OUTSIDE_COORD.x < -0.01 || BEZEL_OUTSIDE_COORD.x > 1.01 || BEZEL_OUTSIDE_COORD.y < -0.01 || BEZEL_OUTSIDE_COORD.y > 1.01)
+	if (HHLP_IsOutsideCoordSpace(BEZEL_OUTSIDE_COORD))
 	{
 		vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
 		if (HSM_CACHE_GRAPHICS_ON > 0.5 && feedback_color_test.a < 0 && !CACHE_INFO_CHANGED && HSM_RENDER_SIMPLE_MODE < 0.5)
@@ -188,6 +188,11 @@ void main()
 				FragColor = vec4(FRAME_MASK);
 		}
 	}
+
+	// If we have calculated an image then set -1 as a flag to show that we have
+	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
+		FragColor.a = -1;
+		
 	return;
 }
 
