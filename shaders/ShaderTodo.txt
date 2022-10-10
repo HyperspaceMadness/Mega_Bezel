@@ -14,7 +14,7 @@ Changes:
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
-  * Tube Transparent mode
+  * Fix Blur Noise Samples
   * Integer Scale Mode X & Y not affecting tube scale
   * Move Global Variable Update to separate file for compile speed
 

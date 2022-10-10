@@ -65,7 +65,7 @@ layout(set = 0, binding = 9) uniform sampler2D InfoCachePassFeedback;
 #define MAX_INT_DIGITS 4
 
 #define CHAR_SIZE vec2(6, 7)
-#define CHAR_SPACING vec2(6, 9)
+#define CHAR_SPACING vec2(6, 11)
 
 #define STRWIDTH(c) (c * CHAR_SPACING.x)
 #define STRHEIGHT(c) (c * CHAR_SPACING.y)
@@ -201,6 +201,104 @@ vec2 ch_rpa = vec2(788512.0,1589528.0);
 vec2 ch_tid = vec2(675840.0,0.0);
 vec2 ch_lar = vec2(8387.0,1147904.0);
 
+float TEXT_MASK = 0;
+vec2 CUR_UV = vec2(0);
+
+#define _spc TEXT_MASK += char(ch_spc, CUR_UV);
+#define _exc TEXT_MASK += char(ch_exc, CUR_UV);
+#define _quo TEXT_MASK += char(ch_quo, CUR_UV);
+#define _hsh TEXT_MASK += char(ch_hsh, CUR_UV);
+#define _dol TEXT_MASK += char(ch_dol, CUR_UV);
+#define _pct TEXT_MASK += char(ch_pct, CUR_UV);
+#define _amp TEXT_MASK += char(ch_amp, CUR_UV);
+#define _apo TEXT_MASK += char(ch_apo, CUR_UV);
+#define _lbr TEXT_MASK += char(ch_lbr, CUR_UV);
+#define _rbr TEXT_MASK += char(ch_rbr, CUR_UV);
+#define _ast TEXT_MASK += char(ch_ast, CUR_UV);
+#define _crs TEXT_MASK += char(ch_crs, CUR_UV);
+#define _per TEXT_MASK += char(ch_per, CUR_UV);
+#define _dsh TEXT_MASK += char(ch_dsh, CUR_UV);
+#define _com TEXT_MASK += char(ch_com, CUR_UV);
+#define _lsl TEXT_MASK += char(ch_lsl, CUR_UV);
+#define _0 TEXT_MASK += char(ch_0, CUR_UV);
+#define _1 TEXT_MASK += char(ch_1, CUR_UV);
+#define _2 TEXT_MASK += char(ch_2, CUR_UV);
+#define _3 TEXT_MASK += char(ch_3, CUR_UV);
+#define _4 TEXT_MASK += char(ch_4, CUR_UV);
+#define _5 TEXT_MASK += char(ch_5, CUR_UV);
+#define _6 TEXT_MASK += char(ch_6, CUR_UV);
+#define _7 TEXT_MASK += char(ch_7, CUR_UV);
+#define _8 TEXT_MASK += char(ch_8, CUR_UV);
+#define _9 TEXT_MASK += char(ch_9, CUR_UV);
+#define _col TEXT_MASK += char(ch_col, CUR_UV);
+#define _scl TEXT_MASK += char(ch_scl, CUR_UV);
+#define _les TEXT_MASK += char(ch_les, CUR_UV);
+#define _equ TEXT_MASK += char(ch_equ, CUR_UV);
+#define _grt TEXT_MASK += char(ch_grt, CUR_UV);
+#define _que TEXT_MASK += char(ch_que, CUR_UV);
+#define _ats TEXT_MASK += char(ch_ats, CUR_UV);
+#define _A TEXT_MASK += char(ch_A, CUR_UV);
+#define _B TEXT_MASK += char(ch_B, CUR_UV);
+#define _C TEXT_MASK += char(ch_C, CUR_UV);
+#define _D TEXT_MASK += char(ch_D, CUR_UV);
+#define _E TEXT_MASK += char(ch_E, CUR_UV);
+#define _F TEXT_MASK += char(ch_F, CUR_UV);
+#define _G TEXT_MASK += char(ch_G, CUR_UV);
+#define _H TEXT_MASK += char(ch_H, CUR_UV);
+#define _I TEXT_MASK += char(ch_I, CUR_UV);
+#define _J TEXT_MASK += char(ch_J, CUR_UV);
+#define _K TEXT_MASK += char(ch_K, CUR_UV);
+#define _L TEXT_MASK += char(ch_L, CUR_UV);
+#define _M TEXT_MASK += char(ch_M, CUR_UV);
+#define _N TEXT_MASK += char(ch_N, CUR_UV);
+#define _O TEXT_MASK += char(ch_O, CUR_UV);
+#define _P TEXT_MASK += char(ch_P, CUR_UV);
+#define _Q TEXT_MASK += char(ch_Q, CUR_UV);
+#define _R TEXT_MASK += char(ch_R, CUR_UV);
+#define _S TEXT_MASK += char(ch_S, CUR_UV);
+#define _T TEXT_MASK += char(ch_T, CUR_UV);
+#define _U TEXT_MASK += char(ch_U, CUR_UV);
+#define _V TEXT_MASK += char(ch_V, CUR_UV);
+#define _W TEXT_MASK += char(ch_W, CUR_UV);
+#define _X TEXT_MASK += char(ch_X, CUR_UV);
+#define _Y TEXT_MASK += char(ch_Y, CUR_UV);
+#define _Z TEXT_MASK += char(ch_Z, CUR_UV);
+#define _lsb TEXT_MASK += char(ch_lsb, CUR_UV);
+#define _rsl TEXT_MASK += char(ch_rsl, CUR_UV);
+#define _rsb TEXT_MASK += char(ch_rsb, CUR_UV);
+#define _pow TEXT_MASK += char(ch_pow, CUR_UV);
+#define _usc TEXT_MASK += char(ch_usc, CUR_UV);
+#define _a TEXT_MASK += char(ch_a, CUR_UV);
+#define _b TEXT_MASK += char(ch_b, CUR_UV);
+#define _c TEXT_MASK += char(ch_c, CUR_UV);
+#define _d TEXT_MASK += char(ch_d, CUR_UV);
+#define _e TEXT_MASK += char(ch_e, CUR_UV);
+#define _f TEXT_MASK += char(ch_f, CUR_UV);
+#define _g TEXT_MASK += char(ch_g, CUR_UV);
+#define _h TEXT_MASK += char(ch_h, CUR_UV);
+#define _i TEXT_MASK += char(ch_i, CUR_UV);
+#define _j TEXT_MASK += char(ch_j, CUR_UV);
+#define _k TEXT_MASK += char(ch_k, CUR_UV);
+#define _l TEXT_MASK += char(ch_l, CUR_UV);
+#define _m TEXT_MASK += char(ch_m, CUR_UV);
+#define _n TEXT_MASK += char(ch_n, CUR_UV);
+#define _o TEXT_MASK += char(ch_o, CUR_UV);
+#define _p TEXT_MASK += char(ch_p, CUR_UV);
+#define _q TEXT_MASK += char(ch_q, CUR_UV);
+#define _r TEXT_MASK += char(ch_r, CUR_UV);
+#define _s TEXT_MASK += char(ch_s, CUR_UV);
+#define _t TEXT_MASK += char(ch_t, CUR_UV);
+#define _u TEXT_MASK += char(ch_u, CUR_UV);
+#define _v TEXT_MASK += char(ch_v, CUR_UV);
+#define _w TEXT_MASK += char(ch_w, CUR_UV);
+#define _x TEXT_MASK += char(ch_x, CUR_UV);
+#define _y TEXT_MASK += char(ch_y, CUR_UV);
+#define _z TEXT_MASK += char(ch_z, CUR_UV);
+#define _lpa TEXT_MASK += char(ch_lpa, CUR_UV);
+#define _bar TEXT_MASK += char(ch_bar, CUR_UV);
+#define _rpa TEXT_MASK += char(ch_rpa, CUR_UV);
+#define _tid TEXT_MASK += char(ch_tid, CUR_UV);
+#define _lar TEXT_MASK += char(ch_lar, CUR_UV);
 
 vec2 res;
 vec2 print_pos = vec2(0);
@@ -312,188 +410,69 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
     print_pos.x = margin;
     print_pos.y += STRHEIGHT(1);  
 
-    col += char(ch_V, uv);
-    col += char(ch_i, uv);
-    col += char(ch_e, uv);
-    col += char(ch_w, uv);
-    col += char(ch_p, uv);
-    col += char(ch_o, uv);
-    col += char(ch_r, uv);
-    col += char(ch_t, uv);
-    col += char(ch_spc, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
-
-    col += char(ch_spc, uv);
-    col += print_integer(viewport_size.x, 0, uv); 
-    col += char(ch_spc, uv);
-    col += char(ch_x, uv);
-    col += char(ch_spc, uv);
-    col += print_integer(viewport_size.y, 0, uv); 
-
+   TEXT_MASK = 0;
+   CUR_UV = uv;
+   _V _i _e _w _p _o _r _t _spc _dsh _dsh _dsh _dsh _dsh _dsh _spc 
+   TEXT_MASK += print_integer(viewport_size.x, 0, uv); 
+   _spc _x _spc
+   TEXT_MASK += print_integer(viewport_size.y, 0, uv); 
 
     // Line 13 Screen Resolution ----------------------------------------------------------
     print_pos.x = margin;
     print_pos.y += STRHEIGHT(1);
 
-    col += char(ch_S, uv);
-    col += char(ch_c, uv);
-    col += char(ch_r, uv);
-    col += char(ch_e, uv);
-    col += char(ch_e, uv);
-    col += char(ch_n, uv);
-    col += char(ch_spc, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
-
-    col += char(ch_spc, uv);
-    col += print_integer(screen_size.x, 0, uv);
-    col += char(ch_spc, uv);
-    col += char(ch_x, uv);
-    col += char(ch_spc, uv);
-    col += print_integer(screen_size.y, 0, uv);
-
+   _S _c _r _e _e _n _spc _dsh _dsh _dsh _dsh _dsh _dsh _dsh _dsh _spc
+   TEXT_MASK += print_integer(screen_size.x, 0, uv);
+   _spc _x _spc
+   TEXT_MASK += print_integer(screen_size.y, 0, uv);
 
     // Line 12 Final Aspect Ratio ----------------------------------------------------------
     print_pos.x = margin;
     print_pos.y += STRHEIGHT(1);
     
-    col += char(ch_F, uv);
-    col += char(ch_i, uv);
-    col += char(ch_n, uv);
-    col += char(ch_a, uv);
-    col += char(ch_l, uv);
-    col += char(ch_spc, uv);
-    col += char(ch_A, uv);
-    col += char(ch_s, uv);
-    col += char(ch_p, uv);
-    col += char(ch_e, uv);
-    col += char(ch_c, uv);
-    col += char(ch_t, uv);
-    col += char(ch_spc, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
-    
-    col += char(ch_spc, uv);
-    col += print_number(screen_size.x/screen_size.y > 1 ? screen_size.x/screen_size.y : screen_size.y/screen_size.x, print_pos, uv);
-
+   _F _i _n _a _l _spc _A _s _p _e _c _t _spc _dsh _dsh _spc
+   TEXT_MASK += print_number(screen_size.x/screen_size.y > 1 ? screen_size.x/screen_size.y : screen_size.y/screen_size.x, print_pos, uv);
 
     // Line 11 Non-Int Scale Percent ----------------------------------------------------------
     print_pos.x = margin;
     print_pos.y += STRHEIGHT(1);
     
-    col += char(ch_N, uv);
-    col += char(ch_o, uv);
-    col += char(ch_n, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_I, uv);
-    col += char(ch_n, uv);
-    col += char(ch_t, uv);
-    col += char(ch_spc, uv);
-    col += char(ch_S, uv);
-    col += char(ch_c, uv);
-    col += char(ch_l, uv);
-    col += char(ch_spc, uv);
-    col += char(ch_pct, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
-    
-    col += char(ch_spc, uv);
-    col += print_number(screen_size.y / viewport_size.y * 100, print_pos, uv);
-
+    _N _o _n _spc _I _n _t _spc _S _c _l _spc _pct _dsh _dsh _spc
+    TEXT_MASK += print_number(screen_size.y / viewport_size.y * 100, print_pos, uv);
 
     // Line 10 Int Scale Vertical ----------------------------------------------------------
     print_pos.x = margin;
     print_pos.y += STRHEIGHT(1);
     
-    col += char(ch_I, uv);
-    col += char(ch_n, uv);
-    col += char(ch_t, uv);
-    col += char(ch_spc, uv);
-    col += char(ch_S, uv);
-    col += char(ch_c, uv);
-    col += char(ch_l, uv);
-    col += char(ch_spc, uv);
-    col += char(ch_V, uv);
-    col += char(ch_e, uv);
-    col += char(ch_r, uv);
-    col += char(ch_t, uv);
-    col += char(ch_spc, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
-    
-    col += char(ch_spc, uv);
-    if (fract(int_mult.y) < 0.01 || fract(int_mult.y) > 0.99)
-        col += print_number(int_mult.y, print_pos, uv);
-    else
-        col += print_number(int_mult.y, print_pos, uv);
+   _I _n _t _spc _S _c _l _spc _V _e _r _t _spc _dsh _dsh _spc
 
+    if (fract(int_mult.y) < 0.01 || fract(int_mult.y) > 0.99)
+        TEXT_MASK += print_number(int_mult.y, print_pos, uv);
+    else
+        TEXT_MASK += print_number(int_mult.y, print_pos, uv);
 
     // Line 09 Int Scale Horizontal ----------------------------------------------------------
     print_pos.x = margin;
     print_pos.y += STRHEIGHT(1);
     
-    col += char(ch_I, uv);
-    col += char(ch_n, uv);
-    col += char(ch_t, uv);
-    col += char(ch_spc, uv);
-    col += char(ch_S, uv);
-    col += char(ch_c, uv);
-    col += char(ch_l, uv);
-    col += char(ch_spc, uv);
-    col += char(ch_H, uv);
-    col += char(ch_o, uv);
-    col += char(ch_r, uv);
-    col += char(ch_z, uv);
-    col += char(ch_spc, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
-    
-    col += char(ch_spc, uv);
-    if (fract(int_mult.x) < 0.01 || fract(int_mult.x) > 0.99)
-        col += print_number(int_mult.x, print_pos, uv);
-    else
-        col += print_number(int_mult.x, print_pos, uv);
+   _I _n _t _spc _S _c _l _spc _H _o _r _z _spc _dsh _dsh _spc
 
+    if (fract(int_mult.x) < 0.01 || fract(int_mult.x) > 0.99)
+        TEXT_MASK += print_number(int_mult.x, print_pos, uv);
+    else
+        TEXT_MASK += print_number(int_mult.x, print_pos, uv);
 
     // Line 08 Sampling Resolution ----------------------------------------------------------
     if (cropped_original_size.x != sampling_res.x || cropped_original_size.y != sampling_res.y)
     {
-        print_pos.x = margin;
-        print_pos.y += STRHEIGHT(1);
+      print_pos.x = margin;
+      print_pos.y += STRHEIGHT(1);
         
-        col += char(ch_S, uv);
-        col += char(ch_a, uv);
-        col += char(ch_m, uv);
-        col += char(ch_p, uv);
-        col += char(ch_l, uv);
-        col += char(ch_i, uv);
-        col += char(ch_n, uv);
-        col += char(ch_g, uv);
-        col += char(ch_spc, uv);
-        col += char(ch_R, uv);
-        col += char(ch_e, uv);
-        col += char(ch_s, uv);
-        col += char(ch_spc, uv);
-        col += char(ch_dsh, uv);
-        col += char(ch_dsh, uv);
+      _S _a _m _p _l _i _n _g _spc _R _e _s _spc _dsh _dsh _spc
 
-        col += char(ch_spc, uv);
-        col += print_integer(sampling_res.x, 0, uv);
-        col += char(ch_spc, uv);
-        col += char(ch_x, uv);
-        col += char(ch_spc, uv);
-        col += print_integer(sampling_res.y, 0, uv);
+      TEXT_MASK += print_integer(sampling_res.x, 0, uv);
+      _spc _x _spc
+      TEXT_MASK += print_integer(sampling_res.y, 0, uv);
     }
 
 
@@ -503,59 +482,25 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
         print_pos.x = margin;
         print_pos.y += STRHEIGHT(1);
         
-        col += char(ch_C, uv);
-        col += char(ch_r, uv);
-        col += char(ch_o, uv);
-        col += char(ch_p, uv);
-        col += char(ch_p, uv);
-        col += char(ch_e, uv);
-        col += char(ch_d, uv);
-        col += char(ch_spc, uv);
-        col += char(ch_dsh, uv);
-        col += char(ch_dsh, uv);
-        col += char(ch_dsh, uv);
-        col += char(ch_dsh, uv);
-        col += char(ch_dsh, uv);
-        col += char(ch_dsh, uv);
-        col += char(ch_dsh, uv);
+      _C _r _o _p _p _e _d _spc _dsh _dsh _dsh _dsh _dsh _dsh _dsh _spc
 
-        col += char(ch_spc, uv);
-        col += print_integer(cropped_original_size.x, 0, uv);
-        col += char(ch_spc, uv);
-        col += char(ch_x, uv);
-        col += char(ch_spc, uv);
-        col += print_integer(cropped_original_size.y, 0, uv);
+      TEXT_MASK += print_integer(cropped_original_size.x, 0, uv);
+      _spc _x _spc
+      TEXT_MASK += print_integer(cropped_original_size.y, 0, uv);
     }
 
 
     // Line 06 Negative Crop Resolution ----------------------------------------------------------
     if (derezed_size.x != ROTATED_CORE_PREPPED_SIZE.x || derezed_size.y != ROTATED_CORE_PREPPED_SIZE.y)
     {
-        print_pos.x = margin;
-        print_pos.y += STRHEIGHT(1);
+      print_pos.x = margin;
+      print_pos.y += STRHEIGHT(1);
         
-        col += char(ch_N, uv);
-        col += char(ch_e, uv);
-        col += char(ch_g, uv);
-        col += char(ch_dsh, uv);
-        col += char(ch_C, uv);
-        col += char(ch_r, uv);
-        col += char(ch_o, uv);
-        col += char(ch_p, uv);
-        col += char(ch_spc, uv);
-        col += char(ch_A, uv);
-        col += char(ch_d, uv);
-        col += char(ch_d, uv);
-        col += char(ch_spc, uv);
-        col += char(ch_dsh, uv);
-        col += char(ch_dsh, uv);
+      _N _e _g _dsh _C _r _o _p _spc _A _d _d _spc _dsh _dsh _spc
 
-        col += char(ch_spc, uv);
-        col += print_integer(ROTATED_CORE_PREPPED_SIZE.x, 0, uv);
-        col += char(ch_spc, uv);
-        col += char(ch_x, uv);
-        col += char(ch_spc, uv);
-        col += print_integer(ROTATED_CORE_PREPPED_SIZE.y, 0, uv);
+      TEXT_MASK += print_integer(ROTATED_CORE_PREPPED_SIZE.x, 0, uv);
+      _spc _x _spc
+      TEXT_MASK += print_integer(ROTATED_CORE_PREPPED_SIZE.y, 0, uv);
     }
 
 
@@ -565,28 +510,11 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
         print_pos.x = margin;
         print_pos.y += STRHEIGHT(1);
         
-        col += char(ch_D, uv);
-        col += char(ch_e, uv);
-        col += char(ch_r, uv);
-        col += char(ch_e, uv);
-        col += char(ch_z, uv);
-        col += char(ch_e, uv);
-        col += char(ch_d, uv);
-        col += char(ch_spc, uv);
-        col += char(ch_dsh, uv);
-        col += char(ch_dsh, uv);
-        col += char(ch_dsh, uv);
-        col += char(ch_dsh, uv);
-        col += char(ch_dsh, uv);
-        col += char(ch_dsh, uv);
-        col += char(ch_dsh, uv);
+      _D _e _r _e _z _e _d _spc _dsh _dsh _dsh _dsh _dsh _dsh _dsh _spc
 
-        col += char(ch_spc, uv);
-        col += print_integer(derezed_size.x, 0, uv);
-        col += char(ch_spc, uv);
-        col += char(ch_x, uv);
-        col += char(ch_spc, uv);
-        col += print_integer(derezed_size.y, 0, uv);
+      TEXT_MASK += print_integer(derezed_size.x, 0, uv);
+      _spc _x _spc
+      TEXT_MASK +=  print_integer(derezed_size.y, 0, uv);
     }
 
 
@@ -594,86 +522,34 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
     print_pos.x = margin;
     print_pos.y += STRHEIGHT(1);
     
-    col += char(ch_C, uv);
-    col += char(ch_o, uv);
-    col += char(ch_r, uv);
-    col += char(ch_e, uv);
-    col += char(ch_spc, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_dsh, uv);
+   _C _o _r _e _spc _dsh _dsh _dsh _dsh _dsh _dsh _dsh _dsh _dsh _dsh _spc
 
-    col += char(ch_spc, uv);
-    col += print_integer(ROTATED_CORE_ORIGINAL_SIZE.x, 0, uv);
-    col += char(ch_spc, uv);
-    col += char(ch_x, uv);
-    col += char(ch_spc, uv);
-    col += print_integer(ROTATED_CORE_ORIGINAL_SIZE.y, 0, uv);
-
+   TEXT_MASK += print_integer(ROTATED_CORE_ORIGINAL_SIZE.x, 0, uv);
+   _spc _x _spc
+   TEXT_MASK += print_integer(ROTATED_CORE_ORIGINAL_SIZE.y, 0, uv);
 
     // Line 03 Preset Type ----------------------------------------------------------
     print_pos.x = margin;
     print_pos.y += STRHEIGHT(2);
     
 #ifdef IS_ADV_PRESET
-    col += char(ch_A, uv);
-    col += char(ch_D, uv);
-    col += char(ch_V, uv);
-    col += char(ch_A, uv);
-    col += char(ch_N, uv);
-    col += char(ch_C, uv);
-    col += char(ch_E, uv);
-    col += char(ch_D, uv);
+   _A _D _V _A _N _C _E _D
 #endif
 
 #ifdef IS_STD_PRESET
-    col += char(ch_S, uv);
-    col += char(ch_T, uv);
-    col += char(ch_A, uv);
-    col += char(ch_N, uv);
-    col += char(ch_D, uv);
-    col += char(ch_A, uv);
-    col += char(ch_R, uv);
-    col += char(ch_D, uv);
+   _S _T _A _N _D _A _R _D
 #endif
 
 #ifdef IS_GLASS_PRESET
-    col += char(ch_spc, uv);
-    col += char(ch_G, uv);
-    col += char(ch_L, uv);
-    col += char(ch_A, uv);
-    col += char(ch_S, uv);
-    col += char(ch_S, uv);
+   _spc _G _L _A _S _S
 #endif
 
 #ifdef IS_NO_REFLECT_PRESET
-    col += char(ch_spc, uv);
-    col += char(ch_N, uv);
-    col += char(ch_O, uv);
-    col += char(ch_spc, uv);
-    col += char(ch_R, uv);
-    col += char(ch_E, uv);
-    col += char(ch_F, uv);
-    col += char(ch_L, uv);
-    col += char(ch_E, uv);
-    col += char(ch_C, uv);
-    col += char(ch_T, uv);
+   _spc _N _O _spc _R _E _F _L _E _C _T
 #endif
 
 #ifdef IS_POTATO_PRESET
-    col += char(ch_P, uv);
-    col += char(ch_0, uv);
-    col += char(ch_T, uv);
-    col += char(ch_A, uv);
-    col += char(ch_T, uv);
-    col += char(ch_O, uv);
+   _P _O _T _A _T _O
 #endif
 
 
@@ -681,43 +557,18 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
     print_pos.x = margin;
     print_pos.y += STRHEIGHT(1);
 
-    col += char(ch_1, uv);
-    col += char(ch_per, uv);
-    col += char(ch_4, uv);
-    col += char(ch_per, uv);
-    col += char(ch_2, uv);
-    col += char(ch_spc, uv);
-
-    // Date
-    col += char(ch_2, uv);
-    col += char(ch_0, uv);
-    col += char(ch_2, uv);
-    col += char(ch_2, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_0, uv);
-    col += char(ch_9, uv);
-    col += char(ch_dsh, uv);
-    col += char(ch_2, uv);
-    col += char(ch_7, uv);
-
+   // Version
+   _1 _per _4 _per _2 _spc 
+   // Date
+   _2 _0 _2 _2 _dsh _0 _9 _dsh _2 _7
 
     // Line 01 Title ----------------------------------------------------------
     print_pos.x = margin;
     print_pos.y += STRHEIGHT(1);
 
-    col += char(ch_M, uv);
-    col += char(ch_E, uv);
-    col += char(ch_G, uv);
-    col += char(ch_A, uv);
-    col += char(ch_spc, uv);
-    col += char(ch_B, uv);
-    col += char(ch_E, uv);
-    col += char(ch_Z, uv);
-    col += char(ch_E, uv);
-    col += char(ch_L, uv);
-    col += char(ch_spc, uv);
+   _M _E _G _A _spc _B _E _Z _E _L _spc
 
-    return col;
+    return TEXT_MASK;
 }
 
 vec2 GetScreenSize(vec2 screen_scale)
