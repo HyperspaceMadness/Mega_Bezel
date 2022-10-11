@@ -55,6 +55,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 */
 
 #include "../base/common/globals-and-screen-scale-params.inc"
+#include "../base/common/helper-functions.inc"
 
 #include "include/parameters.h"
 

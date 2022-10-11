@@ -104,7 +104,7 @@ float HSM_REFLECT_BLUR_FALLOFF_DISTANCE = global.HSM_REFLECT_BLUR_FALLOFF_DISTAN
 #pragma parameter HSM_REFLECT_NOISE_AMOUNT 						    "          Noise Amount" 50 0 100 1
 float HSM_REFLECT_NOISE_AMOUNT = global.HSM_REFLECT_NOISE_AMOUNT / 100;
 
-#pragma parameter HSM_REFLECT_NOISE_SAMPLES 					    "          Noise Samples (0 for OFF)" 1 0 20 1
+#pragma parameter HSM_REFLECT_NOISE_SAMPLES 					    "          Noise Samples - 0 | 1 | 2 | 12" 1 0 3 1
 float HSM_REFLECT_NOISE_SAMPLES = global.HSM_REFLECT_NOISE_SAMPLES;
 
 #pragma parameter HSM_REFLECT_NOISE_SAMPLE_DISTANCE 			    "          Sample Distance" 100 0 500 5
