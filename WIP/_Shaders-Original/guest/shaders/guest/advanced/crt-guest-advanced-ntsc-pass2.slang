@@ -70,7 +70,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter bloom_dist "          Bloom Distribution" 0.0 0.0 3.0 0.05
 #define bloom_dist         global.bloom_dist     // bloom effect distribution
 
-#pragma parameter halation "          Halation Strength" 0.0 0.0 2.0 0.025
+#pragma parameter halation "          Halation Strength" 0.0 -2.0 2.0 0.025
 #define halation         global.halation     // halation effect
 
 #pragma parameter gamma_c "          Gamma correct" 1.0 0.50 2.0 0.02
@@ -105,7 +105,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter vertmask "          Scanline Color Deconvergence" 0.0 -1.0 1.0 0.1
 #define vertmask     params.vertmask     // Scanline deconvergence colors
 
-#pragma parameter scans "          Scanline Saturation / Mask Falloff" 0.60 0.0 2.5 0.05
+#pragma parameter scans "          Scanline Saturation / Mask Falloff" 0.40 0.0 3.5 0.05
 #define scans        global.scans     // scanline saturation
 
 #pragma parameter scan_falloff "          Scanline Falloff" 1.0 0.25 2.0 0.05
@@ -345,11 +345,11 @@ if (!interb)
 	float mc1 = max(max(color1.r,color1.g),color1.b) + eps;
 	float mc2 = max(max(color2.r,color2.g),color2.b) + eps;
 	
-	cref1 = color1 / mc1; cref1=cref1*cref1; cref1*=cref1;
-	cref2 = color2 / mc2; cref2=cref2*cref2; cref2*=cref2;
+	cref1 = color1 / mc1;
+	cref2 = color2 / mc2;
 
-	w1 = max( mix(w1*mix(one, cref1, scans), w1, wf1*min((1.0+0.15*scans), 1.2)), 0.0); w1 = min(w1*color1, mc1)/(color1 + eps);
-	w2 = max( mix(w2*mix(one, cref2, scans), w2, wf2*min((1.0+0.15*scans), 1.2)), 0.0); w2 = min(w2*color2, mc2)/(color2 + eps);
+	w1 = pow(w1, mix(2.0*scans.xxx + 1.0, 1.0.xxx, cref1))*mix(1.0.xxx + 0.075*scans, 1.0.xxx, cref1);
+	w2 = pow(w2, mix(2.0*scans.xxx + 1.0, 1.0.xxx, cref2))*mix(1.0.xxx + 0.075*scans, 1.0.xxx, cref2);
 	
 	// Scanline Deconvergence
 	

@@ -23,6 +23,10 @@
 
 layout(push_constant) uniform Push
 {
+   vec4 SourceSize;
+   vec4 OriginalSize;
+   vec4 OutputSize;
+   uint FrameCount;
    float PR, PG, PB;
 } params;
 
@@ -30,11 +34,9 @@ layout(push_constant) uniform Push
 #pragma parameter internal_res "          Internal Resolution" 1.0 1.0 8.0 0.10
 
 #pragma parameter bogus_afterglow "[ AFTERGLOW SETTINGS ]:" 0.0 0.0 1.0 1.0
-#pragma parameter PR  "          Persistence Red" 0.32 0.0 0.50 0.01
-#pragma parameter PG  "          Persistence Green"  0.32 0.0 0.50 0.01
-#pragma parameter PB  "          Persistence Blue"  0.32 0.0 0.50 0.01
-#pragma parameter AS  "          Afterglow Strength" 0.20 0.0 0.60 0.01
-#pragma parameter sat "          Afterglow saturation" 0.50 0.0 1.0 0.01
+#pragma parameter PR "          Persistence Red" 0.32 0.0 0.50 0.01
+#pragma parameter PG "          Persistence Green"  0.32 0.0 0.50 0.01
+#pragma parameter PB "          Persistence Blue"  0.32 0.0 0.50 0.01
 
 #define PR params.PR
 #define PG params.PG
@@ -69,11 +71,21 @@ layout(set = 0, binding = 3) uniform sampler2D AfterglowPassFeedback;
 
 void main()
 {
-	vec3 color  = COMPAT_TEXTURE(OriginalHistory0, TEX0.xy).rgb;
+	vec2 dx = vec2(params.OriginalSize.z, 0.0);
+	vec2 dy = vec2(0.0, params.OriginalSize.w);
+	
+	vec3 color0  = COMPAT_TEXTURE(OriginalHistory0, TEX0.xy).rgb;
+	vec3 color1  = COMPAT_TEXTURE(OriginalHistory0, TEX0.xy - dx).rgb;
+	vec3 color2  = COMPAT_TEXTURE(OriginalHistory0, TEX0.xy + dx).rgb;
+	vec3 color3  = COMPAT_TEXTURE(OriginalHistory0, TEX0.xy - dy).rgb;
+	vec3 color4  = COMPAT_TEXTURE(OriginalHistory0, TEX0.xy + dy).rgb;	
+
+	vec3 color = (2.5 * color0 + color1 + color2 + color3 + color4)/6.5;
+	
 	vec3 accumulate = COMPAT_TEXTURE(AfterglowPassFeedback, TEX0.xy).rgb;
 
 	float w = 1.0;
-	if ((color.r + color.g + color.b < 5.0/255.0)) { w = 0.0; }
+	if ((color0.r + color0.g + color0.b < 5.0/255.0)) { w = 0.0; }
 
 	vec3 result = mix( max(mix(color, accumulate, 0.49 + vec3(PR, PG, PB))- 2.0/255.0, 0.0), color, w);
 

@@ -23,7 +23,10 @@
 
 layout(push_constant) uniform Push
 {
-   float GDV_AFTERGLOW_THRESHOLD;
+   vec4 SourceSize;
+   vec4 OriginalSize;
+   vec4 OutputSize;
+   uint FrameCount;
    float PR, PG, PB;
 } params;
 
@@ -69,13 +72,23 @@ layout(set = 0, binding = 3) uniform sampler2D AfterglowPassFeedback;
 
 void main()
 {
-	vec3 color  = COMPAT_TEXTURE(PreCRTPass, TEX0.xy).rgb;
+	vec2 dx = vec2(params.OriginalSize.z, 0.0);
+	vec2 dy = vec2(0.0, params.OriginalSize.w);
+	
+	vec3 color0  = COMPAT_TEXTURE(PreCRTPass, TEX0.xy).rgb;
+	vec3 color1  = COMPAT_TEXTURE(PreCRTPass, TEX0.xy - dx).rgb;
+	vec3 color2  = COMPAT_TEXTURE(PreCRTPass, TEX0.xy + dx).rgb;
+	vec3 color3  = COMPAT_TEXTURE(PreCRTPass, TEX0.xy - dy).rgb;
+	vec3 color4  = COMPAT_TEXTURE(PreCRTPass, TEX0.xy + dy).rgb;	
+
+	vec3 color = (2.5 * color0 + color1 + color2 + color3 + color4)/6.5;
+	
 	vec3 accumulate = COMPAT_TEXTURE(AfterglowPassFeedback, TEX0.xy).rgb;
 
 	float w = 1.0;
-	if ((color.r + color.g + color.b < 5.0/255.0)) { w = 0.0; }
+	if ((color0.r + color0.g + color0.b < 5.0/255.0)) { w = 0.0; }
 
-	vec3 result = mix( max(mix(color, accumulate, 0.49 + vec3(PR, PG, PB))- 3.0/255.0, 0.0), color, w);
+	vec3 result = mix( max(mix(color, accumulate, 0.49 + vec3(PR, PG, PB))- 2.0/255.0, 0.0), color, w);
 
 	FragColor = vec4(result, w);
 }

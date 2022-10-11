@@ -39,7 +39,7 @@ layout(push_constant) uniform Push
 #pragma parameter bloom_dist 	"          Bloom Distribution -- bloom_dist" 0.0 0.0 3.0 0.05
 #define bloom_dist         global.bloom_dist     // bloom effect distribution
 
-#pragma parameter halation 		"          Halation Strength -- halation" 0.0 0.0 2.0 0.025
+#pragma parameter halation 		"          Halation Strength -- halation" 0.0 -2.0 2.0 0.025
 #define halation         params.halation     // halation effect
 
 #pragma parameter SIZEHB 		"          Horizontal Radius ( Num Samples ) -- SIZEHB" 3.0 1.0 50.0 1.0 

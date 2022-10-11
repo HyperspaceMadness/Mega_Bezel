@@ -81,7 +81,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter bloom_dist "          Bloom Distribution" 0.0 0.0 3.0 0.05
 #define bloom_dist         global.bloom_dist     // bloom effect distribution
 
-#pragma parameter halation "          Halation Strength" 0.0 0.0 2.0 0.025
+#pragma parameter halation "          Halation Strength" 0.0 -2.0 2.0 0.025
 #define halation         global.halation     // halation effect
 
 #pragma parameter gamma_c "          Gamma correct" 1.0 0.50 2.0 0.02
@@ -614,11 +614,11 @@ void main()
 	if (mask_bloom > 0.025)
 	{
 		float maxb = max(max(Bloom.r,Bloom.g),Bloom.b);
-		maxb = pow(sqrt(maxb*mix(maxb, colmx, 0.75)),0.275);
-		vec3 mBloom = 0.5*(1.5*Bloom+0.5*maxb) * mix(1.0, 2.0-colmx, (bloom_dist + 0.5));
+		maxb = pow(sqrt(maxb*mix(maxb, colmx, 0.75)),0.375);
+		vec3 mBloom = 0.5*(1.25*Bloom+0.75*maxb) * mix(1.0, 2.0-colmx, (bloom_dist + 0.5));
 		float maskmx = 1.0; if (shadowMask > 0.5 || shadowMask < 4.5) maskmx = maskLight; else if (shadowMask > 6.5 && shadowMask < 10.5) maskmx = 1.0; else maskmx = max(max(cmask.r,cmask.g),cmask.b);
 		cmask = min(cmask + maxb*mBloom*mask_bloom, maskmx);
-		smask = min(smask + 0.9*maxb*max(max(mBloom.r,mBloom.g),mBloom.b)*mask_bloom, 1.0);
+		smask = min(smask + maxb*max(max(mBloom.r,mBloom.g),mBloom.b)*mask_bloom, 1.0);
 	}
 
 	color = pow(color, vec3(mask_gamma/gamma_in));
@@ -657,6 +657,11 @@ void main()
 	if (halation > 0.01) {
 		Bloom = mix(0.5*(Bloom + Bloom*Bloom), 0.75*Bloom*Bloom, colmx);	
 		color = color + 2.0*max((2.0*mix(maxb*maxb, maxb, colmx)-0.5*max(max(Ref.r,Ref.g),Ref.b)),0.25)*mix(1.0,w3,0.5*colmx)*mix(one,cmask,0.6)*Bloom*halation; }
+	else
+	if (halation < 0.01) {
+		float mbl = max(max(Bloom.r,Bloom.g),Bloom.b);
+		Bloom = plant(Bloom + Ref + orig1 + Bloom*Bloom*Bloom, min(mbl*mbl,0.75));
+		color = color + 2.0*mix(1.0,w3,0.5*colmx)*mix(one,cmask,0.5)*Bloom*(-halation); }
 
 	Glow = mix(Glow, 0.25*color, 0.7*colmx);
 	if (glow >= 0.0) color = color + 0.5*Glow*glow; else { cmask*=cmask; cmask*=cmask; color = color + (-glow)*cmask*Glow; }
