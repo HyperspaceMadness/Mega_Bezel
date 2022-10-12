@@ -23,7 +23,7 @@
 */
 
 // Screen Scale Required Parameters
-#pragma parameter HSM_MEGA_BEZEL_TITLE								"[ --- HSM MEGA BEZEL V1.4.3_2022-10-09 --- ]" 0 0 0.01 0.01
+#pragma parameter HSM_MEGA_BEZEL_TITLE								"[ --- HSM MEGA BEZEL V1.5.0_2022-10-11 --- ]" 0 0 0.01 0.01
 
 #pragma parameter HSM_RESOLUTION_DEBUG_ON							"          Show Resolution Info" 0 0 1 1
 float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
@@ -173,7 +173,7 @@ float HSM_INT_SCALE_MAX_HEIGHT = global.HSM_INT_SCALE_MAX_HEIGHT / 100;
 
 
 //---------------------------------------------------------------------------------------------------
-//    Non-Integer Scale
+//    NON-INTEGER SCALE
 //---------------------------------------------------------------------------------------------------
 
 #pragma parameter HSM_NON_INTEGER_SCALE_PERCENT_TITLE							"[ NON-INTEGER SCALE PERCENT ]:" 0 0 0.01 0.01
@@ -185,7 +185,7 @@ float HSM_NON_INTEGER_SCALE = global.HSM_NON_INTEGER_SCALE / 100;
 
 
 //---------------------------------------------------------------------------------------------------
-//    Physical Size
+//    PHYSICAL SIZE
 //---------------------------------------------------------------------------------------------------
 
 #pragma parameter HSM_PHYSICAL_SIZE_TITLE							"[ NON-INTEGER - PHYSICAL SIZES ]:" 0 0 0.01 0.01
@@ -204,7 +204,7 @@ float HSM_PHYSICAL_SIM_TUBE_DIAGONAL_SIZE = global.HSM_PHYSICAL_SIM_TUBE_DIAGONA
 
 
 //---------------------------------------------------------------------------------------------------
-//    Automatic Scale & Position
+//    AUTOMATIC SCALE & POSITION
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_AUTOMATIC_SCREEN_SCALE_TITLE					"[ NON-INTEGER - AUTOMATIC SCREEN SCALE & PLACEMENT ]:" 0 0 0.01 0.01
 
@@ -219,7 +219,7 @@ float HSM_PLACEMENT_IMAGE_MODE = global.HSM_PLACEMENT_IMAGE_MODE;
 
 
 //---------------------------------------------------------------------------------------------------
-//    Non Integer Scale Offset
+//    NON-INTEGER SCALE OFFSET
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_NONINTEGER_SCALE_OFFSET_TITLE					"[ NON-INTEGER SCALE OFFSET ]:" 0 0 0.01 0.01
 
@@ -228,7 +228,7 @@ float HSM_NON_INTEGER_SCALE_OFFSET = global.HSM_NON_INTEGER_SCALE_OFFSET / 100;
 
 
 //---------------------------------------------------------------------------------------------------
-//    Snap to Integer Scale
+//    SNAP TO INTEGER SCALE
 //---------------------------------------------------------------------------------------------------
 
 #pragma parameter HSM_SNAP_NONINTEGER_TITLE							"[ SNAP NON-INTEGER TO CLOSEST INTEGER SCALE ]:" 0 0 0.01 0.01

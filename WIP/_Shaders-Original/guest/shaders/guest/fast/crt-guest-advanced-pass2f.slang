@@ -198,7 +198,7 @@ layout(location = 0) out vec2 vTexCoord;
 void main()
 {
    gl_Position = global.MVP * Position;
-   vTexCoord = TexCoord * 1.000001;
+   vTexCoord = TexCoord * 1.00001;
 }
 
 #pragma stage fragment

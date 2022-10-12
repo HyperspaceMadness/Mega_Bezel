@@ -3,7 +3,7 @@ Mega Bezel Shader Readme
 ------------------------------------------------------------------------------------------------------------
 ![Mega Bezel Logo](MegaBezelLogo.png)
 
-**Version V1.4.3_2022-10-09**
+**Version V1.5.0_2022-10-11**
 ----------------------------------------
 ----------------------------------------
 
@@ -98,7 +98,6 @@ This shader package is meant for you to experiment with and make your own creati
 **EDITING PRESETS**
   * You can then open this Simple Preset file and add other parameter adjustments or set textures as you see fit. E.G. add the following lines to change the background image: 
     * `BackgroundImage = "MyImage.jpg"`
-    * `BackgroundVertImage = "MyImage.jpg"`
   * Or change the path indicated on the `#reference` line to point at a different base preset
 
 ***
@@ -663,8 +662,6 @@ The color/texture of the tube which appears behind the CRT image
   - 0: Black - Game image is shown over 100% black
   - 1: Image - Shows an grayish image of crt tube with lighting
   - 2: Transparent - See through the CRT tube to the background
-- **Opacity** 
-  - Opacity of the tube background, With opacity of 0 you will see through to the background, good for things like Tron's Deadly Discs 
 - **Colorize On** - Colorize the image
 - **Hue Offset**
 - **Saturation**
@@ -696,8 +693,9 @@ Adds a shadow on top of the tube diffuse image and colored gel
 -----------------------------------------------------------------------------------------------
 **[ CRT ON TUBE DIFFUSE BLENDING ]:**
 
-How to apply the CRT (Game Image) on top of the tube
-- **CRT On Tube Diffuse Blend Mode** 
+- **Tube Opacity**
+  - Opacity of the tube, with opacity of 0 you will see through to the background, good for things like Tron's Deadly Discs 
+- **CRT On Tube Diffuse Blend Mode** - How to apply the CRT (Game Image) on top of the tube
   - 0: OFF - Don't apply the game image
   - 1: ADD - Apply the game image additively this is the normal behavior
   - 2: Multiply - Darken the tube diffuse image with the game image 
