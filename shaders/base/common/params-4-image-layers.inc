@@ -60,22 +60,19 @@ float HSM_TOP_LAYER_ORDER = global.HSM_TOP_LAYER_ORDER;
 //---------------------------------------------------------------------------------------------------
 //    CutOut in Image Layers
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_CUTOUT_TITLE			    "[ CUTOUT ]:" 0 0 0.01 0.01
+#pragma parameter HSM_CUTOUT_TITLE			     "[ CUTOUT ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_CUTOUT_ASPECT_MODE      "         Cutout Aspect- FULL | EXPL. | 4:3 | 3:4 | 16:9 | 9:16" 4 0 5 1
+#pragma parameter HSM_CUTOUT_ASPECT_MODE        "         Cutout Aspect- FULL | EXPL. | 4:3 | 3:4 | 16:9 | 9:16" 4 0 5 1
 float HSM_CUTOUT_ASPECT_MODE = global.HSM_CUTOUT_ASPECT_MODE;
 
-#pragma parameter HSM_CUTOUT_EXPLICIT_ASPECT  "          Explicit Aspect" 1.33333 0.01 3 0.01
+#pragma parameter HSM_CUTOUT_EXPLICIT_ASPECT    "          Explicit Aspect" 1.33333 0.01 3 0.01
 float HSM_CUTOUT_EXPLICIT_ASPECT = global.HSM_CUTOUT_EXPLICIT_ASPECT;
 
-#pragma parameter HSM_CUTOUT_FOLLOW_LAYER               " Follow Layer - FULL | TUBE | BZL | BG | DEVICE | DECAL"  0 0 5 1
+#pragma parameter HSM_CUTOUT_FOLLOW_LAYER       " Follow Layer - FULL | TUBE | BZL | BG | DEVICE | DECAL"  0 0 5 1
 float HSM_CUTOUT_FOLLOW_LAYER = global.HSM_CUTOUT_FOLLOW_LAYER;
 
 #pragma parameter HSM_CUTOUT_FOLLOW_FULL_USES_ZOOM     "          Follow Full also follows Zoom" 1 0 1 1
 float HSM_CUTOUT_FOLLOW_FULL_USES_ZOOM = global.HSM_CUTOUT_FOLLOW_FULL_USES_ZOOM;
-
-#pragma parameter HSM_CUTOUT_KEEP_ASPECT        "        Scale Aspect - INHERIT FROM SCALE MODE | KEEP ASPECT"  1 0 1 1
-float HSM_CUTOUT_KEEP_ASPECT = global.HSM_CUTOUT_KEEP_ASPECT;
 
 #pragma parameter HSM_CUTOUT_SCALE 				"          Scale" 100 -100 200 0.1
 float HSM_CUTOUT_SCALE = global.HSM_CUTOUT_SCALE / 100;
@@ -163,10 +160,7 @@ float HSM_BG_FOLLOW_MODE = global.HSM_BG_FOLLOW_MODE;
 #pragma parameter HSM_BG_FOLLOW_FULL_USES_ZOOM     "          Follow Full also follows Zoom" 1 0 1 1
 float HSM_BG_FOLLOW_FULL_USES_ZOOM = global.HSM_BG_FOLLOW_FULL_USES_ZOOM;
 
-#pragma parameter HSM_BG_SCALE_KEEP_ASPECT        "          Scale Aspect - INHERIT FROM LAYER | USE TEX ASPECT"  1 0 1 1
-float HSM_BG_SCALE_KEEP_ASPECT = global.HSM_BG_SCALE_KEEP_ASPECT;
-
-#pragma parameter HSM_BG_FILL_MODE                "          Image Fill Mode - STRETCH | SPLIT HORIZONTAL"  0 0 1 1
+#pragma parameter HSM_BG_FILL_MODE                "         Image Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
 float HSM_BG_FILL_MODE = global.HSM_BG_FILL_MODE;
 
 #pragma parameter HSM_BG_SPLIT_PRESERVE_CENTER    "          Split Mode Preserve Center %"  0 0 500 1
@@ -283,10 +277,7 @@ float HSM_LED_FOLLOW_MODE = global.HSM_LED_FOLLOW_MODE;
 #pragma parameter HSM_LED_FOLLOW_FULL_USES_ZOOM          "          Follow Full also follows Zoom" 1 0 1 1
 float HSM_LED_FOLLOW_FULL_USES_ZOOM = global.HSM_LED_FOLLOW_FULL_USES_ZOOM;
 
-#pragma parameter HSM_LED_SCALE_KEEP_ASPECT             "          Scale Aspect - INHERIT FROM LAYER | USE TEX ASPECT"  1 0 1 1
-float HSM_LED_SCALE_KEEP_ASPECT = global.HSM_LED_SCALE_KEEP_ASPECT;
-
-#pragma parameter HSM_LED_FILL_MODE                     "          Image Fill Mode - STRETCH | SPLIT HORIZONTAL"  0 0 1 1
+#pragma parameter HSM_LED_FILL_MODE                     "         Image Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
 float HSM_LED_FILL_MODE = global.HSM_LED_FILL_MODE;
 
 #pragma parameter HSM_LED_SPLIT_PRESERVE_CENTER         "          Split Mode Preserve Center %"  0 0 500 1
@@ -370,10 +361,7 @@ float HSM_DEVICE_FOLLOW_MODE = global.HSM_DEVICE_FOLLOW_MODE;
 #pragma parameter HSM_DEVICE_FOLLOW_FULL_USES_ZOOM      "          Follow Full also follows Zoom" 1 0 1 1
 float HSM_DEVICE_FOLLOW_FULL_USES_ZOOM = global.HSM_DEVICE_FOLLOW_FULL_USES_ZOOM;
 
-#pragma parameter HSM_DEVICE_SCALE_KEEP_ASPECT         "          Scale Aspect - INHERIT FROM LAYER | USE TEX ASPECT"  1 0 1 1
-float HSM_DEVICE_SCALE_KEEP_ASPECT = global.HSM_DEVICE_SCALE_KEEP_ASPECT;
-
-#pragma parameter HSM_DEVICE_FILL_MODE                 "          Image Fill Mode - STRETCH | SPLIT HORIZONTAL"  0 0 1 1
+#pragma parameter HSM_DEVICE_FILL_MODE                 "         Image Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
 float HSM_DEVICE_FILL_MODE = global.HSM_DEVICE_FILL_MODE;
 
 #pragma parameter HSM_DEVICE_SPLIT_PRESERVE_CENTER     "          Split Mode Preserve Center %"  0 0 500 1
@@ -458,10 +446,7 @@ float HSM_DEVICELED_FOLLOW_MODE = global.HSM_DEVICELED_FOLLOW_MODE;
 #pragma parameter HSM_DEVICELED_FOLLOW_FULL_USES_ZOOM     "          Follow Full also follows Zoom" 1 0 1 1
 float HSM_DEVICELED_FOLLOW_FULL_USES_ZOOM = global.HSM_DEVICELED_FOLLOW_FULL_USES_ZOOM;
 
-#pragma parameter HSM_DEVICELED_SCALE_KEEP_ASPECT         "          Scale Aspect - INHERIT FROM LAYER | USE TEX ASPECT"  1 0 1 1
-float HSM_DEVICELED_SCALE_KEEP_ASPECT = global.HSM_DEVICELED_SCALE_KEEP_ASPECT;
-
-#pragma parameter HSM_DEVICELED_FILL_MODE                 "          Image Fill Mode - STRETCH | SPLIT HORIZONTAL"  0 0 1 1
+#pragma parameter HSM_DEVICELED_FILL_MODE                 "         Image Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
 float HSM_DEVICELED_FILL_MODE = global.HSM_DEVICELED_FILL_MODE;
 
 #pragma parameter HSM_DEVICELED_SPLIT_PRESERVE_CENTER     "          Split Mode Preserve Center %"  0 0 500 1
@@ -545,10 +530,7 @@ float HSM_DECAL_FOLLOW_MODE = global.HSM_DECAL_FOLLOW_MODE;
 #pragma parameter HSM_DECAL_FOLLOW_FULL_USES_ZOOM       "          Follow Full also follows Zoom" 1 0 1 1
 float HSM_DECAL_FOLLOW_FULL_USES_ZOOM = global.HSM_DECAL_FOLLOW_FULL_USES_ZOOM;
 
-#pragma parameter HSM_DECAL_SCALE_KEEP_ASPECT           "          Scale Aspect - INHERIT FROM LAYER | USE TEX ASPECT"  1 0 1 1
-float HSM_DECAL_SCALE_KEEP_ASPECT = global.HSM_DECAL_SCALE_KEEP_ASPECT;
-
-#pragma parameter HSM_DECAL_FILL_MODE                   "          Image Fill Mode - STRETCH | SPLIT HORIZONTAL"  0 0 1 1
+#pragma parameter HSM_DECAL_FILL_MODE                   "         Image Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
 float HSM_DECAL_FILL_MODE = global.HSM_DECAL_FILL_MODE;
 
 #pragma parameter HSM_DECAL_SPLIT_PRESERVE_CENTER       "          Split Mode Preserve Center %"  0 0 500 1
@@ -632,10 +614,7 @@ float HSM_CAB_GLASS_FOLLOW_MODE = global.HSM_CAB_GLASS_FOLLOW_MODE;
 #pragma parameter HSM_CAB_GLASS_FOLLOW_FULL_USES_ZOOM       "          Follow Full also follows Zoom" 1 0 1 1
 float HSM_CAB_GLASS_FOLLOW_FULL_USES_ZOOM = global.HSM_CAB_GLASS_FOLLOW_FULL_USES_ZOOM;
 
-#pragma parameter HSM_CAB_GLASS_SCALE_KEEP_ASPECT           "          Scale Aspect - INHERIT FROM LAYER | USE TEX ASPECT"  1 0 1 1
-float HSM_CAB_GLASS_SCALE_KEEP_ASPECT = global.HSM_CAB_GLASS_SCALE_KEEP_ASPECT;
-
-#pragma parameter HSM_CAB_GLASS_FILL_MODE                   "          Image Fill Mode - STRETCH | SPLIT HORIZONTAL"  0 0 1 1
+#pragma parameter HSM_CAB_GLASS_FILL_MODE                   "         Image Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
 float HSM_CAB_GLASS_FILL_MODE = global.HSM_CAB_GLASS_FILL_MODE;
 
 #pragma parameter HSM_CAB_GLASS_SPLIT_PRESERVE_CENTER       "          Split Mode Preserve Center %"  0 0 500 1
@@ -719,10 +698,7 @@ float HSM_TOP_FOLLOW_MODE = global.HSM_TOP_FOLLOW_MODE;
 #pragma parameter HSM_TOP_FOLLOW_FULL_USES_ZOOM          "          Follow Full also follows Zoom" 1 0 1 1
 float HSM_TOP_FOLLOW_FULL_USES_ZOOM = global.HSM_TOP_FOLLOW_FULL_USES_ZOOM;
 
-#pragma parameter HSM_TOP_SCALE_KEEP_ASPECT             "          Scale Aspect - INHERIT FROM LAYER | USE TEX ASPECT"  1 0 1 1
-float HSM_TOP_SCALE_KEEP_ASPECT = global.HSM_TOP_SCALE_KEEP_ASPECT;
-
-#pragma parameter HSM_TOP_FILL_MODE                     "          Image Fill Mode - STRETCH | SPLIT HORIZONTAL"  0 0 1 1
+#pragma parameter HSM_TOP_FILL_MODE                     "         Image Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
 float HSM_TOP_FILL_MODE = global.HSM_TOP_FILL_MODE;
 
 #pragma parameter HSM_TOP_SPLIT_PRESERVE_CENTER       "          Split Mode Preserve Center %"  0 0 500 1

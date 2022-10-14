@@ -3,10 +3,8 @@
 Mega Bezel is updated to V1.5.0_2022-10-11
 
 Changes:
-  * Updated guest to crt-guest-advanced-2022-10-11-release1 with new halation
-  * Fixed Compilation issues with GLCore
-  * Fix error in Megatron which was preventing it from loading
-  * Fixed problem with NO-REFLECT where you could see the background through where the black edge was supposed to be
+  * Fixed GLCore viewport size cache issue
+  * Changed the image fill mode to be simpler
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
