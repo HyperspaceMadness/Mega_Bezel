@@ -85,9 +85,6 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter halation "          Halation Strength" 0.0 -2.0 2.0 0.025
 #define halation         global.halation     // halation effect
 
-#pragma parameter gamma_c "          Gamma correct" 1.0 0.50 2.0 0.02
-#define gamma_c   global.gamma_c     // adjust brightness
-
 #pragma parameter brightboost "          Bright Boost Dark Pixels" 1.40 0.25 10.0 0.05
 #define brightboost  params.brightboost     // adjust brightness
 
@@ -176,7 +173,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter slotms "          Slot Mask Size" 1.0 1.0 4.0 1.0
 #define slotms  global.slotms     // Slot Mask Size
 
-#pragma parameter mclip "          Keep Mask effect with clipping" 0.50 0.0 1.0 0.05
+#pragma parameter mclip "          Keep Mask effect with clipping" 0.30 0.0 1.0 0.05
 #define mclip  global.mclip     //
 
 #pragma parameter gamma_out "Gamma out" 2.4 1.0 5.0 0.05
@@ -251,8 +248,12 @@ vec3 Mask(vec2 pos, float mx)
 
 	vec3 mask = vec3(maskDark, maskDark, maskDark);
 	vec3 one = vec3(1.0);
-	float dark_compensate  = mix(max( clamp( mix (mcut, maskstr, mx),0.0, 1.0) - 0.4, 0.0) + 1.0, 1.0, mx);
-	float mc = 1.0 - max(maskstr, 0.0);	
+	
+	// brightness correcture masks 5-12
+	float sm = 0.45; if(shadowMask == 8.0 || shadowMask == 11.0) sm = 0.7;
+	float dark_compensate  = mix(max( clamp( mix (mcut, maskstr, mx),0.0, 1.0) - sm, 0.0) + 1.0, 1.0, mx);
+	
+	float mc = 1.0 - max(maskstr, 0.0);
 	
 	// No mask
 	if (shadowMask == -1.0)

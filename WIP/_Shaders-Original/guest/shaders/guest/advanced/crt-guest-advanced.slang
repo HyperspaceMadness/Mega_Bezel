@@ -73,7 +73,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter halation "          Halation Strength" 0.0 -2.0 2.0 0.025
 #define halation         global.halation     // halation effect
 
-#pragma parameter gamma_c "          Gamma correct" 1.0 0.50 2.0 0.02
+#pragma parameter gamma_c "          Gamma correct" 1.0 0.50 2.0 0.025
 #define gamma_c   global.gamma_c     // adjust brightness
 
 #pragma parameter brightboost "          Bright Boost Dark Pixels" 1.40 0.25 10.0 0.05

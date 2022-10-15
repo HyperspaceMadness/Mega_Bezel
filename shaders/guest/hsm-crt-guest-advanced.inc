@@ -42,7 +42,7 @@
 #pragma parameter halation "          Halation Strength -- halation" 0.0 -2.0 2.0 0.025
 #define halation         global.halation     // halation effect
 
-#pragma parameter gamma_c "          Gamma Correct -- gamma_c" 1.0 0.50 2.0 0.02
+#pragma parameter gamma_c "          Gamma Correct -- gamma_c" 1.0 0.50 2.0 0.025
 #define gamma_c   global.gamma_c     // adjust brightness
 
 #pragma parameter brightboost "          Bright Boost Dark Pixels -- brightboost" 1.40 0.25 10.0 0.05

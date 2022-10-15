@@ -4,13 +4,17 @@ Mega Bezel is updated to V1.5.0_2022-10-11
 
 Changes:
   * Fixed GLCore viewport size cache issue
-  * Changed the image fill mode to be simpler
+  * Updated to crt-guest-advanced-2022-10-15-release1
+  * Changed the Image Fill Mode parameter to be simpler
+    * It now has 3 options
+      * 0 - KEEP TEXURE ASPECT
+      * 1 - SPLIT
+      * 2 - STRETCH
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
-  * Fix Blur Noise Samples
   * Integer Scale Mode X & Y not affecting tube scale
   * Move Global Variable Update to separate file for compile speed
 
