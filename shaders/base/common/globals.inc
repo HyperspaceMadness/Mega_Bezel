@@ -734,6 +734,7 @@ float mask_bloom;
 	float shadowMask;
 	float maskstr;
 	float mcut;	
+	float maskboost;
 	float masksize;
 	float maskDark;
 	float maskLight;

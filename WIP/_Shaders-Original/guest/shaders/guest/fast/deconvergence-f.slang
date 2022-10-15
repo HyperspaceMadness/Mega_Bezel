@@ -64,6 +64,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float dctypey;
 	float post_br;
 	float noisetype;
+	float maskboost;
 } global;
 
 
@@ -138,6 +139,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter mcut "          Mask 5-12 Low Strength" 1.10 0.0 2.0 0.05
 #define mcut         params.mcut      // Mask 5-12 dark color strength
+
+#pragma parameter maskboost "          CRT Mask Boost" 1.0 1.0 3.0 0.05
+#define maskboost     global.maskboost     // Mask Boost
 
 #pragma parameter masksize "          CRT Mask Size" 1.0 1.0 4.0 1.0
 #define masksize     params.masksize     // Mask Size
@@ -411,7 +415,8 @@ vec3 Mask(vec2 pos, float mx)
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
 	}
 	
-	return mask;
+	float maskmin = min(min(mask.r,mask.g),mask.b);
+	return (mask - maskmin) * maskboost + maskmin;
 }
 
 float SlotMask(vec2 pos, float m)
@@ -614,10 +619,9 @@ void main()
 	if (mask_bloom > 0.025)
 	{
 		float maxb = max(max(Bloom.r,Bloom.g),Bloom.b);
-		maxb = pow(sqrt(maxb*mix(maxb, colmx, 0.75)),0.375);
-		vec3 mBloom = 0.5*(1.25*Bloom+0.75*maxb) * mix(1.0, 2.0-colmx, (bloom_dist + 0.5));
-		float maskmx = 1.0; if (shadowMask > 0.5 || shadowMask < 4.5) maskmx = maskLight; else if (shadowMask > 6.5 && shadowMask < 10.5) maskmx = 1.0; else maskmx = max(max(cmask.r,cmask.g),cmask.b);
-		cmask = min(cmask + maxb*mBloom*mask_bloom, maskmx);
+		maxb = pow(sqrt(maxb*mix(maxb, colmx, 0.75)),0.325);
+		vec3 mBloom = 0.5*(1.4*Bloom+0.6*maxb) * mix(1.0, 2.0-colmx, (bloom_dist + 0.5));
+		cmask = max(min(cmask + maxb*mBloom*mask_bloom, 1.0), cmask);
 		smask = min(smask + maxb*max(max(mBloom.r,mBloom.g),mBloom.b)*mask_bloom, 1.0);
 	}
 

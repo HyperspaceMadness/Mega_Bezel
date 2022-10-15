@@ -48,6 +48,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float bloom_dist;
 	float mshift;
 	float mask_layout;
+	float maskboost;
 } global;
 
 #pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
@@ -133,6 +134,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter mcut "          Mask 5-12 Low Strength" 1.10 0.0 2.0 0.05
 #define mcut         params.mcut      // Mask 5-12 dark color strength
 
+#pragma parameter maskboost "          CRT Mask Boost" 1.0 1.0 3.0 0.05
+#define maskboost     global.maskboost     // Mask Boost
+
 #pragma parameter masksize "          CRT Mask Size" 1.0 1.0 4.0 1.0
 #define masksize     params.masksize     // Mask Size
 
@@ -198,7 +202,7 @@ layout(location = 0) out vec2 vTexCoord;
 void main()
 {
    gl_Position = global.MVP * Position;
-   vTexCoord = TexCoord * 1.00001;
+   vTexCoord = TexCoord * 1.00000;
 }
 
 #pragma stage fragment
@@ -424,7 +428,8 @@ vec3 Mask(vec2 pos, float mx)
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;		
 	}  
  
-	return mask;
+	float maskmin = min(min(mask.r,mask.g),mask.b);
+	return (mask - maskmin) * maskboost + maskmin;
 }
 
 float SlotMask(vec2 pos, float m)
