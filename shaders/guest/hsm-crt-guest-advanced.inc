@@ -361,9 +361,9 @@ void main()
 	*/
 	
 	// HSM Added
-	float fdivider = min((1 - USE_VERTICAL_SCANLINES) * HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR + 
-			   				USE_VERTICAL_SCANLINES *  HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR, 
-			   				2.0);
+	float fdivider = min((1 - USE_VERTICAL_SCANLINES) * SAMPLING_SCANLINE_DIR_MULT + 
+			   				  USE_VERTICAL_SCANLINES *  SAMPLING_OPPOSITE_DIR_MULT, 
+			   				  2.0);
 	// End Addition
 
 	float wl3 = (2.0 + fpx)/fdivider;

@@ -149,6 +149,8 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, vec2 vTexCoo
 	sample_coord = HSM_GetCacheSampleCoord(1, 1);
 	texture_sample = texture(in_cache_pass, sample_coord);
 	AVERAGE_LUMA = texture_sample.a;
+	SAMPLING_SCANLINE_DIR_MULT = texture_sample.r;
+	SAMPLING_OPPOSITE_DIR_MULT = texture_sample.g;
 
 	float res_mult_size_sum = 0;
 	float res_mult_size_sum_feedback = 0;

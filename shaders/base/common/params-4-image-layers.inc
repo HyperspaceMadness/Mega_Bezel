@@ -27,6 +27,7 @@
 //---------------------------------------------------------------------------------------------------
 //    IMAGE LAYERING START
 //---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_LAYER_ORDER_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_LAYER_ORDER_TITLE			  "[ LAYER ORDER ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_BG_LAYER_ORDER              "          Background Layer"  0 0 12 1
@@ -60,6 +61,7 @@ float HSM_TOP_LAYER_ORDER = global.HSM_TOP_LAYER_ORDER;
 //---------------------------------------------------------------------------------------------------
 //    CutOut in Image Layers
 //---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_CUTOUT_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_CUTOUT_TITLE			     "[ CUTOUT ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_CUTOUT_ASPECT_MODE        "         Cutout Aspect- FULL | EXPL. | 4:3 | 3:4 | 16:9 | 9:16" 4 0 5 1
@@ -93,6 +95,7 @@ float HSM_CUTOUT_CORNER_RADIUS = global.HSM_CUTOUT_CORNER_RADIUS;
 //---------------------------------------------------------------------------------------------------
 //    MASK DEBUG
 //---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_MASK_DEBUG_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_MASK_DEBUG_TITLE			"[ MASK DEBUG ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_LAYERING_DEBUG_MASK_MODE    "    Mask - ALL | SCRN | TUBE | BZ- | BZ | BZ+ | FRM | FRM+ | BG" -1 -2 8 1
@@ -101,6 +104,7 @@ float HSM_LAYERING_DEBUG_MASK_MODE = global.HSM_LAYERING_DEBUG_MASK_MODE;
 //---------------------------------------------------------------------------------------------------
 //    BG IMAGE
 //---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_BACKGROUND_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_BACKGROUND_TITLE			"[ BACKGROUND LAYER ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_BG_OPACITY                  "          Opacity" 100 0 100 0.1
@@ -149,6 +153,7 @@ float HSM_BG_CUTOUT_MODE = global.HSM_BG_CUTOUT_MODE;
 float HSM_BG_DUALSCREEN_VIS_MODE = global.HSM_BG_DUALSCREEN_VIS_MODE;
 
 //---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_BG2_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_BG_TITLE2			           "[ BACKGROUND SCALE & FOLLOW ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_BG_FOLLOW_LAYER               "          Follow Layer - FULL | TUBE | BEZEL" 0 0 2 1
@@ -188,6 +193,7 @@ float HSM_BG_MIRROR_WRAP = global.HSM_BG_MIRROR_WRAP;
 //---------------------------------------------------------------------------------------------------
 //    VIEWPORT VIGNETTE
 //---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_VIEWPORT_VIGNETTE_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_VIEWPORT_VIGNETTE_TITLE		"[ VIEWPORT VIGNETTE LAYER ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_VIEWPORT_VIGNETTE_OPACITY     "          Opacity" 0 0 100 2
@@ -218,6 +224,7 @@ float HSM_VIEWPORT_VIGNETTE_POS_Y = global.HSM_VIEWPORT_VIGNETTE_POS_Y / 100;
 //---------------------------------------------------------------------------------------------------
 //    LED IMAGE
 //---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_LEDX_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_LED_TITLE		                "[ LED LAYER ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_LED_OPACITY                   "          Opacity"  100 0 100 1
@@ -266,6 +273,7 @@ float HSM_LED_CUTOUT_MODE = global.HSM_LED_CUTOUT_MODE;
 float HSM_LED_DUALSCREEN_VIS_MODE = global.HSM_LED_DUALSCREEN_VIS_MODE;
 
 //---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_LED2_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_LED_TITLE2		                "[ LED SCALE & FOLLOW]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_LED_FOLLOW_LAYER                  "             Follow Layer - FULL | TUBE | BEZEL | BG | DEVICE"  3 0 4 1
@@ -302,6 +310,7 @@ float HSM_LED_POS_Y = global.HSM_LED_POS_Y / 100;
 //---------------------------------------------------------------------------------------------------
 //    DEVICE IMAGE
 //---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_DEVICE_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_DEVICE_TITLE			           "[ DEVICE IMAGE LAYER ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_DEVICE_OPACITY                   "          Opacity" 100 0 100 1
@@ -350,6 +359,7 @@ float HSM_DEVICE_CUTOUT_MODE = global.HSM_DEVICE_CUTOUT_MODE;
 float HSM_DEVICE_DUALSCREEN_VIS_MODE = global.HSM_DEVICE_DUALSCREEN_VIS_MODE;
 
 //---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_DEVICE2_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_DEVICE_TITLE2			           "[ DEVICE SCALE & FOLLOW ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_DEVICE_FOLLOW_LAYER                "          Follow Layer - FULL | TUBE | BEZEL | BG"  1 0 3 1
@@ -387,6 +397,7 @@ float HSM_DEVICE_POS_Y = global.HSM_DEVICE_POS_Y / 100;
 //---------------------------------------------------------------------------------------------------
 //    DEVICELED IMAGE
 //---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_DEVICELED_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_DEVICELED_TITLE			           "[ DEVICE LED IMAGE LAYER ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_DEVICELED_OPACITY                   "          Opacity" 100 0 100 1
@@ -435,6 +446,7 @@ float HSM_DEVICELED_CUTOUT_MODE = global.HSM_DEVICELED_CUTOUT_MODE;
 float HSM_DEVICELED_DUALSCREEN_VIS_MODE = global.HSM_DEVICELED_DUALSCREEN_VIS_MODE;
 
 //---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_DEVICELED2_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_DEVICELED_TITLE2			          "[ DEVICE LED SCALE & FOLLOW ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_DEVICELED_FOLLOW_LAYER              "          Follow Layer - FULL | TUBE | BEZEL | BG | DEVICE"  4 0 4 1
@@ -471,6 +483,7 @@ float HSM_DEVICELED_POS_Y = global.HSM_DEVICELED_POS_Y / 100;
 //---------------------------------------------------------------------------------------------------
 //    DECAL IMAGE
 //---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_DECAL_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_DECAL_TITLE			            "[ DECAL LAYER ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_DECAL_OPACITY                     "          Opacity"  100 0 100 0.1
@@ -519,6 +532,7 @@ float HSM_DECAL_CUTOUT_MODE = global.HSM_DECAL_CUTOUT_MODE;
 float HSM_DECAL_DUALSCREEN_VIS_MODE = global.HSM_DECAL_DUALSCREEN_VIS_MODE;
 
 //---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_DECAL2_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_DECAL_TITLE2			            "[ DECAL SCALE & FOLLOW ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_DECAL_FOLLOW_LAYER                "          Follow Layer - FULL | TUBE | BEZEL | BG | DEVICE"  0 0 4 1
@@ -555,6 +569,7 @@ float HSM_DECAL_POS_Y = global.HSM_DECAL_POS_Y / 100;
 //---------------------------------------------------------------------------------------------------
 //    CAB GLS IMAGE
 //---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_CAB_GLASS_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_CAB_GLASS_TITLE			            "[ CABINET GLASS LAYER ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_CAB_GLASS_OPACITY                     "          Opacity" 100 0 100 1
@@ -603,6 +618,7 @@ float HSM_CAB_GLASS_CUTOUT_MODE = global.HSM_CAB_GLASS_CUTOUT_MODE;
 float HSM_CAB_GLASS_DUALSCREEN_VIS_MODE = global.HSM_CAB_GLASS_DUALSCREEN_VIS_MODE;
 
 //---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_CAB_GLASS2_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_CAB_GLASS_TITLE2			            "[ CABINET GLASS SCALE & FOLLOW ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_CAB_GLASS_FOLLOW_LAYER                "        Follow Layer- FULL | TUBE | BEZEL | BG | DEVICE | DECAL" 0 0 5 1
@@ -639,6 +655,7 @@ float HSM_CAB_GLASS_POS_Y = global.HSM_CAB_GLASS_POS_Y / 100;
 //---------------------------------------------------------------------------------------------------
 //    TOP IMAGE
 //---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_TOP_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_TOP_TITLE			                "[ TOP EXTRA LAYER ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_TOP_OPACITY                       "          Opacity"  100 0 100 0.1
@@ -687,6 +704,7 @@ float HSM_TOP_CUTOUT_MODE = global.HSM_TOP_CUTOUT_MODE;
 float HSM_TOP_DUALSCREEN_VIS_MODE = global.HSM_TOP_DUALSCREEN_VIS_MODE;
 
 //---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_TOP2_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_TOP_TITLE2			           "[ TOP SCALE & FOLLOW ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_TOP_FOLLOW_LAYER                  "      Follow Layer - FULL | TUBE | BEZEL | BG | DEVICE | DECAL" 0 0 5 1
@@ -726,7 +744,8 @@ float HSM_TOP_MIRROR_WRAP = global.HSM_TOP_MIRROR_WRAP;
 //---------------------------------------------------------------------------------------------------
 //    RENDER FOR SIMPLIFIED PRESETS
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_RENDER_FOR_SIMPLIFIED_TITLE       "[ MEGA BEZEL DEV RENDER FOR SIMPLIFIED PRESETS ]:" 1 0 1 1
+#pragma parameter HSM_RENDER_FOR_SIMPLIFIED_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter HSM_RENDER_FOR_SIMPLIFIED_TITLE       "[ MEGA BEZEL DEV RENDER FOR SIMPLIFIED PRESETS ]:" 0 0 0.001 0.001
 
 #pragma parameter HSM_RENDER_SIMPLE_MODE                "     Mode:  NORM | BLACK-SCREEN | BLACK-BG | PINK-MASK| BW-MASK" 0 0 4 1
 float HSM_RENDER_SIMPLE_MODE = global.HSM_RENDER_SIMPLE_MODE;

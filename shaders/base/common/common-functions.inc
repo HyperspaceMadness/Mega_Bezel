@@ -80,11 +80,6 @@ vec2 HSM_GetRotatedNegativeCropAddedSize()
 	return HSM_ROTATE_CORE_IMAGE * global.NegativeCropAddedPassSize.yx + (1 - HSM_ROTATE_CORE_IMAGE) * global.NegativeCropAddedPassSize.xy;
 }
 
-float HSM_GetNegativeCropExpandMultiplier()
-{
-	return HSM_GetNegativeCropAddedSize().y / HSM_GetDerezedSize().y;
-}
-
 float HSM_GetSwappedScreenIndex(float screen_index)
 {
 	float out_index = screen_index;
@@ -104,46 +99,6 @@ float HSM_GetSwappedScreenIndex(float screen_index)
 	return out_index;
 }
 
-// Get the original size with split area added
-vec2 HSM_GetScreenCorePreppedSize(float screen_index)
-{
-	vec2 core_prepped_size = global.NegativeCropAddedPassSize.xy;
-
-	if (HSM_DUALSCREEN_MODE > 0)
-		if (HSM_GetCoreImageSplitDirection() == 1)
-			core_prepped_size.y *= 0.5;
-		else
-			core_prepped_size.x *= 0.5;
-
-	return core_prepped_size;
-}
-
-vec2 HSM_GetRotatedScreenCorePreppedSize(float screen_index)
-{
-	vec2 original_size = HSM_GetScreenCorePreppedSize(screen_index);
-	return HSM_ROTATE_CORE_IMAGE * original_size.yx + (1 - HSM_ROTATE_CORE_IMAGE) * original_size.xy;
-}
-
-// Get the original size with split area added
-vec2 HSM_GetScreenDerezedSize()
-{
-	vec2 pass_size = global.DerezedPassSize.xy;
-
-	if (HSM_DUALSCREEN_MODE > 0)
-		if (HSM_GetCoreImageSplitDirection() == 1)
-			pass_size.y *= 0.5;
-		else
-			pass_size.x *= 0.5;
-
-	return pass_size;
-}
-
-vec2 HSM_GetRotatedScreenDerezedSize()
-{
-	vec2 pass_size = HSM_GetScreenDerezedSize();
-	return HSM_ROTATE_CORE_IMAGE * pass_size.yx + (1 - HSM_ROTATE_CORE_IMAGE) * pass_size.xy;
-}
-
 vec2 HSM_RotateCoordinate(vec2 in_coord, float rotation)
 {
 	vec2 ctr_coord = in_coord - 0.5;
@@ -153,40 +108,6 @@ vec2 HSM_RotateCoordinate(vec2 in_coord, float rotation)
 				+ abs(clamp(rotation, -1, 0)) * abs(rotation) * vec2(ctr_coord.y, -ctr_coord.x);
 
 	return ctr_coord + 0.5;
-}
-
-float HSM_GetUseVerticalScanlines(float screen_aspect)
-{
-	float auto_use_vert_scanlines = screen_aspect < 1 ? 1 : 0;
-
-	float scanline_direction = HSM_SCANLINE_DIRECTION < 2 ? 0 : 1;
-	
-	if (HSM_SCANLINE_DIRECTION < 1)
-		if (HSM_DUALSCREEN_MODE < 1) 
-			scanline_direction = auto_use_vert_scanlines;
-
-	return scanline_direction;
-}
-
-vec2 HSM_GetResMult()
-{
-	// TODO when using target resolution
-	// float epsilon = 0.25;
-	// float original_res = 1464;
-	// float target_res
-	// float multiple = 1464 / 224;
-	// float int_multiple = floor(multiple + epsilon);
-	// float int_div_res_near_target_res = original_res / int_multiple;
-
-	vec2 original_size = HSM_GetRotatedNegativeCropAddedSize();
-	float use_vert_scanlines = HSM_GetUseVerticalScanlines(original_size.x/original_size.y);
-
-	vec2 sampling_mult = vec2(HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR, HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR);
-	
-	if (use_vert_scanlines == 1 && HSM_ROTATE_CORE_IMAGE == 0 || use_vert_scanlines == 0 && HSM_ROTATE_CORE_IMAGE == 1)
-		sampling_mult = sampling_mult.yx;
-
-	return sampling_mult;
 }
 
 // Texture Sampler function which takes a coordinate in the cropped coordinate space
@@ -261,16 +182,6 @@ vec2 GetSimpleImageScaledCoord(vec2 in_viewport_coord, vec2 in_viewport_unscaled
 	}
 
 	return HSM_AddPosScaleToCoord(coord_ctr + 0.5, in_pos, in_scale);
-}
-
-vec2 HSM_GetRotatedCorePreppedSizeWithResMult(float screen_index)
-{
-	vec2 prepped_size = HSM_GetScreenCorePreppedSize(screen_index);
-	vec2 sampling_mult = HSM_GetResMult();
-
-	vec2 sampling_size = vec2(floor(sampling_mult.x * prepped_size.x), floor(sampling_mult.y * prepped_size.y));
-
-	return HSM_ROTATE_CORE_IMAGE * sampling_size.yx + (1 - HSM_ROTATE_CORE_IMAGE) * sampling_size.xy;
 }
 
 vec2 HSM_GetScreenPositionOffset(vec2 placement_image_pos, vec2 screen_scale, float screen_index )
@@ -873,10 +784,6 @@ vec4 HSM_GetMipmappedTexSample(sampler2D in_sampler, vec2 in_coord, vec2 in_scal
 vec4 HSM_GetCroppedTexSample(sampler2D in_sampler, vec2 in_screen_coord)
 {
 	vec2 core_prepped_size = HSM_GetRotatedNegativeCropAddedSize();
-	if (HSM_GetUseVerticalScanlines(SCREEN_ASPECT) > 0.5)
-		in_screen_coord.x += HSM_CORE_RES_SAMPLING_SHIFT_OPPOSITE_DIR /CROPPED_ROTATED_SIZE_WITH_RES_MULT.x;
-	else
-		in_screen_coord.y += HSM_CORE_RES_SAMPLING_SHIFT_OPPOSITE_DIR /CROPPED_ROTATED_SIZE_WITH_RES_MULT.y;
 	vec4 out_color = HSM_GetTexSampleFromSampleStartAndSize(in_sampler, in_screen_coord, SAMPLE_AREA_START_PIXEL_COORD, CROPPED_ROTATED_SIZE);
 
 	return out_color;
