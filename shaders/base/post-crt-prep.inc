@@ -63,8 +63,8 @@ layout(set = 0, binding = 10) uniform sampler2D NightLightingImage;
 layout(set = 0, binding = 11) uniform sampler2D NightLighting2Image;
 layout(set = 0, binding = 12) uniform sampler2D IntroPass;
 
-layout(set = 0, binding = 13) uniform sampler2D MBZ_PostCRTPassFeedback;
-#define PassFeedback MBZ_PostCRTPassFeedback
+layout(set = 0, binding = 13) uniform sampler2D PostCRTPassFeedback;
+#define PassFeedback PostCRTPassFeedback
 
 // Torridgristle - ScanlineSimple pass - Public domain
 vec4 HSM_ApplyScanlineMask(vec4 in_color, vec2 screen_scale, vec2 in_coord, vec2 in_curved_coord, float in_scanline_opacity)

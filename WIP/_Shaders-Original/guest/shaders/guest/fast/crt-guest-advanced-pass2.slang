@@ -27,7 +27,7 @@
 layout(push_constant) uniform Push
 {
 	float brightboost, brightboost1, gsl, scanline1, scanline2, beam_min, beam_max, beam_size,
-    glow, vertmask, maskstr, inters, bloom, halation, scans, gamma_c, gamma_out, IOS;
+    glow, vertmask, maskstr, inters, bloom, halation, scans, gamma_c, gamma_out, IOS, no_scanlines;
 } params;
 
 layout(std140, set = 0, binding = 0) uniform UBO
@@ -56,7 +56,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-#pragma parameter intres "          Internal Resolution Y: 224p/240p, 1.5...y-dowsample" 0.0 0.0 6.0 0.5 // Joint parameter with linearize pass, values must match
+#pragma parameter intres "          Internal Resolution Y: 0.5...y-dowsample" 0.0 0.0 6.0 0.5 // Joint parameter with linearize pass, values must match
 
 #pragma parameter IOS "          Integer Scaling: Odd:Y, Even:'X'+Y" 0.0 0.0 4.0 1.0
 #define IOS          params.IOS     // Smart Integer Scaling
@@ -125,7 +125,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter scanline1 "          Scanline Beam Shape Center" 6.0 -20.0 20.0 0.5
 #define scanline1    params.scanline1      // scanline param, vertical sharpness
 
-#pragma parameter scanline2 "          Scanline Beam Shape Edges" 8.0 3.0 70.0 1.0 
+#pragma parameter scanline2 "          Scanline Beam Shape Edges" 8.0 0.0 70.0 1.0 
 #define scanline2    params.scanline2      // scanline param, vertical sharpness
 
 #pragma parameter beam_min "          Scanline Shape Dark Pixels" 1.30 0.25 5.0 0.05
@@ -146,7 +146,8 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter scan_falloff "          Scanline Falloff" 1.0 0.25 2.0 0.05
 #define scan_falloff        global.scan_falloff     // scanline falloff
 
-
+#pragma parameter no_scanlines "          No-scanline mode" 0.0 0.0 1.0 1.0
+#define no_scanlines params.no_scanlines
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
 #define TEX0 vTexCoord
@@ -228,6 +229,8 @@ vec2 Warp(vec2 pos)
 
 void main()
 {
+	vec2 prescalex = vec2(textureSize(LinearizePass, 0)) / global.OriginalSize.xy;
+
 	vec4 SourceSize = vec4(global.SourceSize.x, global.OriginalSize.y, global.SourceSize.z, global.OriginalSize.w);
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
@@ -235,17 +238,16 @@ void main()
 
 	float SourceY = SourceSize.y;
 	float sy = 1.0;
-	if (global.intres == 0.5) sy = SourceY/224.0; else
-	if (global.intres == 1.0) sy = SourceY/240.0; else
-	if (global.intres > 1.25) sy = global.intres;
-	SourceSize*=vec4(1.0, 1.0/sy, 1.0, sy); 
+	if (global.intres == 1.0) sy = SourceY/224.0;
+	if (global.intres > 0.25 && global.intres != 1.0) sy = global.intres;
+	SourceSize*=vec4(1.0, 1.0/sy, 1.0, sy);
 
 	// Calculating texel coordinates
    
 	vec2 texcoord = TEX0.xy;
 
 	if (IOS > 0.0 && !interb){
-		vec2 ofactor = OutputSize.xy/SourceSize.xy;
+		vec2 ofactor = OutputSize.xy/global.OriginalSize.xy;
 		vec2 intfactor = (IOS < 2.5) ? floor(ofactor) : ceil(ofactor);
 		vec2 diff = ofactor/intfactor;
 		float scan = diff.y;
@@ -274,11 +276,15 @@ void main()
 	pC4.x = pos.x;
 	
 	if (interb)  pC4.y = pos.y;
+
+	if (global.intres == 0.5 && prescalex.y < 1.5) pC4.y = floor(pC4.y * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
 	
 	vec3 color1 = COMPAT_TEXTURE(Pass1, pC4      ).rgb;
 	vec3 scolor1 = 	COMPAT_TEXTURE(Pass1, pC4      ).aaa;
 	
 	pC4+=dy;
+
+	if (global.intres == 0.5 && prescalex.y < 1.5) pC4.y = floor((pos.y + 0.33*dy.y) * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
 	
 	vec3 color2 = COMPAT_TEXTURE(Pass1, pC4      ).rgb;
 	vec3 scolor2 = 	COMPAT_TEXTURE(Pass1, pC4      ).aaa;
@@ -352,7 +358,8 @@ if (!interb)
 		cd2 = mix(one, vec3(v_low, v_high2, v_low), ds2);
 	}
 	
-	color = gc(color1)*w1*cd1 + gc(color2)*w2*cd2;
+	color = (gc(color1)*w1*cd1 + gc(color2)*w2*cd2)/mix(1.0.xxx, w1+w2, no_scanlines);
+
 	color = min(color, 1.0);
 }
 	

@@ -42,7 +42,7 @@ layout(set = 0, binding = 1) uniform sampler2D Source;
 layout(set = 0, binding = 2) uniform sampler2D InfoCachePassFeedback;
 layout(set = 0, binding = 3) uniform sampler2D ScreenPlacementImage;
 layout(set = 0, binding = 4) uniform sampler2D LinearizePassFeedback;
-layout(set = 0, binding = 5) uniform sampler2D DerezedPass;
+layout(set = 0, binding = 5) uniform sampler2D DerezedPassFeedback;
 
 // Get the original size with split area added
 vec2 HSM_GetScreenCorePreppedSize(float screen_index)
@@ -249,14 +249,11 @@ float HSM_GetIsCorePreppedSizeVertical(float screen_index)
 vec2 HSM_GetResMult(float use_vert_scanlines)
 {
 	vec2 linear_size = textureSize(LinearizePassFeedback, 0);
-	vec2 derez_size = textureSize(DerezedPass, 0);
+	vec2 derez_size = textureSize(DerezedPassFeedback, 0);
 
 	vec2 upscale_mult = linear_size / derez_size;
-	float upscale_mult_x = float(linear_size.x) / float(derez_size.x);
-	float upscale_mult_y = float(linear_size.y) / float(derez_size.y);
-
-	float upscale_scanline_dir_mult = use_vert_scanlines < 0.5 ? upscale_mult_x : upscale_mult_y;
-	float upscale_opposite_dir_mult = use_vert_scanlines < 0.5 ? upscale_mult_y : upscale_mult_x;
+	float upscale_scanline_dir_mult = use_vert_scanlines < 0.5 ? upscale_mult.x : upscale_mult.y;
+	float upscale_opposite_dir_mult = use_vert_scanlines < 0.5 ? upscale_mult.y : upscale_mult.x;
 
 	vec2 original_size = HSM_GetRotatedNegativeCropAddedSize();
 

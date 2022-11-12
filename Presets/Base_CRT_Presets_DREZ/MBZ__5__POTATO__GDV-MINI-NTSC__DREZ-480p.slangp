@@ -1,4 +1,4 @@
-shaders = 16
+shaders = 17
 
 shader0 = ../../shaders/base/add-params-potato.slang
 alias0 = "CorePass"
@@ -54,60 +54,69 @@ shader7 = ../../shaders/dogway/hsm-grade.slang
 filter_linear7 = false
 scale_type7 = source
 scale7 = 1.0
-float_framebuffer7 = true
 alias7 = "ColorCorrectPass"
 
-shader8 = ../../shaders/base/linearize.slang
-float_framebuffer8 = "true"
-alias8 = "LinearizePass"
+shader8 = ../../shaders/base/stock.slang
+filter_linear8 = true
+scale_type8 = source
+scale_x8 = 1.0
+scale_y8 = 1.0
+alias8 = "PrePass"
+mipmap_input8 = true
 
-shader9 = ../../shaders/base/stock.slang
-float_framebuffer9 = true
-alias9 = "PrePass0"
+shader9 = ../../shaders/guest/hsm-avg-lum.slang
+filter_linear9 = true
+scale_type9 = source
+scale9 = 1.0
+mipmap_input9 = true
+alias9 = "AvgLumPass"
 
-shader10 = ../../shaders/guest/ntsc/hsm-ntsc-pass1.slang
-filter_linear10 = false
-scale_type_x10 = source
-scale_type_y10 = source
-scale_x10 = 4.0
-scale_y10 = 1.0
-frame_count_mod10 = 2
+// Pass referenced by subsequent blurring passes and crt pass
+shader10 = ../../shaders/guest/hsm-interlace-and-linearize.slang
+filter_linear10 = true
+scale_type10 = source
+scale10 = 1.0
 float_framebuffer10 = true
-alias10 = "NPass1"
+alias10 = "LinearizePass"
 
-shader11 = ../../shaders/guest/ntsc/hsm-ntsc-pass2.slang
-filter_linear11 = true
-scale_type11 = source
-scale_x11 = 0.5
-scale_y11 = 1.0
-float_framebuffer11 = true
+shader11 = ../../shaders/base/stock.slang
+alias11 = "PrePass0"
 
-shader12 = ../../shaders/guest/ntsc/hsm-ntsc-pass3.slang
-filter_linear12 = true
-scale_type12 = source
-scale_x12 = 1.0
-scale_y12 = 1.0
+shader12 = ../../shaders/guest/ntsc/hsm-ntsc-pass1.slang
+filter_linear12 = false
 float_framebuffer12 = true
+scale_type_x12 = source
+scale_type_y12 = source
+scale_x12 = 4.0
+scale_y12 = 1.0
+frame_count_mod12 = 2
+alias12 = NPass1
 
-shader13 = ../../shaders/base/delinearize.slang
+shader13 = ../../shaders/guest/ntsc/hsm-ntsc-pass2.slang
+float_framebuffer13 = true
+filter_linear13 = true
 scale_type13 = source
-float_framebuffer13 = "true"
+scale_x13 = 0.5
+scale_y13 = 1.0
 
-shader14 = ../../shaders/guest/hsm-crt-dariusg-gdv-mini-potato.slang
-scale_type14 = viewport
+shader14 = ../../shaders/guest/ntsc/hsm-ntsc-pass3.slang
+filter_linear14 = true
+scale_type14 = source
 scale_x14 = 1.0
 scale_y14 = 1.0
-filter_linear14 = true
-float_framebuffer14 = "true"
-alias14 = "CRTPass"
+
+shader15 = ../../shaders/guest/hsm-crt-dariusg-gdv-mini-potato.slang
+scale_type15 = viewport
+scale_x15 = 1.0
+scale_y15 = 1.0
+filter_linear15 = true
 
 g_sat = 0.15
-g_gamma_out = 2.45
 
-shader15 = ../../shaders/base/post-crt-prep-potato.slang
-scale_type15 = viewport
-float_framebuffer15 = true
-alias15 = "PostCRTPass"
+shader16 = ../../shaders/base/post-crt-prep-potato.slang
+scale_type16 = viewport
+float_framebuffer16 = true
+alias16 = "PostCRTPass"
 // Define textures to be used by the different passes
 textures = "ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
 

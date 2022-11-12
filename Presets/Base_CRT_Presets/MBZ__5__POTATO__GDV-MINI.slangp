@@ -43,9 +43,10 @@ alias5 = "IntroPass"
 // Color Correction with Dogway's awesome Grade shader
 // Grade is after Afterglow so that brightening the black level does not break the afterglow
 shader6 = ../../shaders/dogway/hsm-grade.slang
-filter_linear6 = true
+filter_linear6 = false
 scale_type6 = source
 scale6 = 1.0
+alias6 = "ColorCorrectPass"
 
 shader7 = ../../shaders/guest/hsm-crt-dariusg-gdv-mini-potato.slang
 scale_type7 = viewport
@@ -56,7 +57,9 @@ filter_linear7 = true
 g_sat = 0.15
 
 shader8 = ../../shaders/base/post-crt-prep-potato.slang
-alias8 = "MBZ_PostCRTPass"
+scale_type8 = viewport
+float_framebuffer8 = true
+alias8 = "PostCRTPass"
 // Define textures to be used by the different passes
 textures = "ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
 

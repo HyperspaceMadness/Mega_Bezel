@@ -1,0 +1,20 @@
+shaders = 3
+
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/stock.slang
+float_framebuffer0 = true
+alias0 = "PrePass"
+
+shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/hsm-avg-lum.slang
+filter_linear1 = true
+scale_type1 = source
+scale1 = 1.0
+mipmap_input1 = true
+float_framebuffer1 = true
+alias1 = "AvgLumPass"
+
+// Pass referenced by subsequent blurring passes and crt pass
+shader2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/hsm-interlace.slang
+filter_linear2 = true
+scale_type2 = source
+scale2 = 1.0
+float_framebuffer2 = true

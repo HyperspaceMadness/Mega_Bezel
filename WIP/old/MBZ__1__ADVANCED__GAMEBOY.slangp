@@ -43,7 +43,7 @@ shader6 = ../../shaders/hsm-gameboy/hsm-gb-pass4.slang
 filter_linear6 = false
 scale_type6 = source
 scale6 = 1.0
-alias6 = "MBZ_PostCRTPass"
+alias6 = "PostCRTPass"
 
 // Reduce Resolution  ----------------------------------------------------------------
 //      Reduce the resolution to a small static size regardless of final resolution
@@ -103,7 +103,7 @@ mipmap_input12 = true
 filter_linear12 = true
 scale_type12 = viewport
 float_framebuffer12 = true
-alias12 = BR_CRTAndReflectionPass
+alias12 = ReflectionPass
 
 // Bezel Reflection ----------------------------------------------------------------
 

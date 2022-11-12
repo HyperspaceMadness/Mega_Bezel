@@ -1,4 +1,4 @@
-shaders = 23
+shaders = 22
 
 shader0 = ../../shaders/base/add-params-potato.slang
 alias0 = "CorePass"
@@ -49,22 +49,19 @@ scale6 = 1.0
 alias6 = "IntroPass"
 
 shader7 = ../../shaders/base/stock.slang
-float_framebuffer7 = true
 alias7 = "PreCRTPass"
 
 shader8 = ../../shaders/guest/hsm-afterglow0.slang
-filter_linear8 = false
+filter_linear8 = true
 scale_type8 = source
 scale8 = 1.0
 alias8 = "AfterglowPass"
-float_framebuffer8 = true
 
 shader9 = ../../shaders/guest/hsm-pre-shaders-afterglow.slang
-filter_linear9 = false
+filter_linear9 = true
 scale_type9 = source
 mipmap_input9 = true
 scale9 = 1.0
-float_framebuffer9 = true
 
 // Color Correction with Dogway's awesome Grade shader
 // Grade is after Afterglow so that brightening the black level does not break the afterglow
@@ -72,7 +69,6 @@ shader10 = ../../shaders/dogway/hsm-grade.slang
 filter_linear10 = false
 scale_type10 = source
 scale10 = 1.0
-float_framebuffer10 = true
 alias10 = "ColorCorrectPass"
 
 shader11 =  ../../shaders/guest/hsm-custom-fast-sharpen.slang
@@ -80,18 +76,20 @@ filter_linear11 = true
 scale_type11 = source
 scale_x11 = 1.0
 scale_y11 = 1.0
-float_framebuffer11 = true
 
 shader12 = ../../shaders/base/stock.slang
-float_framebuffer12 = true
+filter_linear12 = true
+scale_type12 = source
+scale_x12 = 1.0
+scale_y12 = 1.0
 alias12 = "PrePass"
+mipmap_input12 = true
 
 shader13 = ../../shaders/guest/hsm-avg-lum.slang
 filter_linear13 = true
 scale_type13 = source
 scale13 = 1.0
 mipmap_input13 = true
-float_framebuffer13 = true
 alias13 = "AvgLumPass"
 
 // Pass referenced by subsequent blurring passes and crt pass
@@ -100,64 +98,59 @@ filter_linear14 = true
 scale_type14 = source
 scale14 = 1.0
 float_framebuffer14 = true
+alias14 = "LinearizePass"
 
-shader15 = ../../shaders/base/linearize.slang
-float_framebuffer15 = "true"
-alias15 = "LinearizePass"
+shader15 = ../../shaders/guest/hsm-gaussian_horizontal.slang
+filter_linear15 = true
+scale_type_x15 = absolute
+scale_x15 = 800.0
+scale_type_y15 = source
+scale_y15 = 1.0 
+float_framebuffer15 = true
 
-shader16 = ../../shaders/guest/hsm-gaussian_horizontal.slang
+shader16 = ../../shaders/guest/hsm-gaussian_vertical.slang
 filter_linear16 = true
 scale_type_x16 = absolute
 scale_x16 = 800.0
-scale_type_y16 = source
-scale_y16 = 1.0 
+scale_type_y16 = absolute
+scale_y16 = 600.0
 float_framebuffer16 = true
+alias16 = GlowPass
 
-shader17 = ../../shaders/guest/hsm-gaussian_vertical.slang
+shader17 = ../../shaders/guest/hsm-bloom_horizontal.slang
 filter_linear17 = true
 scale_type_x17 = absolute
 scale_x17 = 800.0
 scale_type_y17 = absolute
-scale_y17 = 600.0
+scale_y17 = 600.0 
 float_framebuffer17 = true
-alias17 = GlowPass
 
-shader18 = ../../shaders/guest/hsm-bloom_horizontal.slang
+shader18 = ../../shaders/guest/hsm-bloom_vertical.slang
 filter_linear18 = true
-scale_type_x18 = absolute
-scale_x18 = 800.0
-scale_type_y18 = absolute
-scale_y18 = 600.0 
+scale_type_x18 = source
+scale_x18 = 1.0
+scale_type_y18 = source
+scale_y18 = 1.0
 float_framebuffer18 = true
+alias18 = BloomPass
 
-shader19 = ../../shaders/guest/hsm-bloom_vertical.slang
+shader19 = ../../shaders/guest/hsm-crt-guest-advanced-potato.slang
 filter_linear19 = true
-scale_type_x19 = source
-scale_x19 = 1.0
-scale_type_y19 = source
-scale_y19 = 1.0
 float_framebuffer19 = true
-alias19 = BloomPass
+scale_type19 = viewport
+scale_x19 = 1.0
+scale_y19 = 1.0
 
-shader20 = ../../shaders/guest/hsm-crt-guest-advanced-potato.slang
+shader20 = ../../shaders/guest/hsm-deconvergence-potato.slang
 filter_linear20 = true
 scale_type20 = viewport
 scale_x20 = 1.0
 scale_y20 = 1.0
-float_framebuffer20 = true
 
-shader21 = ../../shaders/guest/hsm-deconvergence-potato.slang
-filter_linear21 = true
+shader21 = ../../shaders/base/post-crt-prep-potato.slang
 scale_type21 = viewport
-scale_x21 = 1.0
-scale_y21 = 1.0
 float_framebuffer21 = true
-alias21 = "CRTPass"
-
-shader22 = ../../shaders/base/post-crt-prep-potato.slang
-scale_type22 = viewport
-float_framebuffer22 = true
-alias22 = "PostCRTPass"
+alias21 = "PostCRTPass"
 // Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
 

@@ -3,7 +3,7 @@
 /*
    Interlacing
    
-   Copyright (C) 2020 guest(r) - guest.r@gmail.com
+   Copyright (C) 2020 - 2022 guest(r) - guest.r@gmail.com
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@ layout(push_constant) uniform Push
 	float interm;
 	float inters;
 	float iscan;
+	float intres;
 } params;
 
 
@@ -52,6 +53,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter interm "          Interlace Mode: OFF, Normal 1-3, Interpolation 4-5" 1.0 0.0 5.0 1.0
 #define interm         params.interm     // interlace mode 
+
+#pragma parameter intres "          Internal Resolution Y: 0.5...y-dowsample" 0.0 0.0 3.0 0.5 // Joint parameter with main pass, values must match
+#define intres         params.intres     // interlace resolution
 
 #pragma parameter inters "          Interlacing Effect Smoothness" 0.0 0.0 0.5 0.05 // // Joint parameter with main pass, values must match
 #define inters  params.inters     // interlacing effect smoothing
@@ -105,7 +109,9 @@ void main()
 
 	float r = m1;
 		
-	if (inter <= params.OriginalSize.y && interm > 0.5)
+	float yres_div = 1.0; if (intres > 1.25) yres_div = intres;
+		
+	if (inter <= params.OriginalSize.y/yres_div && interm > 0.5 && intres != 1.0 && intres != 0.5) 
 	{
 		intera = 0.25;
 		float line_no  = clamp(floor(mod(params.OriginalSize.y*vTexCoord.y, 2.0)), 0.0, 1.0);

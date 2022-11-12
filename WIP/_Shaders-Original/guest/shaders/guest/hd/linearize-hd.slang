@@ -33,8 +33,6 @@ layout(push_constant) uniform Push
 	float iscan;
 	float intres;
 	float iscans;
-	float prescalex;
-	float prescaley;
 } params;
 
 
@@ -59,14 +57,8 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter iscan "          Interlacing Scanline Effect" 0.20 0.0 1.0 0.05
 #define iscan  params.iscan     // interlacing effect scanlining
 
-#pragma parameter intres "          Internal Resolution Y: 224p/240p, 1.5...y-dowsample" 0.0 0.0 6.0 0.5 // Joint parameter with main pass, values must match
+#pragma parameter intres "          Internal Resolution Y: 0.5...y-dowsample" 0.0 0.0 6.0 0.5 // Joint parameter with main pass, values must match
 #define intres         params.intres     // interlace resolution
-
-#pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader...)" 1.0 1.0 5.0 0.25  // Joint parameter with main pass, values must match
-#define prescalex        params.prescalex     // prescale-x factor
-
-#pragma parameter prescaley "          Prescale-Y Factor (for xBR...pre-shader...)" 1.0 1.0 5.0 0.25  // Joint parameter with main pass, values must match
-#define prescaley        params.prescaley     // prescale-y factor
 
 #pragma parameter iscans "          Interlacing (Scanline) Saturation" 0.25 0.0 1.0 0.05
 #define iscans        params.iscans     // interlace saturation

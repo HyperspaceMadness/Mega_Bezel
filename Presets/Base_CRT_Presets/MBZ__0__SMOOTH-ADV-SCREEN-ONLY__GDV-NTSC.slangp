@@ -110,9 +110,10 @@ scale26 = 1.0
 // Color Correction with Dogway's awesome Grade shader
 // Grade is after Afterglow so that brightening the black level does not break the afterglow
 shader27 = ../../shaders/dogway/hsm-grade.slang
-filter_linear27 = true
+filter_linear27 = false
 scale_type27 = source
 scale27 = 1.0
+alias27 = "ColorCorrectPass"
 
 shader28 = ../../shaders/base/stock.slang
 alias28 = "PrePass0"
@@ -226,7 +227,9 @@ scale_x42 = 1.0
 scale_y42 = 1.0
 
 shader43 = ../../shaders/base/post-crt-prep-no-reflect.slang
-alias43 = "MBZ_PostCRTPass"
+scale_type43 = viewport
+float_framebuffer43 = true
+alias43 = "PostCRTPass"
 // Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 

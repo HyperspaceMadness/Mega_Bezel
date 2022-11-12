@@ -27,7 +27,7 @@
 layout(push_constant) uniform Push
 {
 	float IOS, OS, BLOOM, brightboost, brightboost1, gsl, scanline1, scanline2, beam_min, beam_max, beam_size,
-	h_sharp, s_sharp, warpX, warpY, glow, shadowMask, masksize, vertmask, ring;
+	h_sharp, s_sharp, warpX, warpY, glow, shadowMask, masksize, vertmask, ring, no_scanlines;
 } params;
 
 layout(std140, set = 0, binding = 0) uniform UBO
@@ -117,9 +117,12 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter rolling_scan "          Rolling Scanlines" 0.0 -1.0 1.0 0.01
 #define rolling_scan        global.rolling_scan     // rolling scanlines
 
+#pragma parameter no_scanlines "          No-scanline mode" 0.0 0.0 1.0 1.0
+#define no_scanlines params.no_scanlines
+
 #pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-#pragma parameter intres "          Internal Resolution Y: 224p/240p, 1.5...y-dowsample" 0.0 0.0 6.0 0.5 // Joint parameter with linearize pass, values must match
+#pragma parameter intres "          Internal Resolution Y: 0.5...y-dowsample" 0.0 0.0 6.0 0.5 // Joint parameter with linearize pass, values must match
 
 #pragma parameter IOS "          Integer Scaling: Odd:Y, Even:'X'+Y" 0.0 0.0 4.0 1.0
 #define IOS          params.IOS     // Smart Integer Scaling
@@ -144,9 +147,6 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter overscanY "          Overscan Y original pixels" 0.0 -200.0 200.0 1.0
 #define overscanY        global.overscanY     // OverscanY pixels
-
-#pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader)" 1.0 1.0 4.0 1.0
-#define prescalex        global.prescalex     // prescale-x factor
 
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
@@ -233,6 +233,8 @@ vec3 gc(vec3 c)
 
 void main()
 {
+	float prescalex = float(textureSize(LinearizePass, 0).x) / (2.0*global.OriginalSize.x);
+	
 	vec4 SourceSize = global.OriginalSize * vec4(prescalex, 1.0, 1.0/prescalex, 1.0);
 	
 	SourceSize*= vec4(2.0, 1.0, 0.5, 1.0);
@@ -242,19 +244,18 @@ void main()
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
 	bool interb  = (intera < 0.5);
-	
-	float SourceY = SourceSize.y;
+
+	float SourceY = SourceSize.y;	
 	float sy = 1.0;
-	if (global.intres == 0.5) sy = SourceY/224.0; else
-	if (global.intres == 1.0) sy = SourceY/240.0; else
-	if (global.intres > 1.25) sy = global.intres;
+	if (global.intres == 1.0) sy = SourceY/224.0;
+	if (global.intres > 0.25 && global.intres != 1.0) sy = global.intres;
 	SourceSize*=vec4(1.0, 1.0/sy, 1.0, sy);
 	
 	// Calculating texel coordinates
    
 	vec2 texcoord = TEX0.xy;
 	if (IOS > 0.0 && !interb){
-		vec2 ofactor = OutputSize.xy/SourceSize.xy;
+		vec2 ofactor = OutputSize.xy/global.OriginalSize.xy;
 		vec2 intfactor = (IOS < 2.5) ? floor(ofactor) : ceil(ofactor);
 		vec2 diff = ofactor/intfactor;
 		float scan = diff.y;
@@ -265,7 +266,7 @@ void main()
 	float factor  = 1.00 + (1.0-0.5*OS)*BLOOM/100.0 - lum*BLOOM/100.0;
 	texcoord  = Overscan(texcoord, factor, factor);
 
-	texcoord = Overscan(texcoord, (SourceSize.x - overscanX)/SourceSize.x, (SourceSize.y - overscanY)/SourceSize.y);
+	texcoord = Overscan(texcoord, (global.OriginalSize.x - overscanX)/global.OriginalSize.x, (global.OriginalSize.y - overscanY)/global.OriginalSize.y);
 
 	vec2 pos  = Warp(texcoord);
 	vec2 pos0 = Warp(TEX0.xy);
@@ -287,12 +288,16 @@ void main()
 	pC4.x = pos.x;	
 	if (interb)  pC4.y = pos.y;
 
+	if (global.intres == 0.5 && prescalex < 1.5) pC4.y = floor(pC4.y * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
+	
 	vec3 color1 = COMPAT_TEXTURE(Pass1, pC4      ).rgb;
 	vec3 scolor1 = 	COMPAT_TEXTURE(Pass1, pC4      ).aaa;
 
 	if(!interb) color1 = pow(color1, vec3(scangamma/gamma_in));
   
 	pC4+=dy;
+
+	if (global.intres == 0.5 && prescalex < 1.5) pC4.y = floor((pos.y + 0.33*dy.y) * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
 	
 	vec3 color2 = COMPAT_TEXTURE(Pass1, pC4      ).rgb;
 	vec3 scolor2 = 	COMPAT_TEXTURE(Pass1, pC4      ).aaa;
@@ -373,7 +378,7 @@ if (!interb)
 		cd2 = mix(one, vec3(v_low, v_high2, v_low), ds2);
 	}
 	
-	color = gc(color1)*w1*cd1 + gc(color2)*w2*cd2;
+	color = (gc(color1)*w1*cd1 + gc(color2)*w2*cd2)/mix(1.0.xxx, w1+w2, no_scanlines);
 
 	if (abs(rolling_scan) > 0.005) 
 	{ 

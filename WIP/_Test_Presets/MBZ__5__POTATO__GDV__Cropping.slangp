@@ -94,7 +94,7 @@ scale_x14 = 800.0
 scale_type_y14 = absolute
 scale_y14 = 600.0
 float_framebuffer14 = true
-alias14 = GlowPass
+alias14 = "GlowPass"
 
 shader15 = ../../shaders/guest/hsm-bloom_horizontal.slang
 filter_linear15 = true
@@ -111,7 +111,7 @@ scale_x16 = 1.0
 scale_type_y16 = source
 scale_y16 = 1.0
 float_framebuffer16 = true
-alias16 = BloomPass
+alias16 = "BloomPass"
 
 shader17 = ../../shaders/guest/hsm-crt-guest-advanced-potato.slang
 filter_linear17 = true
@@ -126,7 +126,7 @@ scale_x18 = 1.0
 scale_y18 = 1.0
 
 shader19 = ../../shaders/base/post-crt-prep-potato.slang
-alias19 = "MBZ_PostCRTPass"
+alias19 = "PostCRTPass"
 // Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
 

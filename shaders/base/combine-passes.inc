@@ -74,11 +74,11 @@ layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
 layout(set = 0, binding = 3) uniform sampler2D BR_LayersUnderCRTPass;
 
 #ifdef IS_NO_REFLECT_PRESET
-layout(set = 0, binding = 4) uniform sampler2D MBZ_PostCRTPass;
-#define MiddlePass MBZ_PostCRTPass
+layout(set = 0, binding = 4) uniform sampler2D PostCRTPass;
+#define MiddlePass PostCRTPass
 #else
-layout(set = 0, binding = 4) uniform sampler2D BR_CRTAndReflectionPass;
-#define MiddlePass BR_CRTAndReflectionPass
+layout(set = 0, binding = 4) uniform sampler2D ReflectionPass;
+#define MiddlePass ReflectionPass
 #endif
 
 layout(set = 0, binding = 5) uniform sampler2D BR_LayersOverCRTPass;

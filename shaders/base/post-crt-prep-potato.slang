@@ -56,8 +56,8 @@ layout(set = 0, binding = 2) uniform sampler2D InfoCachePass;
 layout(set = 0, binding = 7) uniform sampler2D BackgroundImage;
 layout(set = 0, binding = 8) uniform sampler2D BackgroundVertImage;
 
-layout(set = 0, binding = 11) uniform sampler2D MBZ_PostCRTPassFeedback;
-#define PassFeedback MBZ_PostCRTPassFeedback
+layout(set = 0, binding = 11) uniform sampler2D PostCRTPassFeedback;
+#define PassFeedback PostCRTPassFeedback
 
 vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, vec2 VIEWPORT_COORD_TRANSFORMED, vec2 screen_curved_coord, in sampler2D BackgroundImage, in sampler2D BackgroundVertImage)
 { 

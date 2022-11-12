@@ -35,8 +35,6 @@ layout(push_constant) uniform Push
 	float S_SHARP;
 	float HARNG;
 	float HSHARP; 
-	float prescalex;
-	float prescaley;
 	float spike;
 	float SIGMA_VER;
 	float VSHARPNESS;
@@ -92,11 +90,6 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter spike "          Scanline Spike Removal" 1.0 0.0 2.0 0.10
 #define spike params.spike
 
-#pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader...)" 1.0 1.0 5.0 0.25  // Joint parameter with main pass, values must match
-#define prescalex        params.prescalex     // prescale-x factor
-
-#pragma parameter prescaley "          Prescale-Y Factor (for xBR...pre-shader...)" 1.0 1.0 5.0 0.25  // Joint parameter with Linearize Pass pass, values must match
-#define prescaley        params.prescaley     // prescale-y factor
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
 #define TEX0 vTexCoord
@@ -129,7 +122,9 @@ float gaussian(float x)
 
 void main()
 {	
-	vec4 SourceSize = params.OriginalSize * vec4(prescalex, prescaley, 1.0/prescalex, 1.0/prescaley);
+	vec2 prescalex = vec2(textureSize(LinearizePass, 0)) / params.OriginalSize.xy;
+
+	vec4 SourceSize = params.OriginalSize * vec4(prescalex.x, prescalex.y, 1.0/prescalex.x, 1.0/prescalex.y);
 	
 	float f = fract(SourceSize.x * vTexCoord.x);
 	f = 0.5 - f;

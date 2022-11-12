@@ -27,7 +27,7 @@
 layout(push_constant) uniform Push
 {
 	float TATE, IOS, OS, BLOOM, brightboost, brightboost1, gsl, scanline1, scanline2, beam_min, beam_max, beam_size,
-	h_sharp, s_sharp, csize, bsize1, warpX, warpY, glow, vertmask, spike, ring;
+	h_sharp, s_sharp, csize, bsize1, warpX, warpY, glow, vertmask, spike, ring, no_scanlines;
 } params;
 
 layout(std140, set = 0, binding = 0) uniform UBO
@@ -120,6 +120,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter scangamma "          Scanline Gamma" 2.40 0.5 5.0 0.05
 #define scangamma global.scangamma
 
+#pragma parameter no_scanlines "          No-scanline mode" 0.0 0.0 1.0 1.0
+#define no_scanlines params.no_scanlines
+
 #pragma parameter bogus_filtering "[ FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
 
 #pragma parameter h_sharp "          Horizontal sharpness" 5.20 0.20 15.0 0.10
@@ -142,7 +145,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-#pragma parameter intres "          Internal Resolution Y: 224p/240p, 1.5...y-dowsample" 0.0 0.0 6.0 0.5 // Joint parameter with linearize pass, values must match
+#pragma parameter intres "          Internal Resolution Y: 0.5...y-dowsample" 0.0 0.0 6.0 0.5 // Joint parameter with linearize pass, values must match
 
 #pragma parameter TATE "          TATE Mode" 0.0 0.0 1.0 1.0
 #define TATE         params.TATE     // Screen orientation
@@ -170,9 +173,6 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter overscanY "          Overscan Y original pixels" 0.0 -200.0 200.0 1.0
 #define overscanY        global.overscanY     // OverscanY pixels
-
-#pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader)" 1.0 1.0 4.0 1.0
-#define prescalex        global.prescalex     // prescale-x factor
 
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
@@ -260,7 +260,9 @@ vec3 gc(vec3 c)
 
 void main()
 {
-	vec4 SourceSize = global.OriginalSize * mix( vec4(prescalex, 1.0, 1.0/prescalex, 1.0), vec4(1.0, prescalex, 1.0, 1.0/prescalex), TATE);
+	vec2 prescalex = vec2(vec2(textureSize(LinearizePass, 0))/global.OriginalSize.xy);
+	
+	vec4 SourceSize = global.OriginalSize * mix( vec4(prescalex.x, 1.0, 1.0/prescalex.x, 1.0), vec4(1.0, prescalex.y, 1.0, 1.0/prescalex.y), TATE);
 	
 	float lum = COMPAT_TEXTURE(AvgLumPass, vec2(0.5,0.5)).a;
 	
@@ -270,17 +272,17 @@ void main()
 	bool notate  = (TATE < 0.5);
 
 	float SourceY = mix(SourceSize.y, SourceSize.x, TATE);
+	
 	float sy = 1.0;
-	if (global.intres == 0.5) sy = SourceY/224.0; else
-	if (global.intres == 1.0) sy = SourceY/240.0; else
-	if (global.intres > 1.25) sy = global.intres;
+	if (global.intres == 1.0) sy = SourceY/224.0;
+	if (global.intres > 0.25 && global.intres != 1.0) sy = global.intres;
 	if (notate) SourceSize*=vec4(1.0, 1.0/sy, 1.0, sy); else SourceSize*=vec4(1.0/sy, 1.0, sy, 1.0);
 	
 	// Calculating texel coordinates
    
 	vec2 texcoord = TEX0.xy;
 	if (IOS > 0.0 && !interb){
-		vec2 ofactor = OutputSize.xy/SourceSize.xy;
+		vec2 ofactor = OutputSize.xy/global.OriginalSize.xy;
 		vec2 intfactor = (IOS < 2.5) ? floor(ofactor) : ceil(ofactor);
 		vec2 diff = ofactor/intfactor;
 		float scan = mix(diff.y, diff.x, TATE);
@@ -325,12 +327,15 @@ void main()
 	
 	vec2 pC4 = floor(OGL2Pos) * ps + 0.5*ps; 
 	
+	if (global.intres == 0.5 &&  notate && prescalex.y < 1.5) pC4.y = floor(pC4.y * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
+	if (global.intres == 0.5 && !notate && prescalex.x < 1.5) pC4.x = floor(pC4.x * global.OriginalSize.x)*global.OriginalSize.z + 0.5*global.OriginalSize.z;
+	
 	if (interb)  pC4.y = pos.y;
 	
 	float zero = exp2(-h_sharp);
 	float sharp1 = s_sharp * zero;
 	
-	float fdivider = min(prescalex, 2.0);
+	float fdivider = min(mix(prescalex.x, prescalex.y,TATE), 2.0);
 	
 	float wl3 = (2.0 + fpx)/fdivider;
 	float wl2 = (1.0 + fpx)/fdivider;
@@ -415,6 +420,9 @@ void main()
 	if (!interb)
 {	
 	pC4+=offy;
+
+	if (global.intres == 0.5 &&  notate && prescalex.y < 1.5) pC4.y = floor((pos.y + 0.33*offy.y) * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
+	if (global.intres == 0.5 && !notate && prescalex.x < 1.5) pC4.x = floor((pos.x + 0.33*offy.x) * global.OriginalSize.x)*global.OriginalSize.z + 0.5*global.OriginalSize.z;
 	
 	l3 = COMPAT_TEXTURE(LinearizePass, pC4 -off2).rgb;
 	l2 = COMPAT_TEXTURE(LinearizePass, pC4 -offx).rgb;
@@ -530,7 +538,7 @@ if (!interb)
 		cd2 = mix(one, vec3(v_low, v_high2, v_low), ds2);
 	}
 	
-	color = gc(color1)*w1*cd1 + gc(color2)*w2*cd2;
+	color = (gc(color1)*w1*cd1 + gc(color2)*w2*cd2)/mix(1.0.xxx, w1+w2, no_scanlines);
 
 	if (abs(rolling_scan) > 0.005) 
 	{ 

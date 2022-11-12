@@ -1,0 +1,16 @@
+#reference "Components/00__add-params__potato.slangp"
+#reference "Components/01__downrez__480p.slangp"
+#reference "Components/01__add-negative-crop-area.slangp"
+#reference "Components/10__info-cache-screen-scale-params.slangp"
+#reference "Components/11__text__potato.slangp"
+#reference "Components/12__intro__potato.slangp"
+#reference "Components/55__color-correct__grade.slangp
+#reference "Components/59__prep__gdv-linearize.slangp"
+#reference "Components/57__prep__gdv-ntsc.slangp"
+#reference "Components/60__crt__gdvmini-potato.slangp"
+#reference "Components/68__post-crt__potato.slangp"
+
+#reference "Components/90__textures__gdvmini-potato.slangp"
+
+#reference "Components/90__parameters__gdv-ntsc.slangp"
+#reference "Components/90__parameters__non-megatron.slangp"

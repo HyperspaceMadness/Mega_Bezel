@@ -56,11 +56,11 @@ void main()
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 1) in vec2 blur_dxdy;
 layout(location = 0) out vec4 FragColor;
-layout(set = 0, binding = 2) uniform sampler2D MBZ_PostCRTPass;
+layout(set = 0, binding = 2) uniform sampler2D PostCRTPass;
 
 #include "../../../../include/blur-functions.h"
 
 void main()
 {
-   FragColor = HSM_Linearize(vec4(tex2Dblur9x9(MBZ_PostCRTPass, vTexCoord, blur_dxdy), 1), DEFAULT_CRT_GAMMA);
+   FragColor = HSM_Linearize(vec4(tex2Dblur9x9(PostCRTPass, vTexCoord, blur_dxdy), 1), DEFAULT_CRT_GAMMA);
 }

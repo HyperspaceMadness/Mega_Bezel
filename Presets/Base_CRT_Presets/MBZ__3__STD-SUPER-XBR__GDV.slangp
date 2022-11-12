@@ -58,9 +58,10 @@ scale8 = 1.0
 // Color Correction with Dogway's awesome Grade shader
 // Grade is after Afterglow so that brightening the black level does not break the afterglow
 shader9 = ../../shaders/dogway/hsm-grade.slang
-filter_linear9 = true
+filter_linear9 = false
 scale_type9 = source
 scale9 = 1.0
+alias9 = "ColorCorrectPass"
 
 shader10 =  ../../shaders/guest/hsm-custom-fast-sharpen.slang
 filter_linear10 = true
@@ -198,7 +199,9 @@ scale_x25 = 1.0
 scale_y25 = 1.0
 
 shader26 = ../../shaders/base/post-crt-prep-image-layers.slang
-alias26 = "MBZ_PostCRTPass"
+scale_type26 = viewport
+float_framebuffer26 = true
+alias26 = "PostCRTPass"
 
 // Reduce Resolution  ----------------------------------------------------------------
 //      Reduce the resolution to a small static size regardless of final resolution
@@ -214,16 +217,19 @@ scale_type27 = absolute
 // scale_y27 = 540
 scale_x27 = 800
 scale_y27 = 600
+float_framebuffer27 = true
 alias27 = "BR_MirrorLowResPass"
 
 // Add Blur for the Reflection (Horizontal) ----------------------------------------------------------------
 shader28 = ../../shaders/base/blur-outside-screen-horiz.slang
 mipmap_input28 = true
 filter_linear28 = true
+float_framebuffer28 = true
 
 // Add Blur for the Reflection (Vertical) ----------------------------------------------------------------
 shader29 = ../../shaders/base/blur-outside-screen-vert.slang
 filter_linear29 = true
+float_framebuffer29 = true
 alias29 = "BR_MirrorBlurredPass"
 
 // Reduce resolution ----------------------------------------------------------------
@@ -235,6 +241,7 @@ filter_linear30 = true
 scale_type30 = absolute
 scale_x30 = 128
 scale_y30 = 128
+float_framebuffer30 = true
 alias30 = "BR_MirrorReflectionDiffusedPass"
 
 // Add Diffused glow all around the screen ----------------------------------------------------------------
@@ -246,13 +253,14 @@ filter_linear31 = true
 scale_type31 = absolute
 scale_x31 = 12
 scale_y31 = 12
+float_framebuffer31 = true
 alias31 = "BR_MirrorFullscreenGlowPass"
 
 // Bezel Reflection ----------------------------------------------------------------
 shader32 = ../../shaders/base/reflection.slang
 scale_type32 = viewport
 float_framebuffer32 = true
-alias32 = "BR_CRTAndReflectionPass"
+alias32 = "ReflectionPass"
 
 // Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 

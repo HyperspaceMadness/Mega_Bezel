@@ -46,7 +46,6 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float overscanX;
 	float overscanY;	
 	float intres;
-	float prescalex;
 	float c_shape;
 	float barspeed;
 	float barintensity;   
@@ -135,12 +134,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter overscanY "          Overscan Y original pixels" 0.0 -200.0 200.0 1.0
 #define overscanY        global.overscanY     // OverscanY pixels
 
-#pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader)" 1.0 1.0 4.0 1.0
-#define prescalex        global.prescalex     // prescale-x factor
-
 #pragma parameter bogus_masks "[ CRT MASK OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-#pragma parameter shadowMask "          CRT Mask: 0:CGWG, 1-4:Lottes, 5-12:'Trinitron'" 0.0 -1.0 12.0 1.0
+#pragma parameter shadowMask "          CRT Mask: 0:CGWG, 1-4:Lottes, 5-13:'Trinitron'" 0.0 -1.0 13.0 1.0
 #define shadowMask   params.shadowMask     // Mask Style
 
 #pragma parameter maskstr "          Mask Strength (0, 5-12)" 0.3 -0.5 1.0 0.025
@@ -161,7 +157,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter maskLight "          Lottes maskLight" 1.5 0.0 2.0 0.05
 #define maskLight    params.maskLight     // Light "Phosphor"
 
-#pragma parameter mshift "          Mask Shift/Stagger" 0.0 -8.0 8.0 1.0
+#pragma parameter mshift "          Mask Shift/Stagger" 0.0 -8.0 8.0 0.5
 #define mshift     params.mshift     // mask 'line' shift/stagger
 
 #pragma parameter mask_layout "          Mask Layout: RGB or BGR (check LCD panel) " 0.0 0.0 1.0 1.0
@@ -256,8 +252,9 @@ vec3 Mask(vec2 pos, float mx)
 {
 	vec2 pos0 = pos;
 	pos.y = floor(pos.y/masksize);
-	float next_line = float(fract(pos.y*0.5) > 0.25);
-	pos0.x = (mshift > -0.25) ? (pos0.x + next_line * mshift) : (pos0.x + pos.y * mshift);
+	float stagg_lvl = 1.0; if (fract(abs(mshift)) > 0.25 && abs(mshift) > 1.25) stagg_lvl = 2.0;
+	float next_line = float(fract((pos.y/stagg_lvl)*0.5) > 0.25);
+	pos0.x = (mshift > -0.25) ? (pos0.x + next_line * floor(mshift)) : (pos0.x + floor(pos.y / stagg_lvl) * floor(abs(mshift)));
 	pos = floor(pos0/masksize);
 
 	vec3 mask = vec3(maskDark, maskDark, maskDark);
@@ -419,13 +416,27 @@ vec3 Mask(vec2 pos, float mx)
 	}     
 
 	// RRGGBBX mask
-	else
+	else if (shadowMask == 12.0)
 	{
 		mask = vec3(0.0);
 		pos.x = floor(mod(pos.x,7.0));
-		if      (pos.x < 1.0)  mask   = 0.0.xxx;
-		else if (pos.x < 3.0)  mask.r = 1.0;
-		else if (pos.x < 5.0)  mask.g = 1.0;	
+		if      (pos.x < 0.5)  mask   = 0.0.xxx;
+		else if (pos.x < 2.5)  mask.r = 1.0;
+		else if (pos.x < 4.5)  mask.g = 1.0;	
+		else                   mask.b = 1.0;
+		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
+	}
+
+	// 4k mask
+	else
+	{
+		mask = vec3(0.0);
+		pos.x = floor(mod(pos.x,6.0));
+		if      (pos.x < 0.5)  mask   = 0.0.xxx;
+		else if (pos.x < 1.5)  mask.r = 1.0;
+		else if (pos.x < 2.5)  mask.rg = 1.0.xx;
+		else if (pos.x < 3.5)  mask.rgb = 1.0.xxx;
+		else if (pos.x < 4.5)  mask.gb = 1.0.xx;		
 		else                   mask.b = 1.0;
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
 	}
@@ -573,7 +584,7 @@ void fetch_pixel (inout vec3 c, inout vec3 b, vec2 coord, vec2 bcoord)
 
 void main()
 {
-	vec4 SourceSize = global.OriginalSize * vec4(prescalex, 1.0, 1.0/prescalex, 1.0);
+	vec4 SourceSize = global.OriginalSize;
 	
 	float lum = COMPAT_TEXTURE(AvgLumPass, vec2(0.5,0.5)).a;
 	
@@ -585,7 +596,7 @@ void main()
    
 	vec2 texcoord = TEX0.xy;
 	if (IOS > 0.0 && !interb){
-		vec2 ofactor = OutputSize.xy/SourceSize.xy;
+		vec2 ofactor = OutputSize.xy/global.OriginalSize.xy;
 		vec2 intfactor = (IOS < 2.5) ? floor(ofactor) : ceil(ofactor);
 		vec2 diff = ofactor/intfactor;
 		float scan = diff.y;

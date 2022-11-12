@@ -86,13 +86,13 @@ layout(set = 0, binding = 6) uniform sampler2D ReflectionMaskImage;
 layout(set = 0, binding = 7) uniform sampler2D TubeStaticReflectionImage;
 layout(set = 0, binding = 8) uniform sampler2D TubeColoredGelImage;
 
-layout(set = 0, binding = 9) uniform sampler2D MBZ_PostCRTPass;
+layout(set = 0, binding = 9) uniform sampler2D PostCRTPass;
 layout(set = 0, binding = 10) uniform sampler2D BR_MirrorBlurredPass;
 layout(set = 0, binding = 11) uniform sampler2D BR_MirrorReflectionDiffusedPass;
 layout(set = 0, binding = 12) uniform sampler2D BR_MirrorFullscreenGlowPass;
 
-layout(set = 0, binding = 13) uniform sampler2D BR_CRTAndReflectionPassFeedback;
-#define PassFeedback BR_CRTAndReflectionPassFeedback
+layout(set = 0, binding = 13) uniform sampler2D ReflectionPassFeedback;
+#define PassFeedback ReflectionPassFeedback
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
@@ -133,7 +133,7 @@ void main()
 	// CRT Pass
 	//----------------------------------------------------
 	// Get the CRT pass and make it in linear space & mask the area outside the screen
-	vec4 crt_linear = HSM_Linearize(texture(MBZ_PostCRTPass, UNFLIPPED_VIEWPORT_COORD.xy), DEFAULT_CRT_GAMMA);
+	vec4 crt_linear = HSM_Linearize(texture(PostCRTPass, UNFLIPPED_VIEWPORT_COORD.xy), DEFAULT_CRT_GAMMA);
 	crt_linear = HSM_ApplyGamma(crt_linear, DEFAULT_CRT_GAMMA / DEFAULT_SRGB_GAMMA);
 
 	vec4 blurred_reflection_color = HHLP_GetBilinearTextureSample(BR_MirrorBlurredPass, UNFLIPPED_VIEWPORT_COORD.xy, params.BR_MirrorBlurredPassSize);

@@ -31,7 +31,6 @@ layout(push_constant) uniform Push
 	vec4 OutputSize;
 	uint FrameCount;
 	float IOS, h_sharp, s_sharp, spike, ring;
-	float prescalex;
 } params;
 
 layout(std140, set = 0, binding = 0) uniform UBO
@@ -54,8 +53,6 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter spike "          Scanline Spike Removal" 1.0 0.0 2.0 0.10
 #define spike params.spike
 
-#pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader)" 1.0 1.0 4.0 1.0  // Joint parameter with linearize pass, values must match
-#define prescalex        params.prescalex     // prescale-x factor
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
 #define TEX0 vTexCoord
@@ -82,7 +79,9 @@ layout(set = 0, binding = 2) uniform sampler2D LinearizePass;
 
 void main()
 {	
-	vec4 SourceSize = params.OriginalSize * vec4(prescalex, 1.0, 1.0/prescalex, 1.0);
+	vec2 prescalex = vec2(textureSize(LinearizePass, 0)) / params.OriginalSize.xy;
+
+	vec4 SourceSize = params.OriginalSize * vec4(prescalex.x, prescalex.y, 1.0/prescalex.x, 1.0/prescalex.y);
 	
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
 	
@@ -108,7 +107,7 @@ void main()
 	float zero = exp2(-h_sharp);
 	float sharp1 = s_sharp * zero;
 	
-	float fdivider = min(prescalex, 2.0);
+	float fdivider = min(prescalex.x, 2.0);
 	
 	float wl3 = (2.0 + fpx)/fdivider;
 	float wl2 = (1.0 + fpx)/fdivider;

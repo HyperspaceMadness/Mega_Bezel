@@ -136,9 +136,10 @@ scale25 = 1.0
 // Color Correction with Dogway's awesome Grade shader
 // Grade is after Afterglow so that brightening the black level does not break the afterglow
 shader26 = ../../shaders/dogway/hsm-grade.slang
-filter_linear26 = true
+filter_linear26 = false
 scale_type26 = source
 scale26 = 1.0
+alias26 = "ColorCorrectPass"
 
 shader27 = ../../shaders/base/stock.slang
 alias27 = "PrePass0"
@@ -252,7 +253,9 @@ scale_x41 = 1.0
 scale_y41 = 1.0
 
 shader42 = ../../shaders/base/post-crt-prep-no-reflect.slang
-alias42 = "MBZ_PostCRTPass"
+scale_type42 = viewport
+float_framebuffer42 = true
+alias42 = "PostCRTPass"
 
 // Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 
