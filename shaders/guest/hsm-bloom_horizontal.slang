@@ -3,7 +3,7 @@
 /*
    Gaussian blur - horizontal pass, dynamic range, resizable
    
-   Copyright (C) 2020 guest(r) - guest.r@gmail.com
+   Copyright (C) 2020 - 2022 guest(r) - guest.r@gmail.com
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -31,6 +31,7 @@ layout(push_constant) uniform Push
 	float SIGMA_HB;
 } params;
 
+#pragma parameter GDV_BLOOM_LINE							" " 0 0 0.001 0.001
 #pragma parameter bogus_bloom 	"[ BLOOM & HALATION ]:" 0.0 0.0 1.0 1.0
 
 #pragma parameter bloom 		"          Bloom Strength -- bloom" 0.0 -2.0 2.0 0.05

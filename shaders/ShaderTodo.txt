@@ -10,6 +10,10 @@ Changes:
       * 0 - KEEP TEXURE ASPECT
       * 1 - SPLIT
       * 2 - STRETCH
+  * Fixed Scanline Direction, was giving the wrong direction compared to the parameters
+  * Core Sampling Multipliers now go to 0 which is Auto
+    * Auto means that the samling multiplier will match the upscale in the shader chain 
+    * The scanline direction multiplier is now set to 0 by default
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
