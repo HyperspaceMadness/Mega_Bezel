@@ -158,12 +158,13 @@ vec4 HSM_GetTubeHighlight(vec2 tube_curved_coord, bool apply_to_mirror, in sampl
 	return out_color;
 }
 
-vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, vec2 screen_curved_coord, in sampler2D source_pass, bool source_is_linear, in sampler2D TubeDiffuseImage, in sampler2D TubeColoredGelImage, in sampler2D TubeStaticReflectionImage, in sampler2D BackgroundImage, in sampler2D BackgroundVertImage, in sampler2D NightLightingImage, in sampler2D NightLighting2Image)
+vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_linear, vec2 VIEWPORT_COORD, vec2 screen_curved_coord, in sampler2D source_pass, in sampler2D TubeDiffuseImage, in sampler2D TubeColoredGelImage, in sampler2D TubeStaticReflectionImage, in sampler2D BackgroundImage, in sampler2D BackgroundVertImage, in sampler2D NightLightingImage, in sampler2D NightLighting2Image)
 {
 	if (HSM_MONOCHROME_MODE > 0.5 && HSM_GetUseOnCurrentScreenIndex(HSM_MONOCHROME_DUALSCREEN_VIS_MODE))
-		in_color_with_gamma = HSM_ApplyMonochrome(in_color_with_gamma);
+		in_color_linear = HSM_ApplyMonochrome(in_color_linear);
 
-	vec4 crt_color = HSM_Linearize(in_color_with_gamma, DEFAULT_SRGB_GAMMA);
+	vec4 crt_color = in_color_linear;
+
 	crt_color *= HSM_POST_CRT_BRIGHTNESS;
 
 	vec2 mirrored_screen_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
@@ -193,10 +194,10 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 		ab_screen_coord = HSM_GetMirrorWrappedCoord(ab_screen_coord);
 
 		vec4 source_color = HSM_GetCroppedTexSample(source_pass, ab_screen_coord);
-		if (!source_is_linear)
-			source_color = HSM_Linearize(source_color, GAMMA_INPUT);
-		source_color = HSM_Delinearize(source_color, HSM_GAMMA_OUT_CRT);
-		source_color = HSM_Linearize(source_color, DEFAULT_SRGB_GAMMA);
+		// TODO should adjust this
+		// source_color = HSM_Delinearize(source_color, HSM_GAMMA_OUT_CRT);
+		// source_color = HSM_Linearize(source_color, DEFAULT_SRGB_GAMMA);
+		source_color = HSM_Linearize(source_color, GAMMA_INPUT);
 
 		crt_color = source_color;
 	}
@@ -393,11 +394,6 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_with_gamma, vec2 VIEWPORT_COORD, v
 
 		out_color.rgb += tube_highlight_image * HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY;
 	}
-
-	// #ifndef IS_NO_REFLECT_PRESET
-	// Apply the final Gamma
-	out_color = HSM_Delinearize(out_color, DEFAULT_SRGB_GAMMA);
-	// #endif
 	
 	return out_color;
 }
@@ -452,5 +448,5 @@ void main()
 
 	FragColor = texture(Source, UNFLIPPED_VIEWPORT_COORD);
 
-	FragColor = HSM_GetPostCrtPreppedColor(FragColor, vTexCoord, screen_curved_coord, IntroPass, false, TubeDiffuseImage, TubeColoredGelImage, TubeStaticReflectionImage, BackgroundImage, BackgroundVertImage, NightLightingImage, NightLighting2Image);
+	FragColor = HSM_GetPostCrtPreppedColor(FragColor, vTexCoord, screen_curved_coord, IntroPass, TubeDiffuseImage, TubeColoredGelImage, TubeStaticReflectionImage, BackgroundImage, BackgroundVertImage, NightLightingImage, NightLighting2Image);
 }

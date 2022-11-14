@@ -36,13 +36,15 @@ alias3 = BloomPass
 
 shader4 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/hsm-crt-guest-advanced.slang
 filter_linear4 = true
-float_framebuffer4 = true
 scale_type4 = viewport
 scale_x4 = 1.0
 scale_y4 = 1.0
+float_framebuffer4 = true
 
 shader5 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/hsm-deconvergence.slang
 filter_linear5 = true
 scale_type5 = viewport
 scale_x5 = 1.0
 scale_y5 = 1.0
+float_framebuffer5 = true
+alias5 = "CRTPass"

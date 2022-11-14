@@ -3,7 +3,7 @@
 /*
    Interlacing
    
-   Copyright (C) 2020 guest(r) - guest.r@gmail.com
+   Copyright (C) 2020 - 2022 guest(r) - guest.r@gmail.com
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -37,7 +37,6 @@ layout(push_constant) uniform Push
 // 	float iscan;
 // 	float intres;
 // 	float downsample_level;
-// 	float prescalex;
 } params;
 
 
@@ -82,10 +81,6 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #define downsample_level         HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR     // downsample level
 
 // #pragma parameter downsample_levely "          Downsampling-Y (High-res content, pre-scalers)" 0.0 0.0 2.0 0.25
-
-
-// #pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader)" 1.0 1.0 4.0 1.0  // Joint parameter with main pass, values must match
-// #define prescalex        params.prescalex     // prescale-x factor
 
 #pragma parameter iscans 	"          Interlacing (Scanline) Saturation" 0.25 0 1 0.05
 #define iscans global.iscans
@@ -244,6 +239,8 @@ void main()
 		if (interm == 4.0) { c = plant(mix(c, c*c, 0.5*iscans), max(max(c.r,c.g),c.b)); intera = 0.45; }
 		if (interm == 5.0) { c = mix(c2, c1, 0.5); c = plant(mix(c, c*c, 0.5*iscans), max(max(c.r,c.g),c.b)); intera = 0.45; }
 	}
+
+	// Linearize Color
 	c = pow(c, vec3(gamma_in));
 	
 	// if (USE_VERTICAL_SCANLINES > 0.5)

@@ -39,7 +39,6 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float HSM_RESOLUTION_DEBUG_ON;
 	float HSM_CACHE_GRAPHICS_ON;
 	float HSM_CACHE_UPDATE_INDICATOR_MODE;
-float HSM_SHOW_CACHE_AREA;
 
 	// Graphics Brightness
 	float HSM_GLOBAL_GRAPHICS_BRIGHTNESS;

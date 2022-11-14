@@ -793,5 +793,7 @@ void main()
 	// HSM Added
 	float adjusted_bardir = global.bardir < 0 ? TATE : global.bardir;
 	color.rgb *= humbar(mix(pos.y, pos.x, adjusted_bardir));
+
 	FragColor = vec4(color, 1.0);
+	FragColor = HSM_Linearize(FragColor, DEFAULT_SRGB_GAMMA);
 }

@@ -62,5 +62,6 @@ layout(set = 0, binding = 2) uniform sampler2D PostCRTPass;
 
 void main()
 {
-   FragColor = HSM_Linearize(vec4(tex2Dblur9x9(PostCRTPass, vTexCoord, blur_dxdy), 1), DEFAULT_CRT_GAMMA);
+    FragColor = vec4(tex2Dblur9x9(PostCRTPass, vTexCoord, blur_dxdy), 1);
+    FragColor = HSM_ApplyGamma(FragColor, DEFAULT_SRGB_GAMMA/DEFAULT_CRT_GAMMA - 0.05);
 }

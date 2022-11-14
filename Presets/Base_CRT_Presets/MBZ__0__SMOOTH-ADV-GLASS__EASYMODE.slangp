@@ -175,6 +175,9 @@ shader37 = ../../shaders/easymode/hsm-crt-easymode-halation.slang
 filter_linear37 = true
 scale_type37 = viewport
 float_framebuffer37 = true
+alias37 = "CRTPass"
+
+g_gamma_out = 2.45
 
 shader38 = ../../shaders/base/post-crt-prep-glass.slang
 scale_type38 = viewport

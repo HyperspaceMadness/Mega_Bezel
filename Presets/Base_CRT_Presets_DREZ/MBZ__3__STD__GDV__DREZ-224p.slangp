@@ -136,16 +136,18 @@ alias18 = BloomPass
 
 shader19 = ../../shaders/guest/hsm-crt-guest-advanced.slang
 filter_linear19 = true
-float_framebuffer19 = true
 scale_type19 = viewport
 scale_x19 = 1.0
 scale_y19 = 1.0
+float_framebuffer19 = true
 
 shader20 = ../../shaders/guest/hsm-deconvergence.slang
 filter_linear20 = true
 scale_type20 = viewport
 scale_x20 = 1.0
 scale_y20 = 1.0
+float_framebuffer20 = true
+alias20 = "CRTPass"
 
 shader21 = ../../shaders/base/post-crt-prep-image-layers.slang
 scale_type21 = viewport

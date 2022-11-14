@@ -606,7 +606,6 @@ float HSM_GetParameterSum()
 					+ HSM_STATIC_LAYERS_GAMMA
 
 					+ HSM_CACHE_GRAPHICS_ON
-					* HSM_SHOW_CACHE_AREA
 					
 					// Night Lighting
 					+ HSM_AMBIENT_LIGHTING_OPACITY * 100

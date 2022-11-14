@@ -109,6 +109,9 @@ shader17 = ../../shaders/easymode/hsm-crt-easymode-halation.slang
 filter_linear17 = true
 scale_type17 = viewport
 float_framebuffer17 = true
+alias17 = "CRTPass"
+
+g_gamma_out = 2.45
 
 shader18 = ../../shaders/base/post-crt-prep-potato.slang
 scale_type18 = viewport

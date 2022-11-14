@@ -51,7 +51,6 @@ layout(location = 1) in vec2 TexCoord;
 
 layout(location = 6) out vec2 vTexCoord;
 layout(location = 7) out vec2 UNFLIPPED_VIEWPORT_COORD;
-layout(location = 8) out vec3 BEZEL_FRAME_ORIGINAL_COLOR_RGB;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
@@ -62,8 +61,6 @@ void main()
 	UNFLIPPED_VIEWPORT_COORD = vTexCoord * 1.0001;
 	vTexCoord * 1.0001;
 
-	// Not sure why we need linearize this but it seems to have a smoother range this way
-	BEZEL_FRAME_ORIGINAL_COLOR_RGB = HSM_Linearize(vec4(HSM_HSVtoRGB(vec3(HSM_BZL_COLOR_HUE, HSM_BZL_COLOR_SATURATION, HSM_BZL_COLOR_VALUE)), 1), DEFAULT_SRGB_GAMMA).rgb;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +68,6 @@ void main()
 
 layout(location = 6) in vec2 vTexCoord;
 layout(location = 7) in vec2 UNFLIPPED_VIEWPORT_COORD;
-layout(location = 8) in vec3 BEZEL_FRAME_ORIGINAL_COLOR_RGB;
 
 layout(location = 0) out vec4 FragColor;
 
@@ -133,8 +129,7 @@ void main()
 	// CRT Pass
 	//----------------------------------------------------
 	// Get the CRT pass and make it in linear space & mask the area outside the screen
-	vec4 crt_linear = HSM_Linearize(texture(PostCRTPass, UNFLIPPED_VIEWPORT_COORD.xy), DEFAULT_CRT_GAMMA);
-	crt_linear = HSM_ApplyGamma(crt_linear, DEFAULT_CRT_GAMMA / DEFAULT_SRGB_GAMMA);
+	vec4 crt_linear = texture(PostCRTPass, UNFLIPPED_VIEWPORT_COORD.xy);
 
 	vec4 blurred_reflection_color = HHLP_GetBilinearTextureSample(BR_MirrorBlurredPass, UNFLIPPED_VIEWPORT_COORD.xy, params.BR_MirrorBlurredPassSize);
 
@@ -427,7 +422,10 @@ void main()
 	vec4 frag_color_linear = crt_linear;
 	frag_color_linear = HSM_BlendModeLayerMix(frag_color_linear, bg_image, HSM_BG_BLEND_MODE, HSM_BG_OPACITY);
 	frag_color_linear += reflection_color;
-	FragColor = HSM_ApplyGamma(clamp(frag_color_linear, 0, 1), DEFAULT_SRGB_GAMMA);
+
+#ifndef IS_HDR_PRESET
+	FragColor = HSM_Delinearize(clamp(frag_color_linear, 0, 1), DEFAULT_SRGB_GAMMA);
+#endif
 
 	return;
 #endif
@@ -436,5 +434,4 @@ FragColor = crt_linear;
 FragColor.rgb += reflection_color.rgb;
 FragColor *= 1 - OUTSIDE_BEZEL_MASK;
 return;
-
 }

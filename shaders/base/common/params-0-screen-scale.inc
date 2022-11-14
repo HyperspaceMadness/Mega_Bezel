@@ -59,9 +59,6 @@ float HSM_CACHE_GRAPHICS_ON = global.HSM_CACHE_GRAPHICS_ON;
 #pragma parameter HSM_CACHE_UPDATE_INDICATOR_MODE					"        Cache Update Indicator: OFF | ON | ONLY IF CACHE IS OFF" 2 0 2 1
 float HSM_CACHE_UPDATE_INDICATOR_MODE = global.HSM_CACHE_UPDATE_INDICATOR_MODE;
 
-#pragma parameter HSM_SHOW_CACHE_AREA							    "         Show Cache Area" 0 0 1 1
-float HSM_SHOW_CACHE_AREA = global.HSM_SHOW_CACHE_AREA;
-
 
 //---------------------------------------------------------------------------------------------------
 //    Global Graphics Brightness

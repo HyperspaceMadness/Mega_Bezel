@@ -42,6 +42,18 @@
 vec2 UNFLIPPED_VIEWPORT_COORD = vec2(0.5);
 vec2 FLIPPED_VIEWPORT_COORD = vec2(0.5);
 
+//---------------------------------------------------------------------------------------------------
+//    SHOW PASS
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_PASS_VIEWER_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter HSM_PASS_VIEWER_TITLE       "[ MEGA BEZEL DEV SHOW PASS ]:" 0 0 0.001 0.001
+
+#pragma parameter HSM_SHOW_PASS_INDEX_INFO1   "     0:END | 1:REFLECTION | 2:TUBE | 3:CRT | " 0 0 0.001 0.001
+#pragma parameter HSM_SHOW_PASS_INDEX_INFO2   "     4:LINEARIZE | 5:INTERLACE & UPSCALE | 6:COLORCORRECT |" 0 0 0.001 0.001
+#pragma parameter HSM_SHOW_PASS_INDEX_INFO3   "     7:DREZ | 8:CORE | 9:LAYERS TOP | 10:LAYERS BOTTOM" 0 0 0.001 0.001
+#pragma parameter HSM_SHOW_PASS_INDEX         "          Show Pass Index" 0 0 10 1
+float HSM_SHOW_PASS_INDEX = global.HSM_SHOW_PASS_INDEX;
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma stage vertex
 
@@ -49,7 +61,6 @@ layout(location = 0) in vec4 Position;
 layout(location = 1) in vec2 TexCoord;
 
 layout(location = 6) out vec2 vTexCoord;
-layout(location = 8) out vec3 BEZEL_FRAME_ORIGINAL_COLOR_RGB;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
@@ -58,7 +69,6 @@ void main()
 	vTexCoord = TexCoord;
 
 	// Not sure why we need linearize this but it seems to have a smoother range this way
-	BEZEL_FRAME_ORIGINAL_COLOR_RGB = HSM_Linearize(vec4(HSM_HSVtoRGB(vec3(HSM_BZL_COLOR_HUE, HSM_BZL_COLOR_SATURATION, HSM_BZL_COLOR_VALUE)), 1), DEFAULT_SRGB_GAMMA).rgb;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,21 +80,48 @@ layout(location = 0) out vec4 FragColor;
 
 // Pass Framebuffer Textures
 layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
-
-layout(set = 0, binding = 3) uniform sampler2D BR_LayersUnderCRTPass;
+layout(set = 0, binding = 2) uniform sampler2D CorePass;
+layout(set = 0, binding = 3) uniform sampler2D DerezedPass;
+layout(set = 0, binding = 4) uniform sampler2D LinearizePass;
+layout(set = 0, binding = 5) uniform sampler2D CRTPass;
+layout(set = 0, binding = 6) uniform sampler2D PostCRTPass;
 
 #ifdef IS_NO_REFLECT_PRESET
-layout(set = 0, binding = 4) uniform sampler2D PostCRTPass;
 #define MiddlePass PostCRTPass
 #else
-layout(set = 0, binding = 4) uniform sampler2D ReflectionPass;
+layout(set = 0, binding = 7) uniform sampler2D ReflectionPass;
 #define MiddlePass ReflectionPass
 #endif
 
-layout(set = 0, binding = 5) uniform sampler2D BR_LayersOverCRTPass;
+layout(set = 0, binding = 8) uniform sampler2D BR_LayersUnderCRTPass;
+layout(set = 0, binding = 9) uniform sampler2D BR_LayersOverCRTPass;
 
-layout(set = 0, binding = 6) uniform sampler2D CombinePassFeedback;
+layout(set = 0, binding = 10) uniform sampler2D CombinePassFeedback;
 #define PassFeedback CombinePassFeedback
+
+layout(set = 0, binding = 12) uniform sampler2D ColorCorrectPass;
+
+
+vec3 PrepGraphicsForHDR(vec3 in_color)
+{
+	vec3 out_color = in_color.rgb;
+	
+#ifdef IS_HDR_PRESET
+	out_color *= HSM_GLOBAL_GRAPHICS_BRIGHTNESS;
+
+   if((HCRT_HDR < 1.0f) && (HCRT_COLOUR_ACCURATE < 1.0f))
+      if(HCRT_OUTPUT_COLOUR_SPACE == 2.0f)
+         out_color= (out_color * k709_to_XYZ) * kXYZ_to_DCIP3; 
+
+   if(HCRT_HDR > 0.5f)
+      out_color = InverseTonemap(out_color, HCRT_MAX_NITS, HCRT_PAPER_WHITE_NITS);
+
+	if((HCRT_HDR >= 1.0f) && (HCRT_COLOUR_ACCURATE < 1.0f))
+		out_color  *= k2020Gamuts[uint(HCRT_EXPAND_GAMUT)] * (HCRT_PAPER_WHITE_NITS / kMaxNitsFor2084);
+#endif
+
+	return out_color;
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
@@ -93,13 +130,57 @@ void main()
 	vec2 VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 
+	if (HSM_SHOW_PASS_INDEX > 0.5)
+	{
+		FragColor = vec4(0);
+
+		vec2 screen_curved_coord = HSM_GetCRTShaderCurvedCoord(SCREEN_COORD);
+
+#ifndef IS_NO_REFLECT_PRESET
+		if (HSM_SHOW_PASS_INDEX == 1)
+			FragColor = texture(ReflectionPass, vTexCoord);
+#endif
+
+		if (HSM_SHOW_PASS_INDEX == 2)
+			FragColor = texture(PostCRTPass, vTexCoord);
+
+		if (HSM_SHOW_PASS_INDEX == 3)
+			FragColor = texture(CRTPass, vTexCoord);
+
+		if (HSM_SHOW_PASS_INDEX == 4)
+			FragColor = texture(LinearizePass, (floor(screen_curved_coord * textureSize(LinearizePass, 0)) + 0.5) / textureSize(LinearizePass, 0));
+
+		if (HSM_SHOW_PASS_INDEX == 5)
+			FragColor = texture(LinearizePass, (floor(screen_curved_coord * textureSize(LinearizePass, 0)) + 0.5) / textureSize(LinearizePass, 0));
+
+		if (HSM_SHOW_PASS_INDEX == 6)
+			FragColor = texture(ColorCorrectPass, (floor(screen_curved_coord * textureSize(ColorCorrectPass, 0)) + 0.5) / textureSize(ColorCorrectPass, 0));
+
+		if (HSM_SHOW_PASS_INDEX == 7)
+			FragColor = texture(DerezedPass, screen_curved_coord);
+
+		if (HSM_SHOW_PASS_INDEX == 8)
+			FragColor = texture(CorePass, screen_curved_coord);
+
+		if (HSM_SHOW_PASS_INDEX == 9)
+			FragColor = texture(BR_LayersOverCRTPass, vTexCoord);
+
+		if (HSM_SHOW_PASS_INDEX == 10)
+			FragColor = texture(BR_LayersUnderCRTPass, vTexCoord);
+
+		// Linearize passes which are not already in linear space
+		if (HSM_SHOW_PASS_INDEX > 4 && HSM_SHOW_PASS_INDEX < 9)
+			FragColor = HSM_Linearize(FragColor, GAMMA_INPUT);
+
+		return;
+	}
 
 	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
 	HSM_GetBezelCoords(TUBE_DIFFUSE_COORD, 
-						TUBE_DIFFUSE_COORD, 
+						TUBE_DIFFUSE_SCALE, 
 						TUBE_SCALE, 
 						TUBE_DIFFUSE_ASPECT,
-						false, 
+						false,
 						BEZEL_OUTSIDE_SCALE,
 						BEZEL_OUTSIDE_COORD, 
 						BEZEL_OUTSIDE_CURVED_COORD, 
@@ -115,14 +196,12 @@ void main()
 		}
 	}
 
-	vec4 out_color = texture(BR_LayersUnderCRTPass, vTexCoord);
-	out_color.rgb *= HSM_GLOBAL_GRAPHICS_BRIGHTNESS;
+	vec4 under_layer = texture(BR_LayersUnderCRTPass, vTexCoord);
+	under_layer.rgb = PrepGraphicsForHDR(under_layer.rgb);
+
+	vec4 out_color = under_layer;
 
 	vec4 crt_layer = texture(MiddlePass, vTexCoord);
-
-	#ifdef IS_NO_REFLECT_PRESET
-		crt_layer = HSM_Linearize(crt_layer, DEFAULT_SRGB_GAMMA);
-	#endif
 
 	if (HSM_RENDER_SIMPLE_MODE > 0.5)
 		crt_layer.rgb = vec3(0);
@@ -135,10 +214,10 @@ void main()
 		out_color = HSM_PreMultAlphaBlend(out_color, crt_layer);
 
 	vec4 over_layer = texture(BR_LayersOverCRTPass, vTexCoord);
-	over_layer.rgb *= HSM_GLOBAL_GRAPHICS_BRIGHTNESS;
-	out_color = HSM_PreMultAlphaBlend(out_color, over_layer);
+	over_layer.rgb = PrepGraphicsForHDR(over_layer.rgb);
 
-	FragColor = HSM_ApplyGamma(clamp(out_color, 0, 1), DEFAULT_SRGB_GAMMA);
+	out_color = HSM_PreMultAlphaBlend(out_color, over_layer);
+	FragColor = out_color;
 
 	if (HSM_RENDER_SIMPLE_MODE > 0.5)
 	{
@@ -148,7 +227,6 @@ void main()
 		TUBE_DIFFUSE_MASK = HSM_GetCornerMask(((TUBE_DIFFUSE_CURVED_COORD - 0.5) * 1.001) + 0.5, TUBE_DIFFUSE_ASPECT, HSM_GLOBAL_CORNER_RADIUS * HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE, HSM_TUBE_BLACK_EDGE_SHARPNESS);
 
 		TUBE_MASK =  HSM_GetCornerMask(tube_curved_coord, TUBE_DIFFUSE_ASPECT, bezel_corner_radius, 0.99);
-		// float TUBE_MASK_TRIM = HSM_GetCornerMask((tube_curved_coord - 0.5) * 1.003 + 0.5, TUBE_DIFFUSE_ASPECT, bezel_corner_radius, 0.99);
 
 		INSIDE_BEZEL_MASK = HSM_GetCornerMask(BEZEL_OUTSIDE_CURVED_COORD, TUBE_DIFFUSE_ASPECT, HSM_GLOBAL_CORNER_RADIUS * HSM_BZL_OUTER_CORNER_RADIUS_SCALE, 0.9);
 		BEZEL_MASK = INSIDE_BEZEL_MASK * (1 - TUBE_MASK);
@@ -203,38 +281,8 @@ void main()
 	// If we have calculated an image then set -1 as a flag to show that we have
 	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
 		FragColor.a = -1;
-		
-	return;
+
+#ifndef IS_HDR_PRESET	
+	FragColor = HSM_Delinearize(FragColor, DEFAULT_SRGB_GAMMA);
+#endif
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -64,3 +64,35 @@ void GammaCorrect(const vec3 scanline_colour, inout vec3 gamma_corrected)
       gamma_corrected = LinearToST2084(scanline_colour);
    }
 }
+
+void LinearToOutputColor(const vec3 scanline_colour, inout vec3 output_color)
+{
+  vec3 transformed_colour;
+
+   if(HCRT_COLOUR_ACCURATE >= 1.0f)
+   {
+      if(HCRT_HDR >= 1.0f)
+      {
+         const vec3 rec2020  = scanline_colour * k2020Gamuts[uint(HCRT_EXPAND_GAMUT)];
+         transformed_colour  = rec2020 * (HCRT_PAPER_WHITE_NITS / kMaxNitsFor2084);
+      }
+      else if(HCRT_OUTPUT_COLOUR_SPACE == 2.0f)
+      {
+         transformed_colour = (scanline_colour * k709_to_XYZ) * kXYZ_to_DCIP3; 
+      }
+      else
+      {
+         transformed_colour = scanline_colour;
+      }
+   } 
+   else
+   {      
+      transformed_colour = scanline_colour;
+   }
+
+   vec3 gamma_corrected; 
+   
+   GammaCorrect(transformed_colour, gamma_corrected);
+
+   output_color = gamma_corrected;
+}
