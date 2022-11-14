@@ -1,4 +1,4 @@
-shaders = 13
+shaders = 14
 
 shader0 = ../../shaders/base/add-params-potato.slang
 alias0 = "CorePass"
@@ -79,18 +79,25 @@ scale10 = 1.0
 float_framebuffer10 = true
 alias10 = "LinearizePass"
 
-shader11 = ../../shaders/guest/hsm-crt-dariusg-gdv-mini-potato.slang
-scale_type11 = viewport
-scale_x11 = 1.0
-scale_y11 = 1.0
-filter_linear11 = true
+shader11 = ../../shaders/base/delinearize.slang
+scale_type11 = source
+float_framebuffer11 = "true"
+
+shader12 = ../../shaders/guest/hsm-crt-dariusg-gdv-mini-potato.slang
+scale_type12 = viewport
+scale_x12 = 1.0
+scale_y12 = 1.0
+filter_linear12 = true
+float_framebuffer12 = "true"
+alias12 = "CRTPass"
 
 g_sat = 0.15
+g_gamma_out = 2.45
 
-shader12 = ../../shaders/base/post-crt-prep-potato.slang
-scale_type12 = viewport
-float_framebuffer12 = true
-alias12 = "PostCRTPass"
+shader13 = ../../shaders/base/post-crt-prep-potato.slang
+scale_type13 = viewport
+float_framebuffer13 = true
+alias13 = "PostCRTPass"
 // Define textures to be used by the different passes
 textures = "ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
 

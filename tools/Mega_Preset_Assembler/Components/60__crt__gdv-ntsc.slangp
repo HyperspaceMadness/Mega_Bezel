@@ -41,17 +41,19 @@ scale_x4 = 640.0
 scale_type_y4 = absolute
 scale_y4 = 480.0
 float_framebuffer4 = true
-alias4 = BloomPass 
+alias4 = BloomPass
 
 shader5 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/hsm-crt-guest-advanced-ntsc-pass2.slang
 filter_linear5 = true
-float_framebuffer5 = true
 scale_type5 = viewport
 scale_x5 = 1.0
 scale_y5 = 1.0
+float_framebuffer5 = true
 
 shader6 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/hsm-deconvergence.slang
 filter_linear6 = true
 scale_type6 = viewport
 scale_x6 = 1.0
 scale_y6 = 1.0
+float_framebuffer6 = true
+alias6 = "CRTPass"

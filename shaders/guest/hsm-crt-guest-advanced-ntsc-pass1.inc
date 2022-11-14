@@ -32,9 +32,7 @@ layout(push_constant) uniform Push
 	float HSHARPNESS;
 	float S_SHARP;
 	float HARNG;
-	float HSHARP; 
-	float prescalex;
-	float prescaley;
+	float HSHARP;
 	float spike;
 	float internal_res;
 } params;
@@ -58,9 +56,6 @@ layout(push_constant) uniform Push
 
 #pragma parameter spike "          Scanline Spike Removal -- spike" 1.0 0.0 2.0 0.10
 #define spike params.spike
-
-#pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader) -- prescalex" 1.0 1.0 4.0 1.0  // Joint parameter with main pass, values must match
-#define prescalex        params.prescalex     // prescale-x factor 
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
 
@@ -116,10 +111,13 @@ void main()
 #endif
 
 	/* HSM Removed
-	vec4 SourceSize = params.OriginalSize * vec4(2.0*prescalex, 1.0, 0.5/prescalex, 1.0);
+	vec2 prescalex = vec2(textureSize(LinearizePass, 0)) / params.OriginalSize.xy;
+
+	vec4 SourceSize = params.OriginalSize * vec4(2.0*prescalex.x, prescalex.y, 0.5/prescalex.x, 1.0/prescalex.y);
 	*/
+	
 	// HSM Added
-	vec4 SourceSize = vec4(CROPPED_ROTATED_SIZE_WITH_RES_MULT, 1 / CROPPED_ROTATED_SIZE_WITH_RES_MULT) * vec4(2.0*prescalex, 1.0, 0.5/prescalex, 1.0);
+	vec4 SourceSize = vec4(CROPPED_ROTATED_SIZE_WITH_RES_MULT, 1 / CROPPED_ROTATED_SIZE_WITH_RES_MULT);
 
 	float f = fract(SourceSize.x * vTexCoord.x);
 	f = 0.5 - f;

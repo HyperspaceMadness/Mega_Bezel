@@ -4,6 +4,7 @@
 #reference "Components/10__info-cache-no-reflect-params.slangp"
 #reference "Components/11__text__std-no-reflect.slangp"
 #reference "Components/12__intro.slangp"
+#reference "Components/30__dedithering__0-none.slangp"
 #reference "Components/54__prep__gdv-afterglow.slangp"
 #reference "Components/55__color-correct__grade.slangp"
 #reference "Components/57__prep__gdv-ntsc.slangp"

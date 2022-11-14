@@ -49,7 +49,7 @@ vec2 FLIPPED_VIEWPORT_COORD = vec2(0.5);
 #pragma parameter HSM_PASS_VIEWER_TITLE       "[ MEGA BEZEL DEV SHOW PASS ]:" 0 0 0.001 0.001
 
 #pragma parameter HSM_SHOW_PASS_INDEX_INFO1   "     0:END | 1:REFLECTION | 2:TUBE | 3:CRT | " 0 0 0.001 0.001
-#pragma parameter HSM_SHOW_PASS_INDEX_INFO2   "     4:LINEARIZE | 5:INTERLACE & UPSCALE | 6:COLORCORRECT |" 0 0 0.001 0.001
+#pragma parameter HSM_SHOW_PASS_INDEX_INFO2   "     4:INTERLACE | 5:COLOR CORRECT & UPSCALE | 6:DEDITHER" 0 0 0.001 0.001
 #pragma parameter HSM_SHOW_PASS_INDEX_INFO3   "     7:DREZ | 8:CORE | 9:LAYERS TOP | 10:LAYERS BOTTOM" 0 0 0.001 0.001
 #pragma parameter HSM_SHOW_PASS_INDEX         "          Show Pass Index" 0 0 10 1
 float HSM_SHOW_PASS_INDEX = global.HSM_SHOW_PASS_INDEX;
@@ -82,24 +82,24 @@ layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
 layout(set = 0, binding = 2) uniform sampler2D CorePass;
 layout(set = 0, binding = 3) uniform sampler2D DerezedPass;
-layout(set = 0, binding = 4) uniform sampler2D LinearizePass;
-layout(set = 0, binding = 5) uniform sampler2D CRTPass;
-layout(set = 0, binding = 6) uniform sampler2D PostCRTPass;
+layout(set = 0, binding = 4) uniform sampler2D DeditherPass;
+layout(set = 0, binding = 5) uniform sampler2D ColorCorrectPass;
+layout(set = 0, binding = 6) uniform sampler2D LinearizePass;
+layout(set = 0, binding = 7) uniform sampler2D CRTPass;
+layout(set = 0, binding = 8) uniform sampler2D PostCRTPass;
 
 #ifdef IS_NO_REFLECT_PRESET
 #define MiddlePass PostCRTPass
 #else
-layout(set = 0, binding = 7) uniform sampler2D ReflectionPass;
+layout(set = 0, binding = 9) uniform sampler2D ReflectionPass;
 #define MiddlePass ReflectionPass
 #endif
 
-layout(set = 0, binding = 8) uniform sampler2D BR_LayersUnderCRTPass;
-layout(set = 0, binding = 9) uniform sampler2D BR_LayersOverCRTPass;
+layout(set = 0, binding = 10) uniform sampler2D BR_LayersUnderCRTPass;
+layout(set = 0, binding = 11) uniform sampler2D BR_LayersOverCRTPass;
 
-layout(set = 0, binding = 10) uniform sampler2D CombinePassFeedback;
+layout(set = 0, binding = 12) uniform sampler2D CombinePassFeedback;
 #define PassFeedback CombinePassFeedback
-
-layout(set = 0, binding = 12) uniform sampler2D ColorCorrectPass;
 
 
 vec3 PrepGraphicsForHDR(vec3 in_color)
@@ -137,40 +137,50 @@ void main()
 		vec2 screen_curved_coord = HSM_GetCRTShaderCurvedCoord(SCREEN_COORD);
 
 #ifndef IS_NO_REFLECT_PRESET
+		// REFLECTION
 		if (HSM_SHOW_PASS_INDEX == 1)
 			FragColor = texture(ReflectionPass, vTexCoord);
 #endif
 
+		// TUBE
 		if (HSM_SHOW_PASS_INDEX == 2)
 			FragColor = texture(PostCRTPass, vTexCoord);
 
+		// CRT
 		if (HSM_SHOW_PASS_INDEX == 3)
 			FragColor = texture(CRTPass, vTexCoord);
 
+		// INTERLACE & LINEARIZE
 		if (HSM_SHOW_PASS_INDEX == 4)
 			FragColor = texture(LinearizePass, (floor(screen_curved_coord * textureSize(LinearizePass, 0)) + 0.5) / textureSize(LinearizePass, 0));
 
+		// COLOR CORRECT & UPSCALE
 		if (HSM_SHOW_PASS_INDEX == 5)
-			FragColor = texture(LinearizePass, (floor(screen_curved_coord * textureSize(LinearizePass, 0)) + 0.5) / textureSize(LinearizePass, 0));
-
-		if (HSM_SHOW_PASS_INDEX == 6)
 			FragColor = texture(ColorCorrectPass, (floor(screen_curved_coord * textureSize(ColorCorrectPass, 0)) + 0.5) / textureSize(ColorCorrectPass, 0));
 
+		// DEDITHER
+		if (HSM_SHOW_PASS_INDEX == 6)
+			FragColor = texture(DeditherPass, (floor(screen_curved_coord * textureSize(DeditherPass, 0)) + 0.5) / textureSize(DeditherPass, 0));
+
+		// DREZ
 		if (HSM_SHOW_PASS_INDEX == 7)
 			FragColor = texture(DerezedPass, screen_curved_coord);
 
+		// CORE
 		if (HSM_SHOW_PASS_INDEX == 8)
 			FragColor = texture(CorePass, screen_curved_coord);
 
+		// LAYERS TOP
 		if (HSM_SHOW_PASS_INDEX == 9)
 			FragColor = texture(BR_LayersOverCRTPass, vTexCoord);
 
+		// LAYERS BOTTOM
 		if (HSM_SHOW_PASS_INDEX == 10)
 			FragColor = texture(BR_LayersUnderCRTPass, vTexCoord);
 
 		// Linearize passes which are not already in linear space
-		if (HSM_SHOW_PASS_INDEX > 4 && HSM_SHOW_PASS_INDEX < 9)
-			FragColor = HSM_Linearize(FragColor, GAMMA_INPUT);
+		if (HSM_SHOW_PASS_INDEX < 5 || HSM_SHOW_PASS_INDEX > 8)
+			FragColor = HSM_Delinearize(FragColor, DEFAULT_SRGB_GAMMA);
 
 		return;
 	}

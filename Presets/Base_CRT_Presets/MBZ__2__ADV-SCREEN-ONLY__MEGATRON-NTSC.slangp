@@ -60,6 +60,7 @@ shader15 = ../../shaders/dedither/dedither-gamma-prep-2-after.slang
 shader16 = ../../shaders/ps1dither/hsm-PS1-Undither-BoxBlur.slang
 
 shader17 = ../../shaders/guest/extras/hsm-sharpsmoother.slang
+alias17 = "DeditherPass"
 
 shader18 = ../../shaders/base/stock.slang
 alias18 = "PreCRTPass"

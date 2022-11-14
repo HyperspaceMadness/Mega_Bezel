@@ -68,6 +68,7 @@ shader16 = ../../shaders/dedither/dedither-gamma-prep-2-after.slang
 shader17 = ../../shaders/ps1dither/hsm-PS1-Undither-BoxBlur.slang
 
 shader18 = ../../shaders/guest/extras/hsm-sharpsmoother.slang
+alias18 = "DeditherPass"
 
 // GTU TV Processing
 shader19 = ../../shaders/gtu/hsm-gtu-pass1.slang

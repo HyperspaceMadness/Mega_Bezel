@@ -60,6 +60,7 @@ shader15 = ../../shaders/dedither/dedither-gamma-prep-2-after.slang
 shader16 = ../../shaders/ps1dither/hsm-PS1-Undither-BoxBlur.slang
 
 shader17 = ../../shaders/guest/extras/hsm-sharpsmoother.slang
+alias17 = "DeditherPass"
 
 // GTU TV Processing
 shader18 = ../../shaders/gtu/hsm-gtu-pass1.slang
@@ -128,14 +129,19 @@ float_framebuffer27 = true
 alias27 = "LinearizePass"
 
 shader28 = ../../shaders/base/delinearize.slang
+scale_type28 = source
+float_framebuffer28 = "true"
 
 shader29 = ../../shaders/guest/hsm-crt-dariusg-gdv-mini.slang
 scale_type29 = viewport
 scale_x29 = 1.0
 scale_y29 = 1.0
 filter_linear29 = true
+float_framebuffer29 = "true"
+alias29 = "CRTPass"
 
 g_sat = 0.15
+g_gamma_out = 2.45
 
 shader30 = ../../shaders/base/post-crt-prep-image-layers.slang
 scale_type30 = viewport

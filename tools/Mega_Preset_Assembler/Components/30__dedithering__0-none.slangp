@@ -1,0 +1,4 @@
+shaders = 1
+
+shader0 =  :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/stock.slang
+alias0 = "DeditherPass"

@@ -60,6 +60,7 @@ shader15 = ../../shaders/dedither/dedither-gamma-prep-2-after.slang
 shader16 = ../../shaders/ps1dither/hsm-PS1-Undither-BoxBlur.slang
 
 shader17 = ../../shaders/guest/extras/hsm-sharpsmoother.slang
+alias17 = "DeditherPass"
 
 // GTU TV Processing
 shader18 = ../../shaders/gtu/hsm-gtu-pass1.slang
@@ -142,7 +143,7 @@ scale_x29 = 800.0
 scale_type_y29 = absolute
 scale_y29 = 600.0
 float_framebuffer29 = true
-alias29 = GlowPass
+alias29 = "GlowPass"
 
 shader30 = ../../shaders/guest/hsm-bloom_horizontal.slang
 filter_linear30 = true
@@ -159,20 +160,22 @@ scale_x31 = 1.0
 scale_type_y31 = source
 scale_y31 = 1.0
 float_framebuffer31 = true
-alias31 = BloomPass
+alias31 = "BloomPass"
 
 shader32 = ../../shaders/guest/hsm-crt-guest-advanced-no-reflect.slang
 filter_linear32 = true
-float_framebuffer32 = true
 scale_type32 = viewport
 scale_x32 = 1.0
 scale_y32 = 1.0
+float_framebuffer32 = true
 
 shader33 = ../../shaders/guest/hsm-deconvergence-no-reflect.slang
 filter_linear33 = true
 scale_type33 = viewport
 scale_x33 = 1.0
 scale_y33 = 1.0
+float_framebuffer33 = true
+alias33 = "CRTPass"
 
 shader34 = ../../shaders/base/post-crt-prep-no-reflect.slang
 scale_type34 = viewport

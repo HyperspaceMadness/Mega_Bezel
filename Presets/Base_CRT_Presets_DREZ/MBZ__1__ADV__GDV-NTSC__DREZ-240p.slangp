@@ -68,6 +68,7 @@ shader16 = ../../shaders/dedither/dedither-gamma-prep-2-after.slang
 shader17 = ../../shaders/ps1dither/hsm-PS1-Undither-BoxBlur.slang
 
 shader18 = ../../shaders/guest/extras/hsm-sharpsmoother.slang
+alias18 = "DeditherPass"
 
 shader19 = ../../shaders/base/stock.slang
 alias19 = "PreCRTPass"
@@ -188,20 +189,22 @@ scale_x35 = 640.0
 scale_type_y35 = absolute
 scale_y35 = 480.0
 float_framebuffer35 = true
-alias35 = BloomPass 
+alias35 = BloomPass
 
 shader36 = ../../shaders/guest/hsm-crt-guest-advanced-ntsc-pass2.slang
 filter_linear36 = true
-float_framebuffer36 = true
 scale_type36 = viewport
 scale_x36 = 1.0
 scale_y36 = 1.0
+float_framebuffer36 = true
 
 shader37 = ../../shaders/guest/hsm-deconvergence.slang
 filter_linear37 = true
 scale_type37 = viewport
 scale_x37 = 1.0
 scale_y37 = 1.0
+float_framebuffer37 = true
+alias37 = "CRTPass"
 
 shader38 = ../../shaders/base/post-crt-prep-image-layers.slang
 scale_type38 = viewport

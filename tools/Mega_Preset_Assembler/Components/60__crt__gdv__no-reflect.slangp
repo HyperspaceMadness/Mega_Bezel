@@ -15,7 +15,7 @@ scale_x1 = 800.0
 scale_type_y1 = absolute
 scale_y1 = 600.0
 float_framebuffer1 = true
-alias1 = GlowPass
+alias1 = "GlowPass"
 
 shader2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/hsm-bloom_horizontal.slang
 filter_linear2 = true
@@ -32,17 +32,19 @@ scale_x3 = 1.0
 scale_type_y3 = source
 scale_y3 = 1.0
 float_framebuffer3 = true
-alias3 = BloomPass
+alias3 = "BloomPass"
 
 shader4 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/hsm-crt-guest-advanced-no-reflect.slang
 filter_linear4 = true
-float_framebuffer4 = true
 scale_type4 = viewport
 scale_x4 = 1.0
 scale_y4 = 1.0
+float_framebuffer4 = true
 
 shader5 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/hsm-deconvergence-no-reflect.slang
 filter_linear5 = true
 scale_type5 = viewport
 scale_x5 = 1.0
 scale_y5 = 1.0
+float_framebuffer5 = true
+alias5 = "CRTPass"
