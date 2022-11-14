@@ -25,6 +25,7 @@
 // All parameter uniform values are in globals.inc 
 
 
+#pragma parameter GDV_BRIGHTNESS_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter bogus_brightness "[ BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
 #pragma parameter glow "          Glow Strength -- glow" 0.08 -2.0 2.0 0.01
@@ -51,6 +52,7 @@
 #pragma parameter brightboost1 "          Bright Boost Bright Pixels -- brightboost1" 1.10 0.25 3.00 0.025
 #define brightboost1  global.brightboost1     // adjust brightness
 
+#pragma parameter GDV_SCANLINE_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter bogus_scanline "[ SCANLINE OPTIONS ]: " 0.0 0.0 1.0 1.0
 
 #pragma parameter gsl "          Scanline Type -- gsl" 0.0 -1.0 2.0 1.0
@@ -89,6 +91,10 @@
 #pragma parameter scangamma "          Scanline Gamma" 2.40 0.5 10.0 0.05
 #define scangamma 	global.scangamma
 
+#pragma parameter no_scanlines "          No-Scanline Mode (Guest Advanced Only)" 0.0 0.0 1.0 1.0
+#define no_scanlines global.no_scanlines
+
+#pragma parameter GDV_FILTERING_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter bogus_filtering "[ FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
 
 #pragma parameter h_sharp "          Horizontal sharpness -- h_sharp" 5.20 0.20 15.0 0.10
@@ -111,7 +117,7 @@
 
 // #pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-// #pragma parameter intres "          Internal Resolution Y: 224p/240p, 1.5...y-dowsample" 0.0 0.0 6.0 0.5 // Joint parameter with linearize pass, values must match
+// #pragma parameter intres "          Internal Resolution Y: 0.5...y-dowsample" 0.0 0.0 6.0 0.5 // Joint parameter with linearize pass, values must match
 
 // #pragma parameter TATE "          TATE Mode" 0.0 0.0 1.0 1.0
 // #define TATE         params.TATE     // Screen orientation
@@ -139,9 +145,6 @@
 
 // #pragma parameter overscanY "          Overscan Y original pixels" 0.0 -200.0 200.0 1.0
 // #define overscanY        global.overscanY     // OverscanY pixels
-
-// #pragma parameter prescalex "          Prescale-X Factor (for xBR...pre-shader)" 1.0 1.0 4.0 1.0
-// #define prescalex        global.prescalex     // prescale-x factor
 
 /* HSM Removed
  #define COMPAT_TEXTURE(c,d) texture(c,d)
@@ -241,11 +244,6 @@ void main()
 	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 
-	bool ntsc_processing_on = false;
-	#ifdef IS_NTSC
-		ntsc_processing_on = true;
-	#endif
-
 	vec2 cache_bounds_coord = SCREEN_COORD;
 
 // If it's the potato preset render the whole frame
@@ -272,12 +270,14 @@ void main()
 	float TATE = USE_VERTICAL_SCANLINES;
 
 	/* HSM Removed
-	vec4 SourceSize = global.OriginalSize * vec4(prescalex, 1.0, 1.0/prescalex, 1.0);
+	vec2 prescalex = vec2(vec2(textureSize(LinearizePass, 0))/global.OriginalSize.xy);
+	
+	vec4 SourceSize = global.OriginalSize * mix( vec4(prescalex.x, 1.0, 1.0/prescalex.x, 1.0), vec4(1.0, prescalex.y, 1.0, 1.0/prescalex.y), TATE);
 	*/
 
 	// HSM Added
-	vec4 SourceSize = vec4(CROPPED_ROTATED_SIZE_WITH_RES_MULT, 1/CROPPED_ROTATED_SIZE_WITH_RES_MULT);
-	
+
+	vec4 SourceSize = vec4(CROPPED_ROTATED_SIZE_WITH_RES_MULT, 1 / CROPPED_ROTATED_SIZE_WITH_RES_MULT);
 
 	float lum = COMPAT_TEXTURE(AvgLumPass, vec2(0.5,0.5)).a;
 	
@@ -292,16 +292,15 @@ void main()
 	/* HSM Removed
 	float SourceY = mix(SourceSize.y, SourceSize.x, TATE);
 	float sy = 1.0;
-	if (global.intres == 0.5) sy = SourceY/224.0; else
-	if (global.intres == 1.0) sy = SourceY/240.0; else
-	if (global.intres > 1.25) sy = global.intres;
+	if (global.intres == 1.0) sy = SourceY/224.0;
+	if (global.intres > 0.25 && global.intres != 1.0) sy = global.intres;
 	if (notate) SourceSize*=vec4(1.0, 1.0/sy, 1.0, sy); else SourceSize*=vec4(1.0/sy, 1.0, sy, 1.0);
-
+	
 	// Calculating texel coordinates
    
 	vec2 texcoord = TEX0.xy;
 	if (IOS > 0.0 && !interb){
-		vec2 ofactor = OutputSize.xy/SourceSize.xy;
+		vec2 ofactor = OutputSize.xy/global.OriginalSize.xy;
 		vec2 intfactor = (IOS < 2.5) ? floor(ofactor) : ceil(ofactor);
 		vec2 diff = ofactor/intfactor;
 		float scan = mix(diff.y, diff.x, TATE);
@@ -351,13 +350,20 @@ void main()
 	
 	vec2 pC4 = floor(OGL2Pos) * ps + 0.5*ps; 
 
+	/* HSM Removed
+	if (global.intres == 0.5 &&  notate && prescalex.y < 1.5) pC4.y = floor(pC4.y * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
+	if (global.intres == 0.5 && !notate && prescalex.x < 1.5) pC4.x = floor(pC4.x * global.OriginalSize.x)*global.OriginalSize.z + 0.5*global.OriginalSize.z;
+	*/
+
+// TODO need to add something to support the VGA double resolution of the 
+
 	if (interb)  pC4.y = pos.y;
 	
 	float zero = exp2(-h_sharp);
 	float sharp1 = s_sharp * zero;
 	
 	/* HSM Removed
-	 float fdivider = min(prescalex, 2.0);
+	float fdivider = min(mix(prescalex.x, prescalex.y,TATE), 2.0);
 	*/
 	
 	// HSM Added
@@ -450,7 +456,14 @@ void main()
 	if (!interb)
 {	
 	pC4+=offy;
-	
+
+	/* HSM Removed
+	if (global.intres == 0.5 &&  notate && prescalex.y < 1.5) pC4.y = floor((pos.y + 0.33*offy.y) * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
+	if (global.intres == 0.5 && !notate && prescalex.x < 1.5) pC4.x = floor((pos.x + 0.33*offy.x) * global.OriginalSize.x)*global.OriginalSize.z + 0.5*global.OriginalSize.z;
+	*/
+
+// TODO need to add something to support the VGA double resolution of the 
+
 	l3 = COMPAT_TEXTURE(LinearizePass, pC4 -off2).rgb;
 	l2 = COMPAT_TEXTURE(LinearizePass, pC4 -offx).rgb;
 	l1 = COMPAT_TEXTURE(LinearizePass, pC4      ).rgb;
@@ -570,7 +583,7 @@ if (!interb)
 		cd2 = mix(one, vec3(v_low, v_high2, v_low), ds2);
 	}
 	
-	color = gc(color1)*w1*cd1 + gc(color2)*w2*cd2;
+	color = (gc(color1)*w1*cd1 + gc(color2)*w2*cd2)/mix(1.0.xxx, w1+w2, no_scanlines);
 
 	if (abs(rolling_scan) > 0.005) 
 	{ 
