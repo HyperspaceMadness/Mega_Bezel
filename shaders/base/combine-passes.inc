@@ -106,8 +106,9 @@ vec3 PrepGraphicsForHDR(vec3 in_color)
 {
 	vec3 out_color = in_color.rgb;
 	
-#ifdef IS_HDR_PRESET
 	out_color *= HSM_GLOBAL_GRAPHICS_BRIGHTNESS;
+	
+#ifdef IS_HDR_PRESET
 
    if((HCRT_HDR < 1.0f) && (HCRT_COLOUR_ACCURATE < 1.0f))
       if(HCRT_OUTPUT_COLOUR_SPACE == 2.0f)
@@ -294,5 +295,11 @@ void main()
 
 #ifndef IS_HDR_PRESET	
 	FragColor = HSM_Delinearize(FragColor, DEFAULT_SRGB_GAMMA);
+#endif
+
+#ifdef IS_HDR_PRESET
+	vec3 output_colour = vec3(0);
+	LinearToOutputColor(FragColor.rgb, output_colour);
+	FragColor = vec4(output_colour, 1.0f);
 #endif
 }

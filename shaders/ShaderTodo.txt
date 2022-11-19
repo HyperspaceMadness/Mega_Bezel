@@ -3,6 +3,7 @@
 Mega Bezel is updated to V1.5.0_2022-10-11
 
 Changes:
+  * Added HDR versions for Megatron
   * Fixed GLCore viewport size cache issue
   * Updated to crt-guest-advanced-2022-10-15-release1
   * Changed the Image Fill Mode parameter to be simpler
@@ -15,17 +16,19 @@ Changes:
   * Core Sampling Multipliers now go to 0 which is Auto
     * Auto means that the samling multiplier will match the upscale in the shader chain 
     * The scanline direction multiplier is now set to 0 by default
+  * Improved Glass so it doesn't get create banding
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
   * Integer Scale Mode X & Y not affecting tube scale
+  * Use brightness values of sides to control static corner highlight
   * Move Global Variable Update to separate file for compile speed
+  * Fix Megatron Reflection
 
   * Add .params #reference to with all parameters commented out
   * Bezel shadow on Potato Tube / Game Image
-  * Get CRT image to composite on top of the BG, so effects can affect the BG
   * We should have a middle pass which has the device behind the CRT tube
 
 ----------------------------------------------------

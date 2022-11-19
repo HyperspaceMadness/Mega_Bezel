@@ -18,3 +18,4 @@ filter_linear2 = true
 scale_type2 = source
 scale2 = 1.0
 float_framebuffer2 = true
+alias2 = "LinearizePass"

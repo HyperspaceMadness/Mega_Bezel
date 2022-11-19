@@ -1,4 +1,4 @@
-shaders = 44
+shaders = 45
 
 shader0 = ../../shaders/base/add-params-glass.slang
 alias0 = "CorePass"
@@ -137,22 +137,19 @@ scale_x30 = 1.0
 scale_y30 = 1.0
 
 shader31 = ../../shaders/base/stock.slang
-filter_linear31 = true
-scale_type31 = source
-scale_x31 = 1.0
-scale_y31 = 1.0
+float_framebuffer31 = true
 alias31 = "PrePass"
-mipmap_input31 = true
 
 shader32 = ../../shaders/guest/hsm-avg-lum.slang
 filter_linear32 = true
 scale_type32 = source
 scale32 = 1.0
 mipmap_input32 = true
+float_framebuffer32 = true
 alias32 = "AvgLumPass"
 
 // Pass referenced by subsequent blurring passes and crt pass
-shader33 = ../../shaders/guest/hsm-interlace-and-linearize.slang
+shader33 = ../../shaders/guest/hsm-interlace.slang
 filter_linear33 = true
 scale_type33 = source
 scale33 = 1.0
@@ -183,10 +180,9 @@ shader36 = "../../shaders/megatron/crt-sony-megatron.slang"
 filter_linear36 = "false"
 wrap_mode36 = "clamp_to_border"
 mipmap_input36 = "false"
-alias36 = ""
-float_framebuffer36 = "false"
-srgb_framebuffer36 = "false"
 scale_type36 = "viewport"
+float_framebuffer36 = "true"
+alias36 = "CRTPass"
 
 shader37 = ../../shaders/base/post-crt-prep-glass.slang
 scale_type37 = viewport
@@ -247,10 +243,14 @@ float_framebuffer42 = true
 alias42 = "BR_MirrorFullscreenGlowPass"
 
 // Bezel Reflection ----------------------------------------------------------------
-shader43 = ../../shaders/base/reflection-glass.slang
+shader43 = ../../shaders/base/reflection-glass-hdr.slang
 scale_type43 = viewport
-float_framebuffer43 = true
 alias43 = "ReflectionPass"
+
+// Combine Passes ----------------------------------------------------------------
+shader44 = ../../shaders/base/output-hdr.slang
+scale_type44 = viewport
+alias44 = "OutputPass"
 // Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
@@ -393,9 +393,8 @@ shadowMask = 3
 
 // Sony Megatron Color Monitor
 hcrt_hdr = "0.000000"
-hcrt_gamma_in = "2.020000"
 
 HSM_INT_SCALE_MODE = "1.000000"
 HSM_CRT_CURVATURE_SCALE = "0.000000"
-HSM_GLOBAL_GRAPHICS_BRIGHTNESS = "40.000000"
-HSM_REFLECT_GLOBAL_AMOUNT = "300.000000"
+HSM_GLOBAL_GRAPHICS_BRIGHTNESS = "30.000000"
+HSM_REFLECT_GLOBAL_AMOUNT = "40.000000"

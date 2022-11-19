@@ -17,8 +17,8 @@ layout(push_constant) uniform Push
    float hcrt_gamma_in;
 } params;
 
-#pragma parameter hcrt_color_settings                "[ COLOR SETTINGS HDR/SDR INPUT/OUTPUT by MajorPainTheCactus ]:"                                     0.0      0.0   0.0001   0.0001
-#pragma parameter hcrt_space0                        " "                                                            0.0      0.0   0.0001   0.0001
+// #pragma parameter hcrt_color_settings                "[ COLOR SETTINGS HDR/SDR INPUT/OUTPUT by MajorPainTheCactus ]:"                                     0.0      0.0   0.0001   0.0001
+// #pragma parameter hcrt_space0                        " "                                                            0.0      0.0   0.0001   0.0001
 // #pragma parameter hcrt_support0                      "If image is dark, try turning up your TV's brightness"               0.0      0.0   0.0001   0.0001
 #pragma parameter hcrt_support1                      "HDR mode: Set the peak luminance to that of your TV."         0.0      0.0   0.0001   0.0001
 #pragma parameter hcrt_support2                      "Then adjust paper white luminance until it looks right"       0.0      0.0   0.0001   0.0001

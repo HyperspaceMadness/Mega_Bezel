@@ -23,7 +23,7 @@ THIS SHADER DOES NOT SUPPORT WRGB OLED (Due to the sub pixel layout of WRGB - RG
 
 #define ENABLE_BLACK_WHITE_MASKS 0
 
-#pragma format A2B10G10R10_UNORM_PACK32
+// #pragma format A2B10G10R10_UNORM_PACK32
 
 layout(push_constant) uniform Push
 {
@@ -91,11 +91,11 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #include "include/parameters.h"
 
-#define HCRT_HDR                             0
+#define HCRT_HDR                             params.hcrt_hdr
 #define HCRT_OUTPUT_COLOUR_SPACE             params.hcrt_colour_space
-#define HCRT_MAX_NITS                        700
-#define HCRT_PAPER_WHITE_NITS                700
-#define HCRT_EXPAND_GAMUT                    0
+#define HCRT_MAX_NITS                        params.hcrt_max_nits
+#define HCRT_PAPER_WHITE_NITS                params.hcrt_paper_white_nits
+#define HCRT_EXPAND_GAMUT                    params.hcrt_expand_gamut
 #define HCRT_GAMMA_OUT                       params.hcrt_gamma_out
 #define HCRT_COLOUR_ACCURATE                 params.hcrt_colour_accurate
 
@@ -1675,6 +1675,7 @@ void main()
       scanline_colour += scanline_channel_2 * kColourMask[channel_2];
    }
 
+/*
    vec3 transformed_colour;
 
    if(HCRT_COLOUR_ACCURATE >= 1.0f)
@@ -1703,4 +1704,14 @@ void main()
    GammaCorrect(transformed_colour, gamma_corrected);
 
    FragColor = vec4(gamma_corrected, 1.0f);
+*/
+
+   scanline_colour = pow(scanline_colour, vec3(1 / (HSM_GAMMA_OUT_CRT / GAMMA_INPUT)));
+   FragColor = vec4(scanline_colour, 1.0f);
+
+/*
+   vec3 output_colour = vec3(0);
+   LinearToOutputColor(scanline_colour, output_colour);
+   FragColor = vec4(output_colour, 1.0f);
+*/
 }

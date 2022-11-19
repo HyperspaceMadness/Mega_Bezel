@@ -74,20 +74,16 @@ layout(location = 0) out vec4 FragColor;
 // Pass Framebuffer Textures
 layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
 
-layout(set = 0, binding = 3) uniform sampler2D NightLightingImage;
-layout(set = 0, binding = 4) uniform sampler2D NightLighting2Image;
-layout(set = 0, binding = 5) uniform sampler2D BackgroundImage;
-layout(set = 0, binding = 6) uniform sampler2D ReflectionMaskImage;
+layout(set = 0, binding = 2) uniform sampler2D BackgroundImage;
+layout(set = 0, binding = 3) uniform sampler2D ReflectionMaskImage;
 
-layout(set = 0, binding = 7) uniform sampler2D TubeStaticReflectionImage;
-layout(set = 0, binding = 8) uniform sampler2D TubeColoredGelImage;
+layout(set = 0, binding = 4) uniform sampler2D BR_MirrorLowResPass;
+layout(set = 0, binding = 5) uniform sampler2D PostCRTPass;
+layout(set = 0, binding = 6) uniform sampler2D BR_MirrorBlurredPass;
+layout(set = 0, binding = 7) uniform sampler2D BR_MirrorReflectionDiffusedPass;
+layout(set = 0, binding = 8) uniform sampler2D BR_MirrorFullscreenGlowPass;
 
-layout(set = 0, binding = 9) uniform sampler2D PostCRTPass;
-layout(set = 0, binding = 10) uniform sampler2D BR_MirrorBlurredPass;
-layout(set = 0, binding = 11) uniform sampler2D BR_MirrorReflectionDiffusedPass;
-layout(set = 0, binding = 12) uniform sampler2D BR_MirrorFullscreenGlowPass;
-
-layout(set = 0, binding = 13) uniform sampler2D ReflectionPassFeedback;
+layout(set = 0, binding = 9) uniform sampler2D ReflectionPassFeedback;
 #define PassFeedback ReflectionPassFeedback
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -403,8 +399,6 @@ void main()
 		// 		reflection_image_scale = DEVICE_SCALE;
 		// 	}
 
-		// 	float reflection_image = HSM_GetMipmappedTexSample(TubeColoredGelImage, mirrored_tube_coord, TUBE_SCALE, 0);
-
 		// 	reflection_color *= HSM_REFLECT_MASK_IMG_AMOUNT * texture(ReflectionMaskImage, reflection_image_coord).r + (1 - HSM_REFLECT_MASK_IMG_AMOUNT);
 		// }
 	}
@@ -423,9 +417,18 @@ void main()
 	frag_color_linear = HSM_BlendModeLayerMix(frag_color_linear, bg_image, HSM_BG_BLEND_MODE, HSM_BG_OPACITY);
 	frag_color_linear += reflection_color;
 
+
+	FragColor = frag_color_linear; //clamp(frag_color_linear, 0, 1);
+
 #ifndef IS_HDR_PRESET
-	FragColor = HSM_Delinearize(clamp(frag_color_linear, 0, 1), DEFAULT_SRGB_GAMMA);
+	FragColor = HSM_Delinearize(frag_color_linear, DEFAULT_SRGB_GAMMA);
 #endif
+
+// #ifdef IS_HDR_PRESET
+// 	vec3 output_colour = vec3(0);
+// 	LinearToOutputColor(FragColor.rgb, output_colour);
+// 	FragColor = vec4(output_colour, 1.0f);
+// #endif
 
 	return;
 #endif

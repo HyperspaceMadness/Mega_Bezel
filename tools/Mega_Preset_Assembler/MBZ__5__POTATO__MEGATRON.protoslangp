@@ -7,7 +7,7 @@
 #reference "Components/54__prep__gdv-afterglow.slangp"
 #reference "Components/55__color-correct__grade.slangp"
 #reference "Components/58__fast-sharpen.slangp"
-#reference "Components/59__prep__gdv-linearize.slangp"
+#reference "Components/59__prep__gdv-interlace.slangp"
 #reference "Components/60__crt__megatron__potato.slangp"
 #reference "Components/68__post-crt__potato.slangp"
 #reference "Components/90__textures__potato.slangp"

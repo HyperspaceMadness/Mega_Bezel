@@ -27,7 +27,4 @@ DONT USE THIS PRESET DIRECTLY - Use any of the others in this directory
 */
 
 #reference "../../../MBZ__1__ADV__MEGATRON.slangp"
-
-
-HSM_GLOBAL_GRAPHICS_BRIGHTNESS = "30.000000"
-hcrt_hdr = "1.000000"
+#reference "../../_params/megatron-hdr.params"
