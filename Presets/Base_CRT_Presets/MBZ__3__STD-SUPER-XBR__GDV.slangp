@@ -404,3 +404,6 @@ HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = 0
 // maskDark = 0.4
 // maskLight = 1.2
 // mask_gamma = 4
+
+// Mask Size is Auto, so it will look the same at 1080p and 4K
+masksize = 0

@@ -17,6 +17,8 @@ Changes:
     * Auto means that the samling multiplier will match the upscale in the shader chain 
     * The scanline direction multiplier is now set to 0 by default
   * Improved Glass so it doesn't get create banding
+  * SMOOTH-ADV & SUPER-XBR now have Mask size set to 0 so they will scale 2X at 4K
+  * Added Noise Multiplier at 4K (Will double at 8K if not 1)
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
@@ -24,8 +26,9 @@ Changes:
 
   * Integer Scale Mode X & Y not affecting tube scale
   * Use brightness values of sides to control static corner highlight
-  * Move Global Variable Update to separate file for compile speed
   * Fix Megatron Reflection
+  * Add Signal Res Noise
+  * Create 4K Royale Preset
 
   * Add .params #reference to with all parameters commented out
   * Bezel shadow on Potato Tube / Game Image

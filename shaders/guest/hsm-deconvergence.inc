@@ -78,7 +78,7 @@
 #pragma parameter GDV_HUMBAR_LINE							" " 0 0 0.001 0.001
 #pragma parameter gdv_humbar_title "[ HUM BAR ]: " 0.0 0.0 0.1 0.1
 
-#pragma parameter barspeed "          Hum Bar Speed" 50.0 5.0 200.0 1.0
+#pragma parameter barspeed "          Hum Bar Speed" 50.0 3.0 200.0 1.0
 
 #pragma parameter barintensity "          Hum Bar Intensity" 0.0 -1.0 1.0 0.01
 
@@ -186,7 +186,10 @@
 
 #pragma parameter addnoised "          Add Noise" 0.2 -1.0 1.0 0.02
 
-#pragma parameter noiseresd "          Noise Resolution" 2.0 1.0 10.0 1.0
+#pragma parameter noiseresd "          Noise Size (AKA Resolution)" 2.0 1.0 10.0 1.0
+
+// HSM Added
+#pragma parameter noiseresd4kmult "          Noise Size Multiplier at 4K" 2 1 4 1
 
 #pragma parameter noisetype "          Noise Type: Colored, Luma" 0.0 0.0 1.0 1.0
 
@@ -798,7 +801,19 @@ void main()
 	
 	if (global.GDV_NOISE_ON > 0.5)
 	{
+		/* HSM Removed
 		vec3 noise0 = noise(vec3(floor(OutputSize.xy * vTexCoord / global.noiseresd), float(global.FrameCount)));		
+		if (global.noisetype < 0.5) color = mix(color, noise0, 0.25*abs(global.addnoised) * rc);
+		else color = min(color * mix(1.0, 1.5*noise0.x, 0.5*abs(global.addnoised)), 1.0);
+		*/
+
+		// HSM Added
+		float noise_res = global.FinalViewportSize.y > 2000 ? global.noiseresd * global.noiseresd4kmult : global.noiseresd;
+
+		// If we are at 8k multiply this by 2
+		noise_res *= global.noiseresd4kmult > 1 && global.FinalViewportSize.y > 4200 ? 2 : 1;
+
+		vec3 noise0 = noise(vec3(floor(OutputSize.xy * vTexCoord / noise_res), float(global.FrameCount)));		
 		if (global.noisetype < 0.5) color = mix(color, noise0, 0.25*abs(global.addnoised) * rc);
 		else color = min(color * mix(1.0, 1.5*noise0.x, 0.5*abs(global.addnoised)), 1.0);
 	}

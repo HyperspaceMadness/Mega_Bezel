@@ -756,6 +756,7 @@ float mask_bloom;
 	float addnoised;
 	float noisetype;
 	float noiseresd;
+	float noiseresd4kmult;
 	float deconrr;
 	float deconrg;
 	float deconrb;
