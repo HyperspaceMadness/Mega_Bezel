@@ -2,7 +2,6 @@
 
 hcrt_crt_screen_type = "1.000000"
 hcrt_crt_resolution = "2.000000"
-hcrt_paper_white_nits = "400.000000"
 hcrt_red_scanline_min = "0.5000000"
 hcrt_red_scanline_max = "1.000000"
 hcrt_red_scanline_attack = "0.350000"

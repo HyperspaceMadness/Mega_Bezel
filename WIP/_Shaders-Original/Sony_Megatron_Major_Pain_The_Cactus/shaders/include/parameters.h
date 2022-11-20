@@ -16,8 +16,8 @@
 #pragma parameter hcrt_colour_accurate               "    Mask Accurate/Colour Accurate"                            1.0      0.0   1.0      1.0
 #pragma parameter hcrt_colour_space                  "    SDR: Display's Colour Space: r709 | sRGB | DCI-P3"        1.0      0.0   2.0      1.0
 #pragma parameter hcrt_gamma_out                     "    SDR: Gamma"                                               2.4      1.0   5.0      0.01
-#pragma parameter hcrt_max_nits                      "    HDR: Display's Peak Luminance"                            700.0    0.0   10000.0  10.0
-#pragma parameter hcrt_paper_white_nits              "    HDR: Display's Paper White Luminance"                     700.0    0.0   10000.0  10.0
+#pragma parameter hcrt_max_nits                      "    HDR: Display's Peak Luminance"                            1000.0   0.0   10000.0  10.0
+#pragma parameter hcrt_paper_white_nits              "    HDR: Display's Paper White Luminance"                     200.0    0.0   10000.0  10.0
 #pragma parameter hcrt_expand_gamut                  "    HDR: Original/Vivid"                                      0.0      0.0   1.0      1.0
 #pragma parameter hcrt_lcd_resolution                "    Display's Resolution: 1080p | 4K | 8K"                    1.0      0.0   2.0      1.0
 #pragma parameter hcrt_lcd_subpixel                  "    Display's Subpixel Layout: RGB | RWBG (OLED) | BGR"       0.0      0.0   2.0      1.0

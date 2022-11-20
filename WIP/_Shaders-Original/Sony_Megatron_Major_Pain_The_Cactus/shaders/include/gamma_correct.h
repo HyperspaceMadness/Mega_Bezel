@@ -14,7 +14,8 @@ const mat3 kXYZ_to_DCIP3 = mat3 (
 
 float LinearTosRGB_1(const float channel)
 {
-	return (channel > 0.0031308f) ? (1.055f * pow(channel, 1.0f / HCRT_GAMMA_OUT)) - 0.055f : channel * 12.92f; 
+	//return (channel > 0.0031308f) ? (1.055f * pow(channel, 1.0f / HCRT_GAMMA_OUT)) - 0.055f : channel * 12.92f; 
+   return (1.055f * pow(channel, 1.0f / HCRT_GAMMA_OUT)) - 0.055f; 
 }
 
 vec3 LinearTosRGB(const vec3 colour)
@@ -24,7 +25,8 @@ vec3 LinearTosRGB(const vec3 colour)
 
 float LinearTo709_1(const float channel)
 {
-	return (channel >= 0.018f) ? pow(channel * 1.099f, 1.0f / (HCRT_GAMMA_OUT - 0.18f)) - 0.099f : channel * 4.5f;  // Gamma: 2.4 - 0.18 = 2.22
+	//return (channel >= 0.018f) ? pow(channel * 1.099f, 1.0f / (HCRT_GAMMA_OUT - 0.18f)) - 0.099f : channel * 4.5f;  // Gamma: 2.4 - 0.18 = 2.22
+   return pow(channel * 1.099f, 1.0f / (HCRT_GAMMA_OUT - 0.18f)) - 0.099f;
 }
 
 vec3 LinearTo709(const vec3 colour)

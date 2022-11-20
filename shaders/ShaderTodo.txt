@@ -19,6 +19,7 @@ Changes:
   * Improved Glass so it doesn't get create banding
   * SMOOTH-ADV & SUPER-XBR now have Mask size set to 0 so they will scale 2X at 4K
   * Added Noise Multiplier at 4K (Will double at 8K if not 1)
+  * Megatron Updated to V4.3
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------

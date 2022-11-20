@@ -74,7 +74,8 @@ vec3 WhiteBalance(float temperature, vec3 colour)
 float r601ToLinear_1(const float channel)
 {
 	//return (channel >= 0.081f) ? pow((channel + 0.099f) * (1.0f / 1.099f), (1.0f / 0.45f)) : channel * (1.0f / 4.5f);
-	return (channel >= 0.081f) ? pow((channel + 0.099f) * (1.0f / 1.099f), HCRT_GAMMA_IN) : channel * (1.0f / 4.5f);
+	//return (channel >= 0.081f) ? pow((channel + 0.099f) * (1.0f / 1.099f), HCRT_GAMMA_IN) : channel * (1.0f / 4.5f);
+   return pow((channel + 0.099f) * (1.0f / 1.099f), HCRT_GAMMA_IN);
 }
 
 vec3 r601ToLinear(const vec3 colour)
@@ -86,7 +87,8 @@ vec3 r601ToLinear(const vec3 colour)
 float r709ToLinear_1(const float channel)
 {
 	//return (channel >= 0.081f) ? pow((channel + 0.099f) * (1.0f / 1.099f), (1.0f / 0.45f)) : channel * (1.0f / 4.5f);
-	return (channel >= 0.081f) ? pow((channel + 0.099f) * (1.0f / 1.099f), HCRT_GAMMA_IN) : channel * (1.0f / 4.5f);
+	//return (channel >= 0.081f) ? pow((channel + 0.099f) * (1.0f / 1.099f), HCRT_GAMMA_IN) : channel * (1.0f / 4.5f);
+   return pow((channel + 0.099f) * (1.0f / 1.099f), HCRT_GAMMA_IN);
 }
 
 vec3 r709ToLinear(const vec3 colour)
