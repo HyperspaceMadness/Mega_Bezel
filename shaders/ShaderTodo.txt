@@ -6,6 +6,7 @@ Changes:
   * Added HDR versions for Megatron
   * Fixed GLCore viewport size cache issue
   * Updated to crt-guest-advanced-2022-11-14-release1
+  * Added -1 option to interlace mode which will turn on No Scanlines for both GDV and GDV-NTSC
   * Changed the Image Fill Mode parameter to be simpler
     * It now has 3 options
       * 0 - KEEP TEXURE ASPECT

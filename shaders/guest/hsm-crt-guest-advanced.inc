@@ -586,8 +586,16 @@ if (abs(vertmask) > 0.025)
 		cd2 = mix(one, vec3(v_low, v_high2, v_low), ds2);
 	}
 }
-	
+	/* HSM Removed
 	color = (gc(color1)*w1*cd1 + gc(color2)*w2*cd2)/mix(1.0.xxx, w1+w2, no_scanlines);
+	*/
+
+	// HSM Added
+	float scan_res = (1 - USE_VERTICAL_SCANLINES) * CROPPED_ROTATED_SIZE_WITH_RES_MULT.y + 
+						USE_VERTICAL_SCANLINES *  CROPPED_ROTATED_SIZE_WITH_RES_MULT.x;
+	float hsm_no_scanlines = HSM_INTERLACE_MODE < 0 && HSM_INTERLACE_TRIGGER_RES <= scan_res ? 1 : no_scanlines;
+	
+	color = (gc(color1)*w1*cd1 + gc(color2)*w2*cd2)/mix(1.0.xxx, w1+w2, hsm_no_scanlines);
 
 	if (abs(rolling_scan) > 0.005) 
 	{ 
