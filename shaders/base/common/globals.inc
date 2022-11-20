@@ -747,6 +747,7 @@ float mask_bloom;
 	float double_slot;
 	float slotms;
 	float mclip;
+	float smoothmask;
 	float mshift;
 	float mask_layout;
 	

@@ -84,6 +84,7 @@ void main()
 	vec4 SourceSize = params.OriginalSize * vec4(prescalex.x, prescalex.y, 1.0/prescalex.x, 1.0/prescalex.y);
 	
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
+	bool interb  = (intera < 0.5);
 	
 	// Calculating texel coordinates
    
@@ -107,7 +108,7 @@ void main()
 	float zero = exp2(-h_sharp);
 	float sharp1 = s_sharp * zero;
 	
-	float fdivider = min(prescalex.x, 2.0);
+	float fdivider = max(min(prescalex.x, 2.0), 1.5*float(interb));
 	
 	float wl3 = (2.0 + fpx)/fdivider;
 	float wl2 = (1.0 + fpx)/fdivider;

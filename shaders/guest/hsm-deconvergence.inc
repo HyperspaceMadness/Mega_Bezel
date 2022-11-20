@@ -147,8 +147,11 @@
 #pragma parameter slotms "          Slot Mask Size - Auto | 2K | 4k -- slotms" 1.0 0.0 4.0 1.0
 #define slotms  global.slotms       // Slot Mask Size
 
-#pragma parameter mclip "          Keep Mask effect with clipping -- mclip" 0.30 0.0 1.0 0.05
+#pragma parameter mclip "          Keep Mask effect with clipping -- mclip" 0.0 0.0 1.0 0.05
 #define mclip  global.mclip
+
+#pragma parameter smoothmask "          Smooth Masks in bright scanlines" 0.0 0.0 1.0 1.0
+#define smoothmask  global.smoothmask
 
 // #pragma parameter gamma_out "Gamma out" 2.4 1.0 5.0 0.05
 #define gamma_out    HSM_GAMMA_OUT_CRT     // output gamma
@@ -234,7 +237,7 @@ layout(set = 0, binding = 8) uniform sampler2D InfoCachePass;
 
 // Shadow mask (1-4 from PD CRT Lottes shader).
 
-vec3 Mask(vec2 pos, float mx)
+vec3 Mask(vec2 pos, float mx, float mb)
 {
 	// HSM Added
 	float final_mask_size = masksize;
@@ -452,7 +455,7 @@ vec3 Mask(vec2 pos, float mx)
 	}
 	
 	float maskmin = min(min(mask.r,mask.g),mask.b);
-	return (mask - maskmin) * maskboost + maskmin;
+	return (mask - maskmin) * (1.0 + (maskboost-1.0)*mb) + maskmin;
 }
 
 float SlotMask(vec2 pos, float m)
@@ -698,20 +701,33 @@ void main()
 	vec3 color = COMPAT_TEXTURE(Source,pos1).rgb;
 	vec3  Bloom = HSM_GetCroppedTexSample(BloomPass, pos).rgb;
 
-	// HSM Added
-	if (GDV_DECONVERGENCE_ON > 0.5)
-		fetch_pixel(color, Bloom, pos1, pos); // deconvergence
+	/* HSM Removed
+if ((abs(global.deconrr) + abs(global.deconrry) + abs(global.deconrg) + abs(global.deconrgy) + abs(global.deconrb) + abs(global.deconrby)) > 0.2)
+	fetch_pixel(color, Bloom, pos1, pos); // deconvergence
+	*/
 
+	// HSM Added
+	if (GDV_DECONVERGENCE_ON > 0.5 && ((abs(global.deconrr) + abs(global.deconrry) + abs(global.deconrg) + abs(global.deconrgy) + abs(global.deconrb) + abs(global.deconrby)) > 0.2))
+		fetch_pixel(color, Bloom, pos1, pos); // deconvergence
+	
 	float cm = max(max(color.r,color.g),color.b);
 	float mx1 = COMPAT_TEXTURE(Source, pos1     ).a;
 	float colmx = max(mx1, cm);
-	float w3 = min((c0 + 0.0005) / (pow(colmx, gamma_in/1.4) + 0.0005), 1.0);
+	float w3 = min((c0 + 0.0001) / (pow(colmx, gamma_in/1.4) + 0.0005), 1.0);
 	
 	vec2 dx = mix(vec2(0.001, 0.0), vec2(0.0, 0.001), TATE);
 	float mx0 = COMPAT_TEXTURE(Source, pos1 - dx).a;
 	float mx2 = COMPAT_TEXTURE(Source, pos1 + dx).a;
 	float mx = max(max(mx0,mx1),max(mx2,cm));
+
+
+	// mask boost tweak
 	
+	dx = mix(vec2(global.OriginalSize.z, 0.0), vec2(0.0, global.OriginalSize.w), TATE) * 0.25;
+	mx0 = COMPAT_TEXTURE(Source, pos1 - dx).a;
+	mx2 = COMPAT_TEXTURE(Source, pos1 + dx).a;
+	float mb = 1.0 - min(abs(mx0-mx2)/(0.5+mx1), 1.0);
+		
 	vec3 one = vec3(1.0);
 	
 	// Apply Mask
@@ -723,12 +739,12 @@ void main()
 	if (notate) maskcoord = maskcoord.yx;
 	
 	float smask = SlotMask(maskcoord, mx);	
-	cmask*= Mask(maskcoord, mx);
-	
+	cmask*= Mask(maskcoord, mx, mb);
+
 	if (mask_layout > 0.5) cmask = cmask.rbg;
 
+	cmask*=smask;
 	vec3 cmask1 = cmask;
-	float smask1 = smask;
 
 	if (mask_bloom > 0.025)
 	{
@@ -736,17 +752,15 @@ void main()
 		maxb = pow(sqrt(maxb*mix(maxb, colmx, 0.75)),0.325);
 		vec3 mBloom = 0.5*(1.4*Bloom+0.6*maxb) * mix(1.0, 2.0-colmx, (bloom_dist + 0.5));
 		cmask = max(min(cmask + maxb*mBloom*mask_bloom, 1.0), cmask);
-		smask = min(smask + maxb*max(max(mBloom.r,mBloom.g),mBloom.b)*mask_bloom, 1.0);
 	}
 	
 	color = pow(color, vec3(mask_gamma/gamma_in));
 	color = color*cmask;
 	color = min(color,1.0);
-	color = color*smask;
 	color = pow(color, vec3(gamma_in/mask_gamma));
 
-	cmask = min(cmask*smask, 1.0);
-	cmask1 = min(cmask1*smask1, 1.0);
+	cmask = min(cmask, 1.0);
+	cmask1 = min(cmask1, 1.0);
 
 	float bb = mix(brightboost, brightboost1, colmx);
 	if (interb) bb = (abs(intera-0.5)<0.1) ? pow(0.80*bb, 0.65) : pow(bb, 0.70);
@@ -765,14 +779,14 @@ void main()
 
 	vec3 Bloom1 = Bloom;
 
+if (abs(bloom) > 0.025)
+{
 	if (bloom < -0.01) Bloom1 = plant(Bloom, maxb);
-
 	Bloom1 = min(Bloom1*(orig1+color), max(0.5*(colmx + orig1 - color),0.001*Bloom1));
 	Bloom1 = 0.5*(Bloom1 + mix(Bloom1, mix(colmx*orig1, Bloom1, 0.5), 1.0-color));
-
 	Bloom1 = Bloom1 * mix(1.0, 2.0-colmx, bloom_dist);
-
 	color = color + abs(bloom) * Bloom1;
+}
 
 	color = min(color, mix(one, cmask1, mclip));
 
@@ -782,10 +796,12 @@ void main()
 		Bloom = mix(0.5*(Bloom + Bloom*Bloom), 0.75*Bloom*Bloom, colmx);	
 		color = color + 2.0*max((2.0*mix(maxb*maxb, maxb, colmx)-0.5*max(max(Ref.r,Ref.g),Ref.b)),0.25)*mix(1.0,w3,0.5*colmx)*mix(one,cmask,0.6)*Bloom*halation; }
 	else
-	if (halation < 0.01) {
+	if (halation < -0.01) {
 		float mbl = max(max(Bloom.r,Bloom.g),Bloom.b);
 		Bloom = plant(Bloom + Ref + orig1 + Bloom*Bloom*Bloom, min(mbl*mbl,0.75));
 		color = color + 2.0*mix(1.0,w3,0.5*colmx)*mix(one,cmask,0.5)*Bloom*(-halation); }
+
+	if (smoothmask > 0.5) { w3 = mix(1.0, w3, smoothstep(0.3, 0.6, mx1)); color = max(min(color/w3, 1.0)*w3, min(color,color*(1.0-w3))); }
 
 	Glow = mix(Glow, 0.25*color, 0.7*colmx);
 	if (glow >= 0.0) color = color + 0.5*Glow*glow; else { cmask*=cmask; cmask*=cmask; color = color + (-glow)*cmask*Glow; }

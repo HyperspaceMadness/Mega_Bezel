@@ -40,6 +40,11 @@ layout(push_constant) uniform Push
    float contr;
 } params;
 
+
+#pragma parameter bogus_compat "[ COMPATIBILITY AND PERFORMANCE ]:" 0.0 0.0 1.0 1.0
+
+#pragma parameter fcompat "          Compatibility Mode (slower, use if glitchy)" 0.0 0.0 1.0 1.0 
+
 #pragma parameter bogus_color "[ COLOR TWEAKS ]:" 0.0 0.0 1.0 1.0
 
 #pragma parameter TNTC "          LUT Colors: Trin.1 | Trin.2 | Nec Mult. | NTSC" 0.0 0.0 4.0 1.0

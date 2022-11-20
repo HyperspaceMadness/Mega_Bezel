@@ -128,7 +128,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter scanline2 "          Scanline Beam Shape Edges" 8.0 0.0 70.0 1.0 
 #define scanline2    params.scanline2      // scanline param, vertical sharpness
 
-#pragma parameter beam_min "          Scanline Shape Dark Pixels" 1.30 0.25 5.0 0.05
+#pragma parameter beam_min "          Scanline Shape Dark Pixels" 1.30 0.25 10.0 0.05
 #define beam_min     params.beam_min     // dark area beam min - narrow
 
 #pragma parameter beam_max "          Scanline Shape Bright Pixels" 1.00 0.4 3.5 0.025
@@ -143,7 +143,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter scans "          Scanline Saturation / Mask Falloff" 0.40 0.0 3.5 0.05
 #define scans        params.scans     // scanline saturation
 
-#pragma parameter scan_falloff "          Scanline Falloff" 1.0 0.25 2.0 0.05
+#pragma parameter scan_falloff "          Scanline Falloff" 1.0 0.20 2.0 0.05
 #define scan_falloff        global.scan_falloff     // scanline falloff
 
 #pragma parameter no_scanlines "          No-scanline mode" 0.0 0.0 1.0 1.0
@@ -338,8 +338,11 @@ if (!interb)
 	
 	// Scanline Deconvergence
 	
-	vec3 cd1 = one; vec3 cd2 = one; float vm = sqrt(abs(vertmask));
+	vec3 cd1 = one; vec3 cd2 = one;
 	
+if (abs(vertmask) > 0.025)
+{
+	float vm = sqrt(abs(vertmask));
 	float v_high1 = 1.0 + 0.3*vm;
 	float v_high2 = 1.0 + 0.6*vm;	
 	float v_low  = 1.0 - vm;
@@ -357,9 +360,9 @@ if (!interb)
 		cd1 = mix(one, vec3(v_high1, v_low, v_high1), ds1);
 		cd2 = mix(one, vec3(v_low, v_high2, v_low), ds2);
 	}
+}
 	
 	color = (gc(color1)*w1*cd1 + gc(color2)*w2*cd2)/mix(1.0.xxx, w1+w2, no_scanlines);
-
 	color = min(color, 1.0);
 }
 	

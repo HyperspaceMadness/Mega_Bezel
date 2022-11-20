@@ -3,7 +3,7 @@
 /*
    Gaussian blur - horizontal pass, dynamic range, resizable
    
-   Copyright (C) 2021 guest(r) - guest.r@gmail.com
+   Copyright (C) 2020 - 2022 guest(r) - guest.r@gmail.com
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@ layout(push_constant) uniform Push
 	uint FrameCount;
 	float SIZEHB;
 	float SIGMA_HB;
+	float BLOOMCUT_H;
 } params;
 
 #pragma parameter bogus_glow "[ GLOW/BLOOM PASS SETTINGS ]:" 0.0 0.0 1.0 1.0 
@@ -38,6 +39,9 @@ layout(push_constant) uniform Push
 
 #pragma parameter SIGMA_HB "          Horizontal Bloom/Halation/Glow Sigma" 1.0 0.25 15.0 0.05
 #define SIGMA_HB params.SIGMA_HB
+
+#pragma parameter BLOOMCUT_H "          Horizontal Bloom/Halation/(Glow) Substract" 0.0 0.0 0.5 0.01
+#define BLOOMCUT_H params.BLOOMCUT_H
 
 layout(std140, set = 0, binding = 0) uniform UBO
 {
@@ -86,7 +90,7 @@ void main()
 	do
 	{
 		pixel  = COMPAT_TEXTURE(LinearizePass, tex + n*dx);
-		w      = gaussian(n+f);
+		w      = max(gaussian(n+f) - BLOOMCUT_H, 0.0);
 		pixel.a = max(max(pixel.r, pixel.g),pixel.b);
 		pixel.a*=pixel.a*pixel.a;
 		color  = color + w * pixel;

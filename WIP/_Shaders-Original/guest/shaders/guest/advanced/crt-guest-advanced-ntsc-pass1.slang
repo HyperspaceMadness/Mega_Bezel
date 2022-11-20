@@ -138,7 +138,7 @@ void main()
 		w = gaussian(n+f) - sharp;
 		fpx = abs(n+f-sign(n)*FPR)/FPR;
 		if (abs(n) <= CLAMPSIZE) { cmax = max(cmax, pixel); cmin = min(cmin, pixel); }
-		if (w < 0.0) w = clamp(w, mix(-maxsharp, 0.0, pow(fpx, HSHARP)), 0.0);
+		if (w < 0.0) w = clamp(w, mix(-maxsharp, 0.0, pow(clamp(fpx,0.0,1.0), HSHARP)), 0.0);
 	
 		color = color + w * pixel;
 		wsum  = wsum + w;
