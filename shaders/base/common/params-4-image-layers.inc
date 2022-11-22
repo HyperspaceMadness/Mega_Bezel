@@ -274,7 +274,7 @@ float HSM_LED_DUALSCREEN_VIS_MODE = global.HSM_LED_DUALSCREEN_VIS_MODE;
 
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_LED2_EMPTY_LINE							" " 0 0 0.001 0.001
-#pragma parameter HSM_LED_TITLE2		                "[ LED SCALE & FOLLOW]:" 0 0 0.01 0.01
+#pragma parameter HSM_LED_TITLE2		                "[ LED SCALE & FOLLOW ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_LED_FOLLOW_LAYER                  "             Follow Layer - FULL | TUBE | BEZEL | BG | DEVICE"  3 0 4 1
 float HSM_LED_FOLLOW_LAYER = global.HSM_LED_FOLLOW_LAYER;

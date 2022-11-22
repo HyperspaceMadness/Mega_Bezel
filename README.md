@@ -3,7 +3,7 @@ Mega Bezel Shader Readme
 ------------------------------------------------------------------------------------------------------------
 ![Mega Bezel Logo](MegaBezelLogo.png)
 
-**Version V1.5.0_2022-10-11**
+**Version V1.6.0_2022-11-21**
 ----------------------------------------
 ----------------------------------------
 
@@ -534,7 +534,13 @@ Cropping removes parts of the game image at the edges of the screen which were n
 - **Crop Overscan Right**
 - **Black Threshold for 'CROP BLACK ONLY'** - The brightness threshold of the black area to be cropped
 
-
+-----------------------------------------------------------------------------------------------
+**[ DREZ DOWNSAMPLE FILTER - HYLLIAN - DREZ PRESETS ONLY ]:**
+- **DREZ Filter** - Filter to use in the DREZ downsampling pass 
+  - 0 - B-Spline
+  - 1 - Bicubic
+  - 2 - Catmull-Rom
+  - 3 - Bicubic H
 
 -----------------------------------------------------------------------------------------------
 **[ SCANLINE DIRECTION ]:**
@@ -543,14 +549,10 @@ Cropping removes parts of the game image at the edges of the screen which were n
   - 0 - Auto --- Chooses horizontal or vertical scanline direction based on aspect ratio
   - 1 - Horizontal
   - 2 - Vertical
-
------------------------------------------------------------------------------------------------
-**[ DREZ DOWNSAMPLE FILTER - HYLLIAN - DREZ PRESETS ONLY ]:**
-- **DREZ Filter** - Filter to use in the DREZ downsampling pass 
-  - 0 - B-Spline
-  - 1 - Bicubic
-  - 2 - Catmull-Rom
-  - 3 - Bicubic H
+- **No-Scanline Mode** 
+  - Guest Advanced Only, keeps scanline dynamics withoug the darkness between lines
+  - 0 - OFF
+  - 1 - ON
 
 -----------------------------------------------------------------------------------------------
 **[ CORE RES SAMPLING ]:**
@@ -561,21 +563,34 @@ Cropping removes parts of the game image at the edges of the screen which were n
 - **Scanline Direction Multiplier (X-Prescale for H Scanline)**
   - Adjust the sampling in direction of the scanlines
   - E.G. if the scanlines are horizontal this adjusts sampling along the horizontal axis
+  - 0 uses the upscaling ratio, so for a SMOOTH-ADV preset this ratio would be 300%, If there is no upscaling this ratio is 100%
 - **Scanline Dir Downsample Blur**
   - Add blur along the scanline direction
 - **Opposite Direction Multiplier (Y Downsample for H Scanline)**
   - Adjust the sampling in direction opposite of the scanlines
   - E.G. if the scanlines are horizontal this adjusts sampling along the vertical axis
+  - 0 uses the upscaling ratio, so for a SMOOTH-ADV preset this ratio would be 300%, If there is no upscaling this ratio is 100%
 - **Opposite Dir Downsample Blur**
   - Add blur along the opposite direction of the scanlines
+
+-----------------------------------------------------------------------------------------------
+**[ FAST SHARPEN - GUEST.R ]:**
+
+- **Sharpen Strength**
+- **Amount of Sharpening**
+- **Details Sharpened**
 
 -----------------------------------------------------------------------------------------------
 **[ INTERLACING From Guest.r :) ]:**
 
 - **Interlace and Fake Scanlines Trigger Res**
   - Resolution where the shader should switch into its interlace or high res content mode.
-- **Interlacing Mode: OFF | Normal 1-3 | Interpolation 4-5**
-  * Default is Mode 4 which gives a result with no scanlines
+- **Interlacing Mode**
+  * Default is Mode 4 which gives a result with no scanlines and bilinear blending
+  - **-1 - No Scanlines**
+  - **0 - No Interlacing**
+  - **1-3 - Normal Interlacing Modes**
+  - **4-5 - Interpolation Interlacing Modes**
 - **Interlacing Effect Smoothness**
 - **Interlacing Scanline Effect**
 - **Interlacing (Scanline) Saturation**
@@ -1256,18 +1271,23 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
   - ***Decal Image*** *- Follow the Decal Image Scaling*
   - ***Top Extra Image*** *- Follow the Top Extra Image Scaling*
 
-- **Follow Full also follows Zoom**
+- ***Follow Mode***
+  - *Controls if this layer follows another layer's scaling* 
+  - ***Follow Scale and Pos*** *- Follow Scale and Position, ignore split*
+  - ***Follow Exactly*** *- Match the layer exactly including split*
+
+- ***Follow Full also follows Zoom***
   - When the layer Follow Layer is in **FULL** mode this controls if the layer should scale with the global zoom or not, this defaults to ON
 
-- **Image Fill Mode**
+- ***Image Fill Mode***
   - **0 - USE TEXURE ASPECT** --- Keeps the aspect of the teture
   - **1 - SPLIT HORIZONTAL** --- Splits the image in the center and slide it out towards the sides to match the required aspect
   - **2 - STRETCH** --- Stretch the image across the whole area to match the required aspect
 
-- **Split Mode Preserve Center %** --- Preserves a part of the center of the graphic when split is used
+- ***Split Mode Preserve Center %*** --- Preserves a part of the center of the graphic when split is used
   - One usage is to have a logo in the center of the bottom of the monitor graphic and reserve space for this
 
-- **Split Mode Repeat Width %** --- Width of repeating texture in exposed area 
+- ***Split Mode Repeat Width %*** --- Width of repeating texture in exposed area 
   - When this is 0 repeat is off
 
 - **Scale** --- *Scales image layer equally in both directions*
@@ -1294,6 +1314,9 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Mask**
 - **Cutout Mask**
 - **Dual Screen Visibility**
+
+**[ BACKGROUND SCALE & FOLLOW ]:**
+
 - **Follow Layer**
   - **0 - FullScreen**
   - **1 - Tube**
@@ -1341,13 +1364,16 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Mask**
 - **Cutout Mask**
 - **Dual Screen Visibility**
+
+**[ LED SCALE & FOLLOW ]:**
+
 - **Follow Layer**
   - **0 - FullScreen**
   - **1 - Tube**
   - **2 - Bezel**
   - **3 - BG**
   - **4 - Device**
-- **Follow Layer**
+- **Follow Mode**
 - **Follow Full also follows Zoom**
 - **Image Fill Mode**
 - **Split Mode Preserve Center %**
@@ -1373,12 +1399,15 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Mask**
 - **Cutout Mask**
 - **Dual Screen Visibility**
+
+**[ DEVICE SCALE & FOLLOW ]:**
+
 - **Follow Layer**
   - **0 - FullScreen**
   - **1 - Tube**
   - **2 - Bezel**
   - **3 - BG**
-- **Follow Layer**
+- **Follow Mode**
 - **Follow Full also follows Zoom**
 - **Image Fill Mode**
 - **Split Mode Preserve Center %**
@@ -1404,13 +1433,16 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Mask**
 - **Cutout Mask**
 - **Dual Screen Visibility**
+
+**[ DECAL SCALE & FOLLOW ]:**
+
 - **Follow Layer**
   - **0 - FullScreen**
   - **1 - Tube**
   - **2 - Bezel**
   - **3 - BG**
   - **4 - Device**
-- **Follow Layer**
+- **Follow Mode**
 - **Follow Full also follows Zoom**
 - **Image Fill Mode**
 - **Split Mode Preserve Center %**
@@ -1421,7 +1453,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Mipmapping Blend Bias**
 
 -----------------------------------------------------------------------------------------------
-**[ CABINET OR CABINET GLASS LAYER ]:**
+**[ CABINET GLASS LAYER ]:**
 
 - **Opacity**
 - **Colorize On**
@@ -1436,6 +1468,9 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Mask**
 - **Cutout Mask**
 - **Dual Screen Visibility**
+
+**[ CABINET GLASS SCALE & FOLLOW ]:**
+
 - **Follow Layer**
   - **0 - FullScreen**
   - **1 - Tube**
@@ -1443,7 +1478,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
   - **3 - BG**
   - **4 - Device**
   - **5 - Decal**
-- **Follow Layer**
+- **Follow Mode**
 - **Follow Full also follows Zoom**
 - **Image Fill Mode**
 - **Split Mode Preserve Center %**
@@ -1471,6 +1506,9 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Mask**
 - **Cutout Mask**
 - **Dual Screen Visibility**
+
+**[ TOP SCALE & FOLLOW ]:**
+
 - **Follow Layer**
   - **0 - FullScreen**
   - **1 - Tube**
@@ -1478,7 +1516,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
   - **3 - BG**
   - **4 - Device**
   - **5 - Decal**
-- **Follow Layer**
+- **Follow Mode**
 - **Follow Full also follows Zoom**
 - **Image Fill Mode**
 - **Split Mode Preserve Center %**
