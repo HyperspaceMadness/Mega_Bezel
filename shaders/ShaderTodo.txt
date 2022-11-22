@@ -1,6 +1,6 @@
 ![Mega_Bezel_Logo|512x256, 75%](upload://6PNkvcMF9Go9Wnk6OJXfYR1opXI.png) 
 
-Mega Bezel is updated to V1.6.0_2022-11-21
+Mega Bezel is updated to V1.6.1_2022-11-21
 
 Changes:
   * Megatron
@@ -29,7 +29,7 @@ Changes:
   * SMOOTH-ADV & SUPER-XBR now have Mask size set to 0 so they will scale 2X at 4K
   * SMOOTH-ADV has the Opposite Direction Multiplier set to 1, this avoids artifacts in a number of different places
   * Added [ MEGA BEZEL DEV SHOW PASS] to show the results of passes throughout the shader chain
-  
+
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
