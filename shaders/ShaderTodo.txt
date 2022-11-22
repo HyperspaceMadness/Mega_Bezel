@@ -1,40 +1,19 @@
 ![Mega_Bezel_Logo|512x256, 75%](upload://6PNkvcMF9Go9Wnk6OJXfYR1opXI.png) 
 
-Mega Bezel is updated to V1.6.1_2022-11-21
+Mega Bezel is updated to V1.6.2_2022-11-22
 
 Changes:
-  * Megatron
-    * HDR versions Added
-    * Megatron Updated to V4.3
-    * Multiple Categories available
-      * ADV
-      * ADV-SCREEN-ONLY
-      * STD
-      * STD-SCREEN-ONLY
-  * Fixed GLCore viewport size cache issue
-  * Guest Advanced (GDV)
-    * Updated to crt-guest-advanced-2022-11-14-release1
-    * Interlace mode -1 option added which turns on No Scanlines for both GDV and GDV-NTSC
-    * Added Noise Multiplier at 4K (Will double at 8K if not 1)
-  * Image Fill Mode parameter changed to be simpler
-    * It now has 3 options
-      * 0 - KEEP TEXURE ASPECT
-      * 1 - SPLIT
-      * 2 - STRETCH
-  * Scanline Direction Fixed, was giving the wrong direction compared to the parameters
-  * Core Sampling Multipliers now go to 0 which is Auto
-    * Auto means that the samling multiplier will match the upscale in the shader chain 
-    * The scanline direction multiplier is now set to 0 by default
-  * Improved Glass so it doesn't get create banding as much
-  * SMOOTH-ADV & SUPER-XBR now have Mask size set to 0 so they will scale 2X at 4K
-  * SMOOTH-ADV has the Opposite Direction Multiplier set to 1, this avoids artifacts in a number of different places
-  * Added [ MEGA BEZEL DEV SHOW PASS] to show the results of passes throughout the shader chain
-
+  * Fixed DREZ Presets
+  * Fixed DeviceVertImage
+  * 480p POTATO presets included
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Revisit Tate Mode / Vertical Scanline and Rotate CRT artifacts
+    * Fast Sharpen & Sharp Smoother currently work on x axis, should be relative to scanline direction
+    * NTSC is causing blurriness when using FB Neo and Rotate CRT - Test Game Batrider 
   * Integer Scale Mode X & Y not affecting tube scale
   * Use brightness values of sides to control static corner highlight
   * Fix Megatron Reflection
