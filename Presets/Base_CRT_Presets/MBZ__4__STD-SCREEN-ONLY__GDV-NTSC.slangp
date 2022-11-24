@@ -1,4 +1,4 @@
-shaders = 27
+shaders = 28
 
 shader0 = ../../shaders/base/add-params-no-reflect.slang
 alias0 = "CorePass"
@@ -183,6 +183,11 @@ shader26 = ../../shaders/base/post-crt-prep-no-reflect.slang
 scale_type26 = viewport
 float_framebuffer26 = true
 alias26 = "PostCRTPass"
+
+// Combine Passes ----------------------------------------------------------------
+shader27 = ../../shaders/base/output-sdr.slang
+scale_type27 = viewport
+alias27 = "OutputPass"
 // Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 

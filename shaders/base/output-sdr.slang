@@ -1,30 +1,5 @@
 #version 450
 
-/*
-    HDR Output - All color work by MajorPainTheCactus
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see [http://www.gnu.org/licenses/].
-*/
-
-// Pass HDR color format
-#pragma format A2B10G10R10_UNORM_PACK32
-
-/////////////// IMPORTS ///////////////
-#include "../megatron/include/parameters-hdr-color.h"
-#include "../megatron/include/gamma_correct.h"
-#include "../megatron/include/inverse_tonemap.h"
-
 #include "../base/common/globals-and-screen-scale-params.inc"
 #include "../base/common/common-functions.inc"
 #include "../base/common/params-2-bezel.inc"
@@ -85,9 +60,7 @@ void main()
 		}
 	}
 
-	vec3 output_colour = vec3(0);
-	LinearToOutputColor(texture(Source, vTexCoord).rgb, output_colour);
-	FragColor = vec4(output_colour, 1.0f);
+	FragColor = HSM_Delinearize(texture(Source, vTexCoord), DEFAULT_SRGB_GAMMA);
 
 	// If we have calculated an image then set -1 as a flag to show that we have
 	if (vTexCoord.x > (1 - 2 / global.OutputSize.x) && vTexCoord.y > ( 1 - 2 / global.OutputSize.y))

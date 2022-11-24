@@ -1,4 +1,4 @@
-shaders = 29
+shaders = 30
 
 shader0 = ../../shaders/base/add-params-glass.slang
 alias0 = "CorePass"
@@ -208,6 +208,11 @@ alias27 = "BR_MirrorFullscreenGlowPass"
 shader28 = ../../shaders/base/reflection-glass-hdr.slang
 scale_type28 = viewport
 alias28 = "ReflectionPass"
+
+// Combine Passes ----------------------------------------------------------------
+shader29 = ../../shaders/base/output-hdr.slang
+scale_type29 = viewport
+alias29 = "OutputPass"
 // Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 

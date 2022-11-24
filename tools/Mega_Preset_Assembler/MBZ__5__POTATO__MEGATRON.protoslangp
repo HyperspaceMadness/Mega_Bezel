@@ -9,6 +9,9 @@
 #reference "Components/58__fast-sharpen.slangp"
 #reference "Components/59__prep__gdv-interlace.slangp"
 #reference "Components/60__crt__megatron__potato.slangp"
-#reference "Components/68__post-crt__potato.slangp"
+#reference "Components/68__post-crt__potato-megatron.slangp"
+#reference "Components/89__output-hdr.slangp"
+
 #reference "Components/90__textures__potato.slangp"
+
 #reference "Components/90__parameters__megatron.slangp"

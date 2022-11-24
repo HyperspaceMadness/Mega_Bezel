@@ -1,4 +1,4 @@
-shaders = 18
+shaders = 19
 
 shader0 = ../../shaders/base/add-params-potato.slang
 alias0 = "CorePass"
@@ -117,10 +117,15 @@ scale_type16 = "viewport"
 float_framebuffer16 = "true"
 alias16 = "CRTPass"
 
-shader17 = ../../shaders/base/post-crt-prep-potato.slang
+shader17 = ../../shaders/base/post-crt-prep-potato-megatron.slang
 scale_type17 = viewport
 float_framebuffer17 = true
 alias17 = "PostCRTPass"
+
+// Combine Passes ----------------------------------------------------------------
+shader18 = ../../shaders/base/output-hdr.slang
+scale_type18 = viewport
+alias18 = "OutputPass"
 // Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
 
