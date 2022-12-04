@@ -316,7 +316,7 @@ HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = 30
 ntsc_scale = 0.4
 
 // Lottes mask, a bit like a slot mask effect
-shadowMask = 3
+shadowMask = 1
 mask_bloom = 0.3
 
 // Mask Size is Auto, so it will look the same at 1080p and 4K

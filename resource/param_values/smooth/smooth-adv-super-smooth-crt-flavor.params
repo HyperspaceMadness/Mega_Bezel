@@ -1,9 +1,11 @@
 // Lottes mask, a bit like a slot mask effect
-shadowMask = 4
+shadowMask = 3
 
 g_lum = "0.15"
 g_lift = "0.200000"
 g_sat = "0.10"
+
+gamma_out = "2.00000"
 
 mask_bloom = "0.200000"
 maskDark = "0.300000"

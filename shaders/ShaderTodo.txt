@@ -5,19 +5,26 @@ Mega Bezel is updated to V1.6.3_2022-11-23
 Changes:
   * Guest Advanced updated to crt-guest-advanced-2022-11-28-release1
   * Presets
-    * Reorganized Presets
+    * Reorganized Variation Presets (Base CRT Presets stay the same) including:
+      * Megatron
+      * Max Int Scale
+      * Smoothed presets
     * Presets updated to reference .params files to avoid redundancy
     * These Params files can be used in any of your presets to apply pre-defined effects
-  * Updated Smoothed presets, now there is the range of no smoothing to super smoothing
-  * Updated Vector Presets made for FBNeo High Res Mode
-    * Better mask display which is appropriate for color vector games
+    * Updated Smoothed presets, now there is the range of no smoothing to super smoothing
+    * Updated Vector Presets made for FBNeo High Res Mode
+      * Better mask display which is appropriate for color vector games
+  * Fixed Glass Presets and brightness of Megatron in HDR
   * Tube Effects default values have been adjusted
-  * Black Level Control in Grade has better incremental adjustmtne
-    * This is now working well with the Post Brightness Affects Black Level
-    * Used in the Vector preset so the vector brightness can be increased without the rest of the screen brightening
   * Changed Sampling Multiplier now to use 100 by default, and 0 is no longer an option
     * If you have any presets with the sampling multiplier set to 0 you will need to change them
   * Fixed bug where Colored Gel was causing the tube to become transparent
+  * Good trick for Scanlines on Black without destroying contrast
+    * Increase the black level in grade to bring black up to a bit gray and scanlines appearing on the black
+    * Reduce Gamma Out near the top of the full setting list to make the gray areas darker but keep scanlines
+  * Black Level Control in Grade has better incremental adjustmtne
+    * This is now working well with the Post Brightness Affects Black Level
+    * Used in the Vector preset so the vector brightness can be increased without the rest of the screen brightening
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------

@@ -1,8 +1,3 @@
-BackgroundImage = ../shaders/textures/Placeholder_Transparent_16x16.png
-BackgroundVertImage = ../shaders/textures/Placeholder_Transparent_16x16.png
-NightLightingImage = ../shaders/textures/Placeholder_Transparent_16x16.png
-FrameTextureImage = ../shaders/textures/Placeholder_Transparent_16x16.png
-
 // Parameters
 HSM_ASPECT_RATIO_MODE = 0
 HSM_INT_SCALE_MODE = 1
