@@ -23,6 +23,8 @@ Changes:
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+
+  * Adjustable Bezel Curvature per side?
   * Fix Glass in HDR
   * Add Explicit Resolution of Core
   * Put Splitscreen by Pass Viewer

@@ -193,7 +193,7 @@ alias37 = "PostCRTPass"
 //      Reduce the resolution to a small static size regardless of final resolution
 //      Allows consistent look and faster at different final resolutions for blur
 //      Mipmap option allows downscaling without artifacts
-shader38 = ../../shaders/base/linearize-crt.slang
+shader38 = ../../shaders/base/linearize-crt-hdr.slang
 mipmap_input38 = true
 filter_linear38 = true
 scale_type38 = absolute
@@ -245,7 +245,6 @@ alias42 = "BR_MirrorFullscreenGlowPass"
 // Bezel Reflection ----------------------------------------------------------------
 shader43 = ../../shaders/base/reflection.slang
 scale_type43 = viewport
-float_framebuffer43 = true
 alias43 = "ReflectionPass"
 
 // Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
@@ -362,7 +361,7 @@ hcrt_hdr = "0.000000"
 
 HSM_INT_SCALE_MODE = "1.000000"
 HSM_CRT_CURVATURE_SCALE = "0.000000"
-HSM_GLOBAL_GRAPHICS_BRIGHTNESS = "30.000000"
+HSM_GLOBAL_GRAPHICS_BRIGHTNESS = "100.000000"
 HSM_REFLECT_GLOBAL_AMOUNT = "40.000000"
 // SMOOTH-ADV
 HSM_DEDITHER_MODE = "3.000000"

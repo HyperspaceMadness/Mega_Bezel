@@ -267,7 +267,6 @@ alias43 = "BR_MirrorFullscreenGlowPass"
 // Bezel Reflection ----------------------------------------------------------------
 shader44 = ../../shaders/base/reflection.slang
 scale_type44 = viewport
-float_framebuffer44 = true
 alias44 = "ReflectionPass"
 
 // Bezel Generation & Composite of Image Layers ----------------------------------------------------------------

@@ -22,6 +22,9 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+// Float format so we can avoid banding
+#pragma format R16G16B16A16_SFLOAT
+
 /////////////// IMPORTS ///////////////
 #include "common/common-functions-bezel.inc"
 
@@ -418,8 +421,9 @@ void main()
 	frag_color_linear += reflection_color;
 
 
-	FragColor = frag_color_linear; //clamp(frag_color_linear, 0, 1);
+	FragColor = frag_color_linear;
 
+// Apply output gamma if this not an HDR preset because it is the last pass
 #ifndef IS_HDR_PRESET
 	FragColor = HSM_Delinearize(frag_color_linear, DEFAULT_SRGB_GAMMA);
 #endif
