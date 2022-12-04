@@ -47,7 +47,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter bogus_filtering "[ FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-#pragma parameter HSHARPNESS "          Horizontal Filter Range" 1.5 1.0 8.0 0.125
+#pragma parameter HSHARPNESS "          Horizontal Filter Range" 1.5 1.0 8.0 0.05
 #define HSHARPNESS params.HSHARPNESS
 
 #pragma parameter SIGMA_HOR "          Horizontal Blur Sigma" 0.90 0.1 7.0 0.05

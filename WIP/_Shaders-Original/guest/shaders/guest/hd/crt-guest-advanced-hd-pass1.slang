@@ -55,7 +55,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter internal_res "          Internal Resolution" 1.0 1.0 8.0 0.10
 #define internal_res params.internal_res
 
-#pragma parameter HSHARPNESS "          Horizontal Filter Range" 1.0 1.0 8.0 0.25
+#pragma parameter HSHARPNESS "          Horizontal Filter Range" 1.0 1.0 8.0 0.05
 #define HSHARPNESS params.HSHARPNESS
 
 #pragma parameter SIGMA_HOR "          Horizontal Blur Sigma" 0.50 0.1 7.0 0.025
@@ -72,7 +72,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter bogus_vfiltering "[ VERTICAL/INTERLACING FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-#pragma parameter VSHARPNESS "          Vertical Filter Range" 1.0 1.0 8.0 0.25
+#pragma parameter VSHARPNESS "          Vertical Filter Range" 1.0 1.0 8.0 0.05
 #define VSHARPNESS global.VSHARPNESS
 
 #pragma parameter SIGMA_VER "          Vertical Blur Sigma" 0.50 0.1 7.0 0.025

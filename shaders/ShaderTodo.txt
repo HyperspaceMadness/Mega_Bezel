@@ -3,6 +3,7 @@
 Mega Bezel is updated to V1.6.3_2022-11-23
 
 Changes:
+  * Guest Advanced updated to crt-guest-advanced-2022-11-28-release1
   * Presets
     * Reorganized Presets
     * Presets updated to reference .params files to avoid redundancy
@@ -24,7 +25,6 @@ Changes:
 
   * Fix Glass in HDR
   * Add Explicit Resolution of Core
-  * Fix Colored Gel On, showing transparent through center
   * Put Splitscreen by Pass Viewer
   * Revisit Tate Mode / Vertical Scanline and Rotate CRT artifacts
     * Fast Sharpen & Sharp Smoother currently work on x axis, should be relative to scanline direction

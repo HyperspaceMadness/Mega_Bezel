@@ -474,7 +474,7 @@ if (abs(vertmask) > 0.025)
 		color = gc(color1);
 	}
 
-	float colmx = pow(max(max(ctmp.r,ctmp.g),ctmp.b), 1.40/gamma_in);
+	float colmx = max(max(ctmp.r,ctmp.g),ctmp.b);
 
 	if(!interb) color = pow( color, vec3(gamma_in/scangamma) );
 

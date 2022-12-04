@@ -62,7 +62,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter bogus_vfiltering "[ VERTICAL/INTERLACING FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-#pragma parameter VSHARPNESS "          Vertical Filter Range" 1.0 1.0 8.0 0.25
+#pragma parameter VSHARPNESS "          Vertical Filter Range" 1.0 1.0 8.0 0.05
 #define VSHARPNESS global.VSHARPNESS
 
 #pragma parameter SIGMA_VER "          Vertical Blur Sigma" 0.50 0.1 7.0 0.025
@@ -383,7 +383,7 @@ void main()
 	
 	// calculating scanlines
 
-	vec3 ctmp = color1; vec3 mcolor = scolor1; float w3 = 1.0; vec3 color = color1;
+	vec3 ctmp = color1; float w3 = 1.0; vec3 color = color1;
 	vec3 one = vec3(1.0);
 
 if (!interb)
@@ -463,7 +463,7 @@ if (abs(vertmask) > 0.025)
 		color = gc(color1);
 	}
 
-	float colmx = pow(max(max(ctmp.r,ctmp.g),ctmp.b), 1.40/gamma_in);
+	float colmx = max(max(ctmp.r,ctmp.g),ctmp.b);
 
 	if (!interb) color = pow( color, vec3(gamma_in/scangamma) );
   

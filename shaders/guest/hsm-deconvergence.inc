@@ -544,6 +544,11 @@ vec3 declip(vec3 c, float b)
 	return c;
 }
 
+float igc(float mc)
+{
+	return pow(mc, gamma_c);
+}
+
 // noise function:
 // Dedicated to the public domain.
 // If you want a real license, you may consider this MIT/BSD/CC0/WTFPL-licensed (take your pick).
@@ -694,9 +699,6 @@ void main()
 	vec2 pos = HSM_GetMirrorWrappedCoord(screen_curved_coord);
 	vec2 pos0 = pos;
 
-	vec3 color0 = COMPAT_TEXTURE(Source,pos1).rgb;
-	float c0 = max(max(color0.r, color0.g),color0.b);
-
 	// color and bloom fetching
 	vec3 color = COMPAT_TEXTURE(Source,pos1).rgb;
 	vec3  Bloom = HSM_GetCroppedTexSample(BloomPass, pos).rgb;
@@ -710,16 +712,16 @@ if ((abs(global.deconrr) + abs(global.deconrry) + abs(global.deconrg) + abs(glob
 	if (GDV_DECONVERGENCE_ON > 0.5 && ((abs(global.deconrr) + abs(global.deconrry) + abs(global.deconrg) + abs(global.deconrgy) + abs(global.deconrb) + abs(global.deconrby)) > 0.2))
 		fetch_pixel(color, Bloom, pos1, pos); // deconvergence
 	
-	float cm = max(max(color.r,color.g),color.b);
+	float cm = igc(max(max(color.r,color.g),color.b));
 	float mx1 = COMPAT_TEXTURE(Source, pos1     ).a;
 	float colmx = max(mx1, cm);
-	float w3 = min((c0 + 0.0001) / (pow(colmx, gamma_in/1.4) + 0.0005), 1.0);
+	float w3 = min((cm + 0.0001) / (colmx + 0.0005), 1.0);
 	
 	vec2 dx = mix(vec2(0.001, 0.0), vec2(0.0, 0.001), TATE);
 	float mx0 = COMPAT_TEXTURE(Source, pos1 - dx).a;
 	float mx2 = COMPAT_TEXTURE(Source, pos1 + dx).a;
-	float mx = max(max(mx0,mx1),max(mx2,cm));
-
+	float mxg = max(max(mx0,mx1),max(mx2,cm));
+	float mx = pow(mxg, 1.40/gamma_in);
 
 	// mask boost tweak
 	
@@ -748,10 +750,9 @@ if ((abs(global.deconrr) + abs(global.deconrry) + abs(global.deconrg) + abs(glob
 
 	if (mask_bloom > 0.025)
 	{
-		float maxb = max(max(Bloom.r,Bloom.g),Bloom.b);
-		maxb = pow(sqrt(maxb*mix(maxb, colmx, 0.75)),0.325);
-		vec3 mBloom = 0.5*(1.4*Bloom+0.6*maxb) * mix(1.0, 2.0-colmx, (bloom_dist + 0.5));
-		cmask = max(min(cmask + maxb*mBloom*mask_bloom, 1.0), cmask);
+		float maxbl = max(max(max(Bloom.r,Bloom.g),Bloom.b), mxg);
+		maxbl = maxbl * mix(1.0, 2.0-colmx, bloom_dist);
+		cmask = max(min(cmask + maxbl*mask_bloom, 1.0), cmask);
 	}
 	
 	color = pow(color, vec3(mask_gamma/gamma_in));
@@ -762,7 +763,7 @@ if ((abs(global.deconrr) + abs(global.deconrry) + abs(global.deconrg) + abs(glob
 	cmask = min(cmask, 1.0);
 	cmask1 = min(cmask1, 1.0);
 
-	float bb = mix(brightboost, brightboost1, colmx);
+	float bb = mix(brightboost, brightboost1, mx);
 	if (interb) bb = (abs(intera-0.5)<0.1) ? pow(0.80*bb, 0.65) : pow(bb, 0.70);
 	color*=bb;
 
