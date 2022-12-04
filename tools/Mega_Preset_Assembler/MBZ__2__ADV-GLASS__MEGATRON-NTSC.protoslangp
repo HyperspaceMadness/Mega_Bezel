@@ -21,5 +21,4 @@
 #reference "Components/90__textures__glass.slangp"
 
 #reference "Components/90__parameters__megatron.slangp"
-#reference "Components/90__parameters__smooth-adv.slangp"
 #reference "Components/90__parameters__gdv-ntsc.slangp"

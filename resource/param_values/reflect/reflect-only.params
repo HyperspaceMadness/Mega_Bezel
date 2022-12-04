@@ -1,4 +1,4 @@
-#reference "set-all-textures-empty.params"
+#reference "../base/set-all-textures-empty.params"
 
 // Parameters
 HSM_BZL_WIDTH = "350.000000"

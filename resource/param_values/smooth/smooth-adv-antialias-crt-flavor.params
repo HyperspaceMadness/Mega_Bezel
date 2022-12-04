@@ -1,0 +1,10 @@
+// Lottes mask, a bit like a slot mask effect
+shadowMask = 2
+
+gsl = "2.000000"
+
+g_lum = "0.10"
+g_lift = "0.100000"
+
+GDV_DECONVERGENCE_ON = "1.000000"
+

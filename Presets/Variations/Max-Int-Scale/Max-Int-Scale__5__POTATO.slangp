@@ -1,2 +1,2 @@
 #reference "../../Base_CRT_Presets/MBZ__5__POTATO__GDV.slangp"
-#reference "../../../Params/max-int-scale.params"
+#reference "../../../resource/param_values/scale/max-int-scale.params"

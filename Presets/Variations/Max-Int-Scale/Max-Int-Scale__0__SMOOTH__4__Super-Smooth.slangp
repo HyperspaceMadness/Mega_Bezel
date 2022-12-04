@@ -1,0 +1,8 @@
+#reference "../../Base_CRT_Presets/MBZ__0__SMOOTH-ADV-SCREEN-ONLY__GDV.slangp"
+#reference "../../../resource/param_values/scale/max-int-scale.params"
+#reference "../../../resource/param_values/smooth/smooth-adv-super-smooth.params"
+#reference "../../../resource/param_values/smooth/smooth-adv-super-smooth-crt-flavor.params"
+
+HSM_BZL_COLOR_VALUE = 30
+HSM_AMBIENT_LIGHTING_OPACITY = 98
+HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY = "1.000000"

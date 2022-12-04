@@ -3,12 +3,23 @@
 Mega Bezel is updated to V1.6.3_2022-11-23
 
 Changes:
-  * Fixed Screen-Only Presets
+  * Presets updated to reference .params files to avoid redundancy
+  * Updated Smoothed presets, now there is the range of no smoothing to super smoothing
+  * Updated Vector Presets made for FBNeo High Res Mode
+    * Better mask display which is appropriate for color vector games
+  * Tube Effects default values have been adjusted
+  * Black Level Control in Grade has better incremental adjustmtne
+    * This is now working well with the Post Brightness Affects Black Level
+    * Used in the Vector preset so the vector brightness can be increased without the rest of the screen brightening
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Fix Glass in HDR
+  * Add Explicit Resolution of Core
+  * Fix Colored Gel On, showing transparent through center
+  * Put Splitscreen by Pass Viewer
   * Revisit Tate Mode / Vertical Scanline and Rotate CRT artifacts
     * Fast Sharpen & Sharp Smoother currently work on x axis, should be relative to scanline direction
     * NTSC is causing blurriness when using FB Neo and Rotate CRT - Test Game Batrider 
