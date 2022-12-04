@@ -323,13 +323,13 @@ float HSM_SCANLINE_DIRECTION = global.HSM_SCANLINE_DIRECTION;
 #pragma parameter HSM_SAMPLING_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_SAMPLING_TITLE								"[ CORE RES SAMPLING ]:" 0 0 0.001 0.001
 
-#pragma parameter HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR			"          Scanline Dir Multiplier - 0:Auto Matches Upscale"  0 0 1600 25
+#pragma parameter HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR			"          Scanline Dir Multiplier - 0:Auto Matches Upscale"  100 25 1600 25
 float HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = global.HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR / 100;
 
 #pragma parameter HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR 					"          Scanline Dir Downsample Blur" 0 0 200 1
 float HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR = global.HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR / 100;
 
-#pragma parameter HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR			"          Opposite Dir Multiplier - 0:Auto Matches Upscale"  100 0 1600 25
+#pragma parameter HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR			"          Opposite Dir Multiplier - 0:Auto Matches Upscale"  100 25 1600 25
 float HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR = global.HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR / 100;
 
 #pragma parameter HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR 					"          Opposite Dir Downsample Blur" 0 0 200 1

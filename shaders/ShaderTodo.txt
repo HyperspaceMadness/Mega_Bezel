@@ -3,7 +3,10 @@
 Mega Bezel is updated to V1.6.3_2022-11-23
 
 Changes:
-  * Presets updated to reference .params files to avoid redundancy
+  * Presets
+    * Reorganized Presets
+    * Presets updated to reference .params files to avoid redundancy
+    * These Params files can be used in any of your presets to apply pre-defined effects
   * Updated Smoothed presets, now there is the range of no smoothing to super smoothing
   * Updated Vector Presets made for FBNeo High Res Mode
     * Better mask display which is appropriate for color vector games
@@ -11,6 +14,9 @@ Changes:
   * Black Level Control in Grade has better incremental adjustmtne
     * This is now working well with the Post Brightness Affects Black Level
     * Used in the Vector preset so the vector brightness can be increased without the rest of the screen brightening
+  * Changed Sampling Multiplier now to use 100 by default, and 0 is no longer an option
+    * If you have any presets with the sampling multiplier set to 0 you will need to change them
+  * Fixed bug where Colored Gel was causing the tube to become transparent
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------

@@ -338,10 +338,10 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_linear, vec2 VIEWPORT_COORD, vec2 
 		gel_image = HSM_GLOBAL_GRAPHICS_BRIGHTNESS * HSM_Linearize(gel_image, DEFAULT_SRGB_GAMMA);
 
 		if (HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT > 0)
-			out_color = mix(out_color, out_color * gel_image, HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT);
+			out_color.rgb = mix(out_color.rgb, out_color.rgb * gel_image.rgb, HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT);
 
 		if (HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT > 0)
-			out_color = mix(out_color, out_color + gel_image, HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT);
+			out_color.rgb = mix(out_color.rgb, out_color.rgb + gel_image.rgb, HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT);
 
 		if (HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT > 0)
 		{
