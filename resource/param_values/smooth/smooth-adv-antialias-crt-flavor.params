@@ -1,8 +1,9 @@
 // Lottes mask, a bit like a slot mask effect
-shadowMask = 1
+shadowMask = 2
 
 gsl = "0.000000"
 
+wp_temperature = 7400
 g_lum = "0.10"
 g_lift = "0.100000"
 

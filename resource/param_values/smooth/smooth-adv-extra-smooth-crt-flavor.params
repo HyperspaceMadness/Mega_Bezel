@@ -3,6 +3,7 @@ shadowMask = 1
 
 gsl = "0.000000"
 
+wp_temperature = 7400
 g_lum = "0.15"
 g_sat = "0.05"
 g_lift = "0.100000"

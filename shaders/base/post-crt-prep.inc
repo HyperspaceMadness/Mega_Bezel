@@ -82,20 +82,21 @@ vec4 HSM_ApplyScanlineMask(vec4 in_color, vec2 screen_scale, vec2 in_coord, vec2
     // float s = pow(scans,0.9);
     // col = col * vec3(s);
 
-	float scan_axis_pos = USE_VERTICAL_SCANLINES * in_coord.x + (1 - USE_VERTICAL_SCANLINES) * in_coord.y;
+	float scan_axis_pos = USE_VERTICAL_SCANLINES > 0.5 ? in_coord.x : in_coord.y;
 	scan_axis_pos += scanline_roll_offset;
 
 	vec2 screen_size = global.OutputSize.xy * screen_scale;
-	float scan_axis_screen_scale_res = USE_VERTICAL_SCANLINES * screen_size.x + (1 - USE_VERTICAL_SCANLINES) * screen_size.y;
+	float scan_axis_screen_scale_res = USE_VERTICAL_SCANLINES > 0.5 ? screen_size.x : screen_size.y;
 	
-	float simulated_scanline_res = HSM_FAKE_SCANLINE_RES_MODE > 0.5 ? HSM_FAKE_SCANLINE_RES : CROPPED_ROTATED_SIZE.y;
+	float cropped_rotated_scan_res = USE_VERTICAL_SCANLINES > 0.5 ? CROPPED_ROTATED_SIZE.x : CROPPED_ROTATED_SIZE.y;
+	float simulated_scanline_res = HSM_FAKE_SCANLINE_RES_MODE > 0.5 ? HSM_FAKE_SCANLINE_RES : cropped_rotated_scan_res;
 
 	float scanline_size = scan_axis_screen_scale_res / simulated_scanline_res;
 
 	if (HSM_FAKE_SCANLINE_INT_SCALE == 1)
 		scanline_size = ceil(scanline_size);
 
-	float scan = mod(scan_axis_pos * scan_axis_screen_scale_res, scanline_size) / scanline_size;
+	float scan = mod(scan_axis_pos * scan_axis_screen_scale_res + scanline_size / 2, scanline_size) / scanline_size;
 
 	// Alternate, modulating the scanline width depending on brightness
 	//float scanline_mask = HHLP_EasePowerOut(1 - abs(scan - 0.5) * 2, 0.5 + 2 * smoothstep(0.4, 0.9, (in_color.r + in_color.g +  in_color.b) / 3));
