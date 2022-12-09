@@ -143,6 +143,24 @@ vec3 fetch_pixel(vec2 coord)
 	return result/sum;
 }
 
+// noise function:
+// Dedicated to the public domain.
+// If you want a real license, you may consider this MIT/BSD/CC0/WTFPL-licensed (take your pick).
+// Adapted from ChuckNorris - shadertoy: https://www.shadertoy.com/view/XtK3Dz
+
+vec3 noise(vec3 v, float noise_amount){
+    if (noise_amount < 0.0) v.z = -noise_amount; else v.z = mod(v.z,6001.0)/1753.0;
+	// ensure reasonable range
+    v = fract(v) + fract(v*1e4) + fract(v*1e-4);
+    // seed
+    v += vec3(0.12345, 0.6789, 0.314159);
+    // more iterations => more random
+    v = fract(v*dot(v, v)*123.456);
+    v = fract(v*dot(v, v)*123.456);
+	v = fract(v*dot(v, v)*123.456);
+	v = fract(v*dot(v, v)*123.456);	
+    return v;
+}
 
 void main()
 {
@@ -245,6 +263,36 @@ void main()
 	
 	// if (USE_VERTICAL_SCANLINES > 0.5)
 	// 	intera = 1;
+
+	// HSM Added Noise based on Guest.r's noise from deconvergence pass
+	if (HSM_SIGNAL_NOISE_ON > 0.5)
+	{
+		float rc = 0.6*sqrt(max(max(c.r, c.g), c.b))+0.4;
+
+		vec2 upscale_mult = global.SourceSize.xy / global.DerezedPassSize.xy;
+		
+		float noise_size = 1;
+
+		// Scanline sized noise
+		if (HSM_SIGNAL_NOISE_SIZE_MODE == 0)
+			noise_size = upscale_mult.x * HSM_SIGNAL_NOISE_SIZE_MULT / SAMPLING_OPPOSITE_DIR_MULT;
+		// Core resolution sized noise
+		if (HSM_SIGNAL_NOISE_SIZE_MODE == 1)
+			noise_size = upscale_mult.x * HSM_SIGNAL_NOISE_SIZE_MULT;
+		// Uprezed sized noise
+		if (HSM_SIGNAL_NOISE_SIZE_MODE == 2)
+			noise_size = HSM_SIGNAL_NOISE_SIZE_MULT;
+
+		vec3 noise0 = noise(vec3(floor(global.SourceSize.xy * vTexCoord / noise_size), float(global.FrameCount)), HSM_SIGNAL_NOISE_AMOUNT);		
+		if (HSM_SIGNAL_NOISE_TYPE < 0.5)
+			c = mix(c, 				
+					noise0,
+					0.25 * abs(HSM_SIGNAL_NOISE_AMOUNT) * rc);
+		else 
+			c = min(c * mix(1.0,
+							1.5 * noise0.x, 0.5 * abs(HSM_SIGNAL_NOISE_AMOUNT)),
+							1.0);
+	}
 
 	if (vTexCoord.x > 0.5) gamma_in = intera; else gamma_in = 1.0/gamma_in;
 	

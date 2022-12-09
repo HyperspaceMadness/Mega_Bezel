@@ -812,12 +812,12 @@ if (abs(bloom) > 0.025)
 	*/
 	
 	color = pow(color, vec3(1.0/gamma_out));
-
-	float rc = 0.6*sqrt(max(max(color.r, color.g), color.b))+0.4;
 	
 	
 	if (global.GDV_NOISE_ON > 0.5)
 	{
+		float rc = 0.6*sqrt(max(max(color.r, color.g), color.b))+0.4;
+
 		/* HSM Removed
 		vec3 noise0 = noise(vec3(floor(OutputSize.xy * vTexCoord / global.noiseresd), float(global.FrameCount)));		
 		if (global.noisetype < 0.5) color = mix(color, noise0, 0.25*abs(global.addnoised) * rc);

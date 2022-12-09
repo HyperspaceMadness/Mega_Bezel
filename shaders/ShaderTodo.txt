@@ -25,6 +25,9 @@ Changes:
   * Black Level Control in Grade has better incremental adjustmtne
     * This is now working well with the Post Brightness Affects Black Level
     * Used in the Vector preset so the vector brightness can be increased without the rest of the screen brightening
+  * Added Signal Level Noise (Noise in signal before the CRT shader)
+    * Works independently of the retroarch viewport resolution
+    * Choose between resolution of noise matching the scanline resolution, core resolution or smoothed resolution
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
@@ -32,7 +35,6 @@ Changes:
 
 
   * Adjustable Bezel Curvature per side?
-  * Fix Glass in HDR
   * Add Explicit Resolution of Core
   * Put Splitscreen by Pass Viewer
   * Revisit Tate Mode / Vertical Scanline and Rotate CRT artifacts

@@ -421,9 +421,6 @@ float HSM_CURVATURE_MODE = global.HSM_CURVATURE_MODE;
 #pragma parameter HSM_CURVATURE_2D_SCALE_SHORT_AXIS 				"          2D Curvature on Short Axis" 100 5 400 5
 #define HSM_CURVATURE_2D_SCALE_SHORT_AXIS global.HSM_CURVATURE_2D_SCALE_SHORT_AXIS / 100
 
-// #pragma parameter HSM_CURVATURE_2D_SHAPE "          2D Curvature Shape" 0.25 0.05 0.60 0.05
-// #define HSM_CURVATURE_2D_SHAPE        global.HSM_CURVATURE_2D_SHAPE
-
 #pragma parameter HSM_CURVATURE_3D_RADIUS 							"          3D Radius" 200 16 102400 1
 float HSM_CURVATURE_3D_RADIUS = global.HSM_CURVATURE_3D_RADIUS / 100;
 
@@ -439,6 +436,27 @@ float HSM_CURVATURE_3D_TILT_ANGLE_Y = global.HSM_CURVATURE_3D_TILT_ANGLE_Y / 100
 #pragma parameter HSM_CRT_CURVATURE_SCALE 				            "       CRT Curvature Scale Multiplier: 0 = Less Moire Artifacts" 100 0 100 1
 float HSM_CRT_CURVATURE_SCALE = global.HSM_CRT_CURVATURE_SCALE / 100;
 
+
+//---------------------------------------------------------------------------------------------------
+//    SIGNAL NOISE
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_SIGNAL_NOISE_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter HSM_SIGNAL_NOISE_TITLE							"[ Signal-Noise ]:" 0 0 0.001 0.001
+
+#pragma parameter HSM_SIGNAL_NOISE_ON 								"          Signal Noise ON" 0 0 1 1
+#define HSM_SIGNAL_NOISE_ON global.HSM_SIGNAL_NOISE_ON
+
+#pragma parameter HSM_SIGNAL_NOISE_AMOUNT 						    "          Amount" 0.2 -1.0 1.0 0.02
+#define HSM_SIGNAL_NOISE_AMOUNT global.HSM_SIGNAL_NOISE_AMOUNT
+
+#pragma parameter HSM_SIGNAL_NOISE_SIZE_MODE 						"          Noise Resolution Mode:  SCANLINE | CORE | SMOOTHED" 0 0 2 1
+#define HSM_SIGNAL_NOISE_SIZE_MODE global.HSM_SIGNAL_NOISE_SIZE_MODE
+
+#pragma parameter HSM_SIGNAL_NOISE_SIZE_MULT 						"          Size Mult" 0.5 0.5 4 0.5
+#define HSM_SIGNAL_NOISE_SIZE_MULT global.HSM_SIGNAL_NOISE_SIZE_MULT
+
+#pragma parameter HSM_SIGNAL_NOISE_TYPE 						    "          Noise Type:  LUMA ADD | COLORED" 0 0 1 1
+#define HSM_SIGNAL_NOISE_TYPE global.HSM_SIGNAL_NOISE_TYPE
 
 
 //---------------------------------------------------------------------------------------------------
