@@ -198,6 +198,7 @@
 
 // #pragma parameter post_br   "          Post CRT Brightness" 1.0 0.25 5.0 0.01
 
+#define HSM_AUTO_MASK_THRESHOLD 2000
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
 #define TEX0 vTexCoord
@@ -244,7 +245,7 @@ vec3 Mask(vec2 pos, float mx, float mb)
 
 	// If using automatic Mask Size
 	if (masksize < 0.5)
-		final_mask_size = global.FinalViewportSize.y > 2000 ? 2 : 1;
+		final_mask_size = min(global.FinalViewportSize.x, global.FinalViewportSize.y) > HSM_AUTO_MASK_THRESHOLD ? 2 : 1;
 	
 	final_mask_size = max(1, floor(((1 - HSM_VIEWPORT_ZOOM_MASK) + HSM_VIEWPORT_ZOOM_MASK * VIEWPORT_SCALE.y) * final_mask_size + 0.2));
 
@@ -467,7 +468,7 @@ float SlotMask(vec2 pos, float m)
 	float final_mask_size = slotms;
 	// If using automatic Mask Size
 	if (slotms < 0.5)
-		final_mask_size = (global.FinalViewportSize.x + global.FinalViewportSize.y) / 3 > 1900 ? 2 : 1;
+		final_mask_size = min(global.FinalViewportSize.x, global.FinalViewportSize.y) > HSM_AUTO_MASK_THRESHOLD ? 2 : 1;
 	
 	final_mask_size = max(1, floor(((1 - HSM_VIEWPORT_ZOOM_MASK) + HSM_VIEWPORT_ZOOM_MASK * VIEWPORT_SCALE.y) * final_mask_size + 0.2));
 
