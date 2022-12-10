@@ -28,6 +28,9 @@ Changes:
   * Added Signal Level Noise (Noise in signal before the CRT shader)
     * Works independently of the retroarch viewport resolution
     * Choose between resolution of noise matching the scanline resolution, core resolution or smoothed resolution
+  * Fixed Top/Bottom Cropping in NTSC presets which was doing incorrect sampling
+
+
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------

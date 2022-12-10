@@ -115,9 +115,10 @@ void main()
 
 	vec4 SourceSize = params.OriginalSize * vec4(2.0*prescalex.x, prescalex.y, 0.5/prescalex.x, 1.0/prescalex.y);
 	*/
-	
-	// HSM Added
-	vec4 SourceSize = vec4(CROPPED_ROTATED_SIZE_WITH_RES_MULT, 1 / CROPPED_ROTATED_SIZE_WITH_RES_MULT);
+
+	vec2 prescalex = global.NegativeCropAddedPassSize.xy / params.OriginalSize.xy;
+
+	vec4 SourceSize = global.NegativeCropAddedPassSize * vec4(2.0*prescalex.x, prescalex.y, 0.5/prescalex.x, 1.0/prescalex.y);
 
 	float f = fract(SourceSize.x * vTexCoord.x);
 	f = 0.5 - f;
