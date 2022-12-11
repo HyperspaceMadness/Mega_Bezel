@@ -744,6 +744,7 @@ float mask_bloom;
 	float mcut;	
 	float maskboost;
 	float masksize;
+	float masksizeautothreshold;
 	float maskDark;
 	float maskLight;
 	float mask_gamma;
@@ -759,11 +760,6 @@ float mask_bloom;
 	
 	float GDV_DECONVERGENCE_ON;
 	float decons;
-	float GDV_NOISE_ON;
-	float addnoised;
-	float noisetype;
-	float noiseresd;
-	float noiseresd4kmult;
 	float deconrr;
 	float deconrg;
 	float deconrb;
@@ -773,6 +769,13 @@ float mask_bloom;
 	float deconsmooth;
 	float dctypex;
 	float dctypey; 
+	float dcscalemode; 
+	
+	float GDV_NOISE_ON;
+	float addnoised;
+	float noisetype;
+	float noiseresd;
+	float noiseresd4kmult;
 
 	// Grade Params
 	float g_grade_on;
@@ -863,6 +866,7 @@ float SCREEN_INDEX = 1;
 
 float SCREEN_ASPECT = 1;
 vec2 SCREEN_SCALE = vec2(1);
+vec2 SCREEN_SCALE_WITH_ZOOM = vec2(1);
 vec2 SCREEN_POS_OFFSET = vec2(0.15);
 vec2 SCREEN_SCALE_2ND_SCREEN = vec2(1);
 
@@ -904,6 +908,8 @@ vec2 CROPPED_ROTATED_SIZE_WITH_RES_MULT = vec2(1);
 vec2 CROPPED_ROTATED_SIZE_WITH_RES_MULT_FEEDBACK = vec2(1);
 vec2 CROPPED_ROTATED_SIZE = vec2(1);
 vec2 SAMPLE_AREA_START_PIXEL_COORD = vec2(1);
+
+vec2 SCREEN_SIZE = vec2(1);
 
 vec2 VIEWPORT_UNSCALED_COORD = vec2(0.5);
 vec2 SCREEN_COORD = vec2(0.5);

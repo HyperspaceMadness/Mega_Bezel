@@ -108,6 +108,9 @@
 #pragma parameter masksize "          Mask Size - 0:Auto | 2K | 4k -- masksize" 1.0 0.0 4 1.0
 #define masksize     global.masksize     // Mask Size
 
+#pragma parameter masksizeautothreshold "          Mask Size Auto Threshold -- masksizeautothreshold" 2000 100 4000 100
+#define masksizeautothreshold     global.masksizeautothreshold
+
 #pragma parameter maskstr "          Mask Strength (0, 5-12) -- maskstr" 0.3 -0.5 1.0 0.025
 #define maskstr         global.maskstr      // CGWG Mask Strength
 
@@ -182,6 +185,9 @@
 
 #pragma parameter decons   "          Strength -- decons" 1 0 3.0 0.10
 
+#pragma parameter dcscalemode   "       Scale Mode -- dcscalemode: SCREEN|OUTPUT|ABSOLUTE|MASK" 0 0 3 1
+
+
 #pragma parameter GDV_NOISE_LINE							" " 0 0 0.001 0.001
 #pragma parameter noise_title "[ NOISE ]: " 0.0 0.0 1.0 1.0
 
@@ -197,8 +203,6 @@
 #pragma parameter noisetype "          Noise Type: Colored, Luma" 0.0 0.0 1.0 1.0
 
 // #pragma parameter post_br   "          Post CRT Brightness" 1.0 0.25 5.0 0.01
-
-#define HSM_AUTO_MASK_THRESHOLD 2000
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
 #define TEX0 vTexCoord
@@ -236,19 +240,26 @@ layout(set = 0, binding = 8) uniform sampler2D InfoCachePass;
 
 #define eps 1e-10 
 
+// HSM Added
+float HSM_GetAutoScaledMaskSize(float in_masksize)
+{
+	float final_mask_size = in_masksize;
+
+	// If using automatic Mask Size
+	if (masksize < 0.5)
+		final_mask_size = min(global.FinalViewportSize.x, global.FinalViewportSize.y) > masksizeautothreshold ? 2 : 1;
+	
+	final_mask_size = max(1, floor(((1 - HSM_VIEWPORT_ZOOM_MASK) + HSM_VIEWPORT_ZOOM_MASK * VIEWPORT_SCALE.y) * final_mask_size + 0.2));
+
+	return final_mask_size;
+}
+
 // Shadow mask (1-4 from PD CRT Lottes shader).
 
 vec3 Mask(vec2 pos, float mx, float mb)
 {
 	// HSM Added
-	float final_mask_size = masksize;
-
-	// If using automatic Mask Size
-	if (masksize < 0.5)
-		final_mask_size = min(global.FinalViewportSize.x, global.FinalViewportSize.y) > HSM_AUTO_MASK_THRESHOLD ? 2 : 1;
-	
-	final_mask_size = max(1, floor(((1 - HSM_VIEWPORT_ZOOM_MASK) + HSM_VIEWPORT_ZOOM_MASK * VIEWPORT_SCALE.y) * final_mask_size + 0.2));
-
+	float final_mask_size = HSM_GetAutoScaledMaskSize(masksize);
 
 /* HSM Removed
 	vec2 pos0 = pos;
@@ -464,13 +475,9 @@ float SlotMask(vec2 pos, float m)
 	if ((slotmask + slotmask1) == 0.0) return 1.0;
 	else
 	{
+
 	// HSM Added
-	float final_mask_size = slotms;
-	// If using automatic Mask Size
-	if (slotms < 0.5)
-		final_mask_size = min(global.FinalViewportSize.x, global.FinalViewportSize.y) > HSM_AUTO_MASK_THRESHOLD ? 2 : 1;
-	
-	final_mask_size = max(1, floor(((1 - HSM_VIEWPORT_ZOOM_MASK) + HSM_VIEWPORT_ZOOM_MASK * VIEWPORT_SCALE.y) * final_mask_size + 0.2));
+	float final_mask_size = HSM_GetAutoScaledMaskSize(slotms);
 
 	pos = floor(pos / final_mask_size);
 	// End HSM Added
@@ -571,13 +578,52 @@ vec3 noise(vec3 v){
 
 void fetch_pixel (inout vec3 c, inout vec3 b, vec2 coord, vec2 bcoord)
 {
+	/* HSM REmoved
 		float stepx = OutputSize.z;
 		float stepy = OutputSize.w;
-		
+	*/
+
+		float stepx = 0.5;
+		float stepy = 0.5;
+
+		// HSM Added
+		// Link Deconvergence as a ratio of the viewport height
+		if (global.dcscalemode < 1.5)
+		{
+			// Base deconvergence size based on 1080p
+			stepx = 1.0 / 1080.0 * OutputSize.y / OutputSize.x;
+			stepy = 1.0 / 1080.0;
+		}
+
+		// Link Deconvergence size to screen height
+		if (global.dcscalemode == 0)
+		{
+			stepx *= SCREEN_SCALE_WITH_ZOOM.y / DEFAULT_SCREEN_HEIGHT;
+			stepy *= SCREEN_SCALE_WITH_ZOOM.y / DEFAULT_SCREEN_HEIGHT;
+		}
+
+		// Link Deconvergence size is to final output pixel size
+		if (global.dcscalemode > 1.5)
+		{
+			// Compensate for a landscape viewport in 0-1 space
+			stepx = OutputSize.z;
+			stepy = OutputSize.w;
+
+			// Link the deconvergence to the mask size
+			if (global.dcscalemode == 3.0)
+			{
+				float scaled_mask_size = HSM_GetAutoScaledMaskSize(masksize);
+				stepx *= scaled_mask_size;
+				stepy *= scaled_mask_size;
+			}
+		}
+
 		float ds = global.decons;
 				
 		vec2 dx = vec2(stepx, 0.0);
 		vec2 dy = vec2(0.0, stepy);		
+
+
 		
 		float posx = 2.0*coord.x - 1.0;
 		float posy = 2.0*coord.y - 1.0;
@@ -726,7 +772,15 @@ if ((abs(global.deconrr) + abs(global.deconrry) + abs(global.deconrg) + abs(glob
 
 	// mask boost tweak
 	
+	/* HSM Removed
 	dx = mix(vec2(global.OriginalSize.z, 0.0), vec2(0.0, global.OriginalSize.w), TATE) * 0.25;
+	*/
+
+	dx = mix(vec2(1 / CROPPED_ROTATED_SIZE_WITH_RES_MULT.x, 0.0), 
+			 vec2(0.0, 1 / CROPPED_ROTATED_SIZE_WITH_RES_MULT.y),
+			 TATE) * 0.25;
+	dx *=  SCREEN_SCALE.y / DEFAULT_SCREEN_HEIGHT;
+
 	mx0 = COMPAT_TEXTURE(Source, pos1 - dx).a;
 	mx2 = COMPAT_TEXTURE(Source, pos1 + dx).a;
 	float mb = 1.0 - min(abs(mx0-mx2)/(0.5+mx1), 1.0);

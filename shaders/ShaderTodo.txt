@@ -19,16 +19,29 @@ Changes:
   * Changed Sampling Multiplier now to use 100 by default, and 0 is no longer an option
     * If you have any presets with the sampling multiplier set to 0 you will need to change them
   * Fixed bug where Colored Gel was causing the tube to become transparent
-  * Good trick for Scanlines on Black without destroying contrast
-    * Increase the black level in grade to bring black up to a bit gray and scanlines appearing on the black
-    * Reduce Gamma Out near the top of the full setting list to make the gray areas darker but keep scanlines
-  * Black Level Control in Grade has better incremental adjustmtne
-    * This is now working well with the Post Brightness Affects Black Level
-    * Used in the Vector preset so the vector brightness can be increased without the rest of the screen brightening
-  * Added Signal Level Noise (Noise in signal before the CRT shader)
+  * Signal Noise Added (Noise in signal before the CRT shader)
     * Works independently of the retroarch viewport resolution
     * Choose between resolution of noise matching the scanline resolution, core resolution or smoothed resolution
   * Fixed Top/Bottom Cropping in NTSC presets which was doing incorrect sampling
+  * Resolution Debug
+    * Correct scale values are now shown when Viewport Zoom is used
+    * Integers with no decimal are now shown when screen is at an integer scale 
+  * Deconvergence Scale Mode Added
+    * There are now a different deconvergence scaling modes
+      * SCREEN - Scales relative to screen height - Default
+      * OUTPUT - Scales relative to output height
+      * ABSOLUTE - Does not scale
+        * This means the deconvergence will look bigger if you are running at a lower resolution and vice versa
+      * MASK - Will scale by the factor of the mask's current size
+  * Mask Size Auto Threshold Added
+    * You can now see and set what the threshold is for the masks to increase size
+  * Black Level Control in Grade has better incremental adjustment
+    * This is now working well with the Post Brightness Affects Black Level
+    * Used in the Vector preset so the vector brightness can be increased without the rest of the screen brightening
+
+  * Note: Good trick for Scanlines on Black without destroying contrast
+    * Increase the black level in grade to bring black up to a bit gray and scanlines appearing on the black
+    * Reduce Gamma Out near the top of the full setting list to make the gray areas darker but keep scanlines
 
 
 
@@ -36,21 +49,17 @@ Changes:
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
-
   * Adjustable Bezel Curvature per side?
   * Add Explicit Resolution of Core
   * Put Splitscreen by Pass Viewer
   * Revisit Tate Mode / Vertical Scanline and Rotate CRT artifacts
     * Fast Sharpen & Sharp Smoother currently work on x axis, should be relative to scanline direction
-    * NTSC is causing blurriness when using FB Neo and Rotate CRT - Test Game Batrider 
-  * Integer Scale Mode X & Y not affecting tube scale
+    * NTSC is causing blurriness when using FB Neo and Rotate CRT - Test Game Batrider
   * Use brightness values of sides to control static corner highlight
   * Fix Megatron Reflection
-  * Add Signal Res Noise
   * Create 4K Royale Preset
 
   * Add .params #reference to with all parameters commented out
-  * Bezel shadow on Potato Tube / Game Image
   * We should have a middle pass which has the device behind the CRT tube
 
 ----------------------------------------------------
