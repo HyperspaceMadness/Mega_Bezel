@@ -479,4 +479,10 @@ if (abs(vertmask) > 0.025)
 	if(!interb) color = pow( color, vec3(gamma_in/scangamma) );
 
 	FragColor = vec4(color, colmx);
+
+	if (HSM_GetUseFakeScanlines())
+	{
+		vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 1, TUBE_DIFFUSE_SCALE, TUBE_SCALE, TUBE_DIFFUSE_ASPECT, 1);
+		FragColor = HSM_ApplyScanlineMask(FragColor, SCREEN_SCALE, SCREEN_COORD, screen_curved_coord, tube_curved_coord, HSM_FAKE_SCANLINE_OPACITY);
+	}
 }

@@ -67,56 +67,6 @@ layout(set = 0, binding = 13) uniform sampler2D PostCRTPassFeedback;
 #define PassFeedback PostCRTPassFeedback
 
 // Torridgristle - ScanlineSimple pass - Public domain
-vec4 HSM_ApplyScanlineMask(vec4 in_color, vec2 screen_scale, vec2 in_coord, vec2 in_curved_coord, float in_scanline_opacity)
-{
-	//   Stuff to try implementing
-    //   Try mame hlsl darkening
-    //   Check Lottes tone mapping
-
-	in_coord = mix(in_coord, in_curved_coord, HSM_FAKE_SCANLINE_CURVATURE);
-
-    /* Scanlines */
-	float scanline_roll_offset = float(mod(global.FrameCount, 1280)) / 1280 * HSM_FAKE_SCANLINE_ROLL; 
-
-    // float scans = clamp( 0.35+0.18*sin(6.0*time-curved_uv.y*resolution.y*1.5), 0.0, 1.0);
-    // float s = pow(scans,0.9);
-    // col = col * vec3(s);
-
-	float scan_axis_pos = USE_VERTICAL_SCANLINES > 0.5 ? in_coord.x : in_coord.y;
-	scan_axis_pos += scanline_roll_offset;
-
-	vec2 screen_size = global.OutputSize.xy * screen_scale;
-	float scan_axis_screen_scale_res = USE_VERTICAL_SCANLINES > 0.5 ? screen_size.x : screen_size.y;
-	
-	float cropped_rotated_scan_res = USE_VERTICAL_SCANLINES > 0.5 ? CROPPED_ROTATED_SIZE.x : CROPPED_ROTATED_SIZE.y;
-	float simulated_scanline_res = HSM_FAKE_SCANLINE_RES_MODE > 0.5 ? HSM_FAKE_SCANLINE_RES : cropped_rotated_scan_res;
-
-	float scanline_size = scan_axis_screen_scale_res / simulated_scanline_res;
-
-	if (HSM_FAKE_SCANLINE_INT_SCALE == 1)
-		scanline_size = ceil(scanline_size);
-
-	float scan = mod(scan_axis_pos * scan_axis_screen_scale_res + scanline_size / 2, scanline_size) / scanline_size;
-
-	// Alternate, modulating the scanline width depending on brightness
-	//float scanline_mask = HHLP_EasePowerOut(1 - abs(scan - 0.5) * 2, 0.5 + 2 * smoothstep(0.4, 0.9, (in_color.r + in_color.g +  in_color.b) / 3));
-	float color_brightness_modulation = HHLP_EasePowerOut(smoothstep(0.4, 0.99, (in_color.r + in_color.g +  in_color.b) / 3), 2);
-
-	float scanline_mask = 1 - abs(scan - 0.5) * 2;
-	scanline_mask = pow(1 - scanline_mask, 1);
-
-	float final_scanline_mask = clamp(1 * scanline_mask, 0, 1);
-
-	color_brightness_modulation = HHLP_EasePowerOut(smoothstep(0.4, HSM_FAKE_SCANLINE_BRIGHTNESS_CUTOFF + 1.5, (in_color.r + in_color.g +  in_color.b) / 3), 2);
-	final_scanline_mask = clamp(mix(1, mix(final_scanline_mask, 1, color_brightness_modulation), in_scanline_opacity), 0, 1);
-
-	vec4 masked_color = in_color;
-	masked_color *= 1 + 0.5 * in_scanline_opacity;
-	masked_color = clamp(final_scanline_mask * masked_color, 0, 1);
-	masked_color.w = in_color.w;
-
-	return clamp(masked_color, 0, 1);
-}
 
 vec4 HSM_GetTubeHighlight(vec2 tube_curved_coord, bool apply_to_mirror, in sampler2D TubeStaticReflectionImage)
 {
@@ -199,20 +149,6 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_linear, vec2 VIEWPORT_COORD, vec2 
 		source_color = HSM_Linearize(source_color, GAMMA_INPUT);
 
 		crt_color = source_color;
-	}
-
-	float scan_axis_res = USE_VERTICAL_SCANLINES * CROPPED_ROTATED_SIZE_WITH_RES_MULT.x + (1 - USE_VERTICAL_SCANLINES) * CROPPED_ROTATED_SIZE_WITH_RES_MULT.y;
-
-	if (HSM_FAKE_SCANLINE_OPACITY > 0.001 && (HSM_FAKE_SCANLINE_MODE == 1 || (HSM_FAKE_SCANLINE_MODE == 2 && scan_axis_res > HSM_INTERLACE_TRIGGER_RES)))
-	{
-		vec4 scanline_masked_color = HSM_ApplyScanlineMask(crt_color, SCREEN_SCALE, SCREEN_COORD, screen_curved_coord, HSM_FAKE_SCANLINE_OPACITY);
-		
-		// Darken the outside image a bit
-		crt_color = mix(crt_color, crt_color * 0.9, HSM_FAKE_SCANLINE_OPACITY);
-
-		// Show scanlines only in the tube area
-		float tube_highlight_mask = HSM_GetCornerMask((tube_curved_coord - 0.5) * 0.995 + 0.5 , TUBE_DIFFUSE_ASPECT, HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS, 0.05);
-		crt_color = mix(crt_color, scanline_masked_color, tube_highlight_mask);
 	}
 	
 	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
@@ -349,7 +285,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_linear, vec2 VIEWPORT_COORD, vec2 
 			gel_image.rgb *= tube_shadow;
 
 			if (HSM_TUBE_COLORED_GEL_IMAGE_FAKE_SCANLINE_AMOUNT > 0.001)
-				gel_image.rgb = HSM_ApplyScanlineMask(gel_image, SCREEN_SCALE, SCREEN_COORD, screen_curved_coord, HSM_TUBE_COLORED_GEL_IMAGE_FAKE_SCANLINE_AMOUNT).rgb;
+				gel_image.rgb = HSM_ApplyScanlineMask(gel_image, SCREEN_SCALE, SCREEN_COORD, screen_curved_coord, tube_curved_coord, HSM_TUBE_COLORED_GEL_IMAGE_FAKE_SCANLINE_AMOUNT).rgb;
 
 			gel_image.rgb = HSM_ApplyAmbientImage(gel_image.rgb, ambient_lighting_image.rgb, HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING);
 			gel_image.rgb = HSM_ApplyAmbientImage(gel_image.rgb, ambient2_lighting_image.rgb, HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT2_LIGHTING);

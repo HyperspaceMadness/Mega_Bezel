@@ -67,8 +67,6 @@ vec3 fetch_offset(sampler2D in_sampler, vec2 coord, vec2 offset)
     offset = vec2(0);
     vec2 texel_size = 1 / CROPPED_ROTATED_SIZE;
     vec2 pixel_coord = SAMPLE_AREA_START_PIXEL_COORD + coord * CROPPED_ROTATED_SIZE + offset;
-    vec2 raw_coord = pixel_coord / ROTATED_CORE_PREPPED_SIZE;
-
 
     vec3 out_rgb = HSM_GetCroppedTexSample(in_sampler, coord + offset * texel_size).rgb;
     out_rgb = pow(vec3(param.LCD_GAIN) * out_rgb, vec3(param.LCD_GAMMA));

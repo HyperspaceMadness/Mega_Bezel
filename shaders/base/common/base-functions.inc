@@ -153,10 +153,7 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, vec2 vTexCoo
 	SAMPLING_OPPOSITE_DIR_MULT = texture_sample.g;
 
 	float res_mult_size_sum = 0;
-	float res_mult_size_sum_feedback = 0;
-
 	float res_mult_size2_sum = 0;
-	float res_mult_size2_sum_feedback = 0;
 
 	if (SCREEN_INDEX == 1)
 	{
