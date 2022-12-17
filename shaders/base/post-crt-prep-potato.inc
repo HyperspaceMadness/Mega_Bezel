@@ -115,23 +115,22 @@ vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_linear, vec2 VIEWPORT_COORD,
 				bg_layer = texture(BackgroundImage, bg_coord);
 			bg_layer = HSM_Linearize(bg_layer, DEFAULT_SRGB_GAMMA);
 
+			vec3 bg_gel = HSM_POTATO_COLORIZE_CRT_WITH_BG * bg_layer.rgb * HSM_POTATO_COLORIZE_BRIGHTNESS + (1 - HSM_POTATO_COLORIZE_CRT_WITH_BG);
+
 			bg_layer.rgb *= HSM_GLOBAL_GRAPHICS_BRIGHTNESS;
 			bg_layer.rgb = pow(bg_layer.rgb, vec3(1/HSM_STATIC_LAYERS_GAMMA));
 
-			if (HSM_CRT_SCREEN_BLEND_MODE == 1)
-				bg_layer *= (1 - TUBE_MASK);
-
 			bg_layer *= HSM_BG_BRIGHTNESS;
 
-			if (HSM_CRT_SCREEN_BLEND_MODE > 0)
+			if (HSM_POTATO_SHOW_BG_OVER_SCREEN == 1)
 			{
-				if (HSM_POTATO_SHOW_BG_OVER_SCREEN == 1)
-					out_color = HSM_BlendModeLayerMix(out_color, bg_layer, HSM_BG_BLEND_MODE, HSM_BG_OPACITY);
-				else
-				{
-					bg_layer.rgb *= HSM_BG_OPACITY;
-					out_color = HSM_BlendModeLayerMix(bg_layer, out_color, HSM_CRT_SCREEN_BLEND_MODE, 1);
-				}
+				out_color.rgb *= bg_gel.rgb;
+				out_color = HSM_BlendModeLayerMix(out_color, bg_layer, HSM_BG_BLEND_MODE, HSM_BG_OPACITY);
+			}
+			else
+			{
+				bg_layer.rgb *= HSM_BG_OPACITY;
+				out_color = HSM_BlendModeLayerMix(bg_layer, out_color, HSM_CRT_SCREEN_BLEND_MODE, 1);
 			}
 		}
 	}

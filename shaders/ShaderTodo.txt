@@ -1,48 +1,11 @@
 ![Mega_Bezel_Logo|512x256, 75%](upload://6PNkvcMF9Go9Wnk6OJXfYR1opXI.png) 
 
-Mega Bezel is updated to V1.6.4_2022-12-11
+Mega Bezel is updated to V1.6.4_2022-12-XX
 
 Changes:
-  * Guest Advanced updated to crt-guest-advanced-2022-11-28-release1
-  * Presets
-    * Reorganized Variation Presets (Base CRT Presets stay the same) including:
-      * Megatron
-      * Max Int Scale
-      * Smoothed presets
-    * Presets updated to reference .params files to avoid redundancy
-    * These Params files can be used in any of your presets to apply pre-defined effects
-    * Updated Smoothed presets, now there is the range of no smoothing to super smoothing
-    * Updated Vector Presets made for FBNeo High Res Mode
-      * Better mask display which is appropriate for color vector games
-  * Fixed Glass Presets and brightness of Megatron in HDR
-  * Tube Effects default values have been adjusted
-  * Changed Sampling Multiplier now to use 100 by default, and 0 is no longer an option
-    * If you have any presets with the sampling multiplier set to 0 you will need to change them
-  * Fixed bug where Colored Gel was causing the tube to become transparent
-  * Signal Noise Added (Noise in signal before the CRT shader)
-    * Works independently of the retroarch viewport resolution
-    * Choose between resolution of noise matching the scanline resolution, core resolution or smoothed resolution
-  * Fixed Top/Bottom Cropping in NTSC presets which was doing incorrect sampling
-  * Resolution Debug
-    * Correct scale values are now shown when Viewport Zoom is used
-    * Integers with no decimal are now shown when screen is at an integer scale 
-  * Deconvergence Scale Mode Added
-    * There are now a different deconvergence scaling modes
-      * SCREEN - Scales relative to screen height - Default
-      * OUTPUT - Scales relative to output height
-      * ABSOLUTE - Does not scale
-        * This means the deconvergence will look bigger if you are running at a lower resolution and vice versa
-      * MASK - Will scale by the factor of the mask's current size
-  * Fake Scanlines now applied before deconvergence so deconvergence will be applied above and below each scanline
-  * Mask Size Auto Threshold Added
-    * You can now see and set what the threshold is for the masks to increase size
-  * Black Level Control in Grade has better incremental adjustment
-    * This is now working well with the Post Brightness Affects Black Level
-    * Used in the Vector preset so the vector brightness can be increased without the rest of the screen brightening
-
-  * Note: Good trick for Scanlines on Black without destroying contrast
-    * Increase the black level in grade to bring black up to a bit gray and scanlines appearing on the black
-    * Reduce Gamma Out near the top of the full setting list to make the gray areas darker but keep scanlines
+  * POTATO
+    * Fixed Background Masking and Blend Modes
+    * Added Colorize & Brightness
 
 
 
