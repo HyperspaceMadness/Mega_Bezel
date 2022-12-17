@@ -143,9 +143,7 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_linear, vec2 VIEWPORT_COORD, vec2 
 		ab_screen_coord = HSM_GetMirrorWrappedCoord(ab_screen_coord);
 
 		vec4 source_color = HSM_GetCroppedTexSample(source_pass, ab_screen_coord);
-		// TODO should adjust this
-		// source_color = HSM_Delinearize(source_color, HSM_GAMMA_OUT_CRT);
-		// source_color = HSM_Linearize(source_color, DEFAULT_SRGB_GAMMA);
+
 		source_color = HSM_Linearize(source_color, GAMMA_INPUT);
 
 		crt_color = source_color;

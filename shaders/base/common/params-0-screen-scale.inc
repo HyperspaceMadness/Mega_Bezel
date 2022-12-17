@@ -495,6 +495,24 @@ float HSM_AB_COMPARE_FREEZE_GRAPHICS = global.HSM_AB_COMPARE_FREEZE_GRAPHICS;
 
 
 //---------------------------------------------------------------------------------------------------
+//    SHOW PASS
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_PASS_VIEWER_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter HSM_PASS_VIEWER_TITLE       "[ SHOW PASS (For Debugging) ]:" 0 0 0.001 0.001
+
+#pragma parameter HSM_SHOW_PASS_INDEX_INFO1   "     0:END | 1:REFLECTION | 2:TUBE | 3:CRT" 0 0 0.001 0.001
+#pragma parameter HSM_SHOW_PASS_INDEX_INFO2   "     4:INTERLACE | 5:COLOR CORRECT & UPSCALE" 0 0 0.001 0.001
+#pragma parameter HSM_SHOW_PASS_INDEX_INFO3   "     6:DEDITHER | 7:DREZ | 8:CORE" 0 0 0.001 0.001
+#pragma parameter HSM_SHOW_PASS_INDEX_INFO4   "     9:LAYERS TOP | 10:LAYERS BOTTOM" 0 0 0.001 0.001
+
+#pragma parameter HSM_SHOW_PASS_INDEX         "          Show Pass Index" 0 0 10 1
+float HSM_SHOW_PASS_INDEX = global.HSM_SHOW_PASS_INDEX;
+
+#pragma parameter HSM_SHOW_PASS_APPLY_SCREEN_COORD  "          Apply Screen Scale & Curvature to Unscaled Passes" 1 0 1 1
+float HSM_SHOW_PASS_APPLY_SCREEN_COORD = global.HSM_SHOW_PASS_APPLY_SCREEN_COORD;
+
+
+//---------------------------------------------------------------------------------------------------
 //    SCREEN VIGNETTE
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_SCREEN_VIGNETTE_EMPTY_LINE							" " 0 0 0.001 0.001

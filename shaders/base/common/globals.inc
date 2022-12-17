@@ -208,15 +208,10 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float HSM_AB_COMPARE_SPLIT_AREA;
 	float HSM_AB_COMPARE_SPLIT_POSITION;
 
-	// CRT Screen
-	// These names are inconsistent with the general naming on purpose
-	// They match the namse in Guest's shader
-	float HSM_CRT_BLEND_MODE;
-	float HSM_CRT_BLEND_AMOUNT;
+	// Show Pass
+	float HSM_SHOW_PASS_INDEX;
+	float HSM_SHOW_PASS_APPLY_SCREEN_COORD;
 
-	float HSM_CRT_SCREEN_BLEND_MODE;
-
-	//    Screen Vignette
 	float HSM_SCREEN_VIGNETTE_ON;
 	float HSM_SCREEN_VIGNETTE_DUALSCREEN_VIS_MODE;
 	float HSM_SCREEN_VIGNETTE_STRENGTH;
@@ -302,9 +297,17 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float HSM_TUBE_STATIC_POS_Y;
 	float HSM_TUBE_STATIC_SHADOW_OPACITY;
 	float HSM_TUBE_STATIC_DITHER_SAMPLES;
-float HSM_TUBE_STATIC_DITHER_DISTANCE;
-float HSM_TUBE_STATIC_DITHER_AMOUNT;
+	float HSM_TUBE_STATIC_DITHER_DISTANCE;
+	float HSM_TUBE_STATIC_DITHER_AMOUNT;
 
+	// CRT Screen
+	// These names are inconsistent with the general naming on purpose
+	// They match the namse in Guest's shader
+	float HSM_CRT_BLEND_MODE;
+	float HSM_CRT_BLEND_AMOUNT;
+	float HSM_CRT_SCREEN_BLEND_MODE;
+
+	//    Screen Vignette
 	//    SCREEN BLACK EDGE
 	float HSM_GLOBAL_CORNER_RADIUS;
 	float HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE;
@@ -653,7 +656,6 @@ float HSM_TUBE_STATIC_DITHER_AMOUNT;
 
 	float HSM_RENDER_SIMPLE_MODE;
 	float HSM_RENDER_SIMPLE_MASK_TYPE;
-	float HSM_SHOW_PASS_INDEX;
 	float HSM_LAYERING_DEBUG_MASK_MODE;
 
 	float HSM_INTRO_LOGO_BLEND_MODE;

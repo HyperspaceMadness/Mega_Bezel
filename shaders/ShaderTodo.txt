@@ -6,18 +6,16 @@ Changes:
   * POTATO
     * Fixed Background Masking and Blend Modes
     * Added Colorize & Brightness
-
-
+    * Show Passes Feature
+      * Added switch to enable/disable applying scale and curvature to raw passes
+        * This allows you to compare the passes all with the same curvature or what the pass actually looks like
+      * Moved Show Passes parameters right underneath the AB Compare parameters so they can both easily be used together
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
-  * Apply Fake Scanlines in CRT shader before deconvergence
-    * Add some standard deconvergence which can be used with the rolling scanlines
   * Adjustable Bezel Curvature per side?
-  * Add Explicit Resolution of Core
-  * Put Splitscreen by Pass Viewer?
   * Revisit Tate Mode / Vertical Scanline and Rotate CRT artifacts
     * Fast Sharpen & Sharp Smoother currently work on x axis, should be relative to scanline direction
     * Get GTU to respect scanline direction

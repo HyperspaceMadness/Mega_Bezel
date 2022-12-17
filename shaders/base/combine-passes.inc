@@ -42,17 +42,6 @@
 vec2 UNFLIPPED_VIEWPORT_COORD = vec2(0.5);
 vec2 FLIPPED_VIEWPORT_COORD = vec2(0.5);
 
-//---------------------------------------------------------------------------------------------------
-//    SHOW PASS
-//---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_PASS_VIEWER_EMPTY_LINE							" " 0 0 0.001 0.001
-#pragma parameter HSM_PASS_VIEWER_TITLE       "[ MEGA BEZEL DEV SHOW PASS ]:" 0 0 0.001 0.001
-
-#pragma parameter HSM_SHOW_PASS_INDEX_INFO1   "     0:END | 1:REFLECTION | 2:TUBE | 3:CRT | " 0 0 0.001 0.001
-#pragma parameter HSM_SHOW_PASS_INDEX_INFO2   "     4:INTERLACE | 5:COLOR CORRECT & UPSCALE | 6:DEDITHER" 0 0 0.001 0.001
-#pragma parameter HSM_SHOW_PASS_INDEX_INFO3   "     7:DREZ | 8:CORE | 9:LAYERS TOP | 10:LAYERS BOTTOM" 0 0 0.001 0.001
-#pragma parameter HSM_SHOW_PASS_INDEX         "          Show Pass Index" 0 0 10 1
-float HSM_SHOW_PASS_INDEX = global.HSM_SHOW_PASS_INDEX;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma stage vertex
@@ -135,7 +124,7 @@ void main()
 	{
 		FragColor = vec4(0);
 
-		vec2 screen_curved_coord = HSM_GetCRTShaderCurvedCoord(SCREEN_COORD);
+		vec2 coord_for_raw_passes = HSM_SHOW_PASS_APPLY_SCREEN_COORD > 0.5 ? HSM_GetCRTShaderCurvedCoord(SCREEN_COORD) : vTexCoord;
 
 #ifndef IS_NO_REFLECT_PRESET
 		// REFLECTION
@@ -153,23 +142,23 @@ void main()
 
 		// INTERLACE & LINEARIZE
 		if (HSM_SHOW_PASS_INDEX == 4)
-			FragColor = texture(LinearizePass, (floor(screen_curved_coord * textureSize(LinearizePass, 0)) + 0.5) / textureSize(LinearizePass, 0));
+			FragColor = texture(LinearizePass, (floor(coord_for_raw_passes * textureSize(LinearizePass, 0)) + 0.5) / textureSize(LinearizePass, 0));
 
 		// COLOR CORRECT & UPSCALE
 		if (HSM_SHOW_PASS_INDEX == 5)
-			FragColor = texture(ColorCorrectPass, (floor(screen_curved_coord * textureSize(ColorCorrectPass, 0)) + 0.5) / textureSize(ColorCorrectPass, 0));
+			FragColor = texture(ColorCorrectPass, (floor(coord_for_raw_passes * textureSize(ColorCorrectPass, 0)) + 0.5) / textureSize(ColorCorrectPass, 0));
 
 		// DEDITHER
 		if (HSM_SHOW_PASS_INDEX == 6)
-			FragColor = texture(DeditherPass, (floor(screen_curved_coord * textureSize(DeditherPass, 0)) + 0.5) / textureSize(DeditherPass, 0));
+			FragColor = texture(DeditherPass, (floor(coord_for_raw_passes * textureSize(DeditherPass, 0)) + 0.5) / textureSize(DeditherPass, 0));
 
 		// DREZ
 		if (HSM_SHOW_PASS_INDEX == 7)
-			FragColor = texture(DerezedPass, screen_curved_coord);
+			FragColor = texture(DerezedPass, coord_for_raw_passes);
 
 		// CORE
 		if (HSM_SHOW_PASS_INDEX == 8)
-			FragColor = texture(CorePass, screen_curved_coord);
+			FragColor = texture(CorePass, coord_for_raw_passes);
 
 		// LAYERS TOP
 		if (HSM_SHOW_PASS_INDEX == 9)
