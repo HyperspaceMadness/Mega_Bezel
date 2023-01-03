@@ -191,7 +191,7 @@ scale_y35 = 480.0
 float_framebuffer35 = true
 alias35 = BloomPass
 
-shader36 = ../../shaders/guest/hsm-crt-guest-advanced-ntsc-pass2.slang
+shader36 = ../../shaders/guest/hsm-crt-guest-advanced.slang
 filter_linear36 = true
 scale_type36 = viewport
 scale_x36 = 1.0
@@ -381,6 +381,9 @@ TopLayerImage_mipmap = 1
 // NTSC Parameters
 GAMMA_INPUT = 2.0
 gamma_out = 1.95
+HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = "200.000000"
+h_sharp = "15.000000"
+s_sharp = "1.500000"
 
 // DREZ Parameters
 SHARPEN = 0

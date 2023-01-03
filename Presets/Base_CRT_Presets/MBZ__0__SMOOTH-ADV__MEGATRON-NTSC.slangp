@@ -397,3 +397,5 @@ masksize = 0
 // NTSC Parameters
 GAMMA_INPUT = 2.0
 gamma_out = 1.95
+h_sharp = "15.000000"
+s_sharp = "1.500000"

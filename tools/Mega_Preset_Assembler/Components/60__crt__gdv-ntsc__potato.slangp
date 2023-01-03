@@ -43,7 +43,7 @@ scale_y4 = 480.0
 float_framebuffer4 = true
 alias4 = BloomPass
 
-shader5 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/hsm-crt-guest-advanced-ntsc-pass2-potato.slang
+shader5 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/hsm-crt-guest-advanced-potato.slang
 filter_linear5 = true
 scale_type5 = viewport
 scale_x5 = 1.0

@@ -20,5 +20,5 @@
 #reference "Components/90__textures__all.slangp"
 
 #reference "Components/90__textures__all.slangp"
-#reference "Components/90__parameters__gdv-ntsc.slangp"
+#reference "Components/90__parameters__gdv-ntsc-smooth.slangp"
 #reference "Components/90__parameters__suber-xbr-gdv.slangp"

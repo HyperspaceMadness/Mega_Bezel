@@ -3,14 +3,8 @@
 Mega Bezel is updated to V1.7.0_2022-12-21
 
 Changes:
-  * POTATO
-    * Fixed Background Masking and Blend Modes
-    * Added Colorize & Brightness
-    * Show Passes Feature
-      * Added switch to enable/disable applying scale and curvature to raw passes
-        * This allows you to compare the passes all with the same curvature or what the pass actually looks like
-      * Moved Show Passes parameters right underneath the AB Compare parameters so they can both easily be used together
-
+  * Update to SMOOTH-ADV NTSC Presets
+  
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
@@ -76,6 +70,12 @@ Scene Dynamic Lighting
   * Reflection from screen on additional elements
     * Side Panels, Speaker Panel, Table
     * Masking of main and additional reflection
+    * Colored Mask to define areas
+      * Up      rgb(128,  255,  128)
+      * Down    rgb(128,  0,    128)
+      * Left    rgb(0,    128,  128)
+      * Right   rgb(255,  128,  128)
+      * Center  rgb(128,  128,  255)
   * Bounce lighting from screen to room back to the scene
     * Masking behind devices
   * Sprite sheet for arcade Lighting loop
