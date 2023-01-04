@@ -4,7 +4,7 @@
 #reference "Components/10__info-cache-all-params.slangp"
 #reference "Components/11__text__adv.slangp"
 #reference "Components/12__intro.slangp"
-#reference "Components/30__dedithering__0-checkerboard-and-mdapt.slangp"
+#reference "Components/30__dedithering__1-sgenpt-mix-multipass.slangp"
 #reference "Components/30__dedithering__2-ps1-box-blur.slangp"
 #reference "Components/30__dedithering__3-sharpsmoother.slangp"
 #reference "Components/54__prep__gdv-afterglow.slangp"

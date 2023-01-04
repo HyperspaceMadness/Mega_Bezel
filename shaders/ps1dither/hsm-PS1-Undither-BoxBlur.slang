@@ -6,6 +6,7 @@ layout(push_constant) uniform Push
 	vec4 OriginalSize;
 	vec4 OutputSize;
     float PS1_BOX_BLUR_MODE;
+    float PS1_BOX_BLUR_BLEND;
 	uint FrameCount;
 } params;
 
@@ -16,8 +17,12 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter HSM_BOXBLUR_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter PS1_BOXBLUR_TITLE		"[ --- PS1 BOX BLUR --- ]:" 0 0 0.01 0.01
+
 #pragma parameter PS1_BOX_BLUR_MODE     "          Box Blur ON" 0.0 0.0 1.0 1.0
 #define PS1_BOX_BLUR_MODE params.PS1_BOX_BLUR_MODE
+
+#pragma parameter PS1_BOX_BLUR_BLEND     "          Blend Amount" 100 0.0 100 10.0
+#define PS1_BOX_BLUR_BLEND params.PS1_BOX_BLUR_BLEND / 100
 
 #pragma stage vertex
 layout(location = 0) in vec4 Position;
@@ -71,9 +76,11 @@ void main()
     
     //If SquarePass has a detected edge, use HorizoPass
     vec3 Result = mix(HorizoPass,SquarePass,SquareEdgeMask);
+
     //If HorizoPass has a detected edge, use OriginPass
     Result      = mix(OriginPass,Result,HorizoEdgeMask);
 
-    //It's complete
-    FragColor = vec4(Result,1.0);
+    // It's complete
+    // Blend with Original
+    FragColor = vec4(mix(OriginPass, Result, PS1_BOX_BLUR_BLEND), 1);
 }

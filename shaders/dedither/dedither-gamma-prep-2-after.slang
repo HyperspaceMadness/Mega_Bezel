@@ -32,7 +32,7 @@ layout(push_constant) uniform Push
 	vec4 OriginalSize;
 	vec4 OutputSize;
 	uint FrameCount;
-   float HSM_DEDITHER_MODE;
+   float SGPT_BLEND_OPTION;
    float HSM_DEDITHER_BRIGHTNESS_BIAS;
 } params;
 
@@ -41,11 +41,11 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	mat4 MVP;
 } global;
 
-#pragma parameter HSM_DEDITHERING_EMPTY_LINE							" " 0 0 0.001 0.001
-#pragma parameter HSM_DEDITHERING_TITLE "[ --- MDAPT & HYLLIAN DE-DITHERING --- ]:" 0 0 0.01 0.01
+#pragma parameter HSM_SGENPT_EMPTY_LINE		" " 0 0 0.001 0.001
+#pragma parameter HSM_SGENPT_TITLE          "[ --- HYLLIAN SGENPT-MIX DE-DITHERING --- ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_DEDITHER_MODE "Mode: OFF| STRICT | RELAXED | HYLLIAN | HYL + STRIPES | STRIPES"	0 0 5 1
-#define HSM_DEDITHER_MODE  params.HSM_DEDITHER_MODE
+#pragma parameter SGPT_BLEND_OPTION         "          Mode: OFF | CHECKERBOARD | VERTICAL LINES | BOTH" 0.0  0.0 3.0  1.0
+#define SGPT_BLEND_OPTION                   params.SGPT_BLEND_OPTION
 
 #pragma parameter HSM_DEDITHER_BRIGHTNESS_BIAS "          Transparency Brightness Bias"	100 10 300 5
 #define HSM_DEDITHER_BRIGHTNESS_BIAS  params.HSM_DEDITHER_BRIGHTNESS_BIAS * 0.013
@@ -69,6 +69,6 @@ layout(set = 0, binding = 2) uniform sampler2D Source;
 void main()
 {  
    FragColor = texture(Source, vTexCoord);
-   if (HSM_DEDITHER_MODE > 0.5)
+   if (SGPT_BLEND_OPTION > 0.5)
       FragColor = HSM_Delinearize(texture(Source, vTexCoord), HSM_DEDITHER_BRIGHTNESS_BIAS);
 }
