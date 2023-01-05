@@ -5,6 +5,7 @@
 #reference "Components/11__text__std-no-reflect.slangp"
 #reference "Components/12__intro.slangp"
 #reference "Components/30__dedithering__1-sgenpt-mix-multipass.slangp"
+#reference "Components/58__sharpen__gsharp-resampler.slangp"
 #reference "Components/30__dedithering__3-sharpsmoother.slangp"
 #reference "Components/45__upscale__super-xbr.slangp"
 #reference "Components/54__prep__gdv-afterglow.slangp"

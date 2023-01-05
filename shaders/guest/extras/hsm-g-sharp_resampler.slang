@@ -41,16 +41,20 @@ layout(push_constant) uniform Push
 #pragma parameter GSHARP_ON 	"          G-SHARP ON" 	  0 0 1 1
 #define GSHARP_ON params.GSHARP_ON
 
-#pragma parameter HSHARP0 		"          Filter Range"  1.2 1.0 6.0 0.1
+// Default was 1.2
+#pragma parameter HSHARP0 		"          Filter Range"  1 1.0 6.0 0.1
 #define HSHARP0 params.HSHARP0
 
-#pragma parameter SIGMA_HV 		"          Gaussian Blur Sigma" 0.75 0.1 7.0 0.05
+// Default was 0.75
+#pragma parameter SIGMA_HV 		"          Gaussian Blur Sigma" 1 0.1 7.0 0.05
 #define SIGMA_HV params.SIGMA_HV
 
-#pragma parameter SHAR 			"          Sharpness Definition" 0.5 0.0 2.0 0.05
+// Default was 0.5
+#pragma parameter SHAR 			"          Sharpness Definition" 1.5 0.0 2.0 0.05
 #define SHAR params.SHAR
 
-#pragma parameter HAR 			"          Anti-Ringing" 0.5 0.0 1.0 0.10
+// Default was 0.5
+#pragma parameter HAR 			"          Anti-Ringing" 1 0.0 1.0 0.10
 #define HAR params.HAR
 
 layout(std140, set = 0, binding = 0) uniform UBO

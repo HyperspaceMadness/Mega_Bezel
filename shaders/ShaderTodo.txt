@@ -17,8 +17,11 @@ Changes:
       * HSM_DEDITHER_MODE = 4  (Checkerboard and Vertical Lines de-dither On)
       * becomes:
       * SGPT_BLEND_OPTION = 3
-
   * Added a Blend Value to PS1 Box Blur
+  * Added @Guest's G-Sharp-Resampler pass before the SharpSmoother
+    * By Default it will be off
+    * Default settings are set add sharpening, and no blurring, and the anti-ringing feature really works well
+    * This adds extra sharpening but still allows for smoothing of similar colors afterward in SharpSmoother
   * Fixed Independent Bezel Scale
   
 
