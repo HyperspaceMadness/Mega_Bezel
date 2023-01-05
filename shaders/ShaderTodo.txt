@@ -6,11 +6,14 @@ Changes:
   * Update to SMOOTH-ADV NTSC Presets
   * SGENDPT-Mix-Multipass added to replace MDAPT and CB Dedither
   * Added a Blend Value to PS1 Box Blur
+  * Fixed Independent Bezel Scale
   
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Fix CRT Blend Amount
+  * Adjustable softness of bezel outer edge for reflection
   * Adjustable Bezel Curvature per side?
   * Revisit Tate Mode / Vertical Scanline and Rotate CRT artifacts
     * Fast Sharpen & Sharp Smoother currently work on x axis, should be relative to scanline direction

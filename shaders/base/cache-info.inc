@@ -109,10 +109,10 @@ vec2 HSM_GetTubeScale(vec2 screen_scale, float image_placement_screen_height, ve
 	// Add switch for independent scale
 	if (HSM_BZL_USE_INDEPENDENT_SCALE == 1)
 	{
-		if (HSM_USE_IMAGE_FOR_PLACEMENT == 0)
-			screen_scale = screen_scale / screen_scale.y * HSM_BZL_INDEPENDENT_SCALE;
+		if (HSM_USE_IMAGE_FOR_PLACEMENT > 0.5)
+			screen_scale = screen_scale / screen_scale.y * image_placement_screen_height * HSM_BZL_INDEPENDENT_SCALE / DEFAULT_SCREEN_HEIGHT;
 		else
-			screen_scale = screen_scale / screen_scale.y * image_placement_screen_height;
+			screen_scale = screen_scale / screen_scale.y * HSM_BZL_INDEPENDENT_SCALE;
 	}
 
 	float normalized_screen_height = screen_scale.y / DEFAULT_UNCORRECTED_SCREEN_SCALE.y;
