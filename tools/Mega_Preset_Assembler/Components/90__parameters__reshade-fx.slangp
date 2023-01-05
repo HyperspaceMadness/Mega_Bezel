@@ -1,6 +1,6 @@
 
 // Reshade-FX
-HSM_DEDITHER_MODE = 1
+SGPT_BLEND_OPTION = 1
 
 bLensdirtEnable_toggle = "1.000000"
 bAnamFlareEnable_toggle = "1.000000"

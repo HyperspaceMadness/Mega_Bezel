@@ -385,7 +385,7 @@ g_vignette = "0.0"
 // Easymode Parameters
 gamma_out = 2.2
 // SMOOTH-ADV
-HSM_DEDITHER_MODE = "3.000000"
+SGPT_BLEND_OPTION = 1
 
 HSM_SCALEFX_ON = 1
 

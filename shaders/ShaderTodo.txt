@@ -4,10 +4,25 @@ Mega Bezel is updated to V1.7.0_2022-12-21
 
 Changes:
   * Update to SMOOTH-ADV NTSC Presets
-  * SGENDPT-Mix-Multipass added to replace MDAPT and CB Dedither
+  * @Hyllian's awesome SGENDPT-Mix-Multipass added has replaced MDAPT and CB Dedither
+    * Comversion from Old to New:
+      * HSM_DEDITHER_MODE = 1 & HSM_DEDITHER_MODE = 3 (Checkerboard de-dither On)
+      * become:
+      * SGPT_BLEND_OPTION = 1
+      *
+      * HSM_DEDITHER_MODE = 4  (Vertical Lines de-dither On)
+      * becomes:
+      * SGPT_BLEND_OPTION = 2
+      *
+      * HSM_DEDITHER_MODE = 4  (Checkerboard and Vertical Lines de-dither On)
+      * becomes:
+      * SGPT_BLEND_OPTION = 3
+
   * Added a Blend Value to PS1 Box Blur
   * Fixed Independent Bezel Scale
   
+
+
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------

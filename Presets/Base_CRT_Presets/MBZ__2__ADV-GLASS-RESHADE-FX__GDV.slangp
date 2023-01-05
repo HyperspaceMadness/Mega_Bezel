@@ -461,7 +461,7 @@ HSM_SCREEN_VIGNETTE_IN_REFLECTION = "0.000000"
 g_vignette = "0.0"
 
 // Reshade-FX
-HSM_DEDITHER_MODE = 1
+SGPT_BLEND_OPTION = 1
 
 bLensdirtEnable_toggle = "1.000000"
 bAnamFlareEnable_toggle = "1.000000"
