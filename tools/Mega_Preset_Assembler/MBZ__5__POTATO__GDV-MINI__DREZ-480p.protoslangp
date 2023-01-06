@@ -6,7 +6,7 @@
 #reference "Components/12__intro__potato.slangp"
 #reference "Components/55__color-correct__grade.slangp"
 #reference "Components/59__prep__gdv-linearize.slangp"
-#reference "Components/60__crt__gdvmini-potato.slangp"
+#reference "Components/60__crt__gdvmini__potato.slangp"
 #reference "Components/68__post-crt__potato.slangp"
 
 #reference "Components/90__textures__gdvmini-potato.slangp"
