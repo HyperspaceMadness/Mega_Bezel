@@ -49,7 +49,7 @@ float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
 
 
 //---------------------------------------------------------------------------------------------------
-//    Sinden Gun Border
+//    Sinden Lightgun Border
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_SINDEN_EMPTY_LINE					" " 0 0 0.001 0.001
 #pragma parameter HSM_SINDEN_TITLE                      "[ SINDEN LIGHTGUN BORDER ]:" 0 0 0.001 0.001
@@ -60,9 +60,11 @@ float HSM_SINDEN_BORDER_ON = global.HSM_SINDEN_BORDER_ON;
 #pragma parameter HSM_SINDEN_BORDER_OPACITY				"         Opacity" 50 0 100 5
 float HSM_SINDEN_BORDER_OPACITY = global.HSM_SINDEN_BORDER_OPACITY / 100;
 
-#pragma parameter HSM_SINDEN_BORDER_THICKNESS		    "         Thickness" 5 0 50 1
+#pragma parameter HSM_SINDEN_BORDER_THICKNESS		    "         Thickness" 2 0 30 0.5
 float HSM_SINDEN_BORDER_THICKNESS = global.HSM_SINDEN_BORDER_THICKNESS / 100;
 
+#pragma parameter HSM_SINDEN_BORDER_EMPTY_TUBE_COMPENSATION	"         Compensate Empty Tube" 0 0 1 1
+float HSM_SINDEN_BORDER_EMPTY_TUBE_COMPENSATION = global.HSM_SINDEN_BORDER_EMPTY_TUBE_COMPENSATION;
 
 //---------------------------------------------------------------------------------------------------
 //    Global Graphics Caching
@@ -621,10 +623,17 @@ float HSM_TUBE_DIFFUSE_IMAGE_SCALE_X = global.HSM_TUBE_DIFFUSE_IMAGE_SCALE_X / 1
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_ROTATION  			        "          Image Rotation: -1: 270 | 0 | 1: 90" 0 -1 1 1
 float HSM_TUBE_DIFFUSE_IMAGE_ROTATION = global.HSM_TUBE_DIFFUSE_IMAGE_ROTATION;
 
-#pragma parameter HSM_TUBE_DIFFUSE_FORCE_ASPECT 			        "          Tube Diffuse Aspect - EVEN | SCREEN | Explicit"  1 0 2 1
+
+//---------------------------------------------------------------------------------------------------
+//    TUBE EMPTY
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_TUBE_ASPECT_AND_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter HSM_TUBE_ASPECT_AND_EMPTY_TITLE						"[ TUBE ASPECT & EMPTY SPACE ]:" 0 0 0.001 0.001
+
+#pragma parameter HSM_TUBE_DIFFUSE_FORCE_ASPECT 			        "          Tube Aspect - EVEN | SCREEN | Explicit"  1 0 2 1
 #define HSM_TUBE_DIFFUSE_FORCE_ASPECT global.HSM_TUBE_DIFFUSE_FORCE_ASPECT
 
-#pragma parameter HSM_TUBE_EXPLICIT_ASPECT 			                "          Explicit Tube DiIffuse Aspect"  1.3333 0.5 3 0.01
+#pragma parameter HSM_TUBE_EXPLICIT_ASPECT 			                "          Explicit Tube Aspect"  1.3333 0.5 3 0.01
 #define HSM_TUBE_EXPLICIT_ASPECT global.HSM_TUBE_EXPLICIT_ASPECT
 
 #pragma parameter HSM_TUBE_EMPTY_THICKNESS 				            "          Empty Tube Thickness" 0 0 6000 10

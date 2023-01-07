@@ -3,6 +3,10 @@
 Mega Bezel is updated to V1.7.0_2022-12-21
 
 Changes:
+  * Added Sinden Lightgun procedural border
+    * Creates an adjustable white border to allow the lightgun uses figure out where you are pointing on the screen
+    * Controllable width and Opacity
+    * Optional tube edge correction to keep all screen visible
   * Update to SMOOTH-ADV NTSC Presets
   * @Hyllian's awesome SGENDPT-Mix-Multipass added has replaced MDAPT and CB Dedither
     * Comversion from Old to New:
