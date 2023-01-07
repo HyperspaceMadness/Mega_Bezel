@@ -37,6 +37,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	uint FrameCount;
 
 	float HSM_RESOLUTION_DEBUG_ON;
+	float HSM_SINDEN_BORDER_ON;
+	float HSM_SINDEN_BORDER_OPACITY;
+	float HSM_SINDEN_BORDER_THICKNESS;
 	float HSM_CACHE_GRAPHICS_ON;
 	float HSM_CACHE_UPDATE_INDICATOR_MODE;
 

@@ -300,7 +300,13 @@ vec4 HSM_GetPostCrtPreppedColor(vec4 in_color_linear, vec2 VIEWPORT_COORD, vec2 
 				out_color = normal_blended + out_color;
 			}
 		}
-	} 
+	}
+
+	if (HSM_SINDEN_BORDER_ON > 0.5)
+	{
+		float sinden_gun_mask =  tube_diffuse_mask - HSM_GetCornerMask((tube_diffuse_curved_coord - 0.5) * (1 + vec2(1 / TUBE_DIFFUSE_ASPECT * HSM_SINDEN_BORDER_THICKNESS, HSM_SINDEN_BORDER_THICKNESS)) + 0.5, TUBE_DIFFUSE_ASPECT, black_edge_corner_radius, 0.99);
+		out_color += HSM_SINDEN_BORDER_OPACITY * sinden_gun_mask;
+	}
 
 	#ifndef IS_NO_REFLECT_PRESET
 

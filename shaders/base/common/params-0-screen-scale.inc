@@ -47,6 +47,23 @@ float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
 #pragma parameter post_br_affect_black_level                "          Post CRT Brightness Affects Grade Black Level" 100 0 100 10
 #define HSM_POST_CRT_BRIGHTNESS_AFFECT_BLACK_LEVEL global.post_br_affect_black_level / 100
 
+
+//---------------------------------------------------------------------------------------------------
+//    Sinden Gun Border
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_SINDEN_EMPTY_LINE					" " 0 0 0.001 0.001
+#pragma parameter HSM_SINDEN_TITLE                      "[ SINDEN LIGHTGUN BORDER ]:" 0 0 0.001 0.001
+
+#pragma parameter HSM_SINDEN_BORDER_ON					"         Show Border" 0 0 1 1
+float HSM_SINDEN_BORDER_ON = global.HSM_SINDEN_BORDER_ON;
+
+#pragma parameter HSM_SINDEN_BORDER_OPACITY				"         Opacity" 50 0 100 5
+float HSM_SINDEN_BORDER_OPACITY = global.HSM_SINDEN_BORDER_OPACITY / 100;
+
+#pragma parameter HSM_SINDEN_BORDER_THICKNESS		    "         Thickness" 5 0 50 1
+float HSM_SINDEN_BORDER_THICKNESS = global.HSM_SINDEN_BORDER_THICKNESS / 100;
+
+
 //---------------------------------------------------------------------------------------------------
 //    Global Graphics Caching
 //---------------------------------------------------------------------------------------------------
