@@ -1049,7 +1049,11 @@ vec4 HSM_Apply_Sinden_Lightgun_Border(vec4 in_rgba, vec2 in_tube_diffuse_curved_
 {
 	float sinden_gun_mask =  in_tube_diffuse_mask - HSM_GetCornerMask((in_tube_diffuse_curved_coord - 0.5) * (1 + vec2(1 / TUBE_DIFFUSE_ASPECT * HSM_SINDEN_BORDER_THICKNESS, HSM_SINDEN_BORDER_THICKNESS)) + 0.5, TUBE_DIFFUSE_ASPECT, in_black_edge_corner_radius, 0.99);
 	vec4 out_rgba = in_rgba;
-	out_rgba.rgb += HSM_SINDEN_BORDER_OPACITY * sinden_gun_mask;
+
+	vec3 base_rgb = vec3(1);
+	out_rgba.rgb = base_rgb * HSM_SINDEN_BORDER_BRIGHTNESS * sinden_gun_mask + (1 - sinden_gun_mask) * out_rgba.rgb;
+
+	// out_rgba.rgb += HSM_SINDEN_BORDER_OPACITY * sinden_gun_mask;
 	return out_rgba;
 }
 

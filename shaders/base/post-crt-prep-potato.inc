@@ -136,7 +136,7 @@ vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_linear, vec2 VIEWPORT_COORD,
 	if (HSM_SINDEN_BORDER_ON > 0.5)
 	{
 		vec2 tube_diffuse_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, TUBE_DIFFUSE_SCALE, TUBE_SCALE, TUBE_DIFFUSE_ASPECT, 0);
-		float  =  tube_diffuse_mask - HSM_GetCornerMask((tube_diffuse_curved_coord - 0.5) * (1 + vec2(1 / TUBE_DIFFUSE_ASPECT * HSM_SINDEN_BORDER_THICKNESS, HSM_SINDEN_BORDER_THICKNESS)) + 0.5, TUBE_DIFFUSE_ASPECT, black_edge_corner_radius, 0.99);
+		float tube_diffuse_mask =  HSM_GetCornerMask(tube_diffuse_curved_coord, TUBE_DIFFUSE_ASPECT, black_edge_corner_radius, 0.99);
 		out_color = HSM_Apply_Sinden_Lightgun_Border(out_color, tube_diffuse_curved_coord, tube_diffuse_mask, black_edge_corner_radius);
 	}
 

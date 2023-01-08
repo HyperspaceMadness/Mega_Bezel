@@ -57,8 +57,8 @@ float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
 #pragma parameter HSM_SINDEN_BORDER_ON					"         Show Border" 0 0 1 1
 float HSM_SINDEN_BORDER_ON = global.HSM_SINDEN_BORDER_ON;
 
-#pragma parameter HSM_SINDEN_BORDER_OPACITY				"         Opacity" 50 0 100 5
-float HSM_SINDEN_BORDER_OPACITY = global.HSM_SINDEN_BORDER_OPACITY / 100;
+#pragma parameter HSM_SINDEN_BORDER_BRIGHTNESS				"         Brightness" 60 0 200 5
+float HSM_SINDEN_BORDER_BRIGHTNESS = global.HSM_SINDEN_BORDER_BRIGHTNESS / 100;
 
 #pragma parameter HSM_SINDEN_BORDER_THICKNESS		    "         Thickness" 2 0 30 0.5
 float HSM_SINDEN_BORDER_THICKNESS = global.HSM_SINDEN_BORDER_THICKNESS / 100;

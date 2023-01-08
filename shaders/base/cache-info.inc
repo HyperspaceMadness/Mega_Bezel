@@ -1082,8 +1082,8 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	vec2 screen_scale = HSM_GetScreenScale(screen_aspect, screen_pos_and_height.z, cropped_rotated_size);
 	vec2 screen_size = GetScreenSizeWithZoom(screen_scale);
 
-	// Adjust tube empty thickness for sinden lightgun bright edge border if needed
-	float tube_sinden_border_thickness =  HSM_SINDEN_BORDER_ON > 0.5 && HSM_SINDEN_BORDER_EMPTY_TUBE_COMPENSATION > 0.5 ? 0.8 * HSM_SINDEN_BORDER_THICKNESS * 60 : 0;
+	// Adjust tube empty thickness for Sinden lightgun bright edge border if needed
+	float tube_sinden_border_thickness =  HSM_SINDEN_BORDER_ON > 0.5 && HSM_SINDEN_BORDER_EMPTY_TUBE_COMPENSATION > 0.5 ? 0.6 * HSM_SINDEN_BORDER_THICKNESS * 60 : 0;
 
 	vec2 tube_diffuse_scale = HSM_GetTubeScale(screen_scale, screen_pos_and_height.z, vec2(HSM_TUBE_EMPTY_THICKNESS * HSM_TUBE_EMPTY_THICKNESS_X_SCALE + tube_sinden_border_thickness, HSM_TUBE_EMPTY_THICKNESS + screen_aspect * tube_sinden_border_thickness));	
 	float tube_diffuse_aspect = tube_diffuse_scale.x / tube_diffuse_scale.y * output_aspect;
