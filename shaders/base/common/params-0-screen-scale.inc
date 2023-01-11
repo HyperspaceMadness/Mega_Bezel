@@ -23,7 +23,7 @@
 */
 
 // Screen Scale Required Parameters
-#pragma parameter HSM_MEGA_BEZEL_TITLE								"[ --- HSM MEGA BEZEL V1.7.0_2022-12-21 --- ]" 0 0 0.001 0.001
+#pragma parameter HSM_MEGA_BEZEL_TITLE								"[ --- HSM MEGA BEZEL V1.8.0_2022-01-10 --- ]" 0 0 0.001 0.001
 
 #pragma parameter HSM_RESOLUTION_DEBUG_ON							"          Show Resolution Info" 0 0 1 1
 float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
@@ -46,37 +46,6 @@ float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
 
 #pragma parameter post_br_affect_black_level                "          Post CRT Brightness Affects Grade Black Level" 100 0 100 10
 #define HSM_POST_CRT_BRIGHTNESS_AFFECT_BLACK_LEVEL global.post_br_affect_black_level / 100
-
-
-//---------------------------------------------------------------------------------------------------
-//    Sinden Lightgun Border
-//---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_SINDEN_EMPTY_LINE					" " 0 0 0.001 0.001
-#pragma parameter HSM_SINDEN_TITLE                      "[ SINDEN LIGHTGUN BORDER ]:" 0 0 0.001 0.001
-
-#pragma parameter HSM_SINDEN_BORDER_ON					"         Show Border" 0 0 1 1
-float HSM_SINDEN_BORDER_ON = global.HSM_SINDEN_BORDER_ON;
-
-#pragma parameter HSM_SINDEN_BORDER_BRIGHTNESS				"         Brightness" 60 0 200 5
-float HSM_SINDEN_BORDER_BRIGHTNESS = global.HSM_SINDEN_BORDER_BRIGHTNESS / 100;
-
-#pragma parameter HSM_SINDEN_BORDER_THICKNESS		    "         Thickness" 2 0 30 0.5
-float HSM_SINDEN_BORDER_THICKNESS = global.HSM_SINDEN_BORDER_THICKNESS / 100;
-
-#pragma parameter HSM_SINDEN_BORDER_EMPTY_TUBE_COMPENSATION	"         Compensate Empty Tube" 0 0 1 1
-float HSM_SINDEN_BORDER_EMPTY_TUBE_COMPENSATION = global.HSM_SINDEN_BORDER_EMPTY_TUBE_COMPENSATION;
-
-//---------------------------------------------------------------------------------------------------
-//    Global Graphics Caching
-//---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_GLOBAL_GRAPHICS_CACHE_EMPTY_LINE							" " 0 0 0.001 0.001
-#pragma parameter HSM_GLOBAL_GRAPHICS_CACHE_TITLE                   "[ GRAPHICS CACHE ]:" 0 0 0.001 0.001
-
-#pragma parameter HSM_CACHE_GRAPHICS_ON							    "         Cache Graphics: OFF | ON" 1 0 1 1
-float HSM_CACHE_GRAPHICS_ON = global.HSM_CACHE_GRAPHICS_ON;
-
-#pragma parameter HSM_CACHE_UPDATE_INDICATOR_MODE					"        Cache Update Indicator: OFF | ON | ONLY IF CACHE IS OFF" 2 0 2 1
-float HSM_CACHE_UPDATE_INDICATOR_MODE = global.HSM_CACHE_UPDATE_INDICATOR_MODE;
 
 
 //---------------------------------------------------------------------------------------------------
@@ -109,6 +78,25 @@ float HSM_AMBIENT2_OPACITY = global.HSM_AMBIENT2_OPACITY / 100 * global.HSM_AMBI
 
 #pragma parameter HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE     "          Which Images to Use: BOTH | 1 ONLY | 2 ONLY | SWAP"  0 0 3 1
 float HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE = global.HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE;
+
+
+//---------------------------------------------------------------------------------------------------
+//    Sinden Lightgun Border
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_SINDEN_EMPTY_LINE					" " 0 0 0.001 0.001
+#pragma parameter HSM_SINDEN_TITLE                      "[ SINDEN LIGHTGUN BORDER ]:" 0 0 0.001 0.001
+
+#pragma parameter HSM_SINDEN_BORDER_ON					"         Show Border" 0 0 1 1
+float HSM_SINDEN_BORDER_ON = global.HSM_SINDEN_BORDER_ON;
+
+#pragma parameter HSM_SINDEN_BORDER_BRIGHTNESS				"         Brightness" 60 0 200 5
+float HSM_SINDEN_BORDER_BRIGHTNESS = global.HSM_SINDEN_BORDER_BRIGHTNESS / 100;
+
+#pragma parameter HSM_SINDEN_BORDER_THICKNESS		    "         Thickness" 2 0 30 0.5
+float HSM_SINDEN_BORDER_THICKNESS = global.HSM_SINDEN_BORDER_THICKNESS / 100;
+
+#pragma parameter HSM_SINDEN_BORDER_EMPTY_TUBE_COMPENSATION	"         Compensate Empty Tube" 0 0 1 1
+float HSM_SINDEN_BORDER_EMPTY_TUBE_COMPENSATION = global.HSM_SINDEN_BORDER_EMPTY_TUBE_COMPENSATION;
 
 
 //---------------------------------------------------------------------------------------------------
@@ -492,6 +480,19 @@ float HSM_CRT_CURVATURE_SCALE = global.HSM_CRT_CURVATURE_SCALE / 100;
 
 
 //---------------------------------------------------------------------------------------------------
+//    Global Graphics Caching
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_GLOBAL_GRAPHICS_CACHE_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter HSM_GLOBAL_GRAPHICS_CACHE_TITLE                   "[ GRAPHICS CACHE ]:" 0 0 0.001 0.001
+
+#pragma parameter HSM_CACHE_GRAPHICS_ON							    "         Cache Graphics: OFF | ON" 1 0 1 1
+float HSM_CACHE_GRAPHICS_ON = global.HSM_CACHE_GRAPHICS_ON;
+
+#pragma parameter HSM_CACHE_UPDATE_INDICATOR_MODE					"        Cache Update Indicator: OFF | ON | ONLY IF CACHE IS OFF" 2 0 2 1
+float HSM_CACHE_UPDATE_INDICATOR_MODE = global.HSM_CACHE_UPDATE_INDICATOR_MODE;
+
+
+//---------------------------------------------------------------------------------------------------
 //    A/B SPLITSCREEN COMPARE
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_CRT_AB_EMPTY_LINE							" " 0 0 0.001 0.001
@@ -529,6 +530,9 @@ float HSM_SHOW_PASS_INDEX = global.HSM_SHOW_PASS_INDEX;
 
 #pragma parameter HSM_SHOW_PASS_APPLY_SCREEN_COORD  "          Apply Screen Scale & Curvature to Unscaled Passes" 1 0 1 1
 float HSM_SHOW_PASS_APPLY_SCREEN_COORD = global.HSM_SHOW_PASS_APPLY_SCREEN_COORD;
+
+#pragma parameter HSM_SHOW_PASS_ALPHA         "          Show Alpha Channel" 0 0 1 1
+float HSM_SHOW_PASS_ALPHA = global.HSM_SHOW_PASS_ALPHA;
 
 
 //---------------------------------------------------------------------------------------------------
@@ -579,6 +583,28 @@ float HSM_MONOCHROME_DUALSCREEN_VIS_MODE = global.HSM_MONOCHROME_DUALSCREEN_VIS_
 
 
 //---------------------------------------------------------------------------------------------------
+//    TUBE EMPTY
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_TUBE_ASPECT_AND_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter HSM_TUBE_ASPECT_AND_EMPTY_TITLE						"[ TUBE ASPECT & EMPTY SPACE ]:" 0 0 0.001 0.001
+
+#pragma parameter HSM_TUBE_DIFFUSE_FORCE_ASPECT 			        "          Tube Aspect - EVEN | SCREEN | Explicit"  1 0 2 1
+#define HSM_TUBE_DIFFUSE_FORCE_ASPECT global.HSM_TUBE_DIFFUSE_FORCE_ASPECT
+
+#pragma parameter HSM_TUBE_EXPLICIT_ASPECT 			                "          Explicit Tube Aspect "  1.3333 0.5 3 0.01
+#define HSM_TUBE_EXPLICIT_ASPECT global.HSM_TUBE_EXPLICIT_ASPECT
+
+#pragma parameter HSM_TUBE_EMPTY_THICKNESS 				            "          Empty Tube Thickness" 0 0 6000 10
+#define HSM_TUBE_EMPTY_THICKNESS (0.7 * global.HSM_TUBE_EMPTY_THICKNESS / 100)
+
+#pragma parameter HSM_TUBE_EMPTY_THICKNESS_X_SCALE 			        "          Empty Tube Thicknes X Scale" 100 0 3000 1
+#define HSM_TUBE_EMPTY_THICKNESS_X_SCALE (global.HSM_TUBE_EMPTY_THICKNESS_X_SCALE / 100)
+
+#pragma parameter HSM_SCREEN_CORNER_RADIUS_SCALE 			        "          Screen (Game Image) Corner Radius Scale" 100 5 3000 1
+#define HSM_SCREEN_CORNER_RADIUS_SCALE (global.HSM_SCREEN_CORNER_RADIUS_SCALE / 100)
+
+
+//---------------------------------------------------------------------------------------------------
 //    TUBE DIFFUSE IMAGE
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_TUBE_DIFFUSE_EMPTY_LINE							" " 0 0 0.001 0.001
@@ -622,28 +648,6 @@ float HSM_TUBE_DIFFUSE_IMAGE_SCALE_X = global.HSM_TUBE_DIFFUSE_IMAGE_SCALE_X / 1
 
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_ROTATION  			        "          Image Rotation: -1: 270 | 0 | 1: 90" 0 -1 1 1
 float HSM_TUBE_DIFFUSE_IMAGE_ROTATION = global.HSM_TUBE_DIFFUSE_IMAGE_ROTATION;
-
-
-//---------------------------------------------------------------------------------------------------
-//    TUBE EMPTY
-//---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_TUBE_ASPECT_AND_EMPTY_LINE							" " 0 0 0.001 0.001
-#pragma parameter HSM_TUBE_ASPECT_AND_EMPTY_TITLE						"[ TUBE ASPECT & EMPTY SPACE ]:" 0 0 0.001 0.001
-
-#pragma parameter HSM_TUBE_DIFFUSE_FORCE_ASPECT 			        "          Tube Aspect - EVEN | SCREEN | Explicit"  1 0 2 1
-#define HSM_TUBE_DIFFUSE_FORCE_ASPECT global.HSM_TUBE_DIFFUSE_FORCE_ASPECT
-
-#pragma parameter HSM_TUBE_EXPLICIT_ASPECT 			                "          Explicit Tube Aspect"  1.3333 0.5 3 0.01
-#define HSM_TUBE_EXPLICIT_ASPECT global.HSM_TUBE_EXPLICIT_ASPECT
-
-#pragma parameter HSM_TUBE_EMPTY_THICKNESS 				            "          Empty Tube Thickness" 0 0 6000 10
-#define HSM_TUBE_EMPTY_THICKNESS (0.7 * global.HSM_TUBE_EMPTY_THICKNESS / 100)
-
-#pragma parameter HSM_TUBE_EMPTY_THICKNESS_X_SCALE 			        "          Empty Tube Thicknes X Scale" 100 0 3000 1
-#define HSM_TUBE_EMPTY_THICKNESS_X_SCALE (global.HSM_TUBE_EMPTY_THICKNESS_X_SCALE / 100)
-
-#pragma parameter HSM_SCREEN_CORNER_RADIUS_SCALE 			        "          Screen (Game Image) Corner Radius Scale" 100 5 3000 1
-#define HSM_SCREEN_CORNER_RADIUS_SCALE (global.HSM_SCREEN_CORNER_RADIUS_SCALE / 100)
 
 
 //---------------------------------------------------------------------------------------------------

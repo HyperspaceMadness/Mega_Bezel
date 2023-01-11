@@ -142,7 +142,7 @@ void main()
 
 	float edge_mask =  HSM_GetCornerMask(edge_mask_coord, TUBE_DIFFUSE_ASPECT, bezel_corner_radius, HSM_BZL_INNER_EDGE_SHARPNESS);
 
-	float outside_tube_mask = 1 - HSM_GetCornerMask(tube_curved_coord, TUBE_DIFFUSE_ASPECT, bezel_corner_radius, 0.99);
+	float outside_tube_mask = 1 - HSM_GetCornerMask((tube_curved_coord - 0.5) * 1.002 + 0.5, TUBE_DIFFUSE_ASPECT, bezel_corner_radius, 0.99);
 	TUBE_MASK = 1 - outside_tube_mask;
 
 	OUTSIDE_BEZEL_MASK = 1 - HSM_GetCornerMask(BEZEL_OUTSIDE_CURVED_COORD, TUBE_DIFFUSE_ASPECT, HSM_GLOBAL_CORNER_RADIUS * HSM_BZL_OUTER_CORNER_RADIUS_SCALE, 0.9);
@@ -388,22 +388,6 @@ void main()
 
 		// Modulate amount of refleciton on frame inner edge
 		reflection_color.rgb *= (1 - HSM_REFLECT_FRAME_INNER_EDGE_AMOUNT) * (1 - frame_inner_edge_mask) + HSM_REFLECT_FRAME_INNER_EDGE_AMOUNT;
-
-		// TODO needs more work, needs Background Coord and Device Coord
-		// // Apply the mask image on the reflection, usually used to show the uneven brightness of a bumpy surface
-		// if (HSM_REFLECT_MASK_IMG_AMOUNT > 0)
-		// {
-		// 	vec2 reflection_image_coord = BACKGROUND_CURVED_COORD;
-		// 	vec2 reflection_image_scale = BACKGROUND_SCALE;
-
-		// 	if (HSM_REFLECT_MASK_FOLLOW_LAYER == 1)
-		// 	{
-		// 		reflection_image_coord = DEVICE_CURVED_COORD;
-		// 		reflection_image_scale = DEVICE_SCALE;
-		// 	}
-
-		// 	reflection_color *= HSM_REFLECT_MASK_IMG_AMOUNT * texture(ReflectionMaskImage, reflection_image_coord).r + (1 - HSM_REFLECT_MASK_IMG_AMOUNT);
-		// }
 	}
 
 	crt_linear.rgb *= TUBE_MASK;
@@ -419,7 +403,6 @@ void main()
 	vec4 frag_color_linear = crt_linear;
 	frag_color_linear = HSM_BlendModeLayerMix(frag_color_linear, bg_image, HSM_BG_BLEND_MODE, HSM_BG_OPACITY);
 	frag_color_linear += reflection_color;
-
 
 	FragColor = frag_color_linear;
 

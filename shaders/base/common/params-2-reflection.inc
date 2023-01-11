@@ -99,8 +99,6 @@ float HSM_REFLECT_BLUR_MAX = global.HSM_REFLECT_BLUR_MAX / 100;
 #pragma parameter HSM_REFLECT_BLUR_FALLOFF_DISTANCE 				"          Falloff Distance" 	100 0 1000 1
 float HSM_REFLECT_BLUR_FALLOFF_DISTANCE = global.HSM_REFLECT_BLUR_FALLOFF_DISTANCE / 100;
 
-// float HSM_REFLECT_BLUR_FALLOFF_DISTANCE = 1;
-
 // Reflection Noise
 #pragma parameter HSM_REFLECT_NOISE_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_REFLECT_NOISE_TITLE			                "[ REFLECTION NOISE ]:" 0 0 0.01 0.01
@@ -114,23 +112,29 @@ float HSM_REFLECT_NOISE_SAMPLES = global.HSM_REFLECT_NOISE_SAMPLES;
 #pragma parameter HSM_REFLECT_NOISE_SAMPLE_DISTANCE 			    "          Sample Distance" 100 0 500 5
 float HSM_REFLECT_NOISE_SAMPLE_DISTANCE = global.HSM_REFLECT_NOISE_SAMPLE_DISTANCE / 500;
 
-//TODO Reflection Mask is disabled at the moment because it really needs the layer scaling sof it can follow the device or other layers
-// Reflection Mask
-// #pragma parameter HSM_REFLECT_MASK_TITLE			                "[ REFLECTION MASK IMAGE ]:" 0 0 0.01 0.01
+// #pragma parameter HSM_REFLECT_BRIGHTNESS_NOISE_BLACK_LEVEL                      "          Mask Black Level" 0 -100 100 0.5
+// float HSM_REFLECT_BRIGHTNESS_NOISE_BLACK_LEVEL = (global.HSM_REFLECT_BRIGHTNESS_NOISE_BLACK_LEVEL / 1000 + 1);
 
-// #pragma parameter HSM_REFLECT_MASK_IMG_AMOUNT 		                "          Reflection Image Mask Amount" 0 0 100 1
-// float HSM_REFLECT_MASK_IMG_AMOUNT = global.HSM_REFLECT_MASK_IMG_AMOUNT / 100;
+// #pragma parameter HSM_REFLECT_BRIGHTNESS_NOISE_BRIGHTNESS                      "          Mask Brightness" 100 0 200 1
+// float HSM_REFLECT_BRIGHTNESS_NOISE_BRIGHTNESS = global.HSM_REFLECT_BRIGHTNESS_NOISE_BRIGHTNESS / 100;
 
-// #pragma parameter HSM_REFLECT_MASK_FOLLOW_LAYER 			            "       Scaling Mode (Image Layers Only)- FullScreen | Bezel Img" 0 0 1 1
-// float HSM_REFLECT_MASK_FOLLOW_LAYER = global.HSM_REFLECT_MASK_FOLLOW_LAYER;
+//---------------------------------------------------------------------------------------------------
+//    REFLECTION MASK
+//---------------------------------------------------------------------------------------------------
+#include "params-2-reflection-mask.inc"
 
-#pragma parameter HSM_GLASS_BORDER_ON               "          Glass Border ON (For Glass Preset)" 0 0 1 1
+
+// Glass Preset Stuff
+#pragma parameter HSM_REFLECT_GLASS_EMPTY_LINE						" " 0 0 0.001 0.001
+#pragma parameter HSM_REFLECT_GLASS_TITLE			                "[ REFLECTION GLASS ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_GLASS_BORDER_ON                               "          Glass Border ON (For Glass Preset)" 0 0 1 1
 float HSM_GLASS_BORDER_ON = global.HSM_GLASS_BORDER_ON;
 
-#pragma parameter HSM_REFLECT_VIGNETTE_AMOUNT 		"          Glass Reflection Vignette" 0 0 100 0.5
+#pragma parameter HSM_REFLECT_VIGNETTE_AMOUNT 		                "          Glass Reflection Vignette" 0 0 100 0.5
 float HSM_REFLECT_VIGNETTE_AMOUNT = global.HSM_REFLECT_VIGNETTE_AMOUNT / 100;
 
-#pragma parameter HSM_REFLECT_VIGNETTE_SIZE 		"          Glass Reflection Vignette Size" 100 50 200 2
+#pragma parameter HSM_REFLECT_VIGNETTE_SIZE 		                "          Glass Reflection Vignette Size" 100 50 200 2
 float HSM_REFLECT_VIGNETTE_SIZE = global.HSM_REFLECT_VIGNETTE_SIZE / 100;
 
 

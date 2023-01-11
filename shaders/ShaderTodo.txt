@@ -1,6 +1,6 @@
 ![Mega_Bezel_Logo|512x256, 75%](upload://6PNkvcMF9Go9Wnk6OJXfYR1opXI.png) 
 
-Mega Bezel is updated to V1.7.0_2022-12-21
+Mega Bezel is updated to V1.8.0_2023-01-10
 
 Changes:
   * Added Sinden Lightgun procedural border
@@ -27,13 +27,17 @@ Changes:
     * Default settings are set add sharpening, and no blurring, and the anti-ringing feature really works well
     * This adds extra sharpening but still allows for smoothing of similar colors afterward in SharpSmoother
   * Fixed Independent Bezel Scale
-  
-
+  * Added Reflection Mask Image back in, Neo Geo example in Mega Bezel Examples package
+  * Some small updates to the Readme 
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Swap out // for # in presets
+  * Add Reflection Mask back
+  * Add ability to have layers appear on top of the bezel but below the reflection
+    * One way to do this would be to have a CRT/Reflection layer offset which forces layers below to be composited on top of the bezel
   * Fix CRT Blend Amount
   * Adjustable softness of bezel outer edge for reflection
   * Adjustable Bezel Curvature per side?

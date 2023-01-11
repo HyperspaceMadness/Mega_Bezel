@@ -3,7 +3,7 @@ Mega Bezel Shader Readme
 ------------------------------------------------------------------------------------------------------------
 ![Mega Bezel Logo](MegaBezelLogo.png)
 
-**Version V1.7.0_2022-12-21**
+**Version V1.8.0_2022-12-21**
 ----------------------------------------
 ----------------------------------------
 
@@ -380,17 +380,6 @@ NTSC Processing is only included in NTSC Presets, and GTU Horizontal blurring is
   * **Post CRT Brightness Affects Grade Black Level** - As this value is reduced the brightness adjustment amount will be reduced on the black level. So if you set it to a low value there will be almost no increase in brightness on the areas which were black before the black level adjustment.
 
 -----------------------------------------------------------------------------------------------
-**[ GRAPHICS CACHE ]:**
-
-  * **Cache Graphics**
-    * **0: OFF** - Graphics Layering and Bezel Generation are regenerated every frame
-    * **1: ON** - Graphics & Bezel are generated once and cached for subsequent frames. The cache auto updates when changes in parameters are detected
-  * **Cache Update Indicator** 
-    * **0: OFF** - Never show the red dot indicator on screen when the cache updates
-    * **1: ON** - Appears whenever the graphics are regenerated and cache is updated, when caching is off or if the cache is auto-updated
-    * **2: ONLY WHEN CACHE OFF** - Indicator does not appear on auto-update, It only appears when caching is off
-
------------------------------------------------------------------------------------------------
 **[ GRAPHICS GLOBAL BRIGHTNESS ]:**
   * **Graphics Brightness** - Brightness of all graphics and images which are not the CRT Shader
   * **Graphics Gamma Adjust** - Gamma adjustment on all graphics and images which are not the CRT Shader to adjust brightness with a gamma curve
@@ -406,6 +395,17 @@ NTSC Processing is only included in NTSC Presets, and GTU Horizontal blurring is
   * **1 - 1 ONLY** - Use the first image for both slots
   * **2 - 2 ONLY** - Use the second image for both slots
   * **3 - Swap** - Swap the Images
+
+
+-----------------------------------------------------------------------------------------------
+**[ SINDEN LIGHTGUN BORDER ]:**
+  * **Show Border** - Show the white border around the inner edge of the tube
+  * **Brightness** - How bright is the border
+  * **Thickness** - How Thick is the border
+  * **Compensate Empty Tube**
+    * **0 - Don't adjust the tube size and puts the white border on top of the CRT image**
+    * **1 - Adjust the tube to be wider so the white border is outside the CRT image**
+
 
 -----------------------------------------------------------------------------------------------
 **[ VIEWPORT ZOOM ]:** 
@@ -637,6 +637,18 @@ Blend parts of the image which flicker on/off repeatedly between frames often us
   - Brightness difference required before the colors will be blended
 
 -----------------------------------------------------------------------------------------------
+**[ GRAPHICS CACHE ]:**
+
+  * **Cache Graphics**
+    * **0: OFF** - Graphics Layering and Bezel Generation are regenerated every frame
+    * **1: ON** - Graphics & Bezel are generated once and cached for subsequent frames. The cache auto updates when changes in parameters are detected
+  * **Cache Update Indicator** 
+    * **0: OFF** - Never show the red dot indicator on screen when the cache updates
+    * **1: ON** - Appears whenever the graphics are regenerated and cache is updated, when caching is off or if the cache is auto-updated
+    * **2: ONLY WHEN CACHE OFF** - Indicator does not appear on auto-update, It only appears when caching is off
+
+
+-----------------------------------------------------------------------------------------------
 **[ A/B SPLITSCREEN COMPARE ]:**
 
 - **Show:  CRT SHADER | ORIGINAL**
@@ -649,6 +661,29 @@ Blend parts of the image which flicker on/off repeatedly between frames often us
   - Freeze an image of the CRT tube at the current time on one side of the screen, while the area on the other side keeps updating to user changes
 - **Freeze Graphics (Freeze Left, New changes on Right)**
   - Freeze an image of the Graphics at the current time ion one side of the screen, while the area on the other side keeps updating to user changes
+
+
+- **[ SHOW PASS (For Debugging) ]:**
+
+Shows the results at different stages of the shader chain
+
+- **Show Pass Index**
+    * **0: END** - Result of the final pass
+    * **1: REFLECTION** - Shows te Reflection pass (includes final image of the tube)
+    * **2: TUBE** - Shows the pass with the tube effects applied, E.G. vignette, diffuse, static reflection
+    * **3: CRT** - The CRT effect only
+    * **4: INTERLACE** - The stage before the CRT which has interlacing effects added
+    * **5: COLOR CORRECT & UPSCALE** - Color Correct, and upscaling like ScaleFx or SuperXBR are applied here
+    * **6: DEDITHER** - ADV passes only, at this point dithering should be blended together
+    * **7: DREZ** - DREZ passes only, shows result after the downsampling pass
+    * **8: CORE** - This is the initial input into the shader pipeline
+    * **9: LAYERS TOP** - Just the pass which composites all the layers which are in front of the CRT tube
+    * **10: LAYERS BOTTOM** - Just the pass which composites all the layers which are behind the CRT tube
+- **Apply Screen Scale & Curvature to Unscaled Passes**
+    * **0: Show exact output of the chosen pass**
+    * **1: Apply scale and curvature to the output of the chosen pass so it is easier to directly compare between earlier and later passes**
+- **Show Alpha Channel**
+    Show the alpha channel of the pass. E.G. the alpha channel of the Layers Bottom pass is the reflection mask
 
 -----------------------------------------------------------------------------------------------
 **[ SCREEN VIGNETTE ]:**
@@ -672,6 +707,24 @@ Blend parts of the image which flicker on/off repeatedly between frames often us
 - **Monochrome Hue Offset** 
 - **Monochrome Saturation** 
 
+
+-----------------------------------------------------------------------------------------------
+**[ TUBE ASPECT & EMPTY SPACE ]:**
+
+- **Tube Aspect** - Default is 2: Explicit
+  - 0 - EVEN - If there is empty tube space added it will be added evenly on all sides. If there is no empty space then the aspect ratio will match the screen aspect.
+  - 1 - SCREEN - Have the tube keep the same aspect of the game screen as empty space is added
+  - 2 - EXPLICIT - Sets the explicit aspect ratio of the tube
+- **Explicit Tube Aspect**
+  - Aspect used when Tube Aspect is set to Explicit
+- **Empty Tube Thickness**
+  - Amount of Empty tube around the game image
+- **Empty Tube Thicknes X Scale**
+  - Amount of Empty tube around the game image horizontally
+- **Screen (Game Image) Corner Radius Scale**
+  - How round are the corners of the CRT image on top of empty area of the tube
+
+
 -----------------------------------------------------------------------------------------------
 **[ TUBE DIFFUSE IMAGE ]:**
 
@@ -689,10 +742,6 @@ The color/texture of the tube which appears behind the CRT image
   - A multiplier on the amount of global ambient lighting applied
 - **Scale**
 - **Scale X**
-- **Empty Tube Thickness**
-  - Amount of Empty tube around the game image
-- **Empty Tube Thicknes X Scale**
-  - Amount of Empty tube around the game image horizontally
 
 -----------------------------------------------------------------------------------------------
 **[ TUBE SHADOW IMAGE ]:**
@@ -707,6 +756,7 @@ Adds a shadow on top of the tube diffuse image and colored gel
 - **Scale X** 
 - **Scale Y** - Scales shadow from the top of the tube
 - **Curvature Scale** - How much curvature is applied to the shadow, more curvature has the effect of making it look like the light is higher relative to the tube/bezel
+
 
 -----------------------------------------------------------------------------------------------
 **[ CRT ON TUBE DIFFUSE BLENDING ]:**
@@ -768,6 +818,7 @@ Adds a shadow on top of the tube diffuse image and colored gel
   - Set this to 0 or less to remove the black edge
 - **Black Edge Thickness X Scale** --- Scale the thickness on the left and right edge
 
+
 -----------------------------------------------------------------------------------------------
 **[ DUAL SCREEN ]:**
 
@@ -807,6 +858,7 @@ Adds a shadow on top of the tube diffuse image and colored gel
 - **2nd Screen Crop Overscan Left**
 - **2nd Screen Crop Overscan Right**
 
+
 -----------------------------------------------------------------------------------------------
 **[ REFLECTION POSITION & SCALE ]:**
 
@@ -817,6 +869,7 @@ Adds a shadow on top of the tube diffuse image and colored gel
   - Shift the reflection left or right
 - **Screen Reflection Pos Y**
   - Shift the reflection up or down
+
 
 -----------------------------------------------------------------------------------------------
 **[ AMBIENT LIGHTING IMAGE 1 ]:**
@@ -850,8 +903,7 @@ Adds a shadow on top of the tube diffuse image and colored gel
 
 
 -----------------------------------------------------------------------------------------------
-**[ AMBIENT LIGHTING IMAGE 2 ]:** - Has the same parameters as Ambiend Image 1
-
+**[ AMBIENT LIGHTING IMAGE 2 ]:** - Has the same parameters as Ambient Image 1
 
 
 -----------------------------------------------------------------------------------------------
@@ -865,6 +917,7 @@ Adds a shadow on top of the tube diffuse image and colored gel
 - **Use Independent Curvature** --- Define curvature separately from the screen
 - **Independent Curvature X** --- Horizontal curvature for the bezel when independent
 - **Independent Curvature Y** --- Vertical curvature for the bezel when independent
+
 
 -----------------------------------------------------------------------------------------------
 **[ BEZEL GENERAL ]:**
@@ -954,6 +1007,7 @@ Adds a shadow on top of the tube diffuse image and colored gel
 - **Value/Brightness**
   - The brightness of the color, default is 10 which is 10%
 
+
 -----------------------------------------------------------------------------------------------
 **[ FRAME COLOR ]:**
 
@@ -965,6 +1019,7 @@ Adds a shadow on top of the tube diffuse image and colored gel
   - How saturated or strong the color is
 - **Value/Brightness**
   - The brightness of the color, default is 10 which is 10%
+
 
 -----------------------------------------------------------------------------------------------
 **[ FRAME GENERAL ]:**
@@ -1007,20 +1062,6 @@ Adds a shadow on top of the tube diffuse image and colored gel
 -----------------------------------------------------------------------------------------------
 **[ REFLECTION ]:**
 
-- **Blend Mode** - How the reflection is applied to the layer underneath Default is 2
-  - **0 - Off** - The layer is not shown
-  - **1 - Normal Blending**
-  - **2 - Additive Blending** - Applied additively to brighten what's underneath
-- **Mask** - Mask the reflection with the area inside the:
-  - **0 - ALL** - Whole viewport
-  - **1 - Screen** - Illuminated area of the tube
-  - **2 - Tube**
-  - **2 - Bezel and Inward** - Bezel and inward
-  - **3 - Bezel**
-  - **4 - Bezel +** - Bezel and outward
-  - **5 - Frame**
-  - **6 - Frame +** - Frame and outward
-  - **7 - Background**  - Outside the frame
 - **Global Amount**
   - Overall multiplier on the amount of reflection shown
 - **Global Gamma Adjust**
@@ -1054,8 +1095,7 @@ Adds a shadow on top of the tube diffuse image and colored gel
   - When the reflection fades out towards the corners, for example on the bottom bezel the reflection fades out towards the left and right. The position where the fade starts.
 - **Lateral Outer Fade Distance**
   - For the lateral fade the distance for it to fade out
-- **Viewport Vignette (For Glass Presets)**
-  - Adds a vignette over the entire viewport to darken the areas as it goes towards the edges used to darken the reflection in the glass preset
+
 
 -----------------------------------------------------------------------------------------------
 **[ REFLECTION CORNER ]:**
@@ -1095,12 +1135,39 @@ Adds a shadow on top of the tube diffuse image and colored gel
 - **Sample Distance**
   - What is the farthest distance away from the point being drawn where the scattered sample come from
 
+
+
 -----------------------------------------------------------------------------------------------
-**[ GLASS BORDER ]:**
+**[ REFLECTION MASK IMAGE - Only in Image Layer Presets ]:**
 
-- **Glass Border ON (Glass Preset Only)**
+- **Reflection Image Mask Amount**
+  - How much the image darkens the reflection
+- **Follow Layer**
+  - Which layer should the image mask match, Default is 4, Following the Device
+  - **0 - FULL**
+  - **1 - TUBE**
+  - **2 - BEZEL**
+  - **3 - BG**
+  - **4 - DEVICE**
+  - **5 - DECAL**
+  - **6 - CAB**
+  - **7 - TOP**
+- **Follow Mode**
+  - Should the image follow exactly 
+  - **0 - FOLLOW SCALE & POS** - Follows only position and orientation
+  - **1 - FOLLOW EXACTLY** - Follows curvature and split mode
+- **Mask Brightness** - Brighten's the mask which brightens the reflection
+- **Mask Black Level** - Increases the black level so that the darker areas of the maskbecome  darker, can help increase contrast
+- **Mipmapping Blend Bias (Affects Sharpness)** - Makes the effect of the mask blurrier or sharper
+
+-----------------------------------------------------------------------------------------------
+**[ REFLECTION GLASS ]:**
+
+- **Glass Border ON (For Glass Preset)**
   - Changes the appearance of the reflection to look like the glass effect, this is here for technical reasons, not very useful to change interactively
-
+- **Glass Reflection Vignette**
+  - Adds a vignette over the entire viewport to darken the areas as it goes towards the edges used to darken the reflection in the glass preset
+- **Glass Reflection Vignette Size**
 
 
 

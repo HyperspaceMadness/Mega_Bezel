@@ -108,6 +108,58 @@ vec4 BlendModeMaskLayerMix(vec4 color_under, vec4 color_over, float blend_mode, 
 	return out_color;
 }
 
+vec2 HSM_GetLayerCoord(vec2 in_viewport_coord, float layer_to_follow, float follow_mode, inout vec2 out_placement_scale)
+{
+	vec2 flat_coord = vec2(0.5);
+	vec2 curved_coord = vec2(0.5);
+	vec2 out_coord = vec2(0.5);
+
+	if (layer_to_follow == FOLLOW_LAYER_VIEWPORT)
+	{
+		flat_coord = in_viewport_coord;
+		curved_coord = in_viewport_coord;
+	}
+	else if (layer_to_follow == FOLLOW_LAYER_TUBE_DIFFUSE)
+	{
+		flat_coord = TUBE_DIFFUSE_COORD;
+		curved_coord = TUBE_DIFFUSE_CURVED_COORD;
+	}
+	else if (layer_to_follow == FOLLOW_LAYER_BEZEL_OUTSIDE)
+	{
+		flat_coord = BEZEL_OUTSIDE_COORD;
+		curved_coord = BEZEL_OUTSIDE_CURVED_COORD;
+	}
+	else if (layer_to_follow == FOLLOW_LAYER_BG)
+	{
+		flat_coord = BACKGROUND_COORD;
+		curved_coord = BACKGROUND_CURVED_COORD;
+	}
+	else if (layer_to_follow == FOLLOW_LAYER_DEVICE)
+	{
+		flat_coord = DEVICE_COORD;
+		curved_coord = DEVICE_CURVED_COORD;
+	}
+	else if (layer_to_follow == FOLLOW_LAYER_DECAL)
+	{
+		flat_coord = DECAL_COORD;
+		curved_coord = DECAL_CURVED_COORD;
+	}
+	else if (layer_to_follow == FOLLOW_LAYER_CAB_GLASS)
+	{
+		flat_coord = CAB_GLASS_COORD;
+		curved_coord = CAB_GLASS_CURVED_COORD;
+	}
+	else if (layer_to_follow == FOLLOW_LAYER_TOP)
+	{
+		flat_coord = TOP_IMAGE_COORD;
+		curved_coord = TOP_IMAGE_CURVED_COORD;
+	}
+
+	out_coord = follow_mode == FOLLOW_MODE_EXACT ? curved_coord : flat_coord;
+
+	return  out_coord;
+}
+
 // Takes a viewport coordinate and gives a new coordinate scaled by the specific scale mode
 // Takes into account the default sizes of each scale mode
 vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
@@ -313,19 +365,20 @@ layout(location = 0) out vec4 FragColor;
 // Pass Framebuffer Textures
 layout(set = 0, binding = 1)  uniform sampler2D InfoCachePass;
 
-layout(set = 0, binding = 3)  uniform sampler2D BackgroundImage;
-layout(set = 0, binding = 4)  uniform sampler2D BackgroundVertImage;
-layout(set = 0, binding = 5)  uniform sampler2D NightLightingImage;
-layout(set = 0, binding = 6)  uniform sampler2D NightLighting2Image;
+layout(set = 0, binding = 2)  uniform sampler2D BackgroundImage;
+layout(set = 0, binding = 3)  uniform sampler2D BackgroundVertImage;
+layout(set = 0, binding = 4)  uniform sampler2D NightLightingImage;
+layout(set = 0, binding = 5)  uniform sampler2D NightLighting2Image;
 
-layout(set = 0, binding = 7)  uniform sampler2D LEDImage;
-layout(set = 0, binding = 8)  uniform sampler2D FrameTextureImage;
-layout(set = 0, binding = 9)  uniform sampler2D DeviceImage;
-layout(set = 0, binding = 10) uniform sampler2D DeviceVertImage;
-layout(set = 0, binding = 11) uniform sampler2D DeviceLEDImage;
-layout(set = 0, binding = 12) uniform sampler2D DecalImage;
-layout(set = 0, binding = 13) uniform sampler2D CabinetGlassImage;
-layout(set = 0, binding = 14) uniform sampler2D TopLayerImage;
+layout(set = 0, binding = 6)  uniform sampler2D LEDImage;
+layout(set = 0, binding = 7)  uniform sampler2D FrameTextureImage;
+layout(set = 0, binding = 8)  uniform sampler2D DeviceImage;
+layout(set = 0, binding = 9) uniform sampler2D DeviceVertImage;
+layout(set = 0, binding = 10) uniform sampler2D DeviceLEDImage;
+layout(set = 0, binding = 11) uniform sampler2D DecalImage;
+layout(set = 0, binding = 12) uniform sampler2D CabinetGlassImage;
+layout(set = 0, binding = 13) uniform sampler2D TopLayerImage;
+layout(set = 0, binding = 14) uniform sampler2D ReflectionMaskImage;
 
 #ifdef LAYERS_OVER_CRT
 layout(set = 0, binding = 15) uniform sampler2D BR_LayersOverCRTPassFeedback;
@@ -1181,6 +1234,24 @@ void main()
 		frag_color_linear = HSM_PreMultAlphaBlend(frag_color_linear, vec4(0.05, 0.05, 0.05, 1) * 0.15 * (1 - debug_mask));
 		frag_color_linear = clamp(frag_color_linear, 0, 1);
 	}
+
+	#ifdef LAYERS_UNDER_CRT
+	// Store reflection mask in the alpha channel
+	// Usually used to show the uneven brightness of a bumpy surface
+	if (HSM_REFLECT_MASK_IMAGE_AMOUNT > 0)
+	{
+		vec2 reflect_mask_scale = vec2(0.5);
+		vec2 reflect_mask_coord = HSM_GetLayerCoord(VIEWPORT_COORD, HSM_REFLECT_MASK_FOLLOW_LAYER, HSM_REFLECT_MASK_FOLLOW_MODE, reflect_mask_scale);
+		float reflect_mask = HSM_GetMipmappedTexSample(ReflectionMaskImage, reflect_mask_coord, reflect_mask_scale, HSM_REFLECT_MASK_MIPMAPPING_BLEND_BIAS).r;
+		reflect_mask = clamp(HSM_REFLECT_MASK_BLACK_LEVEL * (reflect_mask - 1) + 1, 0, 1);
+		reflect_mask *= HSM_REFLECT_MASK_BRIGHTNESS;
+
+		frag_color_linear.a = HSM_REFLECT_MASK_IMAGE_AMOUNT * reflect_mask + (1 - HSM_REFLECT_MASK_IMAGE_AMOUNT);
+	}
+	else
+		frag_color_linear.a = 1;
+
+	#endif
 
 	FragColor = frag_color_linear;
 

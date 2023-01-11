@@ -16,9 +16,9 @@
 #reference "Components/59__prep__gdv-interlace.slangp"
 #reference "Components/60__crt__megatron.slangp"
 #reference "Components/68__post-crt.slangp"
+#reference "Components/80__bezel-images.slangp"
 #reference "Components/69__reflection-prep-hdr.slangp"
 #reference "Components/70__reflection.slangp"
-#reference "Components/80__bezel-images.slangp"
 #reference "Components/85__combine-passes-hdr.slangp"
 
 #reference "Components/90__textures__all.slangp"
