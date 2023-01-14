@@ -253,6 +253,7 @@ float_framebuffer41 = true
 alias41 = "CRTPass"
 
 shader42 = ../../shaders/base/post-crt-prep-image-layers.slang
+mipmap_input42 = true
 scale_type42 = viewport
 float_framebuffer42 = true
 alias42 = "PostCRTPass"

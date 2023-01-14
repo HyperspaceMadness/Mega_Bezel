@@ -145,6 +145,7 @@ float_framebuffer20 = true
 alias20 = "CRTPass"
 
 shader21 = ../../shaders/base/post-crt-prep-glass.slang
+mipmap_input21 = true
 scale_type21 = viewport
 float_framebuffer21 = true
 alias21 = "PostCRTPass"

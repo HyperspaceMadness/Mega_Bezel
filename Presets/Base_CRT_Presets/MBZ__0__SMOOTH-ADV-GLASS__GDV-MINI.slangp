@@ -190,6 +190,7 @@ g_sat = 0.15
 g_gamma_out = 2.45
 
 shader34 = ../../shaders/base/post-crt-prep-glass.slang
+mipmap_input34 = true
 scale_type34 = viewport
 float_framebuffer34 = true
 alias34 = "PostCRTPass"

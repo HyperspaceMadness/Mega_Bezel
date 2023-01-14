@@ -181,6 +181,7 @@ float_framebuffer30 = "true"
 alias30 = "CRTPass"
 
 shader31 = ../../shaders/base/post-crt-prep-no-reflect.slang
+mipmap_input31 = true
 scale_type31 = viewport
 float_framebuffer31 = true
 alias31 = "PostCRTPass"

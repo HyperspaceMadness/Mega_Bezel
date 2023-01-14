@@ -21,8 +21,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-
-#include "common/globals-and-screen-scale-params.inc"
+// HSM_REFLECT_SHOW_TUBE_FX_AMOUNT
+#include "common/globals-and-reflection-params.inc"
 #include "common/helper-functions.inc"
 
 layout(push_constant) uniform Push
@@ -68,7 +68,9 @@ void main()
     FragColor = textureLod(CRTPass, vTexCoord, 2);
     FragColor = HSM_ApplyGamma(FragColor, DEFAULT_SRGB_GAMMA);
 #else
-    FragColor = textureLod(PostCRTPass, vTexCoord, 2);
+    vec4 crt_rgba = textureLod(CRTPass, vTexCoord, 2);
+    vec4 post_crt_rgba = textureLod(PostCRTPass, vTexCoord, 2);
+    FragColor = mix(crt_rgba, post_crt_rgba, HSM_REFLECT_SHOW_TUBE_FX_AMOUNT);
 #endif
 
     FragColor = HSM_ApplyGamma(FragColor, DEFAULT_SRGB_GAMMA/DEFAULT_CRT_GAMMA - 0.05);

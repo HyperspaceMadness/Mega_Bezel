@@ -103,6 +103,7 @@ float_framebuffer15 = "true"
 alias15 = "CRTPass"
 
 shader16 = ../../shaders/base/post-crt-prep-potato.slang
+mipmap_input16 = true
 scale_type16 = viewport
 float_framebuffer16 = true
 alias16 = "PostCRTPass"

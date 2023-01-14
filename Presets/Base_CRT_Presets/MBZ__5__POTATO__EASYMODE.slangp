@@ -114,6 +114,7 @@ alias17 = "CRTPass"
 g_gamma_out = 2.45
 
 shader18 = ../../shaders/base/post-crt-prep-potato.slang
+mipmap_input18 = true
 scale_type18 = viewport
 float_framebuffer18 = true
 alias18 = "PostCRTPass"

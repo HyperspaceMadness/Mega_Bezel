@@ -93,6 +93,7 @@ g_sat = 0.15
 g_gamma_out = 2.45
 
 shader13 = ../../shaders/base/post-crt-prep-potato.slang
+mipmap_input13 = true
 scale_type13 = viewport
 float_framebuffer13 = true
 alias13 = "PostCRTPass"

@@ -142,6 +142,7 @@ float_framebuffer19 = true
 alias19 = "CRTPass"
 
 shader20 = ../../shaders/base/post-crt-prep-potato.slang
+mipmap_input20 = true
 scale_type20 = viewport
 float_framebuffer20 = true
 alias20 = "PostCRTPass"

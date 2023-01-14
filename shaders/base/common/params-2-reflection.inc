@@ -58,6 +58,8 @@ float HSM_REFLECT_FRAME_INNER_EDGE_AMOUNT = global.HSM_REFLECT_FRAME_INNER_EDGE_
 #pragma parameter HSM_REFLECT_FRAME_INNER_EDGE_SHARPNESS 	    "          Frame Inner Edge Sharpness" 90 0 90 2
 float HSM_REFLECT_FRAME_INNER_EDGE_SHARPNESS = global.HSM_REFLECT_FRAME_INNER_EDGE_SHARPNESS / 100;
 
+#pragma parameter HSM_REFLECT_SHOW_TUBE_FX_AMOUNT 	            "          Show Tube Effects in Reflection Amount" 100 0 100 2
+float HSM_REFLECT_SHOW_TUBE_FX_AMOUNT = global.HSM_REFLECT_SHOW_TUBE_FX_AMOUNT / 100;
 
 //---------------------------------------------------------------------------------------------------
 // Reflection Fading

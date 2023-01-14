@@ -196,6 +196,7 @@ alias35 = "CRTPass"
 g_gamma_out = 2.45
 
 shader36 = ../../shaders/base/post-crt-prep-glass.slang
+mipmap_input36 = true
 scale_type36 = viewport
 float_framebuffer36 = true
 alias36 = "PostCRTPass"

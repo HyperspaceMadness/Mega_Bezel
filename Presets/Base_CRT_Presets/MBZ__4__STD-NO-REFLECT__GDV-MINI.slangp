@@ -111,6 +111,7 @@ g_sat = 0.15
 g_gamma_out = 2.45
 
 shader17 = ../../shaders/base/post-crt-prep-no-reflect.slang
+mipmap_input17 = true
 scale_type17 = viewport
 float_framebuffer17 = true
 alias17 = "PostCRTPass"

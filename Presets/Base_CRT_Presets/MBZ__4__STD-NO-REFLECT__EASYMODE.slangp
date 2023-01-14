@@ -117,6 +117,7 @@ alias18 = "CRTPass"
 g_gamma_out = 2.45
 
 shader19 = ../../shaders/base/post-crt-prep-no-reflect.slang
+mipmap_input19 = true
 scale_type19 = viewport
 float_framebuffer19 = true
 alias19 = "PostCRTPass"

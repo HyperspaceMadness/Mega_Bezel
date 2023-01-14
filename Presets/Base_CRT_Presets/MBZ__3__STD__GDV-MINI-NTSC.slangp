@@ -137,6 +137,7 @@ g_sat = 0.15
 g_gamma_out = 2.45
 
 shader21 = ../../shaders/base/post-crt-prep-image-layers.slang
+mipmap_input21 = true
 scale_type21 = viewport
 float_framebuffer21 = true
 alias21 = "PostCRTPass"
