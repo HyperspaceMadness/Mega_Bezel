@@ -396,17 +396,17 @@ float print_integer(float number, int zeros, vec2 uv)
 
 #define eps 1e-3
 
-float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 derezed_size, vec2 negative_crop_added_size, vec2 cropped_original_size, vec2 sampling_res, vec2 int_mult)
+float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec4 screen_region, vec2 derezed_size, vec2 negative_crop_added_size, vec2 cropped_original_size, vec2 sampling_res, vec2 int_mult)
 {
     float col = 0.0;
     
     float current_line_index = 0;
     float margin = STRHEIGHT(1);
 
-    //Resolution Text
+    // Resolution Text
     print_pos = vec2(margin, 0);
 
-    // Line 14 Viewport Resolution ----------------------------------------------------
+    // Viewport Resolution ----------------------------------------------------
     print_pos.x = margin;
     print_pos.y += STRHEIGHT(1);  
 
@@ -417,7 +417,20 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
    _spc _x _spc
    TEXT_MASK += print_integer(viewport_size.y, 0, uv); 
 
-    // Line 13 Screen Resolution ----------------------------------------------------------
+    // Screen Region ----------------------------------------------------------
+    print_pos.x = margin;
+    print_pos.y += STRHEIGHT(1);
+
+   _S _c _r _e _e _n _spc _R _e _g _i _o _n _spc _dsh _spc
+   TEXT_MASK += print_integer(screen_region.x, 0, uv);
+   _spc 
+   TEXT_MASK += print_integer(screen_region.y, 0, uv);
+   _spc 
+   TEXT_MASK += print_integer(screen_region.z, 0, uv);
+   _spc 
+   TEXT_MASK += print_integer(screen_region.w, 0, uv);
+
+    // Screen Resolution ----------------------------------------------------------
     print_pos.x = margin;
     print_pos.y += STRHEIGHT(1);
 
@@ -426,21 +439,21 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
    _spc _x _spc
    TEXT_MASK += print_integer(screen_size.y, 0, uv);
 
-    // Line 12 Final Aspect Ratio ----------------------------------------------------------
+    // Final Aspect Ratio ----------------------------------------------------------
     print_pos.x = margin;
     print_pos.y += STRHEIGHT(1);
     
    _F _i _n _a _l _spc _A _s _p _e _c _t _spc _dsh _dsh _spc
    TEXT_MASK += print_number(screen_size.x/screen_size.y > 1 ? screen_size.x/screen_size.y : screen_size.y/screen_size.x, print_pos, uv);
 
-    // Line 11 Non-Int Scale Percent ----------------------------------------------------------
+    // Non-Int Scale Percent ----------------------------------------------------------
     print_pos.x = margin;
     print_pos.y += STRHEIGHT(1);
     
     _N _o _n _spc _I _n _t _spc _S _c _l _spc _pct _dsh _dsh _spc
     TEXT_MASK += print_number(screen_size.y / viewport_size.y * 100, print_pos, uv);
 
-    // Line 10 Int Scale Vertical ----------------------------------------------------------
+    // Int Scale Vertical ----------------------------------------------------------
     print_pos.x = margin;
     print_pos.y += STRHEIGHT(1);
     
@@ -451,7 +464,7 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
     else
         TEXT_MASK += print_number(int_mult.y, print_pos, uv);
 
-    // Line 09 Int Scale Horizontal ----------------------------------------------------------
+    // Int Scale Horizontal ----------------------------------------------------------
     print_pos.x = margin;
     print_pos.y += STRHEIGHT(1);
     
@@ -462,7 +475,7 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
     else
         TEXT_MASK += print_number(int_mult.x, print_pos, uv);
 
-    // Line 08 Sampling Resolution ----------------------------------------------------------
+    // Sampling Resolution ----------------------------------------------------------
     if (cropped_original_size.x != sampling_res.x || cropped_original_size.y != sampling_res.y)
     {
       print_pos.x = margin;
@@ -476,7 +489,7 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
     }
 
 
-    // Line 07 CROPPED Resolution ----------------------------------------------------------
+    // CROPPED Resolution ----------------------------------------------------------
     if (cropped_original_size.x != ROTATED_CORE_PREPPED_SIZE.x || cropped_original_size.y != ROTATED_CORE_PREPPED_SIZE.y)
     {
         print_pos.x = margin;
@@ -490,7 +503,7 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
     }
 
 
-    // Line 06 Negative Crop Resolution ----------------------------------------------------------
+    // Negative Crop Resolution ----------------------------------------------------------
     if (derezed_size.x != ROTATED_CORE_PREPPED_SIZE.x || derezed_size.y != ROTATED_CORE_PREPPED_SIZE.y)
     {
       print_pos.x = margin;
@@ -504,7 +517,7 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
     }
 
 
-    // Line 05 DEREZ Resolution ----------------------------------------------------------
+    // DEREZ Resolution ----------------------------------------------------------
     if (derezed_size.x != ROTATED_CORE_ORIGINAL_SIZE.x || derezed_size.y != ROTATED_CORE_ORIGINAL_SIZE.y)
     {
         print_pos.x = margin;
@@ -518,7 +531,7 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
     }
 
 
-    // Line 04 CORE Resolution ----------------------------------------------------------
+    // CORE Resolution ----------------------------------------------------------
     print_pos.x = margin;
     print_pos.y += STRHEIGHT(1);
     
@@ -552,8 +565,7 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
    _P _O _T _A _T _O
 #endif
 
-
-    // Line 02 Version ----------------------------------------------------------
+    // Version ----------------------------------------------------------
     print_pos.x = margin;
     print_pos.y += STRHEIGHT(1);
 
@@ -563,7 +575,7 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec2 dereze
    // Date
    _2 _0 _2 _3 _dsh _0 _1 _dsh _1 _1
 
-    // Line 01 Title ----------------------------------------------------------
+    // Title ----------------------------------------------------------
     print_pos.x = margin;
     print_pos.y += STRHEIGHT(1);
 
@@ -579,6 +591,19 @@ vec2 GetIntegerScaleMult(vec2 screen_size, vec2 cropped_size)
 	integer_scale = vec2(abs(integer_scale.x - round(integer_scale.x)) < epsilon ? round(integer_scale.x) : integer_scale.x,
 						 abs(integer_scale.y - round(integer_scale.y)) < epsilon ? round(integer_scale.y) : integer_scale.y);
 	return integer_scale;
+}
+
+vec4 GetScreenRegion(vec2 screen_size)
+{
+    vec2 position_offset = SCREEN_POS_OFFSET * global.FinalViewportSize.xy * HSM_VIEWPORT_ZOOM + 
+                           vec2(-HSM_VIEWPORT_POSITION_X, HSM_VIEWPORT_POSITION_Y) * HSM_VIEWPORT_ZOOM * global.FinalViewportSize.xy;
+
+    vec2 top_left = global.FinalViewportSize.xy / 2 - screen_size / 2 + position_offset;
+
+    vec2 bottom_right = global.FinalViewportSize.xy / 2 + screen_size / 2 + position_offset;
+
+    vec4 out_region = round(vec4(top_left, bottom_right));
+    return out_region;
 }
 
 float GetText(vec2 in_coord)
@@ -597,7 +622,9 @@ float GetText(vec2 in_coord)
    vec2 uv = global.OutputSize.xy * in_coord;
 	vec2 downscaled_uv = floor(global.OutputSize.xy * in_coord / downscale);
 
-	float pixel = DrawResolutions(downscaled_uv, global.FinalViewportSize.xy, SCREEN_SIZE, ROTATED_DEREZED_SIZE, ROTATED_CORE_PREPPED_SIZE, CROPPED_ROTATED_SIZE, CROPPED_ROTATED_SIZE_WITH_RES_MULT, int_mult);
+    vec4 screen_region = GetScreenRegion(SCREEN_SIZE);
+
+	float pixel = DrawResolutions(downscaled_uv, global.FinalViewportSize.xy, SCREEN_SIZE, screen_region, ROTATED_DEREZED_SIZE, ROTATED_CORE_PREPPED_SIZE, CROPPED_ROTATED_SIZE, CROPPED_ROTATED_SIZE_WITH_RES_MULT, int_mult);
     
     vec3 col = vec3(1);
     pixel *= (1 - distance(mod(uv, vec2(1.0)), vec2(0.65))) * 1.2;
