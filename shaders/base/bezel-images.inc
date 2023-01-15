@@ -730,7 +730,12 @@ void main()
 												BACKGROUND_COORD,
 												BACKGROUND_SCALE);
 
-	if (HSM_BG_MIRROR_WRAP == 1)
+	// Tile Wrap the background
+	if (HSM_BG_WRAP_MODE == 1)
+		BACKGROUND_CURVED_COORD = mod(BACKGROUND_CURVED_COORD, 1.0);
+	
+	// Mirror Wrap the bBackground
+	if (HSM_BG_WRAP_MODE == 2)
 		BACKGROUND_CURVED_COORD = HSM_GetMirrorWrapCoord(BACKGROUND_CURVED_COORD);
 
 	vec4 bg_image = vec4(0);

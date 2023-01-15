@@ -483,7 +483,7 @@ float HSM_REFLECT_MASK_MIPMAPPING_BLEND_BIAS;
 	float HSM_BG_SCALE_X;
 	float HSM_BG_POS_X;
 	float HSM_BG_POS_Y;
-	float HSM_BG_MIRROR_WRAP;
+	float HSM_BG_WRAP_MODE;
 	float HSM_BG_MIPMAPPING_BLEND_BIAS;
 
 	// Background Vignette

@@ -851,6 +851,10 @@ bool HSM_Fill_Ambient_Images(vec2 in_viewport_coord, vec2 in_viewport_unscaled_c
 
 		if (HSM_AMBIENT1_OPACITY > 0)
 		{
+			float ambient1_scale = HSM_AMBIENT1_SCALE;
+			if (HSM_AMBIENT1_SCALE_INHERIT_MODE == 1 && HSM_AMBIENT1_SCALE * HSM_VIEWPORT_ZOOM < 1)
+				ambient1_scale = 1 / HSM_VIEWPORT_ZOOM;
+
 			vec2 lighting_coord = GetSimpleImageScaledCoord(in_viewport_coord, 
 															in_viewport_unscaled_coord,
 															in_tube_coord,
@@ -858,7 +862,7 @@ bool HSM_Fill_Ambient_Images(vec2 in_viewport_coord, vec2 in_viewport_unscaled_c
 															in_ambient_sampler,
 															vec2(HSM_AMBIENT1_POSITION_X, HSM_AMBIENT1_POSITION_Y),
 															HSM_AMBIENT1_POS_INHERIT_MODE, 
-															vec2(HSM_AMBIENT1_SCALE * HSM_AMBIENT1_SCALE_X, HSM_AMBIENT1_SCALE), 
+															vec2(ambient1_scale * HSM_AMBIENT1_SCALE_X, ambient1_scale), 
 															HSM_AMBIENT1_SCALE_INHERIT_MODE, 
 															HSM_AMBIENT1_SCALE_KEEP_ASPECT,
 															HSM_AMBIENT1_MIRROR_HORZ,
@@ -875,6 +879,10 @@ bool HSM_Fill_Ambient_Images(vec2 in_viewport_coord, vec2 in_viewport_unscaled_c
 
 		if (HSM_AMBIENT2_OPACITY > 0)
 		{
+			float ambient2_scale = HSM_AMBIENT2_SCALE;
+			if (HSM_AMBIENT2_SCALE_INHERIT_MODE == 1 && HSM_AMBIENT2_SCALE * HSM_VIEWPORT_ZOOM < 1)
+				ambient2_scale = 1 / HSM_VIEWPORT_ZOOM;
+
 			vec2 lighting2_coord = GetSimpleImageScaledCoord(in_viewport_coord, 
 															in_viewport_unscaled_coord,
 															in_tube_coord,
@@ -882,7 +890,7 @@ bool HSM_Fill_Ambient_Images(vec2 in_viewport_coord, vec2 in_viewport_unscaled_c
 															in_ambient2_sampler,
 															vec2(HSM_AMBIENT2_POSITION_X, HSM_AMBIENT2_POSITION_Y),
 															HSM_AMBIENT2_POS_INHERIT_MODE, 
-															vec2(HSM_AMBIENT2_SCALE * HSM_AMBIENT2_SCALE_X, HSM_AMBIENT2_SCALE), 
+															vec2(ambient2_scale * HSM_AMBIENT2_SCALE_X, ambient2_scale), 
 															HSM_AMBIENT2_SCALE_INHERIT_MODE, 
 															HSM_AMBIENT2_SCALE_KEEP_ASPECT,
 															HSM_AMBIENT2_MIRROR_HORZ,

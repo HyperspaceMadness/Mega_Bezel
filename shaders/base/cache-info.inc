@@ -864,7 +864,7 @@ float HSM_GetParameterSum()
 					+ HSM_BG_SCALE_X * 100
 					+ HSM_BG_POS_X * 100
 					+ HSM_BG_POS_Y * 100
-					+ HSM_BG_MIRROR_WRAP
+					+ HSM_BG_WRAP_MODE
 					+ HSM_BG_MIPMAPPING_BLEND_BIAS
 
 					// Background Vignette

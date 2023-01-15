@@ -6,6 +6,10 @@ Changes:
   * Added some more Sinden presets for SCREEN-ONLY and POTATO
   * Added Screen Region to Resolution Debug text
     * Good for getting the screen region pixel coordinates if you need them
+  * Adjusted Ambient Lighting Scaling when using the Inherit Zoom scale mode
+    * Now when you zoom out it is much less likely to generate a black frame covering the outer parts of the background image
+    * The minimum size of the lighting texture will be close to the height of the current viewport
+    * This reduces the likelihood that we will see the cutoff
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
