@@ -40,29 +40,18 @@ THE SOFTWARE.
 
 */
 
-
-layout(push_constant) uniform Push
-{
-	vec4 SourceSize;
-	float SFX_CLR;
-	float SFX_SAA;
-	float HSM_SCALEFX_ON;
-	// float HSM_SCALEFX_SOURCE_RES_DIVISION_FACTOR;
-} params;
-
+#include "hsm-scalefx.inc"
 
 // #pragma parameter SFX_CLR "ScaleFX Threshold" 0.50 0.01 1.00 0.01
-#define SFX_CLR 0.5
+// #define SFX_CLR 0.5
 
 // #pragma parameter SFX_SAA "ScaleFX Filter AA" 1.00 0.00 1.00 1.00
-#define SFX_SAA 1
+// #define SFX_SAA 1
 
 layout(set = 0, binding = 0, std140) uniform UBO
 {
    mat4 MVP;
 } global;
-
-#include "hsm-scalefx.inc"
 
 #pragma stage vertex
 layout(location = 0) in vec4 Position;

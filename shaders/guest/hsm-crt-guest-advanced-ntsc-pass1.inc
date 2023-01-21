@@ -33,29 +33,32 @@ layout(push_constant) uniform Push
 	float S_SHARP;
 	float HARNG;
 	float HSHARP;
-	float spike;
-	float internal_res;
+	float NTSCspike;
 } params;
 
-#pragma parameter bogus_filtering "[ FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
+//---------------------------------------------------------------------------------------------------
+// NTSC Filtering
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_NTSC_FILTERING_EMPTY_LINE		" " 0 0 0.001 0.001
+#pragma parameter HSM_NTSC_FILTERING_TITLE 	"[ NTSC FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-#pragma parameter HSHARPNESS "          Horizontal Filter Range -- HSHARPNESS" 1.5 1.0 8.0 0.05
+#pragma parameter HSHARPNESS 		"          NTSC Horizontal Filter Range -- HSHARPNESS" 1.5 1.0 8.0 0.05
 #define HSHARPNESS params.HSHARPNESS
 
-#pragma parameter SIGMA_HOR "          Horizontal Blur Sigma -- SIGMA_HOR" 0.90 0.1 7.0 0.05
+#pragma parameter SIGMA_HOR 		"          NTSC Horizontal Blur Sigma -- SIGMA_HOR" 0.90 0.1 7.0 0.05
 #define SIGMA_HOR params.SIGMA_HOR
 
-#pragma parameter S_SHARP "          Substractive Sharpness -- S_SHARP" 0.9 0.0 2.0 0.10
+#pragma parameter S_SHARP 			"          NTSC Substractive Sharpness -- S_SHARP" 0.9 0.0 2.0 0.10
 #define S_SHARP params.S_SHARP
 
-#pragma parameter HSHARP "          Sharpness Definition -- HSHARP" 1.2 0.0 2.0 0.10
+#pragma parameter HSHARP 			"          NTSC Sharpness Definition -- HSHARP" 1.2 0.0 2.0 0.10
 #define HSHARP params.HSHARP
 
-#pragma parameter HARNG "          Substractive Sharpness Ringing -- HARNG" 0.4 0.0 4.0 0.10
-#define HARNG params.HARNG 
+#pragma parameter HARNG 			"          NTSC Substractive Sharpness Ringing -- HARNG" 0.4 0.0 4.0 0.10
+#define HARNG params.HARNG
 
-#pragma parameter spike "          Scanline Spike Removal -- spike" 1.0 0.0 2.0 0.10
-#define spike params.spike
+#pragma parameter NTSCspike 		"          NTSC Scanline Spike Removal -- NTSCspike" 1.0 0.0 2.0 0.10
+#define spike params.NTSCspike
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
 
@@ -132,12 +135,11 @@ void main()
 	float wsum = 0.0;
 	vec3 pixel;
 
-	float hsharpness = HSHARPNESS;
 	vec3 cmax = 0.0.xxx;
 	vec3 cmin = 1.0.xxx;
-	float sharp = gaussian(hsharpness) * S_SHARP;
+	float sharp = gaussian(HSHARPNESS) * S_SHARP;
 	float maxsharp = 0.20;
-	float FPR = hsharpness;
+	float FPR = HSHARPNESS;
 	float fpx = 0.0;
 	float sp = 0.0;
 	float sw = 0.0;

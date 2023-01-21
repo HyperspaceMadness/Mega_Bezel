@@ -36,7 +36,8 @@ layout(push_constant) uniform Push
 	float SHAR;
 } params;
 
-#pragma parameter GSHARP_TITLE 	"[ G-SHARP RESAMPLER ]:"  0 0 0.01 0.01
+#pragma parameter HSM_GSHARP_EMPTY_LINE		" " 0 0 0.001 0.001
+#pragma parameter GSHARP_TITLE 	"[ --- G-SHARP RESAMPLER --- ]:"  0 0 0.01 0.01
 
 #pragma parameter GSHARP_ON 	"          G-SHARP ON" 	  0 0 1 1
 #define GSHARP_ON params.GSHARP_ON

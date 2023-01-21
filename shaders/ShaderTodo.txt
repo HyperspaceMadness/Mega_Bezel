@@ -10,14 +10,27 @@ Changes:
     * Now when you zoom out it is much less likely to generate a black frame covering the outer parts of the background image
     * The minimum size of the lighting texture will be close to the height of the current viewport
     * This reduces the likelihood that we will see the cutoff
+  * ScaleFx: Exposed more of the settings so they can be tweaked
+    * Default Settings changed:
+      * ScaleFx Threshold: now 0.43 (was 0.5)
+      * ScaleFx Filter Corners: now 0 (was 1)
+      * These settings result in a slighly clearer picture and less rounding of square corners
+  * SMOOTH-ADV ntsc presets: ntsc_scale adjusted so it visually matches the regular ADV ntsc presets
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Add back Raster Bloom
+  * Do new release
+  * Add Z-Fast to libretro repo
+  * Check difference between old and new NTSC
+  * Check out duplicate params in NTSC
+  * Check out independent bezel scale and reflection, reflection is not following the bezel
+  * Check brighter reflection in new NTSC
+
   * Update Dual Screen to use params files
-  * Swap out // for # in presets
-  * Add Reflection Mask back
+  * Swap out // for # in base presets
   * Add ability to have layers appear on top of the bezel but below the reflection
     * One way to do this would be to have a CRT/Reflection layer offset which forces layers below to be composited on top of the bezel
   * Fix CRT Blend Amount

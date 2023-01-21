@@ -42,25 +42,12 @@ THE SOFTWARE.
 */
 
 
-layout(push_constant) uniform Push
-{
-	vec4 SourceSize;
-	float SFX_SCN;
-	float HSM_SCALEFX_ON;
-	// float HSM_SCALEFX_SOURCE_RES_DIVISION_FACTOR;
-} params;
-
 #include "hsm-scalefx.inc"
-
-// #pragma parameter SFX_SCN "ScaleFX Filter Corners" 1.0 0.0 1.0 1.0
-#define SFX_SCN 1
-
 
 layout(set = 0, binding = 0, std140) uniform UBO
 {
    mat4 MVP;
 } global;
-
 
 #pragma stage vertex
 layout(location = 0) in vec4 Position;

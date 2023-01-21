@@ -40,16 +40,6 @@ THE SOFTWARE.
 
 */
 
-
-layout(push_constant) uniform Push
-{
-	vec4 SourceSize;
-	vec4 refpassSize;
-	float SFX_RAA;
-	float HSM_SCALEFX_ON;
-	// float HSM_SCALEFX_SOURCE_RES_DIVISION_FACTOR;
-} params;
-
 #include "hsm-scalefx.inc"
 
 // #pragma parameter SFX_RAA "ScaleFX rAA Sharpness" 2.0 0.0 10.0 0.05
