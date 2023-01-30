@@ -284,6 +284,7 @@ void main()
 			noise_size = HSM_SIGNAL_NOISE_SIZE_MULT;
 
 		vec3 noise0 = noise(vec3(floor(global.SourceSize.xy * vTexCoord / noise_size), float(global.FrameCount)), HSM_SIGNAL_NOISE_AMOUNT);		
+		noise0 = clamp(HSM_SIGNAL_NOISE_BLACK_LEVEL * (noise0 - 0.5) + 0.5, 0, 1);
 		if (HSM_SIGNAL_NOISE_TYPE < 0.5)
 			c = mix(c, 				
 					noise0,

@@ -3,31 +3,22 @@
 Mega Bezel is updated to V1.9.0_2023-01-22
 
 Changes:
-  * Added some more Sinden presets for SCREEN-ONLY and POTATO
-  * Added Screen Region to Resolution Debug text
-    * Good for getting the screen region pixel coordinates if you need them
-  * Adjusted Ambient Lighting Scaling when using the Inherit Zoom scale mode
-    * Now when you zoom out it is much less likely to generate a black frame covering the outer parts of the background image
-    * The minimum size of the lighting texture will be close to the height of the current viewport
-    * This reduces the likelihood that we will see the cutoff
-  * ScaleFx: Exposed more of the settings so they can be tweaked
-    * Default Settings changed:
-      * ScaleFx Threshold: now 0.43 (was 0.5)
-      * ScaleFx Filter Corners: now 0 (was 1)
-      * These settings result in a slighly clearer picture and less rounding of square corners
-  * SMOOTH-ADV ntsc presets: ntsc_scale adjusted so it visually matches the regular ADV ntsc presets
+  * Updated preset capability and performance table
+  * Added contrast for signal noise
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
   * Add back Raster Bloom
-  * Do new release
-  * Add Z-Fast to libretro repo
+  * Add AbsoluteMax as a scaling type
+  * Update Megatron
+  * Add readme for Signal Noise
   * Check difference between old and new NTSC
   * Check out duplicate params in NTSC
   * Check out independent bezel scale and reflection, reflection is not following the bezel
   * Check brighter reflection in new NTSC
+
 
   * Update Dual Screen to use params files
   * Swap out // for # in base presets

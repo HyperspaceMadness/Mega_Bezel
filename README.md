@@ -202,23 +202,64 @@ And of course I probably would never have started this without seeing the great 
 **Presets in Mega_Bezel / Presets**
 ----------------------------------------
 
-- All in the root of the Presets folder use @guest.r's awesome Guest-Advanced CRT shader which is considered the default CRT shader for the Mega Bezel, the only exception to this is the POTATO preset which uses GDV-MINI for performance reasons.
+- All in the root of the Presets folder use @guest.r's awesome Guest-Advanced CRT shader which is considered the default CRT shader for the Mega Bezel, the only exception to this is the POTATO preset which uses GDV-MINI for performance reasons. The following table is sorted by GPU performance and GPU RAM requirements
 
-|Category                |Reflection  |Image Layers |Tube Fx  |Pre-CRT Chain   |Smooth Upscale  
-|------------------------|------------|-------------|---------|----------------|---------------
-| MBZ__0__SMOOTH-ADV     | ✔          | ✔          | ✔       | FULL + ScaleFx | ✔              
-| MBZ__1__ADV            | ✔          | ✔          | ✔       | FULL           |                
-| MBZ__2__ADV-GLASS      | ✔          |            | ✔        | FULL          |                
-| MBZ__2__ADV-NO-REFLECT |            | ✔          | ✔        | FULL          |                
-| MBZ__3__STD            | ✔          | ✔          | ✔       | BASIC          |                
-| MBZ__3__STD-GLASS      | ✔          |            | ✔        | BASIC         |                
-| MBZ__4__STD-NO-REFLECT |            | ✔          | ✔        | BASIC         |                
-| MBZ__5__POTATO         |            | BG ONLY     |          | MINIMAL       |                
-| SCREEN-ONLY            |            |             | ✔       | Category Chain | N/A             
-| SUPER-XBR              |N/A         |N/A          | ✔       | Category Chain + SUPER-XBR  | ✔              
+|Category                        |Reflection  |Image Layers |Tube Fx  |Pre-CRT Chain   |Smooth Upscale  
+|--------------------------------|------------|-------------|---------|----------------|---------------
+| MBZ__0__SMOOTH-ADV             | ✔          | ✔          | ✔       | ADV + ScaleFx  | 3X          
+| MBZ__0__SMOOTH-ADV-NO-REFLECT  |            | ✔          | ✔       | ADV + ScaleFx  | 3X          
+| MBZ__0__SMOOTH-ADV-SCREEN-ONLY |            |             | ✔       | ADV + ScaleFx | 3X          
+| MBZ__1__ADV-SUPER-XBR          | ✔          | ✔          | ✔       | ADV + XBR     | 2X         
+| MBZ__1__ADV                    | ✔          | ✔          | ✔       | ADV           |                
+| MBZ__2__ADV-GLASS-SUPER-XBR    | ✔          |            | ✔        | ADV + XBR     | 2X        
+| MBZ__2__ADV-GLASS              | ✔          |            | ✔        | ADV           |                
+| MBZ__2__ADV-NO-REFLECT         |            | ✔          | ✔        | ADV           |                
+| MBZ__2__ADV-SCREEN-ONLY        |            |             | ✔       | ADV           |                
+| MBZ__3__STD-SUPER-XBR          | ✔          | ✔          | ✔       | STD + XBR     | 2X         
+| MBZ__3__STD                    | ✔          | ✔          | ✔       | STD           |                
+| MBZ__3__STD-GLASS-SUPER-XBR    | ✔          |            | ✔        | STD + XBR     | 2X          
+| MBZ__3__STD-GLASS              | ✔          |            | ✔        | STD           |                
+| MBZ__4__STD-NO-REFLECT         |            | ✔          | ✔        | STD           |                
+| MBZ__4__STD-SCREEN-ONLY        |            |             | ✔       | STD           |                
+| MBZ__5__POTATO-SUPER-XBR       |            | BG ONLY     |         | POTATO + XBR   | 2X                
+| MBZ__5__POTATO                 |            | BG ONLY     |         | POTATO         |          
+|
+
+----
+**Pre CRT Shader Chains**
+----------------------------------------
+----
+| Shader Behavior                        |SMOOTH-ADV   |ADV   |STD   |POTATO
+|----------------------------------------|-------------|------|------|-------
+| Reducing Core Resolution               | ✔           | ✔   | ✔   | ✔
+| Resolution Text                        | ✔           | ✔   | ✔   | 
+| Intro Animation                        | ✔           | ✔   | ✔   |
+| De-Dithering                           | ✔           | ✔   |      |
+| Image Sharpening                       | ✔           | ✔   | ✔   |
+| Uprezed Edge Contour Smoothing         | ✔           |     |      |
+| Bandwidth Horizontal Blurring (GTU)    | ✔           | ✔   |     |
+| NTSC Signal Processing (NTSC Adaptive) | ✔           | ✔   | ✔   | ✔
+| Afterglow                              | ✔           | ✔   | ✔   | ✔
+| Color Signal Processing (Grade)        | ✔           | ✔   | ✔   | ✔
+| Interlacing & Downsample Blur          | ✔           | ✔   | ✔   | ✔
+| Sinden Lightgun Border                 | ✔           | ✔   | ✔   | ✔
+
+NTSC Processing is only included in NTSC Presets, and GTU Horizontal blurring isincluded in non-NTSC presets
 
 **Descriptions:**
 
+  * **POTATO Pre-CRT shader chain**
+    * Fewest passes, but still Includes Grade Color Correction
+  * **STD Pre-CRT shader chain** 
+    * Includes Some Basic Processing before the CRT shader
+  * **ADV Pre-CRT shader chain** 
+    * Includes STD chain and adds DeDithering & GTU
+  * **ADV Pre-CRT shader chain + ScaleFx Upres** 
+    * Includes ADV Pre-CRT shader chain and ScaleFX
+    * Resolution is tripled in the middle of the chain for ScaleFX
+    * This requires increased GPU processing
+  * **SCREEN-ONLY**
+    * Includes whatever the category's Pre-CRT shader chain but removes the bezel, images and reflection
   * **Glass** 
     * Presets which show a blurry reflection in the area around the screen
   * **Image Layering**
@@ -228,16 +269,7 @@ And of course I probably would never have started this without seeing the great 
     * Tube Static Reflection Highlight
     * Tube Diffuse Image & Shadow
     * Tube Colored Gel
-  * **Basic Pre-CRT shader chain**
-    * Fewest passes, but still Includes Grade Color Correction
-  * **Full Pre-CRT shader chain** 
-    * Includes Basic chain + DeDithering & GTU
-  * **Full Pre-CRT shader chain + ScaleFx Upres** 
-    * Includes Full Pre-CRT shader chain and ScaleFX
-    * Resolution is tripled in the middle of the chain for ScaleFX
-    * This requires increased GPU processing
-  * **SCREEN-ONLY**
-    * Includes whatever the Pre-CRT shader chain of the main category but removes the bezel, images and reflection
+    * All presets include Tube Effects except the Potato
 
 **Preset Folders in Mega_Bezel / Presets**
 
@@ -248,7 +280,7 @@ And of course I probably would never have started this without seeing the great 
   * **Base_CRT_Presets_DREZ**
     * Presets which set the resolution at the beginning of the shader chain
     * Good for reducing the resolution from the core to native res to use with a crt shader
-    * Helps working with cores which are outputting at increased internal resolution, e.g. 2x, 4k this creates antialiasing at native res which comes from rendering at a higher resolution then reducing it 
+    * Helps working with cores which are outputting at increased internal resolution, e.g. 2x, 4k. When a large image comes from the core and is downscaled to ntive res this creates antialiasing, helping smooth out the jaggies
 
 
 **HSM Examples Package (Separate additional Package from Mega Bezel)**
@@ -265,26 +297,6 @@ And of course I probably would never have started this without seeing the great 
     * **Use at your own risk!**
     * These presets are work in progress and are likely to be moved, renamed, dissappear or change behavior at any future release
 
-----
-**Pre CRT Shader Chain**
-----------------------------------------
-----
-| Shader Behavior                        |SMOOTH-ADV   |ADV   |STD   |POTATO
-|----------------------------------------|-------------|------|------|-------
-| Reducing Core Resolution               | ✔           | ✔   | ✔   | ✔
-| Info Cache                             | ✔           | ✔   | ✔   | ✔
-| Resolution Text                        | ✔           | ✔   | ✔   | 
-| Startup Intro                          | ✔           | ✔   | ✔   |
-| De-Dithering                           | ✔           | ✔   |      |
-| Image Sharpening                       | ✔           | ✔   | ✔   |
-| Uprezed Edge Contour Smoothing         | ✔           |     |      |
-| Bandwidth Horizontal Blurring (GTU)    | ✔           | ✔   | ✔   |
-| NTSC Signal Processing (NTSC Adaptive) | ✔           | ✔   | ✔   | ✔
-| Afterglow                              | ✔           | ✔   | ✔   | ✔
-| Color Signal Processing (Grade)        | ✔           | ✔   | ✔   | ✔
-| Interlacing & Downsample Blur          | ✔           | ✔   | ✔   | ✔
-
-NTSC Processing is only included in NTSC Presets, and GTU Horizontal blurring isincluded in non-NTSC presets
 
 ----------------------------------------
 ----------------------------------------

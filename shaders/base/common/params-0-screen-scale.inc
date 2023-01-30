@@ -456,6 +456,9 @@ float HSM_CRT_CURVATURE_SCALE = global.HSM_CRT_CURVATURE_SCALE / 100;
 #pragma parameter HSM_SIGNAL_NOISE_AMOUNT 						    "          Amount" 0.2 -1.0 1.0 0.02
 #define HSM_SIGNAL_NOISE_AMOUNT global.HSM_SIGNAL_NOISE_AMOUNT
 
+#pragma parameter HSM_SIGNAL_NOISE_BLACK_LEVEL 						"          Contrast"  100 0 300 5
+#define HSM_SIGNAL_NOISE_BLACK_LEVEL global.HSM_SIGNAL_NOISE_BLACK_LEVEL / 100
+
 #pragma parameter HSM_SIGNAL_NOISE_SIZE_MODE 						"          Noise Resolution Mode:  SCANLINE | CORE | SMOOTHED" 0 0 2 1
 #define HSM_SIGNAL_NOISE_SIZE_MODE global.HSM_SIGNAL_NOISE_SIZE_MODE
 
