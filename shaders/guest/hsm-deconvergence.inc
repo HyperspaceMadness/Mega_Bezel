@@ -865,11 +865,14 @@ if (abs(bloom) > 0.025)
 	if (global.m_glow < 0.5) Glow = mix(Glow, 0.25*color, 0.7*colmx);
 	else
 	{ 
-		Glow = mix(0.2*Glow,5.0*plant(mix(Glow,orig1, 0.7*abs(plant(Glow,1.0)-plant(orig1,1.0))), max(max(Glow.r,Glow.g),Glow.b)), pow(colmx, 0.60/gamma_in));
-		Glow = mix(Glow, 0.5*Glow, 1.0-colmx*colmx);
+		vec3 gb = plant(orig1, 1.0);
+		maxb = max(max(Glow.r,Glow.g),Glow.b);
+		gb = mix(maxb*vec3(0.0, 0.0, 1.0), Glow, clamp(gb.r + gb.g - 0.375*gb.b,0.0,1.0)); 
+		Glow = mix(0.75*Glow,5.0*plant(mix(gb,orig1, 0.5*sqrt(colmx)*abs(plant(Glow,1.0)-plant(orig1,1.0))), maxb), pow(colmx, 0.50/gamma_in));
+		Glow = mix(Glow, 0.4*Glow, 1.0-colmx*colmx);
 	}
 	
-	if (glow >= 0.0) color = color + 0.5*Glow*glow; else { cmask*=cmask; cmask*=cmask; color = color + (-glow)*cmask*Glow; }
+	if (glow >= 0.0 && global.m_glow < 0.5) color = color + 0.5*Glow*glow; else { cmask*=cmask; cmask*=cmask; color = color + abs(glow)*cmask*Glow; }
 
 	/* HSM Removed
 	color = min(color, 1.0);
