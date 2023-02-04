@@ -105,7 +105,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter vertmask "          Scanline Color Deconvergence" 0.0 -1.0 1.0 0.1
 #define vertmask     params.vertmask     // Scanline deconvergence colors
 
-#pragma parameter scans "          Scanline Saturation / Mask Falloff" 0.4 0.0 3.5 0.05
+#pragma parameter scans "          Scanline Saturation / Mask Falloff" 0.5 -5.0 5.0 0.10
 #define scans        global.scans     // scanline saturation
 
 #pragma parameter scan_falloff "          Scanline Falloff" 1.0 0.20 2.0 0.05
@@ -128,7 +128,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter h_sharp "          Horizontal sharpness" 5.20 0.20 15.0 0.10
 #define h_sharp      params.h_sharp     // pixel sharpness
 
-#pragma parameter s_sharp "          Substractive sharpness (1.0 recommended)" 0.50 0.0 1.5 0.10
+#pragma parameter s_sharp "          Substractive sharpness (1.0 recommended)" 0.50 0.0 2.0 0.10
 #define s_sharp      params.s_sharp     // substractive sharpness
 
 #pragma parameter ring "          Substractive sharpness Ringing" 0.0 0.0 3.0 0.05
@@ -355,8 +355,8 @@ void main()
 
 	float twl3 = max(wl3 - sharp1, 0.0);
 	float twl2 = max(wl2 - sharp1, mix(-0.12, 0.0, 1.0-fp1*fp1));
-	float twl1 = max(wl1 - sharp1, 0.0);
-	float twr1 = max(wr1 - sharp1, 0.0);
+	float twl1 = max(wl1 - sharp1, -0.12);
+	float twr1 = max(wr1 - sharp1, -0.12);
 	float twr2 = max(wr2 - sharp1, mix(-0.12, 0.0, 1.0-fpx*fpx));
 	float twr3 = max(wr3 - sharp1, 0.0);
 	
@@ -406,8 +406,8 @@ void main()
 	float rm2 = max(max(r2.r,r2.g),r2.b);	
 	
 	float swl2 = max(twl2, 0.0) * (dot(l2,luma) + ts);
-	float swl1 = twl1 * (dot(l1,luma) + ts);
-	float swr1 = twr1 * (dot(r1,luma) + ts);
+	float swl1 = max(twl1, 0.0) * (dot(l1,luma) + ts);
+	float swr1 = max(twr1, 0.0) * (dot(r1,luma) + ts);
 	float swr2 = max(twr2, 0.0) * (dot(r2,luma) + ts);
 	
 	float fscolor1 = (lm2*swl2 + lm1*swl1 + rm1*swr1 + rm2*swr2)/(swl2+swl1+swr1+swr2);
@@ -453,8 +453,8 @@ void main()
 	rm2 = max(max(r2.r,r2.g),r2.b);
 	
 	swl2 = max(twl2, 0.0) * (dot(l2,luma) + ts);
-	swl1 = twl1 * (dot(l1,luma) + ts);
-	swr1 = twr1 * (dot(r1,luma) + ts);
+	swl1 = max(twl1, 0.0) * (dot(l1,luma) + ts);
+	swr1 = max(twr1, 0.0) * (dot(r1,luma) + ts);
 	swr2 = max(twr2, 0.0) * (dot(r2,luma) + ts);
 	
 	float fscolor2 = (lm2*swl2 + lm1*swl1 + rm1*swr1 + rm2*swr2)/(swl2+swl1+swr1+swr2);
@@ -513,8 +513,10 @@ if (!interb)
 	cref1 = color1 / mc1;
 	cref2 = color2 / mc2;
 
-	w1 = pow(w1, mix(2.0*scans.xxx + 1.0, 1.0.xxx, cref1))*mix(1.0.xxx + 0.075*scans, 1.0.xxx, cref1);
-	w2 = pow(w2, mix(2.0*scans.xxx + 1.0, 1.0.xxx, cref2))*mix(1.0.xxx + 0.075*scans, 1.0.xxx, cref2);
+	float scanpow1 = (scans > 0.0) ? 1.0 : pow(f1, 0.375);
+	float scanpow2 = (scans > 0.0) ? 1.0 : pow(f2, 0.375);	
+	w1 = pow(w1, mix(2.0*abs(scans).xxx + 1.0, 1.0.xxx, mix(1.0.xxx, cref1, scanpow1)));
+	w2 = pow(w2, mix(2.0*abs(scans).xxx + 1.0, 1.0.xxx, mix(1.0.xxx, cref2, scanpow2)));
 	
 	// Scanline Deconvergence
 	

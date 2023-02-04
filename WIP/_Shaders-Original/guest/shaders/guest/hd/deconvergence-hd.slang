@@ -262,10 +262,10 @@ vec3 Mask(vec2 pos, float mx, float mb)
 	vec3 one = vec3(1.0);
 	
 	// brightness correcture masks 5-12
-	float sm = 0.45; if(shadowMask == 8.0 || shadowMask == 11.0) sm = 0.7;
+	float sm = 0.45; if(shadowMask == 8.0 || shadowMask == 11.0 || shadowMask == 13.0) sm = 0.7;
 	float dark_compensate  = mix(max( clamp( mix (mcut, maskstr, mx),0.0, 1.0) - sm, 0.0) + 1.0, 1.0, mx);
 	
-	float mc = 1.0 - max(maskstr, 0.0);
+	float mc = 1.0 - max(maskstr, 0.0);	
 	
 	// No mask
 	if (shadowMask == -1.0)
@@ -451,6 +451,7 @@ float SlotMask(vec2 pos, float m)
 	if ((slotmask + slotmask1) == 0.0) return 1.0;
 	else
 	{
+	if (shadowMask == 2.0 || shadowMask == 6.0) pos.x = pos.x + 1.0;	
 	pos = floor(pos/slotms);
 	float mlen = slotwidth*2.0;
 	float px = fract(pos.x/mlen);
@@ -462,7 +463,7 @@ float SlotMask(vec2 pos, float m)
 	
 	return slot;
 	}
-}   
+}
  
 vec2 Warp(vec2 pos)
 {
@@ -652,7 +653,7 @@ if ((abs(global.deconrr) + abs(global.deconrry) + abs(global.deconrg) + abs(glob
 	float smask = SlotMask(maskcoord, mx);	
 	cmask*= Mask(maskcoord, mx, mb);
 
-	if (mask_layout > 0.5) cmask = cmask.rbg;
+	if (mask_layout > 0.5) cmask = cmask.bgr;
 
 	cmask*=smask;
 	vec3 cmask1 = cmask;
@@ -689,7 +690,7 @@ if (abs(bloom) > 0.025)
 	Bloom1 = min(Bloom1*(orig1+color), max(0.5*(colmx + orig1 - color),0.001*Bloom1));
 	Bloom1 = 0.5*(Bloom1 + mix(Bloom1, mix(colmx*orig1, Bloom1, 0.5), 1.0-color));
 	Bloom1 = Bloom1 * mix(1.0, 2.0-colmx, bloom_dist);
-	color = color + abs(bloom) * Bloom1;
+	color = pow(pow(color, vec3(mask_gamma/gamma_in)) + abs(bloom) * pow(Bloom1, vec3(mask_gamma/gamma_in)), vec3(gamma_in/mask_gamma));
 }
 
 	color = min(color, mix(one, cmask1, mclip));

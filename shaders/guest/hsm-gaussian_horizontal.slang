@@ -30,6 +30,8 @@ layout(push_constant) uniform Push
 	float glow;
 	float SIZEH;
 	float SIGMA_H;
+	float m_glow;
+	float m_glow_cutoff;
 } params;
 
 #pragma parameter GDV_GDV_ADV_LINE							" " 0 0 0.001 0.001
@@ -37,8 +39,11 @@ layout(push_constant) uniform Push
 
 #pragma parameter bogus_glow "[ GLOW ]:" 0.0 0.0 1.0 1.0
 
-#pragma parameter glow "          Glow Strength -- glow" 0.08 -2.0 2.0 0.01
-#define glow         params.glow     // Glow Strength
+#pragma parameter m_glow "          Ordinary Glow / Magic Glow" 0.0 0.0 1.0 1.0 
+#define m_glow params.m_glow
+
+#pragma parameter m_glow_cutoff "          Magic Glow Cutoff" 0.12 0.0 0.4 0.01 
+#define m_glow_cutoff params.m_glow_cutoff
 
 #pragma parameter SIZEH "          Horizontal Radius (Num Samples) -- SIZEH" 6.0 1.0 50.0 1.0 
 #define SIZEH params.SIZEH
@@ -76,6 +81,12 @@ float gaussian(float x)
 	return exp(-x*x*invsqrsigma);
 }
 
+vec3 plant (vec3 tar, float r)
+{
+	float t = max(max(tar.r,tar.g),tar.b) + 0.00001;
+	return tar * r / t;
+}
+
 void main()
 {
 	vec4 SourceSize1 = params.OriginalSize;
@@ -93,6 +104,11 @@ void main()
 	do
 	{
 		pixel  = COMPAT_TEXTURE(LinearizePass, tex + n*dx).rgb;
+		if (m_glow > 0.5)
+		{
+			pixel = max(pixel-m_glow_cutoff, 0.0);
+			pixel = plant(pixel, max(max(max(pixel.r,pixel.g),pixel.b)-m_glow_cutoff,0.0));
+		}
 		w      = gaussian(n+f);
 		color  = color + w * pixel;
 		wsum   = wsum + w;

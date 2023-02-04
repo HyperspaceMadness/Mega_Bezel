@@ -73,7 +73,7 @@ layout(push_constant) uniform Push
 
 #pragma parameter pre_bb "          Brightness Adjustment" 1.0 0.0 2.0 0.01
 
-#pragma parameter contr "          Contrast Adjustment" 0.0 -1.0 1.0 0.05
+#pragma parameter contr "          Contrast Adjustment" 0.0 -2.0 2.0 0.05
 
 #pragma parameter sega_fix "          Sega Brightness Fix" 0.0 0.0 1.0 1.0
 
@@ -236,10 +236,8 @@ vec3 plant (vec3 tar, float r)
 }
 
 float contrast(float x)
-{ 
-  float y = 2.0*x-1.0;
-  y = (sin(y*1.57079632679)+1.0)*0.5;
-  return mix(x, y, params.contr);
+{
+	return max(mix(x, smoothstep(0.0, 1.0, x), params.contr),0.0);
 }
 
 void main()
@@ -345,10 +343,8 @@ void main()
 	color = plant(color, contrast(max(max(color.r,color.g),color.b)));
 
 	p = 2.2;
-	
+	color = clamp(color, 0.0, 1.0);	
 	color = pow(color, vec3(p)); 
- 
-	color = clamp(color, 0.0, 1.0); 
 	
 	vec3 warmer = D65_to_D55*color;
 	warmer = ToSRGB*warmer;

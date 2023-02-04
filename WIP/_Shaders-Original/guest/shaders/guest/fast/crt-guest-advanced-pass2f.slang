@@ -124,7 +124,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter vertmask "          Scanline Color Deconvergence" 0.0 -1.0 1.0 0.1
 #define vertmask     params.vertmask     // Scanline deconvergence colors
 
-#pragma parameter scans "          Scanline Saturation / Mask Falloff" 0.40 0.0 3.5 0.05
+#pragma parameter scans "          Scanline Saturation / Mask Falloff" 0.50 -5.0 5.0 0.10
 #define scans        params.scans     // scanline saturation
 
 #pragma parameter scan_falloff "          Scanline Falloff" 1.0 0.20 2.0 0.05
@@ -462,9 +462,10 @@ vec3 Mask(vec2 pos, float mx)
 
 float SlotMask(vec2 pos, float m)
 {
-	if (slotmask == 0.0 && slotmask1 == 0.0) return 1.0;
+	if ((slotmask + slotmask1) == 0.0) return 1.0;
 	else
 	{
+	if (shadowMask == 2.0 || shadowMask == 6.0) pos.x = pos.x + 1.0;	
 	pos = floor(pos/slotms);
 	float mlen = slotwidth*2.0;
 	float px = fract(pos.x/mlen);
@@ -678,8 +679,10 @@ if (!interb)
 	cref1 = color1 / mc1;
 	cref2 = color2 / mc2;
 
-	w1 = pow(w1, mix(2.0*scans.xxx + 1.0, 1.0.xxx, cref1))*mix(1.0.xxx + 0.075*scans, 1.0.xxx, cref1);
-	w2 = pow(w2, mix(2.0*scans.xxx + 1.0, 1.0.xxx, cref2))*mix(1.0.xxx + 0.075*scans, 1.0.xxx, cref2);
+	float scanpow1 = (scans > 0.0) ? 1.0 : pow(f1, 0.33);
+	float scanpow2 = (scans > 0.0) ? 1.0 : pow(f2, 0.33);	
+	w1 = pow(w1, mix(2.0*abs(scans).xxx + 1.0, 1.0.xxx, mix(1.0.xxx, cref1, scanpow1)));
+	w2 = pow(w2, mix(2.0*abs(scans).xxx + 1.0, 1.0.xxx, mix(1.0.xxx, cref2, scanpow2)));
 	
 	// Scanline Deconvergence
 	
@@ -728,7 +731,7 @@ if (abs(vertmask) > 0.025)
 	float smask = SlotMask(gl_FragCoord.xy * 1.000001, mx);	
 	cmask*= Mask(gl_FragCoord.xy * 1.000001, mx);
 
-	if (mask_layout > 0.5) cmask = cmask.rbg;
+	if (mask_layout > 0.5) cmask = cmask.bgr;
 	
 	color = color*cmask;
 	color = min(color,1.0);

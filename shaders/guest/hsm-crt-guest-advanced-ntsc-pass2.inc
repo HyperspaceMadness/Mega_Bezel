@@ -103,7 +103,7 @@ layout(push_constant) uniform Push
 #pragma parameter vertmask "          Scanline Color Deconvergence -- vertmask" 0.0 -1.0 1.0 0.1
 #define vertmask     global.vertmask     // Scanline deconvergence colors
 
-#pragma parameter scans "          Scanline Saturation / Mask Falloff -- scans" 0.40 0.0 3.5 0.05
+#pragma parameter scans "          Scanline Saturation / Mask Falloff -- scans" 0.50 -5.0 5.0 0.10
 #define scans        global.scans     // scanline saturation
 
 #pragma parameter scan_falloff "          Scanline Falloff -- scan_falloff" 1.0 0.20 2.0 0.05
@@ -418,8 +418,10 @@ if (!interb)
 	cref1 = color1 / mc1;
 	cref2 = color2 / mc2;
 
-	w1 = pow(w1, mix(2.0*scans.xxx + 1.0, 1.0.xxx, cref1))*mix(1.0.xxx + 0.075*scans, 1.0.xxx, cref1);
-	w2 = pow(w2, mix(2.0*scans.xxx + 1.0, 1.0.xxx, cref2))*mix(1.0.xxx + 0.075*scans, 1.0.xxx, cref2);
+	float scanpow1 = (scans > 0.0) ? 1.0 : pow(f1, 0.375);
+	float scanpow2 = (scans > 0.0) ? 1.0 : pow(f2, 0.375);	
+	w1 = pow(w1, mix(2.0*abs(scans).xxx + 1.0, 1.0.xxx, mix(1.0.xxx, cref1, scanpow1)));
+	w2 = pow(w2, mix(2.0*abs(scans).xxx + 1.0, 1.0.xxx, mix(1.0.xxx, cref2, scanpow2)));
 	
 	// Scanline Deconvergence
 	

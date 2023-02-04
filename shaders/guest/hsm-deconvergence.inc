@@ -25,6 +25,8 @@
 #pragma parameter GDV_BRIGHTNESS_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter bogus_brightness "[ BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
+#pragma parameter m_glow "          Ordinary Glow / Magic Glow" 0.0 0.0 1.0 1.0
+
 #pragma parameter glow "          Glow Strength -- glow" 0.08 -2.0 2.0 0.01
 #define glow         global.glow     // Glow Strength
 
@@ -479,6 +481,7 @@ float SlotMask(vec2 pos, float m)
 	// HSM Added
 	float final_mask_size = HSM_GetAutoScaledMaskSize(slotms);
 
+	if (shadowMask == 2.0 || shadowMask == 6.0) pos.x = pos.x + 1.0;	
 	pos = floor(pos / final_mask_size);
 	// End HSM Added
 
@@ -798,7 +801,7 @@ if ((abs(global.deconrr) + abs(global.deconrry) + abs(global.deconrg) + abs(glob
 	float smask = SlotMask(maskcoord, mx);	
 	cmask*= Mask(maskcoord, mx, mb);
 
-	if (mask_layout > 0.5) cmask = cmask.rbg;
+	if (mask_layout > 0.5) cmask = cmask.bgr;
 
 	cmask*=smask;
 	vec3 cmask1 = cmask;
@@ -841,7 +844,7 @@ if (abs(bloom) > 0.025)
 	Bloom1 = min(Bloom1*(orig1+color), max(0.5*(colmx + orig1 - color),0.001*Bloom1));
 	Bloom1 = 0.5*(Bloom1 + mix(Bloom1, mix(colmx*orig1, Bloom1, 0.5), 1.0-color));
 	Bloom1 = Bloom1 * mix(1.0, 2.0-colmx, bloom_dist);
-	color = color + abs(bloom) * Bloom1;
+	color = pow(pow(color, vec3(mask_gamma/gamma_in)) + abs(bloom) * pow(Bloom1, vec3(mask_gamma/gamma_in)), vec3(gamma_in/mask_gamma));
 }
 
 	color = min(color, mix(one, cmask1, mclip));
@@ -859,7 +862,13 @@ if (abs(bloom) > 0.025)
 
 	if (smoothmask > 0.5) { w3 = mix(1.0, w3, smoothstep(0.3, 0.6, mx1)); color = max(min(color/w3, 1.0)*w3, min(color,color*(1.0-w3))); }
 
-	Glow = mix(Glow, 0.25*color, 0.7*colmx);
+	if (global.m_glow < 0.5) Glow = mix(Glow, 0.25*color, 0.7*colmx);
+	else
+	{ 
+		Glow = mix(0.2*Glow,5.0*plant(mix(Glow,orig1, 0.7*abs(plant(Glow,1.0)-plant(orig1,1.0))), max(max(Glow.r,Glow.g),Glow.b)), pow(colmx, 0.60/gamma_in));
+		Glow = mix(Glow, 0.5*Glow, 1.0-colmx*colmx);
+	}
+	
 	if (glow >= 0.0) color = color + 0.5*Glow*glow; else { cmask*=cmask; cmask*=cmask; color = color + (-glow)*cmask*Glow; }
 
 	/* HSM Removed

@@ -701,7 +701,8 @@ float HSM_REFLECT_MASK_MIPMAPPING_BLEND_BIAS;
 	float post_br;
 	float post_br_affect_black_level;
 
-	float glow;
+	float m_glow;
+float glow;
 	float bloom;
 float mask_bloom;
 	float bloom_dist;

@@ -3,21 +3,29 @@
 Mega Bezel is updated to V1.9.0_2023-01-22
 
 Changes:
+  * Guest Advanced updated to crt-guest-advanced-2023-02-01-release1
+    * Includes the new Magic Glow feature which is really fantastic
+      * Turn Magic Glow on and Increase the Glow amount to see the effect
   * Updated preset capability and performance table
   * Added contrast for signal noise
+  * 
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Fix DREZ presets failing to load
   * Add back Raster Bloom
-  * Add AbsoluteMax as a scaling type
+  * Update Guest Advanced
   * Update Megatron
+  * Add Passthrough Preset, no crt shader
+  * Add AbsoluteMax as a scaling type
   * Add readme for Signal Noise
   * Check difference between old and new NTSC
   * Check out duplicate params in NTSC
   * Check out independent bezel scale and reflection, reflection is not following the bezel
   * Check brighter reflection in new NTSC
+  * 
 
 
   * Update Dual Screen to use params files
@@ -40,6 +48,9 @@ Changes:
   * Add .params #reference to with all parameters commented out
   * We should have a middle pass which has the device behind the CRT tube
 
+  * Replacement:
+    * [flip]
+    * [shaders]
 ----------------------------------------------------
 --- Examples  --------------------------------------
 ----------------------------------------------------
