@@ -37,13 +37,13 @@ layout(push_constant) uniform Push
 } params;
 
 #pragma parameter HSM_GSHARP_DREZ_EMPTY_LINE		" " 0 0 0.001 0.001
-#pragma parameter GSHARP_DREZ_TITLE 	"[ --- DREZ G-SHARP RESAMPLER --- ]:"  0 0 0.01 0.01
+#pragma parameter GSHARP_DREZ_TITLE 	"[ --- DREZ DOWNSAMPLE FILTER - GUEST.R G-SHARP RESAMPLER --- ]:"  0 0 0.01 0.01
 
 #pragma parameter HSM_DREZ_GSHARP_ON 	"          G-SHARP ON" 	  1 0 1 1
 #define HSM_DREZ_GSHARP_ON params.HSM_DREZ_GSHARP_ON
 
-// Default was 1.2
-#pragma parameter HSM_DREZ_HSHARP0 		"          Filter Range"  1.2 1.0 6.0 0.1
+// Default was 1.2, now set to 2.3 to match smoothing in Hyllian b-spline
+#pragma parameter HSM_DREZ_HSHARP0 		"          Filter Range"  2.3 1.0 6.0 0.1
 #define HSM_DREZ_HSHARP0 params.HSM_DREZ_HSHARP0
 
 // Default was 0.75

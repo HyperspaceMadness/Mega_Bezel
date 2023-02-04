@@ -368,3 +368,5 @@ GAMMA_INPUT = 2.0
 gamma_out = 1.95
 h_sharp = "15.000000"
 s_sharp = "1.500000"
+
+ntsc_scale = 0.33
