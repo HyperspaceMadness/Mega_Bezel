@@ -1,22 +1,25 @@
 ![Mega_Bezel_Logo|512x256, 75%](upload://6PNkvcMF9Go9Wnk6OJXfYR1opXI.png) 
 
-Mega Bezel is updated to V1.9.0_2023-01-22
+Mega Bezel is updated to V1.10.0_2023-02-04
 
 Changes:
   * Guest Advanced updated to crt-guest-advanced-2023-02-01-release1
     * Includes the new Magic Glow feature which is really fantastic
       * Turn Magic Glow on and Increase the Glow amount to see the effect
+  * Added DREZ presets which keep the horizontal resolution
+    * Helpful for applying to modern games, these two are good to try
+        * `Presets\Base_CRT_Presets_DREZ\MBZ__3__STD__GDV__DREZ_X-VIEWPORT_Y-240p.slangp`
+        * `Presets\Base_CRT_Presets_DREZ\MBZ__3__STD__GDV__DREZ_X-VIEWPORT_Y-480p.slangp`
+    * Also looks good on MVC2, try `Presets\Base_CRT_Presets_DREZ\MBZ__3__STD__GDV__DREZ_X-VIEWPORT_Y-240p.slangp`
   * Updated preset capability and performance table
   * Added contrast for signal noise
-  * 
+
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
-  * Fix DREZ presets failing to load
   * Add back Raster Bloom
-  * Update Guest Advanced
   * Update Megatron
   * Add Passthrough Preset, no crt shader
   * Add AbsoluteMax as a scaling type
@@ -25,7 +28,6 @@ Changes:
   * Check out duplicate params in NTSC
   * Check out independent bezel scale and reflection, reflection is not following the bezel
   * Check brighter reflection in new NTSC
-  * 
 
 
   * Update Dual Screen to use params files
