@@ -32,6 +32,9 @@ layout(push_constant) uniform Push
 	float SIGMA_H;
 	float m_glow;
 	float m_glow_cutoff;
+	float m_glow_low;
+	float m_glow_high;
+	float m_glow_dist;
 } params;
 
 #pragma parameter GDV_GDV_ADV_LINE							" " 0 0 0.001 0.001
@@ -39,7 +42,15 @@ layout(push_constant) uniform Push
 
 #pragma parameter bogus_glow "[ GLOW ]:" 0.0 0.0 1.0 1.0
 
-#pragma parameter m_glow "          Ordinary Glow / Magic Glow" 0.0 0.0 1.0 1.0 
+#pragma parameter m_glow 		"          Ordinary Glow / Magic Glow -- m_glow" 0.0 0.0 1.0 1.0
+
+#pragma parameter m_glow_low 	"          Magic Glow Low Strength -- m_glow_low" 0.35 0.0 7.0 0.05 
+
+#pragma parameter m_glow_high 	"          Magic Glow High Strength -- m_glow_high" 5.0 0.0 7.0 0.10 
+
+#pragma parameter m_glow_dist 	"          Magic Glow Distribution -- m_glow_dist" 1.0 0.20 4.0 0.05 
+
+#pragma parameter glow 			"          (Magic) Glow Strength -- glow" 0.08 -2.0 2.0 0.01
 #define m_glow params.m_glow
 
 #pragma parameter m_glow_cutoff "          Magic Glow Cutoff" 0.12 0.0 0.4 0.01 

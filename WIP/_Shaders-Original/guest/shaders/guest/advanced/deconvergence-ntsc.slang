@@ -69,7 +69,10 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float maskboost;
 	float smoothmask;
 	float gamma_c;
-	float m_glow;	
+	float m_glow;
+	float m_glow_low;
+	float m_glow_high;
+	float m_glow_dist;
 } global;
 
 
@@ -77,7 +80,13 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter m_glow "          Ordinary Glow / Magic Glow" 0.0 0.0 1.0 1.0
 
-#pragma parameter glow "          Glow Strength" 0.08 -2.0 2.0 0.01
+#pragma parameter m_glow_low "          Magic Glow Low Strength" 0.35 0.0 7.0 0.05 
+
+#pragma parameter m_glow_high "          Magic Glow High Strength" 5.0 0.0 7.0 0.10 
+
+#pragma parameter m_glow_dist "          Magic Glow Distribution" 1.0 0.20 4.0 0.05 
+
+#pragma parameter glow "          (Magic) Glow Strength" 0.08 -2.0 2.0 0.01
 #define glow         params.glow     // Glow Strength
 
 #pragma parameter bloom "          Bloom Strength" 0.0 -2.0 2.0 0.05
@@ -725,11 +734,10 @@ if (abs(bloom) > 0.025)
 	if (global.m_glow < 0.5) Glow = mix(Glow, 0.25*color, 0.7*colmx);
 	else
 	{ 
-		vec3 gb = plant(orig1, 1.0);
+		vec3 gb = plant(orig1 + 0.001*Ref, 1.0);
 		maxb = max(max(Glow.r,Glow.g),Glow.b);
-		gb = mix(maxb*vec3(0.0, 0.0, 1.0), Glow, clamp(gb.r + gb.g - 0.375*gb.b,0.0,1.0)); 
-		Glow = mix(0.75*Glow,5.0*plant(mix(gb,orig1, 0.5*sqrt(colmx)*abs(plant(Glow,1.0)-plant(orig1,1.0))), maxb), pow(colmx, 0.50/gamma_in));
-		Glow = mix(Glow, 0.4*Glow, 1.0-colmx*colmx);
+		gb = mix(maxb*vec3(0.0, 0.0, 1.0), Glow, clamp(gb.r + gb.g - 0.25*gb.b,0.0,1.0)); 
+		Glow = mix(global.m_glow_low*Glow, global.m_glow_high*plant(mix(gb,orig1, 0.5*sqrt(colmx)*abs(plant(Glow,1.0)-plant(orig1,1.0))), maxb), pow(mx1, global.m_glow_dist/gamma_in));
 	}
 	
 	if (glow >= 0.0 && global.m_glow < 0.5) color = color + 0.5*Glow*glow; else { cmask*=cmask; cmask*=cmask; color = color + abs(glow)*cmask*Glow; }

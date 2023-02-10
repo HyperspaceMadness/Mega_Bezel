@@ -56,7 +56,7 @@ layout(push_constant) uniform Push
 
 #pragma parameter bogus_brightness "[ BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
-#pragma parameter glow "          Glow Strength -- glow" 0.08 -2.0 2.0 0.01
+#pragma parameter glow 			"          (Magic) Glow Strength -- glow" 0.08 -2.0 2.0 0.01
 #define glow         global.glow     // Glow Strength
 
 #pragma parameter bloom "          Bloom Strength -- bloom" 0.0 -2.0 2.0 0.05

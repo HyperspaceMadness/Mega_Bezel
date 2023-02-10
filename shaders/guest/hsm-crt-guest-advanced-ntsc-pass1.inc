@@ -42,7 +42,7 @@ layout(push_constant) uniform Push
 #pragma parameter HSM_NTSC_FILTERING_EMPTY_LINE		" " 0 0 0.001 0.001
 #pragma parameter HSM_NTSC_FILTERING_TITLE 	"[ NTSC FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-#pragma parameter HSHARPNESS 		"          NTSC Horizontal Filter Range -- HSHARPNESS" 1.5 1.0 8.0 0.05
+#pragma parameter HSHARPNESS 		"          NTSC Horizontal Filter Range -- HSHARPNESS" 1.5 1.0 1.5 0.05
 #define HSHARPNESS params.HSHARPNESS
 
 #pragma parameter SIGMA_HOR 		"          NTSC Horizontal Blur Sigma -- SIGMA_HOR" 0.90 0.1 7.0 0.05

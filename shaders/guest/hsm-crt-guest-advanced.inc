@@ -28,7 +28,7 @@
 #pragma parameter GDV_BRIGHTNESS_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter bogus_brightness "[ BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
-#pragma parameter glow "          Glow Strength -- glow" 0.08 -2.0 2.0 0.01
+#pragma parameter glow 			"          (Magic) Glow Strength -- glow" 0.08 -2.0 2.0 0.01
 #define glow         global.glow     // Glow Strength
 
 #pragma parameter bloom "          Bloom Strength -- bloom" 0.0 -2.0 2.0 0.05
@@ -103,7 +103,7 @@
 #pragma parameter s_sharp "          Substractive sharpness (1.0 recommended) -- s_sharp" 0.50 0.0 2.0 0.10
 #define s_sharp      global.s_sharp     // substractive sharpness
 
-#pragma parameter ring "          Substractive sharpness Ringing -- ring" 0.8 0.0 4.0 0.1
+#pragma parameter ring "          Substractive sharpness Ringing -- ring" 0.0 0.0 3.0 0.05
 #define ring      global.ring     // substractive sharpness ringing
 
 #pragma parameter smart_ei "          Smart Edges Effect Strength -- smart_ei" 0.0 0.0 0.75 0.01

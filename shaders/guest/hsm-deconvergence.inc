@@ -25,30 +25,36 @@
 #pragma parameter GDV_BRIGHTNESS_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter bogus_brightness "[ BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
-#pragma parameter m_glow "          Ordinary Glow / Magic Glow" 0.0 0.0 1.0 1.0
+#pragma parameter m_glow 		"          Ordinary Glow / Magic Glow -- m_glow" 0.0 0.0 1.0 1.0
 
-#pragma parameter glow "          Glow Strength -- glow" 0.08 -2.0 2.0 0.01
+#pragma parameter m_glow_low 	"          Magic Glow Low Strength -- m_glow_low" 0.35 0.0 7.0 0.05 
+
+#pragma parameter m_glow_high 	"          Magic Glow High Strength -- m_glow_high" 5.0 0.0 7.0 0.10 
+
+#pragma parameter m_glow_dist 	"          Magic Glow Distribution -- m_glow_dist" 1.0 0.20 4.0 0.05 
+
+#pragma parameter glow 			"          (Magic) Glow Strength -- glow" 0.08 -2.0 2.0 0.01
 #define glow         global.glow     // Glow Strength
 
-#pragma parameter bloom "          Bloom Strength -- bloom" 0.0 -2.0 2.0 0.05
+#pragma parameter bloom 		"          Bloom Strength -- bloom" 0.0 -2.0 2.0 0.05
 #define bloom         global.bloom     // bloom effect
 
-#pragma parameter mask_bloom "          Mask Bloom -- mask_bloom" 0.0 0.0 2.0 0.05
+#pragma parameter mask_bloom 	"          Mask Bloom -- mask_bloom" 0.0 0.0 2.0 0.05
 #define mask_bloom         global.mask_bloom     // bloom effect
 
-#pragma parameter bloom_dist "          Bloom Distribution -- bloom_dist" 0.0 0.0 3.0 0.05
+#pragma parameter bloom_dist 	"          Bloom Distribution -- bloom_dist" 0.0 0.0 3.0 0.05
 #define bloom_dist         global.bloom_dist     // bloom effect distribution
 
-#pragma parameter halation "          Halation Strength -- halation" 0.0 -2.0 2.0 0.025
+#pragma parameter halation 		"          Halation Strength -- halation" 0.0 -2.0 2.0 0.025
 #define halation         global.halation     // halation effect
 
-#pragma parameter gamma_c "          Gamma Correct -- gamma_c" 1.0 0.50 2.0 0.025
+#pragma parameter gamma_c 		"          Gamma Correct -- gamma_c" 1.0 0.50 2.0 0.025
 #define gamma_c   global.gamma_c     // adjust brightness
 
-#pragma parameter brightboost "          Bright Boost Dark Pixels -- brightboost" 1.40 0.25 10.0 0.05
+#pragma parameter brightboost 	"          Bright Boost Dark Pixels -- brightboost" 1.40 0.25 10.0 0.05
 #define brightboost  global.brightboost     // adjust brightness
 
-#pragma parameter brightboost1 "          Bright Boost Bright Pixels -- brightboost1" 1.10 0.25 3.00 0.025
+#pragma parameter brightboost1 	"          Bright Boost Bright Pixels -- brightboost1" 1.10 0.25 3.00 0.025
 #define brightboost1  global.brightboost1     // adjust brightness
 
 // #pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
@@ -867,11 +873,10 @@ if (abs(bloom) > 0.025)
 	if (global.m_glow < 0.5) Glow = mix(Glow, 0.25*color, 0.7*colmx);
 	else
 	{ 
-		vec3 gb = plant(orig1, 1.0);
+		vec3 gb = plant(orig1 + 0.001*Ref, 1.0);
 		maxb = max(max(Glow.r,Glow.g),Glow.b);
-		gb = mix(maxb*vec3(0.0, 0.0, 1.0), Glow, clamp(gb.r + gb.g - 0.375*gb.b,0.0,1.0)); 
-		Glow = mix(0.75*Glow,5.0*plant(mix(gb,orig1, 0.5*sqrt(colmx)*abs(plant(Glow,1.0)-plant(orig1,1.0))), maxb), pow(colmx, 0.50/gamma_in));
-		Glow = mix(Glow, 0.4*Glow, 1.0-colmx*colmx);
+		gb = mix(maxb*vec3(0.0, 0.0, 1.0), Glow, clamp(gb.r + gb.g - 0.25*gb.b,0.0,1.0)); 
+		Glow = mix(global.m_glow_low*Glow, global.m_glow_high*plant(mix(gb,orig1, 0.5*sqrt(colmx)*abs(plant(Glow,1.0)-plant(orig1,1.0))), maxb), pow(mx1, global.m_glow_dist/gamma_in));
 	}
 	
 	if (glow >= 0.0 && global.m_glow < 0.5) color = color + 0.5*Glow*glow; else { cmask*=cmask; cmask*=cmask; color = color + abs(glow)*cmask*Glow; }
