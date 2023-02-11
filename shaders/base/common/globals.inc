@@ -715,8 +715,12 @@ float HSM_REFLECT_MASK_MIPMAPPING_BLEND_BIAS;
 
 	float TATE;
 	float IOS;
+	float GDV_RASTER_BLOOM_ON;
 	float OS;
 	float BLOOM;
+	float GDV_OVERSCAN;
+float GDV_OVERSCAN_X;
+float GDV_OVERSCAN_Y;
 	float overscanX;
 	float overscanY;
 	float intres;

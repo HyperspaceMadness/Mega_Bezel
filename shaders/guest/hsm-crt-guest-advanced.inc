@@ -125,11 +125,26 @@
 // #pragma parameter IOS "          Integer Scaling: Odd:Y, Even:'X'+Y" 0.0 0.0 4.0 1.0
 // #define IOS          params.IOS     // Smart Integer Scaling
 
-// #pragma parameter OS "          R. Bloom Overscan Mode" 1.0 0.0 2.0 1.0
-// #define OS           params.OS     // Do overscan
+#pragma parameter GDV_RASTERBLOOM_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter GDV_RASTERBLOOM_TITLE "[ OVERSCAN & RASTER BLOOM ]: " 0.0 0.0 1.0 1.0
 
-// #pragma parameter BLOOM "          Raster bloom %" 0.0 0.0 20.0 1.0
-// #define BLOOM        params.BLOOM     // Bloom overscan percentage
+#pragma parameter GDV_OVERSCAN "          Overscan % -- GDV_OVERSCAN" 0 -50 100 0.5
+#define GDV_OVERSCAN        (global.GDV_OVERSCAN / 100)
+
+#pragma parameter GDV_OVERSCAN_X "          Overscan X % -- GDV_OVERSCAN_X" 0 -50 100 0.5
+#define GDV_OVERSCAN_X        (GDV_OVERSCAN + global.GDV_OVERSCAN_X / 100)
+
+#pragma parameter GDV_OVERSCAN_Y "          Overscan Y % -- GDV_OVERSCAN_Y" 0 -50 100 0.5
+#define GDV_OVERSCAN_Y        (GDV_OVERSCAN + global.GDV_OVERSCAN_Y / 100)
+
+#pragma parameter GDV_RASTER_BLOOM_ON "          Raster Bloom ON -- GDV_RASTER_BLOOM_ON" 0 0 1 1
+#define GDV_RASTER_BLOOM_ON        global.GDV_RASTER_BLOOM_ON
+
+#pragma parameter OS "          Raster Bloom Overscan Mode -- OS" 2.0 0.0 2.0 1.0
+#define OS           global.OS
+
+#pragma parameter BLOOM "          Raster Bloom % -- BLOOM" 5.0 0.0 20.0 1.0
+#define BLOOM        global.BLOOM     // Bloom overscan percentage
 
 // #pragma parameter warpX "          CurvatureX (default 0.03)" 0.0 0.0 0.25 0.01
 // #define warpX        params.warpX     // Curvature X
@@ -224,12 +239,13 @@ vec2 Warp(vec2 pos)
 	return pos*0.5 + 0.5;
 }
 
+*/
+
 vec2 Overscan(vec2 pos, float dx, float dy){
 	pos=pos*2.0-1.0;    
 	pos*=vec2(dx,dy);
 	return pos*0.5+0.5;
 } 
-*/
 
 vec3 gc(vec3 c)
 {
@@ -317,8 +333,37 @@ void main()
  	*/
 
 	// HSM Added
+
+
+	// HSM Added
 	vec2 screen_curved_coord = HSM_GetCRTShaderCurvedCoord(SCREEN_COORD);
+
+	// Screen Curved Coordinate but not Mirrored
+	vec2 screen_curved_coord_with_overscan = HSM_ApplyOverscan(screen_curved_coord, GDV_OVERSCAN_X, GDV_OVERSCAN_Y);
+
 	vec2 pos = HSM_GetMirrorWrappedCoord(screen_curved_coord);
+
+	// Add overscan to mirror wrapped coord
+	pos = HSM_ApplyOverscan(pos, GDV_OVERSCAN_X, GDV_OVERSCAN_Y);
+			
+	vec2 screen_scale_with_overscan = SCREEN_SCALE * (vec2(GDV_OVERSCAN_X, GDV_OVERSCAN_Y) + 1);
+
+	// Screen Coordinate overscan but without curvature 
+	vec2 screen_coord_with_overscan = HSM_ApplyOverscan(SCREEN_COORD, GDV_OVERSCAN_X, GDV_OVERSCAN_Y);
+
+	if (GDV_RASTER_BLOOM_ON > 0.5)
+	{
+		pos = HSM_ApplyRasterBloomOverscan(pos, OS, BLOOM, lum);
+		screen_curved_coord_with_overscan = HSM_ApplyRasterBloomOverscan(screen_curved_coord_with_overscan, OS, BLOOM, lum);
+		screen_coord_with_overscan = HSM_ApplyRasterBloomOverscan(screen_coord_with_overscan, OS, BLOOM, lum);
+		screen_scale_with_overscan *= HSM_GetRasterBloomScale(OS, BLOOM, lum);
+
+		if (HHLP_IsOutsideCoordSpace(screen_curved_coord_with_overscan))
+		{
+			FragColor = vec4(0);
+			return;
+		}
+	}
 
 	bool smarte  = (smart_ei > 0.01); // smart edge interpolation on / off
 
@@ -624,6 +669,6 @@ if (abs(vertmask) > 0.025)
 	if (HSM_GetUseFakeScanlines())
 	{
 		vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 1, TUBE_DIFFUSE_SCALE, TUBE_SCALE, TUBE_DIFFUSE_ASPECT, 1);
-		FragColor = HSM_ApplyScanlineMask(FragColor, SCREEN_SCALE, SCREEN_COORD, screen_curved_coord, tube_curved_coord, HSM_FAKE_SCANLINE_OPACITY);
+		FragColor = HSM_ApplyScanlineMask(FragColor, screen_scale_with_overscan, screen_coord_with_overscan, screen_curved_coord_with_overscan, tube_curved_coord, HSM_FAKE_SCANLINE_OPACITY);
 	}
 }

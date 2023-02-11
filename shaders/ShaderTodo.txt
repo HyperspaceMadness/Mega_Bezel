@@ -6,6 +6,8 @@ Changes:
   * Guest Advanced updated to crt-guest-advanced-2023-02-08-release1
     * Improvements to the new Magic Glow feature
       * Turn Magic Glow on and Increase the Glow amount to see the effect
+  * Added Guest's Raster Bloom back in as well as Overscan control
+
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------

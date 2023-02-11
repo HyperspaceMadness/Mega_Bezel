@@ -1065,3 +1065,29 @@ vec4 HSM_Apply_Sinden_Lightgun_Border(vec4 in_rgba, vec2 in_tube_diffuse_curved_
 	return out_rgba;
 }
 
+vec2 HSM_ApplyOverscan(vec2 in_coord, float overscan_x, float overscan_y)
+{
+	vec2 ctr_coord = in_coord * 2.0 - 1.0;
+
+	ctr_coord /= vec2(overscan_x, overscan_y) + 1;
+
+	return ctr_coord * 0.5 + 0.5;
+}
+
+float HSM_GetRasterBloomScale(float raster_bloom_overscan_mode, float raster_bloom_mult, float screen_avg_luma)
+{
+	return 1.00 + (1.0 - 0.5 * raster_bloom_overscan_mode) * raster_bloom_mult / 100 - screen_avg_luma * raster_bloom_mult / 100;
+}
+
+// Thanks to Guest.r for this simple yet effective implementation of raster bloom
+vec2 HSM_ApplyRasterBloomOverscan(vec2 in_coord, float raster_bloom_overscan_mode, float raster_bloom_mult, float screen_avg_luma)
+{
+	//raster_bloom_overscan_mode can be 0, 1, or 2 to adjust if the bloom can only expand or shrink
+
+	vec2 ctr_coord = in_coord * 2.0 - 1.0;
+
+	float raster_bloom_factor = HSM_GetRasterBloomScale(raster_bloom_overscan_mode, raster_bloom_mult, screen_avg_luma);
+	ctr_coord *= vec2(raster_bloom_factor, raster_bloom_factor);
+
+	return ctr_coord * 0.5 + 0.5;
+}
