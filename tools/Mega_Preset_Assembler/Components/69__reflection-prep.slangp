@@ -1,37 +1,37 @@
 shaders = 5
 
-// Reduce Resolution  ----------------------------------------------------------------
-//      Reduce the resolution to a small static size regardless of final resolution
-//      Allows consistent look and faster at different final resolutions for blur
-//      Mipmap option allows downscaling without artifacts
+# Reduce Resolution  ----------------------------------------------------------------
+#      Reduce the resolution to a small static size regardless of final resolution
+#      Allows consistent look and faster at different final resolutions for blur
+#      Mipmap option allows downscaling without artifacts
 shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/linearize-crt.slang
 mipmap_input0 = true
 filter_linear0 = true
 scale_type0 = absolute
-// scale_x0 = 480
-// scale_y0 = 270
-// scale_x0 = 960
-// scale_y0 = 540
+# scale_x0 = 480
+# scale_y0 = 270
+# scale_x0 = 960
+# scale_y0 = 540
 scale_x0 = 800
 scale_y0 = 600
 float_framebuffer0 = true
 alias0 = "BR_MirrorLowResPass"
 
-// Add Blur for the Reflection (Horizontal) ----------------------------------------------------------------
+# Add Blur for the Reflection (Horizontal) ----------------------------------------------------------------
 shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/blur-outside-screen-horiz.slang
 mipmap_input1 = true
 filter_linear1 = true
 float_framebuffer1 = true
 
-// Add Blur for the Reflection (Vertical) ----------------------------------------------------------------
+# Add Blur for the Reflection (Vertical) ----------------------------------------------------------------
 shader2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/blur-outside-screen-vert.slang
 filter_linear2 = true
 float_framebuffer2 = true
 alias2 = "BR_MirrorBlurredPass"
 
-// Reduce resolution ----------------------------------------------------------------
-// Reduced to a very small amount so we can create a blur which will create a glow from the screen
-//      Mipmap option allows smoother downscaling
+# Reduce resolution ----------------------------------------------------------------
+# Reduced to a very small amount so we can create a blur which will create a glow from the screen
+#      Mipmap option allows smoother downscaling
 shader3 = :/shaders/shaders_slang/blurs/shaders/royale/blur9x9.slang
 mipmap_input3 = true
 filter_linear3 = true
@@ -41,9 +41,9 @@ scale_y3 = 128
 float_framebuffer3 = true
 alias3 = "BR_MirrorReflectionDiffusedPass"
 
-// Add Diffused glow all around the screen ----------------------------------------------------------------
-//      Blurred so much that it's non directional
-//      Mipmap option allows downscaling without artifacts
+# Add Diffused glow all around the screen ----------------------------------------------------------------
+#      Blurred so much that it's non directional
+#      Mipmap option allows downscaling without artifacts
 shader4 = :/shaders/shaders_slang/blurs/shaders/royale/blur9x9.slang
 mipmap_input4 = true
 filter_linear4 = true

@@ -1,5 +1,5 @@
 
-// NDS Parameters
+# NDS Parameters
 HSM_ASPECT_RATIO_MODE = 5
 
 HSM_INT_SCALE_MODE = 0

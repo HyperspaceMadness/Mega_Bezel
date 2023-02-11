@@ -75,7 +75,7 @@ shader14 = ../../shaders/guest/extras/hsm-g-sharp_resampler.slang
 alias14 = "DeditherPass"
 
 shader15 = ../../shaders/guest/extras/hsm-sharpsmoother.slang
-// alias15 = "DeditherPass"
+# alias15 = "DeditherPass"
 
 shader16 = ../../shaders/base/stock.slang
 alias16 = "PreCRTPass"
@@ -92,8 +92,8 @@ scale_type18 = source
 mipmap_input18 = true
 scale18 = 1.0
 
-// Color Correction with Dogway's awesome Grade shader
-// Grade is after Afterglow so that brightening the black level does not break the afterglow
+# Color Correction with Dogway's awesome Grade shader
+# Grade is after Afterglow so that brightening the black level does not break the afterglow
 shader19 = ../../shaders/dogway/hsm-grade.slang
 filter_linear19 = false
 scale_type19 = source
@@ -144,7 +144,7 @@ mipmap_input26 = true
 float_framebuffer26 = true
 alias26 = "AvgLumPass"
 
-// Pass referenced by subsequent blurring passes and crt pass
+# Pass referenced by subsequent blurring passes and crt pass
 shader27 = ../../shaders/guest/hsm-interlace.slang
 filter_linear27 = true
 scale_type27 = source
@@ -153,7 +153,7 @@ float_framebuffer27 = true
 alias27 = "LinearizePass"
 feedback_pass = "0"
 
-// Sony Megatron Colour Video Monitor by Major Pain The Cactus
+# Sony Megatron Colour Video Monitor by Major Pain The Cactus
 shader28 = "../../shaders/megatron/crt-sony-megatron-source-pass.slang"
 filter_linear28 = "false"
 scale_type28 = "source"
@@ -186,11 +186,11 @@ scale_type31 = viewport
 float_framebuffer31 = true
 alias31 = "PostCRTPass"
 
-// Combine Passes ----------------------------------------------------------------
+# Combine Passes ----------------------------------------------------------------
 shader32 = ../../shaders/base/output-hdr.slang
 scale_type32 = viewport
 alias32 = "OutputPass"
-// Define textures to be used by the different passes
+# Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
 SamplerLUT1 = ../../shaders/guest/lut/trinitron-lut.png
@@ -277,11 +277,11 @@ TopLayerImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
 TopLayerImage_linear = true
 TopLayerImage_mipmap = 1
 
-// Use for matching vanilla GDV-Advanced
-// HSM_ASPECT_RATIO_MODE = 6
-// HSM_CURVATURE_MODE = 0
+# Use for matching vanilla GDV-Advanced
+# HSM_ASPECT_RATIO_MODE = 6
+# HSM_CURVATURE_MODE = 0
 
-// Sony Megatron Color Monitor
+# Sony Megatron Color Monitor
 hcrt_hdr = "0.000000"
 
 HSM_INT_SCALE_MODE = "1.000000"
@@ -289,7 +289,7 @@ HSM_CRT_CURVATURE_SCALE = "0.000000"
 HSM_GLOBAL_GRAPHICS_BRIGHTNESS = "100.000000"
 HSM_REFLECT_GLOBAL_AMOUNT = "7.000000"
 
-// NTSC Parameters
+# NTSC Parameters
 GAMMA_INPUT = 2.0
 gamma_out = 1.95
 HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = "200.000000"

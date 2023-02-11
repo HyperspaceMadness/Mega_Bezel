@@ -1,4 +1,4 @@
-// Define textures to be used by the different passes
+# Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
 SamplerLUT1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/lut/trinitron-lut.png
@@ -85,6 +85,6 @@ TopLayerImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Placeh
 TopLayerImage_linear = true
 TopLayerImage_mipmap = 1
 
-// Use for matching vanilla GDV-Advanced
-// HSM_ASPECT_RATIO_MODE = 6
-// HSM_CURVATURE_MODE = 0
+# Use for matching vanilla GDV-Advanced
+# HSM_ASPECT_RATIO_MODE = 6
+# HSM_CURVATURE_MODE = 0

@@ -58,8 +58,8 @@ scale_type9 = source
 mipmap_input9 = true
 scale9 = 1.0
 
-// Color Correction with Dogway's awesome Grade shader
-// Grade is after Afterglow so that brightening the black level does not break the afterglow
+# Color Correction with Dogway's awesome Grade shader
+# Grade is after Afterglow so that brightening the black level does not break the afterglow
 shader10 = ../../shaders/dogway/hsm-grade.slang
 filter_linear10 = false
 scale_type10 = source
@@ -87,7 +87,7 @@ scale13 = 1.0
 mipmap_input13 = true
 alias13 = "AvgLumPass"
 
-// Pass referenced by subsequent blurring passes and crt pass
+# Pass referenced by subsequent blurring passes and crt pass
 shader14 = ../../shaders/guest/hsm-interlace-and-linearize.slang
 filter_linear14 = true
 scale_type14 = source
@@ -116,11 +116,11 @@ scale_type17 = viewport
 float_framebuffer17 = true
 alias17 = "PostCRTPass"
 
-// Combine Passes ----------------------------------------------------------------
+# Combine Passes ----------------------------------------------------------------
 shader18 = ../../shaders/base/output-sdr.slang
 scale_type18 = viewport
 alias18 = "OutputPass"
-// Define textures to be used by the different passes
+# Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
 SamplerLUT1 = ../../shaders/guest/lut/trinitron-lut.png
@@ -207,6 +207,6 @@ TopLayerImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
 TopLayerImage_linear = true
 TopLayerImage_mipmap = 1
 
-// Use for matching vanilla GDV-Advanced
-// HSM_ASPECT_RATIO_MODE = 6
-// HSM_CURVATURE_MODE = 0
+# Use for matching vanilla GDV-Advanced
+# HSM_ASPECT_RATIO_MODE = 6
+# HSM_CURVATURE_MODE = 0

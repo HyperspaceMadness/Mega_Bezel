@@ -1,11 +1,11 @@
 shaders = 6
 
 shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/stock.slang
-// filter_linear0 = "false"
-// wrap_mode0 = "clamp_to_border"
-// mipmap_input0 = "false"
-// float_framebuffer0 = "false"
-// srgb_framebuffer0 = "true"
+# filter_linear0 = "false"
+# wrap_mode0 = "clamp_to_border"
+# mipmap_input0 = "false"
+# float_framebuffer0 = "false"
+# srgb_framebuffer0 = "true"
 alias0 = XbrSource
 
 shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/hyllian/crt-super-xbr/super-xbr-pass0.slang

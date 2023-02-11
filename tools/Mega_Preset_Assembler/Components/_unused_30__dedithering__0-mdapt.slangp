@@ -3,7 +3,7 @@ shaders = 7
 shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/linearize.slang
 alias0 = "PreMdaptPass"
 
-// De-Dithering - Mdapt
+# De-Dithering - Mdapt
 shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/mdapt/hsm-mdapt-pass0.slang
 shader2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/mdapt/hsm-mdapt-pass1.slang
 shader3 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/mdapt/hsm-mdapt-pass2.slang

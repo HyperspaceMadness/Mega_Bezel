@@ -75,14 +75,14 @@ shader14 = ../../shaders/guest/extras/hsm-g-sharp_resampler.slang
 alias14 = "DeditherPass"
 
 shader15 = ../../shaders/guest/extras/hsm-sharpsmoother.slang
-// alias15 = "DeditherPass"
+# alias15 = "DeditherPass"
 
 shader16 = ../../shaders/base/stock.slang
-// filter_linear16 = "false"
-// wrap_mode16 = "clamp_to_border"
-// mipmap_input16 = "false"
-// float_framebuffer16 = "false"
-// srgb_framebuffer16 = "true"
+# filter_linear16 = "false"
+# wrap_mode16 = "clamp_to_border"
+# mipmap_input16 = "false"
+# float_framebuffer16 = "false"
+# srgb_framebuffer16 = "true"
 alias16 = XbrSource
 
 shader17 = ../../shaders/hyllian/crt-super-xbr/super-xbr-pass0.slang
@@ -151,8 +151,8 @@ scale_type24 = source
 mipmap_input24 = true
 scale24 = 1.0
 
-// Color Correction with Dogway's awesome Grade shader
-// Grade is after Afterglow so that brightening the black level does not break the afterglow
+# Color Correction with Dogway's awesome Grade shader
+# Grade is after Afterglow so that brightening the black level does not break the afterglow
 shader25 = ../../shaders/dogway/hsm-grade.slang
 filter_linear25 = false
 scale_type25 = source
@@ -206,7 +206,7 @@ scale32 = 1.0
 mipmap_input32 = true
 alias32 = "AvgLumPass"
 
-// Pass referenced by subsequent blurring passes and crt pass
+# Pass referenced by subsequent blurring passes and crt pass
 shader33 = ../../shaders/guest/hsm-interlace-and-linearize.slang
 filter_linear33 = true
 scale_type33 = source
@@ -278,38 +278,38 @@ scale_type41 = viewport
 float_framebuffer41 = true
 alias41 = "PostCRTPass"
 
-// Reduce Resolution  ----------------------------------------------------------------
-//      Reduce the resolution to a small static size regardless of final resolution
-//      Allows consistent look and faster at different final resolutions for blur
-//      Mipmap option allows downscaling without artifacts
+# Reduce Resolution  ----------------------------------------------------------------
+#      Reduce the resolution to a small static size regardless of final resolution
+#      Allows consistent look and faster at different final resolutions for blur
+#      Mipmap option allows downscaling without artifacts
 shader42 = ../../shaders/base/linearize-crt.slang
 mipmap_input42 = true
 filter_linear42 = true
 scale_type42 = absolute
-// scale_x42 = 480
-// scale_y42 = 270
-// scale_x42 = 960
-// scale_y42 = 540
+# scale_x42 = 480
+# scale_y42 = 270
+# scale_x42 = 960
+# scale_y42 = 540
 scale_x42 = 800
 scale_y42 = 600
 float_framebuffer42 = true
 alias42 = "BR_MirrorLowResPass"
 
-// Add Blur for the Reflection (Horizontal) ----------------------------------------------------------------
+# Add Blur for the Reflection (Horizontal) ----------------------------------------------------------------
 shader43 = ../../shaders/base/blur-outside-screen-horiz.slang
 mipmap_input43 = true
 filter_linear43 = true
 float_framebuffer43 = true
 
-// Add Blur for the Reflection (Vertical) ----------------------------------------------------------------
+# Add Blur for the Reflection (Vertical) ----------------------------------------------------------------
 shader44 = ../../shaders/base/blur-outside-screen-vert.slang
 filter_linear44 = true
 float_framebuffer44 = true
 alias44 = "BR_MirrorBlurredPass"
 
-// Reduce resolution ----------------------------------------------------------------
-// Reduced to a very small amount so we can create a blur which will create a glow from the screen
-//      Mipmap option allows smoother downscaling
+# Reduce resolution ----------------------------------------------------------------
+# Reduced to a very small amount so we can create a blur which will create a glow from the screen
+#      Mipmap option allows smoother downscaling
 shader45 = ../../../../blurs/shaders/royale/blur9x9.slang
 mipmap_input45 = true
 filter_linear45 = true
@@ -319,9 +319,9 @@ scale_y45 = 128
 float_framebuffer45 = true
 alias45 = "BR_MirrorReflectionDiffusedPass"
 
-// Add Diffused glow all around the screen ----------------------------------------------------------------
-//      Blurred so much that it's non directional
-//      Mipmap option allows downscaling without artifacts
+# Add Diffused glow all around the screen ----------------------------------------------------------------
+#      Blurred so much that it's non directional
+#      Mipmap option allows downscaling without artifacts
 shader46 = ../../../../blurs/shaders/royale/blur9x9.slang
 mipmap_input46 = true
 filter_linear46 = true
@@ -331,12 +331,12 @@ scale_y46 = 12
 float_framebuffer46 = true
 alias46 = "BR_MirrorFullscreenGlowPass"
 
-// Bezel Reflection ----------------------------------------------------------------
+# Bezel Reflection ----------------------------------------------------------------
 shader47 = ../../shaders/base/reflection-glass.slang
 scale_type47 = viewport
 srgb_framebuffer47 = true
 alias47 = "ReflectionPass"
-// Define textures to be used by the different passes
+# Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
 SamplerLUT1 = ../../shaders/guest/lut/trinitron-lut.png
@@ -423,11 +423,11 @@ TopLayerImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
 TopLayerImage_linear = true
 TopLayerImage_mipmap = 1
 
-// Use for matching vanilla GDV-Advanced
-// HSM_ASPECT_RATIO_MODE = 6
-// HSM_CURVATURE_MODE = 0
+# Use for matching vanilla GDV-Advanced
+# HSM_ASPECT_RATIO_MODE = 6
+# HSM_CURVATURE_MODE = 0
 
-// Parameters
+# Parameters
 HSM_TUBE_BLACK_EDGE_SHARPNESS = "90.0000"
 HSM_TUBE_BLACK_EDGE_THICKNESS = -7
 HSM_BG_OPACITY = "1.000000"
@@ -463,7 +463,7 @@ HSM_SCREEN_VIGNETTE_IN_REFLECTION = "0.000000"
 
 g_vignette = "0.0"
 
-// NTSC Parameters
+# NTSC Parameters
 GAMMA_INPUT = 2.0
 gamma_out = 1.95
 h_sharp = "15.000000"
@@ -471,7 +471,7 @@ s_sharp = "1.500000"
 
 ntsc_scale = 0.33
 
-// SMOOTH-ADV
+# SMOOTH-ADV
 SGPT_BLEND_OPTION = 1
 
 SHARPSMOOTHER_ON = 1
@@ -492,13 +492,13 @@ HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR = 100
 HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR = 0
 HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = 0
 
-// gamma_c = 0.9
-// gsl = -1
-// scanline1 = 3
-// shadowMask = 3
-// maskDark = 0.4
-// maskLight = 1.2
-// mask_gamma = 4
+# gamma_c = 0.9
+# gsl = -1
+# scanline1 = 3
+# shadowMask = 3
+# maskDark = 0.4
+# maskLight = 1.2
+# mask_gamma = 4
 
-// Mask Size is Auto, so it will look the same at 1080p and 4K
+# Mask Size is Auto, so it will look the same at 1080p and 4K
 masksize = 0

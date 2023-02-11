@@ -40,8 +40,8 @@ scale_type5 = source
 scale5 = 1.0
 alias5 = "IntroPass"
 
-// Color Correction with Dogway's awesome Grade shader
-// Grade is after Afterglow so that brightening the black level does not break the afterglow
+# Color Correction with Dogway's awesome Grade shader
+# Grade is after Afterglow so that brightening the black level does not break the afterglow
 shader6 = ../../shaders/dogway/hsm-grade.slang
 filter_linear6 = false
 scale_type6 = source
@@ -69,7 +69,7 @@ scale9 = 1.0
 mipmap_input9 = true
 alias9 = "AvgLumPass"
 
-// Pass referenced by subsequent blurring passes and crt pass
+# Pass referenced by subsequent blurring passes and crt pass
 shader10 = ../../shaders/guest/hsm-interlace-and-linearize.slang
 filter_linear10 = true
 scale_type10 = source
@@ -97,7 +97,7 @@ mipmap_input13 = true
 scale_type13 = viewport
 float_framebuffer13 = true
 alias13 = "PostCRTPass"
-// Define textures to be used by the different passes
+# Define textures to be used by the different passes
 textures = "ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
 
 ScreenPlacementImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
@@ -111,9 +111,9 @@ BackgroundVertImage = ../../shaders/textures/Baked_Frame_Carbonfiber_Background_
 BackgroundVertImage_linear = true
 BackgroundVertImage_mipmap = 1
 
-// Parameters
+# Parameters
 HSM_ASPECT_RATIO_MODE = 1
 
-// Use for matching vanilla GDV-Advanced
-// HSM_ASPECT_RATIO_MODE = 6
-// HSM_CURVATURE_MODE = 0
+# Use for matching vanilla GDV-Advanced
+# HSM_ASPECT_RATIO_MODE = 6
+# HSM_CURVATURE_MODE = 0

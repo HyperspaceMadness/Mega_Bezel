@@ -1,5 +1,5 @@
 
-// Sony Megatron Color Monitor
+# Sony Megatron Color Monitor
 hcrt_hdr = "0.000000"
 
 HSM_INT_SCALE_MODE = "1.000000"

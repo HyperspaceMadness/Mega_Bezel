@@ -12,7 +12,7 @@ shader2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/easymode/hsm-crt-easy
 filter_linear2 = false
 srgb_framebuffer2 = true
 
-// Easymode's Shader!
+# Easymode's Shader!
 shader3 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/easymode/hsm-crt-easymode-halation.slang
 filter_linear3 = true
 scale_type3 = viewport

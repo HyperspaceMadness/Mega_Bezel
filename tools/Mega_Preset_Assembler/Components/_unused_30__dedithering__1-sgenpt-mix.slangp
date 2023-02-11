@@ -1,4 +1,4 @@
 shaders = 1
 
-// SGENDPT - Hyllian's great de-dither shader
+# SGENDPT - Hyllian's great de-dither shader
 shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/hyllian/sgenpt-mix-old/hsm-sgenpt-mix.slang

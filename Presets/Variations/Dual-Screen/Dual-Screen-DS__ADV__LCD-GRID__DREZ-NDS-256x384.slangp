@@ -1,7 +1,7 @@
 #reference "../../Base_CRT_Presets_DREZ/MBZ__1__ADV__LCD-GRID__DREZ-NDS-256x384.slangp"
 
-// BackgroundImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-// BackgroundVertImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+# BackgroundImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+# BackgroundVertImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 
 HSM_ASPECT_RATIO_MODE = 5
 HSM_INT_SCALE_MODE = 0

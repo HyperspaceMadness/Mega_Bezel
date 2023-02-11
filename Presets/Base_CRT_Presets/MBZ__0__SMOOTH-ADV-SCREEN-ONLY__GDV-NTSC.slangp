@@ -75,7 +75,7 @@ shader14 = ../../shaders/guest/extras/hsm-g-sharp_resampler.slang
 alias14 = "DeditherPass"
 
 shader15 = ../../shaders/guest/extras/hsm-sharpsmoother.slang
-// alias15 = "DeditherPass"
+# alias15 = "DeditherPass"
 
 shader16 = ../../shaders/base/stock.slang
 alias16 = refpass
@@ -123,8 +123,8 @@ scale_type24 = source
 mipmap_input24 = true
 scale24 = 1.0
 
-// Color Correction with Dogway's awesome Grade shader
-// Grade is after Afterglow so that brightening the black level does not break the afterglow
+# Color Correction with Dogway's awesome Grade shader
+# Grade is after Afterglow so that brightening the black level does not break the afterglow
 shader25 = ../../shaders/dogway/hsm-grade.slang
 filter_linear25 = false
 scale_type25 = source
@@ -178,7 +178,7 @@ scale32 = 1.0
 mipmap_input32 = true
 alias32 = "AvgLumPass"
 
-// Pass referenced by subsequent blurring passes and crt pass
+# Pass referenced by subsequent blurring passes and crt pass
 shader33 = ../../shaders/guest/hsm-interlace-and-linearize.slang
 filter_linear33 = true
 scale_type33 = source
@@ -250,11 +250,11 @@ scale_type41 = viewport
 float_framebuffer41 = true
 alias41 = "PostCRTPass"
 
-// Combine Passes ----------------------------------------------------------------
+# Combine Passes ----------------------------------------------------------------
 shader42 = ../../shaders/base/output-sdr.slang
 scale_type42 = viewport
 alias42 = "OutputPass"
-// Define textures to be used by the different passes
+# Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
 SamplerLUT1 = ../../shaders/guest/lut/trinitron-lut.png
@@ -341,10 +341,10 @@ TopLayerImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
 TopLayerImage_linear = true
 TopLayerImage_mipmap = 1
 
-// Use for matching vanilla GDV-Advanced
-// HSM_ASPECT_RATIO_MODE = 6
-// HSM_CURVATURE_MODE = 0
-// SMOOTH-ADV
+# Use for matching vanilla GDV-Advanced
+# HSM_ASPECT_RATIO_MODE = 6
+# HSM_CURVATURE_MODE = 0
+# SMOOTH-ADV
 SGPT_BLEND_OPTION = 1
 
 HSM_SCALEFX_ON = 1
@@ -356,14 +356,14 @@ HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = 30
 
 ntsc_scale = 0.33
 
-// Lottes mask, a bit like a slot mask effect
+# Lottes mask, a bit like a slot mask effect
 shadowMask = 1
 mask_bloom = 0.3
 
-// Mask Size is Auto, so it will look the same at 1080p and 4K
+# Mask Size is Auto, so it will look the same at 1080p and 4K
 masksize = 0
 
-// NTSC Parameters
+# NTSC Parameters
 GAMMA_INPUT = 2.0
 gamma_out = 1.95
 h_sharp = "15.000000"

@@ -12,7 +12,7 @@ mipmap_input1 = true
 float_framebuffer1 = true
 alias1 = "AvgLumPass"
 
-// Pass referenced by subsequent blurring passes and crt pass
+# Pass referenced by subsequent blurring passes and crt pass
 shader2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/hsm-interlace.slang
 filter_linear2 = true
 scale_type2 = source

@@ -75,9 +75,9 @@ shader14 = ../../shaders/guest/extras/hsm-g-sharp_resampler.slang
 alias14 = "DeditherPass"
 
 shader15 = ../../shaders/guest/extras/hsm-sharpsmoother.slang
-// alias15 = "DeditherPass"
+# alias15 = "DeditherPass"
 
-// GTU TV Processing
+# GTU TV Processing
 shader16 = ../../shaders/gtu/hsm-gtu-pass1.slang
 scale_type16 = source
 scale16 = 1.0
@@ -106,8 +106,8 @@ scale_type20 = source
 mipmap_input20 = true
 scale20 = 1.0
 
-// Color Correction with Dogway's awesome Grade shader
-// Grade is after Afterglow so that brightening the black level does not break the afterglow
+# Color Correction with Dogway's awesome Grade shader
+# Grade is after Afterglow so that brightening the black level does not break the afterglow
 shader21 = ../../shaders/dogway/hsm-grade.slang
 filter_linear21 = false
 scale_type21 = source
@@ -135,7 +135,7 @@ scale24 = 1.0
 mipmap_input24 = true
 alias24 = "AvgLumPass"
 
-// Pass referenced by subsequent blurring passes and crt pass
+# Pass referenced by subsequent blurring passes and crt pass
 shader25 = ../../shaders/guest/hsm-interlace-and-linearize.slang
 filter_linear25 = true
 scale_type25 = source
@@ -164,11 +164,11 @@ scale_type28 = viewport
 float_framebuffer28 = true
 alias28 = "PostCRTPass"
 
-// Combine Passes ----------------------------------------------------------------
+# Combine Passes ----------------------------------------------------------------
 shader29 = ../../shaders/base/output-sdr.slang
 scale_type29 = viewport
 alias29 = "OutputPass"
-// Define textures to be used by the different passes
+# Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
 SamplerLUT1 = ../../shaders/guest/lut/trinitron-lut.png
@@ -255,6 +255,6 @@ TopLayerImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
 TopLayerImage_linear = true
 TopLayerImage_mipmap = 1
 
-// Use for matching vanilla GDV-Advanced
-// HSM_ASPECT_RATIO_MODE = 6
-// HSM_CURVATURE_MODE = 0
+# Use for matching vanilla GDV-Advanced
+# HSM_ASPECT_RATIO_MODE = 6
+# HSM_CURVATURE_MODE = 0

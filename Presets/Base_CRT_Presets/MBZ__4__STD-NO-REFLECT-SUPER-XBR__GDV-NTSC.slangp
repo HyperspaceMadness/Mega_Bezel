@@ -73,14 +73,14 @@ shader13 = ../../shaders/guest/extras/hsm-g-sharp_resampler.slang
 alias13 = "DeditherPass"
 
 shader14 = ../../shaders/guest/extras/hsm-sharpsmoother.slang
-// alias14 = "DeditherPass"
+# alias14 = "DeditherPass"
 
 shader15 = ../../shaders/base/stock.slang
-// filter_linear15 = "false"
-// wrap_mode15 = "clamp_to_border"
-// mipmap_input15 = "false"
-// float_framebuffer15 = "false"
-// srgb_framebuffer15 = "true"
+# filter_linear15 = "false"
+# wrap_mode15 = "clamp_to_border"
+# mipmap_input15 = "false"
+# float_framebuffer15 = "false"
+# srgb_framebuffer15 = "true"
 alias15 = XbrSource
 
 shader16 = ../../shaders/hyllian/crt-super-xbr/super-xbr-pass0.slang
@@ -149,8 +149,8 @@ scale_type23 = source
 mipmap_input23 = true
 scale23 = 1.0
 
-// Color Correction with Dogway's awesome Grade shader
-// Grade is after Afterglow so that brightening the black level does not break the afterglow
+# Color Correction with Dogway's awesome Grade shader
+# Grade is after Afterglow so that brightening the black level does not break the afterglow
 shader24 = ../../shaders/dogway/hsm-grade.slang
 filter_linear24 = false
 scale_type24 = source
@@ -204,7 +204,7 @@ scale31 = 1.0
 mipmap_input31 = true
 alias31 = "AvgLumPass"
 
-// Pass referenced by subsequent blurring passes and crt pass
+# Pass referenced by subsequent blurring passes and crt pass
 shader32 = ../../shaders/guest/hsm-interlace-and-linearize.slang
 filter_linear32 = true
 scale_type32 = source
@@ -276,7 +276,7 @@ scale_type40 = viewport
 float_framebuffer40 = true
 alias40 = "PostCRTPass"
 
-// Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
+# Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 
 shader41 = ../../shaders/base/bezel-images-under-crt.slang
 filter_linear41 = true
@@ -290,11 +290,11 @@ scale_type42 = viewport
 float_framebuffer42 = true
 alias42 = "BR_LayersOverCRTPass"
 
-// Combine Passes ----------------------------------------------------------------
+# Combine Passes ----------------------------------------------------------------
 shader43 = ../../shaders/base/combine-passes-no-reflect.slang
 scale_type43 = viewport
 alias43 = "CombinePass"
-// Define textures to be used by the different passes
+# Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
 SamplerLUT1 = ../../shaders/guest/lut/trinitron-lut.png
@@ -381,11 +381,11 @@ TopLayerImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
 TopLayerImage_linear = true
 TopLayerImage_mipmap = 1
 
-// Use for matching vanilla GDV-Advanced
-// HSM_ASPECT_RATIO_MODE = 6
-// HSM_CURVATURE_MODE = 0
+# Use for matching vanilla GDV-Advanced
+# HSM_ASPECT_RATIO_MODE = 6
+# HSM_CURVATURE_MODE = 0
 
-// NTSC Parameters
+# NTSC Parameters
 GAMMA_INPUT = 2.0
 gamma_out = 1.95
 h_sharp = "15.000000"
@@ -393,7 +393,7 @@ s_sharp = "1.500000"
 
 ntsc_scale = 0.33
 
-// SMOOTH-ADV
+# SMOOTH-ADV
 SGPT_BLEND_OPTION = 1
 
 SHARPSMOOTHER_ON = 1
@@ -414,13 +414,13 @@ HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR = 100
 HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR = 0
 HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = 0
 
-// gamma_c = 0.9
-// gsl = -1
-// scanline1 = 3
-// shadowMask = 3
-// maskDark = 0.4
-// maskLight = 1.2
-// mask_gamma = 4
+# gamma_c = 0.9
+# gsl = -1
+# scanline1 = 3
+# shadowMask = 3
+# maskDark = 0.4
+# maskLight = 1.2
+# mask_gamma = 4
 
-// Mask Size is Auto, so it will look the same at 1080p and 4K
+# Mask Size is Auto, so it will look the same at 1080p and 4K
 masksize = 0

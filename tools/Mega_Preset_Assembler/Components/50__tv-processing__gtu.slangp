@@ -1,6 +1,6 @@
 shaders = 2
 
-// GTU TV Processing
+# GTU TV Processing
 shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/gtu/hsm-gtu-pass1.slang
 scale_type0 = source
 scale0 = 1.0

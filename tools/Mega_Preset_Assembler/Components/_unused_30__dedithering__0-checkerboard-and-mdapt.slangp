@@ -8,7 +8,7 @@ shader2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/hyllian/checkerboard-
 shader3 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/hyllian/checkerboard-dedither/checkerboard-dedither-pass3.slang
 alias3 = "PreMdaptPass"
 
-// De-Dithering - Mdapt
+# De-Dithering - Mdapt
 shader4 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/mdapt/hsm-mdapt-pass0.slang
 shader5 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/mdapt/hsm-mdapt-pass1.slang
 shader6 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/mdapt/hsm-mdapt-pass2.slang

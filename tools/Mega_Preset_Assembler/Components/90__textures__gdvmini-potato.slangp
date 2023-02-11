@@ -1,4 +1,4 @@
-// Define textures to be used by the different passes
+# Define textures to be used by the different passes
 textures = "ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
 
 ScreenPlacementImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Placeholder_Transparent_16x16.png
@@ -12,9 +12,9 @@ BackgroundVertImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/
 BackgroundVertImage_linear = true
 BackgroundVertImage_mipmap = 1
 
-// Parameters
+# Parameters
 HSM_ASPECT_RATIO_MODE = 1
 
-// Use for matching vanilla GDV-Advanced
-// HSM_ASPECT_RATIO_MODE = 6
-// HSM_CURVATURE_MODE = 0
+# Use for matching vanilla GDV-Advanced
+# HSM_ASPECT_RATIO_MODE = 6
+# HSM_CURVATURE_MODE = 0

@@ -55,8 +55,8 @@ scale_type8 = source
 mipmap_input8 = true
 scale8 = 1.0
 
-// Color Correction with Dogway's awesome Grade shader
-// Grade is after Afterglow so that brightening the black level does not break the afterglow
+# Color Correction with Dogway's awesome Grade shader
+# Grade is after Afterglow so that brightening the black level does not break the afterglow
 shader9 = ../../shaders/dogway/hsm-grade.slang
 filter_linear9 = false
 scale_type9 = source
@@ -107,7 +107,7 @@ mipmap_input16 = true
 float_framebuffer16 = true
 alias16 = "AvgLumPass"
 
-// Pass referenced by subsequent blurring passes and crt pass
+# Pass referenced by subsequent blurring passes and crt pass
 shader17 = ../../shaders/guest/hsm-interlace.slang
 filter_linear17 = true
 scale_type17 = source
@@ -116,7 +116,7 @@ float_framebuffer17 = true
 alias17 = "LinearizePass"
 feedback_pass = "0"
 
-// Sony Megatron Colour Video Monitor by Major Pain The Cactus
+# Sony Megatron Colour Video Monitor by Major Pain The Cactus
 shader18 = "../../shaders/megatron/crt-sony-megatron-source-pass.slang"
 filter_linear18 = "false"
 scale_type18 = "source"
@@ -149,11 +149,11 @@ scale_type21 = viewport
 float_framebuffer21 = true
 alias21 = "PostCRTPass"
 
-// Combine Passes ----------------------------------------------------------------
+# Combine Passes ----------------------------------------------------------------
 shader22 = ../../shaders/base/output-hdr.slang
 scale_type22 = viewport
 alias22 = "OutputPass"
-// Define textures to be used by the different passes
+# Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
 
 SamplerLUT1 = ../../shaders/guest/lut/trinitron-lut.png
@@ -176,14 +176,14 @@ BackgroundVertImage = ../../shaders/textures/Baked_Frame_Carbonfiber_Background_
 BackgroundVertImage_linear = true
 BackgroundVertImage_mipmap = 1
 
-// Parameters
+# Parameters
 HSM_ASPECT_RATIO_MODE = 1
 
-// Use for matching vanilla GDV-Advanced
-// HSM_ASPECT_RATIO_MODE = 6
-// HSM_CURVATURE_MODE = 0
+# Use for matching vanilla GDV-Advanced
+# HSM_ASPECT_RATIO_MODE = 6
+# HSM_CURVATURE_MODE = 0
 
-// Sony Megatron Color Monitor
+# Sony Megatron Color Monitor
 hcrt_hdr = "0.000000"
 
 HSM_INT_SCALE_MODE = "1.000000"
@@ -191,7 +191,7 @@ HSM_CRT_CURVATURE_SCALE = "0.000000"
 HSM_GLOBAL_GRAPHICS_BRIGHTNESS = "100.000000"
 HSM_REFLECT_GLOBAL_AMOUNT = "7.000000"
 
-// NTSC Parameters
+# NTSC Parameters
 GAMMA_INPUT = 2.0
 gamma_out = 1.95
 HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = "200.000000"

@@ -1,6 +1,6 @@
 shaders = 1
 
-// Combine Passes ----------------------------------------------------------------
+# Combine Passes ----------------------------------------------------------------
 shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/combine-passes.slang
 scale_type0 = viewport
 alias0 = "CombinePass"

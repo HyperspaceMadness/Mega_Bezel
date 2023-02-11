@@ -16,7 +16,7 @@ SHARPEN = "0.300000"
 g_cntrst = "0.500000"
 
 GDV_AFTERGLOW_THRESHOLD = "7.5"
-// BP = "16"
+# BP = "16"
 
 glow = "-0.300000"
 SIZEH = "7.000000"

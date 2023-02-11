@@ -56,8 +56,8 @@ scale_type8 = source
 mipmap_input8 = true
 scale8 = 1.0
 
-// Color Correction with Dogway's awesome Grade shader
-// Grade is after Afterglow so that brightening the black level does not break the afterglow
+# Color Correction with Dogway's awesome Grade shader
+# Grade is after Afterglow so that brightening the black level does not break the afterglow
 shader9 = ../../shaders/dogway/hsm-grade.slang
 filter_linear9 = false
 scale_type9 = source
@@ -85,7 +85,7 @@ scale12 = 1.0
 mipmap_input12 = true
 alias12 = "AvgLumPass"
 
-// Pass referenced by subsequent blurring passes and crt pass
+# Pass referenced by subsequent blurring passes and crt pass
 shader13 = ../../shaders/guest/hsm-interlace-and-linearize.slang
 filter_linear13 = true
 scale_type13 = source
@@ -147,7 +147,7 @@ mipmap_input20 = true
 scale_type20 = viewport
 float_framebuffer20 = true
 alias20 = "PostCRTPass"
-// Define textures to be used by the different passes
+# Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
 
 SamplerLUT1 = ../../shaders/guest/lut/trinitron-lut.png
@@ -170,14 +170,14 @@ BackgroundVertImage = ../../shaders/textures/Baked_Frame_Carbonfiber_Background_
 BackgroundVertImage_linear = true
 BackgroundVertImage_mipmap = 1
 
-// Parameters
+# Parameters
 HSM_ASPECT_RATIO_MODE = 1
 
-// Use for matching vanilla GDV-Advanced
-// HSM_ASPECT_RATIO_MODE = 6
-// HSM_CURVATURE_MODE = 0
+# Use for matching vanilla GDV-Advanced
+# HSM_ASPECT_RATIO_MODE = 6
+# HSM_CURVATURE_MODE = 0
 
-// DREZ Parameters
+# DREZ Parameters
 SHARPEN = 0
 HSM_ASPECT_RATIO_ORIENTATION = 1
 HSM_ASPECT_RATIO_MODE = 0

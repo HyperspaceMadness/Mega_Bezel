@@ -3,17 +3,17 @@
 Mega Bezel is updated to V1.10.0_2023-02-04
 
 Changes:
-  * Guest Advanced updated to crt-guest-advanced-2023-02-08-release1
+  * Guest Advanced updated to crt-guest-advanced-2023-02-11-release1
     * Improvements to the new Magic Glow feature
       * Turn Magic Glow on and Increase the Glow amount to see the effect
-  * Added Guest's Raster Bloom back in as well as Overscan control
-
+  * Added/Restored Guest's Raster Bloom as well as Overscan control
+  * Updated Comments in presets to use # instead of // as per @hunterk's request
+  
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
-  * Add back Raster Bloom
   * Update Megatron
   * Add Passthrough Preset, no crt shader
   * Add AbsoluteMax as a scaling type

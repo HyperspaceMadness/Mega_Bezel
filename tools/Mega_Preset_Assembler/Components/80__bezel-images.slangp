@@ -1,6 +1,6 @@
 shaders = 2
 
-// Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
+# Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 
 shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/bezel-images-under-crt.slang
 filter_linear0 = true
