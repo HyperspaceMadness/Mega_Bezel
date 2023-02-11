@@ -18,6 +18,7 @@ Changes:
   * Add Passthrough Preset, no crt shader
   * Add AbsoluteMax as a scaling type
   * Add readme for Signal Noise
+  * Add readme for Overscan and Raster Bloom
   * Check difference between old and new NTSC
   * Check out duplicate params in NTSC
   * Check out independent bezel scale and reflection, reflection is not following the bezel

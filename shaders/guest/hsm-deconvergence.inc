@@ -98,7 +98,7 @@
 #pragma parameter GDV_HUMBAR_LINE							" " 0 0 0.001 0.001
 #pragma parameter gdv_humbar_title "[ HUM BAR ]: " 0.0 0.0 0.1 0.1
 
-#pragma parameter barspeed "          Hum Bar Speed" 50.0 3.0 200.0 1.0
+#pragma parameter barspeed "          Hum Bar Speed" 50.0 3.0 200.0 0.2
 
 #pragma parameter barintensity "          Hum Bar Intensity" 0.0 -1.0 1.0 0.01
 
@@ -908,13 +908,16 @@ if (abs(bloom) > 0.025)
 	if (global.m_glow < 0.5) Glow = mix(Glow, 0.25*color, 0.7*colmx);
 	else
 	{ 
-		vec3 gb = plant(orig1 + 0.001*Ref, 1.0);
 		maxb = max(max(Glow.r,Glow.g),Glow.b);
-		gb = mix(maxb*vec3(0.0, 0.0, 1.0), Glow, clamp(gb.r + gb.g - 0.25*gb.b,0.0,1.0)); 
-		Glow = mix(global.m_glow_low*Glow, global.m_glow_high*plant(mix(gb,orig1, 0.5*sqrt(colmx)*abs(plant(Glow,1.0)-plant(orig1,1.0))), maxb), pow(mx1, global.m_glow_dist/gamma_in));
+		orig1 = plant(orig1 + 0.001*Ref, 1.0);
+		Bloom = plant(Glow, 1.0);
+		mx0 = max(max(orig1.g,orig1.g),orig1.b)-min(min(orig1.g,orig1.g),orig1.b);
+		mx2 = max(max(Bloom.g,Bloom.g),Bloom.b)-min(min(Bloom.g,Bloom.g),Bloom.b);		
+		Bloom = mix(maxb*orig1, Glow, min(sqrt((1.15-mx0)*(0.05+mx2)),1.0));
+		Glow = mix(global.m_glow_low*Glow, global.m_glow_high*Bloom, pow(colmx, global.m_glow_dist/gamma_in));
 	}
 	
-	if (glow >= 0.0 && global.m_glow < 0.5) color = color + 0.5*Glow*glow; else { cmask*=cmask; cmask*=cmask; color = color + abs(glow)*cmask*Glow; }
+	if (glow >= 0.0 && global.m_glow < 0.5) color = color + 0.5*Glow*glow; else { cmask*=cmask; cmask*=cmask; color = color + abs(glow)*cmask*Glow;}
 
 	/* HSM Removed
 	color = min(color, 1.0);

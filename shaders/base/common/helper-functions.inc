@@ -288,7 +288,6 @@ bool HHLP_IsOutsideCoordSpace(vec2 in_coord)
 	return (abs(in_coord.x - 0.5) > 0.51 && abs(in_coord.y - 0.5) > 0.51);
 }
 
-
-
-
-
+float rand(vec2 co, float size){
+    return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453) * size;
+}
