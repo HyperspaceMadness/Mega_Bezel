@@ -25,8 +25,8 @@ for file_name in [p for p in preset_paths if os.path.splitext(p)[1] == '.slangp'
     template_errors = []
     if template_lines:
         for line in template_lines:
-            line = line.replace(':/shaders/shaders_slang/bezel/Mega_Bezel/shaders/', '../../shaders/')
-            line = line.replace(':/shaders/shaders_slang/', '../../../../')
+            line = line.replace(':/shaders/shaders_slang/bezel/Mega_Bezel/shaders/', '../../../shaders/')
+            line = line.replace(':/shaders/shaders_slang/', '../../../../../')
             out_preset_contents += line + '\n'
 
     f = open(file_name, "w")
@@ -38,6 +38,14 @@ print('Absolute Paths Replace Complete!!!')
 
 # Go through all preset files
 for file_name in [p for p in preset_paths if os.path.splitext(p)[1] == '.slangp'] :
+
+    out_simple_preset_contents = ''
+    template_lines = ['#reference "Root_Presets/' + file_name + '"',
+                      '#reference "../../resource/param_values/base/auto-settings.params"']
+    if template_lines:
+        for line in template_lines:
+            out_simple_preset_contents += line + '\n'
+
     # print('\n' + os.path.split(file_name)[1])
     old_preset_path = os.path.join(dir_path, file_name)
 
@@ -52,13 +60,21 @@ for file_name in [p for p in preset_paths if os.path.splitext(p)[1] == '.slangp'
         new_preset_path = os.path.join(test_presets_base_path, file_name)
     else:
         if 'DREZ' in file_name:
-            new_preset_path = os.path.join(presets_base_path, "Base_CRT_Presets_DREZ", file_name)
+            new_preset_path = os.path.join(presets_base_path, "Base_CRT_Presets_DREZ/Root_Presets", file_name)
+            simple_preset_path = os.path.join(presets_base_path, "Base_CRT_Presets_DREZ", file_name)
         else:
-            new_preset_path = os.path.join(presets_base_path, "Base_CRT_Presets", file_name)
+            new_preset_path = os.path.join(presets_base_path, "Base_CRT_Presets/Root_Presets", file_name)
+            simple_preset_path = os.path.join(presets_base_path, "Base_CRT_Presets", file_name)
 
     if os.path.exists(new_preset_path):
         os.replace(old_preset_path, new_preset_path)
     else:
         os.rename(old_preset_path, new_preset_path)
+
+    if os.path.exists(simple_preset_path):
+        os.remove(simple_preset_path)
+    f = open(simple_preset_path, "w")
+    f.write(out_simple_preset_contents)
+    f.close()
 
 print('Files Move and Replace Complete!!!') 

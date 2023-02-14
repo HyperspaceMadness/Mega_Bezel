@@ -59,7 +59,7 @@ vec2 HSM_GetScreenCorePreppedSize(float screen_index)
 vec2 HSM_GetRotatedScreenCorePreppedSize(float screen_index)
 {
 	vec2 original_size = HSM_GetScreenCorePreppedSize(screen_index);
-	return HSM_ROTATE_CORE_IMAGE * original_size.yx + (1 - HSM_ROTATE_CORE_IMAGE) * original_size.xy;
+	return abs(HSM_ROTATE_CORE_IMAGE) * original_size.yx + (1 - abs(HSM_ROTATE_CORE_IMAGE)) * original_size.xy;
 }
 
 vec2 HSM_GetRotatedScreenDerezedSize()
@@ -72,7 +72,7 @@ vec2 HSM_GetRotatedScreenDerezedSize()
 		else
 			pass_size.x *= 0.5;
 
-	return HSM_ROTATE_CORE_IMAGE * pass_size.yx + (1 - HSM_ROTATE_CORE_IMAGE) * pass_size.xy;
+	return abs(HSM_ROTATE_CORE_IMAGE) * pass_size.yx + (1 - abs(HSM_ROTATE_CORE_IMAGE)) * pass_size.xy;
 }
 
 float HSM_GetUseVerticalScanlines(float screen_aspect)
@@ -248,7 +248,7 @@ vec2 HSM_GetResMult(float use_vert_scanlines)
 {
 	vec2 sampling_mult = vec2(HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR, HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR);
 	
-	if (use_vert_scanlines == 1 && HSM_ROTATE_CORE_IMAGE == 0 || use_vert_scanlines == 0 && HSM_ROTATE_CORE_IMAGE == 1)
+	if (use_vert_scanlines == 1 && HSM_ROTATE_CORE_IMAGE == 0 || use_vert_scanlines == 0 && abs(HSM_ROTATE_CORE_IMAGE) == 1)
 		sampling_mult = sampling_mult.yx;
 
 	return sampling_mult;
@@ -574,7 +574,7 @@ void HSM_GetCroppedRotatedSizeAndPixelSampleAreaStart(float screen_index, sample
 
 vec2 HSM_GetCroppedRotatedSizeWithResMult(vec2 cropped_rotated_size, vec2 sampling_mult)
 {
-	sampling_mult = HSM_ROTATE_CORE_IMAGE == 1 ? sampling_mult.yx : sampling_mult.xy;
+	sampling_mult = abs(HSM_ROTATE_CORE_IMAGE) == 1 ? sampling_mult.yx : sampling_mult.xy;
 	return ceil(cropped_rotated_size * sampling_mult.xy);
 }
 

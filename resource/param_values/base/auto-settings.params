@@ -1,0 +1,2 @@
+#reference "../tube-rotation/[rotation].params"
+#reference "../core-defaults/[videodriver]_[core].params"

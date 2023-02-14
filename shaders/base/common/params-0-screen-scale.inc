@@ -138,7 +138,7 @@ float HSM_FLIP_CORE_VERTICAL = -(global.HSM_FLIP_CORE_VERTICAL * 2 - 1);
 // float HSM_FLIP_CORE_HORIZONTAL = global.HSM_FLIP_CORE_HORIZONTAL;
 float HSM_FLIP_CORE_HORIZONTAL = -(global.HSM_FLIP_CORE_HORIZONTAL * 2 - 1);
 
-#pragma parameter HSM_ROTATE_CORE_IMAGE								"          Rotate CRT Tube"  0 0 1 1
+#pragma parameter HSM_ROTATE_CORE_IMAGE								"          Rotate CRT Tube --  -1:270 | 0 | 1:90"  0 -1 1 1
 float HSM_ROTATE_CORE_IMAGE = global.HSM_ROTATE_CORE_IMAGE;
 
 

@@ -56,7 +56,7 @@ float HSM_GetAspectRatioFromMode(float in_aspect_ratio_mode, float in_explicit_a
 
 vec2 HSM_GetRotatedCoreOriginalSize()
 {
-	return HSM_ROTATE_CORE_IMAGE * global.OriginalSize.yx + (1 - HSM_ROTATE_CORE_IMAGE) * global.OriginalSize.xy;
+	return abs(HSM_ROTATE_CORE_IMAGE) * global.OriginalSize.yx + (1 - abs(HSM_ROTATE_CORE_IMAGE)) * global.OriginalSize.xy;
 }
 
 vec2 HSM_GetDerezedSize()
@@ -66,7 +66,7 @@ vec2 HSM_GetDerezedSize()
 
 vec2 HSM_GetRotatedDerezedSize()
 {
-	return HSM_ROTATE_CORE_IMAGE * global.DerezedPassSize.yx + (1 - HSM_ROTATE_CORE_IMAGE) * global.DerezedPassSize.xy;
+	return abs(HSM_ROTATE_CORE_IMAGE) * global.DerezedPassSize.yx + (1 - abs(HSM_ROTATE_CORE_IMAGE)) * global.DerezedPassSize.xy;
 }
 
 // Core Prepped Size is the size after DeRez and adding in the negative crop
@@ -77,7 +77,7 @@ vec2 HSM_GetNegativeCropAddedSize()
 
 vec2 HSM_GetRotatedNegativeCropAddedSize()
 {
-	return HSM_ROTATE_CORE_IMAGE * global.NegativeCropAddedPassSize.yx + (1 - HSM_ROTATE_CORE_IMAGE) * global.NegativeCropAddedPassSize.xy;
+	return abs(HSM_ROTATE_CORE_IMAGE) * global.NegativeCropAddedPassSize.yx + (1 - abs(HSM_ROTATE_CORE_IMAGE)) * global.NegativeCropAddedPassSize.xy;
 }
 
 float HSM_GetSwappedScreenIndex(float screen_index)
@@ -101,11 +101,18 @@ float HSM_GetSwappedScreenIndex(float screen_index)
 
 vec2 HSM_RotateCoordinate(vec2 in_coord, float rotation)
 {
+	if (rotation == 0)
+		return in_coord;
+	
+	float abs_rotation = abs(rotation);
 	vec2 ctr_coord = in_coord - 0.5;
 
-	ctr_coord = (1 - abs(rotation)) * ctr_coord
-				+ clamp(rotation, 0, 1) * rotation * vec2(-ctr_coord.y, ctr_coord.x)
-				+ abs(clamp(rotation, -1, 0)) * abs(rotation) * vec2(ctr_coord.y, -ctr_coord.x);
+	ctr_coord = (1 - abs_rotation) * ctr_coord
+				+ clamp(abs_rotation, 0, 1) * abs_rotation * vec2(-ctr_coord.y, ctr_coord.x)
+				+ abs(clamp(abs_rotation, -1, 0)) * abs_rotation * vec2(ctr_coord.y, -ctr_coord.x);
+
+	if (rotation < 0)
+		ctr_coord *= -1;
 
 	return ctr_coord + 0.5;
 }

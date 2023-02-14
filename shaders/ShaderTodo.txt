@@ -8,12 +8,16 @@ Changes:
       * Turn Magic Glow on and Increase the Glow amount to see the effect
   * Added/Restored Guest's Raster Bloom as well as Overscan control
   * Updated Comments in presets to use # instead of // as per @hunterk's request
-  
+  * Added rotation option for Rotate CRT Tube:
+    * -1 = 90 Degrees Clockwise (or 270 Counter Clockwise)
+    * 0 = No Rotation
+    * 1 = 90 Degrees Counter Clockwise
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Implement Wildcard for Video Driver
   * Update Megatron
   * Add Passthrough Preset, no crt shader
   * Add AbsoluteMax as a scaling type

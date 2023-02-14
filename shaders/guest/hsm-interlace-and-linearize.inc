@@ -182,7 +182,7 @@ void main()
 	use_vert_scanlines_bool = (USE_VERTICAL_SCANLINES > 0.5);
 
 	// HSM Added
-	if (HSM_ROTATE_CORE_IMAGE > 0.5)
+	if (abs(HSM_ROTATE_CORE_IMAGE) > 0.5)
 	{
 		use_vert_scanlines_bool = !use_vert_scanlines_bool;
 	}
