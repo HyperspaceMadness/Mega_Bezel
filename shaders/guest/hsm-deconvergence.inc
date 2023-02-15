@@ -1,7 +1,7 @@
 /*
    CRT - Guest - Advanced
    
-   Copyright (C) 2018-2022 guest(r) - guest.r@gmail.com
+   Copyright (C) 2018-2023 guest(r) - guest.r@gmail.com
 
    Incorporates many good ideas and suggestions from Dr. Venom.
    I would also like give thanks to many Libretro forums members for continuous feedback, suggestions and caring about the shader.
@@ -32,6 +32,8 @@
 #pragma parameter m_glow_high 	"          Magic Glow High Strength -- m_glow_high" 5.0 0.0 7.0 0.10 
 
 #pragma parameter m_glow_dist 	"          Magic Glow Distribution -- m_glow_dist" 1.0 0.20 4.0 0.05 
+
+#pragma parameter m_glow_mask "          Magic Glow Mask Strength -- m_glow_mask" 1.0 0.0 2.0 0.025
 
 #pragma parameter glow 			"          (Magic) Glow Strength -- glow" 0.08 -2.0 2.0 0.01
 #define glow         global.glow     // Glow Strength
@@ -913,11 +915,12 @@ if (abs(bloom) > 0.025)
 		Bloom = plant(Glow, 1.0);
 		mx0 = max(max(orig1.g,orig1.g),orig1.b)-min(min(orig1.g,orig1.g),orig1.b);
 		mx2 = max(max(Bloom.g,Bloom.g),Bloom.b)-min(min(Bloom.g,Bloom.g),Bloom.b);		
-		Bloom = mix(maxb*orig1, Glow, min(sqrt((1.15-mx0)*(0.05+mx2)),1.0));
+		Bloom = mix(maxb*orig1, Glow, min(sqrt((1.15-mx0)*(0.10+mx2)),1.0));
 		Glow = mix(global.m_glow_low*Glow, global.m_glow_high*Bloom, pow(colmx, global.m_glow_dist/gamma_in));
 	}
 	
-	if (glow >= 0.0 && global.m_glow < 0.5) color = color + 0.5*Glow*glow; else { cmask*=cmask; cmask*=cmask; color = color + abs(glow)*cmask*Glow;}
+	if (glow >= 0.0 && global.m_glow < 0.5) color = color + 0.5*Glow*glow;
+	else { if(global.m_glow > 0.5) cmask1 = max(mix(one, cmask1, global.m_glow_mask),0.0); color = color + abs(glow)*cmask1*Glow; }
 
 	/* HSM Removed
 	color = min(color, 1.0);

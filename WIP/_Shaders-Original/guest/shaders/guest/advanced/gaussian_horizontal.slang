@@ -3,7 +3,7 @@
 /*
    Gaussian blur - horizontal pass, dynamic range, resizable
    
-   Copyright (C) 2020-2022 guest(r) - guest.r@gmail.com
+   Copyright (C) 2020-2023 guest(r) - guest.r@gmail.com
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@ layout(push_constant) uniform Push
 	float m_glow_low;
 	float m_glow_high;
 	float m_glow_dist;
+	float m_glow_mask;
 } params;
 
 #pragma parameter bogus_mglow "[ MAGIC GLOW SETTINGS ]:" 0.0 0.0 1.0 1.0
@@ -45,13 +46,12 @@ layout(push_constant) uniform Push
 #define m_glow_cutoff params.m_glow_cutoff
 
 #pragma parameter m_glow_low "          Magic Glow Low Strength" 0.35 0.0 7.0 0.05 
-#define m_glow_low params.m_glow_low
 
 #pragma parameter m_glow_high "          Magic Glow High Strength" 5.0 0.0 7.0 0.10 
-#define m_glow_high params.m_glow_high
 
 #pragma parameter m_glow_dist "          Magic Glow Distribution" 1.0 0.20 4.0 0.05 
-#define m_glow_dist params.m_glow_dist
+
+#pragma parameter m_glow_mask "          Magic Glow Mask Strength" 1.0 0.0 2.0 0.025 
 
 #pragma parameter bogus_glow "[ GLOW PASS SETTINGS ]:" 0.0 0.0 1.0 1.0
 

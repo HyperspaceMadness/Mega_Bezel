@@ -705,6 +705,7 @@ float HSM_REFLECT_MASK_MIPMAPPING_BLEND_BIAS;
 	float m_glow_low;
 	float m_glow_high;
 	float m_glow_dist;
+float m_glow_mask;
 
 	float glow;
 	float bloom;

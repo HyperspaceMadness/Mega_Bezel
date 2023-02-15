@@ -53,13 +53,15 @@ layout(push_constant) uniform Push
 #pragma parameter glow 			"          (Magic) Glow Strength -- glow" 0.08 -2.0 2.0 0.01
 #define m_glow params.m_glow
 
-#pragma parameter m_glow_cutoff "          Magic Glow Cutoff" 0.12 0.0 0.4 0.01 
+#pragma parameter m_glow_mask 	"          Magic Glow Mask Strength -- m_glow_mask" 1.0 0.0 2.0 0.025 
+
+#pragma parameter m_glow_cutoff "          Magic Glow Cutoff -- m_glow_cutoff" 0.12 0.0 0.4 0.01 
 #define m_glow_cutoff params.m_glow_cutoff
 
-#pragma parameter SIZEH "          Horizontal Radius (Num Samples) -- SIZEH" 6.0 1.0 50.0 1.0 
+#pragma parameter SIZEH 		"          Horizontal Radius (Num Samples) -- SIZEH" 6.0 1.0 50.0 1.0 
 #define SIZEH params.SIZEH
 
-#pragma parameter SIGMA_H "          Horizontal Sigma ( Spread ) -- SIGMA_H" 1.20 0.20 15.0 0.10
+#pragma parameter SIGMA_H 		"          Horizontal Sigma ( Spread ) -- SIGMA_H" 1.20 0.20 15.0 0.10
 #define SIGMA_H params.SIGMA_H
 
 layout(std140, set = 0, binding = 0) uniform UBO
