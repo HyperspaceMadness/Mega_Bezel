@@ -17,7 +17,7 @@ Changes:
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
-  * Implement Wildcard for Video Driver
+  * Rotate Texture Parameters
   * Update Megatron
   * Add Passthrough Preset, no crt shader
   * Add AbsoluteMax as a scaling type
