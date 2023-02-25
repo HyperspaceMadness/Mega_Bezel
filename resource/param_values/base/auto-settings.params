@@ -1,2 +1,2 @@
-#reference "../tube-rotation/$CORE-REQUESTED-ROTATION$.params"
-#reference "../core-defaults/$VIDEO-DRIVER$_$CORE$.params"
+#reference "../tube-rotation/$CORE-REQ-ROT$.params"
+#reference "../core-defaults/$VID-DRV$_$CORE$.params"
