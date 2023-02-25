@@ -107,8 +107,9 @@ void main()
 	
 	float zero = exp2(-h_sharp);
 	float sharp1 = s_sharp * zero;
-	
-	float fdivider = max(min(prescalex.x, 2.0), 1.5*float(interb));
+
+	float idiv = clamp(SourceSize.x / 400.0, 1.0, 2.0);	
+	float fdivider = max(min(prescalex.x, 2.0), idiv*float(interb));
 	
 	float wl3 = (2.0 + fpx)/fdivider;
 	float wl2 = (1.0 + fpx)/fdivider;

@@ -52,6 +52,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float no_scanlines;
 	float intres;
 	float fcompat;
+	float smask_mit;	
 } global;
 
 #pragma parameter fcompat "          Compatibility Mode (slower, use if glitchy)" 0.0 0.0 1.0 1.0 
@@ -180,6 +181,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter mclip "          Keep Mask effect with clipping" 0.0 0.0 1.0 0.05
 #define mclip  params.mclip     // Slot Mask Size
 
+#pragma parameter smask_mit "          Mitigate Slotmask Interaction" 0.0 0.0 1.0 0.05
+#define smask_mit  global.smask_mit
+
 #pragma parameter bogus_deconvergence22 "[ HORIZONTAL DECONVERGENCE ]:" 0.0 0.0 1.0 1.0
 
 #pragma parameter DER  "          Deconvergence Red offset" 0.0 -15.0 15.0 0.5
@@ -268,10 +272,10 @@ vec3 Mask(vec2 pos, float mx)
 	vec3 one = vec3(1.0);
 	
 	// brightness correcture masks 5-12
-	float sm = 0.45; if(shadowMask == 8.0 || shadowMask == 11.0) sm = 0.7;
+	float sm = 0.45; if(shadowMask == 8.0 || shadowMask == 11.0 || shadowMask == 13.0) sm = 0.7;
 	float dark_compensate  = mix(max( clamp( mix (mcut, maskstr, mx),0.0, 1.0) - sm, 0.0) + 1.0, 1.0, mx);
 	
-	float mc = 1.0 - max(maskstr, 0.0);
+	float mc = 1.0 - max(maskstr, 0.0);	
 	
 	// No mask
 	if (shadowMask == -1.0)
@@ -298,11 +302,11 @@ vec3 Mask(vec2 pos, float mx)
 		if (fract((pos.y + odd)/2.0) < 0.49)
 			line = maskDark;
 
-		pos.x = fract(pos.x/3.0);
+		pos.x = floor(mod(pos.x,3.0));
     
-		if      (pos.x < 0.3) mask.r = maskLight;
-		else if (pos.x < 0.6) mask.g = maskLight;
-		else                    mask.b = maskLight;
+		if      (pos.x < 0.5) mask.r = maskLight;
+		else if (pos.x < 1.5) mask.g = maskLight;
+		else                  mask.b = maskLight;
 		
 		mask*=line;  
 	} 
@@ -310,11 +314,11 @@ vec3 Mask(vec2 pos, float mx)
 	// Aperture-grille.
 	else if (shadowMask == 2.0)
 	{
-		pos.x = fract(pos.x/3.0);
+		pos.x = floor(mod(pos.x,3.0));
 
-		if      (pos.x < 0.3) mask.r = maskLight;
-		else if (pos.x < 0.6) mask.g = maskLight;
-		else                    mask.b = maskLight;
+		if      (pos.x < 0.5) mask.r = maskLight;
+		else if (pos.x < 1.5) mask.g = maskLight;
+		else                  mask.b = maskLight;
 	} 
 
 	// Stretched VGA style shadow mask (same as prior shaders).
@@ -325,7 +329,7 @@ vec3 Mask(vec2 pos, float mx)
 
 		if      (pos.x < 0.3) mask.r = maskLight;
 		else if (pos.x < 0.6) mask.g = maskLight;
-		else                    mask.b = maskLight;
+		else                  mask.b = maskLight;
 	}
 
 	// VGA style shadow mask.
@@ -337,7 +341,7 @@ vec3 Mask(vec2 pos, float mx)
 
 		if      (pos.x < 0.3) mask.r = maskLight;
 		else if (pos.x < 0.6) mask.g = maskLight;
-		else                    mask.b = maskLight;
+		else                  mask.b = maskLight;
 	}
 	
 	// Trinitron mask 5
@@ -357,9 +361,9 @@ vec3 Mask(vec2 pos, float mx)
 	else if (shadowMask == 6.0)
 	{
 		mask = vec3(0.0);
-		pos.x = fract(pos.x/3.0);
-		if      (pos.x < 0.3) mask.r = 1.0;
-		else if (pos.x < 0.6) mask.g = 1.0;
+		pos.x = floor(mod(pos.x,3.0));
+		if      (pos.x < 0.5) mask.r = 1.0;
+		else if (pos.x < 1.5) mask.g = 1.0;
 		else                    mask.b = 1.0;
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
 	}
@@ -413,21 +417,13 @@ vec3 Mask(vec2 pos, float mx)
 	// 4k mask
 	else if (shadowMask == 11.0)
 	{
-		mask = vec3(mc);
+		mask = vec3(0.0);
 		pos.x = fract(pos.x * 0.25);
 		if      (pos.x < 0.2)  mask.r  = 1.0;
 		else if (pos.x < 0.4)  mask.rg = 1.0.xx;
 		else if (pos.x < 0.7)  mask.gb = 1.0.xx;	
-		else                   mask.b  = 1.0;	
-	}     
-	else if (shadowMask == 12.0)
-	{
-		mask = vec3(mc);
-		pos.x = fract(pos.x * 0.25);
-		if      (pos.x < 0.2)  mask.r  = 1.0;
-		else if (pos.x < 0.4)  mask.rb = 1.0.xx;
-		else if (pos.x < 0.7)  mask.gb = 1.0.xx;	
-		else                   mask.g  = 1.0;	
+		else                   mask.b  = 1.0;
+		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;		
 	}     
 
 	// RRGGBBX mask
@@ -455,7 +451,7 @@ vec3 Mask(vec2 pos, float mx)
 		else                   mask.b = 1.0;
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
 	}
- 
+	
 	float maskmin = min(min(mask.r,mask.g),mask.b);
 	return (mask - maskmin) * maskboost + maskmin;
 }
@@ -465,15 +461,14 @@ float SlotMask(vec2 pos, float m)
 	if ((slotmask + slotmask1) == 0.0) return 1.0;
 	else
 	{
-	if (shadowMask == 2.0 || shadowMask == 6.0) pos.x = pos.x + slotms;
 	pos = floor(pos/slotms);
 	float mlen = slotwidth*2.0;
-	float px = fract(pos.x/mlen);
+	float px = floor(mod(pos.x, 0.99999*mlen));
 	float py = floor(fract(pos.y/(2.0*double_slot))*2.0*double_slot);
 	float slot_dark = mix(1.0-slotmask1, 1.0-slotmask, m);
 	float slot = 1.0;
-	if (py == 0.0 && px <  0.5) slot = slot_dark; else
-	if (py == double_slot && px >= 0.5) slot = slot_dark;		
+	if (py == 0.0 && px < slotwidth) slot = slot_dark; else
+	if (py == double_slot && px >= slotwidth) slot = slot_dark;		
 	
 	return slot;
 	}
@@ -728,7 +723,8 @@ if (abs(vertmask) > 0.025)
 	vec3 orig1 = color;
 	vec3 cmask = one;
 	
-	float smask = SlotMask(gl_FragCoord.xy * 1.000001, mx);	
+	float smask = SlotMask(gl_FragCoord.xy * 1.000001, mx);
+	smask = clamp(smask + mix(smask_mit, 0.0, min(w3, sqrt(max(max(orig1.r,orig1.g),orig1.b)))), 0.0, 1.0);
 	cmask*= Mask(gl_FragCoord.xy * 1.000001, mx);
 
 	if (mask_layout > 0.5) cmask = cmask.rbg;

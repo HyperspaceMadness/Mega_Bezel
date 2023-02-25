@@ -74,6 +74,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float m_glow_high;
 	float m_glow_dist;
 	float m_glow_mask;
+	float smask_mit;
 } global;
 
 
@@ -210,6 +211,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter smoothmask "          Smooth Masks in bright scanlines" 0.0 0.0 1.0 1.0
 #define smoothmask  global.smoothmask
 
+#pragma parameter smask_mit "          Mitigate Slotmask Interaction" 0.0 0.0 1.0 0.05
+#define smask_mit  global.smask_mit
+
 #pragma parameter gamma_out "          Gamma out" 2.4 1.0 5.0 0.05
 #define gamma_out    global.gamma_out     // output gamma
 
@@ -317,11 +321,11 @@ vec3 Mask(vec2 pos, float mx, float mb)
 		if (fract((pos.y + odd)/2.0) < 0.49)
 			line = maskDark;
 
-		pos.x = fract(pos.x/3.0);
+		pos.x = floor(mod(pos.x,3.0));
     
-		if      (pos.x < 0.3) mask.r = maskLight;
-		else if (pos.x < 0.6) mask.g = maskLight;
-		else                    mask.b = maskLight;
+		if      (pos.x < 0.5) mask.r = maskLight;
+		else if (pos.x < 1.5) mask.g = maskLight;
+		else                  mask.b = maskLight;
 		
 		mask*=line;  
 	} 
@@ -329,11 +333,11 @@ vec3 Mask(vec2 pos, float mx, float mb)
 	// Aperture-grille.
 	else if (shadowMask == 2.0)
 	{
-		pos.x = fract(pos.x/3.0);
+		pos.x = floor(mod(pos.x,3.0));
 
-		if      (pos.x < 0.3) mask.r = maskLight;
-		else if (pos.x < 0.6) mask.g = maskLight;
-		else                    mask.b = maskLight;
+		if      (pos.x < 0.5) mask.r = maskLight;
+		else if (pos.x < 1.5) mask.g = maskLight;
+		else                  mask.b = maskLight;
 	} 
 
 	// Stretched VGA style shadow mask (same as prior shaders).
@@ -344,7 +348,7 @@ vec3 Mask(vec2 pos, float mx, float mb)
 
 		if      (pos.x < 0.3) mask.r = maskLight;
 		else if (pos.x < 0.6) mask.g = maskLight;
-		else                    mask.b = maskLight;
+		else                  mask.b = maskLight;
 	}
 
 	// VGA style shadow mask.
@@ -356,7 +360,7 @@ vec3 Mask(vec2 pos, float mx, float mb)
 
 		if      (pos.x < 0.3) mask.r = maskLight;
 		else if (pos.x < 0.6) mask.g = maskLight;
-		else                    mask.b = maskLight;
+		else                  mask.b = maskLight;
 	}
 	
 	// Trinitron mask 5
@@ -376,9 +380,9 @@ vec3 Mask(vec2 pos, float mx, float mb)
 	else if (shadowMask == 6.0)
 	{
 		mask = vec3(0.0);
-		pos.x = fract(pos.x/3.0);
-		if      (pos.x < 0.3) mask.r = 1.0;
-		else if (pos.x < 0.6) mask.g = 1.0;
+		pos.x = floor(mod(pos.x,3.0));
+		if      (pos.x < 0.5) mask.r = 1.0;
+		else if (pos.x < 1.5) mask.g = 1.0;
 		else                    mask.b = 1.0;
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
 	}
@@ -476,15 +480,14 @@ float SlotMask(vec2 pos, float m)
 	if ((slotmask + slotmask1) == 0.0) return 1.0;
 	else
 	{
-	if (shadowMask == 2.0 || shadowMask == 6.0) pos.x = pos.x + slotms;	
 	pos = floor(pos/slotms);
 	float mlen = slotwidth*2.0;
-	float px = fract(pos.x/mlen);
+	float px = floor(mod(pos.x, 0.99999*mlen));
 	float py = floor(fract(pos.y/(2.0*double_slot))*2.0*double_slot);
 	float slot_dark = mix(1.0-slotmask1, 1.0-slotmask, m);
 	float slot = 1.0;
-	if (py == 0.0 && px <  0.5) slot = slot_dark; else
-	if (py == double_slot && px >= 0.5) slot = slot_dark;		
+	if (py == 0.0 && px < slotwidth) slot = slot_dark; else
+	if (py == double_slot && px >= slotwidth) slot = slot_dark;		
 	
 	return slot;
 	}
@@ -678,10 +681,11 @@ if ((abs(global.deconrr) + abs(global.deconrry) + abs(global.deconrg) + abs(glob
 	vec3 orig1 = color;
 	vec3 cmask = one;
 	
-	vec2 maskcoord = gl_FragCoord.yx * 1.000001;
+	vec2 maskcoord = gl_FragCoord.yx * 1.00001;
 	if (notate) maskcoord = maskcoord.yx;
 	
-	float smask = SlotMask(maskcoord, mx);	
+	float smask = SlotMask(maskcoord, mx);
+	smask = clamp(smask + mix(smask_mit, 0.0, min(w3, sqrt(max(max(orig1.r,orig1.g),orig1.b)))), 0.0, 1.0);
 	cmask*= Mask(maskcoord, mx, mb);
 
 	if (mask_layout > 0.5) cmask = cmask.rbg;
@@ -737,6 +741,7 @@ if (abs(bloom) > 0.025)
 		Bloom = plant(Bloom + Ref + orig1 + Bloom*Bloom*Bloom, min(mbl*mbl,0.75));
 		color = color + 2.0*mix(1.0,w3,0.5*colmx)*mix(one,cmask,0.5)*Bloom*(-halation); }
 
+	float w = 0.25 + 0.60*mix(w3, 1.0, sqrt(colmx));
 	if (smoothmask > 0.5) { w3 = mix(1.0, w3, smoothstep(0.3, 0.6, mx1)); color = max(min(color/w3, 1.0)*w3, min(color,color*(1.0-w3))); }
 
 	if (global.m_glow < 0.5) Glow = mix(Glow, 0.25*color, 0.7*colmx);
@@ -745,9 +750,10 @@ if (abs(bloom) > 0.025)
 		maxb = max(max(Glow.r,Glow.g),Glow.b);
 		orig1 = plant(orig1 + 0.001*Ref, 1.0);
 		Bloom = plant(Glow, 1.0);
+		Ref = abs(orig1-Bloom);
 		mx0 = max(max(orig1.g,orig1.g),orig1.b)-min(min(orig1.g,orig1.g),orig1.b);
 		mx2 = max(max(Bloom.g,Bloom.g),Bloom.b)-min(min(Bloom.g,Bloom.g),Bloom.b);		
-		Bloom = mix(maxb*orig1, Glow, min(sqrt((1.15-mx0)*(0.10+mx2)),1.0));
+		Bloom = mix(maxb*min(Bloom,orig1), w*mix(mix(Glow, max(max(Ref.g,Ref.g),Ref.b)*Glow, max(mx,mx0)), Glow, max(mx0,mx2)*Ref), min(sqrt((1.10-mx0)*(0.10+mx2)),1.0));
 		Glow = mix(global.m_glow_low*Glow, global.m_glow_high*Bloom, pow(colmx, global.m_glow_dist/gamma_in));
 	}
 	

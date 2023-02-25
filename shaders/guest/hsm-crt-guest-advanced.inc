@@ -408,7 +408,8 @@ void main()
 	float sharp1 = s_sharp * zero;
 	
 	/* HSM Removed
-	float fdivider = max(min(mix(prescalex.x, prescalex.y,TATE), 2.0), 1.5*float(interb));
+	float idiv = clamp(mix(SourceSize.x, SourceSize.y, TATE) / 400.0, 1.0, 2.0);
+	float fdivider = max(min(mix(prescalex.x, prescalex.y,TATE), 2.0), idiv*float(interb));
 	*/
 	
 	// HSM Added
@@ -453,7 +454,7 @@ void main()
 		c2 = max(c2 - sth, 0.0);
 	}
 
-	vec3 l3, l2, l1, r1, r2, r3, sl2, sl1, sr1, sr2, color1, color2, colmin, colmax;
+	vec3 l3, l2, l1, r1, r2, r3, color1, color2, colmin, colmax;
 
 	l3 = COMPAT_TEXTURE(LinearizePass, pC4 -off2).rgb;
 	l2 = COMPAT_TEXTURE(LinearizePass, pC4 -offx).rgb;
