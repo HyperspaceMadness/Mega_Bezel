@@ -163,14 +163,14 @@
 #pragma parameter slotmask1 "          Slot Mask Strength Dark Pixels -- slotmask1" 0.0 0.0 1.0 0.05
 #define slotmask1     global.slotmask1
 
-#pragma parameter slotwidth "          Slot Mask Width -- slotwidth" 2.0 1.0 8.0 1.0
+#pragma parameter slotwidth "          Slot Mask Width -- slotwidth" 2.0 1.0 16.0 1.0
 #define slotwidth    global.slotwidth     // Slot Mask Width
 
 #pragma parameter double_slot "          Slot Mask Height: 2x1 or 4x1... -- double_slot" 1.0 1.0 4.0 1.0
 #define double_slot  global.double_slot     // Slot Mask Height
 
-#pragma parameter slotms "          Slot Mask Size - Auto | 2K | 4k -- slotms" 1.0 0.0 4.0 1.0
-#define slotms  global.slotms       // Slot Mask Size
+#pragma parameter slotms "          Slot Mask Thickness - Auto | 2K | 4k -- slotms" 1.0 0.0 4.0 1.0
+#define slotms  global.slotms     // Slot Mask Thickness
 
 #pragma parameter mclip "          Keep Mask Effect with Clipping -- mclip" 0.0 0.0 1.0 0.05
 #define mclip  global.mclip
@@ -616,7 +616,7 @@ float SlotMask(vec2 pos, float m)
 	// HSM Added
 	float final_mask_size = HSM_GetAutoScaledMaskSize(slotms);
 
-	pos = floor(pos / final_mask_size);
+	pos.y = floor(pos.y / final_mask_size);
 	// End HSM Added
 
 	/* HSM Removed

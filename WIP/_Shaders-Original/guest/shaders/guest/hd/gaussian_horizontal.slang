@@ -3,7 +3,7 @@
 /*
    Gaussian blur - horizontal pass, dynamic range, resizable
    
-   Copyright (C) 2020 - 2022 guest(r) - guest.r@gmail.com
+   Copyright (C) 2020-2023 guest(r) - guest.r@gmail.com
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -23,25 +23,44 @@
 
 layout(push_constant) uniform Push
 {
-	vec4 SourceSize;
+	vec4 LinearizePassSize;
 	vec4 OriginalSize;
 	vec4 OutputSize;
 	uint FrameCount;
-	float SIZEHB;
-	float SIGMA_HB;
-	float BLOOMCUT_H;
+	float SIZEH;
+	float SIGMA_H;
+	float m_glow;
+	float m_glow_cutoff;
+	float m_glow_low;
+	float m_glow_high;
+	float m_glow_dist;
+	float m_glow_mask;
 } params;
 
-#pragma parameter bogus_glow2 "[ BLOOM PASS SETTINGS ]:" 0.0 0.0 1.0 1.0 
+#pragma parameter bogus_mglow "[ MAGIC GLOW SETTINGS ]:" 0.0 0.0 1.0 1.0
 
-#pragma parameter SIZEHB "          H. Bloom/Halation Radius" 4.0 1.0 30.0 1.0 
-#define SIZEHB params.SIZEHB
+#pragma parameter m_glow "          Ordinary Glow / Magic Glow" 0.0 0.0 1.0 1.0 
+#define m_glow params.m_glow
 
-#pragma parameter SIGMA_HB "          Horizontal Bloom/Halation Sigma" 1.0 0.25 15.0 0.05
-#define SIGMA_HB params.SIGMA_HB
+#pragma parameter m_glow_cutoff "          Magic Glow Cutoff" 0.12 0.0 0.4 0.01 
+#define m_glow_cutoff params.m_glow_cutoff
 
-#pragma parameter BLOOMCUT_H "          Horizontal Bloom/Halation Substract" 0.0 0.0 0.5 0.01
-#define BLOOMCUT_H params.BLOOMCUT_H
+#pragma parameter m_glow_low "          Magic Glow Low Strength" 0.35 0.0 7.0 0.05 
+
+#pragma parameter m_glow_high "          Magic Glow High Strength" 5.0 0.0 7.0 0.10 
+
+#pragma parameter m_glow_dist "          Magic Glow Distribution" 1.0 0.20 4.0 0.05 
+
+#pragma parameter m_glow_mask "          Magic Glow Mask Strength" 1.0 0.0 2.0 0.025 
+
+#pragma parameter bogus_glow1 "[ GLOW PASS SETTINGS ]:" 0.0 0.0 1.0 1.0
+
+#pragma parameter SIZEH "          Horizontal Glow Radius" 6.0 1.0 50.0 1.0 
+#define SIZEH params.SIZEH
+
+#pragma parameter SIGMA_H "          Horizontal Glow Sigma" 1.20 0.20 15.0 0.10
+#define SIGMA_H params.SIGMA_H
+
 
 layout(std140, set = 0, binding = 0) uniform UBO
 {
@@ -66,11 +85,17 @@ layout(set = 0, binding = 2) uniform sampler2D LinearizePass;
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
 
-float invsqrsigma = 1.0/(2.0*SIGMA_HB*SIGMA_HB);
+float invsqrsigma = 1.0/(2.0*SIGMA_H*SIGMA_H);
 
 float gaussian(float x)
 {
 	return exp(-x*x*invsqrsigma);
+}
+
+vec3 plant (vec3 tar, float r)
+{
+	float t = max(max(tar.r,tar.g),tar.b) + 0.00001;
+	return tar * r / t;
 }
 
 void main()
@@ -79,27 +104,30 @@ void main()
 	float f = fract(SourceSize1.x * vTexCoord.x);
 	f = 0.5 - f;
 	vec2 tex = floor(SourceSize1.xy * vTexCoord)*SourceSize1.zw + 0.5*SourceSize1.zw;
-	vec4 color = vec4(0.0);
+	vec3 color = vec3(0.0);
 	vec2 dx  = vec2(SourceSize1.z, 0.0);
 
 	float w;
 	float wsum = 0.0;
-	vec4 pixel;
-	float n = -SIZEHB;
+	vec3 pixel;
+	float n = -SIZEH;
 
 	do
 	{
-		pixel  = COMPAT_TEXTURE(LinearizePass, tex + n*dx);
-		w      = max(gaussian(n+f) - BLOOMCUT_H, 0.0);
-		pixel.a = max(max(pixel.r, pixel.g),pixel.b);
-		pixel.a*=pixel.a*pixel.a;
+		pixel  = COMPAT_TEXTURE(LinearizePass, tex + n*dx).rgb;
+		if (m_glow > 0.5)
+		{
+			pixel = max(pixel-m_glow_cutoff, 0.0);
+			pixel = plant(pixel, max(max(max(pixel.r,pixel.g),pixel.b)-m_glow_cutoff,0.0));
+		}
+		w      = gaussian(n+f);
 		color  = color + w * pixel;
 		wsum   = wsum + w;
 		n = n + 1.0;
 		
-	} while (n <= SIZEHB);
+	} while (n <= SIZEH);
 
 	color = color / wsum;
 	
-	FragColor = vec4(color.rgb, pow(color.a, 0.333333));
+	FragColor = vec4(color, 1.0);
 }

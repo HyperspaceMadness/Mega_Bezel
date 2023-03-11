@@ -1,9 +1,9 @@
 #version 450
 
 /*
-   Gaussian blur - horizontal pass, dynamic range, resizable
+   Gaussian blur - vertical pass, dynamic range, resizable
    
-   Copyright (C) 2020 - 2022 guest(r) - guest.r@gmail.com
+   Copyright (C) 2020 guest(r) - guest.r@gmail.com
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -27,21 +27,16 @@ layout(push_constant) uniform Push
 	vec4 OriginalSize;
 	vec4 OutputSize;
 	uint FrameCount;
-	float SIZEHB;
-	float SIGMA_HB;
-	float BLOOMCUT_H;
+	float SIZEV;
+	float SIGMA_V;
 } params;
 
-#pragma parameter bogus_glow2 "[ BLOOM PASS SETTINGS ]:" 0.0 0.0 1.0 1.0 
 
-#pragma parameter SIZEHB "          H. Bloom/Halation Radius" 4.0 1.0 30.0 1.0 
-#define SIZEHB params.SIZEHB
+#pragma parameter SIZEV "          Vertical Glow Radius" 6.0 1.0 50.0 1.0 
+#define SIZEV params.SIZEV
 
-#pragma parameter SIGMA_HB "          Horizontal Bloom/Halation Sigma" 1.0 0.25 15.0 0.05
-#define SIGMA_HB params.SIGMA_HB
-
-#pragma parameter BLOOMCUT_H "          Horizontal Bloom/Halation Substract" 0.0 0.0 0.5 0.01
-#define BLOOMCUT_H params.BLOOMCUT_H
+#pragma parameter SIGMA_V "          Vertical Glow Sigma" 1.20 0.20 15.0 0.10
+#define SIGMA_V params.SIGMA_V
 
 layout(std140, set = 0, binding = 0) uniform UBO
 {
@@ -62,11 +57,11 @@ void main()
 #pragma stage fragment
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
-layout(set = 0, binding = 2) uniform sampler2D LinearizePass;
+layout(set = 0, binding = 2) uniform sampler2D Source;
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
 
-float invsqrsigma = 1.0/(2.0*SIGMA_HB*SIGMA_HB);
+float invsqrsigma = 1.0/(2.0*SIGMA_V*SIGMA_V);
 
 float gaussian(float x)
 {
@@ -75,31 +70,29 @@ float gaussian(float x)
 
 void main()
 {
-	vec4 SourceSize1 = params.OriginalSize;
-	float f = fract(SourceSize1.x * vTexCoord.x);
+	vec4 SourceSize1 = vec4(params.SourceSize.x, params.OriginalSize.y, params.SourceSize.z, params.OriginalSize.w);
+	float f = fract(SourceSize1.y * vTexCoord.y);
 	f = 0.5 - f;
 	vec2 tex = floor(SourceSize1.xy * vTexCoord)*SourceSize1.zw + 0.5*SourceSize1.zw;
-	vec4 color = vec4(0.0);
-	vec2 dx  = vec2(SourceSize1.z, 0.0);
+	vec3 color = vec3(0.0);
+	vec2 dy  = vec2(0.0, SourceSize1.w);
 
 	float w;
 	float wsum = 0.0;
-	vec4 pixel;
-	float n = -SIZEHB;
+	vec3 pixel;
+	float n = -SIZEV;
 
 	do
 	{
-		pixel  = COMPAT_TEXTURE(LinearizePass, tex + n*dx);
-		w      = max(gaussian(n+f) - BLOOMCUT_H, 0.0);
-		pixel.a = max(max(pixel.r, pixel.g),pixel.b);
-		pixel.a*=pixel.a*pixel.a;
+		pixel  = COMPAT_TEXTURE(Source, tex + n*dy).rgb;
+		w      = gaussian(n+f);
 		color  = color + w * pixel;
 		wsum   = wsum + w;
 		n = n + 1.0;
 		
-	} while (n <= SIZEHB);
+	} while (n <= SIZEV);
 
 	color = color / wsum;
 	
-	FragColor = vec4(color.rgb, pow(color.a, 0.333333));
+	FragColor = vec4(color, 1.0);
 }

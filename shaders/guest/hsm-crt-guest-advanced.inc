@@ -647,14 +647,17 @@ if (abs(vertmask) > 0.025)
 	float screen_mask = HSM_GetCornerMask((screen_curved_coord - 0.5) * 0.999 + 0.5, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS * HSM_SCREEN_CORNER_RADIUS_SCALE, 0.9);
 	bool is_inside_screen = screen_mask > 0.001;
 
-	if (is_inside_screen)
+	// if (is_inside_screen)
 		color = (gc(color1)*w1*cd1 + gc(color2)*w2*cd2)/mix(1.0.xxx, w1+w2, hsm_no_scanlines);
-	else
-	{
-		color = (gc(color1)*w1*cd1 + gc(color2)*w2*cd2)/(w1+w2);
-		vec3 color_no_scanline = gc(color1) + gc(color2);
-		color = mix(color, color_no_scanline, hsm_no_scanlines);
-	}
+
+	// TODO this bit was to remove scanlines outside of the screen, 
+	//      but it has a problem when scangamma is used, so is disabled for now
+	// else
+	// {
+	// 	color = (gc(color1)*w1*cd1 + gc(color2)*w2*cd2)/(w1+w2);
+	// 	vec3 color_no_scanline = gc(color1) + gc(color2);
+	// 	color = mix(color, color_no_scanline, hsm_no_scanlines);
+	// }
 	// End HSM Addition
 
 	if (abs(rolling_scan) > 0.005) 

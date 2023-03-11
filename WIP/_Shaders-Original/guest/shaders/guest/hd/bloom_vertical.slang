@@ -34,13 +34,13 @@ layout(push_constant) uniform Push
 } params;
 
 
-#pragma parameter SIZEVB "          V. Bloom/Halation/Glow Radius" 4.0 1.0 30.0 1.0 
+#pragma parameter SIZEVB "          V. Bloom/Halation Radius" 4.0 1.0 30.0 1.0 
 #define SIZEVB params.SIZEVB
 
-#pragma parameter SIGMA_VB "          Vertical Bloom/Halation/Glow Sigma" 1.0 0.25 15.0 0.05
+#pragma parameter SIGMA_VB "          Vertical Bloom/Halation Sigma" 1.0 0.25 15.0 0.05
 #define SIGMA_VB params.SIGMA_VB
 
-#pragma parameter BLOOMCUT_V "          Vertical Bloom/Halation/(Glow) Substract" 0.0 0.0 0.5 0.01
+#pragma parameter BLOOMCUT_V "          Vertical Bloom/Halation Substract" 0.0 0.0 0.5 0.01
 #define BLOOMCUT_V params.BLOOMCUT_V
 
 layout(std140, set = 0, binding = 0) uniform UBO

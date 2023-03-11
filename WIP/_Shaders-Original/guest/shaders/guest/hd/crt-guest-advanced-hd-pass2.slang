@@ -116,7 +116,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter bogus_brightness "[ BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
-#pragma parameter glow "          Glow Strength" 0.08 -2.0 2.0 0.01
+#pragma parameter glow "          (Magic) Glow Strength" 0.08 -2.0 2.0 0.01
 #define glow         params.glow     // Glow Strength
 
 #pragma parameter bloom "          Bloom Strength" 0.0 -2.0 2.0 0.05

@@ -70,13 +70,28 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float maskboost;
 	float smoothmask;
 	float gamma_c;
+	float m_glow;
+	float m_glow_low;
+	float m_glow_high;
+	float m_glow_dist;
+	float m_glow_mask;	
 	float smask_mit;	
 } global;
 
 
 #pragma parameter bogus_brightness "[ BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
-#pragma parameter glow "          Glow Strength" 0.08 -2.0 2.0 0.01
+#pragma parameter m_glow "          Ordinary Glow / Magic Glow" 0.0 0.0 1.0 1.0
+
+#pragma parameter m_glow_low "          Magic Glow Low Strength" 0.35 0.0 7.0 0.05 
+
+#pragma parameter m_glow_high "          Magic Glow High Strength" 5.0 0.0 7.0 0.10 
+
+#pragma parameter m_glow_dist "          Magic Glow Distribution" 1.0 0.20 4.0 0.05 
+
+#pragma parameter m_glow_mask "          Magic Glow Mask Strength" 1.0 0.0 2.0 0.025
+
+#pragma parameter glow "          (Magic) Glow Strength" 0.08 -2.0 2.0 0.01
 #define glow         params.glow     // Glow Strength
 
 #pragma parameter bloom "          Bloom Strength" 0.0 -2.0 2.0 0.05
@@ -173,14 +188,14 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter slotmask1 "          Slot Mask Strength Dark Pixels" 0.0 0.0 1.0 0.05
 #define slotmask1     params.slotmask1
 
-#pragma parameter slotwidth "          Slot Mask Width" 2.0 1.0 8.0 1.0
+#pragma parameter slotwidth "          Slot Mask Width" 2.0 1.0 16.0 1.0
 #define slotwidth    params.slotwidth     // Slot Mask Width
 
 #pragma parameter double_slot "          Slot Mask Height: 2x1 or 4x1..." 1.0 1.0 4.0 1.0
 #define double_slot  params.double_slot     // Slot Mask Height
 
-#pragma parameter slotms "          Slot Mask Size" 1.0 1.0 4.0 1.0
-#define slotms  global.slotms     // Slot Mask Size
+#pragma parameter slotms "          Slot Mask Thickness" 1.0 1.0 4.0 1.0
+#define slotms  global.slotms     // Slot Mask Thickness
 
 #pragma parameter mclip "          Keep Mask effect with clipping" 0.0 0.0 1.0 0.05
 #define mclip  global.mclip     //
@@ -248,6 +263,7 @@ layout(set = 0, binding = 2) uniform sampler2D LinearizePass;
 layout(set = 0, binding = 3) uniform sampler2D BloomPass;
 layout(set = 0, binding = 4) uniform sampler2D PrePass;
 layout(set = 0, binding = 5) uniform sampler2D Source;
+layout(set = 0, binding = 6) uniform sampler2D GlowPass;
 
 #define eps 1e-10 
 
@@ -455,7 +471,7 @@ float SlotMask(vec2 pos, float m)
 	if ((slotmask + slotmask1) == 0.0) return 1.0;
 	else
 	{
-	pos = floor(pos/slotms);
+	pos.y = floor(pos.y/slotms);
 	float mlen = slotwidth*2.0;
 	float px = floor(mod(pos.x, 0.99999*mlen));
 	float py = floor(fract(pos.y/(2.0*double_slot))*2.0*double_slot);
@@ -681,7 +697,7 @@ if ((abs(global.deconrr) + abs(global.deconrry) + abs(global.deconrg) + abs(glob
 	if (interb) bb = (abs(intera-0.5)<0.1) ? pow(0.80*bb, 0.65) : pow(bb, 0.70);
 	color*=bb;
 
-	vec3  Glow = COMPAT_TEXTURE(BloomPass, pos).rgb;
+	vec3  Glow = COMPAT_TEXTURE(GlowPass, pos).rgb;
 	vec3  Ref = COMPAT_TEXTURE(LinearizePass, pos).rgb;	
 	float maxb = COMPAT_TEXTURE(BloomPass, pos).a;
 	float vig  = COMPAT_TEXTURE(PrePass, clamp(pos, 0.0+0.5*global.OriginalSize.zw, 1.0-0.5*global.OriginalSize.zw)).a;
@@ -710,10 +726,24 @@ if (abs(bloom) > 0.025)
 		Bloom = plant(Bloom + Ref + orig1 + Bloom*Bloom*Bloom, min(mbl*mbl,0.75));
 		color = color + 2.0*mix(1.0,w3,0.5*colmx)*mix(one,cmask,0.5)*Bloom*(-halation); }
 
+	float w = 0.25 + 0.60*mix(w3, 1.0, sqrt(colmx));
 	if (smoothmask > 0.5) { w3 = mix(1.0, w3, smoothstep(0.3, 0.6, mx1)); color = max(min(color/w3, 1.0)*w3, min(color,color*(1.0-w3))); }
 
-	Glow = mix(Glow, 0.25*color, 0.7*colmx);
-	if (glow >= 0.0) color = color + 0.5*Glow*glow; else { cmask*=cmask; cmask*=cmask; color = color + (-glow)*cmask*Glow; }
+	if (global.m_glow < 0.5) Glow = mix(Glow, 0.25*color, 0.7*colmx);
+	else
+	{ 
+		maxb = max(max(Glow.r,Glow.g),Glow.b);
+		orig1 = plant(orig1 + 0.001*Ref, 1.0);
+		Bloom = plant(Glow, 1.0);
+		Ref = abs(orig1-Bloom);
+		mx0 = max(max(orig1.g,orig1.g),orig1.b)-min(min(orig1.g,orig1.g),orig1.b);
+		mx2 = max(max(Bloom.g,Bloom.g),Bloom.b)-min(min(Bloom.g,Bloom.g),Bloom.b);		
+		Bloom = mix(maxb*min(Bloom,orig1), w*mix(mix(Glow, max(max(Ref.g,Ref.g),Ref.b)*Glow, max(mx,mx0)), Glow, max(mx0,mx2)*Ref), min(sqrt((1.10-mx0)*(0.10+mx2)),1.0));
+		Glow = mix(global.m_glow_low*Glow, global.m_glow_high*Bloom, pow(colmx, global.m_glow_dist/gamma_in));
+	}
+	
+	if (glow >= 0.0 && global.m_glow < 0.5) color = color + 0.5*Glow*glow;
+	else { if(global.m_glow > 0.5) cmask1 = max(mix(one, cmask1, global.m_glow_mask),0.0); color = color + abs(glow)*cmask1*Glow; }
 
 	color = min(color, 1.0);
 	

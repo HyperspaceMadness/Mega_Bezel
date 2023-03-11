@@ -170,14 +170,14 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter slotmask1 "          Slot Mask Strength Dark Pixels" 0.0 0.0 1.0 0.05
 #define slotmask1     params.slotmask1
 
-#pragma parameter slotwidth "          Slot Mask Width" 2.0 1.0 8.0 1.0
+#pragma parameter slotwidth "          Slot Mask Width" 2.0 1.0 16.0 1.0
 #define slotwidth    params.slotwidth     // Slot Mask Width
 
 #pragma parameter double_slot "          Slot Mask Height: 2x1 or 4x1..." 1.0 1.0 4.0 1.0
 #define double_slot  params.double_slot     // Slot Mask Height
 
-#pragma parameter slotms "          Slot Mask Size" 1.0 1.0 4.0 1.0
-#define slotms  global.slotms     // Slot Mask Size
+#pragma parameter slotms "          Slot Mask Thickness" 1.0 1.0 4.0 1.0
+#define slotms  global.slotms     // Slot Mask Thickness
 
 #pragma parameter mclip "          Keep Mask effect with clipping" 0.0 0.0 1.0 0.05
 #define mclip  global.mclip     //
@@ -452,7 +452,7 @@ float SlotMask(vec2 pos, float m)
 	if ((slotmask + slotmask1) == 0.0) return 1.0;
 	else
 	{
-	pos = floor(pos/slotms);
+	pos.y = floor(pos.y/slotms);
 	float mlen = slotwidth*2.0;
 	float px = floor(mod(pos.x, 0.99999*mlen));
 	float py = floor(fract(pos.y/(2.0*double_slot))*2.0*double_slot);
