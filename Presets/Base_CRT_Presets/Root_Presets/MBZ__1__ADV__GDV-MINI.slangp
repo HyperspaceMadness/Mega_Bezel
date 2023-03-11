@@ -155,7 +155,8 @@ filter_linear27 = true
 float_framebuffer27 = "true"
 alias27 = "CRTPass"
 
-g_sat = 0.15
+g_sat = 0.25
+g_lum = 0.15
 g_gamma_out = 2.45
 
 shader28 = ../../../shaders/base/post-crt-prep-image-layers.slang

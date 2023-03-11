@@ -6,16 +6,17 @@ Changes:
   * Fixed a performance issue  where we were rendering more than we needed to
     * This should increase performance across most presets
   * Fixed color rainbowing in reflection for Guest-Advanced and LCD-GRID
+  * Updated to crt-guest-advanced-2023-03-11-release1
+  * Updated GDV-MINI from @ROBMARK85's request
+
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
-  * Update Guest to latest
-  * Update GDV-Mini for ROBMARK85
   * Check on Afterglow for BiRaitBec
   * Add Curvature to EasyMode for lasly
-  * Rotate Texture Parameters
+  * Rotate Image Layers with Parameters
   * Update Megatron
   * Add Passthrough Preset, no crt shader
   * Add AbsoluteMax as a scaling type

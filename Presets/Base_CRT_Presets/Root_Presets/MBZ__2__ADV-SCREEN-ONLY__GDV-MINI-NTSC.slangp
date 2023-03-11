@@ -167,7 +167,8 @@ filter_linear29 = true
 float_framebuffer29 = "true"
 alias29 = "CRTPass"
 
-g_sat = 0.15
+g_sat = 0.25
+g_lum = 0.15
 g_gamma_out = 2.45
 
 shader30 = ../../../shaders/base/post-crt-prep-no-reflect.slang

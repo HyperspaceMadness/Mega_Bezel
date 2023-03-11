@@ -107,7 +107,8 @@ filter_linear16 = true
 float_framebuffer16 = "true"
 alias16 = "CRTPass"
 
-g_sat = 0.15
+g_sat = 0.25
+g_lum = 0.15
 g_gamma_out = 2.45
 
 shader17 = ../../../shaders/base/post-crt-prep-glass.slang

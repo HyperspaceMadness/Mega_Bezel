@@ -133,7 +133,8 @@ filter_linear20 = true
 float_framebuffer20 = "true"
 alias20 = "CRTPass"
 
-g_sat = 0.15
+g_sat = 0.25
+g_lum = 0.15
 g_gamma_out = 2.45
 
 shader21 = ../../../shaders/base/post-crt-prep-no-reflect.slang

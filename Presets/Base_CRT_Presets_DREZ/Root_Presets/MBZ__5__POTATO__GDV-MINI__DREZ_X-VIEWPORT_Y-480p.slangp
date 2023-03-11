@@ -84,7 +84,8 @@ filter_linear11 = true
 float_framebuffer11 = "true"
 alias11 = "CRTPass"
 
-g_sat = 0.15
+g_sat = 0.25
+g_lum = 0.15
 g_gamma_out = 2.45
 
 shader12 = ../../../shaders/base/post-crt-prep-potato.slang

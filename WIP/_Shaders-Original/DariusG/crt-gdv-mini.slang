@@ -1,3 +1,5 @@
+#version 450
+
 /*
    CRT - Guest - Nomask w. Curvature
    With work by DariusG to create a cut down extra fast version
@@ -26,7 +28,7 @@ layout(push_constant) uniform Push
 	vec4 OriginalSize;
 	vec4 OutputSize;
 	float brightboost;
-	float saturation;
+	float sat;
     float scanline;
     float beam_min;
     float beam_max;
@@ -37,60 +39,74 @@ layout(push_constant) uniform Push
     float maskDark;
     float maskLight;
     float CGWG;
-    // float warpX;
-    // float warpY;
-    // float gamma_out;
-    // float vignette;
+    float csize;
+    float warpX;
+    float warpY;
+    float gamma_out;
+    float vignette;
 } params;
 
 // Parameter lines go here:
-#pragma parameter GDVMINI_X_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter gdv_mini_title 	"[ GDV MINI - DariusG ]:" 0.0 0.0 1.0 1.0
 
-#pragma parameter brightboost 		"          Bright boost -- brightboost" 1.0 0.5 2.0 0.05
+#pragma parameter gamma_out 		"Gamma out" 0.5 0.2 0.6 0.01
+#define gamma_out params.gamma_out
+
+#pragma parameter brightboost 		"Bright boost" 1.0 0.5 2.0 0.05
 #define brightboost params.brightboost
 
-#pragma parameter saturation 		"          Saturation adjustment -- saturation" 1.0 0.0 2.0 0.05
-#define saturation params.saturation
+#pragma parameter sat 				"Saturation adjustment" 1.0 0.0 2.0 0.05
+#define sat params.sat
 
-#pragma parameter scanline          "          Scanline Adjust -- scanline" 8.0 1.0 12.0 1.0
+#pragma parameter scanline          "Scanline Adjust" 8.0 1.0 12.0 1.0
 #define scanline params.scanline
 
-#pragma parameter beam_min          "          Scanline Dark -- beam_min" 1.7 0.5 3.0 0.05
+#pragma parameter beam_min          "Scanline Dark" 1.7 0.5 3.0 0.05
 #define beam_min params.beam_min
 
-#pragma parameter beam_max          "          Scanline Bright -- beam_max" 2.1 0.5 3.0 0.05
+#pragma parameter beam_max          "Scanline Bright" 2.1 0.5 3.0 0.05
 #define beam_max params.beam_max
 
-#pragma parameter h_sharp           "          Horizontal Sharpness -- h_sharp" 2.0 1.0 5.0 0.05
+#pragma parameter h_sharp           "Horizontal Sharpness" 2.0 1.0 5.0 0.05
 #define h_sharp params.h_sharp
 
-#pragma parameter shadowMask 		"          CRT Mask: 0:CGWG, 1-4:Lottes, 5-6:Trinitron" 0.0 -1.0 10.0 1.0
+#pragma parameter shadowMask 		"CRT Mask: 0:CGWG, 1-4:Lottes, 5-6:Trinitron" 0.0 -1.0 10.0 1.0
 #define shadowMask params.shadowMask
 
-#pragma parameter masksize 			"          CRT Mask Size (2.0 is nice in 4k) -- masksize" 0.0 0.0 2.0 1.0
+#pragma parameter masksize 			"CRT Mask Size (2.0 is nice in 4k)" 1.0 1.0 2.0 1.0
 #define masksize params.masksize
 
-#pragma parameter mcut 				"          Mask 5-7-10 cutoff -- mcut" 0.2 0.0 0.5 0.05
+#pragma parameter mcut 				"Mask 5-7-10 cutoff" 0.2 0.0 0.5 0.05
 #define mcut params.mcut
 
-#pragma parameter maskDark          "          Lottes maskDark" 0.5 0.0 2.0 0.1
+#pragma parameter maskDark          "Lottes maskDark" 0.5 0.0 2.0 0.1
 #define maskDark params.maskDark
 
-#pragma parameter maskLight 		"          Lottes maskLight" 1.5 0.0 2.0 0.1
+#pragma parameter maskLight 		"Lottes maskLight" 1.5 0.0 2.0 0.1
 #define maskLight params.maskLight
 
-#pragma parameter CGWG              "          CGWG Mask Str. -- CGWG" 0.4 0.0 1.0 0.1
-#define CGWG params.CGWG
+#pragma parameter CGWG              "CGWG Mask Str." 0.4 0.0 1.0 0.1
+#define CGWG 		params.CGWG
 
-// #pragma parameter warpX 			"CurvatureX (default 0.03)" 0.0 0.0 0.25 0.01
-// #define warpX        params.warpX     
+#pragma parameter warpX 			"CurvatureX (default 0.03)" 0.0 0.0 0.25 0.01
+#define warpX        params.warpX     
 
-// #pragma parameter warpY 			"CurvatureY (default 0.04)" 0.0 0.0 0.25 0.01
-// #define warpY        params.warpY     
+#pragma parameter warpY 			"CurvatureY (default 0.04)" 0.0 0.0 0.25 0.01
+#define warpY        params.warpY     
 
-// #pragma parameter vignette 			"Vignette On/Off" 0.0 0.0 1.0 1.0
-// #define vignette 	params.vignette
+#pragma parameter vignette 			"Vignette On/Off" 0.0 0.0 1.0 1.0
+#define vignette 	params.vignette
+
+
+
+
+
+layout(std140, set = 0, binding = 0) uniform UBO
+{
+	mat4 MVP;
+	vec4 FinalViewportSize;
+	vec4 OutputSize;
+} global;
 
 #pragma stage vertex
 layout(location = 0) in vec4 Position;
@@ -109,8 +125,6 @@ layout(location = 1) in float maskFade;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 1) uniform sampler2D Source;
 
-layout(set = 0, binding = 2) uniform sampler2D InfoCachePass;
-
 float sw(float x, float l)
 {
 	float d = x;
@@ -123,16 +137,7 @@ float sw(float x, float l)
 // Shadow mask (1-4 from PD CRT Lottes shader).
 vec3 Mask(vec2 pos, vec3 c)
 {
-		// HSM Added
-	float final_mask_size = masksize;
-
-	// If using automatic Mask Size
-	if (masksize < 0.5)
-		final_mask_size = global.FinalViewportSize.y > 2000 ? 2 : 1;
-	
-	final_mask_size = max(1, floor(((1 - HSM_VIEWPORT_ZOOM_MASK) + HSM_VIEWPORT_ZOOM_MASK * VIEWPORT_SCALE.y) * final_mask_size + 0.2));
-
-	pos = floor(pos / final_mask_size);
+	pos = floor(pos / masksize);
 	vec3 mask = vec3(maskDark, maskDark, maskDark);
 	
 	// No mask
@@ -304,7 +309,6 @@ vec3 Mask(vec2 pos, vec3 c)
 	return mask;
 } 
 
-/* HSM Removed
 mat3 vign( float l )
 {
     vec2 vpos = vTexCoord;
@@ -327,9 +331,8 @@ vec2 Warp(vec2 pos)
     pos *= vec2(1.0 + (pos.y*pos.y)*warpX, 1.0 + (pos.x*pos.x)*warpY);
 	return pos*0.5 + 0.5;
 }
-*/
 
-vec3 saturationFunction (vec3 textureColor)
+vec3 saturation (vec3 textureColor)
 {
     float lum=length(textureColor.rgb)*0.5775;
 
@@ -339,44 +342,17 @@ vec3 saturationFunction (vec3 textureColor)
     float luminance = dot(textureColor.rgb, luminanceWeighting);
     vec3 greyScaleColor = vec3(luminance);
 
-    vec3 res = vec3(mix(greyScaleColor, textureColor.rgb, saturation));
+    vec3 res = vec3(mix(greyScaleColor, textureColor.rgb, sat));
     return res;
 }
 
+
 void main()
 {
-    // HSM Added
-	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
-
-	vec2 cache_bounds_coord = SCREEN_COORD;
-
-// If it's the potato preset render the whole frame
-#ifndef IS_POTATO_PRESET
-#ifndef IS_NO_REFLECT_PRESET
-	vec2 bezel_outside_flat_coord;
-	vec2 frame_outside_flat_coord;
-	HSM_GetSimpleBezelCoords(TUBE_DIFFUSE_COORD, 
-							TUBE_DIFFUSE_SCALE, 
-							TUBE_SCALE, 
-							SCREEN_ASPECT,
-							bezel_outside_flat_coord, 
-							frame_outside_flat_coord);
-	cache_bounds_coord = (bezel_outside_flat_coord - 0.5) * 0.9 + 0.5;
-#endif
-#endif
-
-	if (HHLP_IsOutsideCoordSpace(cache_bounds_coord))
-	{
-			FragColor = vec4(0);
-			return;
-	}
-	
-	vec2 screen_curved_coord = HSM_GetCRTShaderCurvedCoord(SCREEN_COORD);
-	vec2 pos = HSM_GetMirrorWrappedCoord(screen_curved_coord);
+	vec2 pos = Warp(vTexCoord);
 
 	// HSM Added
-	vec4 SourceSize = vec4(CROPPED_ROTATED_SIZE_WITH_RES_MULT, 1/CROPPED_ROTATED_SIZE_WITH_RES_MULT);
+	vec4 SourceSize = params.SourceSize;
 
 	vec2 ps = SourceSize.zw;
 	vec2 OGL2Pos = pos * SourceSize.xy;
@@ -387,10 +363,10 @@ void main()
 	vec2 pC4 = floor(OGL2Pos) * ps + 0.5*ps;
 	
 	// Reading the texels
-	vec3 ul = HSM_GetCroppedTexSample(Source, pC4     ).xyz; ul*=ul;
-	vec3 ur = HSM_GetCroppedTexSample(Source, pC4 + dx).xyz; ur*=ur;
-	vec3 dl = HSM_GetCroppedTexSample(Source, pC4 + dy).xyz; dl*=dl;
-	vec3 dr = HSM_GetCroppedTexSample(Source, pC4 + ps).xyz; dr*=dr;
+	vec3 ul = texture(Source, pC4     ).xyz; ul*=ul;
+	vec3 ur = texture(Source, pC4 + dx).xyz; ur*=ur;
+	vec3 dl = texture(Source, pC4 + dy).xyz; dl*=dl;
+	vec3 dr = texture(Source, pC4 + ps).xyz; dr*=dr;
 	
 	float lx = fp.x;        lx = pow(lx, h_sharp);
 	float rx = 1.0 - fp.x;  rx = pow(rx, h_sharp);
@@ -410,14 +386,10 @@ void main()
 	color = color * Mask(vTexCoord * global.OutputSize.xy, color);
 	float lum = color.r*0.3+color.g*0.6+color.b*0.1;
 
-	// Apply difference between GAMMA_INPUT and HSM_GAMMA_OUT_CRT
-    color = pow(color, vec3(GAMMA_INPUT / HSM_GAMMA_OUT_CRT) + 0.05);
+	color = pow(color, vec3(gamma_out, gamma_out, gamma_out));
 	color*= mix(1.0,brightboost,lum);
 
-	color = saturationFunction(color);
-
-	// HSM Removed
-	// color*= vign(lum);
-
-    FragColor = vec4(color, 1.0);
+	color = saturation(color);
+	color*= vign(lum);
+	FragColor = vec4(color, 1.0);
 }
