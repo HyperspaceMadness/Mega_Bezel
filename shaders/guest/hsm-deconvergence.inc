@@ -231,6 +231,15 @@
 
 // #pragma parameter post_br   "          Post CRT Brightness" 1.0 0.25 5.0 0.01
 
+#define red vec3(1, 0, 0)
+#define green vec3(0, 1, 0)
+#define blue vec3(0, 0, 1)
+#define magenta vec3(1, 0, 1)
+#define yellow vec3(1, 1, 0)
+#define cyan vec3(0, 1, 1)
+#define white vec3(1, 1, 1)
+#define black vec3(0, 0, 0)
+
 #define COMPAT_TEXTURE(c,d) texture(c,d)
 #define TEX0 vTexCoord
 
@@ -283,7 +292,7 @@ float HSM_GetAutoScaledMaskSize(float in_masksize)
 
 // Shadow mask (1-4 from PD CRT Lottes shader).
 
-vec3 Mask(vec2 pos, float mx, float mb)
+vec3 Mask(vec2 pos, float mx, float mb, inout float mask_average_luma)
 {
 	// HSM Added
 	float final_mask_size = HSM_GetAutoScaledMaskSize(masksize);
@@ -310,6 +319,7 @@ vec3 Mask(vec2 pos, float mx, float mb)
 	*/
 
 	vec3 mask = vec3(maskDark, maskDark, maskDark);
+	vec3 mask_average = vec3(maskDark, maskDark, maskDark);
 	vec3 one = vec3(1.0);
 	
 	// brightness correcture masks 5-12
@@ -322,6 +332,9 @@ vec3 Mask(vec2 pos, float mx, float mb)
 	if (shadowMask == -1.0)
 	{
 		mask = vec3(1.0);
+		mask_average = vec3(1.0);
+		mask_average_luma = 1;
+		return mask;
 	}       
 	
 	// Phosphor.
@@ -330,6 +343,9 @@ vec3 Mask(vec2 pos, float mx, float mb)
 		pos.x = fract(pos.x*0.5);
 		if (pos.x < 0.49) { mask.r = 1.0; mask.g = mc; mask.b = 1.0; }
 		else { mask.r = mc; mask.g = 1.0; mask.b = mc; }
+
+		// HSM Added
+		mask_average = (black + white + white + vec3(1, mc, 1) + vec3(mc, 1, mc)) / 5;
 	}    
    
 	// Very compressed TV style shadow mask.
@@ -350,6 +366,14 @@ vec3 Mask(vec2 pos, float mx, float mb)
 		else                  mask.b = maskLight;
 		
 		mask*=line;  
+
+		// HSM Added
+		mask_average = (
+						vec3(maskLight, mask_average.g, mask_average.b) + 
+						vec3(mask_average.r, maskLight, mask_average.b) + 
+						vec3(mask_average.r, mask_average.g, maskLight))
+						/ 3;
+		mask_average *= (maskDark * 2 + maskLight) / 3.0;
 	} 
 
 	// Aperture-grille.
@@ -360,6 +384,13 @@ vec3 Mask(vec2 pos, float mx, float mb)
 		if      (pos.x < 0.5) mask.r = maskLight;
 		else if (pos.x < 1.5) mask.g = maskLight;
 		else                  mask.b = maskLight;
+
+		// HSM Added
+		mask_average = (black +
+						vec3(maskLight, mask_average.g, mask_average.b) + 
+						vec3(mask_average.r, maskLight, mask_average.b) + 
+						vec3(mask_average.r, mask_average.g, maskLight))
+						/ 4;
 	} 
 
 	// Stretched VGA style shadow mask (same as prior shaders).
@@ -371,6 +402,14 @@ vec3 Mask(vec2 pos, float mx, float mb)
 		if      (pos.x < 0.3) mask.r = maskLight;
 		else if (pos.x < 0.6) mask.g = maskLight;
 		else                  mask.b = maskLight;
+
+		// HSM Added
+		mask_average = (black +
+						white +
+						vec3(maskLight, mask_average.g, mask_average.b) + 
+						vec3(mask_average.r, maskLight, mask_average.b) + 
+						vec3(mask_average.r, mask_average.g, maskLight))
+						/ 5;
 	}
 
 	// VGA style shadow mask.
@@ -380,9 +419,17 @@ vec3 Mask(vec2 pos, float mx, float mb)
 		pos.x += pos.y*3.0;
 		pos.x  = fract(pos.x/6.0);
 
-		if      (pos.x < 0.3) mask.r = maskLight;
+		if      (pos.x < 0.3) mask.r = maskLight;	
 		else if (pos.x < 0.6) mask.g = maskLight;
 		else                  mask.b = maskLight;
+
+		// HSM Added
+		mask_average = (black +
+						white +
+						vec3(maskLight, mask_average.g, mask_average.b) + 
+						vec3(mask_average.r, maskLight, mask_average.b) + 
+						vec3(mask_average.r, mask_average.g, maskLight))
+						/ 5;
 	}
 	
 	// Trinitron mask 5
@@ -396,6 +443,10 @@ vec3 Mask(vec2 pos, float mx, float mb)
 		}
 		else     mask.g = 1.0;
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
+
+		// HSM Added
+		mask_average = (magenta + green) / 2;
+		mask_average = clamp(mix( mix(one, mask_average, mcut), mix(one, mask_average, maskstr), mx), 0.0, 1.0) * dark_compensate;
 	}    
 
 	// Trinitron mask 6
@@ -407,6 +458,10 @@ vec3 Mask(vec2 pos, float mx, float mb)
 		else if (pos.x < 1.5) mask.g = 1.0;
 		else                    mask.b = 1.0;
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
+
+		// HSM Added
+		mask_average = (red + green + blue) / 3;
+		mask_average = clamp(mix( mix(one, mask_average, mcut), mix(one, mask_average, maskstr), mx), 0.0, 1.0) * dark_compensate;
 	}
 	
 	// BW Trinitron mask 7
@@ -419,6 +474,10 @@ vec3 Mask(vec2 pos, float mx, float mb)
 		}
 		else     mask = 1.0.xxx;
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
+
+		// HSM Added
+		mask_average = (black + white) / 2;
+		mask_average = clamp(mix( mix(one, mask_average, mcut), mix(one, mask_average, maskstr), mx), 0.0, 1.0) * dark_compensate;
 	}    
 
 	// BW Trinitron mask 8
@@ -430,6 +489,10 @@ vec3 Mask(vec2 pos, float mx, float mb)
 		else if (pos.x < 0.6) mask = 1.0.xxx;
 		else                  mask = 1.0.xxx;
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
+
+		// HSM Added
+		mask_average = (black + white + white) / 3.0;
+		 mask_average = clamp(mix( mix(one, mask_average, mcut), mix(one, mask_average, maskstr), mx), 0.0, 1.0) * dark_compensate;
 	}    
 
 	// Magenta - Green - Black mask
@@ -441,6 +504,10 @@ vec3 Mask(vec2 pos, float mx, float mb)
 		else if (pos.x < 0.6) mask.rb = 1.0.xx;
 		else                  mask.g  = 1.0;
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;	
+
+		// HSM Added
+		mask_average = (black + black + magenta + green) / 4.0;
+		mask_average = clamp(mix( mix(one, mask_average, mcut), mix(one, mask_average, maskstr), mx), 0.0, 1.0) * dark_compensate;	
 	}  
 	
 	// RGBX
@@ -453,6 +520,11 @@ vec3 Mask(vec2 pos, float mx, float mb)
 		else if (pos.x < 0.7)  mask.g = 1.0;	
 		else                   mask.b = 1.0;
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;		
+
+		// HSM Added
+		// mask_average = (black + red + green + blue) / 4.0;
+		mask_average = (red + green + blue) / 4.0;
+		mask_average = clamp(mix( mix(one, mask_average, mcut), mix(one, mask_average, maskstr), mx), 0.0, 1.0) * dark_compensate;
 	}  
 
 	// 4k mask
@@ -465,6 +537,10 @@ vec3 Mask(vec2 pos, float mx, float mb)
 		else if (pos.x < 0.7)  mask.gb = 1.0.xx;	
 		else                   mask.b  = 1.0;
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;		
+
+		// HSM Added
+		mask_average = (red + yellow + cyan + blue) / 4.0;
+		mask_average = clamp(mix( mix(one, mask_average, mcut), mix(one, mask_average, maskstr), mx), 0.0, 1.0) * dark_compensate;		
 	}     
 
 	// RRGGBBX mask
@@ -477,6 +553,11 @@ vec3 Mask(vec2 pos, float mx, float mb)
 		else if (pos.x < 4.5)  mask.g = 1.0;	
 		else                   mask.b = 1.0;
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
+
+		// HSM Added
+		// mask_average = (black + red * red + green * green + blue + blue) / 7.0;
+		mask_average = (red * red + green * green + blue + blue) / 6.0;
+		mask_average = clamp(mix( mix(one, mask_average, mcut), mix(one, mask_average, maskstr), mx), 0.0, 1.0) * dark_compensate;
 	}
 
 	// 4k mask
@@ -491,11 +572,40 @@ vec3 Mask(vec2 pos, float mx, float mb)
 		else if (pos.x < 4.5)  mask.gb = 1.0.xx;		
 		else                   mask.b = 1.0;
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
+
+		// HSM Added
+		mask_average = (black + red + yellow + white + cyan + blue) / 6.0;
+		mask_average = clamp(mix( mix(one, mask_average, mcut), mix(one, mask_average, maskstr), mx), 0.0, 1.0) * dark_compensate;
 	}
 	
+	// HSM Added
+	float maskmin_average = min(min(mask_average.r, mask_average.g), mask_average.b);
+	mask_average = (mask_average - maskmin_average) * (1.0 + (maskboost - 1.0) * mb) + maskmin_average;
+	mask_average_luma = dot(mask_average.rgb, vec3(0.299, 0.587, 0.114));
+
 	float maskmin = min(min(mask.r,mask.g),mask.b);
 	return (mask - maskmin) * (1.0 + (maskboost-1.0)*mb) + maskmin;
 }
+
+// TODO need to instead just have a extra parameter to the mask functions to give the average back
+
+// HSM Added
+// vec3 HSM_MaskAverage(vec2 start_pos, float mx, float mb)
+// {
+// 	int sample_count = 32;
+
+// 	vec3 mask_sum = vec3(0);
+
+// 	for(int i=0; i <= sample_count; i++)
+// 	{
+// 		for(int j=0; j <= sample_count; j++)
+// 		{
+// 			mask_sum += Mask(start_pos + vec2(i, j), mx, mb);
+// 		}
+// 	}
+
+// 	return vec3((mask_sum.r + mask_sum.g + mask_sum.b) / 3.0) / float(sample_count * sample_count);
+// }
 
 float SlotMask(vec2 pos, float m)
 {
@@ -523,7 +633,17 @@ float SlotMask(vec2 pos, float m)
 	return slot;
 	}
 }   
- 
+
+// HSM Added
+float HSM_SlotMaskAverage(vec2 start_pos, float m)
+{
+	float slot_dark = mix(1.0 - slotmask1, 1.0 - slotmask, m);
+	float slot =  (slotwidth * 1 + 2 * slot_dark +
+			 	   double_slot * 1 + 2 * slot_dark) / 
+				  (slotwidth + 2 + double_slot + 2);
+	return slot;
+}
+
 /* HSM Removed 
 vec2 Warp(vec2 pos)
 {
@@ -723,11 +843,11 @@ void main()
 						BEZEL_OUTSIDE_COORD, 
 						BEZEL_OUTSIDE_CURVED_COORD, 
 						FRAME_OUTSIDE_CURVED_COORD);
-	cache_bounds_coord = (FRAME_OUTSIDE_CURVED_COORD - 0.5) * 0.9 + 0.5;
+	cache_bounds_coord = (BEZEL_OUTSIDE_COORD - 0.5) * 0.9 + 0.5;
 #endif
 #endif
 
-	if (cache_bounds_coord.x < -0.01 || cache_bounds_coord.x > 1.01 || cache_bounds_coord.y < -0.01 || cache_bounds_coord.y > 1.01)
+	if (HHLP_IsOutsideCoordSpace(cache_bounds_coord))
 	{
 		FragColor = vec4(0);
 		return;
@@ -806,7 +926,10 @@ if ((abs(global.deconrr) + abs(global.deconrry) + abs(global.deconrg) + abs(glob
 	*/
 
 	// HSM Added
-	if (GDV_DECONVERGENCE_ON > 0.5 && ((abs(global.deconrr) + abs(global.deconrry) + abs(global.deconrg) + abs(global.deconrgy) + abs(global.deconrb) + abs(global.deconrby)) > 0.2))
+	float screen_mask = HSM_GetCornerMask((screen_curved_coord - 0.5) * 0.999 + 0.5, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS * HSM_SCREEN_CORNER_RADIUS_SCALE, 0.9);
+	bool is_inside_screen = screen_mask > 0.001;
+
+	if (is_inside_screen && GDV_DECONVERGENCE_ON > 0.5 && ((abs(global.deconrr) + abs(global.deconrry) + abs(global.deconrg) + abs(global.deconrgy) + abs(global.deconrb) + abs(global.deconrby)) > 0.2))
 		fetch_pixel(color, Bloom, pos1, pos); // deconvergence
 	
 	float cm = igc(max(max(color.r,color.g),color.b));
@@ -847,7 +970,15 @@ if ((abs(global.deconrr) + abs(global.deconrry) + abs(global.deconrg) + abs(glob
 	
 	float smask = SlotMask(maskcoord, mx);
 	smask = clamp(smask + mix(smask_mit, 0.0, min(w3, sqrt(max(max(orig1.r,orig1.g),orig1.b)))), 0.0, 1.0);
-	cmask*= Mask(maskcoord, mx, mb);
+	float mask_average_luma = 0;
+	cmask*= Mask(maskcoord, mx, mb, mask_average_luma);
+
+	if (!is_inside_screen)
+	{
+		smask = HSM_SlotMaskAverage(vec2(0.5), mx);
+		smask = clamp(smask + mix(smask_mit, 0.0, min(w3, sqrt(max(max(orig1.r,orig1.g),orig1.b)))), 0.0, 1.0);
+		cmask = vec3(mask_average_luma);
+	}
 
 	if (mask_layout > 0.5) cmask = cmask.rbg;
 

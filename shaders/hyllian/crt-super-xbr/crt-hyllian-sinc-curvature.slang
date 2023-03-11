@@ -201,7 +201,7 @@ void main()
 						BEZEL_OUTSIDE_COORD, 
 						BEZEL_OUTSIDE_CURVED_COORD, 
 						FRAME_OUTSIDE_CURVED_COORD);
-	cache_bounds_coord = (FRAME_OUTSIDE_CURVED_COORD - 0.5) * 0.9 + 0.5;
+	cache_bounds_coord = (BEZEL_OUTSIDE_COORD - 0.5) * 0.9 + 0.5;
 #endif
 #endif
 

@@ -9,7 +9,7 @@
 #reference "Components/55__color-correct__grade.slangp"
 #reference "Components/58__fast-sharpen.slangp"
 #reference "Components/59__prep__gdv-linearize.slangp"
-#reference "Components/60__crt__lcd-grid.slangp"
+#reference "Components/60__crt__lcd-grid__no-reflect.slangp"
 #reference "Components/68__post-crt__no-reflect.slangp"
 #reference "Components/80__bezel-images.slangp"
 #reference "Components/85__combine-passes__no-reflect.slangp"

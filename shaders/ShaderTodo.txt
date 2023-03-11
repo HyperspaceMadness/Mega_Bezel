@@ -3,23 +3,17 @@
 Mega Bezel is updated to V1.11.0_2023-02-25
 
 Changes:
-  * Guest Advanced updated to crt-guest-advanced-2023-02-25-release1
-    * Improvements to the new Magic Glow feature
-      * Turn Magic Glow on and Increase the Glow amount to see the effect
-    * New Slot Mask Mitigation option to reduce moire
-  * Added/Restored Guest's Raster Bloom as well as Overscan control
-  * Updated Comments in presets to use # instead of // as per @hunterk's request
-  * Added rotation option for Rotate CRT Tube:
-    * -1 = 90 Degrees Clockwise (or 270 Counter Clockwise)
-    * 0 = No Rotation
-    * 1 = 90 Degrees Counter Clockwise
-  * Added groundwork for the wildcard replacement feature so presets will auto rotate and not flip in the future
+  * Fixed a performance issue  where we were rendering more than we needed to
+    * This should increase performance across most presets
+  * Fixed color rainbowing in reflection for Guest-Advanced and LCD-GRID
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
   * Update Guest to latest
+  * Update GDV-Mini for ROBMARK85
+  * Check on Afterglow for BiRaitBec
   * Add Curvature to EasyMode for lasly
   * Rotate Texture Parameters
   * Update Megatron

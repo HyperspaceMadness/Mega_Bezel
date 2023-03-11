@@ -106,28 +106,34 @@ void main()
 
 	vec2 cache_bounds_coord = SCREEN_COORD;
 
-// // If it's the potato preset render the whole frame
-// #ifndef IS_POTATO_PRESET
-// #ifndef IS_NO_REFLECT_PRESET
-// 	vec2 bezel_outside_flat_coord;
-// 	vec2 frame_outside_flat_coord;
-// 	HSM_GetSimpleBezelCoords(TUBE_DIFFUSE_COORD, 
-// 							TUBE_DIFFUSE_SCALE, 
-// 							TUBE_SCALE, 
-// 							SCREEN_ASPECT,
-// 							bezel_outside_flat_coord, 
-// 							frame_outside_flat_coord);
-// 	cache_bounds_coord = (frame_outside_flat_coord - 0.5) * 0.9 + 0.5;
-// #endif
-// #endif
+// If it's the potato preset render the whole frame
+#ifndef IS_POTATO_PRESET
+#ifndef IS_NO_REFLECT_PRESET
+	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
+	HSM_GetBezelCoords(TUBE_DIFFUSE_COORD, 
+						TUBE_DIFFUSE_SCALE, 
+						TUBE_SCALE, 
+						SCREEN_ASPECT, 
+						false,
+						BEZEL_OUTSIDE_SCALE,
+						BEZEL_OUTSIDE_COORD, 
+						BEZEL_OUTSIDE_CURVED_COORD, 
+						FRAME_OUTSIDE_CURVED_COORD);
+	cache_bounds_coord = (BEZEL_OUTSIDE_COORD - 0.5) * 0.9 + 0.5;
+#endif
+#endif
 
-// 	if (HHLP_IsOutsideCoordSpace(cache_bounds_coord))
-// 	{
-// 			FragColor = vec4(0);
-// 			return;
-// 	}
+	if (HHLP_IsOutsideCoordSpace(cache_bounds_coord))
+	{
+			FragColor = vec4(0);
+			return;
+	}
 
     vec2 screen_curved_coord = HSM_GetCRTShaderCurvedCoord(SCREEN_COORD);
+
+	// HSM Added
+	float screen_mask = HSM_GetCornerMask((screen_curved_coord - 0.5) * 1.00 + 0.5, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS * HSM_SCREEN_CORNER_RADIUS_SCALE, 0.9);
+
 	vec2 curved_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
     vec2 texelSize = 1 / CROPPED_ROTATED_SIZE_WITH_RES_MULT;
     // End Addition
@@ -169,9 +175,11 @@ void main()
 
     vec3 averageColor = topLeftColor + bottomRightColor + bottomLeftColor + topRightColor;
 
-    averageColor = mat3(cred, cgreen, cblue) * averageColor;
-
     // HSM Added
+    vec3 source_color = texture(Source, curved_coord).rgb;
+    vec3 averageColorOutsideScreen = mix(mat3(cred, cgreen, cblue) * source_color, source_color, 0.75);
+    averageColor = mix(averageColorOutsideScreen, averageColor, screen_mask);
+    
     FragColor = vec4(averageColor, 1);
 	FragColor = pow(FragColor, vec4(1 / (HSM_GAMMA_OUT_CRT / DEFAULT_SRGB_GAMMA)));
 }

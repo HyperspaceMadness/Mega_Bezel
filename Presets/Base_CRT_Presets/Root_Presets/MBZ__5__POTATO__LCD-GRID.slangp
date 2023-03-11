@@ -95,7 +95,7 @@ alias13 = "LinearizePass"
 shader14 = ../../../shaders/base/delinearize.slang
 float_framebuffer14 = "true"
 
-shader15 = ../../../shaders/lcd-cgwg/hsm-lcd-grid-v2.slang
+shader15 = ../../../shaders/lcd-cgwg/hsm-lcd-grid-v2-potato.slang
 filter_linear15 = "false"
 scale_type15 = "viewport"
 scale15 = "1.0"

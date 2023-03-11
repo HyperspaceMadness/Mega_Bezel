@@ -362,7 +362,7 @@ void main()
 							SCREEN_ASPECT,
 							bezel_outside_flat_coord, 
 							frame_outside_flat_coord);
-	cache_bounds_coord = (frame_outside_flat_coord - 0.5) * 0.9 + 0.5;
+	cache_bounds_coord = (bezel_outside_flat_coord - 0.5) * 0.9 + 0.5;
 #endif
 
 	if (HHLP_IsOutsideCoordSpace(cache_bounds_coord))
