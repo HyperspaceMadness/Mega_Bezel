@@ -78,8 +78,11 @@ float HSM_BZL_BRIGHTNESS_MULT_SIDE_LEFT = global.HSM_BZL_BRIGHTNESS_MULT_SIDE_LE
 #pragma parameter HSM_BZL_BRIGHTNESS_MULT_SIDE_RIGHT 	"          Right Side Multiplier" 100 0 1000 2
 float HSM_BZL_BRIGHTNESS_MULT_SIDE_RIGHT = global.HSM_BZL_BRIGHTNESS_MULT_SIDE_RIGHT / 100;
 
-#pragma parameter HSM_BZL_HIGHLIGHT 					"          Highlight" 1 0 100 0.2
+#pragma parameter HSM_BZL_HIGHLIGHT 					"          Main Highlight" 1 0 100 0.2
 float HSM_BZL_HIGHLIGHT = global.HSM_BZL_HIGHLIGHT / 100;
+
+#pragma parameter HSM_BZL_INNER_EDGE_HIGHLIGHT 			"          Inner Edge Highlight" 100 0 100 5
+float HSM_BZL_INNER_EDGE_HIGHLIGHT = global.HSM_BZL_INNER_EDGE_HIGHLIGHT / 100;
 
 
 //---------------------------------------------------------------------------------------------------
@@ -143,11 +146,14 @@ float HSM_FRM_TEXTURE_OPACITY = global.HSM_FRM_TEXTURE_OPACITY / 100;
 #pragma parameter HSM_FRM_TEXTURE_BLEND_MODE            "         Texture Overlay Blend Mode - Off | Normal | Add | Mult"  2 0 3 1
 float HSM_FRM_TEXTURE_BLEND_MODE = global.HSM_FRM_TEXTURE_BLEND_MODE;
 
-#pragma parameter HSM_FRM_NOISE 					"          Noise - Def 30" 30 0 100 1
+#pragma parameter HSM_FRM_NOISE 					    "          Noise - Def 30" 30 0 100 1
 float HSM_FRM_NOISE = global.HSM_FRM_NOISE / 100;
 
 #pragma parameter HSM_FRM_INNER_EDGE_THICKNESS 		    "          Inner Edge Thickness" 100 0 5000 5
 float HSM_FRM_INNER_EDGE_THICKNESS = global.HSM_FRM_INNER_EDGE_THICKNESS * 0.00003;
+
+#pragma parameter HSM_FRM_INNER_EDGE_HIGHLIGHT 		    "          Inner Edge Highlight" 14 0 100 1
+float HSM_FRM_INNER_EDGE_HIGHLIGHT = global.HSM_FRM_INNER_EDGE_HIGHLIGHT * 0.001;
 
 #pragma parameter HSM_FRM_THICKNESS 					"          Frame Thickness" 100 0 2000 5
 float HSM_FRM_THICKNESS = global.HSM_FRM_THICKNESS * 0.0007;

@@ -5,7 +5,8 @@ Mega Bezel is updated to V1.12.0_2023-03-11
 Changes:
   * Fixed LCD-GRID Potato
   * Added params file for glcore and LRPS2 to avoid flipping
-
+  * Added Frame Inner Edge Highlight @DevonCM requested
+  * Added Bezel Inner Edge Brightness
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
