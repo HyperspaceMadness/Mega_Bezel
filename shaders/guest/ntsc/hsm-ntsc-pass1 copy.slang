@@ -48,21 +48,23 @@ layout(location = 8) out float MERGE;
 
 void main()
 {
-	float res = min(global.ntsc_scale, 1.0);
-
    /* HSM Removed
+	float res = min(global.ntsc_scale, 1.0);
 	float OriginalSize = global.OriginalSize.x;
    */
 
 	gl_Position = global.MVP * Position;
 	vTexCoord = TexCoord;
 
-   /* HSM Removed
-	pix_no = TexCoord * global.SourceSize.xy * (res * global.OutputSize.xy / global.SourceSize.xy);
-	phase = (global.ntsc_phase < 1.5) ? ((OriginalSize > 300.0) ? 2.0 : 3.0) : ((global.ntsc_phase > 2.5) ? 3.0 : 2.0);
-	*/
+	vec2 prescalex = vec2(textureSize(LinearizePass, 0)) / params.DerezedPassSize.xy;
 
-	pix_no = TexCoord * global.DerezedPassSize.xy * (res * global.OutputSize.xy / global.DerezedPassSize.xy);
+	vec4 SourceSize = params.DerezedPassSize * vec4(2.0*prescalex.x, prescalex.y, 0.5/prescalex.x, 1.0/prescalex.y);
+
+	float res = min(global.ntsc_scale, 1.0);
+	vec4 OriginalSize = global.DerezedPassSize;
+	gl_Position = global.MVP * Position;
+	vTexCoord = TexCoord;
+	pix_no = TexCoord * DerezedPassSize.xy * (res * global.OutputSize.xy / DerezedPassSize.xy);
 	phase = (global.ntsc_phase < 1.5) ? ((global.DerezedPassSize.x > 300.0) ? 2.0 : 3.0) : ((global.ntsc_phase > 2.5) ? 3.0 : 2.0);
 	
 	CHROMA_MOD_FREQ = (phase < 2.5) ? (4.0 * PI / 15.0) : (PI / 3.0);

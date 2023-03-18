@@ -229,7 +229,7 @@ scale_y38 = 480.0
 float_framebuffer38 = true
 alias38 = BloomPass
 
-shader39 = ../../../shaders/guest/hsm-crt-guest-advanced.slang
+shader39 = ../../../shaders/guest/hsm-crt-guest-advanced-ntsc-pass2.slang
 filter_linear39 = true
 scale_type39 = viewport
 scale_x39 = 1.0
@@ -458,5 +458,3 @@ GAMMA_INPUT = 2.0
 gamma_out = 1.95
 h_sharp = "15.000000"
 s_sharp = "1.500000"
-
-ntsc_scale = 0.33

@@ -297,6 +297,5 @@ TopLayerImage_mipmap = 1
 # NTSC Parameters
 GAMMA_INPUT = 2.0
 gamma_out = 1.95
-HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = "200.000000"
 h_sharp = "15.000000"
 s_sharp = "1.500000"

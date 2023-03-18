@@ -15,7 +15,7 @@
 
 #reference "Components/90__parameters__gdv-ntsc.slangp"
 
-#reference "Components/90__parameters__gdv-ntsc-smooth.slangp"
+#reference "Components/90__parameters__gdv-ntsc.slangp"
 
 #reference "Components/90__parameters__drez.slangp"
 #reference "Components/90__parameters__drez-x-viewport-scale.slangp"

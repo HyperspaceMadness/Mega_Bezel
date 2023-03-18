@@ -199,7 +199,7 @@ scale_y32 = 480.0
 float_framebuffer32 = true
 alias32 = BloomPass
 
-shader33 = ../../../shaders/guest/hsm-crt-guest-advanced.slang
+shader33 = ../../../shaders/guest/hsm-crt-guest-advanced-ntsc-pass2.slang
 filter_linear33 = true
 scale_type33 = viewport
 scale_x33 = 1.0
@@ -392,8 +392,6 @@ GAMMA_INPUT = 2.0
 gamma_out = 1.95
 h_sharp = "15.000000"
 s_sharp = "1.500000"
-
-ntsc_scale = 0.33
 
 # DREZ Parameters
 SHARPEN = 0

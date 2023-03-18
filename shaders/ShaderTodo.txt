@@ -7,12 +7,15 @@ Changes:
   * Added params file for glcore and LRPS2 to avoid flipping
   * Added Frame Inner Edge Highlight @DevonCM requested
   * Added Bezel Inner Edge Brightness
+  * Fixed NTSC Presets
+    * Reported / Requested by @Cyber
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
-  * Frame Inner edge Brightness
+  * Overscan and raster bloom should be for all presets
+  * Guest HD & Passthrough Presets
   * Check on Afterglow for BiRaitBec
   * Add Curvature to EasyMode for lasly
   * Rotate Image Layers with Parameters
