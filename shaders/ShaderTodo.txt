@@ -14,6 +14,8 @@ Changes:
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Python file to create full presets from a folder
+  * Dual Screen Reflection is using the whole screen
   * Overscan and raster bloom should be for all presets
   * Guest HD & Passthrough Presets
   * Check on Afterglow for BiRaitBec
