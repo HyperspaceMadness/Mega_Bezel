@@ -180,17 +180,19 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 						inout vec2 out_placement_coord,
 						inout vec2 out_placement_scale)
 {
+	float texture_aspect = HSM_GetAspectRatioFromMode(texture_aspect_mode, explicit_texture_aspect);
+
+	/*
 	bool is_rotated = false;
 	// float image_rotation_mode = 1; // Modes, 0: explicit, 1: Rotate To Vertical Core Aspect, 2: Rotate To Vertical Viewport Aspect
 	// // vert core aspect rotation, vert vertical aspect rotation
 	// // rotate with tube ?
-	float explicit_image_rotation = 1;
+	float explicit_image_rotation = 0;
 	float image_rotation = explicit_image_rotation;
 
 	// if (image_rotation_mode == 1.0)
 	// 	image_rotation = SCREEN_ASPECT < 1 ? 1 : 0;
-
-	float texture_aspect = HSM_GetAspectRatioFromMode(texture_aspect_mode, explicit_texture_aspect);
+	
 	if (min(abs(image_rotation), 1) > 0.5)
 	{
 		texture_aspect = 1 / texture_aspect;
@@ -198,6 +200,7 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 		offset_scale = offset_scale.yx;
 		is_rotated = true;
 	}
+	*/
 
 	vec2 inherited_coord = in_viewport_coord / 0.5;
 	vec2 inherited_placement_coord = in_viewport_coord / 0.5;
@@ -225,6 +228,7 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 	}
 	else if (layer_to_follow == FOLLOW_LAYER_TUBE_DIFFUSE)
 	{
+/*
 		if (is_rotated)
 		{
 			inherited_coord = TUBE_DIFFUSE_COORD;
@@ -238,6 +242,7 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 		}
 		else
 		{
+*/
 			inherited_coord = TUBE_DIFFUSE_COORD;
 			inherited_placement_coord = TUBE_DIFFUSE_COORD;
 			inherited_final_coord = TUBE_DIFFUSE_CURVED_COORD;
@@ -246,11 +251,12 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 
 			default_offset_scale = vec2(1) / (DEFAULT_UNCORRECTED_SCREEN_SCALE.y);
 			default_offset_scale.x *= texture_aspect / DEFAULT_SCREEN_ASPECT;
-		}
+		// }
 
 	}
 	else if (layer_to_follow == FOLLOW_LAYER_BEZEL_OUTSIDE)
 	{
+/*
 		if (is_rotated)
 		{
 			inherited_coord = BEZEL_OUTSIDE_COORD;
@@ -264,6 +270,7 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 		}
 		else
 		{
+*/
 			inherited_coord = BEZEL_OUTSIDE_COORD;
 			inherited_placement_coord = BEZEL_OUTSIDE_COORD;
 
@@ -272,7 +279,7 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 
 			default_offset_scale = vec2(1) / (DEFAULT_UNCORRECTED_BEZEL_SCALE.y);
 			default_offset_scale.x *= texture_aspect / DEFAULT_SCREEN_ASPECT;
-		}
+		// }
 	}
 	else if (layer_to_follow == FOLLOW_LAYER_BG)
 	{
@@ -372,7 +379,10 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 	// We only need to apply an offset from this
 	out_coord = HSM_AddPosScaleToCoord(inherited_coord, offset_pos, drawing_scale / inherited_scale);
 
-	out_coord = HSM_RotateCoordinate(out_coord, image_rotation);
+/*
+	if (is_rotated)
+		out_coord = HSM_RotateCoordinate(out_coord, image_rotation);
+*/
 
 	return out_coord;
 }
