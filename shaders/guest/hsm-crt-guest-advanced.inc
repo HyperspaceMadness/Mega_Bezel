@@ -333,9 +333,6 @@ void main()
  	*/
 
 	// HSM Added
-
-
-	// HSM Added
 	vec2 screen_curved_coord = HSM_GetCRTShaderCurvedCoord(SCREEN_COORD);
 
 	// Screen Curved Coordinate but not Mirrored
@@ -357,13 +354,8 @@ void main()
 		screen_curved_coord_with_overscan = HSM_ApplyRasterBloomOverscan(screen_curved_coord_with_overscan, OS, BLOOM, lum);
 		screen_coord_with_overscan = HSM_ApplyRasterBloomOverscan(screen_coord_with_overscan, OS, BLOOM, lum);
 		screen_scale_with_overscan *= HSM_GetRasterBloomScale(OS, BLOOM, lum);
-
-		if (HHLP_IsOutsideCoordSpace(screen_curved_coord_with_overscan))
-		{
-			FragColor = vec4(0);
-			return;
-		}
 	}
+	// End Addition
 
 	bool smarte  = (smart_ei > 0.01); // smart edge interpolation on / off
 

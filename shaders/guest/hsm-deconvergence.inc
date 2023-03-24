@@ -897,23 +897,9 @@ void main()
 	// Add overscan to mirror wrapped coord
 	pos = HSM_ApplyOverscan(pos, GDV_OVERSCAN_X, GDV_OVERSCAN_Y);
 			
-	// vec2 screen_scale_with_overscan = SCREEN_SCALE * (vec2(GDV_OVERSCAN_X, GDV_OVERSCAN_Y) + 1);
-
-	// Screen Coordinate overscan but without curvature 
-	vec2 screen_coord_with_overscan = HSM_ApplyOverscan(SCREEN_COORD, GDV_OVERSCAN_X, GDV_OVERSCAN_Y);
-
 	if (GDV_RASTER_BLOOM_ON > 0.5)
 	{
 		pos = HSM_ApplyRasterBloomOverscan(pos, OS, BLOOM, lum);
-		screen_curved_coord_with_overscan = HSM_ApplyRasterBloomOverscan(screen_curved_coord_with_overscan, OS, BLOOM, lum);
-		screen_coord_with_overscan = HSM_ApplyRasterBloomOverscan(screen_coord_with_overscan, OS, BLOOM, lum);
-		// screen_scale_with_overscan *= HSM_GetRasterBloomScale(OS, BLOOM, lum);
-
-		if (HHLP_IsOutsideCoordSpace(screen_curved_coord_with_overscan))
-		{
-			FragColor = vec4(0);
-			return;
-		}
 	}
 	
 	// color and bloom fetching

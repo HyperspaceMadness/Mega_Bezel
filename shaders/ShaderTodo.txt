@@ -3,19 +3,17 @@
 Mega Bezel is updated to V1.13.0_2023-03-19
 
 Changes:
-  * Fixed LCD-GRID Potato
-  * Added params file for glcore and LRPS2 to avoid flipping
-  * Added Frame Inner Edge Highlight @DevonCM requested
-  * Added Bezel Inner Edge Brightness
-  * Fixed NTSC Presets
-    * Reported / Requested by @Cyber
+  * Fixed Reflection Disappearing with Raster Bloom Enabled
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
-  * Python file to create full presets from a folder
+  * Add Vertical Flip correction for more cores 
+  * Raster Bloom is losing the reflection
   * Dual Screen Reflection is using the whole screen
+  * Look at Retro V2 for alternate LCD shader
+  * Python file to create full presets from a folder
   * Overscan and raster bloom should be for all presets
   * Guest HD & Passthrough Presets
   * Check on Afterglow for BiRaitBec

@@ -337,13 +337,13 @@ void main()
 
 	// HSM Added
 	vec2 screen_curved_coord = HSM_GetCRTShaderCurvedCoord(SCREEN_COORD);
-	
-	// // Screen Curved Coordinate but not Mirrored
+
+	// Screen Curved Coordinate but not Mirrored
 	vec2 screen_curved_coord_with_overscan = HSM_ApplyOverscan(screen_curved_coord, GDV_OVERSCAN_X, GDV_OVERSCAN_Y);
 
 	vec2 pos = HSM_GetMirrorWrappedCoord(screen_curved_coord);
 
-	// // Add overscan to mirror wrapped coord
+	// Add overscan to mirror wrapped coord
 	pos = HSM_ApplyOverscan(pos, GDV_OVERSCAN_X, GDV_OVERSCAN_Y);
 			
 	vec2 screen_scale_with_overscan = SCREEN_SCALE * (vec2(GDV_OVERSCAN_X, GDV_OVERSCAN_Y) + 1);
@@ -357,13 +357,8 @@ void main()
 		screen_curved_coord_with_overscan = HSM_ApplyRasterBloomOverscan(screen_curved_coord_with_overscan, OS, BLOOM, lum);
 		screen_coord_with_overscan = HSM_ApplyRasterBloomOverscan(screen_coord_with_overscan, OS, BLOOM, lum);
 		screen_scale_with_overscan *= HSM_GetRasterBloomScale(OS, BLOOM, lum);
-
-		if (HHLP_IsOutsideCoordSpace(screen_curved_coord_with_overscan))
-		{
-			FragColor = vec4(0);
-			return;
-		}
 	}
+	// End Addition
 
 	vec2 coffset = vec2(0.5, 0.5);
 	
@@ -529,6 +524,6 @@ if (abs(vertmask) > 0.025)
 	if (HSM_GetUseFakeScanlines())
 	{
 		vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 1, TUBE_DIFFUSE_SCALE, TUBE_SCALE, TUBE_DIFFUSE_ASPECT, 1);
-		FragColor = HSM_ApplyScanlineMask(FragColor, SCREEN_SCALE, SCREEN_COORD, screen_curved_coord, tube_curved_coord, HSM_FAKE_SCANLINE_OPACITY);
+		FragColor = HSM_ApplyScanlineMask(FragColor, screen_scale_with_overscan, screen_coord_with_overscan, screen_curved_coord_with_overscan, tube_curved_coord, HSM_FAKE_SCANLINE_OPACITY);
 	}
 }
