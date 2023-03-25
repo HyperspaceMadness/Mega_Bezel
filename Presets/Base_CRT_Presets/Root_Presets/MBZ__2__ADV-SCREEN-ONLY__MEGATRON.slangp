@@ -178,6 +178,8 @@ alias29 = "PostCRTPass"
 shader30 = ../../../shaders/base/output-hdr.slang
 scale_type30 = viewport
 alias30 = "OutputPass"
+
+# Textures All
 # Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
@@ -269,7 +271,7 @@ TopLayerImage_mipmap = 1
 # HSM_ASPECT_RATIO_MODE = 6
 # HSM_CURVATURE_MODE = 0
 
-# Sony Megatron Color Monitor
+# Sony Megatron Color Monitor Parameters
 hcrt_hdr = "0.000000"
 
 HSM_INT_SCALE_MODE = "1.000000"

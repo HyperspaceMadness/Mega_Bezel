@@ -268,6 +268,8 @@ alias43 = "BR_LayersOverCRTPass"
 shader44 = ../../../shaders/base/combine-passes-no-reflect.slang
 scale_type44 = viewport
 alias44 = "CombinePass"
+
+# Textures All
 # Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
@@ -358,7 +360,8 @@ TopLayerImage_mipmap = 1
 # Use for matching vanilla GDV-Advanced
 # HSM_ASPECT_RATIO_MODE = 6
 # HSM_CURVATURE_MODE = 0
-# SMOOTH-ADV
+
+# SMOOTH-ADV Parameters
 SGPT_BLEND_OPTION = 1
 
 HSM_SCALEFX_ON = 1
@@ -377,7 +380,7 @@ mask_bloom = 0.3
 # Mask Size is Auto, so it will look the same at 1080p and 4K
 masksize = 0
 
-# NTSC Parameters
+# GDV NTSC Parameters
 GAMMA_INPUT = 2.0
 gamma_out = 1.95
 h_sharp = "15.000000"

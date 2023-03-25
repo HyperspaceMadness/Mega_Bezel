@@ -129,6 +129,8 @@ alias19 = "BR_LayersOverCRTPass"
 shader20 = ../../../shaders/base/combine-passes-no-reflect.slang
 scale_type20 = viewport
 alias20 = "CombinePass"
+
+# Textures All
 # Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 

@@ -93,6 +93,8 @@ mipmap_input12 = true
 scale_type12 = viewport
 float_framebuffer12 = true
 alias12 = "PostCRTPass"
+
+# Textures gdvmini-potato
 # Define textures to be used by the different passes
 textures = "ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
 
@@ -116,5 +118,7 @@ HSM_ASPECT_RATIO_MODE = 1
 
 # DREZ Parameters
 SHARPEN = 0
+
+# Drez X Viewport Scale Parameters
 HSM_ASPECT_RATIO_ORIENTATION = 1
 HSM_ASPECT_RATIO_MODE = 0

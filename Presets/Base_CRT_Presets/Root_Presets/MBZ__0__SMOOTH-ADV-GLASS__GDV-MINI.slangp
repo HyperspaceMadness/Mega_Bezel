@@ -254,6 +254,8 @@ shader40 = ../../../shaders/base/reflection-glass.slang
 scale_type40 = viewport
 srgb_framebuffer40 = true
 alias40 = "ReflectionPass"
+
+# Textures Glass
 # Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
@@ -380,7 +382,8 @@ HSM_SCREEN_VIGNETTE_POWER = "4.000000"
 HSM_SCREEN_VIGNETTE_IN_REFLECTION = "0.000000"
 
 g_vignette = "0.0"
-# SMOOTH-ADV
+
+# SMOOTH-ADV Parameters
 SGPT_BLEND_OPTION = 1
 
 HSM_SCALEFX_ON = 1

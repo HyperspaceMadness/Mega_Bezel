@@ -1,3 +1,5 @@
+
+# Textures gdvmini-potato
 # Define textures to be used by the different passes
 textures = "ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
 

@@ -280,6 +280,8 @@ alias40 = "PostCRTPass"
 shader41 = ../../../shaders/base/output-sdr.slang
 scale_type41 = viewport
 alias41 = "OutputPass"
+
+# Textures All
 # Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
@@ -371,13 +373,13 @@ TopLayerImage_mipmap = 1
 # HSM_ASPECT_RATIO_MODE = 6
 # HSM_CURVATURE_MODE = 0
 
-# NTSC Parameters
+# GDV NTSC Parameters
 GAMMA_INPUT = 2.0
 gamma_out = 1.95
 h_sharp = "15.000000"
 s_sharp = "1.500000"
 
-# SMOOTH-ADV
+# SUPER-XBR GDV Parameters
 SGPT_BLEND_OPTION = 1
 
 SHARPSMOOTHER_ON = 1

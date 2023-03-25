@@ -329,6 +329,8 @@ shader47 = ../../../shaders/base/reflection-glass.slang
 scale_type47 = viewport
 srgb_framebuffer47 = true
 alias47 = "ReflectionPass"
+
+# Textures Glass-Reshade
 # Define textures to be used by the different passes
 textures = "Dirt;Sprite;SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
@@ -464,7 +466,7 @@ HSM_SCREEN_VIGNETTE_IN_REFLECTION = "0.000000"
 
 g_vignette = "0.0"
 
-# Reshade-FX
+# Reshade-FX Parameters
 SGPT_BLEND_OPTION = 1
 
 bLensdirtEnable_toggle = "1.000000"

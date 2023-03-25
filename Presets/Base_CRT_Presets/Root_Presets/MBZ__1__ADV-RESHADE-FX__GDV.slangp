@@ -347,6 +347,8 @@ alias49 = "ReflectionPass"
 shader50 = ../../../shaders/base/combine-passes.slang
 scale_type50 = viewport
 alias50 = "CombinePass"
+
+# Textures All-Reshade-Fx
 # Define textures to be used by the different passes
 textures = "Dirt;Sprite;SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
@@ -446,7 +448,7 @@ TopLayerImage_mipmap = 1
 # HSM_ASPECT_RATIO_MODE = 6
 # HSM_CURVATURE_MODE = 0
 
-# Reshade-FX
+# Reshade-FX Parameters
 SGPT_BLEND_OPTION = 1
 
 bLensdirtEnable_toggle = "1.000000"

@@ -194,6 +194,8 @@ alias25 = "ReflectionPass"
 shader26 = ../../../shaders/base/combine-passes.slang
 scale_type26 = viewport
 alias26 = "CombinePass"
+
+# Textures All
 # Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
@@ -287,5 +289,7 @@ TopLayerImage_mipmap = 1
 
 # DREZ Parameters
 SHARPEN = 0
+
+# Drez X Viewport Scale Parameters
 HSM_ASPECT_RATIO_ORIENTATION = 1
 HSM_ASPECT_RATIO_MODE = 0

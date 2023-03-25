@@ -259,6 +259,8 @@ alias37 = "BR_LayersOverCRTPass"
 shader38 = ../../../shaders/base/combine-passes-no-reflect.slang
 scale_type38 = viewport
 alias38 = "CombinePass"
+
+# Textures All
 # Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
@@ -350,7 +352,7 @@ TopLayerImage_mipmap = 1
 # HSM_ASPECT_RATIO_MODE = 6
 # HSM_CURVATURE_MODE = 0
 
-# SMOOTH-ADV
+# SUPER-XBR GDV Parameters
 SGPT_BLEND_OPTION = 1
 
 SHARPSMOOTHER_ON = 1

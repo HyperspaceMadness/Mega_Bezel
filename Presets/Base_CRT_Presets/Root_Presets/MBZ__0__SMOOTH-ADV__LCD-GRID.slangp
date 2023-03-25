@@ -266,6 +266,8 @@ alias42 = "ReflectionPass"
 shader43 = ../../../shaders/base/combine-passes.slang
 scale_type43 = viewport
 alias43 = "CombinePass"
+
+# Textures All
 # Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
@@ -356,7 +358,8 @@ TopLayerImage_mipmap = 1
 # Use for matching vanilla GDV-Advanced
 # HSM_ASPECT_RATIO_MODE = 6
 # HSM_CURVATURE_MODE = 0
-# SMOOTH-ADV
+
+# SMOOTH-ADV LCD-GRID Parameters
 SGPT_BLEND_OPTION = 1
 
 HSM_SCALEFX_ON = 1
@@ -369,3 +372,6 @@ HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = 0
 ntsc_scale = 0.4
 
 shadowMask = 3
+
+# LCD-GRID Parameters
+HSM_REFLECT_GLOBAL_AMOUNT = 20

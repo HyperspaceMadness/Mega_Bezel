@@ -124,6 +124,8 @@ mipmap_input17 = true
 scale_type17 = viewport
 float_framebuffer17 = true
 alias17 = "PostCRTPass"
+
+# Textures gdvmini-potato
 # Define textures to be used by the different passes
 textures = "ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
 
@@ -145,7 +147,7 @@ HSM_ASPECT_RATIO_MODE = 1
 # HSM_ASPECT_RATIO_MODE = 6
 # HSM_CURVATURE_MODE = 0
 
-# NTSC Parameters
+# GDV NTSC Parameters
 GAMMA_INPUT = 2.0
 gamma_out = 1.95
 h_sharp = "15.000000"

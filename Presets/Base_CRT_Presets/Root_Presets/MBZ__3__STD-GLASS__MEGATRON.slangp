@@ -188,6 +188,8 @@ alias24 = "ReflectionPass"
 shader25 = ../../../shaders/base/output-hdr.slang
 scale_type25 = viewport
 alias25 = "OutputPass"
+
+# Textures Glass
 # Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
@@ -315,7 +317,7 @@ HSM_SCREEN_VIGNETTE_IN_REFLECTION = "0.000000"
 
 g_vignette = "0.0"
 
-# Sony Megatron Color Monitor
+# Sony Megatron Color Monitor Parameters
 hcrt_hdr = "0.000000"
 
 HSM_INT_SCALE_MODE = "1.000000"

@@ -118,6 +118,8 @@ mipmap_input18 = true
 scale_type18 = viewport
 float_framebuffer18 = true
 alias18 = "PostCRTPass"
+
+# Textures Potato
 # Define textures to be used by the different passes
 textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
 
