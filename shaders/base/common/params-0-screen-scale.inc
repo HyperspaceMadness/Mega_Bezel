@@ -308,14 +308,15 @@ float HSM_CROP_BLACK_THRESHOLD = global.HSM_CROP_BLACK_THRESHOLD / 100;
 //    DREZ Filter
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_GSHARP_DREZ_EMPTY_LINE		" " 0 0 0.001 0.001
-#pragma parameter GSHARP_DREZ_TITLE 	"[ --- DREZ DOWNSAMPLE FILTER - GUEST.R G-SHARP RESAMPLER --- ]:"  0 0 0.01 0.01
+#pragma parameter GSHARP_DREZ_TITLE 	    "[ --- DREZ DOWNSAMPLE FILTER - GUEST.R G-SHARP RESAMPLER --- ]:"  0 0 0.01 0.01
 
-#pragma parameter HSM_DREZ_GSHARP_ON 	"          G-SHARP ON" 	  1 0 1 1
+#pragma parameter HSM_DREZ_GSHARP_ON 	    "          G-SHARP ON" 	  1 0 1 1
+#pragma parameter HSM_DREZ_THRESHOLD_RATIO 	"         Downsample Threshold (Original Res Vs Downsampled Res)" 	  1.5 1 4 0.1
 // Default was 1.2, now set to 2.3 to match smoothing in Hyllian b-spline
-#pragma parameter HSM_DREZ_HSHARP0 		"          Filter Range"  2.3 1.0 6.0 0.1
+#pragma parameter HSM_DREZ_HSHARP0 		    "          Filter Range"  2.3 1.0 6.0 0.1
 #pragma parameter HSM_DREZ_SIGMA_HV 		"          Gaussian Blur Sigma" 0.75 0.1 7.0 0.05
 #pragma parameter HSM_DREZ_SHAR 			"          Sharpness Definition" 0.5 0.0 2.0 0.05
-#pragma parameter HSM_DREZ_HAR 			"          Anti-Ringing" 0.5 0.0 1.0 0.10
+#pragma parameter HSM_DREZ_HAR 			    "          Anti-Ringing" 0.5 0.0 1.0 0.10
 
 //---------------------------------------------------------------------------------------------------
 //    SCANLINE DIRECTION

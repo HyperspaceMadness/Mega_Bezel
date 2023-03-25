@@ -34,6 +34,7 @@ layout(push_constant) uniform Push
 	float HSM_DREZ_HSHARP0;
 	float HSM_DREZ_HAR;
 	float HSM_DREZ_SHAR;
+	float HSM_DREZ_THRESHOLD_RATIO;
 } params;
 
 #pragma parameter HSM_GSHARP_DREZ_EMPTY_LINE		" " 0 0 0.001 0.001
@@ -41,6 +42,10 @@ layout(push_constant) uniform Push
 
 #pragma parameter HSM_DREZ_GSHARP_ON 	"          G-SHARP ON" 	  1 0 1 1
 #define HSM_DREZ_GSHARP_ON params.HSM_DREZ_GSHARP_ON
+
+#pragma parameter HSM_DREZ_THRESHOLD_RATIO 	"         Downsample Threshold (Original Res Vs Downsampled Res)" 	  1.5 1 4 0.1
+#define HSM_DREZ_THRESHOLD_RATIO params.HSM_DREZ_THRESHOLD_RATIO
+
 
 // Default was 1.2, now set to 2.3 to match smoothing in Hyllian b-spline
 #pragma parameter HSM_DREZ_HSHARP0 		"          Filter Range"  2.3 1.0 6.0 0.1
@@ -81,6 +86,7 @@ layout(set = 0, binding = 2) uniform sampler2D Source;
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
 #define SourceSize params.SourceSize
+#define OutputSize params.OutputSize
 
 float invsqrsigma_h = 1.0/(2.0*HSM_DREZ_SIGMA_HV*HSM_DREZ_SIGMA_HV);
 
@@ -91,7 +97,7 @@ float gaussian(float x, float y)
 
 void main()
 {
-	if (HSM_DREZ_GSHARP_ON == 0)
+	if (HSM_DREZ_GSHARP_ON == 0 || OutputSize.y / SourceSize.y < HSM_DREZ_THRESHOLD_RATIO)
 	{
 		FragColor = texture(Source, vTexCoord);
 		return;

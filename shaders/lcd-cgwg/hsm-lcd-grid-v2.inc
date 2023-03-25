@@ -176,8 +176,8 @@ void main()
     vec3 averageColor = topLeftColor + bottomRightColor + bottomLeftColor + topRightColor;
 
     // HSM Added
-    vec3 source_color = texture(Source, curved_coord).rgb;
-    vec3 averageColorOutsideScreen = mix(mat3(cred, cgreen, cblue) * source_color, source_color, 0.75);
+    vec3 source_color = HSM_GetCroppedTexSample(Source, curved_coord).rgb;
+    vec3 averageColorOutsideScreen = mix(mat3(cred, cgreen, cblue) * pow(source_color, vec3(outgamma)), pow(source_color, vec3(outgamma)), 0.75);
     averageColor = mix(averageColorOutsideScreen, averageColor, screen_mask);
     
     FragColor = vec4(averageColor, 1);

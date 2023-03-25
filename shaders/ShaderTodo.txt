@@ -4,6 +4,9 @@ Mega Bezel is updated to V1.13.0_2023-03-19
 
 Changes:
   * Fixed Reflection Disappearing with Raster Bloom Enabled
+  * Fixed Reflection on Dual Screen LCD presets
+  * Added Threshold to GSharp so that it doesn't apply to a similar incoming resolution
+
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
