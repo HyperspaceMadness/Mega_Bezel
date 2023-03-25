@@ -125,27 +125,6 @@
 // #pragma parameter IOS "          Integer Scaling: Odd:Y, Even:'X'+Y" 0.0 0.0 4.0 1.0
 // #define IOS          params.IOS     // Smart Integer Scaling
 
-#pragma parameter GDV_RASTERBLOOM_EMPTY_LINE							" " 0 0 0.001 0.001
-#pragma parameter GDV_RASTERBLOOM_TITLE "[ OVERSCAN & RASTER BLOOM ]: " 0.0 0.0 1.0 1.0
-
-#pragma parameter GDV_OVERSCAN "          Overscan % -- GDV_OVERSCAN" 0 -50 100 0.5
-#define GDV_OVERSCAN        (global.GDV_OVERSCAN / 100)
-
-#pragma parameter GDV_OVERSCAN_X "          Overscan X % -- GDV_OVERSCAN_X" 0 -50 100 0.5
-#define GDV_OVERSCAN_X        (GDV_OVERSCAN + global.GDV_OVERSCAN_X / 100)
-
-#pragma parameter GDV_OVERSCAN_Y "          Overscan Y % -- GDV_OVERSCAN_Y" 0 -50 100 0.5
-#define GDV_OVERSCAN_Y        (GDV_OVERSCAN + global.GDV_OVERSCAN_Y / 100)
-
-#pragma parameter GDV_RASTER_BLOOM_ON "          Raster Bloom ON -- GDV_RASTER_BLOOM_ON" 0 0 1 1
-#define GDV_RASTER_BLOOM_ON        global.GDV_RASTER_BLOOM_ON
-
-#pragma parameter OS "          Raster Bloom Overscan Mode -- OS" 2.0 0.0 2.0 1.0
-#define OS           global.OS
-
-#pragma parameter BLOOM "          Raster Bloom % -- BLOOM" 5.0 0.0 20.0 1.0
-#define BLOOM        global.BLOOM     // Bloom overscan percentage
-
 // #pragma parameter warpX "          CurvatureX (default 0.03)" 0.0 0.0 0.25 0.01
 // #define warpX        params.warpX     // Curvature X
 
@@ -162,14 +141,16 @@
 // #define overscanY        global.overscanY     // OverscanY pixels
 
 /* HSM Removed
- #define COMPAT_TEXTURE(c,d) texture(c,d)
+#define COMPAT_TEXTURE(c,d) texture(c,d)
 */
 
 // HSM Added
 #define COMPAT_TEXTURE(c,d) HSM_GetCroppedTexSample(c,d)
 // End Addition
 
-// #define TEX0 vTexCoord
+/* HSM Removed
+#define TEX0 vTexCoord
+*/
 
 #define OutputSize global.OutputSize
 #define gl_FragCoord (vTexCoord * OutputSize.xy)
@@ -191,8 +172,6 @@ layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 2) uniform sampler2D LinearizePass;
 layout(set = 0, binding = 3) uniform sampler2D AvgLumPass;
 layout(set = 0, binding = 4) uniform sampler2D PrePass;
-
-// HSM Added
 layout(set = 0, binding = 6) uniform sampler2D InfoCachePass;
 
 #define eps 1e-10 
@@ -229,7 +208,7 @@ float sw2(float x, float color, float scanline)
 	tmp = mix(beam_max, tmp, pow(x, color+0.3));
 	float ex = x*tmp;
 	return exp2(-scanline*ex*ex);
-}   
+}
 
 /* HSM Removed
 vec2 Warp(vec2 pos)
@@ -295,7 +274,7 @@ void main()
 
 	vec4 SourceSize = vec4(CROPPED_ROTATED_SIZE_WITH_RES_MULT, 1 / CROPPED_ROTATED_SIZE_WITH_RES_MULT);
 
-	float lum = COMPAT_TEXTURE(AvgLumPass, vec2(0.5,0.5)).a;
+	// float lum = COMPAT_TEXTURE(AvgLumPass, vec2(0.5,0.5)).a;
 	
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
@@ -324,7 +303,7 @@ void main()
 		if (IOS == 1.0 || IOS == 3.0) texcoord = mix(vec2(TEX0.x, texcoord.y), vec2(texcoord.x, TEX0.y), TATE);
 	}
    
-	float factor  = 1.00 + (1.0-0.5*OS)*BLOOM/100.0 - lum*BLOOM/100.0;
+	float factor  = 1.00 + (1.0-0.5*HSM_OVERSCAN_RASTER_BLOOM_MODE)*HSM_OVERSCAN_RASTER_BLOOM_AMOUNT/100.0 - lum*HSM_OVERSCAN_RASTER_BLOOM_AMOUNT/100.0;
 	texcoord  = Overscan(texcoord, factor, factor);
 
 	texcoord = Overscan(texcoord, (global.OriginalSize.x - overscanX)/global.OriginalSize.x, (global.OriginalSize.y - overscanY)/global.OriginalSize.y);
@@ -333,28 +312,21 @@ void main()
  	*/
 
 	// HSM Added
-	vec2 screen_curved_coord = HSM_GetCRTShaderCurvedCoord(SCREEN_COORD);
+	float raster_bloom_avg_lum = texture(AvgLumPass, vec2(0.5,0.5)).a;
+	vec2 screen_curved_coord = vec2(0.5);
+	vec2 screen_curved_coord_with_overscan = vec2(0.5);
+	vec2 screen_coord_with_overscan = vec2(0.5);
+	vec2 screen_scale_with_overscan = vec2(0.5);
 
-	// Screen Curved Coordinate but not Mirrored
-	vec2 screen_curved_coord_with_overscan = HSM_ApplyOverscan(screen_curved_coord, GDV_OVERSCAN_X, GDV_OVERSCAN_Y);
+	vec2 screen_curved_coord_with_overscan_and_mirror = HSM_GetCrtShaderFinalCoordExtraVariables(SCREEN_COORD,
+		SCREEN_SCALE,
+		raster_bloom_avg_lum,
+		screen_curved_coord, 
+		screen_curved_coord_with_overscan, 
+		screen_coord_with_overscan,
+		screen_scale_with_overscan);
 
-	vec2 pos = HSM_GetMirrorWrappedCoord(screen_curved_coord);
-
-	// Add overscan to mirror wrapped coord
-	pos = HSM_ApplyOverscan(pos, GDV_OVERSCAN_X, GDV_OVERSCAN_Y);
-			
-	vec2 screen_scale_with_overscan = SCREEN_SCALE * (vec2(GDV_OVERSCAN_X, GDV_OVERSCAN_Y) + 1);
-
-	// Screen Coordinate overscan but without curvature 
-	vec2 screen_coord_with_overscan = HSM_ApplyOverscan(SCREEN_COORD, GDV_OVERSCAN_X, GDV_OVERSCAN_Y);
-
-	if (GDV_RASTER_BLOOM_ON > 0.5)
-	{
-		pos = HSM_ApplyRasterBloomOverscan(pos, OS, BLOOM, lum);
-		screen_curved_coord_with_overscan = HSM_ApplyRasterBloomOverscan(screen_curved_coord_with_overscan, OS, BLOOM, lum);
-		screen_coord_with_overscan = HSM_ApplyRasterBloomOverscan(screen_coord_with_overscan, OS, BLOOM, lum);
-		screen_scale_with_overscan *= HSM_GetRasterBloomScale(OS, BLOOM, lum);
-	}
+	vec2 pos = screen_curved_coord_with_overscan_and_mirror;
 	// End Addition
 
 	bool smarte  = (smart_ei > 0.01); // smart edge interpolation on / off
@@ -392,10 +364,10 @@ void main()
 	if (global.intres == 0.5 && !notate && prescalex.x < 1.5) pC4.x = floor(pC4.x * global.OriginalSize.x)*global.OriginalSize.z + 0.5*global.OriginalSize.z;
 	*/
 
-// TODO need to add something to support the VGA double resolution of the 
+// TODO could do something to support the VGA double resolution of the 
 
 	if (interb)  pC4.y = pos.y;
-	
+
 	float zero = exp2(-h_sharp);
 	float sharp1 = s_sharp * zero;
 	
@@ -500,7 +472,7 @@ void main()
 	if (global.intres == 0.5 && !notate && prescalex.x < 1.5) pC4.x = floor((pos.x + 0.33*offy.x) * global.OriginalSize.x)*global.OriginalSize.z + 0.5*global.OriginalSize.z;
 	*/
 
-// TODO need to add something to support the VGA double resolution of the 
+// TODO could do something to support the VGA double resolution of the 
 
 	l3 = COMPAT_TEXTURE(LinearizePass, pC4 -off2).rgb;
 	l2 = COMPAT_TEXTURE(LinearizePass, pC4 -offx).rgb;
@@ -588,7 +560,7 @@ if (!interb)
 	// Scanline saturation application
 	
 	vec3 w1 = vec3(wf1); vec3 w2 = vec3(wf2);
-	w3 = wf1+wf2;	
+	w3 = wf1+wf2;
 	
 	float mc1 = max(max(color1.r,color1.g),color1.b) + eps;
 	float mc2 = max(max(color2.r,color2.g),color2.b) + eps;
@@ -603,7 +575,7 @@ if (!interb)
 	
 	// Scanline Deconvergence
 	
-	vec3 cd1 = one; vec3 cd2 = one; 
+	vec3 cd1 = one; vec3 cd2 = one;
 
 if (abs(vertmask) > 0.025)
 {
@@ -626,6 +598,7 @@ if (abs(vertmask) > 0.025)
 		cd2 = mix(one, vec3(v_low, v_high2, v_low), ds2);
 	}
 }
+
 	/* HSM Removed
 	color = (gc(color1)*w1*cd1 + gc(color2)*w2*cd2)/mix(1.0.xxx, w1+w2, no_scanlines);
 	*/
@@ -656,7 +629,7 @@ if (abs(vertmask) > 0.025)
 	{ 
 		wt1 = st1(f);
 		wt2 = st1(1.0-f);
-	    color00 = (color1*wt1 + color2*wt2)/(wt1+wt2);
+		color00 = (color1*wt1 + color2*wt2)/(wt1+wt2);
 		color = gc(color00) * mix(w1+w2, w3.xxx, max(wf1,wf2));	
 	}
 	
@@ -671,7 +644,7 @@ if (abs(vertmask) > 0.025)
 	float colmx = max(max(ctmp.r,ctmp.g),ctmp.b);
 
 	if(!interb) color = pow( color, vec3(gamma_in/scangamma) );
-   
+
 	FragColor = vec4(color, colmx);
 
 	if (HSM_GetUseFakeScanlines())

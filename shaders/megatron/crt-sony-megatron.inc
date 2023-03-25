@@ -161,6 +161,7 @@ layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 2) uniform sampler2D SourceSDR;
 layout(set = 0, binding = 3) uniform sampler2D SourceHDR;
 layout(set = 0, binding = 4) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 5) uniform sampler2D AvgLumPass;
 
 
 #define kChannelMask          3
@@ -1174,10 +1175,17 @@ void main()
 			return;
 	}
 
-	vec2 screen_curved_coord = HSM_GetCRTShaderCurvedCoord(SCREEN_COORD);
-	screen_curved_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
+	// HSM Added
+	float raster_bloom_avg_lum = texture(AvgLumPass, vec2(0.5,0.5)).a;
+	vec2 screen_curved_coord = vec2(0.5);
 
-// End HSM Added
+	vec2 screen_curved_coord_with_overscan_and_mirror = HSM_GetCrtShaderFinalCoord(SCREEN_COORD,
+		SCREEN_SCALE,
+		raster_bloom_avg_lum,
+		screen_curved_coord);
+
+	vec2 screen_final_coord = screen_curved_coord_with_overscan_and_mirror;
+   // End HSM Added
 
    const uint screen_type           = uint(HCRT_CRT_SCREEN_TYPE);
    const uint crt_resolution        = uint(HCRT_CRT_RESOLUTION);
@@ -1186,7 +1194,7 @@ void main()
    const vec2 source_size           = CROPPED_ROTATED_SIZE_WITH_RES_MULT;
    const vec2 output_size           = global.OutputSize.xy;
 
-   vec2 tex_coord                   = screen_curved_coord - vec2(0.5f);
+   vec2 tex_coord                   = screen_final_coord - vec2(0.5f);
    tex_coord                        = tex_coord * vec2(1.0f + (HCRT_PIN_PHASE * tex_coord.y), 1.0f);
    tex_coord                        = tex_coord * vec2(HCRT_H_SIZE, HCRT_V_SIZE);
    tex_coord                        = tex_coord + vec2(0.5f);

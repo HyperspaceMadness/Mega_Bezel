@@ -59,6 +59,7 @@ layout(set = 0, binding = 1) uniform sampler2D IntroPass;
 layout(set = 0, binding = 2) uniform sampler2D Source;
 
 layout(set = 0, binding = 3) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 4) uniform sampler2D AvgLumPass;
 
 layout(location = 0) out vec4 FragColor;
 
@@ -129,13 +130,19 @@ void main()
 			return;
 	}
 
-    vec2 screen_curved_coord = HSM_GetCRTShaderCurvedCoord(SCREEN_COORD);
-
 	// HSM Added
-	float screen_mask = HSM_GetCornerMask((screen_curved_coord - 0.5) * 1.00 + 0.5, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS * HSM_SCREEN_CORNER_RADIUS_SCALE, 0.9);
+	float raster_bloom_avg_lum = texture(AvgLumPass, vec2(0.5,0.5)).a;
+	vec2 screen_curved_coord = vec2(0.5);
 
-	vec2 curved_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
+	vec2 screen_curved_coord_with_overscan_and_mirror = HSM_GetCrtShaderFinalCoord(SCREEN_COORD,
+		SCREEN_SCALE,
+		raster_bloom_avg_lum,
+		screen_curved_coord);
+
+	vec2 curved_coord = screen_curved_coord_with_overscan_and_mirror;
     vec2 texelSize = 1 / CROPPED_ROTATED_SIZE_WITH_RES_MULT;
+
+	float screen_mask = HSM_GetCornerMask((screen_curved_coord - 0.5) * 1.00 + 0.5, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS * HSM_SCREEN_CORNER_RADIUS_SCALE, 0.9);
     // End Addition
 
     vec2 range = global.OutputSize.zw / SCREEN_SCALE;

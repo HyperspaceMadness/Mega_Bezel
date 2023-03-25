@@ -414,6 +414,32 @@ float HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = global.HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR
 	#define HSM_FAKE_SCANLINE_BRIGHTNESS_CUTOFF 3
 #endif
 
+//---------------------------------------------------------------------------------------------------
+//    CURVATURE
+//---------------------------------------------------------------------------------------------------
+
+#pragma parameter HSM_OVERSCAN_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter HSM_OVERSCAN_TITLE "[ OVERSCAN & RASTER BLOOM ]: " 0.0 0.0 1.0 1.0
+
+#pragma parameter HSM_OVERSCAN_AMOUNT "          Overscan %" 0 -50 100 0.5
+#define HSM_OVERSCAN_AMOUNT        (global.HSM_OVERSCAN_AMOUNT / 100)
+
+#pragma parameter HSM_OVERSCAN_X "          Overscan X %" 0 -50 100 0.5
+#define HSM_OVERSCAN_X        (HSM_OVERSCAN_AMOUNT + global.HSM_OVERSCAN_X / 100)
+
+#pragma parameter HSM_OVERSCAN_Y "          Overscan Y %" 0 -50 100 0.5
+#define HSM_OVERSCAN_Y        (HSM_OVERSCAN_AMOUNT + global.HSM_OVERSCAN_Y / 100)
+
+#pragma parameter HSM_OVERSCAN_RASTER_BLOOM_ON "          Raster Bloom ON -- (Scaling based on average luma)" 0 0 1 1
+#define HSM_OVERSCAN_RASTER_BLOOM_ON        global.HSM_OVERSCAN_RASTER_BLOOM_ON
+
+#pragma parameter HSM_OVERSCAN_RASTER_BLOOM_MODE "          Raster Bloom Overscan Mode" 2.0 0.0 2.0 1.0
+#define HSM_OVERSCAN_RASTER_BLOOM_MODE           global.HSM_OVERSCAN_RASTER_BLOOM_MODE
+
+#pragma parameter HSM_OVERSCAN_RASTER_BLOOM_AMOUNT "          Raster Bloom %" 5.0 0.0 20.0 1.0
+#define HSM_OVERSCAN_RASTER_BLOOM_AMOUNT        global.HSM_OVERSCAN_RASTER_BLOOM_AMOUNT     // Bloom overscan percentage
+
+
 
 //---------------------------------------------------------------------------------------------------
 //    CURVATURE

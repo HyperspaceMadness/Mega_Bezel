@@ -168,8 +168,8 @@ layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 1) uniform sampler2D Source;
 
 layout(set = 0, binding = 2) uniform sampler2D InfoCachePass;
-
 layout(set = 0, binding = 4) uniform sampler2D LinearizePass;
+layout(set = 0, binding = 5) uniform sampler2D AvgLumPass;
 
 void main()
 {
@@ -235,8 +235,18 @@ void main()
 
     vec2 co = SCREEN_COORD;
     vec2 screen_coord = co;
-    vec2 screen_curved_coord = HSM_GetCRTShaderCurvedCoord(screen_coord);
-	vec2 xy = HSM_GetMirrorWrappedCoord(screen_curved_coord);
+
+	// HSM Added
+	float raster_bloom_avg_lum = texture(AvgLumPass, vec2(0.5,0.5)).a;
+	vec2 screen_curved_coord = vec2(0.5);
+
+	vec2 screen_curved_coord_with_overscan_and_mirror = HSM_GetCrtShaderFinalCoord(SCREEN_COORD,
+		SCREEN_SCALE,
+		raster_bloom_avg_lum,
+		screen_curved_coord);
+
+	vec2 xy = screen_curved_coord_with_overscan_and_mirror;
+	// End Addition
 
     // HSM Removed
     // float corner_weight = 1;

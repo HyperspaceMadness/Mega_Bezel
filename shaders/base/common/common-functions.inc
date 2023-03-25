@@ -1098,3 +1098,81 @@ vec2 HSM_ApplyRasterBloomOverscan(vec2 in_coord, float raster_bloom_overscan_mod
 
 	return ctr_coord * 0.5 + 0.5;
 }
+
+vec2 HSM_GetCrtShaderFinalCoord(vec2 screen_coord,
+								vec2 screen_scale,
+								float raster_bloom_avg_lum,
+								inout vec2 screen_curved_coord
+								)
+
+{
+	// -- START -- This section repeated in function below
+	screen_curved_coord = HSM_GetCRTShaderCurvedCoord(screen_coord);
+
+	// Get the Mirrored coord and then add overscan to it
+	vec2 screen_curved_coord_with_overscan_and_mirror = HSM_GetMirrorWrappedCoord(screen_curved_coord);
+	screen_curved_coord_with_overscan_and_mirror = HSM_ApplyOverscan(screen_curved_coord_with_overscan_and_mirror, HSM_OVERSCAN_X, HSM_OVERSCAN_Y);
+
+	if (HSM_OVERSCAN_RASTER_BLOOM_ON > 0.5)
+	{
+		screen_curved_coord_with_overscan_and_mirror = HSM_ApplyRasterBloomOverscan(screen_curved_coord_with_overscan_and_mirror, 
+			HSM_OVERSCAN_RASTER_BLOOM_MODE, 
+			HSM_OVERSCAN_RASTER_BLOOM_AMOUNT, 
+			raster_bloom_avg_lum);
+	}
+	// -- END -- Repeated Section
+
+	return screen_curved_coord_with_overscan_and_mirror;
+}
+
+vec2 HSM_GetCrtShaderFinalCoordExtraVariables(vec2 screen_coord,
+	vec2 screen_scale,
+	float raster_bloom_avg_lum,
+	inout vec2 screen_curved_coord,
+	inout vec2 screen_curved_coord_with_overscan,
+	inout vec2 screen_coord_with_overscan,
+	inout vec2 screen_scale_with_overscan)
+
+{
+	// -- START -- This section repeated from function above
+	screen_curved_coord = HSM_GetCRTShaderCurvedCoord(screen_coord);
+
+	// Get the Mirrored coord and then add overscan to it
+	vec2 screen_curved_coord_with_overscan_and_mirror = HSM_GetMirrorWrappedCoord(screen_curved_coord);
+	screen_curved_coord_with_overscan_and_mirror = HSM_ApplyOverscan(screen_curved_coord_with_overscan_and_mirror, HSM_OVERSCAN_X, HSM_OVERSCAN_Y);
+
+	if (HSM_OVERSCAN_RASTER_BLOOM_ON > 0.5)
+	{
+		screen_curved_coord_with_overscan_and_mirror = HSM_ApplyRasterBloomOverscan(screen_curved_coord_with_overscan_and_mirror, 
+			HSM_OVERSCAN_RASTER_BLOOM_MODE, 
+			HSM_OVERSCAN_RASTER_BLOOM_AMOUNT, 
+			raster_bloom_avg_lum);
+	}
+	// -- END -- Repeated Section
+
+	// Screen Coordinate overscan but without curvature 
+	// Screen Curved Coordinate but not Mirrored
+	screen_curved_coord_with_overscan = HSM_ApplyOverscan(screen_curved_coord, HSM_OVERSCAN_X, HSM_OVERSCAN_Y);
+	screen_scale_with_overscan = screen_scale * (vec2(HSM_OVERSCAN_X, HSM_OVERSCAN_Y) + 1);
+
+	if (HSM_OVERSCAN_RASTER_BLOOM_ON > 0.5)
+	{
+		screen_curved_coord_with_overscan = HSM_ApplyRasterBloomOverscan(screen_curved_coord_with_overscan, 
+			HSM_OVERSCAN_RASTER_BLOOM_MODE, 
+			HSM_OVERSCAN_RASTER_BLOOM_AMOUNT, 
+			raster_bloom_avg_lum);
+
+		screen_coord_with_overscan = HSM_ApplyRasterBloomOverscan(screen_coord_with_overscan, 
+			HSM_OVERSCAN_RASTER_BLOOM_MODE, 
+			HSM_OVERSCAN_RASTER_BLOOM_AMOUNT, 
+			raster_bloom_avg_lum);
+
+		screen_scale_with_overscan *= HSM_GetRasterBloomScale(HSM_OVERSCAN_RASTER_BLOOM_MODE, 
+			HSM_OVERSCAN_RASTER_BLOOM_AMOUNT, 
+			raster_bloom_avg_lum);
+	}
+
+	screen_coord_with_overscan = HSM_ApplyOverscan(screen_coord, HSM_OVERSCAN_X, HSM_OVERSCAN_Y);
+
+	return screen_curved_coord_with_overscan_and_mirror;
+}

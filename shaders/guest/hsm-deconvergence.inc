@@ -70,24 +70,6 @@
 // #pragma parameter IOS "          Integer Scaling: Odd:Y, Even:'X'+Y" 0.0 0.0 4.0 1.0
 // #define IOS          params.IOS     // Smart Integer Scaling
 
-#pragma parameter GDV_OVERSCAN "          Overscan % -- GDV_OVERSCAN" 0 -50 100 0.5
-#define GDV_OVERSCAN        (global.GDV_OVERSCAN / 100)
-
-#pragma parameter GDV_OVERSCAN_X "          Overscan X % -- GDV_OVERSCAN_X" 0 -50 100 0.5
-#define GDV_OVERSCAN_X        (GDV_OVERSCAN + global.GDV_OVERSCAN_X / 100)
-
-#pragma parameter GDV_OVERSCAN_Y "          Overscan Y % -- GDV_OVERSCAN_Y" 0 -50 100 0.5
-#define GDV_OVERSCAN_Y        (GDV_OVERSCAN + global.GDV_OVERSCAN_Y / 100)
-
-#pragma parameter GDV_RASTER_BLOOM_ON "          Raster Bloom ON -- GDV_RASTER_BLOOM_ON" 0 0 1 1
-#define GDV_RASTER_BLOOM_ON        global.GDV_RASTER_BLOOM_ON
-
-#pragma parameter OS "          Raster Bloom Overscan Mode -- OS" 2.0 0.0 2.0 1.0
-#define OS           global.OS
-
-#pragma parameter BLOOM "          Raster Bloom % -- BLOOM" 5.0 0.0 20.0 1.0
-#define BLOOM        global.BLOOM     // Bloom overscan percentage
-
 // #pragma parameter csize "          Corner Size" 0.0 0.0 0.25 0.005
 // #define csize        params.csize     // corner size
 
@@ -853,7 +835,7 @@ void main()
 		return;
 	}
 
-	float lum = COMPAT_TEXTURE(AvgLumPass, vec2(0.5,0.5)).a;
+	// float lum = COMPAT_TEXTURE(AvgLumPass, vec2(0.5,0.5)).a;
 	
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
@@ -887,21 +869,17 @@ void main()
 	*/
 
 	// HSM Added
-	vec2 screen_curved_coord = HSM_GetCRTShaderCurvedCoord(SCREEN_COORD);
+	float raster_bloom_avg_lum = texture(AvgLumPass, vec2(0.5,0.5)).a;
+	vec2 screen_curved_coord = vec2(0.5);
 
-	// Screen Curved Coordinate but not Mirrored
-	vec2 screen_curved_coord_with_overscan = HSM_ApplyOverscan(screen_curved_coord, GDV_OVERSCAN_X, GDV_OVERSCAN_Y);
+	vec2 screen_curved_coord_with_overscan_and_mirror = HSM_GetCrtShaderFinalCoord(SCREEN_COORD,
+		SCREEN_SCALE,
+		raster_bloom_avg_lum,
+		screen_curved_coord);
 
-	vec2 pos = HSM_GetMirrorWrappedCoord(screen_curved_coord);
+	vec2 pos = screen_curved_coord_with_overscan_and_mirror;
+	// End Addition
 
-	// Add overscan to mirror wrapped coord
-	pos = HSM_ApplyOverscan(pos, GDV_OVERSCAN_X, GDV_OVERSCAN_Y);
-			
-	if (GDV_RASTER_BLOOM_ON > 0.5)
-	{
-		pos = HSM_ApplyRasterBloomOverscan(pos, OS, BLOOM, lum);
-	}
-	
 	// color and bloom fetching
 	vec3 color = COMPAT_TEXTURE(Source,pos1).rgb;
 	vec3  Bloom = HSM_GetCroppedTexSample(BloomPass, pos).rgb;
