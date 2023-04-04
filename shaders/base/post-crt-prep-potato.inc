@@ -62,8 +62,7 @@ vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_linear, vec2 VIEWPORT_COORD,
 	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 1, TUBE_DIFFUSE_SCALE, TUBE_SCALE, TUBE_DIFFUSE_ASPECT, 1);
 	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
 
-	float outside_tube_mask = 1 - HSM_GetCornerMask(tube_curved_coord, TUBE_DIFFUSE_ASPECT, bezel_corner_radius, 0.99);
-	TUBE_MASK = 1 - outside_tube_mask;
+	TUBE_MASK = HSM_GetCornerMask(tube_curved_coord, TUBE_DIFFUSE_ASPECT, bezel_corner_radius, 0.99);
 
 	if (HSM_MONOCHROME_MODE > 0.5 && HSM_GetUseOnCurrentScreenIndex(HSM_MONOCHROME_DUALSCREEN_VIS_MODE))
 		in_color_linear = HSM_ApplyMonochrome(in_color_linear);
@@ -75,6 +74,8 @@ vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_linear, vec2 VIEWPORT_COORD,
 	vec2 mirrored_screen_coord = HSM_GetMirrorWrappedCoord(screen_curved_coord);
 	float black_edge_corner_radius = HSM_TUBE_BLACK_EDGE_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
 	float screen_mask = HSM_GetCornerMask((screen_curved_coord - 0.5) * 0.999 + 0.5, SCREEN_ASPECT, black_edge_corner_radius, 0.9);
+	vec2 tube_diffuse_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, TUBE_DIFFUSE_SCALE, TUBE_SCALE, TUBE_DIFFUSE_ASPECT, 0);
+	float tube_diffuse_mask =  HSM_GetCornerMask(tube_diffuse_curved_coord, TUBE_DIFFUSE_ASPECT, black_edge_corner_radius, 0.99);
 
 	if (HSM_GetUseScreenVignette())
 	{
@@ -88,6 +89,7 @@ vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_linear, vec2 VIEWPORT_COORD,
 
 	out_color.rgb *= screen_mask;
 	out_color *= TUBE_MASK;
+	out_color *= tube_diffuse_mask;
 
 	out_color = clamp(out_color, 0, 1);
 	
@@ -135,8 +137,6 @@ vec4 HSM_GetPostCrtPreppedColorPotato(vec4 in_color_linear, vec2 VIEWPORT_COORD,
 
 	if (HSM_SINDEN_BORDER_ON > 0.5)
 	{
-		vec2 tube_diffuse_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, TUBE_DIFFUSE_SCALE, TUBE_SCALE, TUBE_DIFFUSE_ASPECT, 0);
-		float tube_diffuse_mask =  HSM_GetCornerMask(tube_diffuse_curved_coord, TUBE_DIFFUSE_ASPECT, black_edge_corner_radius, 0.99);
 		out_color = HSM_Apply_Sinden_Lightgun_Border(out_color, tube_diffuse_curved_coord, tube_diffuse_mask, black_edge_corner_radius);
 	}
 

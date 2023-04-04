@@ -9,19 +9,20 @@ Changes:
   * Added Threshold to GSharp so that it doesn't apply to a similar incoming resolution
   * Updated Dual Screen presets to use params files which users could leverage if desired 
   * Overscan and Raster Bloom is now available for all shaders
+  * Potato CRT Curvature is affecting black line which it shouldn't
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Investigate "dip" in reflection at the edge of the bezel
+  * Passthrough Preset (No CRT Shader)
+  * HD Preset
   * Look at Retro V2 for alternate LCD shader
   * Python file to create full presets from a folder
-  * Guest HD & Passthrough Presets
-  * Check on Afterglow for BiRaitBec
   * Add Curvature to EasyMode for lasly
   * Rotate Image Layers with Parameters
   * Update Megatron
-  * Add Passthrough Preset, no crt shader
   * Add AbsoluteMax as a scaling type
   * Add readme for Signal Noise
   * Add readme for Overscan and Raster Bloom

@@ -1,0 +1,11 @@
+shaders = 2
+
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/fxaa/fxaa.slang
+float_framebuffer0 = "true"
+
+shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/extras/hsm-screen-scale-g-sharp_resampler.slang
+filter_linear1 = "false"
+scale_type1 = "viewport"
+scale1 = "1.0"
+float_framebuffer1 = "true"
+alias1 = "CRTPass"
