@@ -39,38 +39,53 @@ def GetNumShaders(in_path : str ) -> int:
 
 # return list of lines and index of last pass
 def GetPresetLines(in_path : str, output_start_pass_index : int) -> tuple[list[str], int]:
+    """
+
+    """
     if not os.path.exists(in_path):
         print('        Path does not exist: ' + in_path)
         return None
     else:
         num_shaders = 0
         component_lines = open(in_path, "r").read().splitlines()
+        out_component_lines : list[str] = []
+        next_pass_index : int = output_start_pass_index
 
         if component_lines[0].startswith('shaders = '):
             num_shaders = int(component_lines[0].split(" = ")[1])
             shader_indexes = range(0, num_shaders)
-            new_shader_indexes = range(output_start_pass_index, output_start_pass_index + num_shaders)
+            new_shader_indexes = range(next_pass_index, next_pass_index + num_shaders)
             processed_line_indexes = []
             
             # Remove the shaders = line
-            component_lines = component_lines[1:]
+            out_component_lines = component_lines[1:]
+            
             # Step through each line of the component to adjust the pass indexes
             zipped_indexes = list(zip(shader_indexes, new_shader_indexes))
             zipped_indexes.reverse()
             for old_index, new_index in zipped_indexes:
-                for i in range(len(component_lines)):
+                for i in range(len(out_component_lines)):
                     if i not in processed_line_indexes:
                         for key in preset_keys:
-                            if key + str(old_index) + " =" in component_lines[i]:
+                            if key + str(old_index) + " =" in out_component_lines[i]:
                                 processed_line_indexes.append(i)
-                                component_lines[i] = component_lines[i].replace(str(old_index) + " =", str(new_index) + " =")
-        # elif component_lines[0].startswith('#reference'):
-        #     for component_line in component_lines:
-        #         out_component_lines.
+                                out_component_lines[i] = out_component_lines[i].replace(str(old_index) + " =", str(new_index) + " =")
+            next_pass_index = output_start_pass_index + num_shaders
+
+        elif component_lines[0].startswith('#reference'):
+            for component_line in component_lines:
+                if component_line.startswith('#reference'):
+                    dir_path : str = os.path.split(in_path)[0]
+                    reference_path : str = os.path.join(dir_path, component_line.split('"')[1])
+                    new_lines, next_pass_index = GetPresetLines(reference_path, next_pass_index)
+                    out_component_lines.extend(new_lines)
+
+        else:
+            out_component_lines = component_lines[:]
         # else:
         #     print("            Can't find Shaders line at first line of the preset, adding all lines without processing")
 
-        return (component_lines, output_start_pass_index + num_shaders)
+        return (out_component_lines, next_pass_index)
         # else:
         #     print('        File is missing "shaders = " or is empty: ' + in_path)
         #     return None
