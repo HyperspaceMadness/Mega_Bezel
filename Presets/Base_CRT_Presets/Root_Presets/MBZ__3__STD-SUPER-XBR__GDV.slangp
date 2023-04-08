@@ -44,92 +44,92 @@ shader6 =  ../../../shaders/base/stock.slang
 alias6 = "DeditherPass"
 
 shader7 = ../../../shaders/base/stock.slang
-alias7 = "PreCRTPass"
+# filter_linear7 = "false"
+# wrap_mode7 = "clamp_to_border"
+# mipmap_input7 = "false"
+# float_framebuffer7 = "false"
+# srgb_framebuffer7 = "true"
+alias7 = XbrSource
 
-shader8 = ../../../shaders/guest/hsm-afterglow0.slang
-filter_linear8 = true
-scale_type8 = source
-scale8 = 1.0
-alias8 = "AfterglowPass"
+shader8 = ../../../shaders/hyllian/crt-super-xbr/super-xbr-pass0.slang
+filter_linear8 = "false"
+wrap_mode8 = "clamp_to_border"
+mipmap_input8 = "false"
+float_framebuffer8 = "false"
+srgb_framebuffer8 = "true"
 
-shader9 = ../../../shaders/guest/hsm-pre-shaders-afterglow.slang
-filter_linear9 = true
-scale_type9 = source
-mipmap_input9 = true
-scale9 = 1.0
+shader9 = ../../../shaders/hyllian/crt-super-xbr/super-xbr-pass1.slang
+filter_linear9 = "false"
+wrap_mode9 = "clamp_to_border"
+mipmap_input9 = "false"
+alias9 = ""
+float_framebuffer9 = "false"
+srgb_framebuffer9 = "true"
+scale_type_x9 = "source"
+scale_x9 = "2.000000"
+scale_type_y9 = "source"
+scale_y9 = "2.000000"
+
+shader10 = ../../../shaders/hyllian/crt-super-xbr/super-xbr-pass2.slang
+filter_linear10 = "false"
+wrap_mode10 = "clamp_to_border"
+mipmap_input10 = "false"
+alias10 = ""
+float_framebuffer10 = "false"
+srgb_framebuffer10 = "true"
+scale_type_x10 = "source"
+scale_x10 = "1.000000"
+scale_type_y10 = "source"
+scale_y10 = "1.000000"
+
+shader11 = ../../../shaders/hyllian/crt-super-xbr/custom-bicubic-X.slang
+filter_linear11 = "false"
+wrap_mode11 = "clamp_to_border"
+mipmap_input11 = "false"
+alias11 = ""
+float_framebuffer11 = "false"
+srgb_framebuffer11 = "true"
+scale_type_x11 = "source"
+scale_x11 = "1.000000"
+scale_type_y11 = "source"
+scale_y11 = "1.000000"
+
+shader12 = ../../../shaders/hyllian/crt-super-xbr/custom-bicubic-y.slang
+filter_linear12 = false
+scale_type_x12 = source
+scale_x12 = 1
+scale_type_y12 = source
+scale_y12 = 0.5
+wrap_mode12 = "clamp_to_edge"
+
+shader13 = ../../../shaders/base/stock.slang
+alias13 = "PreCRTPass"
+
+shader14 = ../../../shaders/guest/hsm-afterglow0.slang
+filter_linear14 = true
+scale_type14 = source
+scale14 = 1.0
+alias14 = "AfterglowPass"
+
+shader15 = ../../../shaders/guest/hsm-pre-shaders-afterglow.slang
+filter_linear15 = true
+scale_type15 = source
+mipmap_input15 = true
+scale15 = 1.0
 
 # Color Correction with Dogway's awesome Grade shader
 # Grade is after Afterglow so that brightening the black level does not break the afterglow
-shader10 = ../../../shaders/dogway/hsm-grade.slang
-filter_linear10 = false
-scale_type10 = source
-scale10 = 1.0
-alias10 = "ColorCorrectPass"
+shader16 = ../../../shaders/dogway/hsm-grade.slang
+filter_linear16 = false
+scale_type16 = source
+scale16 = 1.0
+alias16 = "ColorCorrectPass"
 
-shader11 =  ../../../shaders/guest/hsm-custom-fast-sharpen.slang
-filter_linear11 = true
-scale_type11 = source
-scale_x11 = 1.0
-scale_y11 = 1.0
-
-shader12 = ../../../shaders/base/stock.slang
-# filter_linear12 = "false"
-# wrap_mode12 = "clamp_to_border"
-# mipmap_input12 = "false"
-# float_framebuffer12 = "false"
-# srgb_framebuffer12 = "true"
-alias12 = XbrSource
-
-shader13 = ../../../shaders/hyllian/crt-super-xbr/super-xbr-pass0.slang
-filter_linear13 = "false"
-wrap_mode13 = "clamp_to_border"
-mipmap_input13 = "false"
-float_framebuffer13 = "false"
-srgb_framebuffer13 = "true"
-
-shader14 = ../../../shaders/hyllian/crt-super-xbr/super-xbr-pass1.slang
-filter_linear14 = "false"
-wrap_mode14 = "clamp_to_border"
-mipmap_input14 = "false"
-alias14 = ""
-float_framebuffer14 = "false"
-srgb_framebuffer14 = "true"
-scale_type_x14 = "source"
-scale_x14 = "2.000000"
-scale_type_y14 = "source"
-scale_y14 = "2.000000"
-
-shader15 = ../../../shaders/hyllian/crt-super-xbr/super-xbr-pass2.slang
-filter_linear15 = "false"
-wrap_mode15 = "clamp_to_border"
-mipmap_input15 = "false"
-alias15 = ""
-float_framebuffer15 = "false"
-srgb_framebuffer15 = "true"
-scale_type_x15 = "source"
-scale_x15 = "1.000000"
-scale_type_y15 = "source"
-scale_y15 = "1.000000"
-
-shader16 = ../../../shaders/hyllian/crt-super-xbr/custom-bicubic-X.slang
-filter_linear16 = "false"
-wrap_mode16 = "clamp_to_border"
-mipmap_input16 = "false"
-alias16 = ""
-float_framebuffer16 = "false"
-srgb_framebuffer16 = "true"
-scale_type_x16 = "source"
-scale_x16 = "1.000000"
-scale_type_y16 = "source"
-scale_y16 = "1.000000"
-
-shader17 = ../../../shaders/hyllian/crt-super-xbr/custom-bicubic-y.slang
-filter_linear17 = false
-scale_type_x17 = source
-scale_x17 = 1
-scale_type_y17 = source
-scale_y17 = 0.5
-wrap_mode17 = "clamp_to_edge"
+shader17 =  ../../../shaders/guest/hsm-custom-fast-sharpen.slang
+filter_linear17 = true
+scale_type17 = source
+scale_x17 = 1.0
+scale_y17 = 1.0
 
 shader18 = ../../../shaders/base/stock.slang
 filter_linear18 = true

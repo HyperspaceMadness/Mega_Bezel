@@ -1,0 +1,4 @@
+#reference "68__chain__post-crt__glass.slangp"
+#reference "69__chain__reflection-prep-hdr.slangp"
+#reference "70__chain__reflection__glass-hdr.slangp"
+#reference "89__chain__output-hdr.slangp"

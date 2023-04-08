@@ -10,11 +10,16 @@ Changes:
   * Updated Dual Screen presets to use params files which users could leverage if desired 
   * Overscan and Raster Bloom is now available for all shaders
   * Potato CRT Curvature is affecting black line which it shouldn't
+  * Removed Afterglow on all Potato Presets (Before some had them some didn't)
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Check Banding on Highlight on glass presets
+  * Check Brightness on Megatron Glass Presets
+  * Fix Megatron to not put mask outside screen
+  * Can't show Resolution Text in Potato right now
   * Investigate "dip" in reflection at the edge of the bezel
   * Passthrough Preset (No CRT Shader)
   * HD Preset

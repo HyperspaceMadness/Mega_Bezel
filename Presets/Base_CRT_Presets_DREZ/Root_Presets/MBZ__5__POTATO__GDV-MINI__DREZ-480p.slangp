@@ -1,4 +1,4 @@
-shaders = 13
+shaders = 9
 
 shader0 = ../../../shaders/base/add-params-potato.slang
 alias0 = "CorePass"
@@ -41,58 +41,27 @@ scale_type5 = source
 scale5 = 1.0
 alias5 = "IntroPass"
 
-# Color Correction with Dogway's awesome Grade shader
-# Grade is after Afterglow so that brightening the black level does not break the afterglow
-shader6 = ../../../shaders/dogway/hsm-grade.slang
-filter_linear6 = false
+shader6 = ../../../shaders/base/delinearize.slang
 scale_type6 = source
-scale6 = 1.0
-alias6 = "ColorCorrectPass"
+float_framebuffer6 = "true"
 
-shader7 = ../../../shaders/base/stock.slang
-filter_linear7 = true
-scale_type7 = source
+shader7 = ../../../shaders/guest/hsm-crt-dariusg-gdv-mini-potato.slang
+scale_type7 = viewport
 scale_x7 = 1.0
 scale_y7 = 1.0
-alias7 = "PrePass"
-mipmap_input7 = true
-
-shader8 = ../../../shaders/guest/hsm-avg-lum.slang
-filter_linear8 = true
-scale_type8 = source
-scale8 = 1.0
-mipmap_input8 = true
-alias8 = "AvgLumPass"
-
-# Pass referenced by subsequent blurring passes and crt pass
-shader9 = ../../../shaders/guest/hsm-interlace-and-linearize.slang
-filter_linear9 = true
-scale_type9 = source
-scale9 = 1.0
-float_framebuffer9 = true
-alias9 = "LinearizePass"
-
-shader10 = ../../../shaders/base/delinearize.slang
-scale_type10 = source
-float_framebuffer10 = "true"
-
-shader11 = ../../../shaders/guest/hsm-crt-dariusg-gdv-mini-potato.slang
-scale_type11 = viewport
-scale_x11 = 1.0
-scale_y11 = 1.0
-filter_linear11 = true
-float_framebuffer11 = "true"
-alias11 = "CRTPass"
+filter_linear7 = true
+float_framebuffer7 = "true"
+alias7 = "CRTPass"
 
 g_sat = 0.25
 g_lum = 0.15
 g_gamma_out = 2.45
 
-shader12 = ../../../shaders/base/post-crt-prep-potato.slang
-mipmap_input12 = true
-scale_type12 = viewport
-float_framebuffer12 = true
-alias12 = "PostCRTPass"
+shader8 = ../../../shaders/base/post-crt-prep-potato.slang
+mipmap_input8 = true
+scale_type8 = viewport
+float_framebuffer8 = true
+alias8 = "PostCRTPass"
 
 # Textures gdvmini-potato
 # Define textures to be used by the different passes
