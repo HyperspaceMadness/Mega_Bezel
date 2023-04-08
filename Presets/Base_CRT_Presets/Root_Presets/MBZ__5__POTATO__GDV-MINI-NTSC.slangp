@@ -119,9 +119,18 @@ scale_type16 = viewport
 float_framebuffer16 = true
 alias16 = "PostCRTPass"
 
-# Textures gdvmini-potato
+# Textures Potato
 # Define textures to be used by the different passes
-textures = "ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
+
+SamplerLUT1 = ../../../shaders/guest/lut/trinitron-lut.png
+SamplerLUT1_linear = true 
+SamplerLUT2 = ../../../shaders/guest/lut/inv-trinitron-lut.png
+SamplerLUT2_linear = true 
+SamplerLUT3 = ../../../shaders/guest/lut/nec-lut.png
+SamplerLUT3_linear = true
+SamplerLUT4 = ../../../shaders/guest/lut/ntsc-lut.png
+SamplerLUT4_linear = true
 
 ScreenPlacementImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 ScreenPlacementImage_linear = false
