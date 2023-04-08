@@ -1,4 +1,4 @@
-#reference "01__chain__add-negative-crop-area.slangp"
-#reference "10__chain__info-cache-no-reflect-params.slangp"
-#reference "11__chain__text__adv-no-reflect.slangp"
-#reference "12__chain__intro.slangp"
+#reference "chain__01__add-negative-crop-area.slangp"
+#reference "chain__10__info-cache-no-reflect-params.slangp"
+#reference "chain__11__text__adv-no-reflect.slangp"
+#reference "chain__12__intro.slangp"

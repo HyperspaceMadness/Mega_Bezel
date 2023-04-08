@@ -1,13 +1,13 @@
-#reference "Components/00__chain__add-params__all.slangp"
-#reference "Components/01__chain__downrez__none.slangp"
+#reference "Components/chain__00__add-params__all.slangp"
+#reference "Components/chain__01__downrez__none.slangp"
 #reference "Components/composition__10__cache-and-intro__adv.slangp"
 #reference "Components/composition__40__dedithering__adv.slangp"
-#reference "Components/50__chain__tv-processing__gtu.slangp"
-#reference "Components/51__chain__reshade-fx.slangp
+#reference "Components/chain__50__tv-processing__gtu.slangp"
+#reference "Components/chain__51__reshade-fx.slangp
 #reference "Components/composition__60__pre-crt-prep__std.slangp"
-#reference "Components/60__chain__crt__gdv.slangp"
+#reference "Components/chain__60__crt__gdv.slangp"
 #reference "Components/composition__90__post-crt.slangp"
 
-#reference "Components/90__textures__all-reshade-fx.slangp"
+#reference "Components/textures__00__all-reshade-fx.slangp"
 
-#reference "Components/90__parameters__reshade-fx.slangp"
+#reference "Components/parameters__00__reshade-fx.slangp"

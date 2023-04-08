@@ -1,14 +1,14 @@
-#reference "Components/00__chain__add-params__all.slangp"
-#reference "Components/01__chain__downrez__x-viewport-scale_y-240p.slangp"
+#reference "Components/chain__00__add-params__all.slangp"
+#reference "Components/chain__01__downrez__x-viewport-scale_y-240p.slangp"
 #reference "Components/composition__10__cache-and-intro__std.slangp"
-#reference "Components/30__chain__dedithering__0-none.slangp"
+#reference "Components/chain__30__dedithering__0-none.slangp"
 #reference "Components/composition__60__pre-crt-prep-ntsc.slangp"
-#reference "Components/60__chain__crt__gdv-ntsc.slangp"
+#reference "Components/chain__60__crt__gdv-ntsc.slangp"
 #reference "Components/composition__90__post-crt.slangp"
 
-#reference "Components/90__textures__all.slangp"
+#reference "Components/textures__00__all.slangp"
 
-#reference "Components/90__parameters__gdv-ntsc.slangp"
+#reference "Components/parameters__00__gdv-ntsc.slangp"
 
-#reference "Components/90__parameters__drez.slangp"
-#reference "Components/90__parameters__drez-x-viewport-scale.slangp"
+#reference "Components/parameters__00__drez.slangp"
+#reference "Components/parameters__00__drez-x-viewport-scale.slangp"

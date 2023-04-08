@@ -1,9 +1,0 @@
-shaders = 5
-
-shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/linearize.slang
-alias0 = LinearGamma
-
-shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/hyllian/checkerboard-dedither/checkerboard-dedither-pass1.slang
-shader2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/hyllian/checkerboard-dedither/checkerboard-dedither-pass2.slang
-shader3 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/hyllian/checkerboard-dedither/checkerboard-dedither-pass3.slang
-shader4 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/delinearize.slang
