@@ -1,4 +1,4 @@
-shaders = 16
+shaders = 15
 
 shader0 = ../../../shaders/base/add-params-potato.slang
 alias0 = "CorePass"
@@ -48,70 +48,64 @@ scale_type6 = source
 scale6 = 1.0
 alias6 = "ColorCorrectPass"
 
-shader7 =  ../../../shaders/guest/hsm-custom-fast-sharpen.slang
-filter_linear7 = true
-scale_type7 = source
-scale_x7 = 1.0
-scale_y7 = 1.0
+shader7 = ../../../shaders/base/stock.slang
+float_framebuffer7 = true
+alias7 = "PrePass"
 
-shader8 = ../../../shaders/base/stock.slang
+shader8 = ../../../shaders/guest/hsm-avg-lum.slang
+filter_linear8 = true
+scale_type8 = source
+scale8 = 1.0
+mipmap_input8 = true
 float_framebuffer8 = true
-alias8 = "PrePass"
+alias8 = "AvgLumPass"
 
-shader9 = ../../../shaders/guest/hsm-avg-lum.slang
+# Pass referenced by subsequent blurring passes and crt pass
+shader9 = ../../../shaders/guest/hsm-interlace.slang
 filter_linear9 = true
 scale_type9 = source
 scale9 = 1.0
-mipmap_input9 = true
 float_framebuffer9 = true
-alias9 = "AvgLumPass"
-
-# Pass referenced by subsequent blurring passes and crt pass
-shader10 = ../../../shaders/guest/hsm-interlace.slang
-filter_linear10 = true
-scale_type10 = source
-scale10 = 1.0
-float_framebuffer10 = true
-alias10 = "LinearizePass"
+alias9 = "LinearizePass"
 feedback_pass = "0"
 
 # Sony Megatron Colour Video Monitor by Major Pain The Cactus
-shader11 = "../../../shaders/megatron/crt-sony-megatron-source-pass.slang"
+shader10 = "../../../shaders/megatron/crt-sony-megatron-source-pass.slang"
+filter_linear10 = "false"
+scale_type10 = "source"
+scale10 = "1.0"
+wrap_mode10 = "clamp_to_border"
+mipmap_input10 = "false"
+alias10 = "SourceSDR"
+float_framebuffer10 = "true"
+
+shader11 = "../../../shaders/megatron/crt-sony-megatron-hdr-pass.slang"
 filter_linear11 = "false"
 scale_type11 = "source"
 scale11 = "1.0"
 wrap_mode11 = "clamp_to_border"
 mipmap_input11 = "false"
-alias11 = "SourceSDR"
+alias11 = "SourceHDR"
 float_framebuffer11 = "true"
 
-shader12 = "../../../shaders/megatron/crt-sony-megatron-hdr-pass.slang"
+shader12 = "../../../shaders/megatron/crt-sony-megatron-potato.slang"
 filter_linear12 = "false"
-scale_type12 = "source"
-scale12 = "1.0"
 wrap_mode12 = "clamp_to_border"
 mipmap_input12 = "false"
-alias12 = "SourceHDR"
+scale_type12 = "viewport"
 float_framebuffer12 = "true"
+alias12 = "CRTPass"
 
-shader13 = "../../../shaders/megatron/crt-sony-megatron-potato.slang"
-filter_linear13 = "false"
-wrap_mode13 = "clamp_to_border"
-mipmap_input13 = "false"
-scale_type13 = "viewport"
-float_framebuffer13 = "true"
-alias13 = "CRTPass"
-
-shader14 = ../../../shaders/base/post-crt-prep-potato-megatron.slang
-mipmap_input14 = true
-scale_type14 = viewport
-float_framebuffer14 = true
-alias14 = "PostCRTPass"
+shader13 = ../../../shaders/base/post-crt-prep-potato-megatron.slang
+mipmap_input13 = true
+scale_type13 = viewport
+float_framebuffer13 = true
+alias13 = "PostCRTPass"
 
 # Combine Passes ----------------------------------------------------------------
-shader15 = ../../../shaders/base/output-hdr.slang
-scale_type15 = viewport
-alias15 = "OutputPass"
+shader14 = ../../../shaders/base/output-hdr.slang
+scale_type14 = viewport
+alias14 = "OutputPass"
 
 # Textures Potato
 # Define textures to be used by the different passes

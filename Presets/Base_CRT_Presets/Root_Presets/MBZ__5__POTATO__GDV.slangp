@@ -1,4 +1,4 @@
-shaders = 18
+shaders = 17
 
 shader0 = ../../../shaders/base/add-params-potato.slang
 alias0 = "CorePass"
@@ -48,89 +48,83 @@ scale_type6 = source
 scale6 = 1.0
 alias6 = "ColorCorrectPass"
 
-shader7 =  ../../../shaders/guest/hsm-custom-fast-sharpen.slang
+shader7 = ../../../shaders/base/stock.slang
 filter_linear7 = true
 scale_type7 = source
 scale_x7 = 1.0
 scale_y7 = 1.0
+alias7 = "PrePass"
+mipmap_input7 = true
 
-shader8 = ../../../shaders/base/stock.slang
+shader8 = ../../../shaders/guest/hsm-avg-lum.slang
 filter_linear8 = true
 scale_type8 = source
-scale_x8 = 1.0
-scale_y8 = 1.0
-alias8 = "PrePass"
+scale8 = 1.0
 mipmap_input8 = true
+alias8 = "AvgLumPass"
 
-shader9 = ../../../shaders/guest/hsm-avg-lum.slang
+# Pass referenced by subsequent blurring passes and crt pass
+shader9 = ../../../shaders/guest/hsm-interlace-and-linearize.slang
 filter_linear9 = true
 scale_type9 = source
 scale9 = 1.0
-mipmap_input9 = true
-alias9 = "AvgLumPass"
+float_framebuffer9 = true
+alias9 = "LinearizePass"
 
-# Pass referenced by subsequent blurring passes and crt pass
-shader10 = ../../../shaders/guest/hsm-interlace-and-linearize.slang
+shader10 = ../../../shaders/guest/hsm-gaussian_horizontal.slang
 filter_linear10 = true
-scale_type10 = source
-scale10 = 1.0
+scale_type_x10 = absolute
+scale_x10 = 800.0
+scale_type_y10 = source
+scale_y10 = 1.0 
 float_framebuffer10 = true
-alias10 = "LinearizePass"
 
-shader11 = ../../../shaders/guest/hsm-gaussian_horizontal.slang
+shader11 = ../../../shaders/guest/hsm-gaussian_vertical.slang
 filter_linear11 = true
 scale_type_x11 = absolute
 scale_x11 = 800.0
-scale_type_y11 = source
-scale_y11 = 1.0 
+scale_type_y11 = absolute
+scale_y11 = 600.0
 float_framebuffer11 = true
+alias11 = GlowPass
 
-shader12 = ../../../shaders/guest/hsm-gaussian_vertical.slang
+shader12 = ../../../shaders/guest/hsm-bloom_horizontal.slang
 filter_linear12 = true
 scale_type_x12 = absolute
 scale_x12 = 800.0
 scale_type_y12 = absolute
-scale_y12 = 600.0
+scale_y12 = 600.0 
 float_framebuffer12 = true
-alias12 = GlowPass
 
-shader13 = ../../../shaders/guest/hsm-bloom_horizontal.slang
+shader13 = ../../../shaders/guest/hsm-bloom_vertical.slang
 filter_linear13 = true
-scale_type_x13 = absolute
-scale_x13 = 800.0
-scale_type_y13 = absolute
-scale_y13 = 600.0 
+scale_type_x13 = source
+scale_x13 = 1.0
+scale_type_y13 = source
+scale_y13 = 1.0
 float_framebuffer13 = true
+alias13 = BloomPass
 
-shader14 = ../../../shaders/guest/hsm-bloom_vertical.slang
+shader14 = ../../../shaders/guest/hsm-crt-guest-advanced-potato.slang
 filter_linear14 = true
-scale_type_x14 = source
+scale_type14 = viewport
 scale_x14 = 1.0
-scale_type_y14 = source
 scale_y14 = 1.0
 float_framebuffer14 = true
-alias14 = BloomPass
 
-shader15 = ../../../shaders/guest/hsm-crt-guest-advanced-potato.slang
+shader15 = ../../../shaders/guest/hsm-deconvergence-potato.slang
 filter_linear15 = true
 scale_type15 = viewport
 scale_x15 = 1.0
 scale_y15 = 1.0
 float_framebuffer15 = true
+alias15 = "CRTPass"
 
-shader16 = ../../../shaders/guest/hsm-deconvergence-potato.slang
-filter_linear16 = true
+shader16 = ../../../shaders/base/post-crt-prep-potato.slang
+mipmap_input16 = true
 scale_type16 = viewport
-scale_x16 = 1.0
-scale_y16 = 1.0
 float_framebuffer16 = true
-alias16 = "CRTPass"
-
-shader17 = ../../../shaders/base/post-crt-prep-potato.slang
-mipmap_input17 = true
-scale_type17 = viewport
-float_framebuffer17 = true
-alias17 = "PostCRTPass"
+alias16 = "PostCRTPass"
 
 # Textures Potato
 # Define textures to be used by the different passes
