@@ -5,7 +5,8 @@
 #reference "Components/chain__45__upscale__scalefx.slangp"
 #reference "Components/composition__60__pre-crt-prep.slangp"
 #reference "Components/chain__60__crt__gdv__no-reflect.slangp"
-#reference "Components/composition__90__post-crt__no-reflect.slangp"
+#reference "Components/chain__68__post-crt__no-reflect.slangp"
+#reference "Components/composition__90__mega-process__no-reflect.slangp"
 
 #reference "Components/textures__00__all.slangp"
 

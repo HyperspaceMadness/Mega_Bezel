@@ -74,7 +74,7 @@ layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 2) uniform sampler2D Source;
 layout(set = 0, binding = 3) uniform sampler2D InfoCachePass;
-layout(set = 0, binding = 4) uniform sampler2D AvgLumPass;
+// layout(set = 0, binding = 4) uniform sampler2D AvgLumPass;
 
 // HSM Removed
 // #define COMPAT_TEXTURE(c,d) texture(c,d)
@@ -125,7 +125,7 @@ void main()
 	}
 
 	// HSM Added
-	float raster_bloom_avg_lum = texture(AvgLumPass, vec2(0.5,0.5)).a;
+	float raster_bloom_avg_lum = 0.5; //texture(AvgLumPass, vec2(0.5,0.5)).a;
 	vec2 screen_curved_coord = vec2(0.5);
 
 	vec2 screen_curved_coord_with_overscan_and_mirror = HSM_GetCrtShaderFinalCoord(SCREEN_COORD,

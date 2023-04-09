@@ -16,6 +16,7 @@ Changes:
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Check why intro options are not working
   * Check Banding on Highlight on glass presets
   * Check Brightness on Megatron Glass Presets
   * Fix Megatron to not put mask outside screen

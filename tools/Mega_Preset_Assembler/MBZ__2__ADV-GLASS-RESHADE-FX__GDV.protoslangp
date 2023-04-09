@@ -6,7 +6,8 @@
 #reference "Components/chain__51__reshade-fx.slangp
 #reference "Components/composition__60__pre-crt-prep__std.slangp"
 #reference "Components/chain__60__crt__gdv.slangp"
-#reference "Components/composition__90__post-crt__glass.slangp"
+#reference "Components/chain__68__post-crt__glass.slangp"
+#reference "Components/composition__90__mega-process__glass.slangp"
 
 #reference "Components/textures__00__glass-reshade-fx.slangp"
 

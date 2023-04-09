@@ -5,7 +5,8 @@
 #reference "Components/chain__45__upscale__scalefx.slangp"
 #reference "Components/composition__60__pre-crt-prep-no-linearize-ntsc.slangp"
 #reference "Components/chain__60__crt__megatron__no-reflect.slangp"
-#reference "Components/composition__90__post-crt__screen-only-hdr.slangp"
+#reference "Components/chain__68__post-crt__no-reflect.slangp"
+#reference "Components/composition__90__mega-process__screen-only-hdr.slangp"
 
 #reference "Components/textures__00__all.slangp"
 

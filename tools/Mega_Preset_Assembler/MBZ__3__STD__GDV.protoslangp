@@ -4,6 +4,7 @@
 #reference "Components/chain__30__dedithering__0-none.slangp"
 #reference "Components/composition__60__pre-crt-prep__std.slangp"
 #reference "Components/chain__60__crt__gdv.slangp"
-#reference "Components/composition__90__post-crt.slangp"
+#reference "Components/chain__68__post-crt__std.slangp"
+#reference "Components/composition__90__mega-process__std.slangp"
 
 #reference "Components/textures__00__all.slangp"

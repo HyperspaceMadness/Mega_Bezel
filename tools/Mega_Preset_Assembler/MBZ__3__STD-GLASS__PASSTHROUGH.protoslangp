@@ -1,0 +1,10 @@
+#reference "Components/chain__00__add-params__glass.slangp"
+#reference "Components/chain__01__downrez__none.slangp"
+#reference "Components/composition__10__cache-and-intro__std-glass.slangp"
+#reference "Components/chain__30__dedithering__0-none.slangp"
+#reference "Components/composition__60__pre-crt-prep__passthrough.slangp"
+#reference "Components/chain__60__crt__passthrough.slangp"
+#reference "Components/chain__68__post-crt__minimum__glass.slangp"
+#reference "Components/composition__90__mega-process__glass.slangp"
+
+#reference "Components/textures__00__glass.slangp"
