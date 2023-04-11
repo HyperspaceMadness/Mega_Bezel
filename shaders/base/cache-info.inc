@@ -45,7 +45,7 @@ layout(set = 0, binding = 3) uniform sampler2D ScreenPlacementImage;
 // Get the original size with split area added
 vec2 HSM_GetScreenCorePreppedSize(float screen_index)
 {
-	vec2 core_prepped_size = global.NegativeCropAddedPassSize.xy;
+	vec2 core_prepped_size = global.DerezedPassSize.xy;
 
 	if (HSM_DUALSCREEN_MODE > 0)
 		if (HSM_GetCoreImageSplitDirection() == 1)
@@ -439,7 +439,7 @@ vec4 HSM_GetBlackOnlyCropInPixels(sampler2D in_sampler_2D, vec2 sample_start_pix
 void HSM_GetCroppedRotatedSizeAndPixelSampleAreaStart(float screen_index, sampler2D original_pass, inout vec2 cropped_rotated_size, inout vec2 cropped_sample_area_start)
 {
 	screen_index = HSM_GetSwappedScreenIndex(screen_index);
-	vec2 rotated_negative_crop_added_size = HSM_GetRotatedNegativeCropAddedSize();
+	vec2 rotated_negative_crop_added_size = HSM_GetRotatedDerezedSize();
 
 	float default_crop_left_px = floor(MAX_NEGATIVE_CROP * rotated_negative_crop_added_size.x);
 	float default_crop_top_px = floor(MAX_NEGATIVE_CROP * rotated_negative_crop_added_size.y);
@@ -1073,7 +1073,7 @@ vec2 GetScreenSizeWithZoom(vec2 screen_scale)
 
 vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass, sampler2D original_pass, sampler2D screen_placement_image)
 {
-	NEGATIVE_CROP_EXPAND_MULTIPLIER = global.NegativeCropAddedPassSize.y / global.DerezedPassSize.y;
+	NEGATIVE_CROP_EXPAND_MULTIPLIER = global.DerezedPassSize.y / global.DerezedPassSize.y;
 	MAX_NEGATIVE_CROP = ((1 - (1 / NEGATIVE_CROP_EXPAND_MULTIPLIER)) / 2);
 
 	vec4 out_color = vec4(0);
@@ -1141,7 +1141,7 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
 	{
 		out_color.rg = sampling_dir_mult;
-		out_color.a = HSM_GetAverageLuma(original_pass, global.NegativeCropAddedPassSize.xy);
+		out_color.a = HSM_GetAverageLuma(original_pass, global.DerezedPassSize.xy);
 	}
 
 	// Sample 2, 1
@@ -1170,7 +1170,7 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
 	{
 		out_color.rg = cropped_rotated_size_with_res_mult;
-		out_color.ba = HSM_GetRotatedNegativeCropAddedSize();
+		out_color.ba = HSM_GetRotatedDerezedSize();
 	}
 
 	// Sample 1, 2

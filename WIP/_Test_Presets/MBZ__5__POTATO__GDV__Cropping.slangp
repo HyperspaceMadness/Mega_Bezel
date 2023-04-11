@@ -18,7 +18,7 @@ srgb_framebuffer2 = true
 scale_type2 = source
 scale_x2 = 4
 scale_y2 = 4
-alias2 = "NegativeCropAddedPass"
+alias2 = "DerezedPass"
 
 shader3 = ../../shaders/base/cache-info-screen-scale-params.slang
 filter_linear3 = false

@@ -1,4 +1,4 @@
-shaders = 14
+shaders = 13
 
 shader0 = ../../../shaders/base/add-params-no-reflect.slang
 alias0 = "CorePass"
@@ -11,79 +11,70 @@ scale_x1 = 1
 scale_y1 = 1
 alias1 = "DerezedPass"
 
-shader2 = ../../../shaders/base/add-negative-crop-area.slang
+shader2 = ../../../shaders/base/cache-info-no-reflect-params.slang
 filter_linear2 = false
-mipmap_input2 = false
-srgb_framebuffer2 = true
 scale_type2 = source
-scale_x2 = 1
-scale_y2 = 1
-alias2 = "NegativeCropAddedPass"
+scale2 = 1.0
+alias2 = "InfoCachePass"
 
-shader3 = ../../../shaders/base/cache-info-no-reflect-params.slang
+shader3 = ../../../shaders/base/text-std-no-reflect.slang
 filter_linear3 = false
+float_framebuffer3 = true
 scale_type3 = source
 scale3 = 1.0
-alias3 = "InfoCachePass"
+alias3 = "TextPass"
 
-shader4 = ../../../shaders/base/text-std-no-reflect.slang
+shader4 = ../../../shaders/base/intro.slang
 filter_linear4 = false
 float_framebuffer4 = true
 scale_type4 = source
 scale4 = 1.0
-alias4 = "TextPass"
+alias4 = "IntroPass"
 
-shader5 = ../../../shaders/base/intro.slang
-filter_linear5 = false
-float_framebuffer5 = true
-scale_type5 = source
-scale5 = 1.0
-alias5 = "IntroPass"
-
-shader6 =  ../../../shaders/base/stock.slang
-alias6 = "DeditherPass"
+shader5 =  ../../../shaders/base/stock.slang
+alias5 = "DeditherPass"
 
 # Color Correction with Dogway's awesome Grade shader
 # Grade is after Afterglow so that brightening the black level does not break the afterglow
-shader7 = ../../../shaders/dogway/hsm-grade.slang
-filter_linear7 = false
-scale_type7 = source
-scale7 = 1.0
-alias7 = "ColorCorrectPass"
+shader6 = ../../../shaders/dogway/hsm-grade.slang
+filter_linear6 = false
+scale_type6 = source
+scale6 = 1.0
+alias6 = "ColorCorrectPass"
 
-shader8 =  ../../../shaders/guest/hsm-custom-fast-sharpen.slang
+shader7 =  ../../../shaders/guest/hsm-custom-fast-sharpen.slang
+filter_linear7 = true
+scale_type7 = source
+scale_x7 = 1.0
+scale_y7 = 1.0
+
+shader8 = ../../../shaders/base/linearize.slang
 filter_linear8 = true
 scale_type8 = source
-scale_x8 = 1.0
-scale_y8 = 1.0
+scale8 = 1.0
+float_framebuffer8 = true
+alias8 = "LinearizePass"
 
-shader9 = ../../../shaders/base/linearize.slang
-filter_linear9 = true
-scale_type9 = source
-scale9 = 1.0
-float_framebuffer9 = true
-alias9 = "LinearizePass"
+shader9 = ../../../shaders/fxaa/fxaa.slang
+float_framebuffer9 = "true"
 
-shader10 = ../../../shaders/fxaa/fxaa.slang
+shader10 = ../../../shaders/guest/extras/hsm-screen-scale-g-sharp_resampler-no-reflect.slang
+filter_linear10 = "false"
+scale_type10 = "viewport"
+scale10 = "1.0"
 float_framebuffer10 = "true"
+alias10 = "CRTPass"
 
-shader11 = ../../../shaders/guest/extras/hsm-screen-scale-g-sharp_resampler-no-reflect.slang
-filter_linear11 = "false"
-scale_type11 = "viewport"
-scale11 = "1.0"
-float_framebuffer11 = "true"
-alias11 = "CRTPass"
-
-shader12 = ../../../shaders/base/post-crt-prep-minimum-no-reflect.slang
-mipmap_input12 = true
-scale_type12 = viewport
-float_framebuffer12 = true
-alias12 = "PostCRTPass"
+shader11 = ../../../shaders/base/post-crt-prep-minimum-no-reflect.slang
+mipmap_input11 = true
+scale_type11 = viewport
+float_framebuffer11 = true
+alias11 = "PostCRTPass"
 
 # Combine Passes ----------------------------------------------------------------
-shader13 = ../../../shaders/base/output-sdr.slang
-scale_type13 = viewport
-alias13 = "OutputPass"
+shader12 = ../../../shaders/base/output-sdr.slang
+scale_type12 = viewport
+alias12 = "OutputPass"
 
 # Textures All
 # Define textures to be used by the different passes

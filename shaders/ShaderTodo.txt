@@ -3,6 +3,12 @@
 Mega Bezel is updated to V1.13.0_2023-03-19
 
 Changes:
+  * Added PASSTHROUGH base variants
+    * These have a minimal processing on the image coming from the core, and no CRT shader
+    * Includes FXAA for antialiasing 3D poligonal graphics
+    * Guest's G-Sharp used for scaling the game image down to the size on the screen
+    * Currently this variant does not have post CRT effects like Tube Diffuse or vignette_factor
+      * Depending on user needs we could re-evaluate this
   * Added support to fix flipping in more core with glcore
   * Fixed Reflection Disappearing with Raster Bloom Enabled
   * Fixed Reflection on Dual Screen LCD presets where the whole unsplit image was being used for both screens
@@ -11,11 +17,13 @@ Changes:
   * Overscan and Raster Bloom is now available for all shaders
   * Potato CRT Curvature is affecting black line which it shouldn't
   * Removed Afterglow on all Potato Presets (Before some had them some didn't)
+  * Removed Negative crop passes, since it's not being used
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Implement Original Scaling  Mode
   * Check why intro options are not working
   * Check Banding on Highlight on glass presets
   * Check Brightness on Megatron Glass Presets

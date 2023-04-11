@@ -59,6 +59,7 @@ vec2 HSM_GetRotatedCoreOriginalSize()
 	return abs(HSM_ROTATE_CORE_IMAGE) * global.OriginalSize.yx + (1 - abs(HSM_ROTATE_CORE_IMAGE)) * global.OriginalSize.xy;
 }
 
+// Core Prepped Size is the size after DeRez
 vec2 HSM_GetDerezedSize()
 {
 	return global.DerezedPassSize.xy;
@@ -67,17 +68,6 @@ vec2 HSM_GetDerezedSize()
 vec2 HSM_GetRotatedDerezedSize()
 {
 	return abs(HSM_ROTATE_CORE_IMAGE) * global.DerezedPassSize.yx + (1 - abs(HSM_ROTATE_CORE_IMAGE)) * global.DerezedPassSize.xy;
-}
-
-// Core Prepped Size is the size after DeRez and adding in the negative crop
-vec2 HSM_GetNegativeCropAddedSize()
-{
-	return global.NegativeCropAddedPassSize.xy;
-}
-
-vec2 HSM_GetRotatedNegativeCropAddedSize()
-{
-	return abs(HSM_ROTATE_CORE_IMAGE) * global.NegativeCropAddedPassSize.yx + (1 - abs(HSM_ROTATE_CORE_IMAGE)) * global.NegativeCropAddedPassSize.xy;
 }
 
 float HSM_GetSwappedScreenIndex(float screen_index)
@@ -120,7 +110,7 @@ vec2 HSM_RotateCoordinate(vec2 in_coord, float rotation)
 // Texture Sampler function which takes a coordinate in the cropped coordinate space
 vec4 HSM_GetTexSampleFromSampleStartAndSize(sampler2D in_sampler, vec2 in_screen_coord, vec2 sample_start_pixel_coord, vec2 window_size)
 {
-	vec2 core_prepped_size = HSM_GetRotatedNegativeCropAddedSize();
+	vec2 core_prepped_size = HSM_GetRotatedDerezedSize();
 
 	if ( HSM_DUALSCREEN_MODE > 0 )
 		if (HSM_FLIP_CORE_VERTICAL == -1)
