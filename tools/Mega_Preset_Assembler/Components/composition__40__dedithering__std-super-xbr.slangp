@@ -1,0 +1,3 @@
+#reference "chain__30__dedithering__1-sgenpt-mix-multipass.slangp"
+#reference "chain__58__sharpen__gsharp-resampler.slangp"
+#reference "chain__30__dedithering__4-last-pass-sharpsmoother.slangp"

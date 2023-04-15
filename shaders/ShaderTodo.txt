@@ -23,6 +23,7 @@ Changes:
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Remove Sega Luma Fix
   * Implement Original Scaling  Mode
   * Check why intro options are not working
   * Check Banding on Highlight on glass presets

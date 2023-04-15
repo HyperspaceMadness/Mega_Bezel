@@ -1,11 +1,8 @@
-shaders = 2
+shaders = 1
 
-shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/fxaa/fxaa.slang
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/extras/hsm-screen-scale-g-sharp_resampler-potato.slang
+filter_linear0 = "false"
+scale_type0 = "viewport"
+scale0 = "1.0"
 float_framebuffer0 = "true"
-
-shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/extras/hsm-screen-scale-g-sharp_resampler-potato.slang
-filter_linear1 = "false"
-scale_type1 = "viewport"
-scale1 = "1.0"
-float_framebuffer1 = "true"
-alias1 = "CRTPass"
+alias0 = "CRTPass"

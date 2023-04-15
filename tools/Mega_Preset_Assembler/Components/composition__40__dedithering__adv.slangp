@@ -1,4 +1,5 @@
 #reference "chain__30__dedithering__1-sgenpt-mix-multipass.slangp"
 #reference "chain__30__dedithering__2-ps1-box-blur.slangp"
+#reference "chain__30__antialiasing__fxaa.slangp"
 #reference "chain__58__sharpen__gsharp-resampler.slangp"
-#reference "chain__30__dedithering__3-sharpsmoother.slangp"
+#reference "chain__30__dedithering__4-last-pass-sharpsmoother.slangp"

@@ -1,7 +1,7 @@
 #reference "Components/chain__00__add-params__all.slangp"
 #reference "Components/chain__01__downrez__NDS-1280x1920.slangp"
 #reference "Components/composition__10__cache-and-intro__std.slangp"
-#reference "Components/chain__30__dedithering__0-none.slangp"
+#reference "Components/composition__40__dedithering__std.slangp"
 #reference "Components/composition__60__pre-crt-prep__std.slangp"
 #reference "Components/chain__60__crt__gdv.slangp"
 #reference "Components/chain__68__post-crt__std.slangp"

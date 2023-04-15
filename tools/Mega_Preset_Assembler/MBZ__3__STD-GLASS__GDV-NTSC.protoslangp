@@ -1,7 +1,7 @@
 #reference "Components/chain__00__add-params__glass.slangp"
 #reference "Components/chain__01__downrez__none.slangp"
 #reference "Components/composition__10__cache-and-intro__std-glass.slangp"
-#reference "Components/chain__30__dedithering__0-none.slangp"
+#reference "Components/composition__40__dedithering__std.slangp"
 #reference "Components/composition__60__pre-crt-prep-ntsc.slangp"
 #reference "Components/chain__60__crt__gdv-ntsc.slangp"
 #reference "Components/chain__68__post-crt__glass.slangp"

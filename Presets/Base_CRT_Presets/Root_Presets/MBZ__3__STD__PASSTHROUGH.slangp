@@ -31,7 +31,8 @@ scale_type4 = source
 scale4 = 1.0
 alias4 = "IntroPass"
 
-shader5 =  ../../../shaders/base/stock.slang
+shader5 = ../../../shaders/fxaa/fxaa.slang
+float_framebuffer5 = "true"
 alias5 = "DeditherPass"
 
 # GTU TV Processing

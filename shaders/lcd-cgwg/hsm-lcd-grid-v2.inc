@@ -55,7 +55,6 @@ void main()
 #pragma stage fragment
 layout(location = 0) in vec2 vTexCoord;
 
-layout(set = 0, binding = 1) uniform sampler2D IntroPass;
 layout(set = 0, binding = 2) uniform sampler2D Source;
 
 layout(set = 0, binding = 3) uniform sampler2D InfoCachePass;

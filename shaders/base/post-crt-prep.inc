@@ -61,7 +61,7 @@ layout(set = 0, binding = 9) uniform sampler2D BackgroundVertImage;
 
 layout(set = 0, binding = 10) uniform sampler2D NightLightingImage;
 layout(set = 0, binding = 11) uniform sampler2D NightLighting2Image;
-layout(set = 0, binding = 12) uniform sampler2D IntroPass;
+layout(set = 0, binding = 12) uniform sampler2D DerezedPass;
 
 layout(set = 0, binding = 13) uniform sampler2D PostCRTPassFeedback;
 #define PassFeedback PostCRTPassFeedback
@@ -386,5 +386,5 @@ void main()
 
 	FragColor = texture(Source, UNFLIPPED_VIEWPORT_COORD);
 
-	FragColor = HSM_GetPostCrtPreppedColor(FragColor, vTexCoord, screen_curved_coord, IntroPass, TubeDiffuseImage, TubeColoredGelImage, TubeStaticReflectionImage, BackgroundImage, BackgroundVertImage, NightLightingImage, NightLighting2Image);
+	FragColor = HSM_GetPostCrtPreppedColor(FragColor, vTexCoord, screen_curved_coord, DerezedPass, TubeDiffuseImage, TubeColoredGelImage, TubeStaticReflectionImage, BackgroundImage, BackgroundVertImage, NightLightingImage, NightLighting2Image);
 }

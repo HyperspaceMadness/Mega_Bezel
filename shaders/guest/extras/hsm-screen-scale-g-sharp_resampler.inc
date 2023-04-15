@@ -120,8 +120,8 @@ void main()
 
 	if (HHLP_IsOutsideCoordSpace(cache_bounds_coord))
 	{
-			FragColor = vec4(0);
-			return;
+		FragColor = vec4(0);
+		return;
 	}
 
 	// HSM Added

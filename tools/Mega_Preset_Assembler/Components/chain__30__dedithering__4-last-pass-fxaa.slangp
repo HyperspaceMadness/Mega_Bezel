@@ -1,0 +1,5 @@
+shaders = 1
+
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/fxaa/fxaa.slang
+float_framebuffer0 = "true"
+alias0 = "DeditherPass"

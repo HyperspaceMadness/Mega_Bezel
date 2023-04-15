@@ -1,7 +1,7 @@
 #reference "Components/chain__00__add-params__potato.slangp"
 #reference "Components/chain__01__downrez__none.slangp"
 #reference "Components/composition__10__cache-and-intro__potato.slangp"
-#reference "Components/composition__40__dedithering__non-adv-super-xbr.slangp"
+#reference "Components/composition__40__dedithering__potato-super-xbr.slangp"
 #reference "Components/chain__45__upscale__super-xbr.slangp"
 #reference "Components/composition__60__pre-crt-prep__potato-ntsc.slangp"
 #reference "Components/chain__60__crt__gdv-ntsc__potato.slangp"

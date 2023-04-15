@@ -1,7 +1,7 @@
 #reference "Components/chain__00__add-params__no-reflect.slangp"
 #reference "Components/chain__01__downrez__none.slangp"
 #reference "Components/composition__10__cache-and-intro__std-no-reflect.slangp"
-#reference "Components/chain__30__dedithering__0-none.slangp"
+#reference "Components/composition__40__dedithering__std.slangp"
 #reference "Components/composition__60__pre-crt-prep__std.slangp"
 #reference "Components/chain__60__crt__lcd-grid.slangp"
 #reference "Components/chain__68__post-crt__no-reflect.slangp"

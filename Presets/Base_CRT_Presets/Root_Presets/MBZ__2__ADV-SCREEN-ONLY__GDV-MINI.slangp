@@ -1,4 +1,4 @@
-shaders = 29
+shaders = 30
 
 shader0 = ../../../shaders/base/add-params-no-reflect.slang
 alias0 = "CorePass"
@@ -62,104 +62,106 @@ shader11 = ../../../shaders/dedither/dedither-gamma-prep-2-after.slang
 
 shader12 = ../../../shaders/ps1dither/hsm-PS1-Undither-BoxBlur.slang
 
-shader13 = ../../../shaders/guest/extras/hsm-g-sharp_resampler.slang
-alias13 = "DeditherPass"
+shader13 = ../../../shaders/fxaa/fxaa.slang
+float_framebuffer13 = "true"
 
-shader14 = ../../../shaders/guest/extras/hsm-sharpsmoother.slang
-# alias14 = "DeditherPass"
+shader14 = ../../../shaders/guest/extras/hsm-g-sharp_resampler.slang
+
+shader15 = ../../../shaders/guest/extras/hsm-sharpsmoother.slang
+alias15 = "DeditherPass"
 
 # GTU TV Processing
-shader15 = ../../../shaders/gtu/hsm-gtu-pass1.slang
-scale_type15 = source
-scale15 = 1.0
-float_framebuffer15 = true
-
-shader16 = ../../../shaders/gtu/hsm-gtu-pass2.slang
-scale_type_x16 = source
-scale_x16 = 1.0
-scale_type_y16 = source
-scale_y16 = 1.0
-filter_linear16 = false
+shader16 = ../../../shaders/gtu/hsm-gtu-pass1.slang
+scale_type16 = source
+scale16 = 1.0
 float_framebuffer16 = true
 
-shader17 = ../../../shaders/base/stock.slang
-alias17 = "PreCRTPass"
+shader17 = ../../../shaders/gtu/hsm-gtu-pass2.slang
+scale_type_x17 = source
+scale_x17 = 1.0
+scale_type_y17 = source
+scale_y17 = 1.0
+filter_linear17 = false
+float_framebuffer17 = true
 
-shader18 = ../../../shaders/guest/hsm-afterglow0.slang
-filter_linear18 = true
-scale_type18 = source
-scale18 = 1.0
-alias18 = "AfterglowPass"
+shader18 = ../../../shaders/base/stock.slang
+alias18 = "PreCRTPass"
 
-shader19 = ../../../shaders/guest/hsm-pre-shaders-afterglow.slang
+shader19 = ../../../shaders/guest/hsm-afterglow0.slang
 filter_linear19 = true
 scale_type19 = source
-mipmap_input19 = true
 scale19 = 1.0
+alias19 = "AfterglowPass"
+
+shader20 = ../../../shaders/guest/hsm-pre-shaders-afterglow.slang
+filter_linear20 = true
+scale_type20 = source
+mipmap_input20 = true
+scale20 = 1.0
 
 # Color Correction with Dogway's awesome Grade shader
 # Grade is after Afterglow so that brightening the black level does not break the afterglow
-shader20 = ../../../shaders/dogway/hsm-grade.slang
-filter_linear20 = false
-scale_type20 = source
-scale20 = 1.0
-alias20 = "ColorCorrectPass"
-
-shader21 =  ../../../shaders/guest/hsm-custom-fast-sharpen.slang
-filter_linear21 = true
+shader21 = ../../../shaders/dogway/hsm-grade.slang
+filter_linear21 = false
 scale_type21 = source
-scale_x21 = 1.0
-scale_y21 = 1.0
+scale21 = 1.0
+alias21 = "ColorCorrectPass"
 
-shader22 = ../../../shaders/base/stock.slang
+shader22 =  ../../../shaders/guest/hsm-custom-fast-sharpen.slang
 filter_linear22 = true
 scale_type22 = source
 scale_x22 = 1.0
 scale_y22 = 1.0
-alias22 = "PrePass"
-mipmap_input22 = true
 
-shader23 = ../../../shaders/guest/hsm-avg-lum.slang
+shader23 = ../../../shaders/base/stock.slang
 filter_linear23 = true
 scale_type23 = source
-scale23 = 1.0
+scale_x23 = 1.0
+scale_y23 = 1.0
+alias23 = "PrePass"
 mipmap_input23 = true
-alias23 = "AvgLumPass"
 
-# Pass referenced by subsequent blurring passes and crt pass
-shader24 = ../../../shaders/guest/hsm-interlace-and-linearize.slang
+shader24 = ../../../shaders/guest/hsm-avg-lum.slang
 filter_linear24 = true
 scale_type24 = source
 scale24 = 1.0
-float_framebuffer24 = true
-alias24 = "LinearizePass"
+mipmap_input24 = true
+alias24 = "AvgLumPass"
 
-shader25 = ../../../shaders/base/delinearize.slang
+# Pass referenced by subsequent blurring passes and crt pass
+shader25 = ../../../shaders/guest/hsm-interlace-and-linearize.slang
+filter_linear25 = true
 scale_type25 = source
-float_framebuffer25 = "true"
+scale25 = 1.0
+float_framebuffer25 = true
+alias25 = "LinearizePass"
 
-shader26 = ../../../shaders/guest/hsm-crt-dariusg-gdv-mini-potato.slang
-scale_type26 = viewport
-scale_x26 = 1.0
-scale_y26 = 1.0
-filter_linear26 = true
+shader26 = ../../../shaders/base/delinearize.slang
+scale_type26 = source
 float_framebuffer26 = "true"
-alias26 = "CRTPass"
+
+shader27 = ../../../shaders/guest/hsm-crt-dariusg-gdv-mini-potato.slang
+scale_type27 = viewport
+scale_x27 = 1.0
+scale_y27 = 1.0
+filter_linear27 = true
+float_framebuffer27 = "true"
+alias27 = "CRTPass"
 
 g_sat = 0.25
 g_lum = 0.15
 g_gamma_out = 2.45
 
-shader27 = ../../../shaders/base/post-crt-prep-no-reflect.slang
-mipmap_input27 = true
-scale_type27 = viewport
-float_framebuffer27 = true
-alias27 = "PostCRTPass"
+shader28 = ../../../shaders/base/post-crt-prep-no-reflect.slang
+mipmap_input28 = true
+scale_type28 = viewport
+float_framebuffer28 = true
+alias28 = "PostCRTPass"
 
 # Combine Passes ----------------------------------------------------------------
-shader28 = ../../../shaders/base/output-sdr.slang
-scale_type28 = viewport
-alias28 = "OutputPass"
+shader29 = ../../../shaders/base/output-sdr.slang
+scale_type29 = viewport
+alias29 = "OutputPass"
 
 # Textures All
 # Define textures to be used by the different passes

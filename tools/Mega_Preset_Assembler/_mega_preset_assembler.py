@@ -44,7 +44,7 @@ def GetPresetLines(in_path : str, output_start_pass_index : int) -> tuple[list[s
     """
     if not os.path.exists(in_path):
         print('        Path does not exist: ' + in_path)
-        return None
+        return (None, None)
     else:
         num_shaders = 0
         component_lines = open(in_path, "r").read().splitlines()
@@ -77,7 +77,17 @@ def GetPresetLines(in_path : str, output_start_pass_index : int) -> tuple[list[s
                 if component_line.startswith('#reference'):
                     dir_path : str = os.path.split(in_path)[0]
                     reference_path : str = os.path.join(dir_path, component_line.split('"')[1])
-                    new_lines, next_pass_index = GetPresetLines(reference_path, next_pass_index)
+                    read_success : bool = False
+                    if os.path.exists(reference_path):
+                        new_lines, next_pass_index = GetPresetLines(reference_path, next_pass_index)
+                        read_success = new_lines != None
+                    else:
+                        print('        Error while processing: ' + in_path)
+                        print('        File does not exist:    ' + reference_path)
+                        return None
+                    if not read_success :
+                        print('        Error while processing: ' + in_path)
+                        return None
                     out_component_lines.extend(new_lines)
 
         else:

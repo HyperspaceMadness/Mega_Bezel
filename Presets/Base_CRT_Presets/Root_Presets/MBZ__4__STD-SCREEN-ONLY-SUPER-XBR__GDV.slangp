@@ -61,10 +61,9 @@ filter_linear10 = false
 shader11 = ../../../shaders/dedither/dedither-gamma-prep-2-after.slang
 
 shader12 = ../../../shaders/guest/extras/hsm-g-sharp_resampler.slang
-alias12 = "DeditherPass"
 
 shader13 = ../../../shaders/guest/extras/hsm-sharpsmoother.slang
-# alias13 = "DeditherPass"
+alias13 = "DeditherPass"
 
 shader14 = ../../../shaders/base/stock.slang
 # filter_linear14 = "false"
