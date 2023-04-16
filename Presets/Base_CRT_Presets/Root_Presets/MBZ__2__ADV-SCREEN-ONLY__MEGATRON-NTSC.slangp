@@ -1,74 +1,78 @@
 shaders = 33
 
-shader0 = ../../../shaders/base/add-params-no-reflect.slang
-alias0 = "CorePass"
+shader0 = ../../../shaders/guest/extras/hsm-drez-none.slang
+filter_linear0 = false
+srgb_framebuffer0 = true
+scale_type0 = source
+scale_x0 = 1
+scale_y0 = 1
+alias0 = "DerezedPass"
 
-shader1 =  ../../../shaders/base/stock.slang
+shader1 = ../../../shaders/base/cache-info-no-reflect-params.slang
 filter_linear1 = false
-srgb_framebuffer1 = true
 scale_type1 = source
-scale_x1 = 1
-scale_y1 = 1
-alias1 = "DerezedPass"
+scale1 = 1.0
+alias1 = "InfoCachePass"
 
-shader2 = ../../../shaders/base/cache-info-no-reflect-params.slang
+shader2 = ../../../shaders/base/text-adv-no-reflect.slang
 filter_linear2 = false
+float_framebuffer2 = true
 scale_type2 = source
 scale2 = 1.0
-alias2 = "InfoCachePass"
+alias2 = "TextPass"
 
-shader3 = ../../../shaders/base/text-adv-no-reflect.slang
+shader3 = ../../../shaders/guest/extras/hsm-fetch-drez-output.slang
 filter_linear3 = false
-float_framebuffer3 = true
+srgb_framebuffer3 = true
 scale_type3 = source
-scale3 = 1.0
-alias3 = "TextPass"
+scale_x3 = 1
+scale_y3 = 1
 
-shader4 = ../../../shaders/base/intro.slang
-filter_linear4 = false
-float_framebuffer4 = true
-scale_type4 = source
-scale4 = 1.0
-alias4 = "IntroPass"
+shader4 = ../../../shaders/dedither/dedither-gamma-prep-1-before.slang
+alias4 = LinearGamma
 
-shader5 = ../../../shaders/dedither/dedither-gamma-prep-1-before.slang
-alias5 = LinearGamma
+shader5 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass1.slang
+filter_linear5 = false
+scale_type5 = source
+scale5 = 1.0
 
-shader6 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass1.slang
+shader6 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass2.slang
 filter_linear6 = false
 scale_type6 = source
 scale6 = 1.0
 
-shader7 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass2.slang
+shader7 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass3.slang
 filter_linear7 = false
 scale_type7 = source
 scale7 = 1.0
+alias7 = CB_Output
 
-shader8 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass3.slang
+shader8 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass4.slang
 filter_linear8 = false
 scale_type8 = source
 scale8 = 1.0
-alias8 = CB_Output
 
-shader9 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass4.slang
+shader9 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass5.slang
 filter_linear9 = false
-scale_type9 = source
-scale9 = 1.0
 
-shader10 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass5.slang
-filter_linear10 = false
+shader10 = ../../../shaders/dedither/dedither-gamma-prep-2-after.slang
 
-shader11 = ../../../shaders/dedither/dedither-gamma-prep-2-after.slang
+shader11 = ../../../shaders/ps1dither/hsm-PS1-Undither-BoxBlur.slang
 
-shader12 = ../../../shaders/ps1dither/hsm-PS1-Undither-BoxBlur.slang
+shader12 = ../../../shaders/fxaa/fxaa.slang
+float_framebuffer12 = "true"
 
-shader13 = ../../../shaders/fxaa/fxaa.slang
-float_framebuffer13 = "true"
+shader13 = ../../../shaders/guest/extras/hsm-g-sharp_resampler.slang
 
-shader14 = ../../../shaders/guest/extras/hsm-g-sharp_resampler.slang
+shader14 = ../../../shaders/guest/extras/hsm-sharpsmoother.slang
+alias14 = "DeditherPass"
 
-shader15 = ../../../shaders/guest/extras/hsm-sharpsmoother.slang
-alias15 = "DeditherPass"
+shader15 = ../../../shaders/base/intro.slang
+filter_linear15 = false
+float_framebuffer15 = true
+scale_type15 = source
+scale15 = 1.0
+alias15 = "IntroPass"
 
 shader16 = ../../../shaders/base/stock.slang
 alias16 = "PreCRTPass"

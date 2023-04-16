@@ -1,6 +1,5 @@
-#reference "Components/chain__00__add-params__all.slangp"
 #reference "Components/chain__01__downrez__viewport.slangp"
-#reference "Components/composition__10__cache-and-intro__std.slangp"
+#reference "Components/composition__10__cache__std.slangp"
 #reference "Components/composition__40__dedithering__std.slangp"
 #reference "Components/composition__60__pre-crt-prep__std.slangp"
 #reference "Components/chain__60__crt__gdvmini.slangp"

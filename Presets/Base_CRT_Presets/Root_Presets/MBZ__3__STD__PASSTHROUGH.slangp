@@ -1,237 +1,154 @@
-shaders = 32
+shaders = 20
 
-shader0 = ../../../shaders/base/add-params-all.slang
-alias0 = "CorePass"
+shader0 = ../../../shaders/guest/extras/hsm-drez-none.slang
+filter_linear0 = false
+srgb_framebuffer0 = true
+scale_type0 = source
+scale_x0 = 1
+scale_y0 = 1
+alias0 = "DerezedPass"
 
-shader1 =  ../../../shaders/base/stock.slang
+shader1 = ../../../shaders/base/cache-info-all-params.slang
 filter_linear1 = false
-srgb_framebuffer1 = true
 scale_type1 = source
-scale_x1 = 1
-scale_y1 = 1
-alias1 = "DerezedPass"
+scale1 = 1.0
+alias1 = "InfoCachePass"
 
-shader2 = ../../../shaders/base/cache-info-all-params.slang
+shader2 = ../../../shaders/base/text-std.slang
 filter_linear2 = false
+float_framebuffer2 = true
 scale_type2 = source
 scale2 = 1.0
-alias2 = "InfoCachePass"
+alias2 = "TextPass"
 
-shader3 = ../../../shaders/base/text-std.slang
+shader3 = ../../../shaders/guest/extras/hsm-fetch-drez-output.slang
 filter_linear3 = false
-float_framebuffer3 = true
+srgb_framebuffer3 = true
 scale_type3 = source
-scale3 = 1.0
-alias3 = "TextPass"
+scale_x3 = 1
+scale_y3 = 1
 
-shader4 = ../../../shaders/base/intro.slang
-filter_linear4 = false
-float_framebuffer4 = true
-scale_type4 = source
-scale4 = 1.0
-alias4 = "IntroPass"
+shader4 = ../../../shaders/fxaa/fxaa.slang
+float_framebuffer4 = "true"
+alias4 = "DeditherPass"
 
-shader5 = ../../../shaders/fxaa/fxaa.slang
-float_framebuffer5 = "true"
-alias5 = "DeditherPass"
-
-# GTU TV Processing
-shader6 = ../../../shaders/gtu/hsm-gtu-pass1.slang
-scale_type6 = source
-scale6 = 1.0
-float_framebuffer6 = true
-
-shader7 = ../../../shaders/gtu/hsm-gtu-pass2.slang
-scale_type_x7 = source
-scale_x7 = 1.0
-scale_type_y7 = source
-scale_y7 = 1.0
-filter_linear7 = false
-float_framebuffer7 = true
-
-shader8 = ../../../shaders/base/stock.slang
-alias8 = "PreCRTPass"
-
-shader9 = ../../../shaders/guest/hsm-afterglow0.slang
-filter_linear9 = true
-scale_type9 = source
-scale9 = 1.0
-alias9 = "AfterglowPass"
-
-shader10 = ../../../shaders/guest/hsm-pre-shaders-afterglow.slang
-filter_linear10 = true
-scale_type10 = source
-mipmap_input10 = true
-scale10 = 1.0
+shader5 = ../../../shaders/base/intro.slang
+filter_linear5 = false
+float_framebuffer5 = true
+scale_type5 = source
+scale5 = 1.0
+alias5 = "IntroPass"
 
 # Color Correction with Dogway's awesome Grade shader
 # Grade is after Afterglow so that brightening the black level does not break the afterglow
-shader11 = ../../../shaders/dogway/hsm-grade.slang
-filter_linear11 = false
-scale_type11 = source
-scale11 = 1.0
-alias11 = "ColorCorrectPass"
+shader6 = ../../../shaders/dogway/hsm-grade.slang
+filter_linear6 = false
+scale_type6 = source
+scale6 = 1.0
+alias6 = "ColorCorrectPass"
 
-shader12 =  ../../../shaders/guest/hsm-custom-fast-sharpen.slang
-filter_linear12 = true
-scale_type12 = source
-scale_x12 = 1.0
-scale_y12 = 1.0
+shader7 =  ../../../shaders/guest/hsm-custom-fast-sharpen.slang
+filter_linear7 = true
+scale_type7 = source
+scale_x7 = 1.0
+scale_y7 = 1.0
 
-shader13 = ../../../shaders/base/stock.slang
-filter_linear13 = true
-scale_type13 = source
-scale_x13 = 1.0
-scale_y13 = 1.0
-alias13 = "PrePass"
-mipmap_input13 = true
+shader8 = ../../../shaders/base/linearize.slang
+filter_linear8 = true
+scale_type8 = source
+scale8 = 1.0
+float_framebuffer8 = true
+alias8 = "LinearizePass"
 
-shader14 = ../../../shaders/guest/hsm-avg-lum.slang
-filter_linear14 = true
-scale_type14 = source
-scale14 = 1.0
-mipmap_input14 = true
-alias14 = "AvgLumPass"
+shader9 = ../../../shaders/guest/extras/hsm-screen-scale-g-sharp_resampler.slang
+filter_linear9 = "false"
+scale_type9 = "viewport"
+scale9 = "1.0"
+float_framebuffer9 = "true"
+alias9 = "CRTPass"
 
-# Pass referenced by subsequent blurring passes and crt pass
-shader15 = ../../../shaders/guest/hsm-interlace-and-linearize.slang
-filter_linear15 = true
-scale_type15 = source
-scale15 = 1.0
-float_framebuffer15 = true
-alias15 = "LinearizePass"
-
-shader16 = ../../../shaders/guest/hsm-gaussian_horizontal.slang
-filter_linear16 = true
-scale_type_x16 = absolute
-scale_x16 = 800.0
-scale_type_y16 = source
-scale_y16 = 1.0 
-float_framebuffer16 = true
-
-shader17 = ../../../shaders/guest/hsm-gaussian_vertical.slang
-filter_linear17 = true
-scale_type_x17 = absolute
-scale_x17 = 800.0
-scale_type_y17 = absolute
-scale_y17 = 600.0
-float_framebuffer17 = true
-alias17 = GlowPass
-
-shader18 = ../../../shaders/guest/hsm-bloom_horizontal.slang
-filter_linear18 = true
-scale_type_x18 = absolute
-scale_x18 = 800.0
-scale_type_y18 = absolute
-scale_y18 = 600.0 
-float_framebuffer18 = true
-
-shader19 = ../../../shaders/guest/hsm-bloom_vertical.slang
-filter_linear19 = true
-scale_type_x19 = source
-scale_x19 = 1.0
-scale_type_y19 = source
-scale_y19 = 1.0
-float_framebuffer19 = true
-alias19 = BloomPass
-
-shader20 = ../../../shaders/guest/hsm-crt-guest-advanced.slang
-filter_linear20 = true
-scale_type20 = viewport
-scale_x20 = 1.0
-scale_y20 = 1.0
-float_framebuffer20 = true
-
-shader21 = ../../../shaders/guest/hsm-deconvergence.slang
-filter_linear21 = true
-scale_type21 = viewport
-scale_x21 = 1.0
-scale_y21 = 1.0
-float_framebuffer21 = true
-alias21 = "CRTPass"
-
-shader22 = ../../../shaders/base/post-crt-prep-image-layers.slang
-mipmap_input22 = true
-scale_type22 = viewport
-float_framebuffer22 = true
-alias22 = "PostCRTPass"
+shader10 = ../../../shaders/base/post-crt-prep-image-layers.slang
+mipmap_input10 = true
+scale_type10 = viewport
+float_framebuffer10 = true
+alias10 = "PostCRTPass"
 
 # Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 
-shader23 = ../../../shaders/base/bezel-images-under-crt.slang
-filter_linear23 = true
-scale_type23 = viewport
-float_framebuffer23 = true
-alias23 = "BR_LayersUnderCRTPass"
+shader11 = ../../../shaders/base/bezel-images-under-crt.slang
+filter_linear11 = true
+scale_type11 = viewport
+float_framebuffer11 = true
+alias11 = "BR_LayersUnderCRTPass"
 
-shader24 = ../../../shaders/base/bezel-images-over-crt.slang
-filter_linear24 = true
-scale_type24 = viewport
-float_framebuffer24 = true
-alias24 = "BR_LayersOverCRTPass"
+shader12 = ../../../shaders/base/bezel-images-over-crt.slang
+filter_linear12 = true
+scale_type12 = viewport
+float_framebuffer12 = true
+alias12 = "BR_LayersOverCRTPass"
 
 # Reduce Resolution  ----------------------------------------------------------------
 #      Reduce the resolution to a small static size regardless of final resolution
 #      Allows consistent look and faster at different final resolutions for blur
 #      Mipmap option allows downscaling without artifacts
-shader25 = ../../../shaders/base/linearize-crt.slang
-mipmap_input25 = true
-filter_linear25 = true
-scale_type25 = absolute
-# scale_x25 = 480
-# scale_y25 = 270
-# scale_x25 = 960
-# scale_y25 = 540
-scale_x25 = 800
-scale_y25 = 600
-float_framebuffer25 = true
-alias25 = "BR_MirrorLowResPass"
+shader13 = ../../../shaders/base/linearize-crt.slang
+mipmap_input13 = true
+filter_linear13 = true
+scale_type13 = absolute
+# scale_x13 = 480
+# scale_y13 = 270
+# scale_x13 = 960
+# scale_y13 = 540
+scale_x13 = 800
+scale_y13 = 600
+float_framebuffer13 = true
+alias13 = "BR_MirrorLowResPass"
 
 # Add Blur for the Reflection (Horizontal) ----------------------------------------------------------------
-shader26 = ../../../shaders/base/blur-outside-screen-horiz.slang
-mipmap_input26 = true
-filter_linear26 = true
-float_framebuffer26 = true
+shader14 = ../../../shaders/base/blur-outside-screen-horiz.slang
+mipmap_input14 = true
+filter_linear14 = true
+float_framebuffer14 = true
 
 # Add Blur for the Reflection (Vertical) ----------------------------------------------------------------
-shader27 = ../../../shaders/base/blur-outside-screen-vert.slang
-filter_linear27 = true
-float_framebuffer27 = true
-alias27 = "BR_MirrorBlurredPass"
+shader15 = ../../../shaders/base/blur-outside-screen-vert.slang
+filter_linear15 = true
+float_framebuffer15 = true
+alias15 = "BR_MirrorBlurredPass"
 
 # Reduce resolution ----------------------------------------------------------------
 # Reduced to a very small amount so we can create a blur which will create a glow from the screen
 #      Mipmap option allows smoother downscaling
-shader28 = ../../../../../blurs/shaders/royale/blur9x9.slang
-mipmap_input28 = true
-filter_linear28 = true
-scale_type28 = absolute
-scale_x28 = 128
-scale_y28 = 128
-float_framebuffer28 = true
-alias28 = "BR_MirrorReflectionDiffusedPass"
+shader16 = ../../../../../blurs/shaders/royale/blur9x9.slang
+mipmap_input16 = true
+filter_linear16 = true
+scale_type16 = absolute
+scale_x16 = 128
+scale_y16 = 128
+float_framebuffer16 = true
+alias16 = "BR_MirrorReflectionDiffusedPass"
 
 # Add Diffused glow all around the screen ----------------------------------------------------------------
 #      Blurred so much that it's non directional
 #      Mipmap option allows downscaling without artifacts
-shader29 = ../../../../../blurs/shaders/royale/blur9x9.slang
-mipmap_input29 = true
-filter_linear29 = true
-scale_type29 = absolute
-scale_x29 = 12
-scale_y29 = 12
-float_framebuffer29 = true
-alias29 = "BR_MirrorFullscreenGlowPass"
+shader17 = ../../../../../blurs/shaders/royale/blur9x9.slang
+mipmap_input17 = true
+filter_linear17 = true
+scale_type17 = absolute
+scale_x17 = 12
+scale_y17 = 12
+float_framebuffer17 = true
+alias17 = "BR_MirrorFullscreenGlowPass"
 
 # Bezel Reflection ----------------------------------------------------------------
-shader30 = ../../../shaders/base/reflection.slang
-scale_type30 = viewport
-alias30 = "ReflectionPass"
+shader18 = ../../../shaders/base/reflection.slang
+scale_type18 = viewport
+alias18 = "ReflectionPass"
 
 # Combine Passes ----------------------------------------------------------------
-shader31 = ../../../shaders/base/combine-passes.slang
-scale_type31 = viewport
-alias31 = "CombinePass"
+shader19 = ../../../shaders/base/combine-passes.slang
+scale_type19 = viewport
+alias19 = "CombinePass"
 
 # Textures All
 # Define textures to be used by the different passes

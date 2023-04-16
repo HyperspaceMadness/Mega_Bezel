@@ -1,6 +1,5 @@
-#reference "Components/chain__00__add-params__glass.slangp"
 #reference "Components/chain__01__downrez__none.slangp"
-#reference "Components/composition__10__cache-and-intro__adv-glass.slangp"
+#reference "Components/composition__10__cache__adv-glass.slangp"
 #reference "Components/composition__40__dedithering__adv.slangp"
 #reference "Components/composition__60__pre-crt-prep-ntsc.slangp"
 #reference "Components/chain__60__crt__gdv-ntsc.slangp"

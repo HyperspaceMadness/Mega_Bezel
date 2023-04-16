@@ -1,7 +1,7 @@
 shaders = 20
 
 shader0 = ../../shaders/base/add-params-potato.slang
-alias0 = "CorePass"
+alias0 = "Original"
 
 shader1 =  ../../../../stock.slang
 filter_linear1 = false

@@ -69,7 +69,7 @@ layout(location = 0) out vec4 FragColor;
 
 // Pass Framebuffer Textures
 layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
-layout(set = 0, binding = 2) uniform sampler2D CorePass;
+layout(set = 0, binding = 2) uniform sampler2D Original;
 layout(set = 0, binding = 3) uniform sampler2D DerezedPass;
 layout(set = 0, binding = 4) uniform sampler2D DeditherPass;
 layout(set = 0, binding = 5) uniform sampler2D ColorCorrectPass;
@@ -158,7 +158,7 @@ void main()
 
 		// CORE
 		if (HSM_SHOW_PASS_INDEX == 8)
-			FragColor = texture(CorePass, coord_for_raw_passes);
+			FragColor = texture(Original, coord_for_raw_passes);
 
 		// LAYERS TOP
 		if (HSM_SHOW_PASS_INDEX == 9)

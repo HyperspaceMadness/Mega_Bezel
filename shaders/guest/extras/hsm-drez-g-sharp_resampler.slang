@@ -23,6 +23,8 @@
    
 */ 
 
+#include "../../base/common/globals-and-screen-scale-params.inc"
+
 layout(push_constant) uniform Push
 {
 	vec4 SourceSize;
@@ -63,10 +65,6 @@ layout(push_constant) uniform Push
 #pragma parameter HSM_DREZ_HAR 			"          Anti-Ringing" 0.5 0.0 1.0 0.10
 #define HSM_DREZ_HAR params.HSM_DREZ_HAR
 
-layout(std140, set = 0, binding = 0) uniform UBO
-{
-	mat4 MVP;
-} global;
 
 #pragma stage vertex
 layout(location = 0) in vec4 Position;
@@ -82,11 +80,12 @@ void main()
 #pragma stage fragment
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
-layout(set = 0, binding = 2) uniform sampler2D Source;
+layout(set = 0, binding = 2) uniform sampler2D Original;
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
-#define SourceSize params.SourceSize
+#define SourceSize params.OriginalSize
 #define OutputSize params.OutputSize
+#define Source Original
 
 float invsqrsigma_h = 1.0/(2.0*HSM_DREZ_SIGMA_HV*HSM_DREZ_SIGMA_HV);
 

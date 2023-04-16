@@ -1,39 +1,43 @@
 shaders = 14
 
-shader0 = ../../../shaders/base/add-params-no-reflect.slang
-alias0 = "CorePass"
+shader0 = ../../../shaders/guest/extras/hsm-drez-none.slang
+filter_linear0 = false
+srgb_framebuffer0 = true
+scale_type0 = source
+scale_x0 = 1
+scale_y0 = 1
+alias0 = "DerezedPass"
 
-shader1 =  ../../../shaders/base/stock.slang
+shader1 = ../../../shaders/base/cache-info-no-reflect-params.slang
 filter_linear1 = false
-srgb_framebuffer1 = true
 scale_type1 = source
-scale_x1 = 1
-scale_y1 = 1
-alias1 = "DerezedPass"
+scale1 = 1.0
+alias1 = "InfoCachePass"
 
-shader2 = ../../../shaders/base/cache-info-no-reflect-params.slang
+shader2 = ../../../shaders/base/text-std-no-reflect.slang
 filter_linear2 = false
+float_framebuffer2 = true
 scale_type2 = source
 scale2 = 1.0
-alias2 = "InfoCachePass"
+alias2 = "TextPass"
 
-shader3 = ../../../shaders/base/text-std-no-reflect.slang
+shader3 = ../../../shaders/guest/extras/hsm-fetch-drez-output.slang
 filter_linear3 = false
-float_framebuffer3 = true
+srgb_framebuffer3 = true
 scale_type3 = source
-scale3 = 1.0
-alias3 = "TextPass"
+scale_x3 = 1
+scale_y3 = 1
 
-shader4 = ../../../shaders/base/intro.slang
-filter_linear4 = false
-float_framebuffer4 = true
-scale_type4 = source
-scale4 = 1.0
-alias4 = "IntroPass"
+shader4 = ../../../shaders/fxaa/fxaa.slang
+float_framebuffer4 = "true"
+alias4 = "DeditherPass"
 
-shader5 = ../../../shaders/fxaa/fxaa.slang
-float_framebuffer5 = "true"
-alias5 = "DeditherPass"
+shader5 = ../../../shaders/base/intro.slang
+filter_linear5 = false
+float_framebuffer5 = true
+scale_type5 = source
+scale5 = 1.0
+alias5 = "IntroPass"
 
 # Color Correction with Dogway's awesome Grade shader
 # Grade is after Afterglow so that brightening the black level does not break the afterglow

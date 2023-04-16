@@ -1227,7 +1227,7 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	sample_2d_range = HSM_GetCacheSampleRange(2, 3);
 	if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
 	{
-		out_color.rg = global.CorePassSize.xy;
+		out_color.rg = global.OriginalSize.xy;
 		out_color.ba = HSM_GetRotatedCoreOriginalSize();
 	}
 

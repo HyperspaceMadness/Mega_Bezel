@@ -1,161 +1,165 @@
 shaders = 48
 
-shader0 = ../../../shaders/base/add-params-glass.slang
-alias0 = "CorePass"
+shader0 = ../../../shaders/guest/extras/hsm-drez-none.slang
+filter_linear0 = false
+srgb_framebuffer0 = true
+scale_type0 = source
+scale_x0 = 1
+scale_y0 = 1
+alias0 = "DerezedPass"
 
-shader1 =  ../../../shaders/base/stock.slang
+shader1 = ../../../shaders/base/cache-info-glass-params.slang
 filter_linear1 = false
-srgb_framebuffer1 = true
 scale_type1 = source
-scale_x1 = 1
-scale_y1 = 1
-alias1 = "DerezedPass"
+scale1 = 1.0
+alias1 = "InfoCachePass"
 
-shader2 = ../../../shaders/base/cache-info-screen-scale-params.slang
+shader2 = ../../../shaders/base/text-adv-glass.slang
 filter_linear2 = false
+float_framebuffer2 = true
 scale_type2 = source
 scale2 = 1.0
-alias2 = "InfoCachePass"
+alias2 = "TextPass"
 
-shader3 = ../../../shaders/base/text-adv-glass.slang
+shader3 = ../../../shaders/guest/extras/hsm-fetch-drez-output.slang
 filter_linear3 = false
-float_framebuffer3 = true
+srgb_framebuffer3 = true
 scale_type3 = source
-scale3 = 1.0
-alias3 = "TextPass"
+scale_x3 = 1
+scale_y3 = 1
 
-shader4 = ../../../shaders/base/intro.slang
-filter_linear4 = false
-float_framebuffer4 = true
-scale_type4 = source
-scale4 = 1.0
-alias4 = "IntroPass"
+shader4 = ../../../shaders/dedither/dedither-gamma-prep-1-before.slang
+alias4 = LinearGamma
 
-shader5 = ../../../shaders/dedither/dedither-gamma-prep-1-before.slang
-alias5 = LinearGamma
+shader5 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass1.slang
+filter_linear5 = false
+scale_type5 = source
+scale5 = 1.0
 
-shader6 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass1.slang
+shader6 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass2.slang
 filter_linear6 = false
 scale_type6 = source
 scale6 = 1.0
 
-shader7 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass2.slang
+shader7 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass3.slang
 filter_linear7 = false
 scale_type7 = source
 scale7 = 1.0
+alias7 = CB_Output
 
-shader8 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass3.slang
+shader8 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass4.slang
 filter_linear8 = false
 scale_type8 = source
 scale8 = 1.0
-alias8 = CB_Output
 
-shader9 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass4.slang
+shader9 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass5.slang
 filter_linear9 = false
-scale_type9 = source
-scale9 = 1.0
 
-shader10 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass5.slang
-filter_linear10 = false
+shader10 = ../../../shaders/dedither/dedither-gamma-prep-2-after.slang
 
-shader11 = ../../../shaders/dedither/dedither-gamma-prep-2-after.slang
+shader11 = ../../../shaders/ps1dither/hsm-PS1-Undither-BoxBlur.slang
 
-shader12 = ../../../shaders/ps1dither/hsm-PS1-Undither-BoxBlur.slang
+shader12 = ../../../shaders/fxaa/fxaa.slang
+float_framebuffer12 = "true"
 
-shader13 = ../../../shaders/fxaa/fxaa.slang
-float_framebuffer13 = "true"
+shader13 = ../../../shaders/guest/extras/hsm-g-sharp_resampler.slang
 
-shader14 = ../../../shaders/guest/extras/hsm-g-sharp_resampler.slang
-
-shader15 = ../../../shaders/guest/extras/hsm-sharpsmoother.slang
-alias15 = "DeditherPass"
+shader14 = ../../../shaders/guest/extras/hsm-sharpsmoother.slang
+alias14 = "DeditherPass"
 
 # GTU TV Processing
-shader16 = ../../../shaders/gtu/hsm-gtu-pass1.slang
-scale_type16 = source
-scale16 = 1.0
+shader15 = ../../../shaders/gtu/hsm-gtu-pass1.slang
+scale_type15 = source
+scale15 = 1.0
+float_framebuffer15 = true
+
+shader16 = ../../../shaders/gtu/hsm-gtu-pass2.slang
+scale_type_x16 = source
+scale_x16 = 1.0
+scale_type_y16 = source
+scale_y16 = 1.0
+filter_linear16 = false
 float_framebuffer16 = true
 
-shader17 = ../../../shaders/gtu/hsm-gtu-pass2.slang
-scale_type_x17 = source
-scale_x17 = 1.0
-scale_type_y17 = source
-scale_y17 = 1.0
-filter_linear17 = false
-float_framebuffer17 = true
+shader17 = "../../../../../reshade/shaders/bloom/BloomPass0.slang"
+filter_linear17 = "true"
+wrap_mode17 = "clamp_to_border"
+mipmap_input17 = "false"
+alias17 = "SamplerBloom1"
+srgb_framebuffer17 = "false"
+scale_type_x17 = "source"
+scale_x17 = "4.000000"
+scale_type_y17 = "source"
+scale_y17 = "4.000000"
+float_framebuffer17 = "true"
 
-shader18 = "../../../../../reshade/shaders/bloom/BloomPass0.slang"
+shader18 = "../../../../../reshade/shaders/bloom/BloomPass1.slang"
 filter_linear18 = "true"
 wrap_mode18 = "clamp_to_border"
 mipmap_input18 = "false"
-alias18 = "SamplerBloom1"
+alias18 = "SamplerBloom2"
 srgb_framebuffer18 = "false"
-scale_type_x18 = "source"
-scale_x18 = "4.000000"
-scale_type_y18 = "source"
-scale_y18 = "4.000000"
 float_framebuffer18 = "true"
 
-shader19 = "../../../../../reshade/shaders/bloom/BloomPass1.slang"
+shader19 = "../../../../../reshade/shaders/bloom/BloomPass2.slang"
 filter_linear19 = "true"
 wrap_mode19 = "clamp_to_border"
 mipmap_input19 = "false"
-alias19 = "SamplerBloom2"
-srgb_framebuffer19 = "false"
+alias19 = "SamplerBloom3"
 float_framebuffer19 = "true"
 
-shader20 = "../../../../../reshade/shaders/bloom/BloomPass2.slang"
+shader20 = "../../../../../reshade/shaders/bloom/BloomPass3.slang"
 filter_linear20 = "true"
 wrap_mode20 = "clamp_to_border"
 mipmap_input20 = "false"
-alias20 = "SamplerBloom3"
+alias20 = "SamplerBloom4"
 float_framebuffer20 = "true"
 
-shader21 = "../../../../../reshade/shaders/bloom/BloomPass3.slang"
+shader21 = "../../../../../reshade/shaders/bloom/BloomPass4.slang"
 filter_linear21 = "true"
 wrap_mode21 = "clamp_to_border"
 mipmap_input21 = "false"
-alias21 = "SamplerBloom4"
+alias21 = "SamplerBloom5"
 float_framebuffer21 = "true"
 
-shader22 = "../../../../../reshade/shaders/bloom/BloomPass4.slang"
+shader22 = "../../../../../reshade/shaders/bloom/LensFlarePass0.slang"
 filter_linear22 = "true"
 wrap_mode22 = "clamp_to_border"
 mipmap_input22 = "false"
-alias22 = "SamplerBloom5"
+alias22 = "LensFlare1"
 float_framebuffer22 = "true"
 
-shader23 = "../../../../../reshade/shaders/bloom/LensFlarePass0.slang"
+shader23 = "../../../../../reshade/shaders/bloom/LensFlarePass1.slang"
 filter_linear23 = "true"
 wrap_mode23 = "clamp_to_border"
 mipmap_input23 = "false"
-alias23 = "LensFlare1"
+alias23 = "LensFlare2"
 float_framebuffer23 = "true"
 
-shader24 = "../../../../../reshade/shaders/bloom/LensFlarePass1.slang"
+shader24 = "../../../../../reshade/shaders/bloom/LensFlarePass2.slang"
 filter_linear24 = "true"
 wrap_mode24 = "clamp_to_border"
 mipmap_input24 = "false"
-alias24 = "LensFlare2"
+alias24 = "LensFlare3"
 float_framebuffer24 = "true"
 
-shader25 = "../../../../../reshade/shaders/bloom/LensFlarePass2.slang"
+shader25 = "../../../../../reshade/shaders/bloom/LightingCombine.slang"
 filter_linear25 = "true"
 wrap_mode25 = "clamp_to_border"
 mipmap_input25 = "false"
-alias25 = "LensFlare3"
+alias25 = ""
+scale_type_x25 = "source"
+scale_x25 = "0.250000"
+scale_type_y25 = "source"
+scale_y25 = "0.250000"
 float_framebuffer25 = "true"
 
-shader26 = "../../../../../reshade/shaders/bloom/LightingCombine.slang"
-filter_linear26 = "true"
-wrap_mode26 = "clamp_to_border"
-mipmap_input26 = "false"
-alias26 = ""
-scale_type_x26 = "source"
-scale_x26 = "0.250000"
-scale_type_y26 = "source"
-scale_y26 = "0.250000"
-float_framebuffer26 = "true"
+shader26 = ../../../shaders/base/intro.slang
+filter_linear26 = false
+float_framebuffer26 = true
+scale_type26 = source
+scale26 = 1.0
+alias26 = "IntroPass"
 
 shader27 = ../../../shaders/base/stock.slang
 alias27 = "PreCRTPass"

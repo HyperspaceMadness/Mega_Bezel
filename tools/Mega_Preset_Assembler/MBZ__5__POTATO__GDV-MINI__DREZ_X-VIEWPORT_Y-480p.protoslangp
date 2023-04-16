@@ -1,6 +1,5 @@
-#reference "Components/chain__00__add-params__potato.slangp"
 #reference "Components/chain__01__downrez__x-viewport-scale_y-480p.slangp"
-#reference "Components/composition__10__cache-and-intro__potato.slangp"
+#reference "Components/composition__10__cache__potato.slangp"
 #reference "Components/composition__60__pre-crt-prep__potato.slangp"
 #reference "Components/chain__60__crt__gdvmini__potato.slangp"
 #reference "Components/chain__68__post-crt__potato.slangp"

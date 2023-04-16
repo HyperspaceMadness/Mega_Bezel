@@ -1,128 +1,118 @@
-shaders = 18
+shaders = 16
 
-shader0 = ../../../shaders/base/add-params-potato.slang
-alias0 = "CorePass"
+shader0 = ../../../shaders/guest/extras/hsm-drez-none.slang
+filter_linear0 = false
+srgb_framebuffer0 = true
+scale_type0 = source
+scale_x0 = 1
+scale_y0 = 1
+alias0 = "DerezedPass"
 
-shader1 =  ../../../shaders/base/stock.slang
+shader1 = ../../../shaders/base/cache-info-potato-params.slang
 filter_linear1 = false
-srgb_framebuffer1 = true
 scale_type1 = source
-scale_x1 = 1
-scale_y1 = 1
-alias1 = "DerezedPass"
+scale1 = 1.0
+alias1 = "InfoCachePass"
 
-shader2 = ../../../shaders/base/cache-info-screen-scale-params.slang
+shader2 = ../../../shaders/guest/extras/hsm-fetch-drez-output.slang
 filter_linear2 = false
+srgb_framebuffer2 = true
 scale_type2 = source
-scale2 = 1.0
-alias2 = "InfoCachePass"
-
-shader3 = ../../../shaders/base/text-potato.slang
-filter_linear3 = false
-float_framebuffer3 = true
-scale_type3 = source
-scale3 = 1.0
-alias3 = "TextPass"
-
-shader4 = ../../../shaders/base/intro-potato.slang
-filter_linear4 = false
-float_framebuffer4 = true
-scale_type4 = source
-scale4 = 1.0
-alias4 = "IntroPass"
+scale_x2 = 1
+scale_y2 = 1
 
 # Color Correction with Dogway's awesome Grade shader
 # Grade is after Afterglow so that brightening the black level does not break the afterglow
-shader5 = ../../../shaders/dogway/hsm-grade.slang
+shader3 = ../../../shaders/dogway/hsm-grade.slang
+filter_linear3 = false
+scale_type3 = source
+scale3 = 1.0
+alias3 = "ColorCorrectPass"
+
+shader4 = ../../../shaders/base/stock.slang
+alias4 = "PrePass0"
+
+shader5 = ../../../shaders/guest/ntsc/hsm-ntsc-pass1.slang
 filter_linear5 = false
-scale_type5 = source
-scale5 = 1.0
-alias5 = "ColorCorrectPass"
+float_framebuffer5 = true
+scale_type_x5 = source
+scale_type_y5 = source
+scale_x5 = 4.0
+scale_y5 = 1.0
+frame_count_mod5 = 2
+alias5 = NPass1
 
-shader6 = ../../../shaders/base/stock.slang
-alias6 = "PrePass0"
+shader6 = ../../../shaders/guest/ntsc/hsm-ntsc-pass2.slang
+float_framebuffer6 = true
+filter_linear6 = true
+scale_type6 = source
+scale_x6 = 0.5
+scale_y6 = 1.0
 
-shader7 = ../../../shaders/guest/ntsc/hsm-ntsc-pass1.slang
-filter_linear7 = false
-float_framebuffer7 = true
-scale_type_x7 = source
-scale_type_y7 = source
-scale_x7 = 4.0
+shader7 = ../../../shaders/guest/ntsc/hsm-ntsc-pass3.slang
+filter_linear7 = true
+scale_type7 = source
+scale_x7 = 1.0
 scale_y7 = 1.0
-frame_count_mod7 = 2
-alias7 = NPass1
 
-shader8 = ../../../shaders/guest/ntsc/hsm-ntsc-pass2.slang
+shader8 = ../../../shaders/base/stock.slang
 float_framebuffer8 = true
-filter_linear8 = true
-scale_type8 = source
-scale_x8 = 0.5
-scale_y8 = 1.0
+alias8 = "PrePass"
 
-shader9 = ../../../shaders/guest/ntsc/hsm-ntsc-pass3.slang
+shader9 = ../../../shaders/guest/hsm-avg-lum.slang
 filter_linear9 = true
 scale_type9 = source
-scale_x9 = 1.0
-scale_y9 = 1.0
-
-shader10 = ../../../shaders/base/stock.slang
-float_framebuffer10 = true
-alias10 = "PrePass"
-
-shader11 = ../../../shaders/guest/hsm-avg-lum.slang
-filter_linear11 = true
-scale_type11 = source
-scale11 = 1.0
-mipmap_input11 = true
-float_framebuffer11 = true
-alias11 = "AvgLumPass"
+scale9 = 1.0
+mipmap_input9 = true
+float_framebuffer9 = true
+alias9 = "AvgLumPass"
 
 # Pass referenced by subsequent blurring passes and crt pass
-shader12 = ../../../shaders/guest/hsm-interlace.slang
-filter_linear12 = true
-scale_type12 = source
-scale12 = 1.0
-float_framebuffer12 = true
-alias12 = "LinearizePass"
+shader10 = ../../../shaders/guest/hsm-interlace.slang
+filter_linear10 = true
+scale_type10 = source
+scale10 = 1.0
+float_framebuffer10 = true
+alias10 = "LinearizePass"
 feedback_pass = "0"
 
 # Sony Megatron Colour Video Monitor by Major Pain The Cactus
-shader13 = "../../../shaders/megatron/crt-sony-megatron-source-pass.slang"
+shader11 = "../../../shaders/megatron/crt-sony-megatron-source-pass.slang"
+filter_linear11 = "false"
+scale_type11 = "source"
+scale11 = "1.0"
+wrap_mode11 = "clamp_to_border"
+mipmap_input11 = "false"
+alias11 = "SourceSDR"
+float_framebuffer11 = "true"
+
+shader12 = "../../../shaders/megatron/crt-sony-megatron-hdr-pass.slang"
+filter_linear12 = "false"
+scale_type12 = "source"
+scale12 = "1.0"
+wrap_mode12 = "clamp_to_border"
+mipmap_input12 = "false"
+alias12 = "SourceHDR"
+float_framebuffer12 = "true"
+
+shader13 = "../../../shaders/megatron/crt-sony-megatron-potato.slang"
 filter_linear13 = "false"
-scale_type13 = "source"
-scale13 = "1.0"
 wrap_mode13 = "clamp_to_border"
 mipmap_input13 = "false"
-alias13 = "SourceSDR"
+scale_type13 = "viewport"
 float_framebuffer13 = "true"
+alias13 = "CRTPass"
 
-shader14 = "../../../shaders/megatron/crt-sony-megatron-hdr-pass.slang"
-filter_linear14 = "false"
-scale_type14 = "source"
-scale14 = "1.0"
-wrap_mode14 = "clamp_to_border"
-mipmap_input14 = "false"
-alias14 = "SourceHDR"
-float_framebuffer14 = "true"
-
-shader15 = "../../../shaders/megatron/crt-sony-megatron-potato.slang"
-filter_linear15 = "false"
-wrap_mode15 = "clamp_to_border"
-mipmap_input15 = "false"
-scale_type15 = "viewport"
-float_framebuffer15 = "true"
-alias15 = "CRTPass"
-
-shader16 = ../../../shaders/base/post-crt-prep-potato-megatron.slang
-mipmap_input16 = true
-scale_type16 = viewport
-float_framebuffer16 = true
-alias16 = "PostCRTPass"
+shader14 = ../../../shaders/base/post-crt-prep-potato-megatron.slang
+mipmap_input14 = true
+scale_type14 = viewport
+float_framebuffer14 = true
+alias14 = "PostCRTPass"
 
 # Combine Passes ----------------------------------------------------------------
-shader17 = ../../../shaders/base/output-hdr.slang
-scale_type17 = viewport
-alias17 = "OutputPass"
+shader15 = ../../../shaders/base/output-hdr.slang
+scale_type15 = viewport
+alias15 = "OutputPass"
 
 # Textures Potato
 # Define textures to be used by the different passes

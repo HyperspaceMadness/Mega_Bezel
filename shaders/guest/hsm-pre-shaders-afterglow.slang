@@ -75,7 +75,9 @@ layout(push_constant) uniform Push
 
 #pragma parameter contr          "          Contrast Adjustment" 0.0 -2.0 2.0 0.05
 
-#pragma parameter sega_fix       "          Sega Brightness Fix" 0.0 0.0 1.0 1.0
+// #pragma parameter sega_fix       "          Sega Brightness Fix" 0.0 0.0 1.0 1.0
+// #define SEGA_FIX params.sega_fix
+#define SEGA_FIX 0
 
 #pragma parameter BP             "          Raise Black Level" 0.0 -100.0 25.0 1.0
 
@@ -258,7 +260,7 @@ void main()
    float bp = w * BP/255.0;
    
    // Retro Sega Systems: Genesis, 32x, CD and Saturn 2D had color palettes designed in TV levels to save on transformations.
-   if (params.sega_fix > 0.5) imgColor.rgb = imgColor.rgb * (255.0 / 239.0);
+   if (SEGA_FIX > 0.5) imgColor.rgb = imgColor.rgb * (255.0 / 239.0);
    
    imgColor.rgb = min(imgColor.rgb, 1.0);
    

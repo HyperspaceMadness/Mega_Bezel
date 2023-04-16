@@ -1,91 +1,100 @@
 shaders = 48
 
-shader0 = ../../../shaders/base/add-params-all.slang
-alias0 = "CorePass"
+shader0 = ../../../shaders/guest/extras/hsm-drez-none.slang
+filter_linear0 = false
+srgb_framebuffer0 = true
+scale_type0 = source
+scale_x0 = 1
+scale_y0 = 1
+alias0 = "DerezedPass"
 
-shader1 =  ../../../shaders/base/stock.slang
+shader1 = ../../../shaders/base/cache-info-all-params.slang
 filter_linear1 = false
-srgb_framebuffer1 = true
 scale_type1 = source
-scale_x1 = 1
-scale_y1 = 1
-alias1 = "DerezedPass"
+scale1 = 1.0
+alias1 = "InfoCachePass"
 
-shader2 = ../../../shaders/base/cache-info-all-params.slang
+shader2 = ../../../shaders/base/text-adv.slang
 filter_linear2 = false
+float_framebuffer2 = true
 scale_type2 = source
 scale2 = 1.0
-alias2 = "InfoCachePass"
+alias2 = "TextPass"
 
-shader3 = ../../../shaders/base/text-adv.slang
+shader3 = ../../../shaders/guest/extras/hsm-fetch-drez-output.slang
 filter_linear3 = false
-float_framebuffer3 = true
+srgb_framebuffer3 = true
 scale_type3 = source
-scale3 = 1.0
-alias3 = "TextPass"
+scale_x3 = 1
+scale_y3 = 1
 
-shader4 = ../../../shaders/base/intro.slang
-filter_linear4 = false
-float_framebuffer4 = true
-scale_type4 = source
-scale4 = 1.0
-alias4 = "IntroPass"
+shader4 = ../../../shaders/dedither/dedither-gamma-prep-1-before.slang
+alias4 = LinearGamma
 
-shader5 = ../../../shaders/dedither/dedither-gamma-prep-1-before.slang
-alias5 = LinearGamma
+shader5 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass1.slang
+filter_linear5 = false
+scale_type5 = source
+scale5 = 1.0
 
-shader6 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass1.slang
+shader6 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass2.slang
 filter_linear6 = false
 scale_type6 = source
 scale6 = 1.0
 
-shader7 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass2.slang
+shader7 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass3.slang
 filter_linear7 = false
 scale_type7 = source
 scale7 = 1.0
+alias7 = CB_Output
 
-shader8 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass3.slang
+shader8 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass4.slang
 filter_linear8 = false
 scale_type8 = source
 scale8 = 1.0
-alias8 = CB_Output
 
-shader9 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass4.slang
+shader9 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass5.slang
 filter_linear9 = false
-scale_type9 = source
-scale9 = 1.0
 
-shader10 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass5.slang
-filter_linear10 = false
+shader10 = ../../../shaders/dedither/dedither-gamma-prep-2-after.slang
 
-shader11 = ../../../shaders/dedither/dedither-gamma-prep-2-after.slang
+shader11 = ../../../shaders/ps1dither/hsm-PS1-Undither-BoxBlur.slang
 
-shader12 = ../../../shaders/ps1dither/hsm-PS1-Undither-BoxBlur.slang
+shader12 = ../../../shaders/fxaa/fxaa.slang
+float_framebuffer12 = "true"
 
-shader13 = ../../../shaders/fxaa/fxaa.slang
-float_framebuffer13 = "true"
+shader13 = ../../../shaders/guest/extras/hsm-g-sharp_resampler.slang
 
-shader14 = ../../../shaders/guest/extras/hsm-g-sharp_resampler.slang
+shader14 = ../../../shaders/guest/extras/hsm-sharpsmoother.slang
+alias14 = "DeditherPass"
 
-shader15 = ../../../shaders/guest/extras/hsm-sharpsmoother.slang
-alias15 = "DeditherPass"
+shader15 = ../../../shaders/base/stock.slang
+# filter_linear15 = "false"
+# wrap_mode15 = "clamp_to_border"
+# mipmap_input15 = "false"
+# float_framebuffer15 = "false"
+# srgb_framebuffer15 = "true"
+alias15 = XbrSource
 
-shader16 = ../../../shaders/base/stock.slang
-# filter_linear16 = "false"
-# wrap_mode16 = "clamp_to_border"
-# mipmap_input16 = "false"
-# float_framebuffer16 = "false"
-# srgb_framebuffer16 = "true"
-alias16 = XbrSource
+shader16 = ../../../shaders/hyllian/crt-super-xbr/super-xbr-pass0.slang
+filter_linear16 = "false"
+wrap_mode16 = "clamp_to_border"
+mipmap_input16 = "false"
+float_framebuffer16 = "false"
+srgb_framebuffer16 = "true"
 
-shader17 = ../../../shaders/hyllian/crt-super-xbr/super-xbr-pass0.slang
+shader17 = ../../../shaders/hyllian/crt-super-xbr/super-xbr-pass1.slang
 filter_linear17 = "false"
 wrap_mode17 = "clamp_to_border"
 mipmap_input17 = "false"
+alias17 = ""
 float_framebuffer17 = "false"
 srgb_framebuffer17 = "true"
+scale_type_x17 = "source"
+scale_x17 = "2.000000"
+scale_type_y17 = "source"
+scale_y17 = "2.000000"
 
-shader18 = ../../../shaders/hyllian/crt-super-xbr/super-xbr-pass1.slang
+shader18 = ../../../shaders/hyllian/crt-super-xbr/super-xbr-pass2.slang
 filter_linear18 = "false"
 wrap_mode18 = "clamp_to_border"
 mipmap_input18 = "false"
@@ -93,11 +102,11 @@ alias18 = ""
 float_framebuffer18 = "false"
 srgb_framebuffer18 = "true"
 scale_type_x18 = "source"
-scale_x18 = "2.000000"
+scale_x18 = "1.000000"
 scale_type_y18 = "source"
-scale_y18 = "2.000000"
+scale_y18 = "1.000000"
 
-shader19 = ../../../shaders/hyllian/crt-super-xbr/super-xbr-pass2.slang
+shader19 = ../../../shaders/hyllian/crt-super-xbr/custom-bicubic-X.slang
 filter_linear19 = "false"
 wrap_mode19 = "clamp_to_border"
 mipmap_input19 = "false"
@@ -109,25 +118,20 @@ scale_x19 = "1.000000"
 scale_type_y19 = "source"
 scale_y19 = "1.000000"
 
-shader20 = ../../../shaders/hyllian/crt-super-xbr/custom-bicubic-X.slang
-filter_linear20 = "false"
-wrap_mode20 = "clamp_to_border"
-mipmap_input20 = "false"
-alias20 = ""
-float_framebuffer20 = "false"
-srgb_framebuffer20 = "true"
-scale_type_x20 = "source"
-scale_x20 = "1.000000"
-scale_type_y20 = "source"
-scale_y20 = "1.000000"
+shader20 = ../../../shaders/hyllian/crt-super-xbr/custom-bicubic-y.slang
+filter_linear20 = false
+scale_type_x20 = source
+scale_x20 = 1
+scale_type_y20 = source
+scale_y20 = 0.5
+wrap_mode20 = "clamp_to_edge"
 
-shader21 = ../../../shaders/hyllian/crt-super-xbr/custom-bicubic-y.slang
+shader21 = ../../../shaders/base/intro.slang
 filter_linear21 = false
-scale_type_x21 = source
-scale_x21 = 1
-scale_type_y21 = source
-scale_y21 = 0.5
-wrap_mode21 = "clamp_to_edge"
+float_framebuffer21 = true
+scale_type21 = source
+scale21 = 1.0
+alias21 = "IntroPass"
 
 # GTU TV Processing
 shader22 = ../../../shaders/gtu/hsm-gtu-pass1.slang
