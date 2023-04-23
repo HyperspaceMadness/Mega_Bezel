@@ -27,6 +27,7 @@ Changes:
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Fix edges of tube when Integer scale is used on both axes
   * Use parameters to control Text instead of custom text for each family
     * Get from Cache
   * Implement Original Scaling Mode
