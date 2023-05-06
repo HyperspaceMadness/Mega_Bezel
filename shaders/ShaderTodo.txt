@@ -3,7 +3,8 @@
 Mega Bezel is updated to V1.14.0_2023-04-15
 
 Changes:
-  * 
+  * FXAA is now set to sample linear
+  * Fixed Curvature on Simple Mask Generation
   * Potato Params renamed
     * HSM_POTATO_SHOW_BG_OVER_SCREEN -> HSM_SIMPLEBG_SHOW_BG_OVER_SCREEN
     * HSM_BG_BLEND_MODE -> HSM_SIMPLEBG_BLEND_MODE
@@ -12,23 +13,20 @@ Changes:
     * HSM_CRT_SCREEN_BLEND_MODE -> HSM_SIMPLEBG_CRT_SCREEN_BLEND_MODE
     * HSM_POTATO_COLORIZE_CRT_WITH_BG -> HSM_SIMPLEBG_COLORIZE_CRT_WITH_BG
     * HSM_POTATO_COLORIZE_BRIGHTNESS -> HSM_SIMPLEBG_COLORIZE_BRIGHTNESS
+  * New image used for Glass Highlight
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
-  * Passthrough:
-    * Linear sampling for FXAA?
-    * Set G-Sharp to Editable
-  * Use Composition for post-crt in presets
-  * Use compositions for post-crt + hdr
-  * Use different textures for Glass Preset Highlight
+
+  * No-Reflect TubeFx isn't putting black behind tube
+  * Should put Tube Bg in images? Only add Gel Multiply and Highlight in TubeFx?
+  * Update Grade
   * Use parameter to set reflection bezel size to 0 so we can have fewer variant shader files
   * Fix Bezel & Frame Masks when Curvature is applied
   * Potato-Like BG image for Glass Preset
   * Fix edges of tube when Integer scale is used on both axes
-  * Use parameters to control Text instead of custom text for each family
-    * Get from Cache
   * Add FFW effect to enable on rewind or FFW
   * Implement Original Scaling Mode
   * Check why intro options are not working
@@ -36,7 +34,7 @@ Changes:
   * Check Brightness on Megatron Glass Presets
   * Fix Megatron to not put mask outside screen
   * Can't show Resolution Text in Potato right now
-  * Refleciton
+  * Reflection
     * Investigate "dip" in reflection at the edge of the bezel
     * Check out independent bezel scale and reflection, reflection is not following the Bezel
     * Have layers above Bezel go under reflection?

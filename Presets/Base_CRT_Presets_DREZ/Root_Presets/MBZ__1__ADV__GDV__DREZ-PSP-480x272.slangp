@@ -61,6 +61,7 @@ shader10 = ../../../shaders/dedither/dedither-gamma-prep-2-after.slang
 shader11 = ../../../shaders/ps1dither/hsm-PS1-Undither-BoxBlur.slang
 
 shader12 = ../../../shaders/fxaa/fxaa.slang
+filter_linear12 = "true"
 float_framebuffer12 = "true"
 
 shader13 = ../../../shaders/guest/extras/hsm-g-sharp_resampler.slang

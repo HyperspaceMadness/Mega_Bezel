@@ -29,6 +29,7 @@ scale_x3 = 1
 scale_y3 = 1
 
 shader4 = ../../../shaders/fxaa/fxaa.slang
+filter_linear4 = "true"
 float_framebuffer4 = "true"
 alias4 = "DeditherPass"
 

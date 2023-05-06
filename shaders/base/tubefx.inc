@@ -177,7 +177,7 @@ void main()
 		float vignette_factor_outside_screen = HSM_SCREEN_VIGNETTE_IN_REFLECTION * vignette_factor + (1 - HSM_SCREEN_VIGNETTE_IN_REFLECTION) * 1;
 		vignette_factor = screen_mask * vignette_factor + (1 - screen_mask) * vignette_factor_outside_screen;
 
-		crt_color *= vignette_factor;
+		crt_color.rgb *= vignette_factor;
 	}
 
 #ifdef USE_TUBEFX
