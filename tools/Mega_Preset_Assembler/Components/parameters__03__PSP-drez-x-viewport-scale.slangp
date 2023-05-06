@@ -1,0 +1,3 @@
+#reference "parameters__03__PSP.slangp"
+
+ntsc_scale = 0.33

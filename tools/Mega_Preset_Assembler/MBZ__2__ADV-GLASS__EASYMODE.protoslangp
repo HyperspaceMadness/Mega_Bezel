@@ -1,11 +1,7 @@
 #reference "Components/chain__01__downrez__none.slangp"
-#reference "Components/composition__10__cache__adv-glass.slangp"
-#reference "Components/composition__40__dedithering__adv.slangp"
-#reference "Components/composition__60__pre-crt-prep.slangp"
+#reference "Components/composition__10__cache__reflection.slangp"
+#reference "Components/composition__40__pre-crt-chain__adv.slangp"
+#reference "Components/composition__60__crt-prep__adv.slangp"
 #reference "Components/chain__60__crt__easymode.slangp"
-#reference "Components/chain__68__post-crt__glass.slangp"
-#reference "Components/composition__90__mega-process__glass.slangp"
-
-#reference "Components/textures__00__glass.slangp"
-
-#reference "Components/parameters__00__easymode.slangp"
+#reference "Components/chain__68__tubefx-default.slangp"
+#reference "Components/composition__90__post-crt__glass.slangp"

@@ -1,12 +1,8 @@
 #reference "Components/chain__01__downrez__none.slangp"
-#reference "Components/composition__10__cache__std-glass.slangp"
-#reference "Components/composition__40__dedithering__std.slangp"
-#reference "Components/composition__60__pre-crt-prep-no-linearize-ntsc.slangp"
+#reference "Components/composition__10__cache__reflection.slangp"
+#reference "Components/composition__40__pre-crt-chain__std.slangp"
+#reference "Components/composition__60__crt-prep__ntsc.slangp"
 #reference "Components/chain__60__crt__megatron.slangp"
-#reference "Components/chain__68__post-crt__glass.slangp"
-#reference "Components/composition__90__mega-process__glass-hdr.slangp"
+#reference "Components/chain__68__tubefx-default.slangp"
+#reference "Components/composition__90__post-crt__glass-hdr.slangp"
 
-#reference "Components/textures__00__glass.slangp"
-
-#reference "Components/parameters__00__megatron.slangp"
-#reference "Components/parameters__00__gdv-ntsc.slangp"

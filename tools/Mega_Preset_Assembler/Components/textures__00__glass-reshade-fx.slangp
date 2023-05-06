@@ -1,7 +1,7 @@
 
 # Textures Glass-Reshade
 # Define textures to be used by the different passes
-textures = "Dirt;Sprite;SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
+textures = "Dirt;Sprite;SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;GlassPresetHighlightImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
 Dirt = :/shaders/shaders_slang/reshade/shaders/bloom/LensDB.png
 Dirt_wrap_mode = "clamp_to_border"
@@ -46,6 +46,10 @@ TubeColoredGelImage_mipmap = 1
 ReflectionMaskImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Placeholder_White_16x16.png
 ReflectionMaskImage_linear = true
 ReflectionMaskImage_mipmap = 1
+
+GlassPresetHighlightImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/TopLayerImageGradient_3840x2160.png
+GlassPresetHighlightImage_linear = true
+GlassPresetHighlightImage_mipmap = 1
 
 FrameTextureImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Placeholder_Transparent_16x16.png
 FrameTextureImage_linear = true
@@ -102,7 +106,7 @@ TopLayerImage_mipmap = 1
 # Parameters
 HSM_TUBE_BLACK_EDGE_SHARPNESS = "90.0000"
 HSM_TUBE_BLACK_EDGE_THICKNESS = -7
-HSM_BG_OPACITY = "1.000000"
+HSM_SIMPLEBG_OPACITY = "1.000000"
 HSM_GLASS_BORDER_ON = "1.000000"
 HSM_BZL_WIDTH = 3000
 HSM_BZL_HEIGHT = 3000
@@ -128,7 +132,7 @@ HSM_REFLECT_NOISE_AMOUNT = "100.000000"
 HSM_REFLECT_NOISE_SAMPLES = "4.000000"
 HSM_REFLECT_NOISE_SAMPLE_DISTANCE = "15.0000"
 HSM_REFLECT_NOISE_SAMPLE_DISTANCE = "15.0000"
-HSM_BG_BRIGHTNESS = "0.000000"
+HSM_SIMPLEBG_BRIGHTNESS = "0.000000"
 HSM_SCREEN_VIGNETTE_STRENGTH = "20.000000"
 HSM_SCREEN_VIGNETTE_POWER = "4.000000"
 HSM_SCREEN_VIGNETTE_IN_REFLECTION = "0.000000"

@@ -892,7 +892,6 @@ vec3 vcolor = adj;
     vec2 vpos = vTexCoord*(global.OriginalSize.xy/global.SourceSize.xy);
 
     // HSM Added
-	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 
     // vec2 vpos = pos_in_cropped_coords;

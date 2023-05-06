@@ -1,6 +1,6 @@
 shaders = 42
 
-shader0 = ../../../shaders/guest/extras/hsm-drez-none.slang
+shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
 srgb_framebuffer0 = true
 scale_type0 = source
@@ -8,20 +8,20 @@ scale_x0 = 1
 scale_y0 = 1
 alias0 = "DerezedPass"
 
-shader1 = ../../../shaders/base/cache-info-no-reflect-params.slang
+shader1 = ../../../shaders/base/cache-info-bezel-params.slang
 filter_linear1 = false
 scale_type1 = source
 scale1 = 1.0
 alias1 = "InfoCachePass"
 
-shader2 = ../../../shaders/base/text-adv-no-reflect.slang
+shader2 = ../../../shaders/base/text.slang
 filter_linear2 = false
 float_framebuffer2 = true
 scale_type2 = source
 scale2 = 1.0
 alias2 = "TextPass"
 
-shader3 = ../../../shaders/guest/extras/hsm-fetch-drez-output.slang
+shader3 = ../../../shaders/base/fetch-drez-output.slang
 filter_linear3 = false
 srgb_framebuffer3 = true
 scale_type3 = source
@@ -66,6 +66,15 @@ shader13 = ../../../shaders/guest/extras/hsm-g-sharp_resampler.slang
 
 shader14 = ../../../shaders/guest/extras/hsm-sharpsmoother.slang
 alias14 = "DeditherPass"
+
+
+#-------------------------------------------------------------------
+# Pre CRT Chain STD Parameters
+
+HSM_NON_USER_INFO_PRE_CRT_CHAIN = 1
+
+#-------------------------------------------------------------------
+
 
 shader15 = ../../../shaders/base/stock.slang
 # filter_linear15 = "false"
@@ -125,6 +134,45 @@ scale_x20 = 1
 scale_type_y20 = source
 scale_y20 = 0.5
 wrap_mode20 = "clamp_to_edge"
+
+
+# -----------------------------------------------------------------------------------------------
+# SUPER-XBR GDV Parameters
+
+HSM_NON_USER_INFO_UPSCALING = 2
+
+SGPT_BLEND_OPTION = 1
+
+SHARPSMOOTHER_ON = 1
+max_w = 0.05
+min_w = 0
+smoot = 0.4
+lumad = 0.5
+mtric = 0.3
+
+SUPERXBR_ON = 1
+
+SHARPEN = 1
+
+HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = 600
+HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR = 100
+HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR = 0
+HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = 0
+
+ntsc_scale = 0.52
+
+# gamma_c = 0.9
+# gsl = -1
+# scanline1 = 3
+# shadowMask = 3
+# maskDark = 0.4
+# maskLight = 1.2
+# mask_gamma = 4
+
+# Mask Size is Auto, so it will look the same at 1080p and 4K
+masksize = 0
+
+# -----------------------------------------------------------------------------------------------
 
 shader21 = ../../../shaders/base/intro.slang
 filter_linear21 = false
@@ -214,7 +262,7 @@ scale_x33 = 800.0
 scale_type_y33 = absolute
 scale_y33 = 600.0
 float_framebuffer33 = true
-alias33 = "GlowPass"
+alias33 = GlowPass
 
 shader34 = ../../../shaders/guest/hsm-bloom_horizontal.slang
 filter_linear34 = true
@@ -231,16 +279,16 @@ scale_x35 = 1.0
 scale_type_y35 = source
 scale_y35 = 1.0
 float_framebuffer35 = true
-alias35 = "BloomPass"
+alias35 = BloomPass
 
-shader36 = ../../../shaders/guest/hsm-crt-guest-advanced-no-reflect.slang
+shader36 = ../../../shaders/guest/hsm-crt-guest-advanced.slang
 filter_linear36 = true
 scale_type36 = viewport
 scale_x36 = 1.0
 scale_y36 = 1.0
 float_framebuffer36 = true
 
-shader37 = ../../../shaders/guest/hsm-deconvergence-no-reflect.slang
+shader37 = ../../../shaders/guest/hsm-deconvergence.slang
 filter_linear37 = true
 scale_type37 = viewport
 scale_x37 = 1.0
@@ -248,7 +296,7 @@ scale_y37 = 1.0
 float_framebuffer37 = true
 alias37 = "CRTPass"
 
-shader38 = ../../../shaders/base/post-crt-prep-no-reflect.slang
+shader38 = ../../../shaders/base/tubefx-default.slang
 mipmap_input38 = true
 scale_type38 = viewport
 float_framebuffer38 = true
@@ -273,9 +321,10 @@ shader41 = ../../../shaders/base/combine-passes-no-reflect.slang
 scale_type41 = viewport
 alias41 = "CombinePass"
 
+
 # Textures All
 # Define textures to be used by the different passes
-textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;GlassPresetHighlightImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
 SamplerLUT1 = ../../../shaders/guest/lut/trinitron-lut.png
 SamplerLUT1_linear = true 
@@ -312,6 +361,10 @@ TubeStaticReflectionImage_mipmap = 1
 ReflectionMaskImage = ../../../shaders/textures/Placeholder_White_16x16.png
 ReflectionMaskImage_linear = true
 ReflectionMaskImage_mipmap = 1
+
+GlassPresetHighlightImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+GlassPresetHighlightImage_linear = true
+GlassPresetHighlightImage_mipmap = 1
 
 FrameTextureImage = ../../../shaders/textures/FrameTexture_2800x2120.png
 FrameTextureImage_linear = true
@@ -365,34 +418,12 @@ TopLayerImage_mipmap = 1
 # HSM_ASPECT_RATIO_MODE = 6
 # HSM_CURVATURE_MODE = 0
 
-# SUPER-XBR GDV Parameters
-SGPT_BLEND_OPTION = 1
 
-SHARPSMOOTHER_ON = 1
-max_w = 0.05
-min_w = 0
-smoot = 0.4
-lumad = 0.5
-mtric = 0.3
+#------------------------------------------------------------------------------
+# Post CRT Process NO-REFLECT Parameters
 
-SUPERXBR_ON = 1
+HSM_NON_USER_INFO_POST_CRT_PROCESS = 1
+HSM_SCREEN_REFLECTION_ALLOW_REFLECTION = 0
 
-SHARPEN = 1
+#------------------------------------------------------------------------------
 
-HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = 600
-HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR = 100
-HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR = 0
-HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = 0
-
-ntsc_scale = 0.52
-
-# gamma_c = 0.9
-# gsl = -1
-# scanline1 = 3
-# shadowMask = 3
-# maskDark = 0.4
-# maskLight = 1.2
-# mask_gamma = 4
-
-# Mask Size is Auto, so it will look the same at 1080p and 4K
-masksize = 0

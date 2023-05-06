@@ -24,7 +24,8 @@
 
 vec2 HSM_GetOuterBezelScale(vec2 tube_diffuse_scale, float screen_aspect)
 {
-	vec2 bezel_outer_scale_offset = vec2(HSM_BZL_WIDTH / screen_aspect + 1, HSM_BZL_HEIGHT + 1);
+
+	vec2 bezel_outer_scale_offset = vec2(HSM_BZL_WIDTH / screen_aspect, HSM_BZL_HEIGHT ) + vec2(1);
 	return bezel_outer_scale_offset;
 }
 
@@ -48,6 +49,7 @@ float HSM_GetSimpleBezelCoords(vec2 tube_diffuse_coord,
 								vec2 tube_diffuse_scale, 
 								vec2 tube_scale, 
 								float screen_aspect,
+								inout vec2 reflection_outer_boundary_coord, 
 								inout vec2 bezel_outside_coord, 
 								inout vec2 frame_outside_coord)
 {
@@ -66,7 +68,31 @@ float HSM_GetSimpleBezelCoords(vec2 tube_diffuse_coord,
 							vec2((HSM_FRM_THICKNESS * HSM_FRM_THICKNESS_SCALE_X) / 
 							(tube_diffuse_scale.x / tube_diffuse_scale.y * output_aspect) + 1, 
 							HSM_FRM_THICKNESS + 1) + 0.5;
+	reflection_outer_boundary_coord = HSM_SCREEN_REFLECTION_ALLOW_REFLECTION * bezel_outside_coord + 
+										(1 - HSM_SCREEN_REFLECTION_ALLOW_REFLECTION) * tube_diffuse_coord;
 	return 0;
+}
+
+// Assumes that HSM_UpdateGlobalScreenValuesFromCache has already been called
+bool HSM_IsOutsideReflectionBoundary()
+{
+	vec2 cache_bounds_coord = TUBE_COORD;
+	if (HSM_SCREEN_REFLECTION_ALLOW_REFLECTION < 0.5)
+	{
+		// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
+		vec2 reflection_outer_boundary_coord;
+		vec2 bezel_outside_flat_coord;
+		vec2 frame_outside_flat_coord;
+		HSM_GetSimpleBezelCoords(TUBE_DIFFUSE_COORD, 
+								TUBE_DIFFUSE_SCALE, 
+								TUBE_SCALE, 
+								SCREEN_ASPECT,
+								reflection_outer_boundary_coord,
+								bezel_outside_flat_coord, 
+								frame_outside_flat_coord);
+		cache_bounds_coord = (reflection_outer_boundary_coord - 0.5) * 0.9 + 0.5;
+	}
+	return HHLP_IsOutsideCoordSpace(cache_bounds_coord);
 }
 
 float HSM_GetBezelCoords(vec2 tube_diffuse_coord, 

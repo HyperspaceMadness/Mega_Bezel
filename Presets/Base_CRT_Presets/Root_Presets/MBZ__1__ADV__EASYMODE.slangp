@@ -1,6 +1,6 @@
 shaders = 40
 
-shader0 = ../../../shaders/guest/extras/hsm-drez-none.slang
+shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
 srgb_framebuffer0 = true
 scale_type0 = source
@@ -14,14 +14,14 @@ scale_type1 = source
 scale1 = 1.0
 alias1 = "InfoCachePass"
 
-shader2 = ../../../shaders/base/text-adv.slang
+shader2 = ../../../shaders/base/text.slang
 filter_linear2 = false
 float_framebuffer2 = true
 scale_type2 = source
 scale2 = 1.0
 alias2 = "TextPass"
 
-shader3 = ../../../shaders/guest/extras/hsm-fetch-drez-output.slang
+shader3 = ../../../shaders/base/fetch-drez-output.slang
 filter_linear3 = false
 srgb_framebuffer3 = true
 scale_type3 = source
@@ -66,6 +66,15 @@ shader13 = ../../../shaders/guest/extras/hsm-g-sharp_resampler.slang
 
 shader14 = ../../../shaders/guest/extras/hsm-sharpsmoother.slang
 alias14 = "DeditherPass"
+
+
+#-------------------------------------------------------------------
+# Pre CRT Chain STD Parameters
+
+HSM_NON_USER_INFO_PRE_CRT_CHAIN = 1
+
+#-------------------------------------------------------------------
+
 
 shader15 = ../../../shaders/base/intro.slang
 filter_linear15 = false
@@ -159,9 +168,19 @@ scale_type29 = viewport
 float_framebuffer29 = true
 alias29 = "CRTPass"
 
+
+# -----------------------------------------------------------------------------------------------
+# EASYMODE PARAMETERS
+
+g_gamma_out = 2.45
 g_gamma_out = 2.45
 
-shader30 = ../../../shaders/base/post-crt-prep-image-layers.slang
+# Easymode Parameters
+gamma_out = 2.2
+
+# -----------------------------------------------------------------------------------------------
+
+shader30 = ../../../shaders/base/tubefx-default.slang
 mipmap_input30 = true
 scale_type30 = viewport
 float_framebuffer30 = true
@@ -237,6 +256,7 @@ alias37 = "BR_MirrorFullscreenGlowPass"
 # Bezel Reflection ----------------------------------------------------------------
 shader38 = ../../../shaders/base/reflection.slang
 scale_type38 = viewport
+float_framebuffer38 = true
 alias38 = "ReflectionPass"
 
 # Combine Passes ----------------------------------------------------------------
@@ -244,9 +264,10 @@ shader39 = ../../../shaders/base/combine-passes.slang
 scale_type39 = viewport
 alias39 = "CombinePass"
 
+
 # Textures All
 # Define textures to be used by the different passes
-textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;GlassPresetHighlightImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
 SamplerLUT1 = ../../../shaders/guest/lut/trinitron-lut.png
 SamplerLUT1_linear = true 
@@ -283,6 +304,10 @@ TubeStaticReflectionImage_mipmap = 1
 ReflectionMaskImage = ../../../shaders/textures/Placeholder_White_16x16.png
 ReflectionMaskImage_linear = true
 ReflectionMaskImage_mipmap = 1
+
+GlassPresetHighlightImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+GlassPresetHighlightImage_linear = true
+GlassPresetHighlightImage_mipmap = 1
 
 FrameTextureImage = ../../../shaders/textures/FrameTexture_2800x2120.png
 FrameTextureImage_linear = true
@@ -336,5 +361,11 @@ TopLayerImage_mipmap = 1
 # HSM_ASPECT_RATIO_MODE = 6
 # HSM_CURVATURE_MODE = 0
 
-# Easymode Parameters
-gamma_out = 2.2
+
+#--------------------------------------------------------------------------------------
+# Post CRT Process DEFAULT Parameters
+
+HSM_NON_USER_INFO_POST_CRT_PROCESS = 0
+
+#--------------------------------------------------------------------------------------
+

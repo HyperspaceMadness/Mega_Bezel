@@ -1052,14 +1052,19 @@ vec4 HSM_ApplyScanlineMask(vec4 in_color, vec2 screen_scale, vec2 in_coord, vec2
 
 vec4 HSM_Apply_Sinden_Lightgun_Border(vec4 in_rgba, vec2 in_tube_diffuse_curved_coord, float in_tube_diffuse_mask, float in_black_edge_corner_radius)
 {
-	float sinden_gun_mask =  in_tube_diffuse_mask - HSM_GetCornerMask((in_tube_diffuse_curved_coord - 0.5) * (1 + vec2(1 / TUBE_DIFFUSE_ASPECT * HSM_SINDEN_BORDER_THICKNESS, HSM_SINDEN_BORDER_THICKNESS)) + 0.5, TUBE_DIFFUSE_ASPECT, in_black_edge_corner_radius, 0.99);
-	vec4 out_rgba = in_rgba;
+	if (HSM_SINDEN_BORDER_ON < 0.5)
+	{
+		return in_rgba;
+	}
+	else
+	{
+		float sinden_gun_mask =  in_tube_diffuse_mask - HSM_GetCornerMask((in_tube_diffuse_curved_coord - 0.5) * (1 + vec2(1 / TUBE_DIFFUSE_ASPECT * HSM_SINDEN_BORDER_THICKNESS, HSM_SINDEN_BORDER_THICKNESS)) + 0.5, TUBE_DIFFUSE_ASPECT, in_black_edge_corner_radius, 0.99);
 
-	vec3 base_rgb = vec3(1);
-	out_rgba.rgb = base_rgb * HSM_SINDEN_BORDER_BRIGHTNESS * sinden_gun_mask + (1 - sinden_gun_mask) * out_rgba.rgb;
+		vec4 out_rgba = in_rgba;
+		out_rgba.rgb = vec3(1) * HSM_SINDEN_BORDER_BRIGHTNESS * sinden_gun_mask + (1 - sinden_gun_mask) * in_rgba.rgb;
 
-	// out_rgba.rgb += HSM_SINDEN_BORDER_OPACITY * sinden_gun_mask;
-	return out_rgba;
+		return out_rgba;
+	}
 }
 
 vec2 HSM_ApplyOverscan(vec2 in_coord, float overscan_x, float overscan_y)
@@ -1094,7 +1099,6 @@ vec2 HSM_GetCrtShaderFinalCoord(vec2 screen_coord,
 								float raster_bloom_avg_lum,
 								inout vec2 screen_curved_coord
 								)
-
 {
 	// -- START -- This section repeated in function below
 	screen_curved_coord = HSM_GetCRTShaderCurvedCoord(screen_coord);
@@ -1165,4 +1169,103 @@ vec2 HSM_GetCrtShaderFinalCoordExtraVariables(vec2 screen_coord,
 	screen_coord_with_overscan = HSM_ApplyOverscan(screen_coord, HSM_OVERSCAN_X, HSM_OVERSCAN_Y);
 
 	return screen_curved_coord_with_overscan_and_mirror;
+}
+
+vec4 HSM_ApplySimpleBGExplicit(	vec4 in_crt_color,
+							vec2 zoomed_viewport_coord, 
+							sampler2D BackgroundImage, 
+							sampler2D BackgroundVertImage,
+							float crt_blend_mode,
+							float bg_on_top,
+							float bg_blend_mode,
+							float bg_opacity,
+							float bg_brightness,
+							float colorize_using_texture,
+							float colorize_brightness,
+							float graphics_global_brightness,
+							float graphics_gamma
+						)
+{
+	vec4 out_color = in_crt_color;
+
+	if (bg_opacity > 0)
+	{
+		//-----------------------------------------------------------------------------------------
+		// Background
+		//-----------------------------------------------------------------------------------------
+		vec2 bg_coord = zoomed_viewport_coord;
+		bool bg_use_vert_image = SCREEN_ASPECT < 1 && textureSize(BackgroundVertImage, 0).y > 16 ? true : false; 
+		vec2 bg_size = bg_use_vert_image ? textureSize(BackgroundVertImage, 0) : textureSize(BackgroundImage, 0);
+
+		vec4 bg_layer = vec4(0);
+
+		if (bg_size.y > 16)
+		{
+			// Correct image coordinate for image aspect ratio
+			bg_coord.x = (bg_coord.x - 0.5) / ((bg_size.x / bg_size.y) / (global.FinalViewportSize.x/global.FinalViewportSize.y)) + 0.5;
+
+			if (bg_use_vert_image)
+				bg_layer = texture(BackgroundVertImage, bg_coord);
+			else
+				bg_layer = texture(BackgroundImage, bg_coord);
+			bg_layer = HSM_Linearize(bg_layer, DEFAULT_SRGB_GAMMA);
+
+			vec3 bg_gel = colorize_using_texture * bg_layer.rgb * colorize_brightness + (1 - colorize_using_texture);
+
+			bg_layer.rgb *= graphics_global_brightness;
+			bg_layer.rgb *= bg_brightness;
+			bg_layer.rgb = pow(bg_layer.rgb, vec3(1/graphics_gamma));
+
+
+			if (bg_on_top == 1)
+			{
+				out_color.rgb *= bg_gel.rgb;
+				out_color = HSM_BlendModeLayerMix(vec4(0), out_color, crt_blend_mode, 1);
+				out_color = HSM_BlendModeLayerMix(out_color, bg_layer, bg_blend_mode, bg_opacity);
+			}
+			else
+			{
+				out_color.rgb *= bg_gel.rgb;
+				bg_layer = HSM_BlendModeLayerMix(vec4(0), bg_layer, bg_blend_mode, bg_opacity);
+				out_color = HSM_BlendModeLayerMix(bg_layer, out_color, crt_blend_mode, 1);
+			}
+		}
+	}
+	return out_color;
+}
+
+vec4 HSM_ApplySimpleBG(	vec4 in_crt_color, 
+						vec2 in_vTexCoord,
+						sampler2D BackgroundImage, 
+						sampler2D BackgroundVertImage
+						)
+{
+	if (HSM_SIMPLEBG_OPACITY < 0.001)
+		return in_crt_color;
+
+	vec2 zoomed_viewport_coord = HSM_GetViewportCoordWithZoomAndPan(in_vTexCoord);
+	float crt_blend_mode = HSM_SIMPLEBG_CRT_SCREEN_BLEND_MODE;
+	float bg_on_top = HSM_SIMPLEBG_SHOW_BG_OVER_SCREEN;
+	float bg_blend_mode = HSM_SIMPLEBG_BLEND_MODE;
+	float bg_brightness = HSM_SIMPLEBG_BRIGHTNESS;
+	float bg_opacity = HSM_SIMPLEBG_OPACITY;
+	float colorize_using_texture = HSM_SIMPLEBG_COLORIZE_CRT_WITH_BG;
+	float colorize_brightness = HSM_SIMPLEBG_COLORIZE_BRIGHTNESS;
+	float graphics_global_brightness = HSM_GLOBAL_GRAPHICS_BRIGHTNESS;
+	float graphics_gamma = HSM_STATIC_LAYERS_GAMMA;
+
+	return HSM_ApplySimpleBGExplicit(	in_crt_color,
+										zoomed_viewport_coord,
+										BackgroundImage,
+										BackgroundVertImage,
+										crt_blend_mode,
+										bg_on_top,
+										bg_blend_mode,
+										bg_opacity,
+										bg_brightness,
+										colorize_using_texture,
+										colorize_brightness,
+										graphics_global_brightness,
+										graphics_gamma
+									);
 }

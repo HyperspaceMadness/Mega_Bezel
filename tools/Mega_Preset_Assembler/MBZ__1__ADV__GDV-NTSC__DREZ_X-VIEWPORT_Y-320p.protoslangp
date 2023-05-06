@@ -1,14 +1,11 @@
 #reference "Components/chain__01__downrez__x-viewport-scale_y-320p.slangp"
-#reference "Components/composition__10__cache__adv.slangp"
-#reference "Components/composition__40__dedithering__adv.slangp"
-#reference "Components/composition__60__pre-crt-prep-ntsc.slangp"
+#reference "Components/composition__10__cache__all.slangp"
+#reference "Components/composition__40__pre-crt-chain__adv.slangp"
+#reference "Components/composition__60__crt-prep__ntsc.slangp"
 #reference "Components/chain__60__crt__gdv-ntsc.slangp"
-#reference "Components/chain__68__post-crt__std.slangp"
-#reference "Components/composition__90__mega-process__std.slangp"
+#reference "Components/chain__68__tubefx-default.slangp"
+#reference "Components/composition__90__post-crt__default.slangp"
 
-#reference "Components/textures__00__all.slangp"
-
-#reference "Components/parameters__00__gdv-ntsc.slangp"
 
 #reference "Components/parameters__00__drez.slangp"
 #reference "Components/parameters__00__drez-x-viewport-scale.slangp"

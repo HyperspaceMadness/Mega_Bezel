@@ -1,0 +1,12 @@
+#reference "chain__30__dedithering__1-sgenpt-mix-multipass.slangp"
+#reference "chain__58__sharpen__gsharp-resampler.slangp"
+#reference "chain__30__dedithering__4-last-pass-sharpsmoother.slangp"
+
+
+#-------------------------------------------------------------------
+# Pre CRT Chain STD Parameters
+
+HSM_NON_USER_INFO_PRE_CRT_CHAIN = 2
+
+#-------------------------------------------------------------------
+

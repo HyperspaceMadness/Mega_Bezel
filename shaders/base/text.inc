@@ -545,25 +545,53 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec4 screen
     print_pos.x = margin;
     print_pos.y += STRHEIGHT(2);
     
-#ifdef IS_ADV_PRESET
-   _A _D _V _A _N _C _E _D
-#endif
+    // Pre CRT Chain
+    if (HSM_NON_USER_INFO_PRE_CRT_CHAIN == 0)
+    {
+        _S _M _O _O _T _H _dsh _A _D _V
+    }
 
-#ifdef IS_STD_PRESET
-   _S _T _A _N _D _A _R _D
-#endif
+    if (HSM_NON_USER_INFO_PRE_CRT_CHAIN == 1)
+    {
+        _A _D _V
+    }
 
-#ifdef IS_GLASS_PRESET
-   _spc _G _L _A _S _S
-#endif
+    if (HSM_NON_USER_INFO_PRE_CRT_CHAIN == 2)
+    {
+        _S _T _D
+    }
 
-#ifdef IS_NO_REFLECT_PRESET
-   _spc _N _O _spc _R _E _F _L _E _C _T
-#endif
+    if (HSM_NON_USER_INFO_PRE_CRT_CHAIN == 3)
+    {
+        _P _O _T _A _T _O
+    }
 
-#ifdef IS_POTATO_PRESET
-   _P _O _T _A _T _O
-#endif
+    // Post CRT Process
+    if (HSM_NON_USER_INFO_POST_CRT_PROCESS == 1)
+    {
+        _spc _N _O _dsh _R _E _F _L _E _C _T
+    }
+
+    if (HSM_NON_USER_INFO_POST_CRT_PROCESS == 2)
+    {
+        _spc _G _L _A _S _S
+    }
+
+    if (HSM_NON_USER_INFO_POST_CRT_PROCESS == 3)
+    {
+        _spc _S _C _R _E _E _N _dsh _O _N _L _Y
+    }
+
+    if (HSM_NON_USER_INFO_UPSCALING == 1)
+    {
+        _spc _S _C _A _L _E _F _X
+    }
+   
+    if (HSM_NON_USER_INFO_UPSCALING == 2)
+    {
+        _spc _S _U _P _E _R _dsh _X _B _R
+    }
+   
 
     // Version ----------------------------------------------------------
     print_pos.x = margin;

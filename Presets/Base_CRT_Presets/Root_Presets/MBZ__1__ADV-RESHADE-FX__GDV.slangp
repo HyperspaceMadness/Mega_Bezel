@@ -1,6 +1,6 @@
 shaders = 51
 
-shader0 = ../../../shaders/guest/extras/hsm-drez-none.slang
+shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
 srgb_framebuffer0 = true
 scale_type0 = source
@@ -14,14 +14,14 @@ scale_type1 = source
 scale1 = 1.0
 alias1 = "InfoCachePass"
 
-shader2 = ../../../shaders/base/text-adv.slang
+shader2 = ../../../shaders/base/text.slang
 filter_linear2 = false
 float_framebuffer2 = true
 scale_type2 = source
 scale2 = 1.0
 alias2 = "TextPass"
 
-shader3 = ../../../shaders/guest/extras/hsm-fetch-drez-output.slang
+shader3 = ../../../shaders/base/fetch-drez-output.slang
 filter_linear3 = false
 srgb_framebuffer3 = true
 scale_type3 = source
@@ -66,6 +66,15 @@ shader13 = ../../../shaders/guest/extras/hsm-g-sharp_resampler.slang
 
 shader14 = ../../../shaders/guest/extras/hsm-sharpsmoother.slang
 alias14 = "DeditherPass"
+
+
+#-------------------------------------------------------------------
+# Pre CRT Chain STD Parameters
+
+HSM_NON_USER_INFO_PRE_CRT_CHAIN = 1
+
+#-------------------------------------------------------------------
+
 
 # GTU TV Processing
 shader15 = ../../../shaders/gtu/hsm-gtu-pass1.slang
@@ -262,7 +271,7 @@ scale_y40 = 1.0
 float_framebuffer40 = true
 alias40 = "CRTPass"
 
-shader41 = ../../../shaders/base/post-crt-prep-image-layers.slang
+shader41 = ../../../shaders/base/tubefx-default.slang
 mipmap_input41 = true
 scale_type41 = viewport
 float_framebuffer41 = true
@@ -338,6 +347,7 @@ alias48 = "BR_MirrorFullscreenGlowPass"
 # Bezel Reflection ----------------------------------------------------------------
 shader49 = ../../../shaders/base/reflection.slang
 scale_type49 = viewport
+float_framebuffer49 = true
 alias49 = "ReflectionPass"
 
 # Combine Passes ----------------------------------------------------------------
@@ -345,9 +355,115 @@ shader50 = ../../../shaders/base/combine-passes.slang
 scale_type50 = viewport
 alias50 = "CombinePass"
 
+
+# Textures All
+# Define textures to be used by the different passes
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;GlassPresetHighlightImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
+
+SamplerLUT1 = ../../../shaders/guest/lut/trinitron-lut.png
+SamplerLUT1_linear = true 
+SamplerLUT2 = ../../../shaders/guest/lut/inv-trinitron-lut.png
+SamplerLUT2_linear = true 
+SamplerLUT3 = ../../../shaders/guest/lut/nec-lut.png
+SamplerLUT3_linear = true
+SamplerLUT4 = ../../../shaders/guest/lut/ntsc-lut.png
+SamplerLUT4_linear = true
+
+IntroImage = ../../../shaders/textures/IntroImage_MegaBezelLogo.png
+IntroImage_linear = true
+IntroImage_mipmap = 1
+
+ScreenPlacementImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+ScreenPlacementImage_linear = false
+
+TubeDiffuseImage = ../../../shaders/textures/Tube_Diffuse_2390x1792.png
+TubeDiffuseImage_linear = true
+TubeDiffuseImage_mipmap = 1
+
+TubeColoredGelImage = ../../../shaders/textures/Colored_Gel_Rainbow.png
+TubeColoredGelImage_linear = true
+TubeColoredGelImage_mipmap = 1
+
+TubeShadowImage = ../../../shaders/textures/Tube_Shadow_1600x1200.png
+TubeShadowImage_linear = true
+TubeShadowImage_mipmap = 1
+
+TubeStaticReflectionImage = ../../../shaders/textures/TubeGlassOverlayImageCropped_1440x1080.png
+TubeStaticReflectionImage_linear = true
+TubeStaticReflectionImage_mipmap = 1
+
+ReflectionMaskImage = ../../../shaders/textures/Placeholder_White_16x16.png
+ReflectionMaskImage_linear = true
+ReflectionMaskImage_mipmap = 1
+
+GlassPresetHighlightImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+GlassPresetHighlightImage_linear = true
+GlassPresetHighlightImage_mipmap = 1
+
+FrameTextureImage = ../../../shaders/textures/FrameTexture_2800x2120.png
+FrameTextureImage_linear = true
+FrameTextureImage_mipmap = 1
+
+BackgroundImage = ../../../shaders/textures/BackgroundImage_Carbon_3840x2160.png
+BackgroundImage_linear = true
+BackgroundImage_mipmap = 1
+
+BackgroundVertImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+BackgroundVertImage_linear = true
+BackgroundVertImage_mipmap = 1
+
+CabinetGlassImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+CabinetGlassImage_linear = true
+CabinetGlassImage_mipmap = 1
+
+DeviceImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+DeviceImage_linear = true
+DeviceImage_mipmap = 1
+
+DeviceVertImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+DeviceVertImage_linear = true
+DeviceVertImage_mipmap = 1
+
+DeviceLEDImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+DeviceLEDImage_linear = true
+DeviceLEDImage_mipmap = 1
+
+DecalImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+DecalImage_linear = true
+DecalImage_mipmap = 1
+
+NightLightingImage = ../../../shaders/textures/NightLightingClose_1920x1080.png
+NightLightingImage_linear = true
+NightLightingImage_mipmap = 1
+
+NightLighting2Image = ../../../shaders/textures/NightLightingFar_1920x1080.png
+NightLighting2Image_linear = true
+NightLighting2Image_mipmap = 1
+
+LEDImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+LEDImage_linear = true
+LEDImage_mipmap = 1
+
+TopLayerImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+TopLayerImage_linear = true
+TopLayerImage_mipmap = 1
+
+# Use for matching vanilla GDV-Advanced
+# HSM_ASPECT_RATIO_MODE = 6
+# HSM_CURVATURE_MODE = 0
+
+
+#--------------------------------------------------------------------------------------
+# Post CRT Process DEFAULT Parameters
+
+HSM_NON_USER_INFO_POST_CRT_PROCESS = 0
+
+#--------------------------------------------------------------------------------------
+
+
 # Textures All-Reshade-Fx
 # Define textures to be used by the different passes
-textures = "Dirt;Sprite;SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
+textures = "Dirt;Sprite;SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;GlassPresetHighlightImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
 Dirt = ../../../../../reshade/shaders/bloom/LensDB.png
 Dirt_wrap_mode = "clamp_to_border"
@@ -392,6 +508,10 @@ TubeStaticReflectionImage_mipmap = 1
 ReflectionMaskImage = ../../../shaders/textures/Placeholder_White_16x16.png
 ReflectionMaskImage_linear = true
 ReflectionMaskImage_mipmap = 1
+
+GlassPresetHighlightImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+GlassPresetHighlightImage_linear = true
+GlassPresetHighlightImage_mipmap = 1
 
 FrameTextureImage = ../../../shaders/textures/FrameTexture_2800x2120.png
 FrameTextureImage_linear = true

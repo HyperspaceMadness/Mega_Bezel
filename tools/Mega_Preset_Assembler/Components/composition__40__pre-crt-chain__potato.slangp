@@ -1,0 +1,16 @@
+#reference "chain__30__dedithering__0-none.slangp"
+
+
+#-------------------------------------------------------------------
+# Pre CRT Chain POTATO Parameters
+
+HSM_NON_USER_INFO_PRE_CRT_CHAIN = 3
+
+# Use for matching vanilla GDV-Advanced
+# HSM_ASPECT_RATIO_MODE = 6
+# HSM_CURVATURE_MODE = 0
+
+HSM_ASPECT_RATIO_MODE = 1
+
+#-------------------------------------------------------------------
+

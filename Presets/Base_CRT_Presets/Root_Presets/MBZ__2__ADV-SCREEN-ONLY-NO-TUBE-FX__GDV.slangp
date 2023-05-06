@@ -1,6 +1,6 @@
-shaders = 34
+shaders = 33
 
-shader0 = ../../../shaders/guest/extras/hsm-drez-none.slang
+shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
 srgb_framebuffer0 = true
 scale_type0 = source
@@ -8,20 +8,20 @@ scale_x0 = 1
 scale_y0 = 1
 alias0 = "DerezedPass"
 
-shader1 = ../../../shaders/base/cache-info-no-reflect-params.slang
+shader1 = ../../../shaders/base/cache-info-bezel-params.slang
 filter_linear1 = false
 scale_type1 = source
 scale1 = 1.0
 alias1 = "InfoCachePass"
 
-shader2 = ../../../shaders/base/text-adv-no-reflect.slang
+shader2 = ../../../shaders/base/text.slang
 filter_linear2 = false
 float_framebuffer2 = true
 scale_type2 = source
 scale2 = 1.0
 alias2 = "TextPass"
 
-shader3 = ../../../shaders/guest/extras/hsm-fetch-drez-output.slang
+shader3 = ../../../shaders/base/fetch-drez-output.slang
 filter_linear3 = false
 srgb_framebuffer3 = true
 scale_type3 = source
@@ -66,6 +66,15 @@ shader13 = ../../../shaders/guest/extras/hsm-g-sharp_resampler.slang
 
 shader14 = ../../../shaders/guest/extras/hsm-sharpsmoother.slang
 alias14 = "DeditherPass"
+
+
+#-------------------------------------------------------------------
+# Pre CRT Chain STD Parameters
+
+HSM_NON_USER_INFO_PRE_CRT_CHAIN = 1
+
+#-------------------------------------------------------------------
+
 
 shader15 = ../../../shaders/base/intro.slang
 filter_linear15 = false
@@ -155,7 +164,7 @@ scale_x27 = 800.0
 scale_type_y27 = absolute
 scale_y27 = 600.0
 float_framebuffer27 = true
-alias27 = "GlowPass"
+alias27 = GlowPass
 
 shader28 = ../../../shaders/guest/hsm-bloom_horizontal.slang
 filter_linear28 = true
@@ -172,16 +181,16 @@ scale_x29 = 1.0
 scale_type_y29 = source
 scale_y29 = 1.0
 float_framebuffer29 = true
-alias29 = "BloomPass"
+alias29 = BloomPass
 
-shader30 = ../../../shaders/guest/hsm-crt-guest-advanced-no-reflect.slang
+shader30 = ../../../shaders/guest/hsm-crt-guest-advanced.slang
 filter_linear30 = true
 scale_type30 = viewport
 scale_x30 = 1.0
 scale_y30 = 1.0
 float_framebuffer30 = true
 
-shader31 = ../../../shaders/guest/hsm-deconvergence-no-reflect.slang
+shader31 = ../../../shaders/guest/hsm-deconvergence.slang
 filter_linear31 = true
 scale_type31 = viewport
 scale_x31 = 1.0
@@ -189,20 +198,15 @@ scale_y31 = 1.0
 float_framebuffer31 = true
 alias31 = "CRTPass"
 
-shader32 = ../../../shaders/base/post-crt-prep-minimum-no-reflect.slang
+shader32 = ../../../shaders/base/tubefx-none-delinearize.slang
 mipmap_input32 = true
 scale_type32 = viewport
 float_framebuffer32 = true
 alias32 = "PostCRTPass"
 
-# Combine Passes ----------------------------------------------------------------
-shader33 = ../../../shaders/base/output-sdr.slang
-scale_type33 = viewport
-alias33 = "OutputPass"
-
 # Textures All
 # Define textures to be used by the different passes
-textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;GlassPresetHighlightImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
 SamplerLUT1 = ../../../shaders/guest/lut/trinitron-lut.png
 SamplerLUT1_linear = true 
@@ -239,6 +243,10 @@ TubeStaticReflectionImage_mipmap = 1
 ReflectionMaskImage = ../../../shaders/textures/Placeholder_White_16x16.png
 ReflectionMaskImage_linear = true
 ReflectionMaskImage_mipmap = 1
+
+GlassPresetHighlightImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+GlassPresetHighlightImage_linear = true
+GlassPresetHighlightImage_mipmap = 1
 
 FrameTextureImage = ../../../shaders/textures/FrameTexture_2800x2120.png
 FrameTextureImage_linear = true
@@ -291,3 +299,13 @@ TopLayerImage_mipmap = 1
 # Use for matching vanilla GDV-Advanced
 # HSM_ASPECT_RATIO_MODE = 6
 # HSM_CURVATURE_MODE = 0
+
+
+#---------------------------------------------------------------------------
+# Post CRT Process SCREEN-ONLY Parameters
+
+HSM_NON_USER_INFO_POST_CRT_PROCESS = 3
+HSM_SCREEN_REFLECTION_ALLOW_REFLECTION = 0
+
+#---------------------------------------------------------------------------
+

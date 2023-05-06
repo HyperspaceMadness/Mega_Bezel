@@ -1,6 +1,6 @@
 shaders = 1
 
-shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/extras/hsm-drez-g-sharp_resampler.slang
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/drez-g-sharp_resampler.slang
 filter_linear0 = false
 scale_type_x0 = absolute
 scale_x0 = 320

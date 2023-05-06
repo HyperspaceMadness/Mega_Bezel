@@ -1,0 +1,17 @@
+#reference "chain__89__output-hdr.slangp"
+
+#reference "textures__00__potato.slangp"
+
+
+#------------------------------------------------------------------------------
+# Post CRT Process POTATO Parameters
+
+HSM_NON_USER_INFO_POST_CRT_PROCESS = 4
+HSM_SCREEN_REFLECTION_ALLOW_REFLECTION = 0
+
+# Set aspect ratio to 4:3
+HSM_ASPECT_RATIO_MODE = 1
+
+#------------------------------------------------------------------------------
+
+

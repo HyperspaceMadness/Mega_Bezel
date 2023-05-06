@@ -1,10 +1,6 @@
 #reference "Components/chain__01__downrez__none.slangp"
 #reference "Components/composition__10__cache__potato.slangp"
-#reference "Components/composition__60__pre-crt-prep__potato-no-linearize.slangp"
-#reference "Components/chain__60__crt__megatron__potato.slangp"
-#reference "Components/chain__68__post-crt__potato-megatron.slangp"
-#reference "Components/chain__89__output-hdr.slangp"
+#reference "Components/composition__60__crt-prep__potato.slangp"
+#reference "Components/chain__60__crt__megatron.slangp"
+#reference "Components/composition__90__post-crt__potato-hdr.slangp"
 
-#reference "Components/textures__00__potato.slangp"
-
-#reference "Components/parameters__00__megatron.slangp"

@@ -153,7 +153,6 @@ layout(set = 0, binding = 14) uniform sampler2D InfoCachePass;
 void main()
 {
     // HSM Added
-	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 
     vec4 bg_color = vec4(0, 0, 0, 1);

@@ -139,6 +139,8 @@ float HSM_GetScreenIndex(vec2 viewport_coord)
 
 vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, vec2 vTexCoord)
 {
+	// TODO need to set a value to tell us if this has been updated this frame
+	
 	float output_aspect = global.FinalViewportSize.x / global.FinalViewportSize.y;
 	vec2 flipped_viewport_coord = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	SCREEN_INDEX = HSM_GetScreenIndex(flipped_viewport_coord);

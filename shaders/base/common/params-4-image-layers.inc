@@ -110,10 +110,10 @@ float HSM_LAYERING_DEBUG_MASK_MODE = global.HSM_LAYERING_DEBUG_MASK_MODE;
 //---------------------------------------------------------------------------------------------------
 //    BG IMAGE
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_BACKGROUND_EMPTY_LINE							" " 0 0 0.001 0.001
-#pragma parameter HSM_BACKGROUND_TITLE			"[ BACKGROUND LAYER ]:" 0 0 0.01 0.01
+#pragma parameter HSM_BACKGROUND_EMPTY_LINE		  " " 0 0 0.001 0.001
+#pragma parameter HSM_BACKGROUND_TITLE			  "[ BACKGROUND LAYER ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_BG_OPACITY                  "          Opacity" 100 0 100 0.1
+#pragma parameter HSM_BG_OPACITY                  "          BG Opacity" 100 0 100 1
 float HSM_BG_OPACITY = global.HSM_BG_OPACITY / 100;
 
 #pragma parameter HSM_BG_COLORIZE_ON              "          Colorize On" 0 0 1 1
@@ -125,7 +125,7 @@ float HSM_BG_HUE = global.HSM_BG_HUE / 360;
 #pragma parameter HSM_BG_SATURATION                "          Saturation" 100 0 200 1
 float HSM_BG_SATURATION = global.HSM_BG_SATURATION / 100;
 
-#pragma parameter HSM_BG_BRIGHTNESS                "          Brightness" 100 0 200 1
+#pragma parameter HSM_BG_BRIGHTNESS                "          BG Brightness" 100 0 200 1
 float HSM_BG_BRIGHTNESS = global.HSM_BG_BRIGHTNESS / 100;
 
 #pragma parameter HSM_BG_GAMMA                     "          Gamma Adjust" 1 0 5 0.01

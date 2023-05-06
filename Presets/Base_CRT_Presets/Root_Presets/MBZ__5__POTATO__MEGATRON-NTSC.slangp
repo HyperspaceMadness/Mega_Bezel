@@ -1,6 +1,6 @@
-shaders = 16
+shaders = 15
 
-shader0 = ../../../shaders/guest/extras/hsm-drez-none.slang
+shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
 srgb_framebuffer0 = true
 scale_type0 = source
@@ -8,13 +8,13 @@ scale_x0 = 1
 scale_y0 = 1
 alias0 = "DerezedPass"
 
-shader1 = ../../../shaders/base/cache-info-potato-params.slang
+shader1 = ../../../shaders/base/cache-info-bezel-params.slang
 filter_linear1 = false
 scale_type1 = source
 scale1 = 1.0
 alias1 = "InfoCachePass"
 
-shader2 = ../../../shaders/guest/extras/hsm-fetch-drez-output.slang
+shader2 = ../../../shaders/base/fetch-drez-output.slang
 filter_linear2 = false
 srgb_framebuffer2 = true
 scale_type2 = source
@@ -55,20 +55,35 @@ scale_type7 = source
 scale_x7 = 1.0
 scale_y7 = 1.0
 
+
+# -----------------------------------------------------------------------------------------------
+# GDV NTSC
+
+GAMMA_INPUT = 2.0
+gamma_out = 1.95
+h_sharp = "15.000000"
+s_sharp = "1.500000"
+
+# -----------------------------------------------------------------------------------------------
+
+
 shader8 = ../../../shaders/base/stock.slang
-float_framebuffer8 = true
+filter_linear8 = true
+scale_type8 = source
+scale_x8 = 1.0
+scale_y8 = 1.0
 alias8 = "PrePass"
+mipmap_input8 = true
 
 shader9 = ../../../shaders/guest/hsm-avg-lum.slang
 filter_linear9 = true
 scale_type9 = source
 scale9 = 1.0
 mipmap_input9 = true
-float_framebuffer9 = true
 alias9 = "AvgLumPass"
 
 # Pass referenced by subsequent blurring passes and crt pass
-shader10 = ../../../shaders/guest/hsm-interlace.slang
+shader10 = ../../../shaders/guest/hsm-interlace-and-linearize.slang
 filter_linear10 = true
 scale_type10 = source
 scale10 = 1.0
@@ -95,7 +110,7 @@ mipmap_input12 = "false"
 alias12 = "SourceHDR"
 float_framebuffer12 = "true"
 
-shader13 = "../../../shaders/megatron/crt-sony-megatron-potato.slang"
+shader13 = "../../../shaders/megatron/crt-sony-megatron.slang"
 filter_linear13 = "false"
 wrap_mode13 = "clamp_to_border"
 mipmap_input13 = "false"
@@ -103,16 +118,29 @@ scale_type13 = "viewport"
 float_framebuffer13 = "true"
 alias13 = "CRTPass"
 
-shader14 = ../../../shaders/base/post-crt-prep-potato-megatron.slang
-mipmap_input14 = true
-scale_type14 = viewport
-float_framebuffer14 = true
-alias14 = "PostCRTPass"
+
+# -----------------------------------------------------------------------------------------------
+# MEGATRON Parameters
+
+# HDR Parameters
+HSM_NON_USER_IS_HDR_PRESET = "1.000000"
+HSM_NON_USER_LINEARIZE_INTERLACE_PASS = "1.00000"
+
+# Sony Megatron Color Monitor Parameters
+hcrt_hdr = "0.000000"
+
+HSM_INT_SCALE_MODE = "1.000000"
+HSM_CRT_CURVATURE_SCALE = "0.000000"
+HSM_GLOBAL_GRAPHICS_BRIGHTNESS = "100.000000"
+HSM_REFLECT_GLOBAL_AMOUNT = "7.000000"
+
+# -----------------------------------------------------------------------------------------------
 
 # Combine Passes ----------------------------------------------------------------
-shader15 = ../../../shaders/base/output-hdr.slang
-scale_type15 = viewport
-alias15 = "OutputPass"
+shader14 = ../../../shaders/base/output-hdr.slang
+scale_type14 = viewport
+alias14 = "OutputPass"
+
 
 # Textures Potato
 # Define textures to be used by the different passes
@@ -145,16 +173,16 @@ HSM_ASPECT_RATIO_MODE = 1
 # HSM_ASPECT_RATIO_MODE = 6
 # HSM_CURVATURE_MODE = 0
 
-# Sony Megatron Color Monitor Parameters
-hcrt_hdr = "0.000000"
 
-HSM_INT_SCALE_MODE = "1.000000"
-HSM_CRT_CURVATURE_SCALE = "0.000000"
-HSM_GLOBAL_GRAPHICS_BRIGHTNESS = "100.000000"
-HSM_REFLECT_GLOBAL_AMOUNT = "7.000000"
+#------------------------------------------------------------------------------
+# Post CRT Process POTATO Parameters
 
-# GDV NTSC Parameters
-GAMMA_INPUT = 2.0
-gamma_out = 1.95
-h_sharp = "15.000000"
-s_sharp = "1.500000"
+HSM_NON_USER_INFO_POST_CRT_PROCESS = 4
+HSM_SCREEN_REFLECTION_ALLOW_REFLECTION = 0
+
+# Set aspect ratio to 4:3
+HSM_ASPECT_RATIO_MODE = 1
+
+#------------------------------------------------------------------------------
+
+

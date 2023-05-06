@@ -260,10 +260,11 @@ void main()
 		if (interm == 5.0) { c = mix(c2, c1, 0.5); c = plant(mix(c, c*c, 0.5*iscans), max(max(c.r,c.g),c.b)); intera = 0.45; }
 	}
 
-	#ifndef DO_NOT_LINEARIZE
-	// Linearize Color
-	c = pow(c, vec3(gamma_in));
-	#endif
+	if (HSM_NON_USER_LINEARIZE_INTERLACE_PASS > 0.5)
+	{
+		// Linearize Color
+		c = pow(c, vec3(gamma_in));
+	}
 	
 	// if (USE_VERTICAL_SCANLINES > 0.5)
 	// 	intera = 1;

@@ -1,8 +1,7 @@
 #version 450
 
-#include "../base/common/globals-and-screen-scale-params.inc"
+#include "../base/common/globals-and-bezel-params.inc"
 #include "../base/common/common-functions.inc"
-#include "../base/common/params-2-bezel.inc"
 #include "../base/common/common-functions-bezel.inc"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,19 +37,7 @@ void main()
 {
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 
-	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
-	HSM_GetBezelCoords(TUBE_DIFFUSE_COORD, 
-						TUBE_DIFFUSE_SCALE, 
-						TUBE_SCALE, 
-						TUBE_DIFFUSE_ASPECT, 
-						false,
-						BEZEL_OUTSIDE_SCALE,
-						BEZEL_OUTSIDE_COORD, 
-						BEZEL_OUTSIDE_CURVED_COORD, 
-						FRAME_OUTSIDE_CURVED_COORD);
-
-
-	if (HHLP_IsOutsideCoordSpace(BEZEL_OUTSIDE_COORD))
+	if (HSM_IsOutsideReflectionBoundary())
 	{
 		vec4 feedback_color_test = texture(PassFeedback, vec2(1, 1));
 		if (HSM_CACHE_GRAPHICS_ON > 0.5 && feedback_color_test.a < 0 && !CACHE_INFO_CHANGED)

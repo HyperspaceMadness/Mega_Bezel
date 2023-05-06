@@ -1,12 +1,8 @@
 #reference "Components/chain__01__downrez__none.slangp"
-#reference "Components/composition__10__cache__adv-no-reflect.slangp"
-#reference "Components/composition__40__dedithering__adv.slangp"
+#reference "Components/composition__10__cache__bezel.slangp"
+#reference "Components/composition__40__pre-crt-chain__adv-scalefx.slangp"
 #reference "Components/chain__45__upscale__scalefx.slangp"
-#reference "Components/composition__60__pre-crt-prep.slangp"
-#reference "Components/chain__60__crt__gdv__no-reflect.slangp"
-#reference "Components/chain__68__post-crt__no-reflect.slangp"
-#reference "Components/composition__90__mega-process__screen-only.slangp"
-
-#reference "Components/textures__00__all.slangp"
-
-#reference "Components/parameters__00__smooth-adv.slangp"
+#reference "Components/composition__60__crt-prep__adv.slangp"
+#reference "Components/chain__60__crt__gdv.slangp"
+#reference "Components/chain__68__tubefx-default-delinearize.slangp"
+#reference "Components/composition__90__post-crt__screen-only.slangp"

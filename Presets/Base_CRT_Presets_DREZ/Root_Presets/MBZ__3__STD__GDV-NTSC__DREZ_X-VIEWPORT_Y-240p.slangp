@@ -1,6 +1,6 @@
 shaders = 35
 
-shader0 = ../../../shaders/guest/extras/hsm-drez-g-sharp_resampler.slang
+shader0 = ../../../shaders/base/drez-g-sharp_resampler.slang
 filter_linear0 = false
 scale_type_x0 = viewport
 scale_x0 = 1.0
@@ -15,14 +15,14 @@ scale_type1 = source
 scale1 = 1.0
 alias1 = "InfoCachePass"
 
-shader2 = ../../../shaders/base/text-std.slang
+shader2 = ../../../shaders/base/text.slang
 filter_linear2 = false
 float_framebuffer2 = true
 scale_type2 = source
 scale2 = 1.0
 alias2 = "TextPass"
 
-shader3 = ../../../shaders/guest/extras/hsm-fetch-drez-output.slang
+shader3 = ../../../shaders/base/fetch-drez-output.slang
 filter_linear3 = false
 srgb_framebuffer3 = true
 scale_type3 = source
@@ -32,6 +32,15 @@ scale_y3 = 1
 shader4 = ../../../shaders/fxaa/fxaa.slang
 float_framebuffer4 = "true"
 alias4 = "DeditherPass"
+
+
+#-------------------------------------------------------------------
+# Pre CRT Chain STD Parameters
+
+HSM_NON_USER_INFO_PRE_CRT_CHAIN = 2
+
+#-------------------------------------------------------------------
+
 
 shader5 = ../../../shaders/base/intro.slang
 filter_linear5 = false
@@ -88,6 +97,18 @@ filter_linear13 = true
 scale_type13 = source
 scale_x13 = 1.0
 scale_y13 = 1.0
+
+
+# -----------------------------------------------------------------------------------------------
+# GDV NTSC
+
+GAMMA_INPUT = 2.0
+gamma_out = 1.95
+h_sharp = "15.000000"
+s_sharp = "1.500000"
+
+# -----------------------------------------------------------------------------------------------
+
 
 shader14 =  ../../../shaders/guest/hsm-custom-fast-sharpen.slang
 filter_linear14 = true
@@ -176,7 +197,7 @@ scale_y24 = 1.0
 float_framebuffer24 = true
 alias24 = "CRTPass"
 
-shader25 = ../../../shaders/base/post-crt-prep-image-layers.slang
+shader25 = ../../../shaders/base/tubefx-default.slang
 mipmap_input25 = true
 scale_type25 = viewport
 float_framebuffer25 = true
@@ -252,6 +273,7 @@ alias32 = "BR_MirrorFullscreenGlowPass"
 # Bezel Reflection ----------------------------------------------------------------
 shader33 = ../../../shaders/base/reflection.slang
 scale_type33 = viewport
+float_framebuffer33 = true
 alias33 = "ReflectionPass"
 
 # Combine Passes ----------------------------------------------------------------
@@ -259,9 +281,10 @@ shader34 = ../../../shaders/base/combine-passes.slang
 scale_type34 = viewport
 alias34 = "CombinePass"
 
+
 # Textures All
 # Define textures to be used by the different passes
-textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;GlassPresetHighlightImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
 SamplerLUT1 = ../../../shaders/guest/lut/trinitron-lut.png
 SamplerLUT1_linear = true 
@@ -298,6 +321,10 @@ TubeStaticReflectionImage_mipmap = 1
 ReflectionMaskImage = ../../../shaders/textures/Placeholder_White_16x16.png
 ReflectionMaskImage_linear = true
 ReflectionMaskImage_mipmap = 1
+
+GlassPresetHighlightImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+GlassPresetHighlightImage_linear = true
+GlassPresetHighlightImage_mipmap = 1
 
 FrameTextureImage = ../../../shaders/textures/FrameTexture_2800x2120.png
 FrameTextureImage_linear = true
@@ -351,11 +378,14 @@ TopLayerImage_mipmap = 1
 # HSM_ASPECT_RATIO_MODE = 6
 # HSM_CURVATURE_MODE = 0
 
-# GDV NTSC Parameters
-GAMMA_INPUT = 2.0
-gamma_out = 1.95
-h_sharp = "15.000000"
-s_sharp = "1.500000"
+
+#--------------------------------------------------------------------------------------
+# Post CRT Process DEFAULT Parameters
+
+HSM_NON_USER_INFO_POST_CRT_PROCESS = 0
+
+#--------------------------------------------------------------------------------------
+
 
 # DREZ Parameters
 SHARPEN = 0

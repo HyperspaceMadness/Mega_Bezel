@@ -1,7 +1,0 @@
-shaders = 1
-
-shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/post-crt-prep-potato.slang
-mipmap_input0 = true
-scale_type0 = viewport
-float_framebuffer0 = true
-alias0 = "PostCRTPass"

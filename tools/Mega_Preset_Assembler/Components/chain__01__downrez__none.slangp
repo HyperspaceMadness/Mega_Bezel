@@ -1,6 +1,6 @@
 shaders = 1
 
-shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/guest/extras/hsm-drez-none.slang
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/drez-none.slang
 filter_linear0 = false
 srgb_framebuffer0 = true
 scale_type0 = source

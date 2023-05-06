@@ -145,7 +145,6 @@ float rand(vec2 co)
 
 void main()
 {
-	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 
    // stop time variable so the screen doesn't wiggle

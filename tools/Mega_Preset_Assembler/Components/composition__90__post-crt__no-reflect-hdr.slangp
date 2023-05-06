@@ -1,0 +1,14 @@
+#reference "chain__80__bezel-images.slangp"
+#reference "chain__85__combine-passes__no-reflect-hdr.slangp"
+
+#reference "textures__00__all.slangp"
+
+
+#------------------------------------------------------------------------------
+# Post CRT Process NO-REFLECT Parameters
+
+HSM_NON_USER_INFO_POST_CRT_PROCESS = 1
+HSM_SCREEN_REFLECTION_ALLOW_REFLECTION = 0
+
+#------------------------------------------------------------------------------
+

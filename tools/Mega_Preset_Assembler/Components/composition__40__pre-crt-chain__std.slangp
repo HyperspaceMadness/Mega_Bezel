@@ -1,0 +1,10 @@
+#reference "chain__30__dedithering__4-last-pass-fxaa.slangp"
+
+
+#-------------------------------------------------------------------
+# Pre CRT Chain STD Parameters
+
+HSM_NON_USER_INFO_PRE_CRT_CHAIN = 2
+
+#-------------------------------------------------------------------
+

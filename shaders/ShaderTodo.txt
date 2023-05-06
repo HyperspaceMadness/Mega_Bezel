@@ -3,53 +3,53 @@
 Mega Bezel is updated to V1.14.0_2023-04-15
 
 Changes:
-  * Added PASSTHROUGH base variants
-    * These have a minimal processing on the image coming from the core, and no CRT shader
-    * Includes FXAA for antialiasing 3D poligonal graphics
-    * Guest's G-Sharp used for scaling the game image down to the size on the screen
-    * Added NO-TUBE-FX versions here as well
-  * Did a really big refactor of the building of the presets
-    * This makes it easier to keep the presets consistent and know what is in each one
-    * Removed Negative crop passes, since it's not being used
-    * Removed first pass which wasn't needed since we don't use mipmapping for DREZ anymore
-    * Moved the Intro after ScaleFX so the Static should no longer get smoothed
-  * Added support to fix flipping in more core with glcore
-  * Fixed Reflection Disappearing with Raster Bloom Enabled
-  * Fixed Reflection on Dual Screen LCD presets where the whole unsplit image was being used for both screens
-  * Added Threshold to GSharp so that it doesn't apply to a similar incoming resolution
-  * Updated Dual Screen presets to use params files which users could leverage if desired 
-  * Overscan and Raster Bloom is now available for all shaderschain__30__dedithering__none.slangp
-  * Potato CRT Curvature is affecting black line which it shouldn't
-  * Removed Afterglow on all Potato Presets (Before some had them some didn't)
-  * Remove Sega Luma Fix from the Guest shader used so only the one in Grade is used (since it will be turned on automatically for sega consoles)
+  * 
+  * Potato Params renamed
+    * HSM_POTATO_SHOW_BG_OVER_SCREEN -> HSM_SIMPLEBG_SHOW_BG_OVER_SCREEN
+    * HSM_BG_BLEND_MODE -> HSM_SIMPLEBG_BLEND_MODE
+    * HSM_BG_OPACITY -> HSM_SIMPLEBG_OPACITY
+    * HSM_BG_BRIGHTNESS -> HSM_SIMPLEBG_BRIGHTNESS
+    * HSM_CRT_SCREEN_BLEND_MODE -> HSM_SIMPLEBG_CRT_SCREEN_BLEND_MODE
+    * HSM_POTATO_COLORIZE_CRT_WITH_BG -> HSM_SIMPLEBG_COLORIZE_CRT_WITH_BG
+    * HSM_POTATO_COLORIZE_BRIGHTNESS -> HSM_SIMPLEBG_COLORIZE_BRIGHTNESS
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Passthrough:
+    * Linear sampling for FXAA?
+    * Set G-Sharp to Editable
+  * Use Composition for post-crt in presets
+  * Use compositions for post-crt + hdr
+  * Use different textures for Glass Preset Highlight
+  * Use parameter to set reflection bezel size to 0 so we can have fewer variant shader files
+  * Fix Bezel & Frame Masks when Curvature is applied
+  * Potato-Like BG image for Glass Preset
   * Fix edges of tube when Integer scale is used on both axes
   * Use parameters to control Text instead of custom text for each family
     * Get from Cache
+  * Add FFW effect to enable on rewind or FFW
   * Implement Original Scaling Mode
   * Check why intro options are not working
   * Check Banding on Highlight on glass presets
   * Check Brightness on Megatron Glass Presets
   * Fix Megatron to not put mask outside screen
   * Can't show Resolution Text in Potato right now
-  * Investigate "dip" in reflection at the edge of the bezel
-  * Passthrough Preset (No CRT Shader)
+  * Refleciton
+    * Investigate "dip" in reflection at the edge of the bezel
+    * Check out independent bezel scale and reflection, reflection is not following the Bezel
+    * Have layers above Bezel go under reflection?
   * HD Preset
-  * Look at Retro V2 for alternate LCD shader
+  * Look at Kokoaio for dot shader replacement
   * Python file to create full presets from a folder
   * Add Curvature to EasyMode for lasly
-  * Rotate Image Layers with Parameters
   * Update Megatron
   * Add AbsoluteMax as a scaling type
   * Add readme for Signal Noise
   * Add readme for Overscan and Raster Bloom
   * Check difference between old and new NTSC
   * Check out duplicate params in NTSC
-  * Check out independent bezel scale and reflection, reflection is not following the bezel
   * Check brighter reflection in new NTSC
 
 

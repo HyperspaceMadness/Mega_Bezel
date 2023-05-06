@@ -1,10 +1,9 @@
 #reference "Components/chain__01__downrez__480p.slangp"
 #reference "Components/composition__10__cache__potato.slangp"
-#reference "Components/composition__40__dedithering__potato-passthrough.slangp"
-#reference "Components/composition__60__pre-crt-prep__potato-passthrough.slangp"
-#reference "Components/chain__60__crt__passthrough__potato.slangp"
-#reference "Components/chain__68__post-crt__potato.slangp"
+#reference "Components/composition__40__pre-crt-chain__potato-passthrough.slangp"
+#reference "Components/composition__60__crt-prep__passthrough-potato.slangp"
+#reference "Components/chain__60__crt__passthrough.slangp"
+#reference "Components/chain__68__tubefx-none-with-bg-delinearize.slangp"
+#reference "Components/composition__90__post-crt__potato.slangp"
 
-#reference "Components/textures__00__potato.slangp"
-
-#reference "Components/parameters__00__passthrough.slangp"
+#reference "Components/parameters__00__drez.slangp"

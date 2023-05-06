@@ -98,7 +98,6 @@ vec3 PrepGraphicsForHDR(vec3 in_color)
 	out_color *= HSM_GLOBAL_GRAPHICS_BRIGHTNESS;
 	
 #ifdef IS_HDR_PRESET
-
    if((HCRT_HDR < 1.0f) && (HCRT_COLOUR_ACCURATE < 1.0f))
       if(HCRT_OUTPUT_COLOUR_SPACE == 2.0f)
          out_color= (out_color * k709_to_XYZ) * kXYZ_to_DCIP3; 
@@ -117,19 +116,24 @@ vec3 PrepGraphicsForHDR(vec3 in_color)
 void main()
 {
 	UNFLIPPED_VIEWPORT_COORD = vTexCoord;
-	vec2 VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 
 	if (HSM_SHOW_PASS_INDEX > 0.5)
 	{
 		FragColor = vec4(0);
 
+		bool pass_needs_delinearize = true;
 		vec2 coord_for_raw_passes = HSM_SHOW_PASS_APPLY_SCREEN_COORD > 0.5 ? HSM_GetCRTShaderCurvedCoord(SCREEN_COORD) : vTexCoord;
 
+// TODO Can we make this simpler without the #ifdef?
 #ifndef IS_NO_REFLECT_PRESET
 		// REFLECTION
 		if (HSM_SHOW_PASS_INDEX == 1)
+		{
 			FragColor = texture(ReflectionPass, vTexCoord);
+			pass_needs_delinearize = HSM_NON_USER_DELINEARIZE_REFLECT_PASS < 0.5;
+		}
+
 #endif
 
 		// TUBE
@@ -142,23 +146,37 @@ void main()
 
 		// INTERLACE & LINEARIZE
 		if (HSM_SHOW_PASS_INDEX == 4)
+		{
 			FragColor = texture(LinearizePass, (floor(coord_for_raw_passes * textureSize(LinearizePass, 0)) + 0.5) / textureSize(LinearizePass, 0));
+			pass_needs_delinearize = HSM_NON_USER_LINEARIZE_INTERLACE_PASS > 0.5;
+		}
 
 		// COLOR CORRECT & UPSCALE
 		if (HSM_SHOW_PASS_INDEX == 5)
+		{
 			FragColor = texture(ColorCorrectPass, (floor(coord_for_raw_passes * textureSize(ColorCorrectPass, 0)) + 0.5) / textureSize(ColorCorrectPass, 0));
+		}
 
 		// DEDITHER
 		if (HSM_SHOW_PASS_INDEX == 6)
+		{
 			FragColor = texture(DeditherPass, (floor(coord_for_raw_passes * textureSize(DeditherPass, 0)) + 0.5) / textureSize(DeditherPass, 0));
+			pass_needs_delinearize = false;
+		}
 
 		// DREZ
 		if (HSM_SHOW_PASS_INDEX == 7)
+		{
 			FragColor = texture(DerezedPass, coord_for_raw_passes);
+			pass_needs_delinearize = false;
+		}
 
 		// CORE
 		if (HSM_SHOW_PASS_INDEX == 8)
+		{
 			FragColor = texture(Original, coord_for_raw_passes);
+			pass_needs_delinearize = false;
+		}
 
 		// LAYERS TOP
 		if (HSM_SHOW_PASS_INDEX == 9)
@@ -169,7 +187,7 @@ void main()
 			FragColor = texture(BR_LayersUnderCRTPass, vTexCoord);
 
 		// Linearize passes which are not already in linear space
-		if (HSM_SHOW_PASS_INDEX < 5 || HSM_SHOW_PASS_INDEX > 8)
+		if (pass_needs_delinearize)
 			FragColor = HSM_Delinearize(FragColor, DEFAULT_SRGB_GAMMA);
 
 		if (HSM_SHOW_PASS_ALPHA > 0.5)
@@ -178,7 +196,16 @@ void main()
 		return;
 	}
 
-	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
+	if (HSM_IsOutsideReflectionBoundary())
+	{
+		vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
+		if (HSM_CACHE_GRAPHICS_ON > 0.5 && feedback_color_test.a < 0 && !CACHE_INFO_CHANGED && HSM_RENDER_SIMPLE_MODE < 0.5)
+		{
+			FragColor = texture(PassFeedback, UNFLIPPED_VIEWPORT_COORD);
+			return;
+		}
+	}
+
 	HSM_GetBezelCoords(TUBE_DIFFUSE_COORD, 
 						TUBE_DIFFUSE_SCALE, 
 						TUBE_SCALE, 
@@ -188,16 +215,6 @@ void main()
 						BEZEL_OUTSIDE_COORD, 
 						BEZEL_OUTSIDE_CURVED_COORD, 
 						FRAME_OUTSIDE_CURVED_COORD);
-
-	if (HHLP_IsOutsideCoordSpace(BEZEL_OUTSIDE_COORD))
-	{
-		vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
-		if (HSM_CACHE_GRAPHICS_ON > 0.5 && feedback_color_test.a < 0 && !CACHE_INFO_CHANGED && HSM_RENDER_SIMPLE_MODE < 0.5)
-		{
-			FragColor = texture(PassFeedback, UNFLIPPED_VIEWPORT_COORD);
-			return;
-		}
-	}
 
 	vec4 under_layer = texture(BR_LayersUnderCRTPass, vTexCoord);
 	under_layer.rgb = PrepGraphicsForHDR(under_layer.rgb);
@@ -213,6 +230,7 @@ void main()
 	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
 		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
 
+// TODO, need to see how to manage with parameters
 #ifndef IS_NO_REFLECT_PRESET
 	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 1, TUBE_DIFFUSE_SCALE, TUBE_SCALE, TUBE_DIFFUSE_ASPECT, 1);
 
@@ -289,17 +307,16 @@ void main()
 		}
 	}
 
+#ifdef IS_HDR_PRESET	
+	vec3 output_colour = vec3(0);
+	LinearToOutputColor(FragColor.rgb, output_colour);
+	FragColor = vec4(output_colour, 1.0f);
+#else
+	FragColor = HSM_Delinearize(FragColor, DEFAULT_SRGB_GAMMA);
+#endif
+
 	// If we have calculated an image then set -1 as a flag to show that we have
 	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
 		FragColor.a = -1;
 
-#ifndef IS_HDR_PRESET	
-	FragColor = HSM_Delinearize(FragColor, DEFAULT_SRGB_GAMMA);
-#endif
-
-#ifdef IS_HDR_PRESET
-	vec3 output_colour = vec3(0);
-	LinearToOutputColor(FragColor.rgb, output_colour);
-	FragColor = vec4(output_colour, 1.0f);
-#endif
 }

@@ -1,6 +1,6 @@
 shaders = 10
 
-shader0 = ../../../shaders/guest/extras/hsm-drez-g-sharp_resampler.slang
+shader0 = ../../../shaders/base/drez-g-sharp_resampler.slang
 filter_linear0 = false
 scale_type_x0 = viewport
 scale_x0 = 1.0
@@ -9,13 +9,13 @@ scale_y0 = 480
 wrap_mode0 = "clamp_to_edge"
 alias0 = "DerezedPass"
 
-shader1 = ../../../shaders/base/cache-info-potato-params.slang
+shader1 = ../../../shaders/base/cache-info-bezel-params.slang
 filter_linear1 = false
 scale_type1 = source
 scale1 = 1.0
 alias1 = "InfoCachePass"
 
-shader2 = ../../../shaders/guest/extras/hsm-fetch-drez-output.slang
+shader2 = ../../../shaders/base/fetch-drez-output.slang
 filter_linear2 = false
 srgb_framebuffer2 = true
 scale_type2 = source
@@ -57,7 +57,7 @@ shader7 = ../../../shaders/base/delinearize.slang
 scale_type7 = source
 float_framebuffer7 = "true"
 
-shader8 = ../../../shaders/guest/hsm-crt-dariusg-gdv-mini-potato.slang
+shader8 = ../../../shaders/guest/hsm-crt-dariusg-gdv-mini.slang
 scale_type8 = viewport
 scale_x8 = 1.0
 scale_y8 = 1.0
@@ -65,11 +65,18 @@ filter_linear8 = true
 float_framebuffer8 = "true"
 alias8 = "CRTPass"
 
+
+# -----------------------------------------------------------------------------------------------
+# GDV-MINI Parameters
+
 g_sat = 0.25
 g_lum = 0.15
 g_gamma_out = 2.45
 
-shader9 = ../../../shaders/base/post-crt-prep-potato.slang
+# -----------------------------------------------------------------------------------------------
+
+
+shader9 = ../../../shaders/base/tubefx-none-with-bg-delinearize.slang
 mipmap_input9 = true
 scale_type9 = viewport
 float_framebuffer9 = true
@@ -105,6 +112,20 @@ HSM_ASPECT_RATIO_MODE = 1
 # Use for matching vanilla GDV-Advanced
 # HSM_ASPECT_RATIO_MODE = 6
 # HSM_CURVATURE_MODE = 0
+
+
+#------------------------------------------------------------------------------
+# Post CRT Process POTATO Parameters
+
+HSM_NON_USER_INFO_POST_CRT_PROCESS = 4
+HSM_SCREEN_REFLECTION_ALLOW_REFLECTION = 0
+
+# Set aspect ratio to 4:3
+HSM_ASPECT_RATIO_MODE = 1
+
+#------------------------------------------------------------------------------
+
+
 
 # DREZ Parameters
 SHARPEN = 0

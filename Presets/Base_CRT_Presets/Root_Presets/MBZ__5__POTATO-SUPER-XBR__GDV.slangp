@@ -1,6 +1,6 @@
 shaders = 29
 
-shader0 = ../../../shaders/guest/extras/hsm-drez-none.slang
+shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
 srgb_framebuffer0 = true
 scale_type0 = source
@@ -8,13 +8,13 @@ scale_x0 = 1
 scale_y0 = 1
 alias0 = "DerezedPass"
 
-shader1 = ../../../shaders/base/cache-info-potato-params.slang
+shader1 = ../../../shaders/base/cache-info-bezel-params.slang
 filter_linear1 = false
 scale_type1 = source
 scale1 = 1.0
 alias1 = "InfoCachePass"
 
-shader2 = ../../../shaders/guest/extras/hsm-fetch-drez-output.slang
+shader2 = ../../../shaders/base/fetch-drez-output.slang
 filter_linear2 = false
 srgb_framebuffer2 = true
 scale_type2 = source
@@ -54,6 +54,21 @@ shader10 = ../../../shaders/guest/extras/hsm-g-sharp_resampler.slang
 
 shader11 = ../../../shaders/guest/extras/hsm-sharpsmoother.slang
 alias11 = "DeditherPass"
+
+
+#-------------------------------------------------------------------
+# Pre CRT Chain POTATO Parameters
+
+HSM_NON_USER_INFO_PRE_CRT_CHAIN = 3
+
+# Use for matching vanilla GDV-Advanced
+# HSM_ASPECT_RATIO_MODE = 6
+# HSM_CURVATURE_MODE = 0
+
+HSM_ASPECT_RATIO_MODE = 1
+
+#-------------------------------------------------------------------
+
 
 shader12 = ../../../shaders/base/stock.slang
 # filter_linear12 = "false"
@@ -113,6 +128,45 @@ scale_x17 = 1
 scale_type_y17 = source
 scale_y17 = 0.5
 wrap_mode17 = "clamp_to_edge"
+
+
+# -----------------------------------------------------------------------------------------------
+# SUPER-XBR GDV Parameters
+
+HSM_NON_USER_INFO_UPSCALING = 2
+
+SGPT_BLEND_OPTION = 1
+
+SHARPSMOOTHER_ON = 1
+max_w = 0.05
+min_w = 0
+smoot = 0.4
+lumad = 0.5
+mtric = 0.3
+
+SUPERXBR_ON = 1
+
+SHARPEN = 1
+
+HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = 600
+HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR = 100
+HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR = 0
+HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = 0
+
+ntsc_scale = 0.52
+
+# gamma_c = 0.9
+# gsl = -1
+# scanline1 = 3
+# shadowMask = 3
+# maskDark = 0.4
+# maskLight = 1.2
+# mask_gamma = 4
+
+# Mask Size is Auto, so it will look the same at 1080p and 4K
+masksize = 0
+
+# -----------------------------------------------------------------------------------------------
 
 # Color Correction with Dogway's awesome Grade shader
 # Grade is after Afterglow so that brightening the black level does not break the afterglow
@@ -179,14 +233,14 @@ scale_y25 = 1.0
 float_framebuffer25 = true
 alias25 = BloomPass
 
-shader26 = ../../../shaders/guest/hsm-crt-guest-advanced-potato.slang
+shader26 = ../../../shaders/guest/hsm-crt-guest-advanced.slang
 filter_linear26 = true
 scale_type26 = viewport
 scale_x26 = 1.0
 scale_y26 = 1.0
 float_framebuffer26 = true
 
-shader27 = ../../../shaders/guest/hsm-deconvergence-potato.slang
+shader27 = ../../../shaders/guest/hsm-deconvergence.slang
 filter_linear27 = true
 scale_type27 = viewport
 scale_x27 = 1.0
@@ -194,7 +248,7 @@ scale_y27 = 1.0
 float_framebuffer27 = true
 alias27 = "CRTPass"
 
-shader28 = ../../../shaders/base/post-crt-prep-potato.slang
+shader28 = ../../../shaders/base/tubefx-none-with-bg-delinearize.slang
 mipmap_input28 = true
 scale_type28 = viewport
 float_framebuffer28 = true
@@ -231,34 +285,16 @@ HSM_ASPECT_RATIO_MODE = 1
 # HSM_ASPECT_RATIO_MODE = 6
 # HSM_CURVATURE_MODE = 0
 
-# SUPER-XBR GDV Parameters
-SGPT_BLEND_OPTION = 1
 
-SHARPSMOOTHER_ON = 1
-max_w = 0.05
-min_w = 0
-smoot = 0.4
-lumad = 0.5
-mtric = 0.3
+#------------------------------------------------------------------------------
+# Post CRT Process POTATO Parameters
 
-SUPERXBR_ON = 1
+HSM_NON_USER_INFO_POST_CRT_PROCESS = 4
+HSM_SCREEN_REFLECTION_ALLOW_REFLECTION = 0
 
-SHARPEN = 1
+# Set aspect ratio to 4:3
+HSM_ASPECT_RATIO_MODE = 1
 
-HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = 600
-HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR = 100
-HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR = 0
-HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = 0
+#------------------------------------------------------------------------------
 
-ntsc_scale = 0.52
 
-# gamma_c = 0.9
-# gsl = -1
-# scanline1 = 3
-# shadowMask = 3
-# maskDark = 0.4
-# maskLight = 1.2
-# mask_gamma = 4
-
-# Mask Size is Auto, so it will look the same at 1080p and 4K
-masksize = 0

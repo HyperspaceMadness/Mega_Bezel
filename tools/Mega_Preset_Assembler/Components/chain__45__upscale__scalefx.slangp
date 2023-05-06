@@ -30,3 +30,12 @@ shader5 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/scalefx/hsm-scalefx-p
 filter_linear5 = false
 scale_type5 = source
 scale5 = 3
+
+
+# -----------------------------------------------------------------------------------------------
+# SCALEFX
+
+HSM_NON_USER_INFO_UPSCALING = 1
+
+#-------------------------------------------------------------------
+

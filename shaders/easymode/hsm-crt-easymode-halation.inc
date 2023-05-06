@@ -179,29 +179,13 @@ void main()
 
     // TODO implement Cropping
     // HSM Added
-	vec2 viewportCoordTransformed = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
     vec2 tex_size = CROPPED_ROTATED_SIZE_WITH_RES_MULT;
     // End Addition
 
 	vec2 cache_bounds_coord = SCREEN_COORD;
 
-// // If it's the potato preset render the whole frame
-// #ifndef IS_POTATO_PRESET
-// #ifndef IS_NO_REFLECT_PRESET
-// 	vec2 bezel_outside_flat_coord;
-// 	vec2 frame_outside_flat_coord;
-// 	HSM_GetSimpleBezelCoords(TUBE_DIFFUSE_COORD, 
-// 							TUBE_DIFFUSE_SCALE, 
-// 							TUBE_SCALE, 
-// 							SCREEN_ASPECT,
-// 							bezel_outside_flat_coord, 
-// 							frame_outside_flat_coord);
-// 	cache_bounds_coord = (frame_outside_flat_coord - 0.5) * 0.9 + 0.5;
-// #endif
-// #endif
-
-// 	if (HHLP_IsOutsideCoordSpace(cache_bounds_coord))
+// 	if (HSM_IsOutsideReflectionBoundary())
 // 	{
 // 			FragColor = vec4(0);
 // 			return;

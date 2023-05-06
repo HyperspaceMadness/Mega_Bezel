@@ -1,7 +1,7 @@
 
 # Textures All-Reshade-Fx
 # Define textures to be used by the different passes
-textures = "Dirt;Sprite;SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
+textures = "Dirt;Sprite;SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;GlassPresetHighlightImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
 Dirt = :/shaders/shaders_slang/reshade/shaders/bloom/LensDB.png
 Dirt_wrap_mode = "clamp_to_border"
@@ -46,6 +46,10 @@ TubeStaticReflectionImage_mipmap = 1
 ReflectionMaskImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Placeholder_White_16x16.png
 ReflectionMaskImage_linear = true
 ReflectionMaskImage_mipmap = 1
+
+GlassPresetHighlightImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Placeholder_Transparent_16x16.png
+GlassPresetHighlightImage_linear = true
+GlassPresetHighlightImage_mipmap = 1
 
 FrameTextureImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/FrameTexture_2800x2120.png
 FrameTextureImage_linear = true

@@ -1,11 +1,7 @@
 #reference "Components/chain__01__downrez__none.slangp"
-#reference "Components/composition__10__cache__std-no-reflect.slangp"
-#reference "Components/composition__40__dedithering__std.slangp"
-#reference "Components/composition__60__pre-crt-prep-ntsc.slangp"
+#reference "Components/composition__10__cache__all.slangp"
+#reference "Components/composition__40__pre-crt-chain__std.slangp"
+#reference "Components/composition__60__crt-prep__ntsc.slangp"
 #reference "Components/chain__60__crt__gdvmini.slangp"
-#reference "Components/chain__68__post-crt__no-reflect.slangp"
-#reference "Components/composition__90__mega-process__screen-only.slangp"
-
-#reference "Components/textures__00__all.slangp"
-
-#reference "Components/parameters__00__gdv-ntsc.slangp"
+#reference "Components/chain__68__tubefx-default-delinearize.slangp"
+#reference "Components/composition__90__post-crt__screen-only.slangp"

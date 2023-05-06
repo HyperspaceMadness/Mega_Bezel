@@ -71,8 +71,7 @@ def GetPresetLines(in_path : str, output_start_pass_index : int) -> tuple[list[s
                                 processed_line_indexes.append(i)
                                 out_component_lines[i] = out_component_lines[i].replace(str(old_index) + " =", str(new_index) + " =")
             next_pass_index = output_start_pass_index + num_shaders
-
-        elif component_lines[0].startswith('#reference'):
+        else:
             for component_line in component_lines:
                 if component_line.startswith('#reference'):
                     dir_path : str = os.path.split(in_path)[0]
@@ -89,16 +88,10 @@ def GetPresetLines(in_path : str, output_start_pass_index : int) -> tuple[list[s
                         print('        Error while processing: ' + in_path)
                         return None
                     out_component_lines.extend(new_lines)
-
-        else:
-            out_component_lines = component_lines[:]
-        # else:
-        #     print("            Can't find Shaders line at first line of the preset, adding all lines without processing")
-
+                else:
+                    out_component_lines.append(component_line)
+                    
         return (out_component_lines, next_pass_index)
-        # else:
-        #     print('        File is missing "shaders = " or is empty: ' + in_path)
-        #     return None
 
 # Go through all template files
 for template_path in [p for p in template_paths if os.path.splitext(p)[1] == '.protoslangp'] :

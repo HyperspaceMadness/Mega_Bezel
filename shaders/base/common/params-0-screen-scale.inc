@@ -868,6 +868,33 @@ float HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL = 0;
 
 
 //---------------------------------------------------------------------------------------------------
+//    SIMPLE BACKGROUND
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_SIMPLE_BG_IMG_TITLE	                    "[ SIMPLE BACKGROUND (NON STD & ADV PRESETS)]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_SIMPLEBG_SHOW_BG_OVER_SCREEN                "          Show BG: 0:UNDER SCREEN | 1:OVER SCREEN" 1 0 1 1
+float HSM_SIMPLEBG_SHOW_BG_OVER_SCREEN = global.HSM_SIMPLEBG_SHOW_BG_OVER_SCREEN;
+
+#pragma parameter HSM_SIMPLEBG_BLEND_MODE                             "          Blend Mode - OFF | NORMAL | ADD | MULTIPLY"  1 -1 3 1
+float HSM_SIMPLEBG_BLEND_MODE = global.HSM_SIMPLEBG_BLEND_MODE;
+
+#pragma parameter HSM_SIMPLEBG_OPACITY                                "          BG Opacity" 100 0 100 1
+float HSM_SIMPLEBG_OPACITY = global.HSM_SIMPLEBG_OPACITY / 100;
+
+#pragma parameter HSM_SIMPLEBG_BRIGHTNESS                             "          BG Brightness" 100 0 200 1
+float HSM_SIMPLEBG_BRIGHTNESS = global.HSM_SIMPLEBG_BRIGHTNESS / 100;
+
+#pragma parameter HSM_SIMPLEBG_CRT_SCREEN_BLEND_MODE                     "          CRT SIMPLE Blend Mode - OFF | NORMAL | ADD (Backdrop)" 1 0 2 1
+float HSM_SIMPLEBG_CRT_SCREEN_BLEND_MODE = global.HSM_SIMPLEBG_CRT_SCREEN_BLEND_MODE;
+
+#pragma parameter HSM_SIMPLEBG_COLORIZE_CRT_WITH_BG               "          CRT Colorize with BG" 0 0 100 1
+float HSM_SIMPLEBG_COLORIZE_CRT_WITH_BG = global.HSM_SIMPLEBG_COLORIZE_CRT_WITH_BG / 100;
+
+#pragma parameter HSM_SIMPLEBG_COLORIZE_BRIGHTNESS                "          CRT Colorize Brightness" 100 0 1000 10
+float HSM_SIMPLEBG_COLORIZE_BRIGHTNESS = global.HSM_SIMPLEBG_COLORIZE_BRIGHTNESS / 100;
+
+
+//---------------------------------------------------------------------------------------------------
 //    DUAL SCREEN
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_DUALSCREEN_EMPTY_LINE							" " 0 0 0.001 0.001
@@ -936,6 +963,9 @@ float HSM_2ND_SCREEN_CROP_PERCENT_RIGHT = global.HSM_2ND_SCREEN_CROP_PERCENT_RIG
 
 // #pragma parameter HSM_SCREEN_REFLECTION_FOLLOW_DIFFUSE_THICKNESS    "          Follow Tube Diffuse Extra Thickness" 0 1 200 1
 // float HSM_SCREEN_REFLECTION_FOLLOW_DIFFUSE_THICKNESS = global.HSM_SCREEN_REFLECTION_FOLLOW_DIFFUSE_THICKNESS / 100;
+
+#pragma parameter HSM_SCREEN_REFLECTION_ALLOW_REFLECTION     		"          Allow Reflection" 1 0 1 1
+float HSM_SCREEN_REFLECTION_ALLOW_REFLECTION = global.HSM_SCREEN_REFLECTION_ALLOW_REFLECTION;
 
 #pragma parameter HSM_SCREEN_REFLECTION_SCALE     					"          Screen Reflection Scale" 100 1 300 1
 float HSM_SCREEN_REFLECTION_SCALE = global.HSM_SCREEN_REFLECTION_SCALE / 100;
@@ -1041,6 +1071,34 @@ float HSM_AMBIENT2_POSITION_X = global.HSM_AMBIENT2_POSITION_X / -1000;
 
 #pragma parameter HSM_AMBIENT2_POSITION_Y 						"          Position Y" 0 -1000 1000 1
 float HSM_AMBIENT2_POSITION_Y = -1 * global.HSM_AMBIENT2_POSITION_Y / -1000;
+
+
+//---------------------------------------------------------------------------------------------------
+//    PRESET INFO
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_NON_USER_INFO_EMPTY_LINE					" " 0 0 0.001 0.001
+#pragma parameter HSM_NON_USER_INFO_TITLE						"[ NON-USER PRESET SETUP ]:" 0 0 0.001 0.001
+
+#pragma parameter HSM_NON_USER_INFO_PRE_CRT_CHAIN 				"        Pre CRT Chain - SMOOTH-ADV | ADV | STD | POTATO" 0 0 3 1
+#define HSM_NON_USER_INFO_PRE_CRT_CHAIN global.HSM_NON_USER_INFO_PRE_CRT_CHAIN
+
+#pragma parameter HSM_NON_USER_INFO_POST_CRT_PROCESS 			"     Post CRT Process - DEFAULT|N0-REF|GLASS|SCREEN-ONLY|POTATO" 0 0 4 1
+#define HSM_NON_USER_INFO_POST_CRT_PROCESS global.HSM_NON_USER_INFO_POST_CRT_PROCESS
+
+#pragma parameter HSM_NON_USER_INFO_UPSCALING 				    "          Upscaling - 0:NONE | 1:SCALEFX | 2:SUPER-XBR" 0 0 2 1
+#define HSM_NON_USER_INFO_UPSCALING global.HSM_NON_USER_INFO_UPSCALING
+
+#pragma parameter HSM_NON_USER_PARAM_IS_GLASS_PRESET 		    "          Is Glass Preset" 0 0 1 1
+#define HSM_NON_USER_PARAM_IS_GLASS_PRESET global.HSM_NON_USER_PARAM_IS_GLASS_PRESET
+
+#pragma parameter HSM_NON_USER_DELINEARIZE_REFLECT_PASS 	"          De-Linearize Reflection Pass" 0 0 1 1
+#define HSM_NON_USER_DELINEARIZE_REFLECT_PASS global.HSM_NON_USER_DELINEARIZE_REFLECT_PASS
+
+#pragma parameter HSM_NON_USER_LINEARIZE_INTERLACE_PASS 	"          Linearize Interlace Pass" 1 0 1 1
+#define HSM_NON_USER_LINEARIZE_INTERLACE_PASS global.HSM_NON_USER_LINEARIZE_INTERLACE_PASS
+
+#pragma parameter HSM_NON_USER_IS_HDR_PRESET 	"          Is HDR Preset" 0 0 1 1
+#define HSM_NON_USER_IS_HDR_PRESET global.HSM_NON_USER_IS_HDR_PRESET
 
 
 //---------------------------------------------------------------------------------------------------

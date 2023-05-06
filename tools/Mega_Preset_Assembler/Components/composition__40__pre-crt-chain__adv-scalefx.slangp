@@ -1,0 +1,34 @@
+#reference "chain__30__dedithering__1-sgenpt-mix-multipass.slangp"
+#reference "chain__30__dedithering__2-ps1-box-blur.slangp"
+#reference "chain__30__antialiasing__fxaa.slangp"
+#reference "chain__58__sharpen__gsharp-resampler.slangp"
+#reference "chain__30__dedithering__4-last-pass-sharpsmoother.slangp"
+
+
+#-------------------------------------------------------------------
+# Pre CRT Chain SMOOTH-ADV Parameters
+
+HSM_NON_USER_INFO_PRE_CRT_CHAIN = 0
+
+HSM_NON_USER_INFO_UPSCALING = 1
+
+SGPT_BLEND_OPTION = 1
+
+HSM_SCALEFX_ON = 1
+
+HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = 600
+HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR = 100
+HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR = 0
+HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = 30
+
+ntsc_scale = 0.33
+
+# Lottes mask, a bit like a slot mask effect
+shadowMask = 1
+mask_bloom = 0.3
+
+# Mask Size is Auto, so it will look the same at 1080p and 4K
+masksize = 0
+
+#-------------------------------------------------------------------
+

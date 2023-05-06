@@ -1,6 +1,6 @@
-shaders = 10
+shaders = 9
 
-shader0 = ../../../shaders/guest/extras/hsm-drez-none.slang
+shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
 srgb_framebuffer0 = true
 scale_type0 = source
@@ -8,13 +8,13 @@ scale_x0 = 1
 scale_y0 = 1
 alias0 = "DerezedPass"
 
-shader1 = ../../../shaders/base/cache-info-potato-params.slang
+shader1 = ../../../shaders/base/cache-info-bezel-params.slang
 filter_linear1 = false
 scale_type1 = source
 scale1 = 1.0
 alias1 = "InfoCachePass"
 
-shader2 = ../../../shaders/guest/extras/hsm-fetch-drez-output.slang
+shader2 = ../../../shaders/base/fetch-drez-output.slang
 filter_linear2 = false
 srgb_framebuffer2 = true
 scale_type2 = source
@@ -52,21 +52,33 @@ scale6 = 1.0
 float_framebuffer6 = true
 alias6 = "LinearizePass"
 
-shader7 = ../../../shaders/base/delinearize.slang
+shader7 = ../../../shaders/lcd-cgwg/hsm-lcd-grid-v2.slang
+filter_linear7 = "false"
+scale_type7 = "viewport"
+scale7 = "1.0"
 float_framebuffer7 = "true"
+alias7 = "CRTPass"
 
-shader8 = ../../../shaders/lcd-cgwg/hsm-lcd-grid-v2-potato.slang
-filter_linear8 = "false"
-scale_type8 = "viewport"
-scale8 = "1.0"
-float_framebuffer8 = "true"
-alias8 = "CRTPass"
 
-shader9 = ../../../shaders/base/post-crt-prep-potato.slang
-mipmap_input9 = true
-scale_type9 = viewport
-float_framebuffer9 = true
-alias9 = "PostCRTPass"
+# -----------------------------------------------------------------------------------------------
+# LCD-GRID Parameters
+
+# Reduce the Reflection Amount from default
+HSM_REFLECT_GLOBAL_AMOUNT = 20
+
+# The LCD-GRID shader expects the color to already have gamma encoded
+HSM_NON_USER_LINEARIZE_INTERLACE_PASS = 0
+
+# Remove curvature from the lcd image since it just creates horrible moire
+HSM_CRT_CURVATURE_SCALE = 0
+
+# -----------------------------------------------------------------------------------------------
+
+shader8 = ../../../shaders/base/tubefx-none-with-bg-delinearize.slang
+mipmap_input8 = true
+scale_type8 = viewport
+float_framebuffer8 = true
+alias8 = "PostCRTPass"
 
 # Textures Potato
 # Define textures to be used by the different passes
@@ -98,3 +110,17 @@ HSM_ASPECT_RATIO_MODE = 1
 # Use for matching vanilla GDV-Advanced
 # HSM_ASPECT_RATIO_MODE = 6
 # HSM_CURVATURE_MODE = 0
+
+
+#------------------------------------------------------------------------------
+# Post CRT Process POTATO Parameters
+
+HSM_NON_USER_INFO_POST_CRT_PROCESS = 4
+HSM_SCREEN_REFLECTION_ALLOW_REFLECTION = 0
+
+# Set aspect ratio to 4:3
+HSM_ASPECT_RATIO_MODE = 1
+
+#------------------------------------------------------------------------------
+
+

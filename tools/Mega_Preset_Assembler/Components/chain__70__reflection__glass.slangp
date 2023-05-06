@@ -1,7 +1,0 @@
-shaders = 1
-
-# Bezel Reflection ----------------------------------------------------------------
-shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/reflection-glass.slang
-scale_type0 = viewport
-srgb_framebuffer0 = true
-alias0 = "ReflectionPass"

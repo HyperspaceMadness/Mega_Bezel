@@ -1,6 +1,6 @@
 shaders = 32
 
-shader0 = ../../../shaders/guest/extras/hsm-drez-none.slang
+shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
 srgb_framebuffer0 = true
 scale_type0 = source
@@ -8,20 +8,20 @@ scale_x0 = 1
 scale_y0 = 1
 alias0 = "DerezedPass"
 
-shader1 = ../../../shaders/base/cache-info-glass-params.slang
+shader1 = ../../../shaders/base/cache-info-reflection-params.slang
 filter_linear1 = false
 scale_type1 = source
 scale1 = 1.0
 alias1 = "InfoCachePass"
 
-shader2 = ../../../shaders/base/text-std-glass.slang
+shader2 = ../../../shaders/base/text.slang
 filter_linear2 = false
 float_framebuffer2 = true
 scale_type2 = source
 scale2 = 1.0
 alias2 = "TextPass"
 
-shader3 = ../../../shaders/guest/extras/hsm-fetch-drez-output.slang
+shader3 = ../../../shaders/base/fetch-drez-output.slang
 filter_linear3 = false
 srgb_framebuffer3 = true
 scale_type3 = source
@@ -31,6 +31,15 @@ scale_y3 = 1
 shader4 = ../../../shaders/fxaa/fxaa.slang
 float_framebuffer4 = "true"
 alias4 = "DeditherPass"
+
+
+#-------------------------------------------------------------------
+# Pre CRT Chain STD Parameters
+
+HSM_NON_USER_INFO_PRE_CRT_CHAIN = 2
+
+#-------------------------------------------------------------------
+
 
 shader5 = ../../../shaders/base/intro.slang
 filter_linear5 = false
@@ -87,6 +96,18 @@ filter_linear13 = true
 scale_type13 = source
 scale_x13 = 1.0
 scale_y13 = 1.0
+
+
+# -----------------------------------------------------------------------------------------------
+# GDV NTSC
+
+GAMMA_INPUT = 2.0
+gamma_out = 1.95
+h_sharp = "15.000000"
+s_sharp = "1.500000"
+
+# -----------------------------------------------------------------------------------------------
+
 
 shader14 =  ../../../shaders/guest/hsm-custom-fast-sharpen.slang
 filter_linear14 = true
@@ -175,7 +196,7 @@ scale_y24 = 1.0
 float_framebuffer24 = true
 alias24 = "CRTPass"
 
-shader25 = ../../../shaders/base/post-crt-prep-glass.slang
+shader25 = ../../../shaders/base/tubefx-default.slang
 mipmap_input25 = true
 scale_type25 = viewport
 float_framebuffer25 = true
@@ -235,14 +256,15 @@ float_framebuffer30 = true
 alias30 = "BR_MirrorFullscreenGlowPass"
 
 # Bezel Reflection ----------------------------------------------------------------
-shader31 = ../../../shaders/base/reflection-glass.slang
+shader31 = ../../../shaders/base/reflection.slang
 scale_type31 = viewport
-srgb_framebuffer31 = true
+float_framebuffer31 = true
 alias31 = "ReflectionPass"
+
 
 # Textures Glass
 # Define textures to be used by the different passes
-textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;GlassPresetHighlightImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
 SamplerLUT1 = ../../../shaders/guest/lut/trinitron-lut.png
 SamplerLUT1_linear = true 
@@ -280,11 +302,15 @@ ReflectionMaskImage = ../../../shaders/textures/Placeholder_White_16x16.png
 ReflectionMaskImage_linear = true
 ReflectionMaskImage_mipmap = 1
 
+GlassPresetHighlightImage = ../../../shaders/textures/TopLayerImageGradient_3840x2160.png
+GlassPresetHighlightImage_linear = true
+GlassPresetHighlightImage_mipmap = 1
+
 FrameTextureImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 FrameTextureImage_linear = true
 FrameTextureImage_mipmap = 1
 
-BackgroundImage = ../../../shaders/textures/TopLayerImageGradient_3840x2160.png
+BackgroundImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 BackgroundImage_linear = true
 BackgroundImage_mipmap = 1
 
@@ -292,7 +318,7 @@ BackgroundVertImage = ../../../shaders/textures/Placeholder_Transparent_16x16.pn
 BackgroundVertImage_linear = true
 BackgroundVertImage_mipmap = 1
 
-CabinetGlassImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+CabinetGlassImage = ../../../shaders/textures/TopLayerImageGradient_3840x2160.png
 CabinetGlassImage_linear = true
 CabinetGlassImage_mipmap = 1
 
@@ -328,6 +354,14 @@ TopLayerImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 TopLayerImage_linear = true
 TopLayerImage_mipmap = 1
 
+
+
+# -----------------------------------------------------------------------------------------------
+# Post CRT Process GLASS Parameters
+
+HSM_NON_USER_INFO_POST_CRT_PROCESS = 2
+HSM_NON_USER_PARAM_IS_GLASS_PRESET = 1
+
 # Use for matching vanilla GDV-Advanced
 # HSM_ASPECT_RATIO_MODE = 6
 # HSM_CURVATURE_MODE = 0
@@ -335,7 +369,9 @@ TopLayerImage_mipmap = 1
 # Parameters
 HSM_TUBE_BLACK_EDGE_SHARPNESS = "90.0000"
 HSM_TUBE_BLACK_EDGE_THICKNESS = -7
-HSM_BG_OPACITY = "1.000000"
+HSM_CAB_GLASS_OPACITY = "1.000000"
+HSM_SIMPLEBG_OPACITY = "100.000000"
+HSM_SIMPLEBG_BRIGHTNESS = "100.000000"
 HSM_GLASS_BORDER_ON = "1.000000"
 HSM_BZL_WIDTH = 3000
 HSM_BZL_HEIGHT = 3000
@@ -361,15 +397,12 @@ HSM_REFLECT_NOISE_AMOUNT = "100.000000"
 HSM_REFLECT_NOISE_SAMPLES = "4.000000"
 HSM_REFLECT_NOISE_SAMPLE_DISTANCE = "15.0000"
 HSM_REFLECT_NOISE_SAMPLE_DISTANCE = "15.0000"
-HSM_BG_BRIGHTNESS = "0.000000"
 HSM_SCREEN_VIGNETTE_STRENGTH = "20.000000"
 HSM_SCREEN_VIGNETTE_POWER = "4.000000"
 HSM_SCREEN_VIGNETTE_IN_REFLECTION = "0.000000"
 
 g_vignette = "0.0"
 
-# GDV NTSC Parameters
-GAMMA_INPUT = 2.0
-gamma_out = 1.95
-h_sharp = "15.000000"
-s_sharp = "1.500000"
+# -----------------------------------------------------------------------------------------------
+
+

@@ -1,6 +1,6 @@
 shaders = 41
 
-shader0 = ../../../shaders/guest/extras/hsm-drez-none.slang
+shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
 srgb_framebuffer0 = true
 scale_type0 = source
@@ -14,14 +14,14 @@ scale_type1 = source
 scale1 = 1.0
 alias1 = "InfoCachePass"
 
-shader2 = ../../../shaders/base/text-adv.slang
+shader2 = ../../../shaders/base/text.slang
 filter_linear2 = false
 float_framebuffer2 = true
 scale_type2 = source
 scale2 = 1.0
 alias2 = "TextPass"
 
-shader3 = ../../../shaders/guest/extras/hsm-fetch-drez-output.slang
+shader3 = ../../../shaders/base/fetch-drez-output.slang
 filter_linear3 = false
 srgb_framebuffer3 = true
 scale_type3 = source
@@ -66,6 +66,15 @@ shader13 = ../../../shaders/guest/extras/hsm-g-sharp_resampler.slang
 
 shader14 = ../../../shaders/guest/extras/hsm-sharpsmoother.slang
 alias14 = "DeditherPass"
+
+
+#-------------------------------------------------------------------
+# Pre CRT Chain STD Parameters
+
+HSM_NON_USER_INFO_PRE_CRT_CHAIN = 1
+
+#-------------------------------------------------------------------
+
 
 shader15 = ../../../shaders/base/intro.slang
 filter_linear15 = false
@@ -123,6 +132,18 @@ scale_type23 = source
 scale_x23 = 1.0
 scale_y23 = 1.0
 
+
+# -----------------------------------------------------------------------------------------------
+# GDV NTSC
+
+GAMMA_INPUT = 2.0
+gamma_out = 1.95
+h_sharp = "15.000000"
+s_sharp = "1.500000"
+
+# -----------------------------------------------------------------------------------------------
+
+
 shader24 =  ../../../shaders/guest/hsm-custom-fast-sharpen.slang
 filter_linear24 = true
 scale_type24 = source
@@ -130,19 +151,22 @@ scale_x24 = 1.0
 scale_y24 = 1.0
 
 shader25 = ../../../shaders/base/stock.slang
-float_framebuffer25 = true
+filter_linear25 = true
+scale_type25 = source
+scale_x25 = 1.0
+scale_y25 = 1.0
 alias25 = "PrePass"
+mipmap_input25 = true
 
 shader26 = ../../../shaders/guest/hsm-avg-lum.slang
 filter_linear26 = true
 scale_type26 = source
 scale26 = 1.0
 mipmap_input26 = true
-float_framebuffer26 = true
 alias26 = "AvgLumPass"
 
 # Pass referenced by subsequent blurring passes and crt pass
-shader27 = ../../../shaders/guest/hsm-interlace.slang
+shader27 = ../../../shaders/guest/hsm-interlace-and-linearize.slang
 filter_linear27 = true
 scale_type27 = source
 scale27 = 1.0
@@ -177,7 +201,25 @@ scale_type30 = "viewport"
 float_framebuffer30 = "true"
 alias30 = "CRTPass"
 
-shader31 = ../../../shaders/base/post-crt-prep-image-layers.slang
+
+# -----------------------------------------------------------------------------------------------
+# MEGATRON Parameters
+
+# HDR Parameters
+HSM_NON_USER_IS_HDR_PRESET = "1.000000"
+HSM_NON_USER_LINEARIZE_INTERLACE_PASS = "1.00000"
+
+# Sony Megatron Color Monitor Parameters
+hcrt_hdr = "0.000000"
+
+HSM_INT_SCALE_MODE = "1.000000"
+HSM_CRT_CURVATURE_SCALE = "0.000000"
+HSM_GLOBAL_GRAPHICS_BRIGHTNESS = "100.000000"
+HSM_REFLECT_GLOBAL_AMOUNT = "7.000000"
+
+# -----------------------------------------------------------------------------------------------
+
+shader31 = ../../../shaders/base/tubefx-default.slang
 mipmap_input31 = true
 scale_type31 = viewport
 float_framebuffer31 = true
@@ -201,7 +243,7 @@ alias33 = "BR_LayersOverCRTPass"
 #      Reduce the resolution to a small static size regardless of final resolution
 #      Allows consistent look and faster at different final resolutions for blur
 #      Mipmap option allows downscaling without artifacts
-shader34 = ../../../shaders/base/linearize-crt-hdr.slang
+shader34 = ../../../shaders/base/linearize-crt.slang
 mipmap_input34 = true
 filter_linear34 = true
 scale_type34 = absolute
@@ -253,6 +295,7 @@ alias38 = "BR_MirrorFullscreenGlowPass"
 # Bezel Reflection ----------------------------------------------------------------
 shader39 = ../../../shaders/base/reflection.slang
 scale_type39 = viewport
+float_framebuffer39 = true
 alias39 = "ReflectionPass"
 
 # Combine Passes ----------------------------------------------------------------
@@ -260,9 +303,10 @@ shader40 = ../../../shaders/base/combine-passes-hdr.slang
 scale_type40 = viewport
 alias40 = "CombinePass"
 
+
 # Textures All
 # Define textures to be used by the different passes
-textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;GlassPresetHighlightImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
 SamplerLUT1 = ../../../shaders/guest/lut/trinitron-lut.png
 SamplerLUT1_linear = true 
@@ -299,6 +343,10 @@ TubeStaticReflectionImage_mipmap = 1
 ReflectionMaskImage = ../../../shaders/textures/Placeholder_White_16x16.png
 ReflectionMaskImage_linear = true
 ReflectionMaskImage_mipmap = 1
+
+GlassPresetHighlightImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+GlassPresetHighlightImage_linear = true
+GlassPresetHighlightImage_mipmap = 1
 
 FrameTextureImage = ../../../shaders/textures/FrameTexture_2800x2120.png
 FrameTextureImage_linear = true
@@ -352,16 +400,12 @@ TopLayerImage_mipmap = 1
 # HSM_ASPECT_RATIO_MODE = 6
 # HSM_CURVATURE_MODE = 0
 
-# Sony Megatron Color Monitor Parameters
-hcrt_hdr = "0.000000"
 
-HSM_INT_SCALE_MODE = "1.000000"
-HSM_CRT_CURVATURE_SCALE = "0.000000"
-HSM_GLOBAL_GRAPHICS_BRIGHTNESS = "100.000000"
-HSM_REFLECT_GLOBAL_AMOUNT = "7.000000"
+#--------------------------------------------------------------------------------------
+# Post CRT Process DEFAULT Parameters
 
-# GDV NTSC Parameters
-GAMMA_INPUT = 2.0
-gamma_out = 1.95
-h_sharp = "15.000000"
-s_sharp = "1.500000"
+HSM_NON_USER_INFO_POST_CRT_PROCESS = 0
+
+#--------------------------------------------------------------------------------------
+
+
