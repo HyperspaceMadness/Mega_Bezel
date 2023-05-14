@@ -109,7 +109,7 @@ layout(location = 1) in float maskFade;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 1) uniform sampler2D Source;
 
-layout(set = 0, binding = 2) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 2) uniform sampler2D CacheInfoPass;
 
 float sw(float x, float l)
 {
@@ -346,7 +346,7 @@ vec3 saturationFunction (vec3 textureColor)
 void main()
 {
     // HSM Added
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
 
 	if (HSM_IsOutsideReflectionBoundary())
 	{

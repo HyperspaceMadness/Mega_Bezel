@@ -14,13 +14,13 @@ Changes:
     * HSM_POTATO_COLORIZE_CRT_WITH_BG -> HSM_SIMPLEBG_COLORIZE_CRT_WITH_BG
     * HSM_POTATO_COLORIZE_BRIGHTNESS -> HSM_SIMPLEBG_COLORIZE_BRIGHTNESS
   * New image used for Glass Highlight
+  * Fixed No-Reflect-No-TubeFx seeing bg behind the tube
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
-
-  * No-Reflect TubeFx isn't putting black behind tube
+  * Integrate Overscan into the Resolution Debug somehow
   * Should put Tube Bg in images? Only add Gel Multiply and Highlight in TubeFx?
   * Update Grade
   * Use parameter to set reflection bezel size to 0 so we can have fewer variant shader files

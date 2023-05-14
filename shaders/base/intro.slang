@@ -7,7 +7,7 @@
 
 /*
     Mega Bezel - Creates a graphic treatment for the game play area to give a retro feel
-    Copyright (C) 2019-2022 HyperspaceMadness - HyperspaceMadness@outlook.com
+    Copyright (C) 2019-2023 HyperspaceMadness - HyperspaceMadness@outlook.com
 
     Incorporates much great feedback from the libretro forum, and thanks 
     to Hunterk who helped me get started
@@ -31,6 +31,8 @@
 
 // Import so all the mega bezel parameters are the first in the parameter list
 
+#pragma name IntroPass
+
 #pragma stage vertex
 layout(location = 0) in vec4 Position;
 layout(location = 1) in vec2 TexCoord;
@@ -45,50 +47,11 @@ void main()
 #pragma stage fragment
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
+layout(set = 0, binding = 1) uniform sampler2D CacheInfoPass;
 layout(set = 0, binding = 2) uniform sampler2D Source;
-
-#ifndef IS_POTATO_PRESET
-layout(set = 0, binding = 3) uniform sampler2D OriginalHistory1;
-layout(set = 0, binding = 4) uniform sampler2D OriginalHistory2;
-layout(set = 0, binding = 5) uniform sampler2D OriginalHistory3;
-layout(set = 0, binding = 7) uniform sampler2D IntroImage;
-#endif
-
-layout(set = 0, binding = 8) uniform sampler2D InfoCachePass;
-
-layout(set = 0, binding = 10) uniform sampler2D TextPass;
+layout(set = 0, binding = 3) uniform sampler2D IntroImage;
 
 #define eps 1e-3
-
-#ifndef IS_POTATO_PRESET
-vec4 AntiFlicker(vec2 in_coord, vec4 current)
-{
-	// sample the textures
-	vec4 prev1 = texture(OriginalHistory1, in_coord);
-	vec4 prev2 = texture(OriginalHistory2, in_coord);
-	vec4 prev3 = texture(OriginalHistory3, in_coord);
-	
-	// get luma for comparison
-	float cur_lum = dot(current.rgb, vec3(0.2125, 0.7154, 0.0721));
-	float prev1_lum = dot(prev1.rgb, vec3(0.2125, 0.7154, 0.0721));
-	float prev2_lum = dot(prev2.rgb, vec3(0.2125, 0.7154, 0.0721));
-	float prev3_lum = dot(prev3.rgb, vec3(0.2125, 0.7154, 0.0721));
-	
-	// Test whether the luma difference between the pixel in the current frame and that of
-	// the previous frame exceeds the threshold while the difference between the current frame
-	// and 2 frames previous is below the threshold.
-	// Repeat the process for the previous frame's pixel to reduce false-positives
-	bool flicker = (abs(cur_lum - prev1_lum) > HSM_ANTI_FLICKER_THRESHOLD && abs(cur_lum - prev2_lum) < HSM_ANTI_FLICKER_THRESHOLD) &&
-		(abs(prev1_lum - prev2_lum) > HSM_ANTI_FLICKER_THRESHOLD && abs(prev1_lum - prev3_lum) < HSM_ANTI_FLICKER_THRESHOLD);
-	
-	// Average the current frame with the previous frame in linear color space to avoid over-darkening
-	vec4 blended = (pow(current, vec4(2.2)) + pow(prev1, vec4(2.2))) / 2.0;
-	
-	// delinearize the averaged result
-	blended = pow(blended, vec4(1.0 / 2.2));
-	
-	return (!flicker) ? current : blended;
-}
 
 // -----------------------------------------------------------------------------
 // TV Startup Static Animation
@@ -259,94 +222,19 @@ vec4 GetColorWithIntro(vec4 in_color, vec2 in_coord, in sampler2D in_logo_image_
 	}
    return out_color;
 }
-#endif
-
-// vec4 GetCropOverlay(vec2 viewport_coord)
-// {
-//    vec4 out_color = vec4(0);
-//    vec4 screen_color = vec4(1, 0, 0, 1);
-   
-//    for (int i=1; i < 3; i++)
-//    {
-//       vec2 cropped_rotated_size = vec2(0);
-//       vec2 cropped_rotated_size_with_res_mult = vec2(0);
-//       vec2 cropped_sample_area_start_pixel_coord = vec2(0);
-//       HSM_GetCroppedRotatedSizeAndPixelSampleAreaStart(i, Source, cropped_rotated_size, cropped_rotated_size_with_res_mult, cropped_sample_area_start_pixel_coord);
-
-//       vec2 crop_scale = cropped_rotated_size / ROTATED_CORE_PREPPED_SIZE;
-//       vec2 mask_coord = viewport_coord - cropped_sample_area_start_pixel_coord / ROTATED_CORE_PREPPED_SIZE;
-//       mask_coord = mask_coord / crop_scale;
-      
-//       if (i == 2)
-//          screen_color = vec4(0, 1, 0, 1);
-
-//       out_color += screen_color * HSM_GetCornerMask(mask_coord, cropped_rotated_size.x/cropped_rotated_size.y, 0, 0.90);
-//    }
-
-//    return clamp(out_color, 0, 1);
-// }
 
 void main()
 {
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
 
 	// Flip the coordinate vertically if desired
    vec2 viewport_coord_adjusted = vTexCoord;
 	viewport_coord_adjusted.x = HSM_FLIP_VIEWPORT_HORIZONTAL * HSM_FLIP_CORE_HORIZONTAL * (viewport_coord_adjusted.x - 0.5) + 0.5;
 	viewport_coord_adjusted.y = HSM_FLIP_VIEWPORT_VERTICAL * HSM_FLIP_CORE_VERTICAL * (viewport_coord_adjusted.y - 0.5) + 0.5;
 
-   FragColor = texture(Source, viewport_coord_adjusted);
-
-#ifndef IS_POTATO_PRESET
-   // if (HSM_ANTI_FLICKER_ON == 1)
-   //    FragColor = AntiFlicker(viewport_coord_adjusted, FragColor);
+   FragColor = texture(Source, vTexCoord);
 
    if (HSM_INTRO_WHEN_TO_SHOW > 0)
       FragColor = GetColorWithIntro(FragColor, viewport_coord_adjusted, IntroImage);
-#endif
-
-   bool cache_info_changed = CACHE_INFO_CHANGED;
-   bool show_update_indicator = cache_info_changed && ( HSM_CACHE_UPDATE_INDICATOR_MODE == 1 || HSM_CACHE_GRAPHICS_ON < 0.5 && HSM_CACHE_UPDATE_INDICATOR_MODE == 2);
-
-	if (show_update_indicator)
-	{
-		float final_aspect = SCREEN_ASPECT;
-		// vec2 corner_offset = vec2(MAX_NEGATIVE_CROP * 2 * 0.8, MAX_NEGATIVE_CROP * 2 * 0.8);
-		vec2 corner_offset = vec2(0.1, 0.1);
-		vec2 center_coord = vec2(1 - corner_offset.x * final_aspect, 1 - corner_offset.y);
-		vec2 test_coord = vec2(1 - (1 - viewport_coord_adjusted.x) * final_aspect, viewport_coord_adjusted.y);
-		float distance =  length(test_coord - center_coord);
-
-		if (distance < 0.04)
-		{
-			float modulation = clamp(0.4 + abs(mod(global.FrameCount, 90) / 90 - 0.5) * 1.2, 0, 1);
-			modulation = HHLP_EasePowerInOut(modulation, 2);
-			FragColor *= 1 - modulation;
-			FragColor += modulation * vec4(1, 0, 0, 1);
-		}
-	}
-   
-   // vec4 overlay_color = GetCropOverlay(vTexCoord);
-   // FragColor *= 1 - 0.7 * overlay_color.a;
-   // FragColor += 1 * 0.7 * overlay_color;
-
-   //////// Draw text to show resolutions ////////// 
-   if (HSM_RESOLUTION_DEBUG_ON == 1)
-   {
-      vec2 ps = global.OutputSize.zw;
-      vec4 text_rgba = vec4(0);
-      text_rgba = texture(TextPass, vTexCoord);
-      text_rgba.rgb *= vec3(1, 1, 0);
-      text_rgba.a += texture(TextPass, vTexCoord + ps * vec2(1, 0)).a;
-      text_rgba.a += texture(TextPass, vTexCoord + ps * vec2(0, 1)).a;
-      text_rgba.a += texture(TextPass, vTexCoord + ps * vec2(1, 1)).a;
-      text_rgba.a += texture(TextPass, vTexCoord + ps * vec2(-1, 1)).a;
-      text_rgba.a += texture(TextPass, vTexCoord + ps * vec2(-1, 0)).a;
-      text_rgba.a += texture(TextPass, vTexCoord + ps * vec2(0, -1)).a;
-      text_rgba.a += texture(TextPass, vTexCoord + ps * vec2(-1, -1)).a;
-      text_rgba.a += texture(TextPass, vTexCoord + ps * vec2(1, -1)).a;
-      text_rgba = clamp(text_rgba, 0, 1);
-      FragColor = HSM_PreMultAlphaBlend(FragColor, text_rgba);
-   }
 }
 

@@ -2,7 +2,7 @@
 
 /*
     Mega Bezel - Creates a graphic treatment for the game play area to give a retro feel
-    Copyright (C) 2019-2022 HyperspaceMadness - HyperspaceMadness@outlook.com
+    Copyright (C) 2019-2023 HyperspaceMadness - HyperspaceMadness@outlook.com
 
     Incorporates much great feedback from the libretro forum, and thanks 
     to Hunterk who helped me get started
@@ -57,14 +57,14 @@ layout(location = 0) in vec2 vTexCoord;
 layout(location = 1) in vec2 blur_dxdy;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 2) uniform sampler2D CRTPass;
-layout(set = 0, binding = 3) uniform sampler2D PostCRTPass;
+layout(set = 0, binding = 3) uniform sampler2D TubeFxPass;
 
 #include "../../../../include/blur-functions.h"
 
 void main()
 {
-    // FragColor = vec4(tex2Dblur9x9(PostCRTPass, vTexCoord, blur_dxdy), 1);
-    // In the HDR preset sampling from the PostCRTPass results in sort of colorful garbabe
+    // FragColor = vec4(tex2Dblur9x9(TubeFxPass, vTexCoord, blur_dxdy), 1);
+    // In the HDR preset sampling from the TubeFxPass results in sort of colorful garbabe
     // Grabbing from the CRTPass instead
 if (HSM_NON_USER_IS_HDR_PRESET > 0.5)
 {
@@ -74,7 +74,7 @@ if (HSM_NON_USER_IS_HDR_PRESET > 0.5)
 else
 {
     vec4 crt_rgba = textureLod(CRTPass, vTexCoord, 2);
-    vec4 post_crt_rgba = textureLod(PostCRTPass, vTexCoord, 2);
+    vec4 post_crt_rgba = textureLod(TubeFxPass, vTexCoord, 2);
     FragColor = mix(crt_rgba, post_crt_rgba, HSM_REFLECT_SHOW_TUBE_FX_AMOUNT);
 }
 

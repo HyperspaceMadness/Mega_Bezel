@@ -26,7 +26,7 @@ shader4 = ../shaders/hsm-gameboy/hsm-gb-pass4.slang
 filter_linear4 = false
 scale_type4 = source
 scale4 = 1.0
-alias4 = "PostCRTPass"
+alias4 = "TubeFxPass"
 
 // Define how many shaders will be used from this list
 shaders = 5

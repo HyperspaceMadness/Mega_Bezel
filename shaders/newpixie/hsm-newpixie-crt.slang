@@ -94,7 +94,7 @@ layout(location = 0) in vec2 vTexCoord;
 
 layout(location = 0) out vec4 FragColor;
 
-layout(set = 0, binding = 2) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 2) uniform sampler2D CacheInfoPass;
 
 layout(set = 0, binding = 4) uniform sampler2D accum1;
 layout(set = 0, binding = 5) uniform sampler2D blur2;
@@ -145,7 +145,7 @@ float rand(vec2 co)
 
 void main()
 {
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
 
    // stop time variable so the screen doesn't wiggle
     float time = 1.0;

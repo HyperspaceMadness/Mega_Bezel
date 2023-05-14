@@ -6,20 +6,17 @@ srgb_framebuffer0 = true
 scale_type0 = source
 scale_x0 = 1
 scale_y0 = 1
-alias0 = "DerezedPass"
 
 shader1 = ../../../shaders/base/cache-info-all-params.slang
 filter_linear1 = false
 scale_type1 = source
 scale1 = 1.0
-alias1 = "InfoCachePass"
 
 shader2 = ../../../shaders/base/text.slang
 filter_linear2 = false
 float_framebuffer2 = true
 scale_type2 = source
 scale2 = 1.0
-alias2 = "TextPass"
 
 shader3 = ../../../shaders/base/fetch-drez-output.slang
 filter_linear3 = false
@@ -47,7 +44,6 @@ filter_linear5 = false
 float_framebuffer5 = true
 scale_type5 = source
 scale5 = 1.0
-alias5 = "IntroPass"
 
 shader6 = ../../../shaders/base/stock.slang
 alias6 = "PreCRTPass"
@@ -127,8 +123,6 @@ g_gamma_out = 2.45
 shader16 = ../../../shaders/base/tubefx-default.slang
 mipmap_input16 = true
 scale_type16 = viewport
-float_framebuffer16 = true
-alias16 = "PostCRTPass"
 
 # Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 
@@ -206,7 +200,6 @@ alias24 = "ReflectionPass"
 # Combine Passes ----------------------------------------------------------------
 shader25 = ../../../shaders/base/combine-passes.slang
 scale_type25 = viewport
-alias25 = "CombinePass"
 
 
 # Textures All

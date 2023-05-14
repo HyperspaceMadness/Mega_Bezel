@@ -2,7 +2,7 @@
 
 /*
     Mega Bezel - Creates a graphic treatment for the game play area to give a retro feel
-    Copyright (C) 2019-2022 HyperspaceMadness - HyperspaceMadness@outlook.com
+    Copyright (C) 2019-2023 HyperspaceMadness - HyperspaceMadness@outlook.com
 
     Incorporates much great feedback from the libretro forum, and thanks 
     to Hunterk who helped me get started
@@ -63,7 +63,7 @@ layout(location = 7) in vec2 UNFLIPPED_VIEWPORT_COORD;
 layout(location = 0) out vec4 FragColor;
 
 // Pass Framebuffer Textures
-layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 1) uniform sampler2D CacheInfoPass;
 
 layout(set = 0, binding = 2) uniform sampler2D Source;
 
@@ -79,7 +79,7 @@ layout(set = 0, binding = 7) uniform sampler2D SimpleBGPassFeedback;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
 {
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
 
 	if (HSM_IsOutsideReflectionBoundary())
 	{

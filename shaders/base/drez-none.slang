@@ -7,6 +7,8 @@
 
 #include "common/globals-and-screen-scale-params.inc"
 
+#pragma name DerezedPass
+
 layout(push_constant) uniform Push
 {
 	vec4 SourceSize;

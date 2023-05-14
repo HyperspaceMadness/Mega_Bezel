@@ -133,7 +133,7 @@ layout(set = 0, binding = 11) uniform sampler2D BackgroundVertImage;
 layout(set = 0, binding = 12) uniform sampler2D TubeColoredGelImage;
 layout(set = 0, binding = 13) uniform sampler2D TubeStaticReflectionImage;
 
-layout(set = 0, binding = 14) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 14) uniform sampler2D CacheInfoPass;
 
 // #define bg_color texture(DMG0ColorPaletteImage, vec2(0.25, 0.5)) 
 
@@ -153,7 +153,7 @@ layout(set = 0, binding = 14) uniform sampler2D InfoCachePass;
 void main()
 {
     // HSM Added
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
 
     vec4 bg_color = vec4(0, 0, 0, 1);
     if (params.gameboy_color_palette == 0)

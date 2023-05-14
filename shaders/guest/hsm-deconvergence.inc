@@ -254,7 +254,7 @@ layout(set = 0, binding = 6) uniform sampler2D PrePass;
 layout(set = 0, binding = 7) uniform sampler2D Source;
 
 // HSM Added
-layout(set = 0, binding = 8) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 8) uniform sampler2D CacheInfoPass;
 
 #define eps 1e-10 
 
@@ -805,7 +805,7 @@ void main()
 	*/
 
 	// HSM Added
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
 
 	if (HSM_IsOutsideReflectionBoundary())
 	{

@@ -4,4 +4,3 @@ shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/cache-info-all-p
 filter_linear0 = false
 scale_type0 = source
 scale0 = 1.0
-alias0 = "InfoCachePass"

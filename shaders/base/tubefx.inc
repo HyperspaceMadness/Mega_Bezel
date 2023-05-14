@@ -24,6 +24,11 @@
 
 #include "../base/common/common-functions-bezel.inc"
 
+#pragma name TubeFxPass
+
+// Float format so we can avoid banding
+#pragma format R16G16B16A16_SFLOAT
+
 #pragma stage vertex
 
 layout(location = 0) in vec4 Position;
@@ -49,7 +54,7 @@ layout(location = 0) out vec4 FragColor;
 
 layout(set = 0, binding = 1) uniform sampler2D Source;
 
-layout(set = 0, binding = 2) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 2) uniform sampler2D CacheInfoPass;
 layout(set = 0, binding = 3) uniform sampler2D DerezedPass;
 
 layout(set = 0, binding = 4) uniform sampler2D BackgroundImage;
@@ -66,8 +71,8 @@ layout(set = 0, binding = 11) uniform sampler2D NightLighting2Image;
 
 #endif
 
-layout(set = 0, binding = 13) uniform sampler2D PostCRTPassFeedback;
-#define PassFeedback PostCRTPassFeedback
+layout(set = 0, binding = 13) uniform sampler2D TubeFxPassFeedback;
+#define PassFeedback TubeFxPassFeedback
 
 // Torridgristle - ScanlineSimple pass - Public domain
 
@@ -124,7 +129,7 @@ void main()
 
 	VIEWPORT_UNSCALED_COORD = HSM_GetViewportCoordWithFlip(vTexCoord);
 
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
 	
 	if (HSM_IsOutsideReflectionBoundary())
 	{
@@ -398,3 +403,20 @@ void main()
 	FragColor = out_color;
 	return;
 }
+
+
+/*
+
+BG + Tube
+Device
+Layers in front of Tube
+
+Reflection / Bounce Masks
+1 per channel
+Blurryness, Amount, Noise
+
+Tube Diffuse & Tube Mask
+Tube Highlight
+Gel
+
+*/

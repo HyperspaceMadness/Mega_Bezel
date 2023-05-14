@@ -22,7 +22,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma alias TextPass
+#pragma name TextPass
 
 #pragma stage vertex
 layout(location = 0) in vec4 Position;
@@ -42,8 +42,8 @@ layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 2) uniform sampler2D TextPassFeedback;
 #define PassFeedback TextPassFeedback
 
-layout(set = 0, binding = 8) uniform sampler2D InfoCachePass;
-layout(set = 0, binding = 9) uniform sampler2D InfoCachePassFeedback;
+layout(set = 0, binding = 8) uniform sampler2D CacheInfoPass;
+layout(set = 0, binding = 9) uniform sampler2D CacheInfoPassFeedback;
 
 /*
     Text code is from the Shadertoy "96-bit 8x12" Font by Flyguy
@@ -665,7 +665,7 @@ void main()
 {
 	vec2 UNFLIPPED_VIEWPORT_COORD = vTexCoord;
    vec2 VIEWPORT_COORD = vTexCoord;
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
 
    // vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
    if (!CACHE_INFO_CHANGED)
@@ -675,9 +675,9 @@ void main()
    }
 
    // Flip the coordinate vertically if desired
-   VIEWPORT_COORD.y = HSM_FLIP_VIEWPORT_VERTICAL * HSM_FLIP_CORE_VERTICAL * (VIEWPORT_COORD.y - 0.5) + 0.5;
-   VIEWPORT_COORD.x = HSM_FLIP_VIEWPORT_HORIZONTAL * HSM_FLIP_CORE_HORIZONTAL * (VIEWPORT_COORD.x - 0.5) + 0.5;
+    VIEWPORT_COORD.y = HSM_FLIP_VIEWPORT_VERTICAL * HSM_FLIP_CORE_VERTICAL * (VIEWPORT_COORD.y - 0.5) + 0.5;
+    VIEWPORT_COORD.x = HSM_FLIP_VIEWPORT_HORIZONTAL * HSM_FLIP_CORE_HORIZONTAL * (VIEWPORT_COORD.x - 0.5) + 0.5;
 
-   //////// Draw text to show resolutions //////////
-   FragColor = vec4(GetText(VIEWPORT_COORD - vec2(MAX_NEGATIVE_CROP, -MAX_NEGATIVE_CROP)));
+    //////// Draw text to show resolutions //////////
+    FragColor = vec4(GetText(VIEWPORT_COORD - vec2(MAX_NEGATIVE_CROP, -MAX_NEGATIVE_CROP)));
 }

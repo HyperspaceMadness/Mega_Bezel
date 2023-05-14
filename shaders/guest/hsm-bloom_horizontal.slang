@@ -32,6 +32,9 @@ layout(push_constant) uniform Push
 	float BLOOMCUT_H;
 } params;
 
+#pragma parameter GDV_XX_LINE							" " 0 0 0.001 0.001
+#pragma parameter GDV_GDV_ADV_TITLE 		"[ --- GUEST ADVANCED --- ]:" 0.0 0.0 1.0 1.0
+
 #pragma parameter GDV_BLOOM_LINE							" " 0 0 0.001 0.001
 #pragma parameter bogus_bloom 	"[ BLOOM & HALATION ]:" 0.0 0.0 1.0 1.0
 

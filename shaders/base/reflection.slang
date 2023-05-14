@@ -1,11 +1,8 @@
 #version 450
 
-#include "common/globals-and-reflection-params.inc"
-#include "common/common-functions.inc"
-
 /*
     Mega Bezel - Creates a graphic treatment for the game play area to give a retro feel
-    Copyright (C) 2019-2022 HyperspaceMadness - HyperspaceMadness@outlook.com
+    Copyright (C) 2019-2023 HyperspaceMadness - HyperspaceMadness@outlook.com
 
     Incorporates much great feedback from the libretro forum, and thanks 
     to Hunterk who helped me get started
@@ -31,6 +28,8 @@
 #pragma format R16G16B16A16_SFLOAT
 
 /////////////// IMPORTS ///////////////
+#include "common/globals-and-reflection-params.inc"
+#include "common/common-functions.inc"
 #include "common/common-functions-bezel.inc"
 
 vec2 VIEWPORT_COORD = vec2(0.5);
@@ -80,7 +79,7 @@ layout(location = 7) in vec2 UNFLIPPED_VIEWPORT_COORD;
 layout(location = 0) out vec4 FragColor;
 
 // Pass Framebuffer Textures
-layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 1) uniform sampler2D CacheInfoPass;
 
 layout(set = 0, binding = 2) uniform sampler2D BackgroundImage;
 layout(set = 0, binding = 3) uniform sampler2D BackgroundVertImage;
@@ -89,7 +88,7 @@ layout(set = 0, binding = 4) uniform sampler2D GlassPresetHighlightImage;
 layout(set = 0, binding = 5) uniform sampler2D ReflectionMaskImage;
 
 layout(set = 0, binding = 6) uniform sampler2D BR_MirrorLowResPass;
-layout(set = 0, binding = 7) uniform sampler2D PostCRTPass;
+layout(set = 0, binding = 7) uniform sampler2D TubeFxPass;
 layout(set = 0, binding = 8) uniform sampler2D BR_MirrorBlurredPass;
 layout(set = 0, binding = 9) uniform sampler2D BR_MirrorReflectionDiffusedPass;
 layout(set = 0, binding = 10) uniform sampler2D BR_MirrorFullscreenGlowPass;
@@ -109,7 +108,7 @@ void main()
 
 	VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
 
 	if (HSM_IsOutsideReflectionBoundary())
 	{
@@ -137,7 +136,7 @@ void main()
 	// CRT Pass
 	//----------------------------------------------------
 	// Get the CRT pass and make it in linear space & mask the area outside the screen
-	vec4 crt_linear = texture(PostCRTPass, UNFLIPPED_VIEWPORT_COORD.xy);
+	vec4 crt_linear = texture(TubeFxPass, UNFLIPPED_VIEWPORT_COORD.xy);
 
 	vec4 blurred_reflection_color = HHLP_GetBilinearTextureSample(BR_MirrorBlurredPass, UNFLIPPED_VIEWPORT_COORD.xy, params.BR_MirrorBlurredPassSize);
 

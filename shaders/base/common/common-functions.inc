@@ -1,6 +1,6 @@
 /*
     Mega Bezel - Creates a graphic treatment for the game play area to give a retro feel
-    Copyright (C) 2019-2022 HyperspaceMadness - HyperspaceMadness@outlook.com
+    Copyright (C) 2019-2023 HyperspaceMadness - HyperspaceMadness@outlook.com
 
     Incorporates much great feedback from the libretro forum, and thanks 
     to Hunterk who helped me get started
@@ -463,7 +463,8 @@ vec2 HSM_GetCurvedCoord(vec2 in_coord, float curvature_multiplier, float screen_
 
 	vec2 curved_coord = vec2(0);
 
-#ifndef IS_POTATO_PRESET
+// TODO only allow 3D curvature in ADV?
+// #ifdef IS_ADV_PRESET
 	if (HSM_CURVATURE_MODE > CURVATURE_MODE_2D_CYLINDER)
 	{
 		if (HSM_USE_GEOM > 0.5)
@@ -497,12 +498,10 @@ vec2 HSM_GetCurvedCoord(vec2 in_coord, float curvature_multiplier, float screen_
 		vec2 curvature_values = curvature_multiplier * HSM_GetCurvatureValues(screen_aspect);
 		curved_coord = HSM_Get2DCurvedCoord(adjusted_coord, curvature_values);
 	}
-#endif
-
-#ifdef IS_POTATO_PRESET
-	vec2 curvature_values = curvature_multiplier * HSM_GetCurvatureValues(screen_aspect);
-	curved_coord = HSM_Get2DCurvedCoord(adjusted_coord, curvature_values);
-#endif
+// #else
+// 		vec2 curvature_values = curvature_multiplier * HSM_GetCurvatureValues(screen_aspect);
+// 		curved_coord = HSM_Get2DCurvedCoord(adjusted_coord, curvature_values);
+// #endif
 
 	return curved_coord;
 }

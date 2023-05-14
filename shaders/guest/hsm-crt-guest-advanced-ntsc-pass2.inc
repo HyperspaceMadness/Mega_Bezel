@@ -172,7 +172,7 @@ layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 2) uniform sampler2D LinearizePass;
 layout(set = 0, binding = 3) uniform sampler2D AvgLumPass;
 layout(set = 0, binding = 4) uniform sampler2D Pass1;
-layout(set = 0, binding = 6) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 6) uniform sampler2D CacheInfoPass;
 
 #define eps 1e-8
 
@@ -236,7 +236,7 @@ vec3 gc(vec3 c)
 void main()
 {
 	// HSM Added
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
 
 	if (HSM_IsOutsideReflectionBoundary())
 	{

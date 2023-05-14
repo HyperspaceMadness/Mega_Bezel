@@ -1,4 +1,4 @@
-shaders = 9
+shaders = 10
 
 shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
@@ -6,58 +6,62 @@ srgb_framebuffer0 = true
 scale_type0 = source
 scale_x0 = 1
 scale_y0 = 1
-alias0 = "DerezedPass"
 
 shader1 = ../../../shaders/base/cache-info-bezel-params.slang
 filter_linear1 = false
 scale_type1 = source
 scale1 = 1.0
-alias1 = "InfoCachePass"
 
-shader2 = ../../../shaders/base/fetch-drez-output.slang
+shader2 = ../../../shaders/base/text.slang
 filter_linear2 = false
-srgb_framebuffer2 = true
+float_framebuffer2 = true
 scale_type2 = source
-scale_x2 = 1
-scale_y2 = 1
+scale2 = 1.0
+
+shader3 = ../../../shaders/base/fetch-drez-output.slang
+filter_linear3 = false
+srgb_framebuffer3 = true
+scale_type3 = source
+scale_x3 = 1
+scale_y3 = 1
 
 # Color Correction with Dogway's awesome Grade shader
 # Grade is after Afterglow so that brightening the black level does not break the afterglow
-shader3 = ../../../shaders/dogway/hsm-grade.slang
-filter_linear3 = false
-scale_type3 = source
-scale3 = 1.0
-alias3 = "ColorCorrectPass"
-
-shader4 = ../../../shaders/base/stock.slang
-filter_linear4 = true
+shader4 = ../../../shaders/dogway/hsm-grade.slang
+filter_linear4 = false
 scale_type4 = source
-scale_x4 = 1.0
-scale_y4 = 1.0
-alias4 = "PrePass"
-mipmap_input4 = true
+scale4 = 1.0
+alias4 = "ColorCorrectPass"
 
-shader5 = ../../../shaders/guest/hsm-avg-lum.slang
+shader5 = ../../../shaders/base/stock.slang
 filter_linear5 = true
 scale_type5 = source
-scale5 = 1.0
+scale_x5 = 1.0
+scale_y5 = 1.0
+alias5 = "PrePass"
 mipmap_input5 = true
-alias5 = "AvgLumPass"
 
-# Pass referenced by subsequent blurring passes and crt pass
-shader6 = ../../../shaders/guest/hsm-interlace-and-linearize.slang
+shader6 = ../../../shaders/guest/hsm-avg-lum.slang
 filter_linear6 = true
 scale_type6 = source
 scale6 = 1.0
-float_framebuffer6 = true
-alias6 = "LinearizePass"
+mipmap_input6 = true
+alias6 = "AvgLumPass"
 
-shader7 = ../../../shaders/lcd-cgwg/hsm-lcd-grid-v2.slang
-filter_linear7 = "false"
-scale_type7 = "viewport"
-scale7 = "1.0"
-float_framebuffer7 = "true"
-alias7 = "CRTPass"
+# Pass referenced by subsequent blurring passes and crt pass
+shader7 = ../../../shaders/guest/hsm-interlace-and-linearize.slang
+filter_linear7 = true
+scale_type7 = source
+scale7 = 1.0
+float_framebuffer7 = true
+alias7 = "LinearizePass"
+
+shader8 = ../../../shaders/lcd-cgwg/hsm-lcd-grid-v2.slang
+filter_linear8 = "false"
+scale_type8 = "viewport"
+scale8 = "1.0"
+float_framebuffer8 = "true"
+alias8 = "CRTPass"
 
 
 # -----------------------------------------------------------------------------------------------
@@ -74,11 +78,9 @@ HSM_CRT_CURVATURE_SCALE = 0
 
 # -----------------------------------------------------------------------------------------------
 
-shader8 = ../../../shaders/base/tubefx-none-with-bg-delinearize.slang
-mipmap_input8 = true
-scale_type8 = viewport
-float_framebuffer8 = true
-alias8 = "PostCRTPass"
+shader9 = ../../../shaders/base/tubefx-none-with-bg-delinearize.slang
+mipmap_input9 = true
+scale_type9 = viewport
 
 # Textures Potato
 # Define textures to be used by the different passes

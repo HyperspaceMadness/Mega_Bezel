@@ -51,7 +51,7 @@ layout(set = 0, binding = 3) uniform sampler2D CRT_PASS;
 void main()
 {
 // 	// HSM Added
-// 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+// 	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
 
 // 	if (HSM_IsOutsideReflectionBoundary())
 // 	{

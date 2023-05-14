@@ -251,7 +251,7 @@ vec3 FxaaPixelShader(vec2 pos, sampler2D tex, vec2 rcpFrame)
 }
 
 #pragma parameter HSM_FXAA_EMPTY_LINE		" " 0 0 0.001 0.001
-#pragma parameter HSM_FXAA_TITLE          "[ --- FXAA - ANTIALIASING --- ]:" 0 0 0.01 0.01
+#pragma parameter HSM_FXAA_TITLE          "[ --- FXAA - ANTIALIASING FOR POLYGONS --- ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_FXAA_ON         "          FXAA ON" 0 0 1 1
 #define HSM_FXAA_ON                   params.HSM_FXAA_ON

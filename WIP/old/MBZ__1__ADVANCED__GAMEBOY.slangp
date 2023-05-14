@@ -5,14 +5,13 @@ shader0 = ../../shaders/base/cache-info.slang
 float_framebuffer0 = true
 scale_type0 = source
 scale_y0 = 0.25
-alias0  = "InfoCachePass"
+alias0  = "CacheInfoPass"
 
 // Add Intro Animation
 shader1 = ../../shaders/base/intro.slang
 float_framebuffer1 = true
 scale_type1 = source
 scale_y1 = 4
-alias1 = "IntroPass"
 alias1  = "PreMdaptPass"
 
 shader2 = ../../shaders/hsm-gameboy/hsm-gb-pass0.slang
@@ -43,7 +42,7 @@ shader6 = ../../shaders/hsm-gameboy/hsm-gb-pass4.slang
 filter_linear6 = false
 scale_type6 = source
 scale6 = 1.0
-alias6 = "PostCRTPass"
+alias6 = "TubeFxPass"
 
 // Reduce Resolution  ----------------------------------------------------------------
 //      Reduce the resolution to a small static size regardless of final resolution

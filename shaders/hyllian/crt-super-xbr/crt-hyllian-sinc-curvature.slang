@@ -69,7 +69,7 @@ layout(location = 0) in vec2 vTexCoord;
 layout(location = 1) in vec2 FragCoord;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 2) uniform sampler2D Source;
-layout(set = 0, binding = 3) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 3) uniform sampler2D CacheInfoPass;
 
 /*
     Hyllian's CRT Shader - Sinc/Spline16 version
@@ -183,7 +183,7 @@ vec3 resampler3(vec3 x)
 void main()
 {
 	// HSM Added
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
 
 	if (HSM_IsOutsideReflectionBoundary())
 	{

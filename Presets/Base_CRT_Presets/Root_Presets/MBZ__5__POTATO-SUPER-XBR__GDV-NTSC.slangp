@@ -1,4 +1,4 @@
-shaders = 34
+shaders = 35
 
 shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
@@ -6,54 +6,58 @@ srgb_framebuffer0 = true
 scale_type0 = source
 scale_x0 = 1
 scale_y0 = 1
-alias0 = "DerezedPass"
 
 shader1 = ../../../shaders/base/cache-info-bezel-params.slang
 filter_linear1 = false
 scale_type1 = source
 scale1 = 1.0
-alias1 = "InfoCachePass"
 
-shader2 = ../../../shaders/base/fetch-drez-output.slang
+shader2 = ../../../shaders/base/text.slang
 filter_linear2 = false
-srgb_framebuffer2 = true
+float_framebuffer2 = true
 scale_type2 = source
-scale_x2 = 1
-scale_y2 = 1
+scale2 = 1.0
 
-shader3 = ../../../shaders/dedither/dedither-gamma-prep-1-before.slang
-alias3 = LinearGamma
+shader3 = ../../../shaders/base/fetch-drez-output.slang
+filter_linear3 = false
+srgb_framebuffer3 = true
+scale_type3 = source
+scale_x3 = 1
+scale_y3 = 1
 
-shader4 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass1.slang
-filter_linear4 = false
-scale_type4 = source
-scale4 = 1.0
+shader4 = ../../../shaders/dedither/dedither-gamma-prep-1-before.slang
+alias4 = LinearGamma
 
-shader5 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass2.slang
+shader5 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass1.slang
 filter_linear5 = false
 scale_type5 = source
 scale5 = 1.0
 
-shader6 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass3.slang
+shader6 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass2.slang
 filter_linear6 = false
 scale_type6 = source
 scale6 = 1.0
-alias6 = CB_Output
 
-shader7 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass4.slang
+shader7 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass3.slang
 filter_linear7 = false
 scale_type7 = source
 scale7 = 1.0
+alias7 = CB_Output
 
-shader8 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass5.slang
+shader8 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass4.slang
 filter_linear8 = false
+scale_type8 = source
+scale8 = 1.0
 
-shader9 = ../../../shaders/dedither/dedither-gamma-prep-2-after.slang
+shader9 = ../../../shaders/hyllian/sgenpt-mix/sgenpt-mix-pass5.slang
+filter_linear9 = false
 
-shader10 = ../../../shaders/guest/extras/hsm-g-sharp_resampler.slang
+shader10 = ../../../shaders/dedither/dedither-gamma-prep-2-after.slang
 
-shader11 = ../../../shaders/guest/extras/hsm-sharpsmoother.slang
-alias11 = "DeditherPass"
+shader11 = ../../../shaders/guest/extras/hsm-g-sharp_resampler.slang
+
+shader12 = ../../../shaders/guest/extras/hsm-sharpsmoother.slang
+alias12 = "DeditherPass"
 
 
 #-------------------------------------------------------------------
@@ -70,34 +74,22 @@ HSM_ASPECT_RATIO_MODE = 1
 #-------------------------------------------------------------------
 
 
-shader12 = ../../../shaders/base/stock.slang
-# filter_linear12 = "false"
-# wrap_mode12 = "clamp_to_border"
-# mipmap_input12 = "false"
-# float_framebuffer12 = "false"
-# srgb_framebuffer12 = "true"
-alias12 = XbrSource
+shader13 = ../../../shaders/base/stock.slang
+# filter_linear13 = "false"
+# wrap_mode13 = "clamp_to_border"
+# mipmap_input13 = "false"
+# float_framebuffer13 = "false"
+# srgb_framebuffer13 = "true"
+alias13 = XbrSource
 
-shader13 = ../../../shaders/hyllian/crt-super-xbr/super-xbr-pass0.slang
-filter_linear13 = "false"
-wrap_mode13 = "clamp_to_border"
-mipmap_input13 = "false"
-float_framebuffer13 = "false"
-srgb_framebuffer13 = "true"
-
-shader14 = ../../../shaders/hyllian/crt-super-xbr/super-xbr-pass1.slang
+shader14 = ../../../shaders/hyllian/crt-super-xbr/super-xbr-pass0.slang
 filter_linear14 = "false"
 wrap_mode14 = "clamp_to_border"
 mipmap_input14 = "false"
-alias14 = ""
 float_framebuffer14 = "false"
 srgb_framebuffer14 = "true"
-scale_type_x14 = "source"
-scale_x14 = "2.000000"
-scale_type_y14 = "source"
-scale_y14 = "2.000000"
 
-shader15 = ../../../shaders/hyllian/crt-super-xbr/super-xbr-pass2.slang
+shader15 = ../../../shaders/hyllian/crt-super-xbr/super-xbr-pass1.slang
 filter_linear15 = "false"
 wrap_mode15 = "clamp_to_border"
 mipmap_input15 = "false"
@@ -105,11 +97,11 @@ alias15 = ""
 float_framebuffer15 = "false"
 srgb_framebuffer15 = "true"
 scale_type_x15 = "source"
-scale_x15 = "1.000000"
+scale_x15 = "2.000000"
 scale_type_y15 = "source"
-scale_y15 = "1.000000"
+scale_y15 = "2.000000"
 
-shader16 = ../../../shaders/hyllian/crt-super-xbr/custom-bicubic-X.slang
+shader16 = ../../../shaders/hyllian/crt-super-xbr/super-xbr-pass2.slang
 filter_linear16 = "false"
 wrap_mode16 = "clamp_to_border"
 mipmap_input16 = "false"
@@ -121,13 +113,25 @@ scale_x16 = "1.000000"
 scale_type_y16 = "source"
 scale_y16 = "1.000000"
 
-shader17 = ../../../shaders/hyllian/crt-super-xbr/custom-bicubic-y.slang
-filter_linear17 = false
-scale_type_x17 = source
-scale_x17 = 1
-scale_type_y17 = source
-scale_y17 = 0.5
-wrap_mode17 = "clamp_to_edge"
+shader17 = ../../../shaders/hyllian/crt-super-xbr/custom-bicubic-X.slang
+filter_linear17 = "false"
+wrap_mode17 = "clamp_to_border"
+mipmap_input17 = "false"
+alias17 = ""
+float_framebuffer17 = "false"
+srgb_framebuffer17 = "true"
+scale_type_x17 = "source"
+scale_x17 = "1.000000"
+scale_type_y17 = "source"
+scale_y17 = "1.000000"
+
+shader18 = ../../../shaders/hyllian/crt-super-xbr/custom-bicubic-y.slang
+filter_linear18 = false
+scale_type_x18 = source
+scale_x18 = 1
+scale_type_y18 = source
+scale_y18 = 0.5
+wrap_mode18 = "clamp_to_edge"
 
 
 # -----------------------------------------------------------------------------------------------
@@ -170,37 +174,37 @@ masksize = 0
 
 # Color Correction with Dogway's awesome Grade shader
 # Grade is after Afterglow so that brightening the black level does not break the afterglow
-shader18 = ../../../shaders/dogway/hsm-grade.slang
-filter_linear18 = false
-scale_type18 = source
-scale18 = 1.0
-alias18 = "ColorCorrectPass"
+shader19 = ../../../shaders/dogway/hsm-grade.slang
+filter_linear19 = false
+scale_type19 = source
+scale19 = 1.0
+alias19 = "ColorCorrectPass"
 
-shader19 = ../../../shaders/base/stock.slang
-alias19 = "PrePass0"
+shader20 = ../../../shaders/base/stock.slang
+alias20 = "PrePass0"
 
-shader20 = ../../../shaders/guest/ntsc/hsm-ntsc-pass1.slang
-filter_linear20 = false
-float_framebuffer20 = true
-scale_type_x20 = source
-scale_type_y20 = source
-scale_x20 = 4.0
-scale_y20 = 1.0
-frame_count_mod20 = 2
-alias20 = NPass1
-
-shader21 = ../../../shaders/guest/ntsc/hsm-ntsc-pass2.slang
+shader21 = ../../../shaders/guest/ntsc/hsm-ntsc-pass1.slang
+filter_linear21 = false
 float_framebuffer21 = true
-filter_linear21 = true
-scale_type21 = source
-scale_x21 = 0.5
+scale_type_x21 = source
+scale_type_y21 = source
+scale_x21 = 4.0
 scale_y21 = 1.0
+frame_count_mod21 = 2
+alias21 = NPass1
 
-shader22 = ../../../shaders/guest/ntsc/hsm-ntsc-pass3.slang
+shader22 = ../../../shaders/guest/ntsc/hsm-ntsc-pass2.slang
+float_framebuffer22 = true
 filter_linear22 = true
 scale_type22 = source
-scale_x22 = 1.0
+scale_x22 = 0.5
 scale_y22 = 1.0
+
+shader23 = ../../../shaders/guest/ntsc/hsm-ntsc-pass3.slang
+filter_linear23 = true
+scale_type23 = source
+scale_x23 = 1.0
+scale_y23 = 1.0
 
 
 # -----------------------------------------------------------------------------------------------
@@ -214,92 +218,90 @@ s_sharp = "1.500000"
 # -----------------------------------------------------------------------------------------------
 
 
-shader23 = ../../../shaders/base/stock.slang
-filter_linear23 = true
-scale_type23 = source
-scale_x23 = 1.0
-scale_y23 = 1.0
-alias23 = "PrePass"
-mipmap_input23 = true
-
-shader24 = ../../../shaders/guest/hsm-avg-lum.slang
+shader24 = ../../../shaders/base/stock.slang
 filter_linear24 = true
 scale_type24 = source
-scale24 = 1.0
+scale_x24 = 1.0
+scale_y24 = 1.0
+alias24 = "PrePass"
 mipmap_input24 = true
-alias24 = "AvgLumPass"
 
-# Pass referenced by subsequent blurring passes and crt pass
-shader25 = ../../../shaders/guest/hsm-interlace-and-linearize.slang
+shader25 = ../../../shaders/guest/hsm-avg-lum.slang
 filter_linear25 = true
 scale_type25 = source
 scale25 = 1.0
-float_framebuffer25 = true
-alias25 = "LinearizePass"
+mipmap_input25 = true
+alias25 = "AvgLumPass"
 
-shader26 = ../../../shaders/guest/hsm-crt-guest-advanced-ntsc-pass1.slang
+# Pass referenced by subsequent blurring passes and crt pass
+shader26 = ../../../shaders/guest/hsm-interlace-and-linearize.slang
 filter_linear26 = true
-scale_type_x26 = viewport
-scale_x26 = 1.0
-scale_type_y26 = source
-scale_y26 = 1.0
+scale_type26 = source
+scale26 = 1.0
 float_framebuffer26 = true
-alias26 = Pass1
+alias26 = "LinearizePass"
 
-shader27 = ../../../shaders/guest/hsm-gaussian_horizontal.slang
+shader27 = ../../../shaders/guest/hsm-crt-guest-advanced-ntsc-pass1.slang
 filter_linear27 = true
-scale_type_x27 = absolute
-scale_x27 = 640.0
+scale_type_x27 = viewport
+scale_x27 = 1.0
 scale_type_y27 = source
-scale_y27 = 1.0 
+scale_y27 = 1.0
 float_framebuffer27 = true
+alias27 = Pass1
 
-shader28 = ../../../shaders/guest/hsm-gaussian_vertical.slang
+shader28 = ../../../shaders/guest/hsm-gaussian_horizontal.slang
 filter_linear28 = true
 scale_type_x28 = absolute
 scale_x28 = 640.0
-scale_type_y28 = absolute
-scale_y28 = 480.0
+scale_type_y28 = source
+scale_y28 = 1.0 
 float_framebuffer28 = true
-alias28 = GlowPass
 
-shader29 = ../../../shaders/guest/hsm-bloom_horizontal.slang
+shader29 = ../../../shaders/guest/hsm-gaussian_vertical.slang
 filter_linear29 = true
 scale_type_x29 = absolute
 scale_x29 = 640.0
 scale_type_y29 = absolute
-scale_y29 = 480.0 
+scale_y29 = 480.0
 float_framebuffer29 = true
+alias29 = GlowPass
 
-shader30 = ../../../shaders/guest/hsm-bloom_vertical.slang
+shader30 = ../../../shaders/guest/hsm-bloom_horizontal.slang
 filter_linear30 = true
 scale_type_x30 = absolute
 scale_x30 = 640.0
 scale_type_y30 = absolute
-scale_y30 = 480.0
+scale_y30 = 480.0 
 float_framebuffer30 = true
-alias30 = BloomPass
 
-shader31 = ../../../shaders/guest/hsm-crt-guest-advanced-ntsc-pass2.slang
+shader31 = ../../../shaders/guest/hsm-bloom_vertical.slang
 filter_linear31 = true
-scale_type31 = viewport
-scale_x31 = 1.0
-scale_y31 = 1.0
+scale_type_x31 = absolute
+scale_x31 = 640.0
+scale_type_y31 = absolute
+scale_y31 = 480.0
 float_framebuffer31 = true
+alias31 = BloomPass
 
-shader32 = ../../../shaders/guest/hsm-deconvergence.slang
+shader32 = ../../../shaders/guest/hsm-crt-guest-advanced-ntsc-pass2.slang
 filter_linear32 = true
 scale_type32 = viewport
 scale_x32 = 1.0
 scale_y32 = 1.0
 float_framebuffer32 = true
-alias32 = "CRTPass"
 
-shader33 = ../../../shaders/base/tubefx-none-with-bg-delinearize.slang
-mipmap_input33 = true
+shader33 = ../../../shaders/guest/hsm-deconvergence.slang
+filter_linear33 = true
 scale_type33 = viewport
+scale_x33 = 1.0
+scale_y33 = 1.0
 float_framebuffer33 = true
-alias33 = "PostCRTPass"
+alias33 = "CRTPass"
+
+shader34 = ../../../shaders/base/tubefx-none-with-bg-delinearize.slang
+mipmap_input34 = true
+scale_type34 = viewport
 
 # Textures Potato
 # Define textures to be used by the different passes

@@ -6,20 +6,17 @@ srgb_framebuffer0 = true
 scale_type0 = source
 scale_x0 = 1
 scale_y0 = 1
-alias0 = "DerezedPass"
 
 shader1 = ../../../shaders/base/cache-info-reflection-params.slang
 filter_linear1 = false
 scale_type1 = source
 scale1 = 1.0
-alias1 = "InfoCachePass"
 
 shader2 = ../../../shaders/base/text.slang
 filter_linear2 = false
 float_framebuffer2 = true
 scale_type2 = source
 scale2 = 1.0
-alias2 = "TextPass"
 
 shader3 = ../../../shaders/base/fetch-drez-output.slang
 filter_linear3 = false
@@ -82,7 +79,6 @@ filter_linear15 = false
 float_framebuffer15 = true
 scale_type15 = source
 scale15 = 1.0
-alias15 = "IntroPass"
 
 # GTU TV Processing
 shader16 = ../../../shaders/gtu/hsm-gtu-pass1.slang
@@ -184,8 +180,6 @@ gamma_out = 2.2
 shader30 = ../../../shaders/base/tubefx-default.slang
 mipmap_input30 = true
 scale_type30 = viewport
-float_framebuffer30 = true
-alias30 = "PostCRTPass"
 
 # Reduce Resolution  ----------------------------------------------------------------
 #      Reduce the resolution to a small static size regardless of final resolution
@@ -352,19 +346,27 @@ HSM_NON_USER_PARAM_IS_GLASS_PRESET = 1
 # HSM_CURVATURE_MODE = 0
 
 # Parameters
-HSM_TUBE_BLACK_EDGE_SHARPNESS = "90.0000"
+HSM_SCREEN_VIGNETTE_STRENGTH = "20.000000"
+HSM_SCREEN_VIGNETTE_POWER = "4.000000"
+HSM_SCREEN_VIGNETTE_IN_REFLECTION = "0.000000"
+
+g_vignette = "0.0"
+
+HSM_TUBE_BLACK_EDGE_SHARPNESS = 90
 HSM_TUBE_BLACK_EDGE_THICKNESS = -7
-HSM_CAB_GLASS_OPACITY = "1.000000"
-HSM_SIMPLEBG_OPACITY = "100.000000"
-HSM_SIMPLEBG_BRIGHTNESS = "100.000000"
-HSM_GLASS_BORDER_ON = "1.000000"
+
+HSM_GLASSPRESET_HIGHLIGHT_OPACITY = 1
+HSM_GLASS_BORDER_ON = 1
+
+HSM_REFLECT_VIGNETTE_AMOUNT = 50
+
 HSM_BZL_WIDTH = 3000
 HSM_BZL_HEIGHT = 3000
 HSM_BZL_INNER_EDGE_THICKNESS = 350
 HSM_BZL_INNER_EDGE_SHARPNESS = 30
 HSM_BZL_INNER_CORNER_RADIUS_SCALE = "100.000000"
 HSM_BZL_INNER_EDGE_SHADOW = "0.000000"
-HSM_FRM_OPACITY = "100.000000"
+
 HSM_REFLECT_GLOBAL_AMOUNT = "35.00000"
 HSM_REFLECT_GLOBAL_GAMMA_ADJUST = "0.900000"
 HSM_REFLECT_BEZEL_INNER_EDGE_AMOUNT = "60.0000"
@@ -382,11 +384,7 @@ HSM_REFLECT_NOISE_AMOUNT = "100.000000"
 HSM_REFLECT_NOISE_SAMPLES = "4.000000"
 HSM_REFLECT_NOISE_SAMPLE_DISTANCE = "15.0000"
 HSM_REFLECT_NOISE_SAMPLE_DISTANCE = "15.0000"
-HSM_SCREEN_VIGNETTE_STRENGTH = "20.000000"
-HSM_SCREEN_VIGNETTE_POWER = "4.000000"
-HSM_SCREEN_VIGNETTE_IN_REFLECTION = "0.000000"
 
-g_vignette = "0.0"
 
 # -----------------------------------------------------------------------------------------------
 

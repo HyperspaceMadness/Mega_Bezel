@@ -1,6 +1,6 @@
 /*
     Mega Bezel - Creates a graphic treatment for the game play area to give a retro feel
-    Copyright (C) 2019-2022 HyperspaceMadness - HyperspaceMadness@outlook.com
+    Copyright (C) 2019-2023 HyperspaceMadness - HyperspaceMadness@outlook.com
 
     Incorporates much great feedback from the libretro forum, and thanks 
     to Hunterk who helped me get started
@@ -422,7 +422,7 @@ layout(location = 8) in vec3 BEZEL_FRAME_ORIGINAL_COLOR_RGB;
 layout(location = 0) out vec4 FragColor;
 
 // Pass Framebuffer Textures
-layout(set = 0, binding = 1)  uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 1)  uniform sampler2D CacheInfoPass;
 
 layout(set = 0, binding = 2)  uniform sampler2D BackgroundImage;
 layout(set = 0, binding = 3)  uniform sampler2D BackgroundVertImage;
@@ -459,7 +459,7 @@ void main()
 	VIEWPORT_UNSCALED_COORD = HSM_GetViewportCoordWithFlip(vTexCoord);
 	VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
 
 	vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
 	if (HSM_CACHE_GRAPHICS_ON > 0.5 && feedback_color_test.a < 0 && !CACHE_INFO_CHANGED)

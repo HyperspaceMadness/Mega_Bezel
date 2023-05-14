@@ -6,20 +6,17 @@ srgb_framebuffer0 = true
 scale_type0 = source
 scale_x0 = 1
 scale_y0 = 1
-alias0 = "DerezedPass"
 
 shader1 = ../../../shaders/base/cache-info-bezel-params.slang
 filter_linear1 = false
 scale_type1 = source
 scale1 = 1.0
-alias1 = "InfoCachePass"
 
 shader2 = ../../../shaders/base/text.slang
 filter_linear2 = false
 float_framebuffer2 = true
 scale_type2 = source
 scale2 = 1.0
-alias2 = "TextPass"
 
 shader3 = ../../../shaders/base/fetch-drez-output.slang
 filter_linear3 = false
@@ -142,7 +139,6 @@ filter_linear21 = false
 float_framebuffer21 = true
 scale_type21 = source
 scale21 = 1.0
-alias21 = "IntroPass"
 
 shader22 = ../../../shaders/base/stock.slang
 alias22 = "PreCRTPass"
@@ -283,8 +279,6 @@ HSM_REFLECT_GLOBAL_AMOUNT = "7.000000"
 shader37 = ../../../shaders/base/tubefx-default.slang
 mipmap_input37 = true
 scale_type37 = viewport
-float_framebuffer37 = true
-alias37 = "PostCRTPass"
 
 # Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 
@@ -303,7 +297,6 @@ alias39 = "BR_LayersOverCRTPass"
 # Combine Passes ----------------------------------------------------------------
 shader40 = ../../../shaders/base/combine-passes-no-reflect-hdr.slang
 scale_type40 = viewport
-alias40 = "CombinePass"
 
 
 # Textures All

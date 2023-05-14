@@ -51,7 +51,7 @@ layout(location = 6) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 
 
-layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 1) uniform sampler2D CacheInfoPass;
 layout(set = 0, binding = 2) uniform sampler2D Source;
 
 layout(set = 0, binding = 3) uniform sampler2D OutputPassFeedback;
@@ -60,7 +60,7 @@ layout(set = 0, binding = 3) uniform sampler2D OutputPassFeedback;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
 {
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
 
 	if (HSM_IsOutsideReflectionBoundary())
 	{

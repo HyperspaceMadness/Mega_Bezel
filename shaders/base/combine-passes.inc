@@ -1,6 +1,6 @@
 /*
     Mega Bezel - Creates a graphic treatment for the game play area to give a retro feel
-    Copyright (C) 2019-2022 HyperspaceMadness - HyperspaceMadness@outlook.com
+    Copyright (C) 2019-2023 HyperspaceMadness - HyperspaceMadness@outlook.com
 
     Incorporates much great feedback from the libretro forum, and thanks 
     to Hunterk who helped me get started
@@ -21,6 +21,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see [http://www.gnu.org/licenses/].
 */
+
+#pragma name CombinePass
 
 /////////////// IMPORTS ///////////////
 #include "common/globals-and-image-layers-params.inc"
@@ -68,17 +70,17 @@ layout(location = 6) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 
 // Pass Framebuffer Textures
-layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 1) uniform sampler2D CacheInfoPass;
 layout(set = 0, binding = 2) uniform sampler2D Original;
-layout(set = 0, binding = 3) uniform sampler2D DerezedPass;
+layout(set = 0, binding = 3) uniform sampler2D FetchDrezPass;
 layout(set = 0, binding = 4) uniform sampler2D DeditherPass;
 layout(set = 0, binding = 5) uniform sampler2D ColorCorrectPass;
 layout(set = 0, binding = 6) uniform sampler2D LinearizePass;
 layout(set = 0, binding = 7) uniform sampler2D CRTPass;
-layout(set = 0, binding = 8) uniform sampler2D PostCRTPass;
+layout(set = 0, binding = 8) uniform sampler2D TubeFxPass;
 
 #ifdef IS_NO_REFLECT_PRESET
-#define MiddlePass PostCRTPass
+#define MiddlePass TubeFxPass
 #else
 layout(set = 0, binding = 9) uniform sampler2D ReflectionPass;
 #define MiddlePass ReflectionPass
@@ -116,7 +118,7 @@ vec3 PrepGraphicsForHDR(vec3 in_color)
 void main()
 {
 	UNFLIPPED_VIEWPORT_COORD = vTexCoord;
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
 
 	if (HSM_SHOW_PASS_INDEX > 0.5)
 	{
@@ -138,7 +140,7 @@ void main()
 
 		// TUBE
 		if (HSM_SHOW_PASS_INDEX == 2)
-			FragColor = texture(PostCRTPass, vTexCoord);
+			FragColor = texture(TubeFxPass, vTexCoord);
 
 		// CRT
 		if (HSM_SHOW_PASS_INDEX == 3)
@@ -167,7 +169,7 @@ void main()
 		// DREZ
 		if (HSM_SHOW_PASS_INDEX == 7)
 		{
-			FragColor = texture(DerezedPass, coord_for_raw_passes);
+			FragColor = texture(FetchDrezPass, coord_for_raw_passes);
 			pass_needs_delinearize = false;
 		}
 

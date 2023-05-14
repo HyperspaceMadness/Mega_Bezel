@@ -6,20 +6,17 @@ srgb_framebuffer0 = true
 scale_type0 = source
 scale_x0 = 1
 scale_y0 = 1
-alias0 = "DerezedPass"
 
 shader1 = ../../../shaders/base/cache-info-bezel-params.slang
 filter_linear1 = false
 scale_type1 = source
 scale1 = 1.0
-alias1 = "InfoCachePass"
 
 shader2 = ../../../shaders/base/text.slang
 filter_linear2 = false
 float_framebuffer2 = true
 scale_type2 = source
 scale2 = 1.0
-alias2 = "TextPass"
 
 shader3 = ../../../shaders/base/fetch-drez-output.slang
 filter_linear3 = false
@@ -174,7 +171,6 @@ filter_linear19 = false
 float_framebuffer19 = true
 scale_type19 = source
 scale19 = 1.0
-alias19 = "IntroPass"
 
 shader20 = ../../../shaders/base/stock.slang
 alias20 = "PreCRTPass"
@@ -327,8 +323,6 @@ alias38 = "CRTPass"
 shader39 = ../../../shaders/base/tubefx-default-delinearize.slang
 mipmap_input39 = true
 scale_type39 = viewport
-float_framebuffer39 = true
-alias39 = "PostCRTPass"
 
 # Textures All
 # Define textures to be used by the different passes

@@ -1,6 +1,6 @@
 /*
     Mega Bezel - Creates a graphic treatment for the game play area to give a retro feel
-    Copyright (C) 2019-2022 HyperspaceMadness - HyperspaceMadness@outlook.com
+    Copyright (C) 2019-2023 HyperspaceMadness - HyperspaceMadness@outlook.com
 
 	Texture interpolation based on "Improved texture interpolation" by Inigo Quilez
 	Original description: http://www.iquilezles.org/www/articles/texture/texture.htm

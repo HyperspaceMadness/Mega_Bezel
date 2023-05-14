@@ -236,7 +236,7 @@ void main()
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 
-layout(set = 0, binding = 1) uniform sampler2D InfoCachePass;
+layout(set = 0, binding = 1) uniform sampler2D CacheInfoPass;
 
 layout(set = 0, binding = 3) uniform sampler2D Source;
 // HSM Removed
@@ -892,7 +892,7 @@ vec3 vcolor = adj;
     vec2 vpos = vTexCoord*(global.OriginalSize.xy/global.SourceSize.xy);
 
     // HSM Added
-	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
 
     // vec2 vpos = pos_in_cropped_coords;
 

@@ -10,8 +10,10 @@ TubeColoredGelImage = ../../../shaders/textures/Placeholder_Transparent_16x16.pn
 TubeShadowImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 TubeStaticReflectionImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 
-// ReflectionMaskImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+ReflectionMaskImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 FrameTextureImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+
+GlassPresetHighlightImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 
 BackgroundImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 BackgroundVertImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png

@@ -7,4 +7,3 @@ scale_x0 = 1280
 scale_type_y0 = absolute
 scale_y0 = 1920
 wrap_mode0 = "clamp_to_edge"
-alias0 = "DerezedPass"

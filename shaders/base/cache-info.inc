@@ -1,6 +1,6 @@
 /*
     Mega Bezel - Creates a graphic treatment for the game play area to give a retro feel
-    Copyright (C) 2019-2022 HyperspaceMadness - HyperspaceMadness@outlook.com
+    Copyright (C) 2019-2023 HyperspaceMadness - HyperspaceMadness@outlook.com
 
     Incorporates much great feedback from the libretro forum, and thanks 
     to Hunterk who helped me get started
@@ -22,6 +22,8 @@
     along with this program.  If not, see [http://www.gnu.org/licenses/].
 */
 
+#pragma name CacheInfoPass
+
 #pragma format R32G32B32A32_SFLOAT
 
 #pragma stage vertex
@@ -39,7 +41,7 @@ void main()
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 1) uniform sampler2D Source;
-layout(set = 0, binding = 2) uniform sampler2D InfoCachePassFeedback;
+layout(set = 0, binding = 2) uniform sampler2D CacheInfoPassFeedback;
 layout(set = 0, binding = 3) uniform sampler2D ScreenPlacementImage;
 
 // Get the original size with split area added
@@ -771,13 +773,6 @@ float HSM_GetParameterSum()
 
 #ifdef HAS_BEZEL_PARAMS
 
-					// Reflection Image Mask
-					+ HSM_REFLECT_MASK_IMAGE_AMOUNT
-					+ HSM_REFLECT_MASK_FOLLOW_LAYER
-					+ HSM_REFLECT_MASK_FOLLOW_MODE
-					+ HSM_REFLECT_MASK_BRIGHTNESS * 100
-					+ HSM_REFLECT_MASK_BLACK_LEVEL
-
 					//	Bezel Params not in Screen Scale
 					+ HSM_BZL_INNER_EDGE_THICKNESS / 0.00007
 					+ HSM_BZL_INNER_EDGE_SHARPNESS * 100
@@ -837,6 +832,13 @@ float HSM_GetParameterSum()
 #endif
 
 #ifdef HAS_IMAGE_LAYER_PARAMS
+
+					// Reflection Image Mask
+					+ HSM_REFLECT_MASK_IMAGE_AMOUNT
+					+ HSM_REFLECT_MASK_FOLLOW_LAYER
+					+ HSM_REFLECT_MASK_FOLLOW_MODE
+					+ HSM_REFLECT_MASK_BRIGHTNESS * 100
+					+ HSM_REFLECT_MASK_BLACK_LEVEL
 
 					// Layer Order
 					+ HSM_BG_LAYER_ORDER
@@ -1358,5 +1360,5 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 
 void main()
 {
-   FragColor = HSM_GetColorForScreenInfoCache(vTexCoord, InfoCachePassFeedback, Source, ScreenPlacementImage);
+   FragColor = HSM_GetColorForScreenInfoCache(vTexCoord, CacheInfoPassFeedback, Source, ScreenPlacementImage);
 }

@@ -1,6 +1,6 @@
 /*
     Mega Bezel - Creates a graphic treatment for the game play area to give a retro feel
-    Copyright (C) 2019-2022 HyperspaceMadness - HyperspaceMadness@outlook.com
+    Copyright (C) 2019-2023 HyperspaceMadness - HyperspaceMadness@outlook.com
 
     Incorporates much great feedback from the libretro forum, and thanks 
     to Hunterk who helped me get started
@@ -156,6 +156,80 @@ float HSM_ASPECT_RATIO_MODE = global.HSM_ASPECT_RATIO_MODE;
 
 #pragma parameter HSM_ASPECT_RATIO_EXPLICIT							"          Explicit Aspect Ratio (Also Auto Ratio Fallback)"  1.3333 0 8 0.002
 float HSM_ASPECT_RATIO_EXPLICIT = global.HSM_ASPECT_RATIO_EXPLICIT;
+
+
+//---------------------------------------------------------------------------------------------------
+//    TUBE_ASPECT RATIO
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_TUBE_ASPECT_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter HSM_TUBE_ASPECT_RATIO_TITLE							"[ TUBE ASPECT RATIO ]:" 0 0 0.001 0.001
+
+#pragma parameter HSM_TUBE_DIFFUSE_FORCE_ASPECT 			        "          Tube Aspect - EVEN | SCREEN | Explicit"  1 0 2 1
+#define HSM_TUBE_DIFFUSE_FORCE_ASPECT global.HSM_TUBE_DIFFUSE_FORCE_ASPECT
+
+#pragma parameter HSM_TUBE_EXPLICIT_ASPECT 			                "          Explicit Tube Aspect "  1.3333 0.5 3 0.005
+#define HSM_TUBE_EXPLICIT_ASPECT global.HSM_TUBE_EXPLICIT_ASPECT
+
+
+//---------------------------------------------------------------------------------------------------
+//    OVERSCAN
+//---------------------------------------------------------------------------------------------------
+
+#pragma parameter HSM_OVERSCAN_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter HSM_OVERSCAN_TITLE "[ OVERSCAN & RASTER BLOOM ]: " 0.0 0.0 1.0 1.0
+
+#pragma parameter HSM_OVERSCAN_AMOUNT "          Overscan %" 0 -50 100 0.1
+#define HSM_OVERSCAN_AMOUNT        (global.HSM_OVERSCAN_AMOUNT / 100)
+
+#pragma parameter HSM_OVERSCAN_X "          Overscan X %" 0 -50 100 0.1
+#define HSM_OVERSCAN_X        (HSM_OVERSCAN_AMOUNT + global.HSM_OVERSCAN_X / 100)
+
+#pragma parameter HSM_OVERSCAN_Y "          Overscan Y %" 0 -50 100 0.1
+#define HSM_OVERSCAN_Y        (HSM_OVERSCAN_AMOUNT + global.HSM_OVERSCAN_Y / 100)
+
+#pragma parameter HSM_OVERSCAN_RASTER_BLOOM_ON "          Raster Bloom ON -- (Scaling based on average luma)" 0 0 1 1
+#define HSM_OVERSCAN_RASTER_BLOOM_ON        global.HSM_OVERSCAN_RASTER_BLOOM_ON
+
+#pragma parameter HSM_OVERSCAN_RASTER_BLOOM_MODE "          Raster Bloom Overscan Mode" 2.0 0.0 2.0 1.0
+#define HSM_OVERSCAN_RASTER_BLOOM_MODE           global.HSM_OVERSCAN_RASTER_BLOOM_MODE
+
+#pragma parameter HSM_OVERSCAN_RASTER_BLOOM_AMOUNT "          Raster Bloom %" 5.0 0.0 20.0 1.0
+#define HSM_OVERSCAN_RASTER_BLOOM_AMOUNT        global.HSM_OVERSCAN_RASTER_BLOOM_AMOUNT     // Bloom overscan percentage
+
+
+//---------------------------------------------------------------------------------------------------
+//    CURVATURE
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_CURVATURE_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter HSM_CURVATURE_TITLE								"[ CURVATURE ]:" 0 0 0.001 0.001
+
+// #pragma parameter HSM_USE_GEOM 									"          Use Geom Curvature" 0 -1 3 1
+// float HSM_USE_GEOM = global.HSM_USE_GEOM;
+float HSM_USE_GEOM = 0;
+
+#pragma parameter HSM_CURVATURE_MODE 								"       Curvature Mode  OFF | 2D | 2D-CYL | 3D-1 | 3D-2 | 3D CYL" 1 0 5 1
+float HSM_CURVATURE_MODE = global.HSM_CURVATURE_MODE;
+
+#pragma parameter HSM_CURVATURE_2D_SCALE_LONG_AXIS 					"          2D Curvature on Long Axis" 100 5 400 5
+#define HSM_CURVATURE_2D_SCALE_LONG_AXIS global.HSM_CURVATURE_2D_SCALE_LONG_AXIS / 100
+
+#pragma parameter HSM_CURVATURE_2D_SCALE_SHORT_AXIS 				"          2D Curvature on Short Axis" 100 5 400 5
+#define HSM_CURVATURE_2D_SCALE_SHORT_AXIS global.HSM_CURVATURE_2D_SCALE_SHORT_AXIS / 100
+
+#pragma parameter HSM_CURVATURE_3D_RADIUS 							"          3D Radius" 200 16 102400 1
+float HSM_CURVATURE_3D_RADIUS = global.HSM_CURVATURE_3D_RADIUS / 100;
+
+#pragma parameter HSM_CURVATURE_3D_VIEW_DIST 						"          3D View Distance - Def 150" 150 50 102400 5
+float HSM_CURVATURE_3D_VIEW_DIST = global.HSM_CURVATURE_3D_VIEW_DIST / 100;
+
+#pragma parameter HSM_CURVATURE_3D_TILT_ANGLE_X 					"          3D Tilt Angle X" 0 -120 120 1
+float HSM_CURVATURE_3D_TILT_ANGLE_X = global.HSM_CURVATURE_3D_TILT_ANGLE_X / 100;
+
+#pragma parameter HSM_CURVATURE_3D_TILT_ANGLE_Y 					"          3D Tilt Angle Y" 0 -120 120 1
+float HSM_CURVATURE_3D_TILT_ANGLE_Y = global.HSM_CURVATURE_3D_TILT_ANGLE_Y / 100;
+
+#pragma parameter HSM_CRT_CURVATURE_SCALE 				            "       CRT Curvature Scale Multiplier: 0 = Less Moire Artifacts" 100 0 100 1
+float HSM_CRT_CURVATURE_SCALE = global.HSM_CRT_CURVATURE_SCALE / 100;
 
 
 //---------------------------------------------------------------------------------------------------
@@ -367,7 +441,7 @@ float HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = global.HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR
 #pragma parameter HSM_INTERLACE_TITLE								"[ INTERLACING From Guest.r :) ]:" 0 0 0.001 0.001
 
 #pragma parameter HSM_INTERLACE_TRIGGER_RES 						"          Interlacing and Fake Scanlines Trigger Res" 650 100 2000 25
-#define HSM_INTERLACE_TRIGGER_RES global.HSM_INTERLACE_TRIGGER_RES
+float HSM_INTERLACE_TRIGGER_RES = global.HSM_INTERLACE_TRIGGER_RES;
 
 #pragma parameter HSM_INTERLACE_MODE 								"    Interlace Mode: -1:NO SCANLN 0:OFF 1-3:NORM 4-5:INTERPOLATE" 4 -1.0 5.0 1.0
 #define HSM_INTERLACE_MODE global.HSM_INTERLACE_MODE
@@ -414,67 +488,6 @@ float HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = global.HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR
 	#define HSM_FAKE_SCANLINE_BRIGHTNESS_CUTOFF 3
 #endif
 
-//---------------------------------------------------------------------------------------------------
-//    CURVATURE
-//---------------------------------------------------------------------------------------------------
-
-#pragma parameter HSM_OVERSCAN_EMPTY_LINE							" " 0 0 0.001 0.001
-#pragma parameter HSM_OVERSCAN_TITLE "[ OVERSCAN & RASTER BLOOM ]: " 0.0 0.0 1.0 1.0
-
-#pragma parameter HSM_OVERSCAN_AMOUNT "          Overscan %" 0 -50 100 0.5
-#define HSM_OVERSCAN_AMOUNT        (global.HSM_OVERSCAN_AMOUNT / 100)
-
-#pragma parameter HSM_OVERSCAN_X "          Overscan X %" 0 -50 100 0.5
-#define HSM_OVERSCAN_X        (HSM_OVERSCAN_AMOUNT + global.HSM_OVERSCAN_X / 100)
-
-#pragma parameter HSM_OVERSCAN_Y "          Overscan Y %" 0 -50 100 0.5
-#define HSM_OVERSCAN_Y        (HSM_OVERSCAN_AMOUNT + global.HSM_OVERSCAN_Y / 100)
-
-#pragma parameter HSM_OVERSCAN_RASTER_BLOOM_ON "          Raster Bloom ON -- (Scaling based on average luma)" 0 0 1 1
-#define HSM_OVERSCAN_RASTER_BLOOM_ON        global.HSM_OVERSCAN_RASTER_BLOOM_ON
-
-#pragma parameter HSM_OVERSCAN_RASTER_BLOOM_MODE "          Raster Bloom Overscan Mode" 2.0 0.0 2.0 1.0
-#define HSM_OVERSCAN_RASTER_BLOOM_MODE           global.HSM_OVERSCAN_RASTER_BLOOM_MODE
-
-#pragma parameter HSM_OVERSCAN_RASTER_BLOOM_AMOUNT "          Raster Bloom %" 5.0 0.0 20.0 1.0
-#define HSM_OVERSCAN_RASTER_BLOOM_AMOUNT        global.HSM_OVERSCAN_RASTER_BLOOM_AMOUNT     // Bloom overscan percentage
-
-
-
-//---------------------------------------------------------------------------------------------------
-//    CURVATURE
-//---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_CURVATURE_EMPTY_LINE							" " 0 0 0.001 0.001
-#pragma parameter HSM_CURVATURE_TITLE								"[ CURVATURE ]:" 0 0 0.001 0.001
-
-// #pragma parameter HSM_USE_GEOM 									"          Use Geom Curvature" 0 -1 3 1
-// float HSM_USE_GEOM = global.HSM_USE_GEOM;
-float HSM_USE_GEOM = 0;
-
-#pragma parameter HSM_CURVATURE_MODE 								"       Curvature Mode  OFF | 2D | 2D-CYL | 3D-1 | 3D-2 | 3D CYL" 1 0 5 1
-float HSM_CURVATURE_MODE = global.HSM_CURVATURE_MODE;
-
-#pragma parameter HSM_CURVATURE_2D_SCALE_LONG_AXIS 					"          2D Curvature on Long Axis" 100 5 400 5
-#define HSM_CURVATURE_2D_SCALE_LONG_AXIS global.HSM_CURVATURE_2D_SCALE_LONG_AXIS / 100
-
-#pragma parameter HSM_CURVATURE_2D_SCALE_SHORT_AXIS 				"          2D Curvature on Short Axis" 100 5 400 5
-#define HSM_CURVATURE_2D_SCALE_SHORT_AXIS global.HSM_CURVATURE_2D_SCALE_SHORT_AXIS / 100
-
-#pragma parameter HSM_CURVATURE_3D_RADIUS 							"          3D Radius" 200 16 102400 1
-float HSM_CURVATURE_3D_RADIUS = global.HSM_CURVATURE_3D_RADIUS / 100;
-
-#pragma parameter HSM_CURVATURE_3D_VIEW_DIST 						"          3D View Distance - Def 150" 150 50 102400 5
-float HSM_CURVATURE_3D_VIEW_DIST = global.HSM_CURVATURE_3D_VIEW_DIST / 100;
-
-#pragma parameter HSM_CURVATURE_3D_TILT_ANGLE_X 					"          3D Tilt Angle X" 0 -120 120 1
-float HSM_CURVATURE_3D_TILT_ANGLE_X = global.HSM_CURVATURE_3D_TILT_ANGLE_X / 100;
-
-#pragma parameter HSM_CURVATURE_3D_TILT_ANGLE_Y 					"          3D Tilt Angle Y" 0 -120 120 1
-float HSM_CURVATURE_3D_TILT_ANGLE_Y = global.HSM_CURVATURE_3D_TILT_ANGLE_Y / 100;
-
-#pragma parameter HSM_CRT_CURVATURE_SCALE 				            "       CRT Curvature Scale Multiplier: 0 = Less Moire Artifacts" 100 0 100 1
-float HSM_CRT_CURVATURE_SCALE = global.HSM_CRT_CURVATURE_SCALE / 100;
-
 
 //---------------------------------------------------------------------------------------------------
 //    SIGNAL NOISE
@@ -501,17 +514,17 @@ float HSM_CRT_CURVATURE_SCALE = global.HSM_CRT_CURVATURE_SCALE / 100;
 #define HSM_SIGNAL_NOISE_TYPE global.HSM_SIGNAL_NOISE_TYPE
 
 
-//---------------------------------------------------------------------------------------------------
-//    ANTI-FLICKER
-//---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_ANTI_FLICKER_EMPTY_LINE							" " 0 0 0.001 0.001
-#pragma parameter HSM_ANTI_FLICKER_TITLE							"[ ANTI-FLICKER ]:" 0 0 0.001 0.001
+// //---------------------------------------------------------------------------------------------------
+// //    ANTI-FLICKER
+// //---------------------------------------------------------------------------------------------------
+// #pragma parameter HSM_ANTI_FLICKER_EMPTY_LINE							" " 0 0 0.001 0.001
+// #pragma parameter HSM_ANTI_FLICKER_TITLE							"[ ANTI-FLICKER ]:" 0 0 0.001 0.001
 
-#pragma parameter HSM_ANTI_FLICKER_ON 								"          Anti-Flicker ON" 0 0 1 1
-#define HSM_ANTI_FLICKER_ON global.HSM_ANTI_FLICKER_ON
+// #pragma parameter HSM_ANTI_FLICKER_ON 								"          Anti-Flicker ON" 0 0 1 1
+// #define HSM_ANTI_FLICKER_ON global.HSM_ANTI_FLICKER_ON
 
-#pragma parameter HSM_ANTI_FLICKER_THRESHOLD 						"          Luma Difference Threshold" 25 0 100 5
-#define HSM_ANTI_FLICKER_THRESHOLD global.HSM_ANTI_FLICKER_THRESHOLD / 100
+// #pragma parameter HSM_ANTI_FLICKER_THRESHOLD 						"          Luma Difference Threshold" 25 0 100 5
+// #define HSM_ANTI_FLICKER_THRESHOLD global.HSM_ANTI_FLICKER_THRESHOLD / 100
 
 
 //---------------------------------------------------------------------------------------------------
@@ -622,12 +635,6 @@ float HSM_MONOCHROME_DUALSCREEN_VIS_MODE = global.HSM_MONOCHROME_DUALSCREEN_VIS_
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_TUBE_ASPECT_AND_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_TUBE_ASPECT_AND_EMPTY_TITLE						"[ TUBE ASPECT & EMPTY SPACE ]:" 0 0 0.001 0.001
-
-#pragma parameter HSM_TUBE_DIFFUSE_FORCE_ASPECT 			        "          Tube Aspect - EVEN | SCREEN | Explicit"  1 0 2 1
-#define HSM_TUBE_DIFFUSE_FORCE_ASPECT global.HSM_TUBE_DIFFUSE_FORCE_ASPECT
-
-#pragma parameter HSM_TUBE_EXPLICIT_ASPECT 			                "          Explicit Tube Aspect "  1.3333 0.5 3 0.01
-#define HSM_TUBE_EXPLICIT_ASPECT global.HSM_TUBE_EXPLICIT_ASPECT
 
 #pragma parameter HSM_TUBE_EMPTY_THICKNESS 				            "          Empty Tube Thickness" 0 0 6000 10
 #define HSM_TUBE_EMPTY_THICKNESS (0.7 * global.HSM_TUBE_EMPTY_THICKNESS / 100)
