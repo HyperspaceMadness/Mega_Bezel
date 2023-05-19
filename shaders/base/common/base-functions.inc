@@ -61,38 +61,43 @@ vec2 HSM_GetVTexCoordWithArgs(vec2 in_coord, vec2 in_scale, vec2 position_offset
 	return HSM_GetInverseScaledCoord(HSM_GetCoordWithPositionOffset(in_coord, position_offset), in_scale);
 }
 
-// Rows and Columns are 1 based
-vec4 HSM_GetCacheSampleRange(float column_index, float row_index)
+vec2 HSM_GetCacheSampleRangeSize()
 {
-	float num_rows = 8;
-	float num_columns = 8;
+	vec2 cache_image_resolution = global.DerezedPassSize.xy;
 
-	float range_width = 1 / num_columns;
-	float range_height = 1 / num_rows;
+	float sample_block_num_pixels = 3;
+	vec2 pixel_size = 1 / cache_image_resolution;
+	vec2 range_size = sample_block_num_pixels * pixel_size;
 
-	float zero_based_row_index = row_index - 1;
-	float zero_based_column_index = column_index - 1;
+	return range_size;
+}
+
+bool HSM_IsOutsideCacheFullRange(vec2 in_coord)
+{
+	float max_samples = 8;
+	vec4 cache_full_range = vec4(0);
+	cache_full_range.zw = vec2(max_samples, max_samples) * HSM_GetCacheSampleRangeSize();
+	vec2 test_coord = in_coord / cache_full_range.zw;
+	return HHLP_IsOutsideCoordSpace(test_coord);
+}
+
+// Rows and Columns are 1 based
+vec4 HSM_GetCacheSampleRange(float row_index, float column_index)
+{
+	vec2 range_size = HSM_GetCacheSampleRangeSize();
 
 	vec4 out_sample_range = vec4(0);
+	out_sample_range.xy = vec2(column_index - 1, row_index - 1) * range_size;
+	out_sample_range.zw = vec2(column_index, row_index) * range_size;
 
-	out_sample_range.x = zero_based_column_index * range_width;
-	out_sample_range.y = zero_based_row_index * range_height;
-	out_sample_range.z = out_sample_range.x + range_width;
-	out_sample_range.w = out_sample_range.y + range_height;
-	
 	return out_sample_range;
 }
 
-vec2 HSM_GetCacheSampleCoord(float column_index, float row_index)
+vec2 HSM_GetCacheSampleCoord(float row_index, float column_index)
 {
-	float num_rows = 8;
-	float num_columns = 8;
-
-	float range_width = 1 / num_columns;
-	float range_height = 1 / num_rows;
-
-	vec4 sample_range = HSM_GetCacheSampleRange(column_index, row_index);
-	return vec2(sample_range.x + range_width/2, sample_range.y + range_height/2);
+	vec4 sample_range = HSM_GetCacheSampleRange(row_index, column_index);
+	vec2 sample_coord = sample_range.xy + (sample_range.zw - sample_range.xy) / 2;
+	return sample_coord;
 }
 
 vec2 HSM_GetViewportCoordWithFlip(vec2 viewport_coord)
@@ -147,7 +152,6 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, vec2 vTexCoo
 	vec2 sample_coord = vec2(0);
 	vec4 texture_sample = vec4(0);
 
-	// Sample 1, 1
 	sample_coord = HSM_GetCacheSampleCoord(1, 1);
 	texture_sample = texture(in_cache_pass, sample_coord);
 	AVERAGE_LUMA = texture_sample.a;
@@ -159,46 +163,40 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, vec2 vTexCoo
 
 	if (SCREEN_INDEX == 1)
 	{
-		// Sample 2, 1
 		// r SCREEN_ASPECT
 		// ba SCREEN_SCALE
-		sample_coord = HSM_GetCacheSampleCoord(2, 1);
+		sample_coord = HSM_GetCacheSampleCoord(1, 2);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		SCREEN_ASPECT = texture_sample.r;
 		SCREEN_SCALE = texture_sample.ba;
 
-		// Sample 3, 1
 		// rg TUBE_SCALE 
 		// ba SCREEN_POS_OFFSET
-		sample_coord = HSM_GetCacheSampleCoord(3, 1);
+		sample_coord = HSM_GetCacheSampleCoord(1, 3);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		TUBE_SCALE = texture_sample.rg;
 		SCREEN_POS_OFFSET = texture_sample.ba;
 
-		// Sample 3, 4
 		// rg TUBE_DIFFUSE_SCALE 
-		sample_coord = HSM_GetCacheSampleCoord(3, 4);
+		sample_coord = HSM_GetCacheSampleCoord(4, 3);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		TUBE_DIFFUSE_SCALE = texture_sample.rg;
 		TUBE_DIFFUSE_ASPECT = TUBE_DIFFUSE_SCALE.x / TUBE_DIFFUSE_SCALE.y * output_aspect;
 
-		// Sample 4, 1
 		// rg CROPPED_ROTATED_SIZE_WITH_RES_MULT
-		sample_coord = HSM_GetCacheSampleCoord(4, 1);
+		sample_coord = HSM_GetCacheSampleCoord(1, 4);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		CROPPED_ROTATED_SIZE_WITH_RES_MULT = texture_sample.rg;
 		res_mult_size_sum = CROPPED_ROTATED_SIZE_WITH_RES_MULT.x + CROPPED_ROTATED_SIZE_WITH_RES_MULT.y;
 		ROTATED_CORE_PREPPED_SIZE = texture_sample.ba;
 
-		// Sample 1, 2
 		// rg CROPPED_ROTATED_SIZE
 		// ba SAMPLE_AREA_START_PIXEL_COORD
-		sample_coord = HSM_GetCacheSampleCoord(1, 2);
+		sample_coord = HSM_GetCacheSampleCoord(2, 1);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		CROPPED_ROTATED_SIZE = texture_sample.rg;
 		SAMPLE_AREA_START_PIXEL_COORD = texture_sample.ba;
 
-		// Sample 4, 4
 		// rg screen size first screen
 		// ba screen size second screen
 		sample_coord = HSM_GetCacheSampleCoord(4, 4);
@@ -208,7 +206,7 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, vec2 vTexCoo
 	// If we are in the section of the viewport which is the second screen
 	if (SCREEN_INDEX == 2)
 	{
-		// Sample 2, 2 Sample - 2nd Screen
+		// 2nd Screen
 		// r SCREEN_ASPECT
 		// ba SCREEN_SCALE
 		sample_coord = HSM_GetCacheSampleCoord(2, 2);
@@ -216,38 +214,34 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, vec2 vTexCoo
 		SCREEN_ASPECT = texture_sample.r;
 		SCREEN_SCALE = texture_sample.gb;
 
-		// Sample 3, 2 - 2nd Screen
+		// 2nd Screen
 		// rg TUBE_SCALE
 		// ba SCREEN_POS_OFFSET
-		sample_coord = HSM_GetCacheSampleCoord(3, 2);
+		sample_coord = HSM_GetCacheSampleCoord(2, 3);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		TUBE_SCALE = 		texture_sample.rg;
 		SCREEN_POS_OFFSET = texture_sample.ba;
 
 		// TODO need to add TUBE_DIFFUSE_ASPECT & deal with 2nd Screen
-		// Sample 3, 4
 		// ba TUBE_DIFFUSE_SCALE 
-		sample_coord = HSM_GetCacheSampleCoord(3, 4);
+		sample_coord = HSM_GetCacheSampleCoord(4, 3);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		TUBE_DIFFUSE_SCALE = texture_sample.ba;
 		TUBE_DIFFUSE_ASPECT = TUBE_DIFFUSE_SCALE.x / TUBE_DIFFUSE_SCALE.y * output_aspect;
 
-		// Sample 4, 2
 		// rg CROPPED_ROTATED_SIZE_WITH_RES_MULT
-		sample_coord = HSM_GetCacheSampleCoord(4, 2);
+		sample_coord = HSM_GetCacheSampleCoord(2, 4);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		CROPPED_ROTATED_SIZE_WITH_RES_MULT = texture_sample.rg;
 		res_mult_size2_sum = CROPPED_ROTATED_SIZE_WITH_RES_MULT.x + CROPPED_ROTATED_SIZE_WITH_RES_MULT.y;
 
-		// Sample 1, 3
 		// rg CROPPED_ROTATED_SIZE
 		// ba SAMPLE_AREA_START_PIXEL_COORD
-		sample_coord = HSM_GetCacheSampleCoord(1, 3);
+		sample_coord = HSM_GetCacheSampleCoord(3, 1);
 		texture_sample = texture(in_cache_pass, sample_coord);
 		CROPPED_ROTATED_SIZE = texture_sample.rg;
 		SAMPLE_AREA_START_PIXEL_COORD = texture_sample.ba;
 
-		// Sample 4, 4
 		// rg screen size first screen
 		// ba screen size second screen
 		sample_coord = HSM_GetCacheSampleCoord(4, 4);
@@ -255,44 +249,39 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, vec2 vTexCoo
 		SCREEN_SIZE = texture_sample.ba;
 	}
 
-	// Sample 3, 1
 	// rg TUBE_SCALE 
 	// ba SCREEN_POS_OFFSET
-	sample_coord = HSM_GetCacheSampleCoord(3, 1);
+	sample_coord = HSM_GetCacheSampleCoord(1, 3);
 	texture_sample = texture(in_cache_pass, sample_coord);
 	// TUBE_SCALE_1ST_SCREEN = texture_sample.rg;
 	SCREEN_POS_OFFSET_1ST_SCREEN = texture_sample.ba;
 
-	// Sample 3, 4
 	// rg TUBE_DIFFUSE_SCALE_1ST_SCREEN 
-	sample_coord = HSM_GetCacheSampleCoord(3, 4);
+	sample_coord = HSM_GetCacheSampleCoord(4, 3);
 	texture_sample = texture(in_cache_pass, sample_coord);
 	TUBE_DIFFUSE_SCALE_1ST_SCREEN = texture_sample.rg;
 	// TUBE_DIFFUSE_ASPECT_1ST_SCREEN = TUBE_DIFFUSE_SCALE_1ST_SCREEN.x / TUBE_DIFFUSE_SCALE_1ST_SCREEN.y * output_aspect;
 
-	// Sample 3, 2 - 2nd Screen
+	// 2nd Screen
 	// rg TUBE_SCALE_2ND_SCREEN
 	// ba SCREEN_POS_OFFSET_2ND_SCREEN
-	sample_coord = HSM_GetCacheSampleCoord(3, 2);
+	sample_coord = HSM_GetCacheSampleCoord(2, 3);
 	texture_sample = texture(in_cache_pass, sample_coord);
 	// TUBE_SCALE_2ND_SCREEN = 		texture_sample.rg;
 	SCREEN_POS_OFFSET_2ND_SCREEN = texture_sample.ba;
 
 	// TODO need to add TUBE_DIFFUSE_ASPECT & deal with 2nd Screen
-	// Sample 3, 4
 	// ba TUBE_DIFFUSE_SCALE_2ND_SCREEN 
-	sample_coord = HSM_GetCacheSampleCoord(3, 4);
+	sample_coord = HSM_GetCacheSampleCoord(4, 3);
 	texture_sample = texture(in_cache_pass, sample_coord);
 	TUBE_DIFFUSE_SCALE_2ND_SCREEN = texture_sample.ba;
 
-	// Sample 2, 3 Sample
 	// rg CORE_SIZE
-	sample_coord = HSM_GetCacheSampleCoord(2, 3);
+	sample_coord = HSM_GetCacheSampleCoord(3, 2);
 	texture_sample = texture(in_cache_pass, sample_coord);
 	CORE_SIZE = texture_sample.rg;
 	ROTATED_CORE_ORIGINAL_SIZE = texture_sample.ba;
 
-	// Sample 3, 3
 	// rg VIEWPORT_SCALE
 	// ba VIEWPORT_POS
 	sample_coord = HSM_GetCacheSampleCoord(3, 3);
@@ -300,10 +289,9 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, vec2 vTexCoo
 	VIEWPORT_SCALE = texture_sample.rg;
 	VIEWPORT_POS = texture_sample.ba;
 
-	// Sample 4, 3
 	// rg SCREEN_SCALE_2ND_SCREEN
 	// ba SCREEN_POS_OFFSET_2ND_SCREEN
-	sample_coord = HSM_GetCacheSampleCoord(4, 3);
+	sample_coord = HSM_GetCacheSampleCoord(3, 4);
 	texture_sample = texture(in_cache_pass, sample_coord);
 	SCREEN_SCALE_2ND_SCREEN = texture_sample.rg;
 	SCREEN_POS_OFFSET_2ND_SCREEN = texture_sample.ba;
@@ -311,7 +299,7 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, vec2 vTexCoo
 	// Sample 1, 4
 	// g CURRENT_FRAME_FROM_CACHE_INFO
 	// b ROTATED_DEREZED_SIZE
-	sample_coord = HSM_GetCacheSampleCoord(1, 4);
+	sample_coord = HSM_GetCacheSampleCoord(4, 1);
 	texture_sample = texture(in_cache_pass, sample_coord);
 	CURRENT_FRAME_FROM_CACHE_INFO = texture_sample.g;
 	ROTATED_DEREZED_SIZE = texture_sample.ba;
@@ -319,7 +307,7 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, vec2 vTexCoo
 	// Sample 2, 4 
 	// r NEGATIVE_CROP_EXPAND_MULTIPLIER
 	// g MAX_NEGATIVE_CROP
-	sample_coord = HSM_GetCacheSampleCoord(2, 4);
+	sample_coord = HSM_GetCacheSampleCoord(4, 2);
 	texture_sample = texture(in_cache_pass, sample_coord);
 	NEGATIVE_CROP_EXPAND_MULTIPLIER = texture_sample.r;
 	MAX_NEGATIVE_CROP = texture_sample.g;

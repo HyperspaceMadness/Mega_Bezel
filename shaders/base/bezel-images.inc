@@ -432,7 +432,7 @@ layout(set = 0, binding = 5)  uniform sampler2D NightLighting2Image;
 layout(set = 0, binding = 6)  uniform sampler2D LEDImage;
 layout(set = 0, binding = 7)  uniform sampler2D FrameTextureImage;
 layout(set = 0, binding = 8)  uniform sampler2D DeviceImage;
-layout(set = 0, binding = 9) uniform sampler2D DeviceVertImage;
+layout(set = 0, binding = 9)  uniform sampler2D DeviceVertImage;
 layout(set = 0, binding = 10) uniform sampler2D DeviceLEDImage;
 layout(set = 0, binding = 11) uniform sampler2D DecalImage;
 layout(set = 0, binding = 12) uniform sampler2D CabinetGlassImage;
@@ -540,7 +540,7 @@ void main()
 	BEZEL_MASK = INSIDE_BEZEL_MASK * (1 - TUBE_MASK);
 	FRAME_MASK = OUTSIDE_BEZEL_MASK * (1 - OUTSIDE_FRAME_MASK);
 
-#ifdef LAYERS_UNDER_CRT
+// #ifdef LAYERS_UNDER_CRT
 	//----------------------------------------------------
 	//  Calculate Corner Highlight Mask
 	//----------------------------------------------------
@@ -766,7 +766,7 @@ void main()
 	vec4 tube_bg_layer = vec4(0, 0, 0, 0);
 
 // end of ifndef LAYERS_UNDER_CRT
-#endif
+// #endif
 
 	//-----------------------------------------------------------------------------------------
 	// Background
@@ -1169,26 +1169,47 @@ void main()
 	// COMPOSITE ALL LAYERS
 	//-----------------------------------------------------------------------------------------
 
+	OUTSIDE_TUBE_MASK_FOR_IMAGE = 1 - HSM_GetCornerMask(tube_curved_coord_ctr * 1.003 + 0.5, TUBE_DIFFUSE_ASPECT, HSM_FRM_OUTER_CORNER_RADIUS, 1);
+
 	vec4 frag_color_linear = vec4(0);
 
 	int start_layer = 0;
 	int end_layer = int(MAX_LAYER_ORDER);
 
+
+
+vec4 layers_over_precomp = vec4(0);
+vec4 layers_under_precomp = vec4(0);
+
+int i_precomp = 0;
+
 #ifdef LAYERS_OVER_CRT
-	start_layer = int(HSM_CRT_LAYER_ORDER);
-	end_layer = int(MAX_LAYER_ORDER);
-#else
-	start_layer = 0;
-	end_layer = int(HSM_CRT_LAYER_ORDER - 1);
+	i_precomp = 1;
 #endif
 
-	OUTSIDE_TUBE_MASK_FOR_IMAGE = 1 - HSM_GetCornerMask(tube_curved_coord_ctr * 1.003 + 0.5, TUBE_DIFFUSE_ASPECT, HSM_FRM_OUTER_CORNER_RADIUS, 1);
+// for (int i_precomp = 0, i_precomp < 2; i_precomp ++)
+// {
+// #ifdef LAYERS_OVER_CRT
+	if (i_precomp == 1)
+	{
+		start_layer = int(HSM_CRT_LAYER_ORDER);
+		end_layer = int(MAX_LAYER_ORDER);
+	}
+// #else
+	if (i_precomp == 0)
+	{
+		start_layer = 0;
+		end_layer = int(HSM_CRT_LAYER_ORDER - 1);
+	}
+// #endif
+
+	vec4 precomp_color = vec4(0);
 
 	for(int i=start_layer; i <= end_layer; i++)
 	{
 		// BACKGROUND
 		if (HSM_BG_LAYER_ORDER == i)
-			frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+			precomp_color = BlendModeMaskLayerMix(precomp_color, 
 													bg_image, 
 													HSM_BG_BLEND_MODE, 
 													HSM_BG_MASK_MODE, 
@@ -1198,7 +1219,7 @@ void main()
 
 		// VIGNETTE
 		if (HSM_VIEWPORT_VIGNETTE_LAYER_ORDER == i)
-			frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+			precomp_color = BlendModeMaskLayerMix(precomp_color, 
 													vignette_layer, 
 													BLEND_MODE_NORMAL, 
 													HSM_VIEWPORT_VIGNETTE_MASK_MODE, 
@@ -1207,7 +1228,7 @@ void main()
 													HSM_VIEWPORT_VIGNETTE_OPACITY);
 		// LED IMAGE
 		if (HSM_LED_LAYER_ORDER == i && HSM_LED_OPACITY > 0)
-				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+				precomp_color = BlendModeMaskLayerMix(precomp_color, 
 														led_image, 
 														HSM_LED_BLEND_MODE, 
 														HSM_LED_MASK_MODE, 
@@ -1217,7 +1238,7 @@ void main()
 
 		// DEVICE IMAGE
 		if (HSM_DEVICE_LAYER_ORDER == i && HSM_DEVICE_OPACITY > 0)
-				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+				precomp_color = BlendModeMaskLayerMix(precomp_color, 
 														device_image, 
 														HSM_DEVICE_BLEND_MODE, 
 														HSM_DEVICE_MASK_MODE, 
@@ -1227,7 +1248,7 @@ void main()
 
 		// DEVICELED IMAGE
 		if (HSM_DEVICELED_LAYER_ORDER == i && HSM_DEVICELED_OPACITY > 0)
-				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+				precomp_color = BlendModeMaskLayerMix(precomp_color, 
 														deviceled_image, 
 														HSM_DEVICELED_BLEND_MODE, 
 														HSM_DEVICELED_MASK_MODE, 
@@ -1237,7 +1258,7 @@ void main()
 
 		// DECAL IMAGE
 		if (HSM_DECAL_LAYER_ORDER == i && HSM_DECAL_OPACITY > 0)
-				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+				precomp_color = BlendModeMaskLayerMix(precomp_color, 
 														decal_image, 
 														HSM_DECAL_BLEND_MODE, 
 														HSM_DECAL_MASK_MODE, 
@@ -1247,7 +1268,7 @@ void main()
 
 		// CABINET GLASS
 		if (HSM_CAB_GLASS_LAYER_ORDER == i && HSM_CAB_GLASS_OPACITY > 0)
-				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+				precomp_color = BlendModeMaskLayerMix(precomp_color, 
 														cab_glass_image, 
 														HSM_CAB_GLASS_BLEND_MODE, 
 														HSM_CAB_GLASS_MASK_MODE, 
@@ -1258,7 +1279,7 @@ void main()
 
 		// Top Layer
 		if (HSM_TOP_LAYER_ORDER == i && HSM_TOP_OPACITY > 0)
-				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+				precomp_color = BlendModeMaskLayerMix(precomp_color, 
 														top_image, 
 														HSM_TOP_BLEND_MODE, 
 														HSM_TOP_MASK_MODE, 
@@ -1267,21 +1288,47 @@ void main()
 														HSM_TOP_OPACITY);
 	}
 
-#ifdef LAYERS_UNDER_CRT
+	if (i_precomp == 0)
+	{
+		// Add background behind tube
+		precomp_color = HSM_PreMultAlphaBlend(precomp_color, tube_bg_layer);
 
-	// Add background behind tube
-	frag_color_linear = HSM_PreMultAlphaBlend(frag_color_linear, tube_bg_layer);
-	// GENERATED BEZEL LAYER
-	if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
-		frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
-												bezel_layer, 
-												HSM_BZL_BLEND_MODE, 
-												MASK_MODE_ALL, 
-												0, 
-												SHOW_ON_DUALSCREEN_MODE_BOTH,
-												1);
-#endif
+		// GENERATED BEZEL LAYER
+		if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
+			precomp_color = BlendModeMaskLayerMix(precomp_color, 
+													bezel_layer, 
+													HSM_BZL_BLEND_MODE, 
+													MASK_MODE_ALL, 
+													0, 
+													SHOW_ON_DUALSCREEN_MODE_BOTH,
+													1);
 
+		// Store reflection mask in the alpha channel
+		// Usually used to show the uneven brightness of a bumpy surface
+		if (HSM_REFLECT_MASK_IMAGE_AMOUNT > 0)
+		{
+			vec2 reflect_mask_scale = vec2(0.5);
+			vec2 reflect_mask_coord = HSM_GetLayerCoord(VIEWPORT_COORD, HSM_REFLECT_MASK_FOLLOW_LAYER, HSM_REFLECT_MASK_FOLLOW_MODE, reflect_mask_scale);
+			float reflect_mask = HSM_GetMipmappedTexSample(ReflectionMaskImage, reflect_mask_coord, reflect_mask_scale, HSM_REFLECT_MASK_MIPMAPPING_BLEND_BIAS).r;
+			reflect_mask = clamp(HSM_REFLECT_MASK_BLACK_LEVEL * (reflect_mask - 1) + 1, 0, 1);
+			reflect_mask *= HSM_REFLECT_MASK_BRIGHTNESS;
+
+			precomp_color.a = HSM_REFLECT_MASK_IMAGE_AMOUNT * reflect_mask + (1 - HSM_REFLECT_MASK_IMAGE_AMOUNT);
+		}
+		else
+			precomp_color.a = 1;
+
+		layers_under_precomp = precomp_color;
+		frag_color_linear = layers_under_precomp;
+	}
+	if (i_precomp == 1)
+	{
+		layers_over_precomp = precomp_color;
+		frag_color_linear = layers_over_precomp;
+	}
+
+// #endif
+// }
 	//-----------------------------------------------------------------------------------------
 	// MASK DEBUG DISPLAY
 	//-----------------------------------------------------------------------------------------
@@ -1299,25 +1346,36 @@ void main()
 		frag_color_linear = clamp(frag_color_linear, 0, 1);
 	}
 
-	#ifdef LAYERS_UNDER_CRT
-	// Store reflection mask in the alpha channel
-	// Usually used to show the uneven brightness of a bumpy surface
-	if (HSM_REFLECT_MASK_IMAGE_AMOUNT > 0)
-	{
-		vec2 reflect_mask_scale = vec2(0.5);
-		vec2 reflect_mask_coord = HSM_GetLayerCoord(VIEWPORT_COORD, HSM_REFLECT_MASK_FOLLOW_LAYER, HSM_REFLECT_MASK_FOLLOW_MODE, reflect_mask_scale);
-		float reflect_mask = HSM_GetMipmappedTexSample(ReflectionMaskImage, reflect_mask_coord, reflect_mask_scale, HSM_REFLECT_MASK_MIPMAPPING_BLEND_BIAS).r;
-		reflect_mask = clamp(HSM_REFLECT_MASK_BLACK_LEVEL * (reflect_mask - 1) + 1, 0, 1);
-		reflect_mask *= HSM_REFLECT_MASK_BRIGHTNESS;
+	// #ifdef LAYERS_UNDER_CRT
 
-		frag_color_linear.a = HSM_REFLECT_MASK_IMAGE_AMOUNT * reflect_mask + (1 - HSM_REFLECT_MASK_IMAGE_AMOUNT);
-	}
-	else
-		frag_color_linear.a = 1;
 
-	#endif
+	// #endif
 
 	FragColor = frag_color_linear;
+
+#ifdef ENABLE_CACHE_FALLBACK_CHECK
+	vec2 viewport_coord_adjusted = vTexCoord;
+	bool cache_info_changed = CACHE_INFO_CHANGED;
+	bool show_update_indicator = cache_info_changed && ( HSM_CACHE_UPDATE_INDICATOR_MODE == 1 || HSM_CACHE_GRAPHICS_ON < 0.5 && HSM_CACHE_UPDATE_INDICATOR_MODE == 2);
+
+	if (show_update_indicator)
+	{
+		float final_aspect = SCREEN_ASPECT;
+		// vec2 corner_offset = vec2(MAX_NEGATIVE_CROP * 2 * 0.8, MAX_NEGATIVE_CROP * 2 * 0.8);
+		vec2 corner_offset = vec2(0.1, 0.1);
+		vec2 center_coord = vec2(1 - corner_offset.x * final_aspect, 1 - corner_offset.y);
+		vec2 test_coord = vec2(1 - (1 - viewport_coord_adjusted.x) * final_aspect, viewport_coord_adjusted.y);
+		float distance =  length(test_coord - center_coord);
+
+		if (distance < 0.04)
+		{
+			float modulation = clamp(0.4 + abs(mod(global.FrameCount, 90) / 90 - 0.5) * 1.2, 0, 1);
+			modulation = HHLP_EasePowerInOut(modulation, 2);
+			FragColor *= 1 - modulation;
+			FragColor += modulation * vec4(1, 0, 0, 1);
+		}
+	}
+#endif
 
 	// If we have calculated an image then set -1 as a flag to show that we have
 	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
