@@ -1,4 +1,4 @@
-shaders = 27
+shaders = 26
 
 shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
@@ -152,77 +152,72 @@ scale_type17 = viewport
 shader18 = ../../../shaders/base/bezel-images-under-crt.slang
 filter_linear18 = true
 scale_type18 = viewport
+scale18 = 2.0
 float_framebuffer18 = true
-alias18 = "BR_LayersUnderCRTPass"
-
-shader19 = ../../../shaders/base/bezel-images-over-crt.slang
-filter_linear19 = true
-scale_type19 = viewport
-float_framebuffer19 = true
-alias19 = "BR_LayersOverCRTPass"
+alias18 = "ImageLayersPass"
 
 # Reduce Resolution  ----------------------------------------------------------------
 #      Reduce the resolution to a small static size regardless of final resolution
 #      Allows consistent look and faster at different final resolutions for blur
 #      Mipmap option allows downscaling without artifacts
-shader20 = ../../../shaders/base/linearize-crt.slang
-mipmap_input20 = true
-filter_linear20 = true
-scale_type20 = absolute
-# scale_x20 = 480
-# scale_y20 = 270
-# scale_x20 = 960
-# scale_y20 = 540
-scale_x20 = 800
-scale_y20 = 600
-float_framebuffer20 = true
-alias20 = "BR_MirrorLowResPass"
+shader19 = ../../../shaders/base/linearize-crt.slang
+mipmap_input19 = true
+filter_linear19 = true
+scale_type19 = absolute
+# scale_x19 = 480
+# scale_y19 = 270
+# scale_x19 = 960
+# scale_y19 = 540
+scale_x19 = 800
+scale_y19 = 600
+float_framebuffer19 = true
+alias19 = "BR_MirrorLowResPass"
 
 # Add Blur for the Reflection (Horizontal) ----------------------------------------------------------------
-shader21 = ../../../shaders/base/blur-outside-screen-horiz.slang
-mipmap_input21 = true
-filter_linear21 = true
-float_framebuffer21 = true
+shader20 = ../../../shaders/base/blur-outside-screen-horiz.slang
+mipmap_input20 = true
+filter_linear20 = true
+float_framebuffer20 = true
 
 # Add Blur for the Reflection (Vertical) ----------------------------------------------------------------
-shader22 = ../../../shaders/base/blur-outside-screen-vert.slang
-filter_linear22 = true
-float_framebuffer22 = true
-alias22 = "BR_MirrorBlurredPass"
+shader21 = ../../../shaders/base/blur-outside-screen-vert.slang
+filter_linear21 = true
+float_framebuffer21 = true
+alias21 = "BR_MirrorBlurredPass"
 
 # Reduce resolution ----------------------------------------------------------------
 # Reduced to a very small amount so we can create a blur which will create a glow from the screen
 #      Mipmap option allows smoother downscaling
-shader23 = ../../../../../blurs/shaders/royale/blur9x9.slang
-mipmap_input23 = true
-filter_linear23 = true
-scale_type23 = absolute
-scale_x23 = 128
-scale_y23 = 128
-float_framebuffer23 = true
-alias23 = "BR_MirrorReflectionDiffusedPass"
+shader22 = ../../../../../blurs/shaders/royale/blur9x9.slang
+mipmap_input22 = true
+filter_linear22 = true
+scale_type22 = absolute
+scale_x22 = 128
+scale_y22 = 128
+float_framebuffer22 = true
+alias22 = "BR_MirrorReflectionDiffusedPass"
 
 # Add Diffused glow all around the screen ----------------------------------------------------------------
 #      Blurred so much that it's non directional
 #      Mipmap option allows downscaling without artifacts
-shader24 = ../../../../../blurs/shaders/royale/blur9x9.slang
-mipmap_input24 = true
-filter_linear24 = true
-scale_type24 = absolute
-scale_x24 = 12
-scale_y24 = 12
-float_framebuffer24 = true
-alias24 = "BR_MirrorFullscreenGlowPass"
+shader23 = ../../../../../blurs/shaders/royale/blur9x9.slang
+mipmap_input23 = true
+filter_linear23 = true
+scale_type23 = absolute
+scale_x23 = 12
+scale_y23 = 12
+float_framebuffer23 = true
+alias23 = "BR_MirrorFullscreenGlowPass"
 
 # Bezel Reflection ----------------------------------------------------------------
-shader25 = ../../../shaders/base/reflection.slang
-scale_type25 = viewport
-float_framebuffer25 = true
-alias25 = "ReflectionPass"
+shader24 = ../../../shaders/base/reflection.slang
+scale_type24 = viewport
+float_framebuffer24 = true
+alias24 = "ReflectionPass"
 
 # Combine Passes ----------------------------------------------------------------
-shader26 = ../../../shaders/base/combine-passes-hdr.slang
-scale_type26 = viewport
+shader25 = ../../../shaders/base/combine-passes-hdr.slang
+scale_type25 = viewport
 
 
 # Textures All

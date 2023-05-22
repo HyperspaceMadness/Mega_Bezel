@@ -758,6 +758,7 @@ bool HSM_GetIsInABCompareArea(vec2 viewport_coord)
 			mod(HSM_AB_COMPARE_AREA, 2) == 1 && test_value > position;
 }
 
+// TODO we should probably give the canvas size as an input instead of assuming FinalViewportSize
 vec4 HSM_GetMipmappedTexSample(sampler2D in_sampler, vec2 in_coord, vec2 in_scale, float in_blend_bias)
 {
 	vec2 tex_size = textureSize(in_sampler, 0);

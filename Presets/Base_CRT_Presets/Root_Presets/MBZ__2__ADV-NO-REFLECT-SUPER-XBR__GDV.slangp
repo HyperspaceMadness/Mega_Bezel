@@ -1,4 +1,4 @@
-shaders = 42
+shaders = 41
 
 shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
@@ -302,18 +302,13 @@ scale_type38 = viewport
 shader39 = ../../../shaders/base/bezel-images-under-crt.slang
 filter_linear39 = true
 scale_type39 = viewport
+scale39 = 2.0
 float_framebuffer39 = true
-alias39 = "BR_LayersUnderCRTPass"
-
-shader40 = ../../../shaders/base/bezel-images-over-crt.slang
-filter_linear40 = true
-scale_type40 = viewport
-float_framebuffer40 = true
-alias40 = "BR_LayersOverCRTPass"
+alias39 = "ImageLayersPass"
 
 # Combine Passes ----------------------------------------------------------------
-shader41 = ../../../shaders/base/combine-passes-no-reflect.slang
-scale_type41 = viewport
+shader40 = ../../../shaders/base/combine-passes-no-reflect.slang
+scale_type40 = viewport
 
 
 # Textures All

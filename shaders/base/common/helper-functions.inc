@@ -283,11 +283,37 @@ vec4 HHLP_GetBilinearTextureSample(sampler2D in_sampler, vec2 in_coord, vec4 in_
    return result;
 }
 
+vec2 HHLP_ConvertCoordInRangeToZeroToOne( vec2 in_coord, vec4 in_range)
+{
+	return (in_coord - in_range.xy) / vec2(in_range.z - in_range.x, in_range.w - in_range.y);
+}
+
+vec2 HHLP_ConvertZeroToOneCoordToRange( vec2 in_coord, vec4 in_range)
+{
+	return in_range.xy + in_coord * vec2(in_range.z - in_range.x, in_range.w - in_range.y);
+}
+
 bool HHLP_IsOutsideCoordSpace(vec2 in_coord)
 {
 	return (abs(in_coord.x - 0.5) > 0.501 || abs(in_coord.y - 0.5) > 0.501);
 }
 
-float rand(vec2 co, float size){
+bool HHLP_IsOutsideRange(vec2 in_coord, vec4 in_range)
+{
+	return HHLP_IsOutsideCoordSpace(HHLP_ConvertCoordInRangeToZeroToOne( in_coord, in_range));
+}
+
+bool HHLP_IsInsideCoordSpace(vec2 in_coord)
+{
+	return !HHLP_IsOutsideCoordSpace(in_coord);
+}
+
+bool HHLP_IsInsideRange(vec2 in_coord, vec4 in_range)
+{
+	return !HHLP_IsOutsideRange(in_coord, in_range);
+}
+
+float rand(vec2 co, float size)
+{
     return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453) * size;
 }

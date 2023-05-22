@@ -86,10 +86,9 @@ layout(set = 0, binding = 9) uniform sampler2D ReflectionPass;
 #define MiddlePass ReflectionPass
 #endif
 
-layout(set = 0, binding = 10) uniform sampler2D BR_LayersUnderCRTPass;
-layout(set = 0, binding = 11) uniform sampler2D BR_LayersOverCRTPass;
+layout(set = 0, binding = 10) uniform sampler2D ImageLayersPass;
 
-layout(set = 0, binding = 12) uniform sampler2D CombinePassFeedback;
+layout(set = 0, binding = 11) uniform sampler2D CombinePassFeedback;
 #define PassFeedback CombinePassFeedback
 
 
@@ -135,7 +134,6 @@ void main()
 			FragColor = texture(ReflectionPass, vTexCoord);
 			pass_needs_delinearize = HSM_NON_USER_DELINEARIZE_REFLECT_PASS < 0.5;
 		}
-
 #endif
 
 		// TUBE
@@ -182,11 +180,15 @@ void main()
 
 		// LAYERS TOP
 		if (HSM_SHOW_PASS_INDEX == 9)
-			FragColor = texture(BR_LayersOverCRTPass, vTexCoord);
+			FragColor = HSM_GetPrecompRGBA(ImageLayersPass, vTexCoord, PRECOMP_INDEX_OVER);
 
 		// LAYERS BOTTOM
 		if (HSM_SHOW_PASS_INDEX == 10)
-			FragColor = texture(BR_LayersUnderCRTPass, vTexCoord);
+			FragColor = HSM_GetPrecompRGBA(ImageLayersPass, vTexCoord, PRECOMP_INDEX_UNDER);
+
+		// LAYERS ATLAS
+		if (HSM_SHOW_PASS_INDEX == 11)
+			FragColor = texture(ImageLayersPass, vTexCoord);
 
 		// Linearize passes which are not already in linear space
 		if (pass_needs_delinearize)
@@ -218,9 +220,9 @@ void main()
 						BEZEL_OUTSIDE_CURVED_COORD, 
 						FRAME_OUTSIDE_CURVED_COORD);
 
-	vec4 under_layer = texture(BR_LayersUnderCRTPass, vTexCoord);
+	vec4 under_layer = HSM_GetPrecompRGBA(ImageLayersPass, vTexCoord, PRECOMP_INDEX_UNDER);
 	under_layer.rgb = PrepGraphicsForHDR(under_layer.rgb);
-
+	
 	vec4 out_color = under_layer;
 
 	vec4 crt_layer = texture(MiddlePass, vTexCoord);
@@ -244,7 +246,7 @@ void main()
 	if (HSM_RENDER_SIMPLE_MODE < 0.5)
 		out_color = HSM_PreMultAlphaBlend(out_color, crt_layer);
 
-	vec4 over_layer = texture(BR_LayersOverCRTPass, vTexCoord);
+	vec4 over_layer = HSM_GetPrecompRGBA(ImageLayersPass, vTexCoord, PRECOMP_INDEX_OVER);
 	over_layer.rgb = PrepGraphicsForHDR(over_layer.rgb);
 
 	out_color = HSM_PreMultAlphaBlend(out_color, over_layer);

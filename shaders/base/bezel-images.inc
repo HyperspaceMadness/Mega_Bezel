@@ -22,13 +22,7 @@
     along with this program.  If not, see [http://www.gnu.org/licenses/].
 */
 
-/////////////// IMPORTS ///////////////
-
-// Removed because BackgroundImageSize returns vec4(0,0,0,0), this happens with all user defined textures
-// layout(push_constant) uniform Push
-// {
-// 	vec4 BackgroundImageSize;
-// } params;
+// #pragma format R32G32B32A32_SFLOAT
 
 /////////////// DEFINES ///////////////
 
@@ -386,12 +380,6 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 	return out_coord;
 }
 
-//TODO remove this and replace with simpler calls
-float GetFade(float current_position, float corner_position, float fade_distance)
-{
-	return smoothstep(corner_position + fade_distance / 2, corner_position - fade_distance / 2, current_position);
-}
-
 //////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma stage vertex
 
@@ -399,15 +387,12 @@ layout(location = 0) in vec4 Position;
 layout(location = 1) in vec2 TexCoord;
 
 layout(location = 6) out vec2 vTexCoord;
-layout(location = 7) out vec2 UNFLIPPED_VIEWPORT_COORD;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
 {
 	gl_Position = global.MVP * Position;
 	vTexCoord = TexCoord;
-
-	UNFLIPPED_VIEWPORT_COORD = vTexCoord;
 
 	VIEWPORT_COORD = vTexCoord * 1.0001;
 }
@@ -416,7 +401,6 @@ void main()
 #pragma stage fragment
 
 layout(location = 6) in vec2 vTexCoord;
-layout(location = 7) in vec2 UNFLIPPED_VIEWPORT_COORD;
 layout(location = 8) in vec3 BEZEL_FRAME_ORIGINAL_COLOR_RGB;
 
 layout(location = 0) out vec4 FragColor;
@@ -438,33 +422,34 @@ layout(set = 0, binding = 11) uniform sampler2D DecalImage;
 layout(set = 0, binding = 12) uniform sampler2D CabinetGlassImage;
 layout(set = 0, binding = 13) uniform sampler2D TopLayerImage;
 layout(set = 0, binding = 14) uniform sampler2D ReflectionMaskImage;
-
-#ifdef LAYERS_OVER_CRT
-layout(set = 0, binding = 15) uniform sampler2D BR_LayersOverCRTPassFeedback;
-#define PassFeedback BR_LayersOverCRTPassFeedback
-#else
-layout(set = 0, binding = 15) uniform sampler2D BR_LayersUnderCRTPassFeedback;
-#define PassFeedback BR_LayersUnderCRTPassFeedback
-#endif
+layout(set = 0, binding = 15) uniform sampler2D ImageLayersPassFeedback;
+#define PassFeedback ImageLayersPassFeedback
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
 {
-	if (HSM_AB_COMPARE_FREEZE_GRAPHICS == 1 && HSM_GetIsInABCompareArea(vTexCoord))
+	// The pass output is split into multiple regions, each holding a separate image or precomp
+	// The current coordinate defines which precomp we are generating
+	float precomp_index = HSM_GetPrecompIndexFromCoord(vTexCoord);
+
+	// We rescale the coordinates to match the current precomp we are processing
+	vec2 vTexCoord_precomp = HHLP_ConvertCoordInRangeToZeroToOne(vTexCoord, HSM_GetImagePrecompRange(precomp_index));
+
+	HSM_UpdateCacheInfoChanged(CacheInfoPass);
+	vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
+	if (HSM_CACHE_GRAPHICS_ON > 0.5 && feedback_color_test.a < 0 && !CACHE_INFO_CHANGED)
 	{
 		FragColor = texture(PassFeedback, vTexCoord);
 		return;
 	}
 
-	VIEWPORT_UNSCALED_COORD = HSM_GetViewportCoordWithFlip(vTexCoord);
-	VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
+	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord_precomp);
+	VIEWPORT_UNSCALED_COORD = HSM_GetViewportCoordWithFlip(vTexCoord_precomp);
+	VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord_precomp);
 
-	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
-
-	vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
-	if (HSM_CACHE_GRAPHICS_ON > 0.5 && feedback_color_test.a < 0 && !CACHE_INFO_CHANGED)
+	if (HSM_AB_COMPARE_FREEZE_GRAPHICS == 1 && HSM_GetIsInABCompareArea(vTexCoord_precomp))
 	{
-		FragColor = texture(PassFeedback, UNFLIPPED_VIEWPORT_COORD);
+		FragColor = texture(PassFeedback, vTexCoord);
 		return;
 	}
 
@@ -1172,44 +1157,28 @@ void main()
 	OUTSIDE_TUBE_MASK_FOR_IMAGE = 1 - HSM_GetCornerMask(tube_curved_coord_ctr * 1.003 + 0.5, TUBE_DIFFUSE_ASPECT, HSM_FRM_OUTER_CORNER_RADIUS, 1);
 
 	vec4 frag_color_linear = vec4(0);
-
 	int start_layer = 0;
 	int end_layer = int(MAX_LAYER_ORDER);
 
 
-
-vec4 layers_over_precomp = vec4(0);
-vec4 layers_under_precomp = vec4(0);
-
-int i_precomp = 0;
-
-#ifdef LAYERS_OVER_CRT
-	i_precomp = 1;
-#endif
-
-// for (int i_precomp = 0, i_precomp < 2; i_precomp ++)
-// {
-// #ifdef LAYERS_OVER_CRT
-	if (i_precomp == 1)
+	if (precomp_index == PRECOMP_INDEX_OVER)
 	{
 		start_layer = int(HSM_CRT_LAYER_ORDER);
 		end_layer = int(MAX_LAYER_ORDER);
 	}
-// #else
-	if (i_precomp == 0)
+
+	if (precomp_index == PRECOMP_INDEX_UNDER)
 	{
 		start_layer = 0;
 		end_layer = int(HSM_CRT_LAYER_ORDER - 1);
 	}
-// #endif
 
-	vec4 precomp_color = vec4(0);
 
 	for(int i=start_layer; i <= end_layer; i++)
 	{
 		// BACKGROUND
 		if (HSM_BG_LAYER_ORDER == i)
-			precomp_color = BlendModeMaskLayerMix(precomp_color, 
+			frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
 													bg_image, 
 													HSM_BG_BLEND_MODE, 
 													HSM_BG_MASK_MODE, 
@@ -1219,7 +1188,7 @@ int i_precomp = 0;
 
 		// VIGNETTE
 		if (HSM_VIEWPORT_VIGNETTE_LAYER_ORDER == i)
-			precomp_color = BlendModeMaskLayerMix(precomp_color, 
+			frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
 													vignette_layer, 
 													BLEND_MODE_NORMAL, 
 													HSM_VIEWPORT_VIGNETTE_MASK_MODE, 
@@ -1228,7 +1197,7 @@ int i_precomp = 0;
 													HSM_VIEWPORT_VIGNETTE_OPACITY);
 		// LED IMAGE
 		if (HSM_LED_LAYER_ORDER == i && HSM_LED_OPACITY > 0)
-				precomp_color = BlendModeMaskLayerMix(precomp_color, 
+				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
 														led_image, 
 														HSM_LED_BLEND_MODE, 
 														HSM_LED_MASK_MODE, 
@@ -1238,7 +1207,7 @@ int i_precomp = 0;
 
 		// DEVICE IMAGE
 		if (HSM_DEVICE_LAYER_ORDER == i && HSM_DEVICE_OPACITY > 0)
-				precomp_color = BlendModeMaskLayerMix(precomp_color, 
+				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
 														device_image, 
 														HSM_DEVICE_BLEND_MODE, 
 														HSM_DEVICE_MASK_MODE, 
@@ -1248,7 +1217,7 @@ int i_precomp = 0;
 
 		// DEVICELED IMAGE
 		if (HSM_DEVICELED_LAYER_ORDER == i && HSM_DEVICELED_OPACITY > 0)
-				precomp_color = BlendModeMaskLayerMix(precomp_color, 
+				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
 														deviceled_image, 
 														HSM_DEVICELED_BLEND_MODE, 
 														HSM_DEVICELED_MASK_MODE, 
@@ -1258,7 +1227,7 @@ int i_precomp = 0;
 
 		// DECAL IMAGE
 		if (HSM_DECAL_LAYER_ORDER == i && HSM_DECAL_OPACITY > 0)
-				precomp_color = BlendModeMaskLayerMix(precomp_color, 
+				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
 														decal_image, 
 														HSM_DECAL_BLEND_MODE, 
 														HSM_DECAL_MASK_MODE, 
@@ -1268,7 +1237,7 @@ int i_precomp = 0;
 
 		// CABINET GLASS
 		if (HSM_CAB_GLASS_LAYER_ORDER == i && HSM_CAB_GLASS_OPACITY > 0)
-				precomp_color = BlendModeMaskLayerMix(precomp_color, 
+				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
 														cab_glass_image, 
 														HSM_CAB_GLASS_BLEND_MODE, 
 														HSM_CAB_GLASS_MASK_MODE, 
@@ -1279,7 +1248,7 @@ int i_precomp = 0;
 
 		// Top Layer
 		if (HSM_TOP_LAYER_ORDER == i && HSM_TOP_OPACITY > 0)
-				precomp_color = BlendModeMaskLayerMix(precomp_color, 
+				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
 														top_image, 
 														HSM_TOP_BLEND_MODE, 
 														HSM_TOP_MASK_MODE, 
@@ -1288,14 +1257,14 @@ int i_precomp = 0;
 														HSM_TOP_OPACITY);
 	}
 
-	if (i_precomp == 0)
+	if (precomp_index == PRECOMP_INDEX_UNDER)
 	{
 		// Add background behind tube
-		precomp_color = HSM_PreMultAlphaBlend(precomp_color, tube_bg_layer);
+		frag_color_linear = HSM_PreMultAlphaBlend(frag_color_linear, tube_bg_layer);
 
 		// GENERATED BEZEL LAYER
 		if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
-			precomp_color = BlendModeMaskLayerMix(precomp_color, 
+			frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
 													bezel_layer, 
 													HSM_BZL_BLEND_MODE, 
 													MASK_MODE_ALL, 
@@ -1313,22 +1282,12 @@ int i_precomp = 0;
 			reflect_mask = clamp(HSM_REFLECT_MASK_BLACK_LEVEL * (reflect_mask - 1) + 1, 0, 1);
 			reflect_mask *= HSM_REFLECT_MASK_BRIGHTNESS;
 
-			precomp_color.a = HSM_REFLECT_MASK_IMAGE_AMOUNT * reflect_mask + (1 - HSM_REFLECT_MASK_IMAGE_AMOUNT);
+			frag_color_linear.a = HSM_REFLECT_MASK_IMAGE_AMOUNT * reflect_mask + (1 - HSM_REFLECT_MASK_IMAGE_AMOUNT);
 		}
 		else
-			precomp_color.a = 1;
-
-		layers_under_precomp = precomp_color;
-		frag_color_linear = layers_under_precomp;
-	}
-	if (i_precomp == 1)
-	{
-		layers_over_precomp = precomp_color;
-		frag_color_linear = layers_over_precomp;
+			frag_color_linear.a = 1;
 	}
 
-// #endif
-// }
 	//-----------------------------------------------------------------------------------------
 	// MASK DEBUG DISPLAY
 	//-----------------------------------------------------------------------------------------
@@ -1346,15 +1305,10 @@ int i_precomp = 0;
 		frag_color_linear = clamp(frag_color_linear, 0, 1);
 	}
 
-	// #ifdef LAYERS_UNDER_CRT
-
-
-	// #endif
-
 	FragColor = frag_color_linear;
 
 #ifdef ENABLE_CACHE_FALLBACK_CHECK
-	vec2 viewport_coord_adjusted = vTexCoord;
+	vec2 viewport_coord_adjusted = vTexCoord_precomp;
 	bool cache_info_changed = CACHE_INFO_CHANGED;
 	bool show_update_indicator = cache_info_changed && ( HSM_CACHE_UPDATE_INDICATOR_MODE == 1 || HSM_CACHE_GRAPHICS_ON < 0.5 && HSM_CACHE_UPDATE_INDICATOR_MODE == 2);
 
@@ -1364,7 +1318,7 @@ int i_precomp = 0;
 		// vec2 corner_offset = vec2(MAX_NEGATIVE_CROP * 2 * 0.8, MAX_NEGATIVE_CROP * 2 * 0.8);
 		vec2 corner_offset = vec2(0.1, 0.1);
 		vec2 center_coord = vec2(1 - corner_offset.x * final_aspect, 1 - corner_offset.y);
-		vec2 test_coord = vec2(1 - (1 - viewport_coord_adjusted.x) * final_aspect, viewport_coord_adjusted.y);
+		vec2 test_coord = vec2(1 - (1 - vTexCoord_precomp.x) * final_aspect, vTexCoord_precomp.y);
 		float distance =  length(test_coord - center_coord);
 
 		if (distance < 0.04)
@@ -1378,7 +1332,7 @@ int i_precomp = 0;
 #endif
 
 	// If we have calculated an image then set -1 as a flag to show that we have
-	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
+	if (vTexCoord.x < (2 / global.OutputSize.x) && vTexCoord.y < (2 / global.OutputSize.y))
 		FragColor.a = -1;
 
 	return;

@@ -1,15 +1,10 @@
-shaders = 2
+shaders = 1
 
 # Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 
 shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/bezel-images-under-crt.slang
 filter_linear0 = true
 scale_type0 = viewport
+scale0 = 2.0
 float_framebuffer0 = true
-alias0 = "BR_LayersUnderCRTPass"
-
-shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/bezel-images-over-crt.slang
-filter_linear1 = true
-scale_type1 = viewport
-float_framebuffer1 = true
-alias1 = "BR_LayersOverCRTPass"
+alias0 = "ImageLayersPass"
