@@ -1,0 +1,8 @@
+#reference "../Components/chain__01__downrez__480p.slangp"
+#reference "../Components/composition__10__cache__potato.slangp"
+#reference "../Components/composition__60__crt-prep__potato.slangp"
+#reference "../Components/chain__60__crt__gdvmini.slangp"
+#reference "../Components/chain__68__tubefx-none-with-bg-delinearize.slangp"
+#reference "../Components/composition__90__post-crt__potato.slangp"
+
+#reference "../Components/parameters__00__drez.slangp"

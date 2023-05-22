@@ -1,0 +1,9 @@
+#reference "../Components/chain__01__downrez__none.slangp"
+#reference "../Components/composition__10__cache__all.slangp"
+#reference "../Components/composition__40__pre-crt-chain__adv-scalefx.slangp"
+#reference "../Components/chain__45__upscale__scalefx.slangp"
+#reference "../Components/composition__60__crt-prep__ntsc.slangp"
+#reference "../Components/chain__60__crt__megatron.slangp"
+#reference "../Components/chain__68__tubefx-default.slangp"
+#reference "../Components/composition__90__post-crt__default-hdr.slangp"
+

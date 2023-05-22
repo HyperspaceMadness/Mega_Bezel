@@ -1,8 +1,0 @@
-#reference "Components/chain__01__downrez__none.slangp"
-#reference "Components/composition__10__cache__potato.slangp"
-#reference "Components/composition__40__pre-crt-chain__potato-super-xbr.slangp"
-#reference "Components/chain__45__upscale__super-xbr.slangp"
-#reference "Components/composition__60__crt-prep__ntsc-potato.slangp"
-#reference "Components/chain__60__crt__gdv-ntsc.slangp"
-#reference "Components/chain__68__tubefx-none-with-bg-delinearize.slangp"
-#reference "Components/composition__90__post-crt__potato.slangp"

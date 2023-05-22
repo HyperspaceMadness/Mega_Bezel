@@ -1,9 +1,0 @@
-#reference "Components/chain__01__downrez__viewport.slangp"
-#reference "Components/composition__10__cache__all.slangp"
-#reference "Components/composition__40__pre-crt-chain__std.slangp"
-#reference "Components/composition__60__crt-prep__std.slangp"
-#reference "Components/chain__60__crt__gdv.slangp"
-#reference "Components/chain__68__tubefx-default.slangp"
-#reference "Components/composition__90__post-crt__default.slangp"
-
-#reference "Components/parameters__00__drez.slangp"
