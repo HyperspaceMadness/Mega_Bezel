@@ -2,4 +2,6 @@ shaders = 1
 
 # Combine Passes ----------------------------------------------------------------
 shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/combine-passes.slang
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear0 = false
 scale_type0 = viewport

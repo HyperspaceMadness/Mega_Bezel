@@ -144,8 +144,11 @@ HSM_REFLECT_GLOBAL_AMOUNT = "7.000000"
 # -----------------------------------------------------------------------------------------------
 
 shader17 = ../../../shaders/base/tubefx-default.slang
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear17 = false
 mipmap_input17 = true
 scale_type17 = viewport
+scale17 = 1.0
 
 # Combine Passes ----------------------------------------------------------------
 shader18 = ../../../shaders/base/output-hdr.slang

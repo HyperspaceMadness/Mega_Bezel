@@ -257,16 +257,19 @@ float_framebuffer37 = true
 alias37 = "CRTPass"
 
 shader38 = ../../../shaders/base/tubefx-default.slang
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear38 = false
 mipmap_input38 = true
 scale_type38 = viewport
+scale38 = 1.0
 
 # Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 
 shader39 = ../../../shaders/base/bezel-images-under-crt.slang
-filter_linear39 = true
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear39 = false
 scale_type39 = viewport
 scale39 = 2.0
-float_framebuffer39 = true
 alias39 = "ImageLayersPass"
 
 # Reduce Resolution  ----------------------------------------------------------------
@@ -330,6 +333,8 @@ alias45 = "ReflectionPass"
 
 # Combine Passes ----------------------------------------------------------------
 shader46 = ../../../shaders/base/combine-passes.slang
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear46 = false
 scale_type46 = viewport
 
 

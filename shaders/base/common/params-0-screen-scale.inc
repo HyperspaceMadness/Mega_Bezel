@@ -241,9 +241,11 @@ float HSM_CRT_CURVATURE_SCALE = global.HSM_CRT_CURVATURE_SCALE / 100;
 #pragma parameter HSM_INT_SCALE_MODE 								"          Integer Scale Mode - OFF | ShortAxis | BothAxes" 0 0 2 1
 #define HSM_INT_SCALE_MODE global.HSM_INT_SCALE_MODE
 
-#pragma parameter HSM_VERTICAL_PRESET 								"       Preset is for Monitor Portrait Mode (Smaller CRT Screen)" 0 0 1 1
-float HSM_VERTICAL_PRESET = global.HSM_VERTICAL_PRESET;
+#pragma parameter HSM_PORTRAIT_MODE_SCALE_REDUCTION 			    "        Monitor Portrait Mode Scale Reduction - OFF| ON | AUTO " 2 0 2 1
+float HSM_PORTRAIT_MODE_SCALE_REDUCTION = global.HSM_PORTRAIT_MODE_SCALE_REDUCTION;
 
+#pragma parameter HSM_PORTRAIT_MODE_SCALE_OFFSET 			        "        Monitor Portrait Mode Scale Offset %" 100 1 200 0.2
+float HSM_PORTRAIT_MODE_SCALE_OFFSET = global.HSM_PORTRAIT_MODE_SCALE_OFFSET / 100;
 
 //---------------------------------------------------------------------------------------------------
 //    Integer Scale

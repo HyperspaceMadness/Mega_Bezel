@@ -180,11 +180,11 @@ void main()
 
 		// LAYERS TOP
 		if (HSM_SHOW_PASS_INDEX == 9)
-			FragColor = HSM_GetPrecompRGBA(ImageLayersPass, vTexCoord, PRECOMP_INDEX_OVER);
+			FragColor = HSM_GetPrecompRGBA(ImageLayersPass, vTexCoord, PRECOMP_INDEX_UPPER);
 
 		// LAYERS BOTTOM
 		if (HSM_SHOW_PASS_INDEX == 10)
-			FragColor = HSM_GetPrecompRGBA(ImageLayersPass, vTexCoord, PRECOMP_INDEX_UNDER);
+			FragColor = HSM_GetPrecompRGBA(ImageLayersPass, vTexCoord, PRECOMP_INDEX_BOTTOM);
 
 		// LAYERS ATLAS
 		if (HSM_SHOW_PASS_INDEX == 11)
@@ -220,7 +220,7 @@ void main()
 						BEZEL_OUTSIDE_CURVED_COORD, 
 						FRAME_OUTSIDE_CURVED_COORD);
 
-	vec4 under_layer = HSM_GetPrecompRGBA(ImageLayersPass, vTexCoord, PRECOMP_INDEX_UNDER);
+	vec4 under_layer = HSM_GetPrecompRGBA(ImageLayersPass, vTexCoord, PRECOMP_INDEX_BOTTOM);
 	under_layer.rgb = PrepGraphicsForHDR(under_layer.rgb);
 	
 	vec4 out_color = under_layer;
@@ -243,11 +243,21 @@ void main()
 	crt_layer *= TUBE_MASK + (1 - TUBE_MASK) * under_layer.a;
 #endif
 
+	vec4 middle_layer = HSM_GetPrecompRGBA(ImageLayersPass, vTexCoord, PRECOMP_INDEX_MIDDLE);
+	middle_layer.rgb = PrepGraphicsForHDR(middle_layer.rgb);
+	out_color = HSM_PreMultAlphaBlend(out_color, middle_layer);
+
 	if (HSM_RENDER_SIMPLE_MODE < 0.5)
 		out_color = HSM_PreMultAlphaBlend(out_color, crt_layer);
 
-	vec4 over_layer = HSM_GetPrecompRGBA(ImageLayersPass, vTexCoord, PRECOMP_INDEX_OVER);
+	vec4 over_layer = HSM_GetPrecompRGBA(ImageLayersPass, vTexCoord, PRECOMP_INDEX_UPPER);
 	over_layer.rgb = PrepGraphicsForHDR(over_layer.rgb);
+
+	vec4 additive_layer = HSM_GetPrecompRGBA(ImageLayersPass, vTexCoord, PRECOMP_INDEX_ADDITIVE) * (1 - crt_layer.a);
+	additive_layer.rgb = PrepGraphicsForHDR(additive_layer.rgb);
+	out_color = HSM_PreMultAlphaBlend(out_color, additive_layer * vec4(1, 1, 1, 0));
+
+	//TODO Need to block out area of tube
 
 	out_color = HSM_PreMultAlphaBlend(out_color, over_layer);
 	FragColor = out_color;

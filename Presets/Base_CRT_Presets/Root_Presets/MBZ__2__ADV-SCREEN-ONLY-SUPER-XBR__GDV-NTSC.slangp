@@ -327,8 +327,11 @@ float_framebuffer40 = true
 alias40 = "CRTPass"
 
 shader41 = ../../../shaders/base/tubefx-default-delinearize.slang
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear41 = false
 mipmap_input41 = true
 scale_type41 = viewport
+scale41 = 1.0
 
 # Textures All
 # Define textures to be used by the different passes

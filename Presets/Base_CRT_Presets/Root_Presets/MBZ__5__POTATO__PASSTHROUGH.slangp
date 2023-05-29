@@ -86,8 +86,11 @@ HSM_CRT_CURVATURE_SCALE = 0
 
 
 shader9 = ../../../shaders/base/tubefx-none-with-bg-delinearize.slang
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear9 = false
 mipmap_input9 = true
 scale_type9 = viewport
+scale9 = 1.0
 
 # Textures Potato
 # Define textures to be used by the different passes

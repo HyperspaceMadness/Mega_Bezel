@@ -22,6 +22,7 @@
     along with this program.  If not, see [http://www.gnu.org/licenses/].
 */
 
+#pragma format R16G16B16A16_SFLOAT
 // #pragma format R32G32B32A32_SFLOAT
 
 /////////////// DEFINES ///////////////
@@ -67,7 +68,7 @@ float GetMask(float mask_mode)
 }
 
 // Assumes Opacity is already encoded in alpha
-vec4 BlendModeMaskLayerMix(vec4 color_under, vec4 color_over, float blend_mode, float mask_mode, float cutout_mode, float dualscreen_mode, float layer_opacity)
+vec4 BlendModeMaskLayerMix(vec4 color_under, vec4 color_over, float blend_mode, bool matte_pass, bool allow_additive_blend, float mask_mode, float cutout_mode, float dualscreen_mode, float layer_opacity)
 {
 	if ( blend_mode == 0 || (dualscreen_mode != SHOW_ON_DUALSCREEN_MODE_BOTH && dualscreen_mode != SCREEN_INDEX) )
 		return color_under;
@@ -88,13 +89,22 @@ vec4 BlendModeMaskLayerMix(vec4 color_under, vec4 color_over, float blend_mode, 
 	if (blend_mode == BLEND_MODE_NORMAL)
 	{
 		color_over.rgb *= color_over.a;
+		if (matte_pass)
+			color_over.rgb *= 0;
 		out_color = HSM_PreMultAlphaBlend(color_under, color_over);
 	}
 	else
 	{
 		vec4 blend_color = color_under; 
-		if (blend_mode == BLEND_MODE_ADD)  	 		blend_color.rgb = color_under.rgb + color_over.rgb ;
-		if (blend_mode == BLEND_MODE_MULTIPLY)  	blend_color.rgb = color_under.rgb * color_over.rgb ;
+		if (blend_mode == BLEND_MODE_ADD)  	 		
+		{
+			if (allow_additive_blend)
+				blend_color.rgb = color_under.rgb + color_over.rgb;
+			else
+				return color_under;
+		}
+		if (blend_mode == BLEND_MODE_MULTIPLY)  	
+			blend_color.rgb = color_under.rgb * color_over.rgb ;
 
 		out_color = vec4(clamp(mix(color_under.rgb, blend_color.rgb, color_over.a), 0, 1), color_under.a);
 	}
@@ -394,7 +404,8 @@ void main()
 	gl_Position = global.MVP * Position;
 	vTexCoord = TexCoord;
 
-	VIEWPORT_COORD = vTexCoord * 1.0001;
+	// VIEWPORT_COORD = vTexCoord * 1.0001;
+	VIEWPORT_COORD = vTexCoord;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -428,20 +439,21 @@ layout(set = 0, binding = 15) uniform sampler2D ImageLayersPassFeedback;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
 {
+	HSM_UpdateCacheInfoChanged(CacheInfoPass);
+	// vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
+	// vec4 feedback_color_test = vec4(0,0,0,-1);
+	if (HSM_CACHE_GRAPHICS_ON > 0.5 && !CACHE_INFO_CHANGED)
+	{
+		FragColor = texture(PassFeedback, vTexCoord);
+		return;
+	}
+
 	// The pass output is split into multiple regions, each holding a separate image or precomp
 	// The current coordinate defines which precomp we are generating
 	float precomp_index = HSM_GetPrecompIndexFromCoord(vTexCoord);
 
 	// We rescale the coordinates to match the current precomp we are processing
 	vec2 vTexCoord_precomp = HHLP_ConvertCoordInRangeToZeroToOne(vTexCoord, HSM_GetImagePrecompRange(precomp_index));
-
-	HSM_UpdateCacheInfoChanged(CacheInfoPass);
-	vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
-	if (HSM_CACHE_GRAPHICS_ON > 0.5 && feedback_color_test.a < 0 && !CACHE_INFO_CHANGED)
-	{
-		FragColor = texture(PassFeedback, vTexCoord);
-		return;
-	}
 
 	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord_precomp);
 	VIEWPORT_UNSCALED_COORD = HSM_GetViewportCoordWithFlip(vTexCoord_precomp);
@@ -733,6 +745,8 @@ void main()
 			bezel_layer = BlendModeMaskLayerMix(frame_shadow_layer,
 													bezel_layer, 
 													BLEND_MODE_NORMAL, 
+													false,
+													true,
 													MASK_MODE_ALL,
 													0, 
 													SHOW_ON_DUALSCREEN_MODE_BOTH,
@@ -1159,119 +1173,175 @@ void main()
 	vec4 frag_color_linear = vec4(0);
 	int start_layer = 0;
 	int end_layer = int(MAX_LAYER_ORDER);
+	bool matte_pass = false;
+	bool allow_additive_blend = false;
 
+	// Make sure bezel layer order is not less than zero
+	float bezel_layer_order = max(0, HSM_CRT_LAYER_ORDER + HSM_BEZEL_LAYER_ORDER_OFFSET_FROM_TUBE);
+	// Make sure the middle layer group's first layer is not greater than the bezel layer order
+	float middle_layer_group_first_layer = min(HSM_MIDDLE_LAYER_GROUP_FIRST_LAYER, bezel_layer_order);
+	// Make sure the base layer is at least 1 less than the middle group first layer, and is not below 0
+	float base_layer_group_first_layer = min(0, middle_layer_group_first_layer - 1);
 
-	if (precomp_index == PRECOMP_INDEX_OVER)
+	if (precomp_index == PRECOMP_INDEX_BOTTOM)
 	{
-		start_layer = int(HSM_CRT_LAYER_ORDER);
+		start_layer = int(base_layer_group_first_layer);
+		end_layer = int(middle_layer_group_first_layer - 1);
+	}
+
+	if (precomp_index == PRECOMP_INDEX_MIDDLE)
+	{
+		start_layer = int(middle_layer_group_first_layer);
+		end_layer = int(HSM_CRT_LAYER_ORDER);
+	}
+
+	if (precomp_index == PRECOMP_INDEX_UPPER)
+	{
+		start_layer = int(HSM_CRT_LAYER_ORDER + 1);
 		end_layer = int(MAX_LAYER_ORDER);
 	}
 
-	if (precomp_index == PRECOMP_INDEX_UNDER)
+	if (precomp_index == PRECOMP_INDEX_ADDITIVE)
 	{
-		start_layer = 0;
-		end_layer = int(HSM_CRT_LAYER_ORDER - 1);
+		matte_pass = true;
+		allow_additive_blend = true;
 	}
-
 
 	for(int i=start_layer; i <= end_layer; i++)
 	{
 		// BACKGROUND
 		if (HSM_BG_LAYER_ORDER == i)
+		{
 			frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
 													bg_image, 
 													HSM_BG_BLEND_MODE, 
+													matte_pass,
+													allow_additive_blend,
 													HSM_BG_MASK_MODE, 
 													HSM_BG_CUTOUT_MODE,
 													HSM_BG_DUALSCREEN_VIS_MODE,
 													HSM_BG_OPACITY);
+		}
 
 		// VIGNETTE
 		if (HSM_VIEWPORT_VIGNETTE_LAYER_ORDER == i)
+		{
 			frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
 													vignette_layer, 
 													BLEND_MODE_NORMAL, 
+													matte_pass,
+													allow_additive_blend,
 													HSM_VIEWPORT_VIGNETTE_MASK_MODE, 
 													HSM_VIEWPORT_VIGNETTE_CUTOUT_MODE,
 													SHOW_ON_DUALSCREEN_MODE_BOTH,
 													HSM_VIEWPORT_VIGNETTE_OPACITY);
+		}
+
 		// LED IMAGE
 		if (HSM_LED_LAYER_ORDER == i && HSM_LED_OPACITY > 0)
-				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
-														led_image, 
-														HSM_LED_BLEND_MODE, 
-														HSM_LED_MASK_MODE, 
-														HSM_LED_CUTOUT_MODE, 
-														HSM_LED_DUALSCREEN_VIS_MODE,
-														HSM_LED_OPACITY);
+		{		
+			frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+													led_image, 
+													HSM_LED_BLEND_MODE, 
+													matte_pass,
+													allow_additive_blend,
+													HSM_LED_MASK_MODE, 
+													HSM_LED_CUTOUT_MODE, 
+													HSM_LED_DUALSCREEN_VIS_MODE,
+													HSM_LED_OPACITY);
+		}
 
 		// DEVICE IMAGE
 		if (HSM_DEVICE_LAYER_ORDER == i && HSM_DEVICE_OPACITY > 0)
-				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
-														device_image, 
-														HSM_DEVICE_BLEND_MODE, 
-														HSM_DEVICE_MASK_MODE, 
-														HSM_DEVICE_CUTOUT_MODE, 
-														HSM_DEVICE_DUALSCREEN_VIS_MODE,
-														HSM_DEVICE_OPACITY);
+		{
+			frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+													device_image, 
+													HSM_DEVICE_BLEND_MODE, 
+													matte_pass,
+													allow_additive_blend,
+													HSM_DEVICE_MASK_MODE, 
+													HSM_DEVICE_CUTOUT_MODE, 
+													HSM_DEVICE_DUALSCREEN_VIS_MODE,
+													HSM_DEVICE_OPACITY);
+		}
 
 		// DEVICELED IMAGE
 		if (HSM_DEVICELED_LAYER_ORDER == i && HSM_DEVICELED_OPACITY > 0)
+		{
+			frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+													deviceled_image, 
+													HSM_DEVICELED_BLEND_MODE, 
+													matte_pass,
+													allow_additive_blend,
+													HSM_DEVICELED_MASK_MODE, 
+													HSM_DEVICELED_CUTOUT_MODE, 
+													HSM_DEVICELED_DUALSCREEN_VIS_MODE,
+													HSM_DEVICELED_OPACITY);
+		}
+
+		if (bezel_layer_order == i)
+		{
+			// Add background behind tube
+			frag_color_linear = HSM_PreMultAlphaBlend(frag_color_linear, tube_bg_layer);
+
+			// GENERATED BEZEL LAYER
+			if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
 				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
-														deviceled_image, 
-														HSM_DEVICELED_BLEND_MODE, 
-														HSM_DEVICELED_MASK_MODE, 
-														HSM_DEVICELED_CUTOUT_MODE, 
-														HSM_DEVICELED_DUALSCREEN_VIS_MODE,
-														HSM_DEVICELED_OPACITY);
+														bezel_layer, 
+														HSM_BZL_BLEND_MODE, 
+														matte_pass,
+														allow_additive_blend,
+														MASK_MODE_ALL, 
+														0, 
+														SHOW_ON_DUALSCREEN_MODE_BOTH,
+														1);
+		}
 
 		// DECAL IMAGE
 		if (HSM_DECAL_LAYER_ORDER == i && HSM_DECAL_OPACITY > 0)
-				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
-														decal_image, 
-														HSM_DECAL_BLEND_MODE, 
-														HSM_DECAL_MASK_MODE, 
-														HSM_DECAL_CUTOUT_MODE, 
-														HSM_DECAL_DUALSCREEN_VIS_MODE,
-														HSM_DECAL_OPACITY);
+		{
+			frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+													decal_image, 
+													HSM_DECAL_BLEND_MODE, 
+													matte_pass,
+													allow_additive_blend,
+													HSM_DECAL_MASK_MODE, 
+													HSM_DECAL_CUTOUT_MODE, 
+													HSM_DECAL_DUALSCREEN_VIS_MODE,
+													HSM_DECAL_OPACITY);
+		}
 
 		// CABINET GLASS
 		if (HSM_CAB_GLASS_LAYER_ORDER == i && HSM_CAB_GLASS_OPACITY > 0)
+		{
 				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
 														cab_glass_image, 
 														HSM_CAB_GLASS_BLEND_MODE, 
+														matte_pass,
+														allow_additive_blend,
 														HSM_CAB_GLASS_MASK_MODE, 
 														HSM_CAB_GLASS_CUTOUT_MODE, 
 														HSM_CAB_GLASS_DUALSCREEN_VIS_MODE,
 														HSM_CAB_GLASS_OPACITY);
-
+		}
 
 		// Top Layer
 		if (HSM_TOP_LAYER_ORDER == i && HSM_TOP_OPACITY > 0)
-				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
-														top_image, 
-														HSM_TOP_BLEND_MODE, 
-														HSM_TOP_MASK_MODE, 
-														HSM_TOP_CUTOUT_MODE, 
-														HSM_TOP_DUALSCREEN_VIS_MODE,
-														HSM_TOP_OPACITY);
+		{
+			frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+													top_image, 
+													HSM_TOP_BLEND_MODE, 
+													matte_pass,
+													allow_additive_blend,
+													HSM_TOP_MASK_MODE, 
+													HSM_TOP_CUTOUT_MODE, 
+													HSM_TOP_DUALSCREEN_VIS_MODE,
+													HSM_TOP_OPACITY);
+		}
 	}
 
-	if (precomp_index == PRECOMP_INDEX_UNDER)
+	if (precomp_index == PRECOMP_INDEX_BOTTOM)
 	{
-		// Add background behind tube
-		frag_color_linear = HSM_PreMultAlphaBlend(frag_color_linear, tube_bg_layer);
-
-		// GENERATED BEZEL LAYER
-		if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
-			frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
-													bezel_layer, 
-													HSM_BZL_BLEND_MODE, 
-													MASK_MODE_ALL, 
-													0, 
-													SHOW_ON_DUALSCREEN_MODE_BOTH,
-													1);
-
 		// Store reflection mask in the alpha channel
 		// Usually used to show the uneven brightness of a bumpy surface
 		if (HSM_REFLECT_MASK_IMAGE_AMOUNT > 0)

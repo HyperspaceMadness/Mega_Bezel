@@ -153,8 +153,11 @@ float_framebuffer18 = true
 alias18 = "CRTPass"
 
 shader19 = ../../../shaders/base/tubefx-none-with-bg-delinearize.slang
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear19 = false
 mipmap_input19 = true
 scale_type19 = viewport
+scale19 = 1.0
 
 # Textures Potato
 # Define textures to be used by the different passes

@@ -170,8 +170,11 @@ g_gamma_out = 2.45
 
 
 shader28 = ../../../shaders/base/tubefx-default-delinearize.slang
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear28 = false
 mipmap_input28 = true
 scale_type28 = viewport
+scale28 = 1.0
 
 # Textures All
 # Define textures to be used by the different passes

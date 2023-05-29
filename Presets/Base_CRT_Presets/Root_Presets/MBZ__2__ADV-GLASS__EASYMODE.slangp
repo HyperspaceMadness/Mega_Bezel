@@ -178,8 +178,11 @@ gamma_out = 2.2
 # -----------------------------------------------------------------------------------------------
 
 shader30 = ../../../shaders/base/tubefx-default.slang
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear30 = false
 mipmap_input30 = true
 scale_type30 = viewport
+scale30 = 1.0
 
 # Reduce Resolution  ----------------------------------------------------------------
 #      Reduce the resolution to a small static size regardless of final resolution

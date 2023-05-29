@@ -217,16 +217,19 @@ HSM_REFLECT_GLOBAL_AMOUNT = "7.000000"
 # -----------------------------------------------------------------------------------------------
 
 shader31 = ../../../shaders/base/tubefx-default.slang
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear31 = false
 mipmap_input31 = true
 scale_type31 = viewport
+scale31 = 1.0
 
 # Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 
 shader32 = ../../../shaders/base/bezel-images-under-crt.slang
-filter_linear32 = true
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear32 = false
 scale_type32 = viewport
 scale32 = 2.0
-float_framebuffer32 = true
 alias32 = "ImageLayersPass"
 
 # Reduce Resolution  ----------------------------------------------------------------

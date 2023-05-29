@@ -39,13 +39,22 @@ float HSM_VIEWPORT_VIGNETTE_LAYER_ORDER = global.HSM_VIEWPORT_VIGNETTE_LAYER_ORD
 #pragma parameter HSM_LED_LAYER_ORDER             "          LED Layer"  2 0 12 1
 float HSM_LED_LAYER_ORDER = global.HSM_LED_LAYER_ORDER;
 
+#pragma parameter HSM_MIDDLE_LAYER_GROUP_FIRST_LAYER "          ---Middle Layer Group FIRST Layer"  3 0 12 1
+float HSM_MIDDLE_LAYER_GROUP_FIRST_LAYER = global.HSM_MIDDLE_LAYER_GROUP_FIRST_LAYER;
+
 #pragma parameter HSM_DEVICE_LAYER_ORDER         "          Device Layer"  3 0 12 1
 float HSM_DEVICE_LAYER_ORDER = global.HSM_DEVICE_LAYER_ORDER;
 
 #pragma parameter HSM_DEVICELED_LAYER_ORDER      "          Device LED Layer"  4 0 12 1
 float HSM_DEVICELED_LAYER_ORDER = global.HSM_DEVICELED_LAYER_ORDER;
 
-#pragma parameter HSM_CRT_LAYER_ORDER             "          CRT Screen Bezel & Frame"  5 0 12 1
+#pragma parameter HSM_BEZEL_LAYER_ORDER_OFFSET_FROM_TUBE "          Bezel Layer Offset from CRT Tube"  0 -5 0 1
+float HSM_BEZEL_LAYER_ORDER_OFFSET_FROM_TUBE = global.HSM_BEZEL_LAYER_ORDER_OFFSET_FROM_TUBE;
+
+// TODO need to resolve when CRT Tube is set at 0. 
+// Everything under the CRT must be in the middle or bottom layer
+// How to put reflection on top of layers above the tube?
+#pragma parameter HSM_CRT_LAYER_ORDER             "          ---CRT Tube (Middle Layer Group LAST Layer)"  5 0 12 1
 float HSM_CRT_LAYER_ORDER = global.HSM_CRT_LAYER_ORDER;
 
 #pragma parameter HSM_DECAL_LAYER_ORDER           "          Decal Layer"  7 0 12 1
@@ -56,6 +65,8 @@ float HSM_CAB_GLASS_LAYER_ORDER = global.HSM_CAB_GLASS_LAYER_ORDER;
 
 #pragma parameter HSM_TOP_LAYER_ORDER             "          Top Layer"  12 0 12 1
 float HSM_TOP_LAYER_ORDER = global.HSM_TOP_LAYER_ORDER;
+
+
 
 
 //---------------------------------------------------------------------------------------------------

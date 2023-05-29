@@ -238,8 +238,11 @@ gamma_out = 2.2
 # -----------------------------------------------------------------------------------------------
 
 shader36 = ../../../shaders/base/tubefx-default.slang
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear36 = false
 mipmap_input36 = true
 scale_type36 = viewport
+scale36 = 1.0
 
 # Reduce Resolution  ----------------------------------------------------------------
 #      Reduce the resolution to a small static size regardless of final resolution

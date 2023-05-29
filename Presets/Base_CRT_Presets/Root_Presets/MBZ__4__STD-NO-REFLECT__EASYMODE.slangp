@@ -129,16 +129,19 @@ gamma_out = 2.2
 # -----------------------------------------------------------------------------------------------
 
 shader18 = ../../../shaders/base/tubefx-default.slang
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear18 = false
 mipmap_input18 = true
 scale_type18 = viewport
+scale18 = 1.0
 
 # Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 
 shader19 = ../../../shaders/base/bezel-images-under-crt.slang
-filter_linear19 = true
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear19 = false
 scale_type19 = viewport
 scale19 = 2.0
-float_framebuffer19 = true
 alias19 = "ImageLayersPass"
 
 # Combine Passes ----------------------------------------------------------------

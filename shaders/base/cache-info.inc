@@ -135,7 +135,8 @@ vec2 HSM_GetScreenScale(float screen_aspect, float screen_height_from_image, vec
 
 		bool viewport_is_vertical = (global.FinalViewportSize.x < global.FinalViewportSize.y);
 
-		float vertical_preset_scale_mult = HSM_VERTICAL_PRESET > 0.5 || viewport_is_vertical ? DEFAULT_SCREEN_HEIGHT_PORTRAIT_MULTIPLIER : 1;
+		bool use_portrait_mode_scale_reduction = HSM_PORTRAIT_MODE_SCALE_REDUCTION == 1 || HSM_PORTRAIT_MODE_SCALE_REDUCTION == 2 && viewport_is_vertical;
+		float vertical_preset_scale_mult = use_portrait_mode_scale_reduction ? DEFAULT_SCREEN_HEIGHT_PORTRAIT_MULTIPLIER * HSM_PORTRAIT_MODE_SCALE_OFFSET : 1;
 		float screen_height = HSM_NON_INTEGER_SCALE * vertical_preset_scale_mult;
 
 		if (HSM_DUALSCREEN_MODE > 0)
@@ -145,7 +146,7 @@ vec2 HSM_GetScreenScale(float screen_aspect, float screen_height_from_image, vec
 		{
 			if (HSM_USE_PHYSICAL_SIZE_FOR_NON_INTEGER == 1)
 			{
-				float monitor_aspect_with_rotation = HSM_VERTICAL_PRESET > 0.5 || viewport_is_vertical ? 1 / HSM_PHYSICAL_MONITOR_ASPECT_RATIO : HSM_PHYSICAL_MONITOR_ASPECT_RATIO;
+				float monitor_aspect_with_rotation = use_portrait_mode_scale_reduction ? 1 / HSM_PHYSICAL_MONITOR_ASPECT_RATIO : HSM_PHYSICAL_MONITOR_ASPECT_RATIO;
 				float monitor_height = HSM_PHYSICAL_MONITOR_DIAGONAL_SIZE / sqrt(monitor_aspect_with_rotation * monitor_aspect_with_rotation + 1);
 				float sim_screen_height = HSM_PHYSICAL_SIM_TUBE_DIAGONAL_SIZE / sqrt(screen_aspect * screen_aspect + 1);
 
@@ -620,7 +621,8 @@ float HSM_GetParameterSum()
 
 					//    SCALING
 					+ HSM_INT_SCALE_MODE
-					+ HSM_VERTICAL_PRESET
+					+ HSM_PORTRAIT_MODE_SCALE_REDUCTION
+					+ HSM_PORTRAIT_MODE_SCALE_OFFSET
 
 					// Integer Scale
 					+ HSM_INT_SCALE_MAX_HEIGHT

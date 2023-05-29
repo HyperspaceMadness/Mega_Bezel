@@ -22,6 +22,81 @@
     along with this program.  If not, see [http://www.gnu.org/licenses/].
 */
 
+
+#define PRECOMP_INDEX_BOTTOM 0
+#define PRECOMP_INDEX_MIDDLE 1
+#define PRECOMP_INDEX_UPPER 2
+#define PRECOMP_INDEX_ADDITIVE 3
+
+#define PRECOMP_INDEX_TUBE 0
+#define PRECOMP_INDEX_GEL 1
+#define PRECOMP_INDEX_AMBIENT_LIGHT_1 2
+#define PRECOMP_INDEX_AMBIENT_LIGHT_2 3
+#define PRECOMP_INDEX_STATIC_HIGHLIGHT 4
+
+
+vec4 HSM_GetImagePrecompRange(float in_precomp_index)
+{
+	vec4 out_range = vec4(0.25, 0.25, 0.5, 0.5);
+	if (in_precomp_index == PRECOMP_INDEX_BOTTOM)
+		out_range = vec4(0, 0, 0.5, 0.5);
+
+	if (in_precomp_index == PRECOMP_INDEX_MIDDLE)
+		out_range = vec4(0.5, 0, 1, 0.5);
+
+	if (in_precomp_index == PRECOMP_INDEX_UPPER)
+		out_range = vec4(0, 0.5, 0.5, 1);
+
+	if (in_precomp_index == PRECOMP_INDEX_ADDITIVE)
+		out_range = vec4(0.5, 0.5, 1, 1);
+	
+	return out_range;
+}
+
+vec4 HSM_GetTubeFxPrecompRange(float in_precomp_index)
+{
+	vec4 out_range = vec4(0.25, 0.25, 0.5, 0.5);
+	if (in_precomp_index == PRECOMP_INDEX_TUBE)
+		out_range = vec4(0, 0, 0.5, 0.5);
+
+	if (in_precomp_index == PRECOMP_INDEX_GEL)
+		out_range = vec4(0.5, 0, 1, 0.5);
+
+	if (in_precomp_index == PRECOMP_INDEX_AMBIENT_LIGHT_1)
+		out_range = vec4(0, 0.5, 0.5, 1);
+
+	if (in_precomp_index == PRECOMP_INDEX_AMBIENT_LIGHT_2)
+		out_range = vec4(0.5, 0.5, 1, 1);
+
+	if (in_precomp_index == PRECOMP_INDEX_STATIC_HIGHLIGHT)
+		out_range = vec4(0.5, 0.5, 1, 1);
+
+	return out_range;
+}
+
+vec4 HSM_GetPrecompRGBA(sampler2D in_sampler_2D, vec2 in_coord, float in_precomp_index)
+{
+	vec4 precomp_range = HSM_GetImagePrecompRange(in_precomp_index);
+	vec2 sample_coord = precomp_range.xy + in_coord * vec2(precomp_range.z - precomp_range.x, precomp_range.w - precomp_range.y);
+	return texture(in_sampler_2D, sample_coord);
+}
+
+float HSM_GetPrecompIndexFromCoord(vec2 in_coord)
+{
+	float out_index = -1;
+
+	for (float i = 0; i < 4; i++)
+	{
+		if (HHLP_IsInsideRange(in_coord, HSM_GetImagePrecompRange(i)))
+		{
+			out_index = i;
+			break;
+		}
+	} 
+
+	return out_index;
+}
+
 // Returns 1 for vertical split, 2 for horizontal split
 float HSM_GetCoreImageSplitDirection()
 {

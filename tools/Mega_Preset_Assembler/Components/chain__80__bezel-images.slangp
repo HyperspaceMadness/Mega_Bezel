@@ -3,8 +3,8 @@ shaders = 1
 # Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 
 shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/bezel-images-under-crt.slang
-filter_linear0 = true
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear0 = false
 scale_type0 = viewport
 scale0 = 2.0
-float_framebuffer0 = true
 alias0 = "ImageLayersPass"

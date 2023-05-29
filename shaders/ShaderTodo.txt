@@ -15,15 +15,26 @@ Changes:
     * HSM_POTATO_COLORIZE_BRIGHTNESS -> HSM_SIMPLEBG_COLORIZE_BRIGHTNESS
   * New image used for Glass Highlight
   * Fixed No-Reflect-No-TubeFx seeing bg behind the tube
+  * Renamed HSM_VERTICAL_PRESET -> HSM_PORTRAIT_MODE_SCALE_REDUCTION
+    * The values of this parameter are now:
+      * 0 - OFF (no scale reduction)
+      * 1 - ON (Explicitly choose to reduce scale for a portrait mode effect)
+      * 2 - AUTO (Reduce scale when the viewport resolution is determined to be a vertical aspect ratio)
+  * HSM_PORTRAIT_MODE_SCALE_OFFSET added to add a scaling adjustment which only is applied when the HSM_PORTRAIT_MODE_SCALE_REDUCTION is active using ON or AUTO
+  * HSM_BEZEL_LAYER_ORDER_OFFSET_FROM_TUBE 
+    * This allows layers to go between the tube and bezel. 
+    * Reflection will always be applied at the same level as the tube
+
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Fix DOT Potato Preset
   * Integrate Overscan into the Resolution Debug somehow
   * Should put Tube Bg in images? Only add Gel Multiply and Highlight in TubeFx?
   * Update Grade
-  * Use parameter to set reflection bezel size to 0 so we can have fewer variant shader files
+  * Update Guest
   * Fix Bezel & Frame Masks when Curvature is applied
   * Potato-Like BG image for Glass Preset
   * Fix edges of tube when Integer scale is used on both axes

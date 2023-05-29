@@ -129,8 +129,11 @@ gamma_out = 2.2
 # -----------------------------------------------------------------------------------------------
 
 shader18 = ../../../shaders/base/tubefx-default-delinearize.slang
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear18 = false
 mipmap_input18 = true
 scale_type18 = viewport
+scale18 = 1.0
 
 # Textures All
 # Define textures to be used by the different passes

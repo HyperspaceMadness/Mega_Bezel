@@ -1,5 +1,8 @@
 shaders = 1
 
 shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/tubefx-default-delinearize.slang
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear0 = false
 mipmap_input0 = true
 scale_type0 = viewport
+scale0 = 1.0

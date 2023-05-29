@@ -22,11 +22,6 @@
     along with this program.  If not, see [http://www.gnu.org/licenses/].
 */
 
-#define PRECOMP_INDEX_UNDER 0
-#define PRECOMP_INDEX_MIDDLE 1
-#define PRECOMP_INDEX_OVER 2
-#define PRECOMP_INDEX_MASKS 3
-
 vec2 HSM_GetOuterBezelScale(vec2 tube_diffuse_scale, float screen_aspect)
 {
 
@@ -98,47 +93,6 @@ bool HSM_IsOutsideReflectionBoundary()
 		cache_bounds_coord = (reflection_outer_boundary_coord - 0.5) * 0.9 + 0.5;
 	}
 	return HHLP_IsOutsideCoordSpace(cache_bounds_coord);
-}
-
-vec4 HSM_GetImagePrecompRange(float in_precomp_index)
-{
-	vec4 out_range = vec4(0.25, 0.25, 0.5, 0.5);
-	if (in_precomp_index == PRECOMP_INDEX_UNDER)
-		out_range = vec4(0, 0, 0.5, 0.5);
-
-	if (in_precomp_index == PRECOMP_INDEX_MIDDLE)
-		out_range = vec4(0.5, 0, 1, 0.5);
-
-	if (in_precomp_index == PRECOMP_INDEX_OVER)
-		out_range = vec4(0, 0.5, 0.5, 1);
-
-	if (in_precomp_index == PRECOMP_INDEX_MASKS)
-		out_range = vec4(0.5, 0.5, 1, 1);
-	
-	return out_range;
-}
-
-vec4 HSM_GetPrecompRGBA(sampler2D in_sampler_2D, vec2 in_coord, float in_precomp_index)
-{
-	vec4 precomp_range = HSM_GetImagePrecompRange(in_precomp_index);
-	vec2 sample_coord = precomp_range.xy + in_coord * vec2(precomp_range.z - precomp_range.x, precomp_range.w - precomp_range.y);
-	return texture(in_sampler_2D, sample_coord);
-}
-
-float HSM_GetPrecompIndexFromCoord(vec2 in_coord)
-{
-	float out_index = -1;
-
-	for (float i = 0; i < 4; i++)
-	{
-		if (HHLP_IsInsideRange(in_coord, HSM_GetImagePrecompRange(i)))
-		{
-			out_index = i;
-			break;
-		}
-	} 
-
-	return out_index;
 }
 
 float HSM_GetBezelCoords(vec2 tube_diffuse_coord, 
