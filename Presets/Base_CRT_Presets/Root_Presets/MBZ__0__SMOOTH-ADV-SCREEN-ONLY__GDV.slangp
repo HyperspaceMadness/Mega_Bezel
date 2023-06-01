@@ -155,7 +155,7 @@ filter_linear23 = false
 float_framebuffer23 = true
 
 shader24 = ../../../shaders/base/stock.slang
-alias24 = "PreCRTPass"
+alias24 = "PreCrtPass"
 
 shader25 = ../../../shaders/guest/hsm-afterglow0.slang
 filter_linear25 = true
@@ -253,7 +253,7 @@ scale_type37 = viewport
 scale_x37 = 1.0
 scale_y37 = 1.0
 float_framebuffer37 = true
-alias37 = "CRTPass"
+alias37 = "CrtPass"
 
 shader38 = ../../../shaders/base/tubefx-default-delinearize.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time

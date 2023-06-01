@@ -173,7 +173,7 @@ scale_type19 = source
 scale19 = 1.0
 
 shader20 = ../../../shaders/base/stock.slang
-alias20 = "PreCRTPass"
+alias20 = "PreCrtPass"
 
 shader21 = ../../../shaders/guest/hsm-afterglow0.slang
 filter_linear21 = true
@@ -318,7 +318,7 @@ scale_type38 = viewport
 scale_x38 = 1.0
 scale_y38 = 1.0
 float_framebuffer38 = true
-alias38 = "CRTPass"
+alias38 = "CrtPass"
 
 shader39 = ../../../shaders/base/tubefx-default.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
@@ -334,7 +334,7 @@ shader40 = ../../../shaders/base/bezel-images-under-crt.slang
 filter_linear40 = false
 scale_type40 = viewport
 scale40 = 1.0
-alias40 = "ImageLayersPass"
+alias40 = "SceneLayersPass"
 
 # Reduce Resolution  ----------------------------------------------------------------
 #      Reduce the resolution to a small static size regardless of final resolution
@@ -351,7 +351,7 @@ scale_type41 = absolute
 scale_x41 = 800
 scale_y41 = 600
 float_framebuffer41 = true
-alias41 = "BR_MirrorLowResPass"
+alias41 = "ReflectPrepLowResPass"
 
 # Add Blur for the Reflection (Horizontal) ----------------------------------------------------------------
 shader42 = ../../../shaders/base/blur-outside-screen-horiz.slang
@@ -363,7 +363,7 @@ float_framebuffer42 = true
 shader43 = ../../../shaders/base/blur-outside-screen-vert.slang
 filter_linear43 = true
 float_framebuffer43 = true
-alias43 = "BR_MirrorBlurredPass"
+alias43 = "ReflectPrepBlurredPass"
 
 # Reduce resolution ----------------------------------------------------------------
 # Reduced to a very small amount so we can create a blur which will create a glow from the screen
@@ -375,7 +375,7 @@ scale_type44 = absolute
 scale_x44 = 128
 scale_y44 = 128
 float_framebuffer44 = true
-alias44 = "BR_MirrorReflectionDiffusedPass"
+alias44 = "ReflectPrepDiffusedPass"
 
 # Add Diffused glow all around the screen ----------------------------------------------------------------
 #      Blurred so much that it's non directional
@@ -387,13 +387,13 @@ scale_type45 = absolute
 scale_x45 = 12
 scale_y45 = 12
 float_framebuffer45 = true
-alias45 = "BR_MirrorFullscreenGlowPass"
+alias45 = "ReflectPrepFullscreenGlowPass"
 
 # Bezel Reflection ----------------------------------------------------------------
 shader46 = ../../../shaders/base/reflection.slang
 scale_type46 = viewport
 float_framebuffer46 = true
-alias46 = "ReflectionPass"
+alias46 = "ReflectPass"
 
 # Combine Passes ----------------------------------------------------------------
 shader47 = ../../../shaders/base/combine-passes.slang

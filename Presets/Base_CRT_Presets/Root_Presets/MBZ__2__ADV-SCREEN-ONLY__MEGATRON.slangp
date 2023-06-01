@@ -95,7 +95,7 @@ filter_linear17 = false
 float_framebuffer17 = true
 
 shader18 = ../../../shaders/base/stock.slang
-alias18 = "PreCRTPass"
+alias18 = "PreCrtPass"
 
 shader19 = ../../../shaders/guest/hsm-afterglow0.slang
 filter_linear19 = true
@@ -172,7 +172,7 @@ wrap_mode28 = "clamp_to_border"
 mipmap_input28 = "false"
 scale_type28 = "viewport"
 float_framebuffer28 = "true"
-alias28 = "CRTPass"
+alias28 = "CrtPass"
 
 
 # -----------------------------------------------------------------------------------------------

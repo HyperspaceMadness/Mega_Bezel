@@ -7,4 +7,4 @@ shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/bezel-images-und
 filter_linear0 = false
 scale_type0 = viewport
 scale0 = 1.0
-alias0 = "ImageLayersPass"
+alias0 = "SceneLayersPass"

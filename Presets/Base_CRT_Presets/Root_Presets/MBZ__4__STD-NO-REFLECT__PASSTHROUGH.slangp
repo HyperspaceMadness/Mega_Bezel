@@ -71,7 +71,7 @@ filter_linear9 = "false"
 scale_type9 = "viewport"
 scale9 = "1.0"
 float_framebuffer9 = "true"
-alias9 = "CRTPass"
+alias9 = "CrtPass"
 
 
 # -----------------------------------------------------------------------------------------------
@@ -99,7 +99,7 @@ shader11 = ../../../shaders/base/bezel-images-under-crt.slang
 filter_linear11 = false
 scale_type11 = viewport
 scale11 = 1.0
-alias11 = "ImageLayersPass"
+alias11 = "SceneLayersPass"
 
 # Combine Passes ----------------------------------------------------------------
 shader12 = ../../../shaders/base/combine-passes-no-reflect.slang

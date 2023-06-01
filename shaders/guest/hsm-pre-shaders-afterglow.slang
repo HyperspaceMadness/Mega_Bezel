@@ -108,7 +108,7 @@ void main()
 #pragma stage fragment
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
-layout(set = 0, binding = 2) uniform sampler2D PreCRTPass;
+layout(set = 0, binding = 2) uniform sampler2D PreCrtPass;
 layout(set = 0, binding = 3) uniform sampler2D AfterglowPass;
 layout(set = 0, binding = 4) uniform sampler2D SamplerLUT1;
 layout(set = 0, binding = 5) uniform sampler2D SamplerLUT2;
@@ -250,7 +250,7 @@ float contrast(float x)
 
 void main()
 {
-   vec4 imgColor = COMPAT_TEXTURE(PreCRTPass, vTexCoord.xy);
+   vec4 imgColor = COMPAT_TEXTURE(PreCrtPass, vTexCoord.xy);
    vec4 aftglow = COMPAT_TEXTURE(AfterglowPass, vTexCoord.xy);
    
    float w = 1.0-aftglow.w;

@@ -51,7 +51,7 @@ mipmap_input4 = "false"
 alias4 = ""
 scale_type4 = "viewport"
 float_framebuffer4 = "true"
-alias4 = "CRTPass"
+alias4 = "CrtPass"
 
 
 # -----------------------------------------------------------------------------------------------

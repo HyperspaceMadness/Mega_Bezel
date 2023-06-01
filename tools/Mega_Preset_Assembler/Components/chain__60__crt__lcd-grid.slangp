@@ -5,7 +5,7 @@ filter_linear0 = "false"
 scale_type0 = "viewport"
 scale0 = "1.0"
 float_framebuffer0 = "true"
-alias0 = "CRTPass"
+alias0 = "CrtPass"
 
 
 # -----------------------------------------------------------------------------------------------

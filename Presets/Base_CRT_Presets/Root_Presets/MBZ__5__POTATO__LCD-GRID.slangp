@@ -61,7 +61,7 @@ filter_linear8 = "false"
 scale_type8 = "viewport"
 scale8 = "1.0"
 float_framebuffer8 = "true"
-alias8 = "CRTPass"
+alias8 = "CrtPass"
 
 
 # -----------------------------------------------------------------------------------------------

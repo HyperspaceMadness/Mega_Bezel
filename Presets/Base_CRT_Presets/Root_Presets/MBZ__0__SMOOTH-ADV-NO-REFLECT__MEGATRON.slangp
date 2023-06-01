@@ -155,7 +155,7 @@ filter_linear23 = false
 float_framebuffer23 = true
 
 shader24 = ../../../shaders/base/stock.slang
-alias24 = "PreCRTPass"
+alias24 = "PreCrtPass"
 
 shader25 = ../../../shaders/guest/hsm-afterglow0.slang
 filter_linear25 = true
@@ -232,7 +232,7 @@ wrap_mode34 = "clamp_to_border"
 mipmap_input34 = "false"
 scale_type34 = "viewport"
 float_framebuffer34 = "true"
-alias34 = "CRTPass"
+alias34 = "CrtPass"
 
 
 # -----------------------------------------------------------------------------------------------
@@ -266,7 +266,7 @@ shader36 = ../../../shaders/base/bezel-images-under-crt.slang
 filter_linear36 = false
 scale_type36 = viewport
 scale36 = 1.0
-alias36 = "ImageLayersPass"
+alias36 = "SceneLayersPass"
 
 # Combine Passes ----------------------------------------------------------------
 shader37 = ../../../shaders/base/combine-passes-no-reflect-hdr.slang

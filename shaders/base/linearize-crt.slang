@@ -56,7 +56,7 @@ void main()
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 1) in vec2 blur_dxdy;
 layout(location = 0) out vec4 FragColor;
-layout(set = 0, binding = 2) uniform sampler2D CRTPass;
+layout(set = 0, binding = 2) uniform sampler2D CrtPass;
 layout(set = 0, binding = 3) uniform sampler2D TubeFxPass;
 
 #include "../../../../include/blur-functions.h"
@@ -65,15 +65,15 @@ void main()
 {
     // FragColor = vec4(tex2Dblur9x9(TubeFxPass, vTexCoord, blur_dxdy), 1);
     // In the HDR preset sampling from the TubeFxPass results in sort of colorful garbabe
-    // Grabbing from the CRTPass instead
+    // Grabbing from the CrtPass instead
 if (HSM_NON_USER_IS_HDR_PRESET > 0.5)
 {
-    FragColor = textureLod(CRTPass, vTexCoord, 2);
+    FragColor = textureLod(CrtPass, vTexCoord, 2);
     FragColor = HSM_ApplyGamma(FragColor, DEFAULT_SRGB_GAMMA);
 }
 else
 {
-    vec4 crt_rgba = textureLod(CRTPass, vTexCoord, 2);
+    vec4 crt_rgba = textureLod(CrtPass, vTexCoord, 2);
     vec4 post_crt_rgba = textureLod(TubeFxPass, vTexCoord, 2);
     FragColor = mix(crt_rgba, post_crt_rgba, HSM_REFLECT_SHOW_TUBE_FX_AMOUNT);
 }

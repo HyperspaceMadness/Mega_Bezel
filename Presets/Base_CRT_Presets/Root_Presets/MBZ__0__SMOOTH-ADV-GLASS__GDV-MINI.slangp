@@ -155,7 +155,7 @@ filter_linear23 = false
 float_framebuffer23 = true
 
 shader24 = ../../../shaders/base/stock.slang
-alias24 = "PreCRTPass"
+alias24 = "PreCrtPass"
 
 shader25 = ../../../shaders/guest/hsm-afterglow0.slang
 filter_linear25 = true
@@ -216,7 +216,7 @@ scale_x33 = 1.0
 scale_y33 = 1.0
 filter_linear33 = true
 float_framebuffer33 = "true"
-alias33 = "CRTPass"
+alias33 = "CrtPass"
 
 
 # -----------------------------------------------------------------------------------------------
@@ -251,7 +251,7 @@ scale_type35 = absolute
 scale_x35 = 800
 scale_y35 = 600
 float_framebuffer35 = true
-alias35 = "BR_MirrorLowResPass"
+alias35 = "ReflectPrepLowResPass"
 
 # Add Blur for the Reflection (Horizontal) ----------------------------------------------------------------
 shader36 = ../../../shaders/base/blur-outside-screen-horiz.slang
@@ -263,7 +263,7 @@ float_framebuffer36 = true
 shader37 = ../../../shaders/base/blur-outside-screen-vert.slang
 filter_linear37 = true
 float_framebuffer37 = true
-alias37 = "BR_MirrorBlurredPass"
+alias37 = "ReflectPrepBlurredPass"
 
 # Reduce resolution ----------------------------------------------------------------
 # Reduced to a very small amount so we can create a blur which will create a glow from the screen
@@ -275,7 +275,7 @@ scale_type38 = absolute
 scale_x38 = 128
 scale_y38 = 128
 float_framebuffer38 = true
-alias38 = "BR_MirrorReflectionDiffusedPass"
+alias38 = "ReflectPrepDiffusedPass"
 
 # Add Diffused glow all around the screen ----------------------------------------------------------------
 #      Blurred so much that it's non directional
@@ -287,13 +287,13 @@ scale_type39 = absolute
 scale_x39 = 12
 scale_y39 = 12
 float_framebuffer39 = true
-alias39 = "BR_MirrorFullscreenGlowPass"
+alias39 = "ReflectPrepFullscreenGlowPass"
 
 # Bezel Reflection ----------------------------------------------------------------
 shader40 = ../../../shaders/base/reflection.slang
 scale_type40 = viewport
 float_framebuffer40 = true
-alias40 = "ReflectionPass"
+alias40 = "ReflectPass"
 
 
 # Textures Glass

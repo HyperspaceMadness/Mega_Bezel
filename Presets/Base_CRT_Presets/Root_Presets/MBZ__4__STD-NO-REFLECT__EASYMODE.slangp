@@ -46,7 +46,7 @@ scale_type5 = source
 scale5 = 1.0
 
 shader6 = ../../../shaders/base/stock.slang
-alias6 = "PreCRTPass"
+alias6 = "PreCrtPass"
 
 shader7 = ../../../shaders/guest/hsm-afterglow0.slang
 filter_linear7 = true
@@ -114,7 +114,7 @@ shader17 = ../../../shaders/easymode/hsm-crt-easymode-halation.slang
 filter_linear17 = true
 scale_type17 = viewport
 float_framebuffer17 = true
-alias17 = "CRTPass"
+alias17 = "CrtPass"
 
 
 # -----------------------------------------------------------------------------------------------
@@ -142,7 +142,7 @@ shader19 = ../../../shaders/base/bezel-images-under-crt.slang
 filter_linear19 = false
 scale_type19 = viewport
 scale19 = 1.0
-alias19 = "ImageLayersPass"
+alias19 = "SceneLayersPass"
 
 # Combine Passes ----------------------------------------------------------------
 shader20 = ../../../shaders/base/combine-passes-no-reflect.slang

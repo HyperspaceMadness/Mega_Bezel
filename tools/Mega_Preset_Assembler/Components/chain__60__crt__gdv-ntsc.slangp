@@ -56,4 +56,4 @@ scale_type6 = viewport
 scale_x6 = 1.0
 scale_y6 = 1.0
 float_framebuffer6 = true
-alias6 = "CRTPass"
+alias6 = "CrtPass"

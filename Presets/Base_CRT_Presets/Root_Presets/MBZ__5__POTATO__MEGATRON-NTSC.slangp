@@ -120,7 +120,7 @@ wrap_mode14 = "clamp_to_border"
 mipmap_input14 = "false"
 scale_type14 = "viewport"
 float_framebuffer14 = "true"
-alias14 = "CRTPass"
+alias14 = "CrtPass"
 
 
 # -----------------------------------------------------------------------------------------------

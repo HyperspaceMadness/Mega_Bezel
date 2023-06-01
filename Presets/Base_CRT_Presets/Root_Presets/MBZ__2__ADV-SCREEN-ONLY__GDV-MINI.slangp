@@ -95,7 +95,7 @@ filter_linear17 = false
 float_framebuffer17 = true
 
 shader18 = ../../../shaders/base/stock.slang
-alias18 = "PreCRTPass"
+alias18 = "PreCrtPass"
 
 shader19 = ../../../shaders/guest/hsm-afterglow0.slang
 filter_linear19 = true
@@ -156,7 +156,7 @@ scale_x27 = 1.0
 scale_y27 = 1.0
 filter_linear27 = true
 float_framebuffer27 = "true"
-alias27 = "CRTPass"
+alias27 = "CrtPass"
 
 
 # -----------------------------------------------------------------------------------------------

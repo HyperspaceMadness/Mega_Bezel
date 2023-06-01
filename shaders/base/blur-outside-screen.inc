@@ -46,7 +46,7 @@ layout(location = 1) in vec2 VIEWPORT_COORD;
 layout(location = 0) out vec4 FragColor;
 
 layout(set = 0, binding = 2) uniform sampler2D Source;
-layout(set = 0, binding = 3) uniform sampler2D BR_MirrorLowResPass;
+layout(set = 0, binding = 3) uniform sampler2D ReflectPrepLowResPass;
 
 layout(set = 0, binding = 4) uniform sampler2D CacheInfoPass;
 
@@ -130,7 +130,7 @@ void main()
 		}
 		vec4 blurred_color = vec4(col / k_total, 1.0);
 
-		vec4 unblurred_color = texture(BR_MirrorLowResPass, vTexCoord);
+		vec4 unblurred_color = texture(ReflectPrepLowResPass, vTexCoord);
 		FragColor = mix(unblurred_color, blurred_color, blend_with_unblurred);
 	}
 	else

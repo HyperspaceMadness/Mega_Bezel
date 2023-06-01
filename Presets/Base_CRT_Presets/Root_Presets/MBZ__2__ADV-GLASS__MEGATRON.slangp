@@ -95,7 +95,7 @@ filter_linear17 = false
 float_framebuffer17 = true
 
 shader18 = ../../../shaders/base/stock.slang
-alias18 = "PreCRTPass"
+alias18 = "PreCrtPass"
 
 shader19 = ../../../shaders/guest/hsm-afterglow0.slang
 filter_linear19 = true
@@ -172,7 +172,7 @@ wrap_mode28 = "clamp_to_border"
 mipmap_input28 = "false"
 scale_type28 = "viewport"
 float_framebuffer28 = "true"
-alias28 = "CRTPass"
+alias28 = "CrtPass"
 
 
 # -----------------------------------------------------------------------------------------------
@@ -214,7 +214,7 @@ scale_type30 = absolute
 scale_x30 = 800
 scale_y30 = 600
 float_framebuffer30 = true
-alias30 = "BR_MirrorLowResPass"
+alias30 = "ReflectPrepLowResPass"
 
 # Add Blur for the Reflection (Horizontal) ----------------------------------------------------------------
 shader31 = ../../../shaders/base/blur-outside-screen-horiz.slang
@@ -226,7 +226,7 @@ float_framebuffer31 = true
 shader32 = ../../../shaders/base/blur-outside-screen-vert.slang
 filter_linear32 = true
 float_framebuffer32 = true
-alias32 = "BR_MirrorBlurredPass"
+alias32 = "ReflectPrepBlurredPass"
 
 # Reduce resolution ----------------------------------------------------------------
 # Reduced to a very small amount so we can create a blur which will create a glow from the screen
@@ -238,7 +238,7 @@ scale_type33 = absolute
 scale_x33 = 128
 scale_y33 = 128
 float_framebuffer33 = true
-alias33 = "BR_MirrorReflectionDiffusedPass"
+alias33 = "ReflectPrepDiffusedPass"
 
 # Add Diffused glow all around the screen ----------------------------------------------------------------
 #      Blurred so much that it's non directional
@@ -250,13 +250,13 @@ scale_type34 = absolute
 scale_x34 = 12
 scale_y34 = 12
 float_framebuffer34 = true
-alias34 = "BR_MirrorFullscreenGlowPass"
+alias34 = "ReflectPrepFullscreenGlowPass"
 
 # Bezel Reflection ----------------------------------------------------------------
 shader35 = ../../../shaders/base/reflection.slang
 scale_type35 = viewport
 float_framebuffer35 = true
-alias35 = "ReflectionPass"
+alias35 = "ReflectPass"
 
 # Combine Passes ----------------------------------------------------------------
 shader36 = ../../../shaders/base/output-hdr.slang

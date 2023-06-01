@@ -56,7 +56,7 @@ float_framebuffer7 = true
 scale_x7 = 800
 scale_y7 = 600
 float_framebuffer7 = true
-alias7 = BR_MirrorLowResPass
+alias7 = ReflectPrepLowResPass
 
 // Add Blur for the Reflection (Horizontal) ----------------------------------------------------------------
 shader8 = ../../shaders/base/blur-outside-screen-horiz.slang
@@ -70,7 +70,7 @@ shader9 = ../../shaders/base/blur-outside-screen-vert.slang
 filter_linear9 = false
 scale_type9 = source
 float_framebuffer9 = true
-alias9 = BR_MirrorBlurredPass
+alias9 = ReflectPrepBlurredPass
 
 // Reduce resolution ----------------------------------------------------------------
 // Reduced to a very small amount so we can create a blur which will create a glow from the screen
@@ -82,7 +82,7 @@ scale_type10 = absolute
 float_framebuffer10 = true
 scale_x10 = 128
 scale_y10 = 128
-alias10 = BR_MirrorReflectionDiffusedPass
+alias10 = ReflectPrepDiffusedPass
 
 // Add Diffused glow all around the screen ----------------------------------------------------------------
 //      Blurred so much that it's non directional
@@ -94,7 +94,7 @@ scale_type11 = absolute
 float_framebuffer11 = true
 scale_x11 = 12
 scale_y11 = 12
-alias11 = BR_MirrorFullscreenGlowPass
+alias11 = ReflectPrepFullscreenGlowPass
 
 // Bezel Reflection ----------------------------------------------------------------
 shader12 = ../../shaders/base/reflection.slang
@@ -102,7 +102,7 @@ mipmap_input12 = true
 filter_linear12 = true
 scale_type12 = viewport
 float_framebuffer12 = true
-alias12 = ReflectionPass
+alias12 = ReflectPass
 
 // Bezel Reflection ----------------------------------------------------------------
 

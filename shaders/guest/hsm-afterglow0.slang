@@ -63,7 +63,7 @@ void main()
 #pragma stage fragment
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
-layout(set = 0, binding = 2) uniform sampler2D PreCRTPass;
+layout(set = 0, binding = 2) uniform sampler2D PreCrtPass;
 layout(set = 0, binding = 3) uniform sampler2D AfterglowPassFeedback;
 
 #define TEX0 vTexCoord
@@ -74,11 +74,11 @@ void main()
 	vec2 dx = vec2(params.OriginalSize.z, 0.0);
 	vec2 dy = vec2(0.0, params.OriginalSize.w);
 	
-	vec3 color0  = COMPAT_TEXTURE(PreCRTPass, TEX0.xy).rgb;
-	vec3 color1  = COMPAT_TEXTURE(PreCRTPass, TEX0.xy - dx).rgb;
-	vec3 color2  = COMPAT_TEXTURE(PreCRTPass, TEX0.xy + dx).rgb;
-	vec3 color3  = COMPAT_TEXTURE(PreCRTPass, TEX0.xy - dy).rgb;
-	vec3 color4  = COMPAT_TEXTURE(PreCRTPass, TEX0.xy + dy).rgb;	
+	vec3 color0  = COMPAT_TEXTURE(PreCrtPass, TEX0.xy).rgb;
+	vec3 color1  = COMPAT_TEXTURE(PreCrtPass, TEX0.xy - dx).rgb;
+	vec3 color2  = COMPAT_TEXTURE(PreCrtPass, TEX0.xy + dx).rgb;
+	vec3 color3  = COMPAT_TEXTURE(PreCrtPass, TEX0.xy - dy).rgb;
+	vec3 color4  = COMPAT_TEXTURE(PreCrtPass, TEX0.xy + dy).rgb;	
 
 	vec3 color = (2.5 * color0 + color1 + color2 + color3 + color4)/6.5;
 	

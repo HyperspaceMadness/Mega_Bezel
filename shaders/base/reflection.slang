@@ -38,9 +38,9 @@ vec2 VIEWPORT_COORD = vec2(0.5);
 
 layout(push_constant) uniform Push
 {
-	vec4 BR_MirrorBlurredPassSize;
-	vec4 BR_MirrorReflectionDiffusedPassSize;
-	vec4 BR_MirrorFullscreenGlowPassSize;
+	vec4 ReflectPrepBlurredPassSize;
+	vec4 ReflectPrepDiffusedPassSize;
+	vec4 ReflectPrepFullscreenGlowPassSize;
 	
 } params;
 
@@ -87,14 +87,14 @@ layout(set = 0, binding = 3) uniform sampler2D BackgroundVertImage;
 layout(set = 0, binding = 4) uniform sampler2D GlassPresetHighlightImage;
 layout(set = 0, binding = 5) uniform sampler2D ReflectionMaskImage;
 
-layout(set = 0, binding = 6) uniform sampler2D BR_MirrorLowResPass;
+layout(set = 0, binding = 6) uniform sampler2D ReflectPrepLowResPass;
 layout(set = 0, binding = 7) uniform sampler2D TubeFxPass;
-layout(set = 0, binding = 8) uniform sampler2D BR_MirrorBlurredPass;
-layout(set = 0, binding = 9) uniform sampler2D BR_MirrorReflectionDiffusedPass;
-layout(set = 0, binding = 10) uniform sampler2D BR_MirrorFullscreenGlowPass;
+layout(set = 0, binding = 8) uniform sampler2D ReflectPrepBlurredPass;
+layout(set = 0, binding = 9) uniform sampler2D ReflectPrepDiffusedPass;
+layout(set = 0, binding = 10) uniform sampler2D ReflectPrepFullscreenGlowPass;
 
-layout(set = 0, binding = 11) uniform sampler2D ReflectionPassFeedback;
-#define PassFeedback ReflectionPassFeedback
+layout(set = 0, binding = 11) uniform sampler2D ReflectPassFeedback;
+#define PassFeedback ReflectPassFeedback
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
@@ -138,7 +138,7 @@ void main()
 	// Get the CRT pass and make it in linear space & mask the area outside the screen
 	vec4 crt_linear = texture(TubeFxPass, UNFLIPPED_VIEWPORT_COORD.xy);
 
-	vec4 blurred_reflection_color = HHLP_GetBilinearTextureSample(BR_MirrorBlurredPass, UNFLIPPED_VIEWPORT_COORD.xy, params.BR_MirrorBlurredPassSize);
+	vec4 blurred_reflection_color = HHLP_GetBilinearTextureSample(ReflectPrepBlurredPass, UNFLIPPED_VIEWPORT_COORD.xy, params.ReflectPrepBlurredPassSize);
 
 	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 1, TUBE_DIFFUSE_SCALE, TUBE_SCALE, TUBE_DIFFUSE_ASPECT, 1);
 	vec2 tube_curved_coord_ctr = tube_curved_coord - 0.5;
@@ -327,18 +327,18 @@ void main()
 		float stoichaic_blur_max = HHLP_QuadraticBezier(outside_ratio_warped, vec2(0, noise_falloff)) * 3;
 		float stoichaic_blur_amount = HSM_REFLECT_NOISE_SAMPLE_DISTANCE;
 
-		// vec4 fullscreen_blurred_sampled_color = HSM_GetStoichaicBlurredSample(BR_MirrorFullscreenGlowPass, UNFLIPPED_VIEWPORT_COORD.xy, stoichaic_blur_samples, (1 - corner_mask) * stoichaic_blur_max * 3, stoichaic_blur_amount);
-		vec4 fullscreen_blurred_sampled_color = HHLP_GetBilinearTextureSample(BR_MirrorFullscreenGlowPass, UNFLIPPED_VIEWPORT_COORD.xy, params.BR_MirrorFullscreenGlowPassSize);
+		// vec4 fullscreen_blurred_sampled_color = HSM_GetStoichaicBlurredSample(ReflectPrepFullscreenGlowPass, UNFLIPPED_VIEWPORT_COORD.xy, stoichaic_blur_samples, (1 - corner_mask) * stoichaic_blur_max * 3, stoichaic_blur_amount);
+		vec4 fullscreen_blurred_sampled_color = HHLP_GetBilinearTextureSample(ReflectPrepFullscreenGlowPass, UNFLIPPED_VIEWPORT_COORD.xy, params.ReflectPrepFullscreenGlowPassSize);
 
 		vec4 corner_reflection_color = fullscreen_blurred_sampled_color;
 		
 		vec4 fullscreen_glow_color = pow(fullscreen_blurred_sampled_color, vec4(HSM_REFLECT_FULLSCREEN_GLOW_GAMMA));
 		
-		vec4 diffused_reflection_color = HHLP_GetBilinearTextureSample(BR_MirrorReflectionDiffusedPass, UNFLIPPED_VIEWPORT_COORD.xy, params.BR_MirrorReflectionDiffusedPassSize);
-		vec4 diffused_reflection_scatter_color = HSM_GetStoichaicBlurredSample(BR_MirrorReflectionDiffusedPass, UNFLIPPED_VIEWPORT_COORD.xy, stoichaic_blur_samples, stoichaic_blur_max, stoichaic_blur_amount);
+		vec4 diffused_reflection_color = HHLP_GetBilinearTextureSample(ReflectPrepDiffusedPass, UNFLIPPED_VIEWPORT_COORD.xy, params.ReflectPrepDiffusedPassSize);
+		vec4 diffused_reflection_scatter_color = HSM_GetStoichaicBlurredSample(ReflectPrepDiffusedPass, UNFLIPPED_VIEWPORT_COORD.xy, stoichaic_blur_samples, stoichaic_blur_max, stoichaic_blur_amount);
 		vec4 diffused_reflection_blended_color = mix(diffused_reflection_color, diffused_reflection_scatter_color, HSM_REFLECT_NOISE_AMOUNT);
 
-		vec4 blurred_reflection_scatter_color = HSM_GetStoichaicBlurredSample(BR_MirrorBlurredPass, UNFLIPPED_VIEWPORT_COORD.xy, stoichaic_blur_samples, stoichaic_blur_max, stoichaic_blur_amount);
+		vec4 blurred_reflection_scatter_color = HSM_GetStoichaicBlurredSample(ReflectPrepBlurredPass, UNFLIPPED_VIEWPORT_COORD.xy, stoichaic_blur_samples, stoichaic_blur_max, stoichaic_blur_amount);
 		vec4 blurred_reflection_blended_color = mix(blurred_reflection_color, blurred_reflection_scatter_color, HSM_REFLECT_NOISE_AMOUNT);
 
 		// Add Fullscreen Glow

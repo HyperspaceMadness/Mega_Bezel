@@ -151,7 +151,7 @@ scale_type18 = viewport
 scale_x18 = 1.0
 scale_y18 = 1.0
 float_framebuffer18 = true
-alias18 = "CRTPass"
+alias18 = "CrtPass"
 
 shader19 = ../../../shaders/base/tubefx-none-with-bg-delinearize.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time

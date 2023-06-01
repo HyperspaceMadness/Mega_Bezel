@@ -230,7 +230,7 @@ layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 1) uniform sampler2D CacheInfoPass;
 
 layout(set = 0, binding = 3) uniform sampler2D Source;
-layout(set = 0, binding = 4) uniform sampler2D PreCRTPass;
+layout(set = 0, binding = 4) uniform sampler2D PreCrtPass;
 layout(set = 0, binding = 5) uniform sampler2D AfterglowPass;
 // HSM Removed
 // layout(set = 0, binding = 3) uniform sampler2D SamplerLUT1;
@@ -742,7 +742,7 @@ void main()
 {
 
     // Guest.r Addition
-   vec4 imgColor = texture(PreCRTPass, vTexCoord.xy);
+   vec4 imgColor = texture(PreCrtPass, vTexCoord.xy);
    vec4 aftglow = texture(AfterglowPass, vTexCoord.xy);
    
    float w = 1.0-aftglow.w;

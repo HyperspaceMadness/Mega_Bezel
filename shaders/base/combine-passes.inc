@@ -76,17 +76,17 @@ layout(set = 0, binding = 3) uniform sampler2D FetchDrezPass;
 layout(set = 0, binding = 4) uniform sampler2D DeditherPass;
 layout(set = 0, binding = 5) uniform sampler2D ColorCorrectPass;
 layout(set = 0, binding = 6) uniform sampler2D LinearizePass;
-layout(set = 0, binding = 7) uniform sampler2D CRTPass;
+layout(set = 0, binding = 7) uniform sampler2D CrtPass;
 layout(set = 0, binding = 8) uniform sampler2D TubeFxPass;
 
 #ifdef IS_NO_REFLECT_PRESET
 #define MiddlePass TubeFxPass
 #else
-layout(set = 0, binding = 9) uniform sampler2D ReflectionPass;
-#define MiddlePass ReflectionPass
+layout(set = 0, binding = 9) uniform sampler2D ReflectPass;
+#define MiddlePass ReflectPass
 #endif
 
-layout(set = 0, binding = 10) uniform sampler2D ImageLayersPass;
+layout(set = 0, binding = 10) uniform sampler2D SceneLayersPass;
 
 layout(set = 0, binding = 11) uniform sampler2D CombinePassFeedback;
 #define PassFeedback CombinePassFeedback
@@ -147,7 +147,7 @@ void main()
 		// REFLECTION
 		if (HSM_SHOW_PASS_INDEX == 1)
 		{
-			FragColor = texture(ReflectionPass, vTexCoord);
+			FragColor = texture(ReflectPass, vTexCoord);
 			pass_needs_delinearize = HSM_NON_USER_DELINEARIZE_REFLECT_PASS < 0.5;
 		}
 		#endif
@@ -158,7 +158,7 @@ void main()
 
 		// CRT
 		if (HSM_SHOW_PASS_INDEX == 3)
-			FragColor = texture(CRTPass, vTexCoord);
+			FragColor = texture(CrtPass, vTexCoord);
 
 		// INTERLACE & LINEARIZE
 		if (HSM_SHOW_PASS_INDEX == 4)
@@ -196,15 +196,15 @@ void main()
 
 		// LAYERS TOP
 		if (HSM_SHOW_PASS_INDEX == 9)
-			FragColor = HSM_GetPrecompRGBA(ImageLayersPass, vTexCoord, PRECOMP_INDEX_FOREGROUND);
+			FragColor = HSM_GetPrecompRGBA(SceneLayersPass, vTexCoord, PRECOMP_INDEX_FOREGROUND);
 
 		// LAYERS BOTTOM
 		if (HSM_SHOW_PASS_INDEX == 10)
-			FragColor = HSM_GetPrecompRGBA(ImageLayersPass, vTexCoord, PRECOMP_INDEX_BACKGROUND);
+			FragColor = HSM_GetPrecompRGBA(SceneLayersPass, vTexCoord, PRECOMP_INDEX_BACKGROUND);
 
 		// LAYERS ATLAS
 		if (HSM_SHOW_PASS_INDEX == 11)
-			FragColor = texture(ImageLayersPass, vTexCoord);
+			FragColor = texture(SceneLayersPass, vTexCoord);
 
 		// Linearize passes which are not already in linear space
 		if (pass_needs_delinearize)
@@ -237,7 +237,7 @@ void main()
 						FRAME_OUTSIDE_CURVED_COORD);
 
 	
-	vec4 image_layers_packed = texture(ImageLayersPass, vTexCoord);
+	vec4 image_layers_packed = texture(SceneLayersPass, vTexCoord);
 
 	vec4 precomp_background = vec4(0);
 	vec4 precomp_middleground = vec4(0);

@@ -104,7 +104,7 @@ scale_type13 = viewport
 scale_x13 = 1.0
 scale_y13 = 1.0
 float_framebuffer13 = true
-alias13 = "CRTPass"
+alias13 = "CrtPass"
 
 shader14 = ../../../shaders/base/tubefx-none-with-bg-delinearize.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time

@@ -67,7 +67,7 @@ scale_x9 = 1.0
 scale_y9 = 1.0
 filter_linear9 = true
 float_framebuffer9 = "true"
-alias9 = "CRTPass"
+alias9 = "CrtPass"
 
 
 # -----------------------------------------------------------------------------------------------

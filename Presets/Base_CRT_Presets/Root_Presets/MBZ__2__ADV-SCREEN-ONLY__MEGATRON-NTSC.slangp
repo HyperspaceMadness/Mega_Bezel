@@ -81,7 +81,7 @@ scale_type15 = source
 scale15 = 1.0
 
 shader16 = ../../../shaders/base/stock.slang
-alias16 = "PreCRTPass"
+alias16 = "PreCrtPass"
 
 shader17 = ../../../shaders/guest/hsm-afterglow0.slang
 filter_linear17 = true
@@ -196,7 +196,7 @@ wrap_mode30 = "clamp_to_border"
 mipmap_input30 = "false"
 scale_type30 = "viewport"
 float_framebuffer30 = "true"
-alias30 = "CRTPass"
+alias30 = "CrtPass"
 
 
 # -----------------------------------------------------------------------------------------------

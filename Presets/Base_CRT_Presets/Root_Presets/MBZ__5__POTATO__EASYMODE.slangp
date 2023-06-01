@@ -73,7 +73,7 @@ shader11 = ../../../shaders/easymode/hsm-crt-easymode-halation.slang
 filter_linear11 = true
 scale_type11 = viewport
 float_framebuffer11 = true
-alias11 = "CRTPass"
+alias11 = "CrtPass"
 
 
 # -----------------------------------------------------------------------------------------------

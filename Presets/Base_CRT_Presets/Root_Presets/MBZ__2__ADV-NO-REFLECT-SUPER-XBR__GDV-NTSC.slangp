@@ -179,7 +179,7 @@ scale_type21 = source
 scale21 = 1.0
 
 shader22 = ../../../shaders/base/stock.slang
-alias22 = "PreCRTPass"
+alias22 = "PreCrtPass"
 
 shader23 = ../../../shaders/guest/hsm-afterglow0.slang
 filter_linear23 = true
@@ -324,7 +324,7 @@ scale_type40 = viewport
 scale_x40 = 1.0
 scale_y40 = 1.0
 float_framebuffer40 = true
-alias40 = "CRTPass"
+alias40 = "CrtPass"
 
 shader41 = ../../../shaders/base/tubefx-default.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
@@ -340,7 +340,7 @@ shader42 = ../../../shaders/base/bezel-images-under-crt.slang
 filter_linear42 = false
 scale_type42 = viewport
 scale42 = 1.0
-alias42 = "ImageLayersPass"
+alias42 = "SceneLayersPass"
 
 # Combine Passes ----------------------------------------------------------------
 shader43 = ../../../shaders/base/combine-passes-no-reflect.slang

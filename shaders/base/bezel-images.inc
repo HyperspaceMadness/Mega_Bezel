@@ -432,8 +432,8 @@ layout(set = 0, binding = 11) uniform sampler2D DecalImage;
 layout(set = 0, binding = 12) uniform sampler2D CabinetGlassImage;
 layout(set = 0, binding = 13) uniform sampler2D TopLayerImage;
 layout(set = 0, binding = 14) uniform sampler2D ReflectionMaskImage;
-layout(set = 0, binding = 15) uniform sampler2D ImageLayersPassFeedback;
-#define PassFeedback ImageLayersPassFeedback
+layout(set = 0, binding = 15) uniform sampler2D SceneLayersPassFeedback;
+#define PassFeedback SceneLayersPassFeedback
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
