@@ -286,7 +286,7 @@ shader35 = ../../../shaders/base/bezel-images-under-crt.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
 filter_linear35 = false
 scale_type35 = viewport
-scale35 = 2.0
+scale35 = 1.0
 alias35 = "ImageLayersPass"
 
 # Combine Passes ----------------------------------------------------------------

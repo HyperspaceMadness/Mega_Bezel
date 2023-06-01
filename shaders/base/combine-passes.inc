@@ -98,7 +98,7 @@ vec3 PrepGraphicsForHDR(vec3 in_color)
 	
 	out_color *= HSM_GLOBAL_GRAPHICS_BRIGHTNESS;
 	
-#ifdef IS_HDR_PRESET
+	#ifdef IS_HDR_PRESET
    if((HCRT_HDR < 1.0f) && (HCRT_COLOUR_ACCURATE < 1.0f))
       if(HCRT_OUTPUT_COLOUR_SPACE == 2.0f)
          out_color= (out_color * k709_to_XYZ) * kXYZ_to_DCIP3; 
@@ -108,10 +108,26 @@ vec3 PrepGraphicsForHDR(vec3 in_color)
 
 	if((HCRT_HDR >= 1.0f) && (HCRT_COLOUR_ACCURATE < 1.0f))
 		out_color  *= k2020Gamuts[uint(HCRT_EXPAND_GAMUT)] * (HCRT_PAPER_WHITE_NITS / kMaxNitsFor2084);
-#endif
+	#endif
 
 	return out_color;
 }
+
+// void _HSM_Unpack_1_RGBA_To_4_RGBA(vec4 packed_rgba, 
+// 								inout vec4 rgba_1, 
+// 								inout vec4 rgba_2, 
+// 								inout vec4 rgba_3, 
+// 								inout vec4 rgba_4)
+// {
+// 	// uint in_uint = floatBitsToUint(packed_rgba.r);
+//    	// vec4 tColor = unpackUnorm4x8(in_uint);
+
+// 	// rgba_1 = tColor;
+// 	rgba_1 = unpackUnorm4x8(floatBitsToUint(packed_rgba.r));
+// 	rgba_2 = unpackUnorm4x8(floatBitsToUint(packed_rgba.g));
+// 	rgba_3 = unpackUnorm4x8(floatBitsToUint(packed_rgba.b));
+// 	rgba_4 = unpackUnorm4x8(floatBitsToUint(packed_rgba.a));
+// }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
@@ -126,15 +142,15 @@ void main()
 		bool pass_needs_delinearize = true;
 		vec2 coord_for_raw_passes = HSM_SHOW_PASS_APPLY_SCREEN_COORD > 0.5 ? HSM_GetCRTShaderCurvedCoord(SCREEN_COORD) : vTexCoord;
 
-// TODO Can we make this simpler without the #ifdef?
-#ifndef IS_NO_REFLECT_PRESET
+		// TODO Can we make this simpler without the #ifdef?
+		#ifndef IS_NO_REFLECT_PRESET
 		// REFLECTION
 		if (HSM_SHOW_PASS_INDEX == 1)
 		{
 			FragColor = texture(ReflectionPass, vTexCoord);
 			pass_needs_delinearize = HSM_NON_USER_DELINEARIZE_REFLECT_PASS < 0.5;
 		}
-#endif
+		#endif
 
 		// TUBE
 		if (HSM_SHOW_PASS_INDEX == 2)
@@ -180,11 +196,11 @@ void main()
 
 		// LAYERS TOP
 		if (HSM_SHOW_PASS_INDEX == 9)
-			FragColor = HSM_GetPrecompRGBA(ImageLayersPass, vTexCoord, PRECOMP_INDEX_UPPER);
+			FragColor = HSM_GetPrecompRGBA(ImageLayersPass, vTexCoord, PRECOMP_INDEX_FOREGROUND);
 
 		// LAYERS BOTTOM
 		if (HSM_SHOW_PASS_INDEX == 10)
-			FragColor = HSM_GetPrecompRGBA(ImageLayersPass, vTexCoord, PRECOMP_INDEX_BOTTOM);
+			FragColor = HSM_GetPrecompRGBA(ImageLayersPass, vTexCoord, PRECOMP_INDEX_BACKGROUND);
 
 		// LAYERS ATLAS
 		if (HSM_SHOW_PASS_INDEX == 11)
@@ -220,10 +236,40 @@ void main()
 						BEZEL_OUTSIDE_CURVED_COORD, 
 						FRAME_OUTSIDE_CURVED_COORD);
 
-	vec4 under_layer = HSM_GetPrecompRGBA(ImageLayersPass, vTexCoord, PRECOMP_INDEX_BOTTOM);
-	under_layer.rgb = PrepGraphicsForHDR(under_layer.rgb);
 	
-	vec4 out_color = under_layer;
+	vec4 image_layers_packed = texture(ImageLayersPass, vTexCoord);
+
+	vec4 precomp_background = vec4(0);
+	vec4 precomp_middleground = vec4(0);
+	vec4 precomp_foreground = vec4(0);
+	vec4 precomp_additive = vec4(0);
+
+	HSM_Unpack_1_Rgba_To_4_Rgba(image_layers_packed, 
+						precomp_foreground, 
+						precomp_middleground, 
+						precomp_background, 
+						precomp_additive);
+
+	precomp_foreground = HSM_Linearize(precomp_foreground, DEFAULT_SRGB_GAMMA);
+	precomp_middleground = HSM_Linearize(precomp_middleground, DEFAULT_SRGB_GAMMA);
+	precomp_background = HSM_Linearize(precomp_background, DEFAULT_SRGB_GAMMA);
+	precomp_additive = HSM_Linearize(precomp_additive, DEFAULT_SRGB_GAMMA);
+
+	// // Test - Show pass output in screen quadrants
+	// vec2 tex_coord_ctr = vTexCoord - 0.5;
+	// if (tex_coord_ctr.x > 0 && tex_coord_ctr.y > 0)
+	// 	FragColor = pow(precomp_background, vec4(1/2.2));
+	// if (tex_coord_ctr.x > 0 && tex_coord_ctr.y < 0)
+	// 	FragColor = pow(precomp_middleground, vec4(1/2.2));
+	// if (tex_coord_ctr.x < 0 && tex_coord_ctr.y < 0)
+	// 	FragColor = pow(precomp_foreground, vec4(1/2.2));
+	// if (tex_coord_ctr.x < 0 && tex_coord_ctr.y > 0)
+	// 	FragColor = pow(precomp_additive, vec4(1/2.2));
+	// return;
+
+	float reflection_mask = precomp_background.a;
+	precomp_background.rgb = PrepGraphicsForHDR(precomp_background.rgb);
+	vec4 out_color = precomp_background;
 
 	vec4 crt_layer = texture(MiddlePass, vTexCoord);
 
@@ -234,32 +280,27 @@ void main()
 	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
 		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
 
-// TODO, need to see how to manage with parameters
-#ifndef IS_NO_REFLECT_PRESET
+	// TODO, need to see how to manage with parameters
+	#ifndef IS_NO_REFLECT_PRESET
 	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 1, TUBE_DIFFUSE_SCALE, TUBE_SCALE, TUBE_DIFFUSE_ASPECT, 1);
 
 	TUBE_MASK =  HSM_GetCornerMask(tube_curved_coord, TUBE_DIFFUSE_ASPECT, bezel_corner_radius, 0.99);
 	// Apply Reflection Image Mask
-	crt_layer *= TUBE_MASK + (1 - TUBE_MASK) * under_layer.a;
-#endif
+	crt_layer *= TUBE_MASK + (1 - TUBE_MASK) * reflection_mask;
+	#endif
 
-	vec4 middle_layer = HSM_GetPrecompRGBA(ImageLayersPass, vTexCoord, PRECOMP_INDEX_MIDDLE);
-	middle_layer.rgb = PrepGraphicsForHDR(middle_layer.rgb);
-	out_color = HSM_PreMultAlphaBlend(out_color, middle_layer);
+	precomp_middleground.rgb = PrepGraphicsForHDR(precomp_middleground.rgb);
+	out_color = HSM_PreMultAlphaBlend(out_color, precomp_middleground);
 
 	if (HSM_RENDER_SIMPLE_MODE < 0.5)
 		out_color = HSM_PreMultAlphaBlend(out_color, crt_layer);
 
-	vec4 over_layer = HSM_GetPrecompRGBA(ImageLayersPass, vTexCoord, PRECOMP_INDEX_UPPER);
-	over_layer.rgb = PrepGraphicsForHDR(over_layer.rgb);
+	precomp_foreground.rgb = PrepGraphicsForHDR(precomp_foreground.rgb);
 
-	vec4 additive_layer = HSM_GetPrecompRGBA(ImageLayersPass, vTexCoord, PRECOMP_INDEX_ADDITIVE) * (1 - crt_layer.a);
-	additive_layer.rgb = PrepGraphicsForHDR(additive_layer.rgb);
-	out_color = HSM_PreMultAlphaBlend(out_color, additive_layer * vec4(1, 1, 1, 0));
+	precomp_additive.rgb = PrepGraphicsForHDR(precomp_additive.rgb);
+	out_color = HSM_PreMultAlphaBlend(out_color, precomp_additive * vec4(1, 1, 1, 0));
 
-	//TODO Need to block out area of tube
-
-	out_color = HSM_PreMultAlphaBlend(out_color, over_layer);
+	out_color = HSM_PreMultAlphaBlend(out_color, precomp_foreground);
 	FragColor = out_color;
 
 	if (HSM_RENDER_SIMPLE_MODE > 0.5)

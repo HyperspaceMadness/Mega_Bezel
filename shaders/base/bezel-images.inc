@@ -22,8 +22,7 @@
     along with this program.  If not, see [http://www.gnu.org/licenses/].
 */
 
-#pragma format R16G16B16A16_SFLOAT
-// #pragma format R32G32B32A32_SFLOAT
+#pragma format R32G32B32A32_SFLOAT
 
 /////////////// DEFINES ///////////////
 
@@ -231,7 +230,7 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 	}
 	else if (layer_to_follow == FOLLOW_LAYER_TUBE_DIFFUSE)
 	{
-/*
+	/*
 		if (is_rotated)
 		{
 			inherited_coord = TUBE_DIFFUSE_COORD;
@@ -245,7 +244,7 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 		}
 		else
 		{
-*/
+	*/
 			inherited_coord = TUBE_DIFFUSE_COORD;
 			inherited_placement_coord = TUBE_DIFFUSE_COORD;
 			inherited_final_coord = TUBE_DIFFUSE_CURVED_COORD;
@@ -259,7 +258,7 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 	}
 	else if (layer_to_follow == FOLLOW_LAYER_BEZEL_OUTSIDE)
 	{
-/*
+	/*
 		if (is_rotated)
 		{
 			inherited_coord = BEZEL_OUTSIDE_COORD;
@@ -273,7 +272,7 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 		}
 		else
 		{
-*/
+	*/
 			inherited_coord = BEZEL_OUTSIDE_COORD;
 			inherited_placement_coord = BEZEL_OUTSIDE_COORD;
 
@@ -382,10 +381,10 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 	// We only need to apply an offset from this
 	out_coord = HSM_AddPosScaleToCoord(inherited_coord, offset_pos, drawing_scale / inherited_scale);
 
-/*
+	/*
 	if (is_rotated)
 		out_coord = HSM_RotateCoordinate(out_coord, image_rotation);
-*/
+	*/
 
 	return out_coord;
 }
@@ -450,10 +449,11 @@ void main()
 
 	// The pass output is split into multiple regions, each holding a separate image or precomp
 	// The current coordinate defines which precomp we are generating
-	float precomp_index = HSM_GetPrecompIndexFromCoord(vTexCoord);
+	// float precomp_index = HSM_GetPrecompIndexFromCoord(vTexCoord);
 
 	// We rescale the coordinates to match the current precomp we are processing
-	vec2 vTexCoord_precomp = HHLP_ConvertCoordInRangeToZeroToOne(vTexCoord, HSM_GetImagePrecompRange(precomp_index));
+	// vec2 vTexCoord_precomp = HHLP_ConvertCoordInRangeToZeroToOne(vTexCoord, HSM_GetImagePrecompRange(precomp_index));
+	vec2 vTexCoord_precomp = vTexCoord;
 
 	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord_precomp);
 	VIEWPORT_UNSCALED_COORD = HSM_GetViewportCoordWithFlip(vTexCoord_precomp);
@@ -471,6 +471,7 @@ void main()
 	HSM_Fill_Ambient_Images(VIEWPORT_COORD, VIEWPORT_UNSCALED_COORD, TUBE_DIFFUSE_COORD, TUBE_DIFFUSE_SCALE, HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE, NightLightingImage, NightLighting2Image, ambient_image, ambient2_image);
 
 	TUBE_DIFFUSE_CURVED_COORD = HSM_GetCurvedCoord(SCREEN_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, TUBE_DIFFUSE_ASPECT);
+
 
 	// TODO this should probably just use TUBE_COORD
 	// TODO should probably use TUBE_ASPECT
@@ -537,7 +538,7 @@ void main()
 	BEZEL_MASK = INSIDE_BEZEL_MASK * (1 - TUBE_MASK);
 	FRAME_MASK = OUTSIDE_BEZEL_MASK * (1 - OUTSIDE_FRAME_MASK);
 
-// #ifdef LAYERS_UNDER_CRT
+	// #ifdef LAYERS_UNDER_CRT
 	//----------------------------------------------------
 	//  Calculate Corner Highlight Mask
 	//----------------------------------------------------
@@ -1183,19 +1184,27 @@ void main()
 	// Make sure the base layer is at least 1 less than the middle group first layer, and is not below 0
 	float base_layer_group_first_layer = min(0, middle_layer_group_first_layer - 1);
 
-	if (precomp_index == PRECOMP_INDEX_BOTTOM)
+	vec4 precomp_background = vec4(0);
+	vec4 precomp_middleground = vec4(0);
+	vec4 precomp_foreground = vec4(0);
+	vec4 precomp_additive = vec4(0);
+
+for (int precomp_index = 0; precomp_index < 4; precomp_index++)
+{
+	vec4 precomp_color = vec4(0);
+	if (precomp_index == PRECOMP_INDEX_BACKGROUND)
 	{
 		start_layer = int(base_layer_group_first_layer);
 		end_layer = int(middle_layer_group_first_layer - 1);
 	}
 
-	if (precomp_index == PRECOMP_INDEX_MIDDLE)
+	if (precomp_index == PRECOMP_INDEX_MIDDLEGROUND)
 	{
 		start_layer = int(middle_layer_group_first_layer);
 		end_layer = int(HSM_CRT_LAYER_ORDER);
 	}
 
-	if (precomp_index == PRECOMP_INDEX_UPPER)
+	if (precomp_index == PRECOMP_INDEX_FOREGROUND)
 	{
 		start_layer = int(HSM_CRT_LAYER_ORDER + 1);
 		end_layer = int(MAX_LAYER_ORDER);
@@ -1212,7 +1221,7 @@ void main()
 		// BACKGROUND
 		if (HSM_BG_LAYER_ORDER == i)
 		{
-			frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+			precomp_color = BlendModeMaskLayerMix(precomp_color, 
 													bg_image, 
 													HSM_BG_BLEND_MODE, 
 													matte_pass,
@@ -1226,7 +1235,7 @@ void main()
 		// VIGNETTE
 		if (HSM_VIEWPORT_VIGNETTE_LAYER_ORDER == i)
 		{
-			frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+			precomp_color = BlendModeMaskLayerMix(precomp_color, 
 													vignette_layer, 
 													BLEND_MODE_NORMAL, 
 													matte_pass,
@@ -1240,7 +1249,7 @@ void main()
 		// LED IMAGE
 		if (HSM_LED_LAYER_ORDER == i && HSM_LED_OPACITY > 0)
 		{		
-			frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+			precomp_color = BlendModeMaskLayerMix(precomp_color, 
 													led_image, 
 													HSM_LED_BLEND_MODE, 
 													matte_pass,
@@ -1254,7 +1263,7 @@ void main()
 		// DEVICE IMAGE
 		if (HSM_DEVICE_LAYER_ORDER == i && HSM_DEVICE_OPACITY > 0)
 		{
-			frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+			precomp_color = BlendModeMaskLayerMix(precomp_color, 
 													device_image, 
 													HSM_DEVICE_BLEND_MODE, 
 													matte_pass,
@@ -1268,7 +1277,7 @@ void main()
 		// DEVICELED IMAGE
 		if (HSM_DEVICELED_LAYER_ORDER == i && HSM_DEVICELED_OPACITY > 0)
 		{
-			frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+			precomp_color = BlendModeMaskLayerMix(precomp_color, 
 													deviceled_image, 
 													HSM_DEVICELED_BLEND_MODE, 
 													matte_pass,
@@ -1282,11 +1291,11 @@ void main()
 		if (bezel_layer_order == i)
 		{
 			// Add background behind tube
-			frag_color_linear = HSM_PreMultAlphaBlend(frag_color_linear, tube_bg_layer);
+			precomp_color = HSM_PreMultAlphaBlend(precomp_color, tube_bg_layer);
 
 			// GENERATED BEZEL LAYER
 			if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
-				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+				precomp_color = BlendModeMaskLayerMix(precomp_color, 
 														bezel_layer, 
 														HSM_BZL_BLEND_MODE, 
 														matte_pass,
@@ -1300,7 +1309,7 @@ void main()
 		// DECAL IMAGE
 		if (HSM_DECAL_LAYER_ORDER == i && HSM_DECAL_OPACITY > 0)
 		{
-			frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+			precomp_color = BlendModeMaskLayerMix(precomp_color, 
 													decal_image, 
 													HSM_DECAL_BLEND_MODE, 
 													matte_pass,
@@ -1314,7 +1323,7 @@ void main()
 		// CABINET GLASS
 		if (HSM_CAB_GLASS_LAYER_ORDER == i && HSM_CAB_GLASS_OPACITY > 0)
 		{
-				frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+				precomp_color = BlendModeMaskLayerMix(precomp_color, 
 														cab_glass_image, 
 														HSM_CAB_GLASS_BLEND_MODE, 
 														matte_pass,
@@ -1328,7 +1337,7 @@ void main()
 		// Top Layer
 		if (HSM_TOP_LAYER_ORDER == i && HSM_TOP_OPACITY > 0)
 		{
-			frag_color_linear = BlendModeMaskLayerMix(frag_color_linear, 
+			precomp_color = BlendModeMaskLayerMix(precomp_color, 
 													top_image, 
 													HSM_TOP_BLEND_MODE, 
 													matte_pass,
@@ -1340,7 +1349,7 @@ void main()
 		}
 	}
 
-	if (precomp_index == PRECOMP_INDEX_BOTTOM)
+	if (precomp_index == PRECOMP_INDEX_BACKGROUND)
 	{
 		// Store reflection mask in the alpha channel
 		// Usually used to show the uneven brightness of a bumpy surface
@@ -1352,11 +1361,24 @@ void main()
 			reflect_mask = clamp(HSM_REFLECT_MASK_BLACK_LEVEL * (reflect_mask - 1) + 1, 0, 1);
 			reflect_mask *= HSM_REFLECT_MASK_BRIGHTNESS;
 
-			frag_color_linear.a = HSM_REFLECT_MASK_IMAGE_AMOUNT * reflect_mask + (1 - HSM_REFLECT_MASK_IMAGE_AMOUNT);
+			precomp_color.a = HSM_REFLECT_MASK_IMAGE_AMOUNT * reflect_mask + (1 - HSM_REFLECT_MASK_IMAGE_AMOUNT);
 		}
 		else
-			frag_color_linear.a = 1;
+			precomp_color.a = 1;
 	}
+
+	if (precomp_index == PRECOMP_INDEX_BACKGROUND)
+		precomp_background = precomp_color;
+
+	if (precomp_index == PRECOMP_INDEX_MIDDLEGROUND)
+		precomp_middleground = precomp_color;
+
+	if (precomp_index == PRECOMP_INDEX_FOREGROUND)
+		precomp_foreground = precomp_color;
+
+	if (precomp_index == PRECOMP_INDEX_ADDITIVE)
+		precomp_additive = precomp_color;
+}
 
 	//-----------------------------------------------------------------------------------------
 	// MASK DEBUG DISPLAY
@@ -1370,14 +1392,12 @@ void main()
 		else
 			debug_mask = GetMask(HSM_LAYERING_DEBUG_MASK_MODE);
 
-		frag_color_linear = HSM_PreMultAlphaBlend(frag_color_linear, vec4(1, 0, 0, 1) * 0.15 * debug_mask);
-		frag_color_linear = HSM_PreMultAlphaBlend(frag_color_linear, vec4(0.05, 0.05, 0.05, 1) * 0.15 * (1 - debug_mask));
-		frag_color_linear = clamp(frag_color_linear, 0, 1);
+		precomp_foreground = HSM_PreMultAlphaBlend(precomp_foreground, vec4(1, 0, 0, 1) * 0.15 * debug_mask);
+		precomp_foreground = HSM_PreMultAlphaBlend(precomp_foreground, vec4(0.05, 0.05, 0.05, 1) * 0.15 * (1 - debug_mask));
+		precomp_foreground = clamp(precomp_foreground, 0, 1);
 	}
 
-	FragColor = frag_color_linear;
-
-#ifdef ENABLE_CACHE_FALLBACK_CHECK
+	#ifdef ENABLE_CACHE_FALLBACK_CHECK
 	vec2 viewport_coord_adjusted = vTexCoord_precomp;
 	bool cache_info_changed = CACHE_INFO_CHANGED;
 	bool show_update_indicator = cache_info_changed && ( HSM_CACHE_UPDATE_INDICATOR_MODE == 1 || HSM_CACHE_GRAPHICS_ON < 0.5 && HSM_CACHE_UPDATE_INDICATOR_MODE == 2);
@@ -1395,15 +1415,44 @@ void main()
 		{
 			float modulation = clamp(0.4 + abs(mod(global.FrameCount, 90) / 90 - 0.5) * 1.2, 0, 1);
 			modulation = HHLP_EasePowerInOut(modulation, 2);
-			FragColor *= 1 - modulation;
-			FragColor += modulation * vec4(1, 0, 0, 1);
+			precomp_foreground *= 1 - modulation;
+			precomp_foreground += modulation * vec4(1, 0, 0, 1);
 		}
 	}
-#endif
+	#endif
+
+	// Need to encode final gamma in source pass since only 8bit
+	precomp_foreground = HSM_Delinearize(precomp_foreground, DEFAULT_SRGB_GAMMA);
+	precomp_middleground = HSM_Delinearize(precomp_middleground, DEFAULT_SRGB_GAMMA);
+	precomp_background = HSM_Delinearize(precomp_background, DEFAULT_SRGB_GAMMA);
+	precomp_additive = HSM_Delinearize(precomp_additive, DEFAULT_SRGB_GAMMA);
+
+	FragColor = HSM_Pack_4_Rgba_To_1_Rgba(precomp_foreground, 
+											precomp_middleground,
+											precomp_background,
+											precomp_additive);
 
 	// If we have calculated an image then set -1 as a flag to show that we have
-	if (vTexCoord.x < (2 / global.OutputSize.x) && vTexCoord.y < (2 / global.OutputSize.y))
-		FragColor.a = -1;
+	// if (vTexCoord.x < (2 / global.OutputSize.x) && vTexCoord.y < (2 / global.OutputSize.y))
+	// 	FragColor.a = -1;
+
+	// uint outPacked = packUnorm4x8(current);
+	// float out_float = uintBitsToFloat(outPacked);
+	// FragColor = vec4(out_float, 0, 0, 0);
+	// FragColor = vec4(
+	// 				uintBitsToFloat(packUnorm4x8(HSM_Delinearize((clamp(precomp_foreground, 0, 1) * 255)/256, DEFAULT_SRGB_GAMMA))), 
+	// 				uintBitsToFloat(packUnorm4x8(HSM_Delinearize((clamp(precomp_middleground, 0, 1) * 255)/256, DEFAULT_SRGB_GAMMA))), 
+	// 				uintBitsToFloat(packUnorm4x8(HSM_Delinearize((clamp(precomp_background, 0, 1) * 255)/256, DEFAULT_SRGB_GAMMA))), 
+	// 				uintBitsToFloat(packUnorm4x8(HSM_Delinearize((clamp(precomp_additive, 0, 1) * 255)/256, DEFAULT_SRGB_GAMMA)))
+	// 				);
+
+	// FragColor = vec4(
+	// 					HSM_Pack_Rgba_To_Float(precomp_foreground, true),
+	// 					HSM_Pack_Rgba_To_Float(precomp_middleground, true),
+	// 					HSM_Pack_Rgba_To_Float(precomp_background, true),
+	// 					HSM_Pack_Rgba_To_Float(precomp_additive, true)
+	// 				);
+
 
 	return;
 }

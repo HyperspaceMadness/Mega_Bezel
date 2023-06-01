@@ -134,7 +134,7 @@ shader17 = ../../../shaders/base/bezel-images-under-crt.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
 filter_linear17 = false
 scale_type17 = viewport
-scale17 = 2.0
+scale17 = 1.0
 alias17 = "ImageLayersPass"
 
 # Reduce Resolution  ----------------------------------------------------------------

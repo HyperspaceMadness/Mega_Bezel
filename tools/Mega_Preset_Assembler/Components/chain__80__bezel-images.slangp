@@ -6,5 +6,5 @@ shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/bezel-images-und
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
 filter_linear0 = false
 scale_type0 = viewport
-scale0 = 2.0
+scale0 = 1.0
 alias0 = "ImageLayersPass"

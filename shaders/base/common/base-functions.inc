@@ -23,9 +23,9 @@
 */
 
 
-#define PRECOMP_INDEX_BOTTOM 0
-#define PRECOMP_INDEX_MIDDLE 1
-#define PRECOMP_INDEX_UPPER 2
+#define PRECOMP_INDEX_BACKGROUND 0
+#define PRECOMP_INDEX_MIDDLEGROUND 1
+#define PRECOMP_INDEX_FOREGROUND 2
 #define PRECOMP_INDEX_ADDITIVE 3
 
 #define PRECOMP_INDEX_TUBE 0
@@ -37,14 +37,16 @@
 
 vec4 HSM_GetImagePrecompRange(float in_precomp_index)
 {
+	return vec4(0, 0, 1, 1);
+
 	vec4 out_range = vec4(0.25, 0.25, 0.5, 0.5);
-	if (in_precomp_index == PRECOMP_INDEX_BOTTOM)
+	if (in_precomp_index == PRECOMP_INDEX_BACKGROUND)
 		out_range = vec4(0, 0, 0.5, 0.5);
 
-	if (in_precomp_index == PRECOMP_INDEX_MIDDLE)
+	if (in_precomp_index == PRECOMP_INDEX_MIDDLEGROUND)
 		out_range = vec4(0.5, 0, 1, 0.5);
 
-	if (in_precomp_index == PRECOMP_INDEX_UPPER)
+	if (in_precomp_index == PRECOMP_INDEX_FOREGROUND)
 		out_range = vec4(0, 0.5, 0.5, 1);
 
 	if (in_precomp_index == PRECOMP_INDEX_ADDITIVE)
@@ -74,6 +76,43 @@ vec4 HSM_GetTubeFxPrecompRange(float in_precomp_index)
 	return out_range;
 }
 
+float HSM_Pack_Rgba_To_Float(vec4 in_rgba)
+{
+	vec4 out_rgba = in_rgba;
+	out_rgba = clamp(in_rgba, 0, 1);
+	out_rgba = out_rgba * 255 / 256;
+	return uintBitsToFloat(packUnorm4x8(out_rgba));
+}
+
+vec4 HSM_Unpack_Float_To_Rgba(float in_packed)
+{
+	return unpackUnorm4x8(floatBitsToUint(in_packed));
+}
+
+vec4 HSM_Pack_4_Rgba_To_1_Rgba(	vec4 rgba_1, 
+								vec4 rgba_2, 
+								vec4 rgba_3, 
+								vec4 rgba_4)
+{
+	vec4 out_color = vec4(HSM_Pack_Rgba_To_Float(rgba_1),
+							HSM_Pack_Rgba_To_Float(rgba_2),
+							HSM_Pack_Rgba_To_Float(rgba_3),
+							HSM_Pack_Rgba_To_Float(rgba_4));
+	return out_color;
+}
+
+void HSM_Unpack_1_Rgba_To_4_Rgba(vec4 packed_rgba, 
+								inout vec4 rgba_1, 
+								inout vec4 rgba_2, 
+								inout vec4 rgba_3, 
+								inout vec4 rgba_4)
+{
+	rgba_1 = HSM_Unpack_Float_To_Rgba(packed_rgba.r);
+	rgba_2 = HSM_Unpack_Float_To_Rgba(packed_rgba.g);
+	rgba_3 = HSM_Unpack_Float_To_Rgba(packed_rgba.b);
+	rgba_4 = HSM_Unpack_Float_To_Rgba(packed_rgba.a);
+}
+
 vec4 HSM_GetPrecompRGBA(sampler2D in_sampler_2D, vec2 in_coord, float in_precomp_index)
 {
 	vec4 precomp_range = HSM_GetImagePrecompRange(in_precomp_index);
@@ -83,6 +122,7 @@ vec4 HSM_GetPrecompRGBA(sampler2D in_sampler_2D, vec2 in_coord, float in_precomp
 
 float HSM_GetPrecompIndexFromCoord(vec2 in_coord)
 {
+	return 0;
 	float out_index = -1;
 
 	for (float i = 0; i < 4; i++)

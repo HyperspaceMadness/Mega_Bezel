@@ -141,7 +141,7 @@ shader19 = ../../../shaders/base/bezel-images-under-crt.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
 filter_linear19 = false
 scale_type19 = viewport
-scale19 = 2.0
+scale19 = 1.0
 alias19 = "ImageLayersPass"
 
 # Combine Passes ----------------------------------------------------------------
