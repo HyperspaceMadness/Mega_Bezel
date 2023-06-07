@@ -69,22 +69,29 @@ This shader package is meant for you to experiment with and make your own creati
 
 ***
 **RETROARCH SETUP**
-  * Set video driver to **Vulkan** or GLCore if Vulkan is not available
-  * It will run in **GLCore** but seems faster in **Vulkan**
-  * **D3D IS NOT RECOMMENDED**. If it loads in D3D it has a VERY slow load time
-  * Restart Retroarch after changing the video driver
-* Open the **Settings** Menu and Set:
-  * **User Interface / Show Advanced Settings** to **ON**
-  * **Video / Scaling / Aspect Ratio** to **Full**
-    * This will match your monitor aspect aspect ratio
-  * **Video / Scaling / Integer Scale** to **OFF**
-  * **Video / Output / Video Rotation** to **Normal**
-  * **Core / Allow Rotation** to **OFF** -- **Important for FB Neo**
-  * For **FB Neo**
-    * Turn **vertical mode OFF** in **Quick Menu > Core Options** if it was previously turned on
-  * **Do all of this before loading content**
-* For **FB Neo**
-  * **If your game is vertical** set the Rotate CRT Tube parameter to 1. If it is now upside down set Flip Core Image Vertical and Horizontal to 1 
+* **Do all of the following before loading content**
+  * **Set the Video Driver**
+    * Set video driver to **Vulkan** or GLCore if Vulkan is not available
+    * It will run in **GLCore** but seems faster in **Vulkan**
+    * **D3D IS NOT RECOMMENDED**. If it loads in D3D it has a VERY slow load time
+    * Restart Retroarch after changing the video driver
+  * **Video Scaling** 
+    * Open the **Settings** Menu and Set:
+      * **User Interface / Show Advanced Settings** to **ON**
+      * **Video / Scaling / Aspect Ratio** to **Full**
+        * This will match your monitor aspect aspect ratio
+      * **Video / Scaling / Integer Scale** to **OFF**
+      * **Video / Output / Video Rotation** to **Normal**
+      * **Core / Allow Rotation** to **OFF** -- **Important for FB Neo and MAME Current**
+  * **Core Setup** 
+    * For **FB Neo**
+      * Go to **Quick Menu > Core Options** and turn **vertical mode** to **OFF**
+    * **MAME Current**
+      * Go to **Quick Menu > Core Options** and set **Rotation Mode** to **internal**
+    * **Swanstation** (and possibly other 3D cores) 
+      * Set **Quick Menu / Core Options / Enhancement Settings / GPU Renderer** to **Vulkan** or **GLCore** if Vulkan is not available
+
+
 
 ***
 **LOADING AND SAVING PRESETS**
