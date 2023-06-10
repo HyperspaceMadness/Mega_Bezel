@@ -570,13 +570,23 @@ float HSM_AB_COMPARE_FREEZE_GRAPHICS = global.HSM_AB_COMPARE_FREEZE_GRAPHICS;
 #pragma parameter HSM_PASS_VIEWER_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_PASS_VIEWER_TITLE       "[ SHOW PASS (For Debugging) ]:" 0 0 0.001 0.001
 
-#pragma parameter HSM_SHOW_PASS_INDEX_INFO1   "     0:END | 1:REFLECTION | 2:TUBE | 3:CRT" 0 0 0.001 0.001
-#pragma parameter HSM_SHOW_PASS_INDEX_INFO2   "     4:INTERLACE | 5:COLOR CORRECT & UPSCALE" 0 0 0.001 0.001
-#pragma parameter HSM_SHOW_PASS_INDEX_INFO3   "     6:DEDITHER | 7:DREZ | 8:CORE" 0 0 0.001 0.001
-#pragma parameter HSM_SHOW_PASS_INDEX_INFO4   "     9:LAYERS TOP | 10:LAYERS BOTTOM | 11: LAYERS ATLAS" 0 0 0.001 0.001
-
-#pragma parameter HSM_SHOW_PASS_INDEX         "          Show Pass Index" 0 0 11 1
+#pragma parameter HSM_SHOW_PASS_INDEX         "          Show Pass Index (Details Below)" 0 0 12 1
 float HSM_SHOW_PASS_INDEX = global.HSM_SHOW_PASS_INDEX;
+
+#pragma parameter HSM_SHOW_PASS_INDEX_INFO0    "               0: END" 0 0 0.001 0.001
+#pragma parameter HSM_SHOW_PASS_INDEX_INFO1    "               1: REFLECTION" 0 0 0.001 0.001
+#pragma parameter HSM_SHOW_PASS_INDEX_INFO2    "               2: TUBE" 0 0 0.001 0.001
+#pragma parameter HSM_SHOW_PASS_INDEX_INFO3    "               3: CRT" 0 0 0.001 0.001
+#pragma parameter HSM_SHOW_PASS_INDEX_INFO4    "               4: INTERLACE" 0 0 0.001 0.001
+#pragma parameter HSM_SHOW_PASS_INDEX_INFO5    "               5: COLOR CORRECT & UPSCALE" 0 0 0.001 0.001
+#pragma parameter HSM_SHOW_PASS_INDEX_INFO6    "               6: DEDITHER" 0 0 0.001 0.001
+#pragma parameter HSM_SHOW_PASS_INDEX_INFO7    "               7: DREZ" 0 0 0.001 0.001
+#pragma parameter HSM_SHOW_PASS_INDEX_INFO8    "               8: CORE" 0 0 0.001 0.001
+#pragma parameter HSM_SHOW_PASS_INDEX_INFO9    "               9: ADDITIVE" 0 0 0.001 0.001
+#pragma parameter HSM_SHOW_PASS_INDEX_INFO10   "               10:LAYERS FOREGROUND" 0 0 0.001 0.001
+#pragma parameter HSM_SHOW_PASS_INDEX_INFO11   "               11:LAYERS MIDDLEGROUND" 0 0 0.001 0.001
+#pragma parameter HSM_SHOW_PASS_INDEX_INFO12   "               12:LAYERS BACKGROUND" 0 0 0.001 0.001
+
 
 #pragma parameter HSM_SHOW_PASS_APPLY_SCREEN_COORD  "          Apply Screen Scale & Curvature to Unscaled Passes" 1 0 1 1
 float HSM_SHOW_PASS_APPLY_SCREEN_COORD = global.HSM_SHOW_PASS_APPLY_SCREEN_COORD;

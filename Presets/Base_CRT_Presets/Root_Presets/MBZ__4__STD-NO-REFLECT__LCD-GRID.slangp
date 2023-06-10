@@ -1,4 +1,4 @@
-shaders = 18
+shaders = 19
 
 shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
@@ -135,9 +135,19 @@ scale_type16 = viewport
 scale16 = 1.0
 alias16 = "SceneLayersPass"
 
+// This pass IS ABSOLUTELY NECESSARY
+// A pass with filter_linear = false must be placed after a pass which is packing 4 8 Bit values into a 32 Bit output
+// Not having this pass results in incorrect sampling/corrupted values coming from the pass when sampled within another pass
+shader17 = ../../../shaders/base/stock.slang
+mipmap_input17 = false
+filter_linear17 = false
+scale_type17 = absolute
+scale_x17 = 8
+scale_y17 = 8
+
 # Combine Passes ----------------------------------------------------------------
-shader17 = ../../../shaders/base/combine-passes-no-reflect.slang
-scale_type17 = viewport
+shader18 = ../../../shaders/base/combine-passes-no-reflect.slang
+scale_type18 = viewport
 
 
 # Textures All

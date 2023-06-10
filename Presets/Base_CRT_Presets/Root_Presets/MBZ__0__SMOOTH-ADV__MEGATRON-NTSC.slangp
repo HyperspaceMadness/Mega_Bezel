@@ -1,4 +1,4 @@
-shaders = 46
+shaders = 47
 
 shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
@@ -292,68 +292,74 @@ scale_type38 = viewport
 scale38 = 1.0
 alias38 = "SceneLayersPass"
 
+// This pass IS ABSOLUTELY NECESSARY
+// A pass with filter_linear = false must be placed after a pass which is packing 4 8 Bit values into a 32 Bit output
+// Not having this pass results in incorrect sampling/corrupted values coming from the pass when sampled within another pass
+shader39 = ../../../shaders/base/stock.slang
+mipmap_input39 = false
+filter_linear39 = false
+scale_type39 = absolute
+scale_x39 = 8
+scale_y39 = 8
+
 # Reduce Resolution  ----------------------------------------------------------------
 #      Reduce the resolution to a small static size regardless of final resolution
 #      Allows consistent look and faster at different final resolutions for blur
 #      Mipmap option allows downscaling without artifacts
-shader39 = ../../../shaders/base/linearize-crt.slang
-mipmap_input39 = true
-filter_linear39 = true
-scale_type39 = absolute
-# scale_x39 = 480
-# scale_y39 = 270
-# scale_x39 = 960
-# scale_y39 = 540
-scale_x39 = 800
-scale_y39 = 600
-float_framebuffer39 = true
-alias39 = "ReflectPrepLowResPass"
-
-# Add Blur for the Reflection (Horizontal) ----------------------------------------------------------------
-shader40 = ../../../shaders/base/blur-outside-screen-horiz.slang
+shader40 = ../../../shaders/base/linearize-crt.slang
 mipmap_input40 = true
 filter_linear40 = true
+scale_type40 = absolute
+scale_x40 = 800
+scale_y40 = 600
 float_framebuffer40 = true
+alias40 = "ReflectPrepLowResPass"
 
-# Add Blur for the Reflection (Vertical) ----------------------------------------------------------------
-shader41 = ../../../shaders/base/blur-outside-screen-vert.slang
+# Add Blur for the Reflection (Horizontal) ----------------------------------------------------------------
+shader41 = ../../../shaders/base/blur-outside-screen-horiz.slang
+mipmap_input41 = true
 filter_linear41 = true
 float_framebuffer41 = true
-alias41 = "ReflectPrepBlurredPass"
+
+# Add Blur for the Reflection (Vertical) ----------------------------------------------------------------
+shader42 = ../../../shaders/base/blur-outside-screen-vert.slang
+filter_linear42 = true
+float_framebuffer42 = true
+alias42 = "ReflectPrepBlurredPass"
 
 # Reduce resolution ----------------------------------------------------------------
 # Reduced to a very small amount so we can create a blur which will create a glow from the screen
 #      Mipmap option allows smoother downscaling
-shader42 = ../../../../../blurs/shaders/royale/blur9x9.slang
-mipmap_input42 = true
-filter_linear42 = true
-scale_type42 = absolute
-scale_x42 = 128
-scale_y42 = 128
-float_framebuffer42 = true
-alias42 = "ReflectPrepDiffusedPass"
-
-# Add Diffused glow all around the screen ----------------------------------------------------------------
-#      Blurred so much that it's non directional
-#      Mipmap option allows downscaling without artifacts
 shader43 = ../../../../../blurs/shaders/royale/blur9x9.slang
 mipmap_input43 = true
 filter_linear43 = true
 scale_type43 = absolute
-scale_x43 = 12
-scale_y43 = 12
+scale_x43 = 128
+scale_y43 = 128
 float_framebuffer43 = true
-alias43 = "ReflectPrepFullscreenGlowPass"
+alias43 = "ReflectPrepDiffusedPass"
+
+# Add Diffused glow all around the screen ----------------------------------------------------------------
+#      Blurred so much that it's non directional
+#      Mipmap option allows downscaling without artifacts
+shader44 = ../../../../../blurs/shaders/royale/blur9x9.slang
+mipmap_input44 = true
+filter_linear44 = true
+scale_type44 = absolute
+scale_x44 = 12
+scale_y44 = 12
+float_framebuffer44 = true
+alias44 = "ReflectPrepFullscreenGlowPass"
 
 # Bezel Reflection ----------------------------------------------------------------
-shader44 = ../../../shaders/base/reflection.slang
-scale_type44 = viewport
-float_framebuffer44 = true
-alias44 = "ReflectPass"
+shader45 = ../../../shaders/base/reflection.slang
+scale_type45 = viewport
+float_framebuffer45 = true
+alias45 = "ReflectPass"
 
 # Combine Passes ----------------------------------------------------------------
-shader45 = ../../../shaders/base/combine-passes-hdr.slang
-scale_type45 = viewport
+shader46 = ../../../shaders/base/combine-passes-hdr.slang
+scale_type46 = viewport
 
 
 # Textures All

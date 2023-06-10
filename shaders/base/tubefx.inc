@@ -216,8 +216,8 @@ void main()
 
 #ifdef USE_TUBEFX
 	// AMBIENT LIGHTING IMAGES
-	vec4 ambient_lighting_image = vec4(1);
-	vec4 ambient2_lighting_image = vec4(1);
+	vec3 ambient_rgb = vec3(1);
+	vec3 ambient2_rgb = vec3(1);
 	HSM_Fill_Ambient_Images(VIEWPORT_COORD, 
 							VIEWPORT_UNSCALED_COORD, 
 							TUBE_DIFFUSE_COORD_MIXED_POS, 
@@ -225,8 +225,8 @@ void main()
 							HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE, 
 							NightLightingImage, 
 							NightLighting2Image, 
-							ambient_lighting_image, 
-							ambient2_lighting_image);
+							ambient_rgb, 
+							ambient2_rgb);
 
 	vec3 tube_shadow = vec3(1);
 	if (HSM_TUBE_SHADOW_IMAGE_ON > 0.5 && (HSM_GetUseTubeDiffuseImage() || HSM_GetUseTubeColoredGelImage() || HSM_GetUseTubeStaticReflection()))
@@ -284,8 +284,8 @@ void main()
 		}
 
 		// If CRT Blend Mode is Multiply (2) then the tube must be fully opaque
-		tube_diffuse.rgb = HSM_ApplyAmbientImage(tube_diffuse.rgb, ambient_lighting_image.rgb, HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING);
-		tube_diffuse.rgb = HSM_ApplyAmbientImage(tube_diffuse.rgb, ambient2_lighting_image.rgb, HSM_TUBE_DIFFUSE_IMAGE_AMBIENT2_LIGHTING);
+		tube_diffuse.rgb = HSM_ApplyAmbientImage(tube_diffuse.rgb, ambient_rgb, HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING);
+		tube_diffuse.rgb = HSM_ApplyAmbientImage(tube_diffuse.rgb, ambient2_rgb, HSM_TUBE_DIFFUSE_IMAGE_AMBIENT2_LIGHTING);
 	}
 
 	tube_diffuse *= HSM_GetTubeOpacity();
@@ -336,8 +336,8 @@ void main()
 			if (HSM_TUBE_COLORED_GEL_IMAGE_FAKE_SCANLINE_AMOUNT > 0.001)
 				gel_image.rgb = HSM_ApplyScanlineMask(gel_image, SCREEN_SCALE, SCREEN_COORD, screen_curved_coord, tube_curved_coord, HSM_TUBE_COLORED_GEL_IMAGE_FAKE_SCANLINE_AMOUNT).rgb;
 
-			gel_image.rgb = HSM_ApplyAmbientImage(gel_image.rgb, ambient_lighting_image.rgb, HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING);
-			gel_image.rgb = HSM_ApplyAmbientImage(gel_image.rgb, ambient2_lighting_image.rgb, HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT2_LIGHTING);
+			gel_image.rgb = HSM_ApplyAmbientImage(gel_image.rgb, ambient_rgb, HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING);
+			gel_image.rgb = HSM_ApplyAmbientImage(gel_image.rgb, ambient2_rgb, HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT2_LIGHTING);
 
 			gel_image = HSM_BlendModeLayerMix(gel_image, vec4(vec3(vignette_factor), 1), BLEND_MODE_MULTIPLY, HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_VIGNETTE);
 
@@ -372,8 +372,8 @@ void main()
 	if (HSM_GetUseTubeStaticReflection())
 	{
 		vec3 tube_highlight_image = HSM_GetTubeHighlight(tube_curved_coord, false, TubeStaticReflectionImage).rgb;
-		tube_highlight_image = HSM_ApplyAmbientImage(tube_highlight_image.rgb, ambient_lighting_image.rgb, HSM_TUBE_STATIC_AMBIENT_LIGHTING);
-		tube_highlight_image = HSM_ApplyAmbientImage(tube_highlight_image.rgb, ambient2_lighting_image.rgb, HSM_TUBE_STATIC_AMBIENT2_LIGHTING);
+		tube_highlight_image = HSM_ApplyAmbientImage(tube_highlight_image.rgb, ambient_rgb, HSM_TUBE_STATIC_AMBIENT_LIGHTING);
+		tube_highlight_image = HSM_ApplyAmbientImage(tube_highlight_image.rgb, ambient2_rgb, HSM_TUBE_STATIC_AMBIENT2_LIGHTING);
 
 		tube_highlight_image.rgb *= HSM_TUBE_STATIC_SHADOW_OPACITY * tube_shadow + (1 - HSM_TUBE_STATIC_SHADOW_OPACITY);
 

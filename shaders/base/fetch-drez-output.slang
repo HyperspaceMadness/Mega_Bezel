@@ -36,7 +36,8 @@ layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 1) uniform sampler2D CacheInfoPass;
 layout(set = 0, binding = 2) uniform sampler2D DerezedPass;
-layout(set = 0, binding = 3) uniform sampler2D TextPass;
+layout(set = 0, binding = 3) uniform sampler2D DerezedPassFeedback;
+layout(set = 0, binding = 4) uniform sampler2D TextPass;
 
 
 // vec4 GetCropOverlay(vec2 viewport_coord)
@@ -73,7 +74,9 @@ void main()
 	viewport_coord_adjusted.x = HSM_FLIP_VIEWPORT_HORIZONTAL * HSM_FLIP_CORE_HORIZONTAL * (viewport_coord_adjusted.x - 0.5) + 0.5;
 	viewport_coord_adjusted.y = HSM_FLIP_VIEWPORT_VERTICAL * HSM_FLIP_CORE_VERTICAL * (viewport_coord_adjusted.y - 0.5) + 0.5;
 
-	FragColor = texture(DerezedPass, viewport_coord_adjusted);
+	vec4 in_pass_color = texture(DerezedPass, viewport_coord_adjusted);
+	vec4 in_pass_color_feedback = texture(DerezedPassFeedback, viewport_coord_adjusted);
+	FragColor = in_pass_color;
 
    bool cache_info_changed = CACHE_INFO_CHANGED;
    bool show_update_indicator = cache_info_changed && ( HSM_CACHE_UPDATE_INDICATOR_MODE == 1 || HSM_CACHE_GRAPHICS_ON < 0.5 && HSM_CACHE_UPDATE_INDICATOR_MODE == 2);
@@ -91,8 +94,8 @@ void main()
 		{
 			float modulation = clamp(0.4 + abs(mod(global.FrameCount, 90) / 90 - 0.5) * 1.2, 0, 1);
 			modulation = HHLP_EasePowerInOut(modulation, 2);
-			FragColor *= 1 - modulation;
-			FragColor += modulation * vec4(1, 0, 0, 1);
+			FragColor.rgb *= 1 - modulation;
+			FragColor.rgb += modulation * vec3(1, 0, 0);
 		}
 	}
 
@@ -112,8 +115,13 @@ void main()
 		text_rgba.a += texture(TextPass, vTexCoord + ps * vec2(-1, -1)).a;
 		text_rgba.a += texture(TextPass, vTexCoord + ps * vec2(1, -1)).a;
 		text_rgba = clamp(text_rgba, 0, 1);
-		FragColor = HSM_PreMultAlphaBlend(FragColor, text_rgba);
+		FragColor.rgb = HSM_PreMultAlphaBlend(FragColor, text_rgba).rgb;
 	}
+
+	// // Put a 0 or 1 value in the alpha to indicate if the pixel has changed since last frame
+	// vec3 pixel_diff = abs(in_pass_color.rgb - in_pass_color_feedback.rgb);
+	// float pixel_changed = max(max(pixel_diff.r, pixel_diff.g), pixel_diff.b ) > 1 / (256.0 * 2.0) ? 1 : 0;
+	// FragColor.a = pixel_changed;
 
 	return;
 }

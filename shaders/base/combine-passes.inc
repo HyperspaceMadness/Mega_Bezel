@@ -113,22 +113,6 @@ vec3 PrepGraphicsForHDR(vec3 in_color)
 	return out_color;
 }
 
-// void _HSM_Unpack_1_RGBA_To_4_RGBA(vec4 packed_rgba, 
-// 								inout vec4 rgba_1, 
-// 								inout vec4 rgba_2, 
-// 								inout vec4 rgba_3, 
-// 								inout vec4 rgba_4)
-// {
-// 	// uint in_uint = floatBitsToUint(packed_rgba.r);
-//    	// vec4 tColor = unpackUnorm4x8(in_uint);
-
-// 	// rgba_1 = tColor;
-// 	rgba_1 = unpackUnorm4x8(floatBitsToUint(packed_rgba.r));
-// 	rgba_2 = unpackUnorm4x8(floatBitsToUint(packed_rgba.g));
-// 	rgba_3 = unpackUnorm4x8(floatBitsToUint(packed_rgba.b));
-// 	rgba_4 = unpackUnorm4x8(floatBitsToUint(packed_rgba.a));
-// }
-
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
 {
@@ -171,6 +155,7 @@ void main()
 		if (HSM_SHOW_PASS_INDEX == 5)
 		{
 			FragColor = texture(ColorCorrectPass, (floor(coord_for_raw_passes * textureSize(ColorCorrectPass, 0)) + 0.5) / textureSize(ColorCorrectPass, 0));
+			pass_needs_delinearize = false;
 		}
 
 		// DEDITHER
@@ -194,17 +179,33 @@ void main()
 			pass_needs_delinearize = false;
 		}
 
-		// LAYERS TOP
-		if (HSM_SHOW_PASS_INDEX == 9)
-			FragColor = HSM_GetPrecompRGBA(SceneLayersPass, vTexCoord, PRECOMP_INDEX_FOREGROUND);
+		// IMAGE LAYERS
+		if (HSM_SHOW_PASS_INDEX > 8)
+		{
+			vec4 image_layers_packed = texture(SceneLayersPass, vTexCoord);
 
-		// LAYERS BOTTOM
-		if (HSM_SHOW_PASS_INDEX == 10)
-			FragColor = HSM_GetPrecompRGBA(SceneLayersPass, vTexCoord, PRECOMP_INDEX_BACKGROUND);
+			vec4 precomp_background = vec4(0);
+			vec4 precomp_middleground = vec4(0);
+			vec4 precomp_foreground = vec4(0);
+			vec4 precomp_additive = vec4(0);
 
-		// LAYERS ATLAS
-		if (HSM_SHOW_PASS_INDEX == 11)
-			FragColor = texture(SceneLayersPass, vTexCoord);
+			HSM_Unpack_1_Rgba_To_4_Rgba(image_layers_packed, 
+								precomp_foreground, 
+								precomp_middleground, 
+								precomp_background, 
+								precomp_additive);
+
+			if (HSM_SHOW_PASS_INDEX == 9)
+				FragColor = precomp_additive;
+			if (HSM_SHOW_PASS_INDEX == 10)
+				FragColor = precomp_foreground;
+			if (HSM_SHOW_PASS_INDEX == 11)
+				FragColor = precomp_middleground;
+			if (HSM_SHOW_PASS_INDEX == 12)
+				FragColor = precomp_background;
+
+			pass_needs_delinearize = false;
+		}
 
 		// Linearize passes which are not already in linear space
 		if (pass_needs_delinearize)
@@ -237,7 +238,7 @@ void main()
 						FRAME_OUTSIDE_CURVED_COORD);
 
 	
-	vec4 image_layers_packed = texture(SceneLayersPass, vTexCoord);
+	vec4 image_layers_packed = texture(SceneLayersPass, vTexCoord, 0);
 
 	vec4 precomp_background = vec4(0);
 	vec4 precomp_middleground = vec4(0);
@@ -254,18 +255,6 @@ void main()
 	precomp_middleground = HSM_Linearize(precomp_middleground, DEFAULT_SRGB_GAMMA);
 	precomp_background = HSM_Linearize(precomp_background, DEFAULT_SRGB_GAMMA);
 	precomp_additive = HSM_Linearize(precomp_additive, DEFAULT_SRGB_GAMMA);
-
-	// // Test - Show pass output in screen quadrants
-	// vec2 tex_coord_ctr = vTexCoord - 0.5;
-	// if (tex_coord_ctr.x > 0 && tex_coord_ctr.y > 0)
-	// 	FragColor = pow(precomp_background, vec4(1/2.2));
-	// if (tex_coord_ctr.x > 0 && tex_coord_ctr.y < 0)
-	// 	FragColor = pow(precomp_middleground, vec4(1/2.2));
-	// if (tex_coord_ctr.x < 0 && tex_coord_ctr.y < 0)
-	// 	FragColor = pow(precomp_foreground, vec4(1/2.2));
-	// if (tex_coord_ctr.x < 0 && tex_coord_ctr.y > 0)
-	// 	FragColor = pow(precomp_additive, vec4(1/2.2));
-	// return;
 
 	float reflection_mask = precomp_background.a;
 	precomp_background.rgb = PrepGraphicsForHDR(precomp_background.rgb);

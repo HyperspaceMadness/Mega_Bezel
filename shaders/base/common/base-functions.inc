@@ -76,12 +76,39 @@ vec4 HSM_GetTubeFxPrecompRange(float in_precomp_index)
 	return out_range;
 }
 
+float HSM_Pack_Vec2_To_Float(vec2 in_vec2)
+{
+	return uintBitsToFloat(packUnorm2x16(in_vec2));
+}
+
+vec2 HSM_Unpack_Float_To_Vec2(float in_packed)
+{
+	return unpackUnorm2x16(floatBitsToUint(in_packed));
+}
+
+vec4 HSM_Pack_2_Rgba_To_1_Rgba(	vec4 rgba_1, 
+								vec4 rgba_2)
+{
+	vec4 out_color = vec4(	HSM_Pack_Vec2_To_Float(rgba_1.rg),
+							HSM_Pack_Vec2_To_Float(rgba_1.ba),
+							HSM_Pack_Vec2_To_Float(rgba_2.rg),
+							HSM_Pack_Vec2_To_Float(rgba_2.ba));
+	return out_color;
+}
+
+void HSM_Unpack_1_Rgba_To_2_Rgba(vec4 packed_rgba, 
+								inout vec4 rgba_1, 
+								inout vec4 rgba_2)
+{
+	rgba_1.rg = clamp(HSM_Unpack_Float_To_Vec2(packed_rgba.r), 0, 1);
+	rgba_1.ba = clamp(HSM_Unpack_Float_To_Vec2(packed_rgba.g), 0, 1);
+	rgba_2.rg = clamp(HSM_Unpack_Float_To_Vec2(packed_rgba.b), 0, 1);
+	rgba_2.ba = clamp(HSM_Unpack_Float_To_Vec2(packed_rgba.a), 0, 1);
+}
+
 float HSM_Pack_Rgba_To_Float(vec4 in_rgba)
 {
-	vec4 out_rgba = in_rgba;
-	out_rgba = clamp(in_rgba, 0, 1);
-	out_rgba = out_rgba * 255 / 256;
-	return uintBitsToFloat(packUnorm4x8(out_rgba));
+	return uintBitsToFloat(packUnorm4x8(in_rgba));
 }
 
 vec4 HSM_Unpack_Float_To_Rgba(float in_packed)

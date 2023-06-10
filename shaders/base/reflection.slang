@@ -83,23 +83,19 @@ layout(set = 0, binding = 1) uniform sampler2D CacheInfoPass;
 
 layout(set = 0, binding = 2) uniform sampler2D BackgroundImage;
 layout(set = 0, binding = 3) uniform sampler2D BackgroundVertImage;
-
 layout(set = 0, binding = 4) uniform sampler2D GlassPresetHighlightImage;
-layout(set = 0, binding = 5) uniform sampler2D ReflectionMaskImage;
-
+layout(set = 0, binding = 5) uniform sampler2D TubeFxPass;
 layout(set = 0, binding = 6) uniform sampler2D ReflectPrepLowResPass;
-layout(set = 0, binding = 7) uniform sampler2D TubeFxPass;
-layout(set = 0, binding = 8) uniform sampler2D ReflectPrepBlurredPass;
-layout(set = 0, binding = 9) uniform sampler2D ReflectPrepDiffusedPass;
-layout(set = 0, binding = 10) uniform sampler2D ReflectPrepFullscreenGlowPass;
+layout(set = 0, binding = 7) uniform sampler2D ReflectPrepBlurredPass;
+layout(set = 0, binding = 8) uniform sampler2D ReflectPrepDiffusedPass;
+layout(set = 0, binding = 9) uniform sampler2D ReflectPrepFullscreenGlowPass;
 
-layout(set = 0, binding = 11) uniform sampler2D ReflectPassFeedback;
+layout(set = 0, binding = 10) uniform sampler2D ReflectPassFeedback;
 #define PassFeedback ReflectPassFeedback
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
 {
-	
 	if (HSM_AB_COMPARE_FREEZE_CRT_TUBE == 1 && HSM_GetIsInABCompareArea(vTexCoord))
 	{
 		FragColor = texture(PassFeedback, vTexCoord);

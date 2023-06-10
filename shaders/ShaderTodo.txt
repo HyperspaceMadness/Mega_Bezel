@@ -30,6 +30,13 @@ Changes:
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Add Same Blend Mode for Tube Gel which uses Alpha
+  * Add Debug for Precomps, Maybe checkerboards with different sizes multiplied by alpha
+  * Need reflection passes with/without images for reflection mask?
+  * Tube Graphics Under CRT
+  * Add Screen Effects to CRT, including Gel, and tube (tube must be here because of reflection)
+  * CRT Multiply only affects Tube
+
   * Fix DOT Potato Preset
   * Integrate Overscan into the Resolution Debug somehow
   * Should put Tube Bg in images? Only add Gel Multiply and Highlight in TubeFx?

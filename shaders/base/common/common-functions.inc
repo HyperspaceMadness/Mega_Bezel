@@ -810,7 +810,7 @@ bool HSM_GetUseScreenVignette()
 	return HSM_SCREEN_VIGNETTE_ON > 0.5 && HSM_GetUseOnCurrentScreenIndex(HSM_SCREEN_VIGNETTE_DUALSCREEN_VIS_MODE);
 }
 
-vec4 HSM_GetNightLightingMultiplyColor( vec2 in_coord, float hue, float saturation, float value, float contrast, float global_ambient_opacity, in sampler2D NightLightingImage )
+vec3 HSM_GetNightLightingMultiplyColor( vec2 in_coord, float hue, float saturation, float value, float contrast, float global_ambient_opacity, in sampler2D NightLightingImage )
 {
 	vec4 lighting_image = vec4(0);
 	// if (HSM_AMBIENT1_DITHERING_SAMPLES > 0.5)
@@ -836,15 +836,14 @@ vec4 HSM_GetNightLightingMultiplyColor( vec2 in_coord, float hue, float saturati
 		lighting_image = vec4(HSM_HSVtoRGB(night_lighting_image_hsv), lighting_image.a);
 	}
 
-	lighting_image.rgb = mix( vec3(1), lighting_image.rgb, global_ambient_opacity );
-
-	return lighting_image;
+	vec3 out_color = mix( vec3(1), lighting_image.rgb, global_ambient_opacity );
+	return out_color;
 }
 
-bool HSM_Fill_Ambient_Images(vec2 in_viewport_coord, vec2 in_viewport_unscaled_coord, vec2 in_tube_coord, vec2 in_tube_scale, float in_swap_images, in sampler2D in_ambient_sampler, in sampler2D in_ambient2_sampler, inout vec4 ambient_lighting_image, inout vec4 ambient2_lighting_image)
+bool HSM_Fill_Ambient_Images(vec2 in_viewport_coord, vec2 in_viewport_unscaled_coord, vec2 in_tube_coord, vec2 in_tube_scale, float in_swap_images, in sampler2D in_ambient_sampler, in sampler2D in_ambient2_sampler, inout vec3 ambient_rgb, inout vec3 ambient2_rgb)
 {
-		ambient_lighting_image = vec4(1);
-		ambient2_lighting_image = vec4(1);
+		ambient_rgb = vec3(1);
+		ambient2_rgb = vec3(1);
 
 		if (HSM_AMBIENT1_OPACITY > 0)
 		{
@@ -865,7 +864,7 @@ bool HSM_Fill_Ambient_Images(vec2 in_viewport_coord, vec2 in_viewport_unscaled_c
 															HSM_AMBIENT1_MIRROR_HORZ,
 															HSM_AMBIENT1_ROTATE );
 
-			ambient_lighting_image = HSM_GetNightLightingMultiplyColor( lighting_coord,
+			ambient_rgb = HSM_GetNightLightingMultiplyColor( lighting_coord,
 																		HSM_AMBIENT1_HUE,
 																		HSM_AMBIENT1_SATURATION,
 																		HSM_AMBIENT1_VALUE,
@@ -893,7 +892,7 @@ bool HSM_Fill_Ambient_Images(vec2 in_viewport_coord, vec2 in_viewport_unscaled_c
 															HSM_AMBIENT2_MIRROR_HORZ,
 															HSM_AMBIENT2_ROTATE );
 
-			ambient2_lighting_image = HSM_GetNightLightingMultiplyColor( lighting2_coord,
+			ambient2_rgb = HSM_GetNightLightingMultiplyColor( lighting2_coord,
 																		HSM_AMBIENT2_HUE,
 																		HSM_AMBIENT2_SATURATION,
 																		HSM_AMBIENT2_VALUE,
@@ -904,9 +903,9 @@ bool HSM_Fill_Ambient_Images(vec2 in_viewport_coord, vec2 in_viewport_unscaled_c
 
 	// if (in_swap_images == 1)
 	// {
-	// 	vec4 temp_image = ambient_lighting_image;
-	// 	ambient_lighting_image = ambient2_lighting_image;
-	// 	ambient2_lighting_image = temp_image;
+	// 	vec4 temp_image = ambient_rgb;
+	// 	ambient_rgb = ambient2_rgb;
+	// 	ambient2_rgb = temp_image;
 	// }
 
 	return true;
@@ -969,13 +968,7 @@ vec4 HSM_ApplyMonochrome(vec4 in_color)
 
 float HSM_GetTubeOpacity()
 {
-	float tube_diffuse_opacity = HSM_TUBE_DIFFUSE_MODE < 1.5 ? HSM_TUBE_OPACITY : 0;
-
-	// If CRT Blend Mode is Multiply (2) then the tube must be fully opaque
-	if (HSM_CRT_BLEND_MODE == 2)
-		tube_diffuse_opacity = 1;
-
-	return tube_diffuse_opacity;
+	return HSM_TUBE_DIFFUSE_MODE < 1.5 ? HSM_TUBE_OPACITY : 0;
 }
 
 vec3 HSM_ApplyAmbientImage(vec3 base_image, vec3 ambient_image, float layer_blend_amount) 
