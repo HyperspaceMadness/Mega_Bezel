@@ -34,6 +34,12 @@ Changes:
   * Add Debug for Precomps, Maybe checkerboards with different sizes multiplied by alpha
   * Need reflection passes with/without images for reflection mask?
   * Tube Graphics Under CRT
+    * Tube
+    * Gel Normal
+    * Highlight
+    * Night 1
+    * Vignette
+    * Night 2
   * Add Screen Effects to CRT, including Gel, and tube (tube must be here because of reflection)
   * CRT Multiply only affects Tube
 

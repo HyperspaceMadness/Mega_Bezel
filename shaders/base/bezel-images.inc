@@ -1118,8 +1118,6 @@ void main()
 
 	if (HSM_CAB_GLASS_OPACITY > 0)
 	{
-
-
 		vec2 cab_glass_size = textureSize(CabinetGlassImage, 0);
 		CAB_GLASS_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
 													VIEWPORT_UNSCALED_COORD,
@@ -1220,7 +1218,6 @@ void main()
 		vignette_layer.a += 0.75 * HHLP_QuadraticBezier(1 - HSM_GetVignetteFactor(vignette_coord, HSM_VIEWPORT_VIGNETTE_OPACITY, 1), vec2(1, 0.5));
 	}
 
-
 	//-----------------------------------------------------------------------------------------
 	// COMPOSITE ALL LAYERS
 	//-----------------------------------------------------------------------------------------
@@ -1248,7 +1245,6 @@ void main()
 	for (int precomp_index = 0; precomp_index < 4; precomp_index++)
 	{
 		vec4 precomp_color = vec4(0);
-		// vec4 precomp_color = vec4(0.2,0,0,1);
 
 		if (precomp_index == PRECOMP_INDEX_BACKGROUND)
 		{
@@ -1486,10 +1482,10 @@ void main()
 	precomp_background = HSM_Delinearize(precomp_background, DEFAULT_SRGB_GAMMA);
 	precomp_additive = HSM_Delinearize(precomp_additive, DEFAULT_SRGB_GAMMA);
 
-	precomp_foreground = round(clamp(precomp_foreground, 0.0, 1.0) * 255.0) / 256;
-	precomp_middleground = round(clamp(precomp_middleground, 0.0, 1.0) * 255.0) / 256;
-	precomp_background = round(clamp(precomp_background, 0.0, 1.0) * 255.0) / 256;
-	precomp_additive = round(clamp(precomp_additive, 0.0, 1.0) * 255.0) / 256;
+	// precomp_foreground = round(clamp(precomp_foreground, 0.0, 1.0) * 255.0) / 256;
+	// precomp_middleground = round(clamp(precomp_middleground, 0.0, 1.0) * 255.0) / 256;
+	// precomp_background = round(clamp(precomp_background, 0.0, 1.0) * 255.0) / 256;
+	// precomp_additive = round(clamp(precomp_additive, 0.0, 1.0) * 255.0) / 256;
 
 	vec4 image_layers_packed = HSM_Pack_4_Rgba_To_1_Rgba(precomp_foreground
 														,precomp_middleground
