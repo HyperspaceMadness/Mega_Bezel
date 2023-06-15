@@ -354,10 +354,10 @@ void main()
 			precomp_gel = HSM_BlendModeLayerMix(gel_image, vec4(0, 0, 0, 0), BLEND_MODE_NORMAL, HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT);
 
 			// TODO, this needs to be applied in final comp pass
-			// if ( HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL == 0 )
+			// if ( HSM_TUBE_COLORED_GEL_LAYERING_ORDER == 0 )
 				// precomp_tube_diffuse = HSM_BlendModeLayerMix(precomp_tube_diffuse, gel_image, BLEND_MODE_NORMAL, HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT);
 			
-			// if ( HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL == 1 )
+			// if ( HSM_TUBE_COLORED_GEL_LAYERING_ORDER == 1 )
 			// {
 			// 	gel_image.rgb *= tube_shadow_mask;
 			// 	vec4 normal_blended = HSM_BlendModeLayerMix(vec4(0, 0, 0, 1), gel_image, BLEND_MODE_NORMAL, HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT);

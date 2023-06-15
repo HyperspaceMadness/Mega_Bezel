@@ -350,10 +350,10 @@ void main()
 
 			// gel_image = HSM_BlendModeLayerMix(gel_image, vec4(vec3(vignette_factor), 1), BLEND_MODE_MULTIPLY, HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_VIGNETTE);
 
-			// if ( HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL == 0 )
+			// if ( HSM_TUBE_COLORED_GEL_LAYERING_ORDER == 0 )
 				// out_color = HSM_BlendModeLayerMix(out_color, gel_image, BLEND_MODE_NORMAL, HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT);
 			HSM_PreMultAlphaBlend(out_color, gel_image);
-			// if ( HSM_SHOW_CRT_ON_TOP_OF_COLORED_GEL == 1 )
+			// if ( HSM_TUBE_COLORED_GEL_LAYERING_ORDER == 1 )
 			// {
 			// 	// gel_image.rgb *= tube_shadow;
 			// 	vec4 normal_blended = HSM_BlendModeLayerMix(vec4(0, 0, 0, 1), gel_image, BLEND_MODE_NORMAL, HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT);

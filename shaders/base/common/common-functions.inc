@@ -962,7 +962,7 @@ vec4 HSM_ApplyMonochrome(vec4 in_color)
 		mcolor = HSM_HSVtoRGB(mcolor_hsv);
 	}
 
-	out_color.rgb = pow(luma, 1.0/HSM_MONOCHROME_GAMMA) * mcolor;
+	out_color.rgb = pow(luma, 1.0 / HSM_MONOCHROME_GAMMA) * mcolor;
 	return out_color;
 }
 
