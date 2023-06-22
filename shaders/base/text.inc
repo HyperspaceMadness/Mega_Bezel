@@ -396,7 +396,7 @@ float print_integer(float number, int zeros, vec2 uv)
 
 #define eps 1e-3
 
-float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec4 screen_region, vec2 derezed_size, vec2 negative_crop_added_size, vec2 cropped_original_size, vec2 sampling_res, vec2 int_mult)
+float DrawResolutions(vec2 uv, vec2 final_viewport_size, vec2 screen_size, vec4 screen_region, vec2 derezed_size, vec2 negative_crop_added_size, vec2 cropped_original_size, vec2 sampling_res, vec2 int_mult)
 {
     float col = 0.0;
     
@@ -412,10 +412,10 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec4 screen
 
    TEXT_MASK = 0;
    CUR_UV = uv;
-   _V _i _e _w _p _o _r _t _spc _dsh _dsh _dsh _dsh _dsh _dsh _spc 
-   TEXT_MASK += print_integer(viewport_size.x, 0, uv); 
+    _F _i _n _a _l _spc _V _i _e _w _p _o _r _t _spc _dsh _dsh _dsh _dsh _dsh _dsh _spc 
+   TEXT_MASK += print_integer(final_viewport_size.x, 0, uv); 
    _spc _x _spc
-   TEXT_MASK += print_integer(viewport_size.y, 0, uv); 
+   TEXT_MASK += print_integer(final_viewport_size.y, 0, uv); 
 
     // Screen Region ----------------------------------------------------------
     print_pos.x = margin;
@@ -451,7 +451,7 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec4 screen
     print_pos.y += STRHEIGHT(1);
     
     _N _o _n _spc _I _n _t _spc _S _c _l _spc _pct _dsh _dsh _spc
-    TEXT_MASK += print_number(screen_size.y / viewport_size.y * 100, print_pos, uv);
+    TEXT_MASK += print_number(screen_size.y / final_viewport_size.y * 100, print_pos, uv);
 
     // Int Scale Vertical ----------------------------------------------------------
     print_pos.x = margin;

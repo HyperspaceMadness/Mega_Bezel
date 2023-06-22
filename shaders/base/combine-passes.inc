@@ -285,11 +285,11 @@ void main()
 		out_color = HSM_PreMultAlphaBlend(out_color, crt_layer);
 
 	precomp_foreground.rgb = PrepGraphicsForHDR(precomp_foreground.rgb);
+	out_color = HSM_PreMultAlphaBlend(out_color, precomp_foreground);
 
 	precomp_additive.rgb = PrepGraphicsForHDR(precomp_additive.rgb);
 	out_color = HSM_PreMultAlphaBlend(out_color, precomp_additive * vec4(1, 1, 1, 0));
 
-	out_color = HSM_PreMultAlphaBlend(out_color, precomp_foreground);
 	FragColor = out_color;
 
 	if (HSM_RENDER_SIMPLE_MODE > 0.5)

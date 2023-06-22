@@ -119,6 +119,93 @@ vec3 HSM_GetTubeHighlight(vec2 tube_curved_coord, bool apply_to_mirror, in sampl
 }
 // #endif
 
+vec4 HSM_ApplyPackedTubeLayers(vec4 crt_color, vec4 image_layers_packed)
+{
+	vec4 unpacked_precomp_tube_diffuse = vec4(0);
+	vec4 unpacked_precomp_gel = vec4(0);
+	vec4 unpacked_precomp_tube_highlight = vec4(0);
+	vec4 unpacked_precomp_nightlight = vec4(0);
+
+	HSM_Unpack_1_Rgba_To_4_Rgba(image_layers_packed, 
+								unpacked_precomp_tube_diffuse, 
+								unpacked_precomp_gel, 
+								unpacked_precomp_tube_highlight, 
+								unpacked_precomp_nightlight);
+
+	unpacked_precomp_tube_diffuse = HSM_Linearize(unpacked_precomp_tube_diffuse, DEFAULT_SRGB_GAMMA);
+	unpacked_precomp_gel = HSM_Linearize(unpacked_precomp_gel, DEFAULT_SRGB_GAMMA);
+	unpacked_precomp_tube_highlight = HSM_Linearize(unpacked_precomp_tube_highlight, DEFAULT_SRGB_GAMMA);
+	float unpacked_vignette = unpacked_precomp_tube_highlight.a;
+
+	unpacked_precomp_nightlight = HSM_Linearize(unpacked_precomp_nightlight, DEFAULT_SRGB_GAMMA);
+	float unpacked_crt_mask = unpacked_precomp_nightlight.b;
+	float unpacked_shadow = unpacked_precomp_nightlight.a;
+
+	vec4 out_color = unpacked_precomp_tube_diffuse;
+
+	if (HSM_MONOCHROME_MODE > 0.5 && HSM_GetUseOnCurrentScreenIndex(HSM_MONOCHROME_DUALSCREEN_VIS_MODE))
+		crt_color = HSM_ApplyMonochrome(crt_color);
+
+	crt_color *= HSM_POST_CRT_BRIGHTNESS;
+
+	// #endif
+
+	// #ifndef USE_TUBEFX
+	// 	out_color = crt_color;
+	// #endif
+
+	crt_color.rgb *= unpacked_crt_mask;
+
+	// Multiply CRT image by Vignette
+	if (HSM_GetUseScreenVignette())
+		crt_color.rgb *= unpacked_vignette;
+
+	// Multiply CRT image by gel
+	if (HSM_GetUseTubeColoredGelImage())
+	{
+		crt_color.rgb *= HSM_TUBE_COLORED_GEL_CRT_BRIGHTNESS;
+		if (HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT > 0)
+			crt_color.rgb = mix(crt_color.rgb, crt_color.rgb * clamp(HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_BRIGHTNESS * unpacked_precomp_gel.rgb, 0, 1), HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT);
+
+		// Add Gel with Over/Normal blending on top of tube before we add the CRT
+		if ( HSM_TUBE_COLORED_GEL_LAYERING_ORDER == 1 )
+		{
+			// out_color += HSM_BlendModeLayerMix(vec4(0, 0, 0, 1), unpacked_precomp_gel, BLEND_MODE_NORMAL, HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT);
+			unpacked_precomp_gel.rgb *= unpacked_shadow;
+			out_color = HSM_BlendModeLayerMix(out_color, unpacked_precomp_gel, BLEND_MODE_NORMAL, HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT);
+		}
+	}
+
+	// Apply the CRT image Additive Blend
+	if (HSM_CRT_BLEND_MODE == 1)
+		out_color = HSM_BlendModeLayerMix(out_color, crt_color, BLEND_MODE_ADD, HSM_CRT_BLEND_AMOUNT);
+	// Apply the CRT image with Multiply Blend
+	else if (HSM_CRT_BLEND_MODE == 2)
+	{	
+		out_color = clamp(out_color, 0, 1);
+		out_color = HSM_BlendModeLayerMix(out_color, crt_color, BLEND_MODE_MULTIPLY, HSM_CRT_BLEND_AMOUNT);
+	}
+	// Apply the CRT image with "Over" Blend, probably useful for something like Gameboy DMG
+	else if (HSM_CRT_BLEND_MODE == 3)
+	{	
+		out_color = clamp(out_color, 0, 1);
+		out_color = HSM_BlendModeLayerMix(out_color, crt_color, BLEND_MODE_NORMAL, HSM_CRT_BLEND_AMOUNT);
+	}
+
+	if (HSM_GetUseTubeColoredGelImage())
+	{
+		// Put Gel on top of CRT (Default situation)
+		unpacked_precomp_gel.rgb *= unpacked_shadow;
+		if ( HSM_TUBE_COLORED_GEL_LAYERING_ORDER == 0 )
+			out_color = HSM_BlendModeLayerMix(out_color, unpacked_precomp_gel, BLEND_MODE_NORMAL, HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT);
+	}
+
+	// Add Tube Highlight
+	out_color.rgb += unpacked_precomp_tube_highlight.rgb;
+
+	return out_color;
+}
+
 void main()
 {
 	if (HSM_AB_COMPARE_FREEZE_CRT_TUBE == 1 && HSM_GetIsInABCompareArea(vTexCoord))
@@ -334,12 +421,14 @@ void main()
 	precomp_tube_highlight.a = vignette_factor;
 // #endif
 
+	float crt_mask = screen_to_tube_mask_invert;
 
 	// Clip everything in the black edge area, perhaps this only needs to happen in the composite stage?
 	if (HSM_SCREEN_REFLECTION_ALLOW_REFLECTION > 0.5)
 	{
 		precomp_gel.rgb  *= black_edge_mask_invert;
 		precomp_tube_diffuse.rgb  *= black_edge_mask_invert;
+		crt_mask *= black_edge_mask_invert;
 	}
 	// Clip everything outside of the tube
 	else
@@ -348,6 +437,7 @@ void main()
 		precomp_tube_diffuse *= tube_mask;
 		precomp_gel.rgb *= tube_diffuse_mask;
 		precomp_gel *= tube_mask;
+		crt_mask *= tube_diffuse_mask;
 	}
 
 	// Need to encode final gamma in source pass since only 8bit
@@ -357,6 +447,7 @@ void main()
 
 	vec4 precomp_nightlight = vec4(ambient_rgb, 1);
 	precomp_nightlight = HSM_Delinearize(precomp_nightlight, DEFAULT_SRGB_GAMMA);
+	precomp_nightlight.b = crt_mask;
 	precomp_nightlight.a = tube_shadow;
 
 	vec4 image_layers_packed = HSM_Pack_4_Rgba_To_1_Rgba(precomp_tube_diffuse
@@ -369,47 +460,9 @@ void main()
 // Do the Final Composite
 //------------------------------------------------------------------------------------------
 
-	// vec4 unpacked_precomp_tube_diffuse = precomp_tube_diffuse;
-	// vec4 unpacked_precomp_gel = precomp_gel;
-	// vec4 unpacked_precomp_tube_highlight = precomp_tube_highlight;
-	// vec4 unpacked_precomp_nightlight = precomp_nightlight;
-
-	// unpacked_precomp_tube_diffuse = HSM_Linearize(unpacked_precomp_tube_diffuse, DEFAULT_SRGB_GAMMA);
-	// unpacked_precomp_gel = HSM_Linearize(unpacked_precomp_gel, DEFAULT_SRGB_GAMMA);
-	// unpacked_precomp_tube_highlight = HSM_Linearize(unpacked_precomp_tube_highlight, DEFAULT_SRGB_GAMMA);
-	// unpacked_precomp_nightlight = HSM_Linearize(unpacked_precomp_nightlight, DEFAULT_SRGB_GAMMA);
-
-
-	vec4 unpacked_precomp_tube_diffuse = vec4(0);
-	vec4 unpacked_precomp_gel = vec4(0);
-	vec4 unpacked_precomp_tube_highlight = vec4(0);
-	vec4 unpacked_precomp_nightlight = vec4(0);
-
-	HSM_Unpack_1_Rgba_To_4_Rgba(image_layers_packed, 
-								unpacked_precomp_tube_diffuse, 
-								unpacked_precomp_gel, 
-								unpacked_precomp_tube_highlight, 
-								unpacked_precomp_nightlight);
-
-	unpacked_precomp_tube_diffuse = HSM_Linearize(unpacked_precomp_tube_diffuse, DEFAULT_SRGB_GAMMA);
-	unpacked_precomp_gel = HSM_Linearize(unpacked_precomp_gel, DEFAULT_SRGB_GAMMA);
-	unpacked_precomp_tube_highlight = HSM_Linearize(unpacked_precomp_tube_highlight, DEFAULT_SRGB_GAMMA);
-	float unpacked_vignette = unpacked_precomp_tube_highlight.a;
-
-	unpacked_precomp_nightlight = HSM_Linearize(unpacked_precomp_nightlight, DEFAULT_SRGB_GAMMA);
-	float unpacked_shadow = unpacked_precomp_nightlight.a;
-
-
-	vec4 out_color = unpacked_precomp_tube_diffuse;
-
 	vec4 crt_color = texture(CrtPass, UNFLIPPED_VIEWPORT_COORD);
 
-	if (HSM_MONOCHROME_MODE > 0.5 && HSM_GetUseOnCurrentScreenIndex(HSM_MONOCHROME_DUALSCREEN_VIS_MODE))
-		crt_color = HSM_ApplyMonochrome(crt_color);
-
-	crt_color *= HSM_POST_CRT_BRIGHTNESS;
-
-// #ifdef USE_TUBEFX
+	// #ifdef USE_TUBEFX
 	if (HSM_AB_COMPARE_SHOW_MODE == 1 && HSM_GetIsInABCompareArea(vTexCoord))
 	{
 		vec2 ab_screen_coord = HSM_CRT_CURVATURE_SCALE * screen_curved_coord + (1 - HSM_CRT_CURVATURE_SCALE) * SCREEN_COORD;
@@ -418,78 +471,121 @@ void main()
 		vec4 drezzed_color = HSM_GetCroppedTexSample(DerezedPass, ab_screen_coord);
 		crt_color = HSM_Linearize(drezzed_color, GAMMA_INPUT);
 	}
-// #endif
 
-// #ifndef USE_TUBEFX
-// 	out_color = crt_color;
-// #endif
+	vec4 out_color = HSM_ApplyPackedTubeLayers(crt_color, image_layers_packed);
 
-	crt_color.rgb *= screen_to_tube_mask_invert;
 
-	if (HSM_SCREEN_REFLECTION_ALLOW_REFLECTION > 0.5)
-	{
-		crt_color.rgb *= black_edge_mask_invert;
-	}
-	else
-	{
-		crt_color *= tube_diffuse_mask;
-	}
 
-	// Multiply CRT image by Vignette
-	if (HSM_GetUseScreenVignette())
-		crt_color.rgb *= unpacked_vignette;
+// 	vec4 unpacked_precomp_tube_diffuse = vec4(0);
+// 	vec4 unpacked_precomp_gel = vec4(0);
+// 	vec4 unpacked_precomp_tube_highlight = vec4(0);
+// 	vec4 unpacked_precomp_nightlight = vec4(0);
 
-	// Multiply CRT image by gel
-	if (HSM_GetUseTubeColoredGelImage())
-	{
-		// Add Gel with Over/Normal blending on top of tube before we add the CRT
-		if ( HSM_TUBE_COLORED_GEL_LAYERING_ORDER == 1 )
-		{
-			// out_color += HSM_BlendModeLayerMix(vec4(0, 0, 0, 1), unpacked_precomp_gel, BLEND_MODE_NORMAL, HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT);
-			precomp_gel.rgb *= tube_shadow;
-			out_color = HSM_BlendModeLayerMix(out_color, unpacked_precomp_gel, BLEND_MODE_NORMAL, HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT);
-		}
+// 	HSM_Unpack_1_Rgba_To_4_Rgba(image_layers_packed, 
+// 								unpacked_precomp_tube_diffuse, 
+// 								unpacked_precomp_gel, 
+// 								unpacked_precomp_tube_highlight, 
+// 								unpacked_precomp_nightlight);
 
-		crt_color.rgb *= HSM_TUBE_COLORED_GEL_CRT_BRIGHTNESS;
-		if (HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT > 0)
-			crt_color.rgb = mix(crt_color.rgb, crt_color.rgb * clamp(HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_BRIGHTNESS * unpacked_precomp_gel.rgb, 0, 1), HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT);
+// 	unpacked_precomp_tube_diffuse = HSM_Linearize(unpacked_precomp_tube_diffuse, DEFAULT_SRGB_GAMMA);
+// 	unpacked_precomp_gel = HSM_Linearize(unpacked_precomp_gel, DEFAULT_SRGB_GAMMA);
+// 	unpacked_precomp_tube_highlight = HSM_Linearize(unpacked_precomp_tube_highlight, DEFAULT_SRGB_GAMMA);
+// 	float unpacked_vignette = unpacked_precomp_tube_highlight.a;
 
-	}
+// 	unpacked_precomp_nightlight = HSM_Linearize(unpacked_precomp_nightlight, DEFAULT_SRGB_GAMMA);
+// 	float unpacked_shadow = unpacked_precomp_nightlight.a;
 
-	// Apply the CRT image Additive Blend
-	if (HSM_CRT_BLEND_MODE == 1)
-		out_color = HSM_BlendModeLayerMix(out_color, crt_color, BLEND_MODE_ADD, HSM_CRT_BLEND_AMOUNT);
-	// Apply the CRT image with Multiply Blend
-	else if (HSM_CRT_BLEND_MODE == 2)
-	{	
-		out_color = clamp(out_color, 0, 1);
-		out_color = HSM_BlendModeLayerMix(out_color, crt_color, BLEND_MODE_MULTIPLY, HSM_CRT_BLEND_AMOUNT);
-	}
-	// Apply the CRT image with "Over" Blend, probably useful for something like Gameboy DMG
-	else if (HSM_CRT_BLEND_MODE == 3)
-	{	
-		out_color = clamp(out_color, 0, 1);
-		out_color = HSM_BlendModeLayerMix(out_color, crt_color, BLEND_MODE_NORMAL, HSM_CRT_BLEND_AMOUNT);
-	}
 
-	if (HSM_GetUseTubeColoredGelImage())
-	{
-		// Put Gel on top of CRT (Default situation)
-		precomp_gel.rgb *= tube_shadow;
-		if ( HSM_TUBE_COLORED_GEL_LAYERING_ORDER == 0 )
-			out_color = HSM_BlendModeLayerMix(out_color, unpacked_precomp_gel, BLEND_MODE_NORMAL, HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT);
-	}
+// 	vec4 out_color = unpacked_precomp_tube_diffuse;
 
-	// Add Tube Highlight
-	out_color.rgb += unpacked_precomp_tube_highlight.rgb;
+// 	vec4 crt_color = texture(CrtPass, UNFLIPPED_VIEWPORT_COORD);
+
+// 	if (HSM_MONOCHROME_MODE > 0.5 && HSM_GetUseOnCurrentScreenIndex(HSM_MONOCHROME_DUALSCREEN_VIS_MODE))
+// 		crt_color = HSM_ApplyMonochrome(crt_color);
+
+// 	crt_color *= HSM_POST_CRT_BRIGHTNESS;
+
+// // #ifdef USE_TUBEFX
+// 	if (HSM_AB_COMPARE_SHOW_MODE == 1 && HSM_GetIsInABCompareArea(vTexCoord))
+// 	{
+// 		vec2 ab_screen_coord = HSM_CRT_CURVATURE_SCALE * screen_curved_coord + (1 - HSM_CRT_CURVATURE_SCALE) * SCREEN_COORD;
+// 		ab_screen_coord = HSM_GetMirrorWrappedCoord(ab_screen_coord);
+
+// 		vec4 drezzed_color = HSM_GetCroppedTexSample(DerezedPass, ab_screen_coord);
+// 		crt_color = HSM_Linearize(drezzed_color, GAMMA_INPUT);
+// 	}
+// // #endif
+
+// // #ifndef USE_TUBEFX
+// // 	out_color = crt_color;
+// // #endif
+
+// 	crt_color.rgb *= screen_to_tube_mask_invert;
+
+// 	if (HSM_SCREEN_REFLECTION_ALLOW_REFLECTION > 0.5)
+// 	{
+// 		crt_color.rgb *= black_edge_mask_invert;
+// 	}
+// 	else
+// 	{
+// 		crt_color *= tube_diffuse_mask;
+// 	}
+
+// 	// Multiply CRT image by Vignette
+// 	if (HSM_GetUseScreenVignette())
+// 		crt_color.rgb *= unpacked_vignette;
+
+// 	// Multiply CRT image by gel
+// 	if (HSM_GetUseTubeColoredGelImage())
+// 	{
+// 		// Add Gel with Over/Normal blending on top of tube before we add the CRT
+// 		if ( HSM_TUBE_COLORED_GEL_LAYERING_ORDER == 1 )
+// 		{
+// 			// out_color += HSM_BlendModeLayerMix(vec4(0, 0, 0, 1), unpacked_precomp_gel, BLEND_MODE_NORMAL, HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT);
+// 			precomp_gel.rgb *= tube_shadow;
+// 			out_color = HSM_BlendModeLayerMix(out_color, unpacked_precomp_gel, BLEND_MODE_NORMAL, HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT);
+// 		}
+
+// 		crt_color.rgb *= HSM_TUBE_COLORED_GEL_CRT_BRIGHTNESS;
+// 		if (HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT > 0)
+// 			crt_color.rgb = mix(crt_color.rgb, crt_color.rgb * clamp(HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_BRIGHTNESS * unpacked_precomp_gel.rgb, 0, 1), HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT);
+
+// 	}
+
+// 	// Apply the CRT image Additive Blend
+// 	if (HSM_CRT_BLEND_MODE == 1)
+// 		out_color = HSM_BlendModeLayerMix(out_color, crt_color, BLEND_MODE_ADD, HSM_CRT_BLEND_AMOUNT);
+// 	// Apply the CRT image with Multiply Blend
+// 	else if (HSM_CRT_BLEND_MODE == 2)
+// 	{	
+// 		out_color = clamp(out_color, 0, 1);
+// 		out_color = HSM_BlendModeLayerMix(out_color, crt_color, BLEND_MODE_MULTIPLY, HSM_CRT_BLEND_AMOUNT);
+// 	}
+// 	// Apply the CRT image with "Over" Blend, probably useful for something like Gameboy DMG
+// 	else if (HSM_CRT_BLEND_MODE == 3)
+// 	{	
+// 		out_color = clamp(out_color, 0, 1);
+// 		out_color = HSM_BlendModeLayerMix(out_color, crt_color, BLEND_MODE_NORMAL, HSM_CRT_BLEND_AMOUNT);
+// 	}
+
+// 	if (HSM_GetUseTubeColoredGelImage())
+// 	{
+// 		// Put Gel on top of CRT (Default situation)
+// 		precomp_gel.rgb *= tube_shadow;
+// 		if ( HSM_TUBE_COLORED_GEL_LAYERING_ORDER == 0 )
+// 			out_color = HSM_BlendModeLayerMix(out_color, unpacked_precomp_gel, BLEND_MODE_NORMAL, HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT);
+// 	}
+
+// 	// Add Tube Highlight
+// 	out_color.rgb += unpacked_precomp_tube_highlight.rgb;
 
 // #ifdef ADD_SIMPLE_BG
 // 	out_color = HSM_ApplySimpleBG(out_color, vTexCoord, BackgroundImage, BackgroundVertImage);
 // #endif
 
-#ifdef DELINEARIZE_TUBEFX
-	out_color = HSM_Delinearize(out_color, DEFAULT_SRGB_GAMMA);
-#endif
+	#ifdef DELINEARIZE_TUBEFX
+		out_color = HSM_Delinearize(out_color, DEFAULT_SRGB_GAMMA);
+	#endif
 
 	// If we have calculated an image then set -1 as a flag to show that we have
 	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))

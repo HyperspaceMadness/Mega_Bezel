@@ -1423,16 +1423,38 @@ void main()
 				precomp_color.a = 1;
 
 			precomp_background = precomp_color;
+
+			// // Add color blocks to precomp for debugging
+			// if (vTexCoord.x < 0.8 && vTexCoord.y < 0.8)
+			// 	precomp_background.rgb = precomp_background.rgb * 0.8 + vec3(0.3, 0, 0) * 0.2;
 		}
 
 		if (precomp_index == PRECOMP_INDEX_MIDDLEGROUND)
+		{
 			precomp_middleground = precomp_color;
+			
+			// // Add color blocks to precomp for debugging
+			// if (vTexCoord.x < 0.65 && vTexCoord.y < 0.65)
+			// 	precomp_middleground.rgb = precomp_middleground.rgb * 0.8 + vec3(0, 0.3, 0) * 0.2;
+		}
 
 		if (precomp_index == PRECOMP_INDEX_FOREGROUND)
+		{
 			precomp_foreground = precomp_color;
-		
+
+			// // Add color blocks to precomp for debugging
+			// if (vTexCoord.x < 0.45 && vTexCoord.y < 0.45)
+			// 	precomp_foreground.rgb = precomp_foreground.rgb * 0.8 + vec3(0, 0.3, 0.3) * 0.2;
+		}
+
 		if (precomp_index == PRECOMP_INDEX_ADDITIVE)
+		{
 			precomp_additive = precomp_color;
+
+			// // Add color blocks to precomp for debugging
+			// if (vTexCoord.x > 0.8 && vTexCoord.y > 0.8)
+			// 	precomp_additive.rgb = precomp_additive.rgb + vec3(0, 0, 0.3);
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------
@@ -1453,27 +1475,26 @@ void main()
 	}
 
 	#ifdef ENABLE_CACHE_FALLBACK_CHECK
-	vec2 viewport_coord_adjusted = vTexCoord_precomp;
-	bool cache_info_changed = CACHE_INFO_CHANGED;
-	bool show_update_indicator = cache_info_changed && ( HSM_CACHE_UPDATE_INDICATOR_MODE == 1 || HSM_CACHE_GRAPHICS_ON < 0.5 && HSM_CACHE_UPDATE_INDICATOR_MODE == 2);
+		vec2 viewport_coord_adjusted = vTexCoord_precomp;
+		bool cache_info_changed = CACHE_INFO_CHANGED;
+		bool show_update_indicator = cache_info_changed && ( HSM_CACHE_UPDATE_INDICATOR_MODE == 1 || HSM_CACHE_GRAPHICS_ON < 0.5 && HSM_CACHE_UPDATE_INDICATOR_MODE == 2);
 
-	if (show_update_indicator)
-	{
-		float final_aspect = SCREEN_ASPECT;
-		// vec2 corner_offset = vec2(MAX_NEGATIVE_CROP * 2 * 0.8, MAX_NEGATIVE_CROP * 2 * 0.8);
-		vec2 corner_offset = vec2(0.1, 0.1);
-		vec2 center_coord = vec2(1 - corner_offset.x * final_aspect, 1 - corner_offset.y);
-		vec2 test_coord = vec2(1 - (1 - vTexCoord_precomp.x) * final_aspect, vTexCoord_precomp.y);
-		float distance =  length(test_coord - center_coord);
-
-		if (distance < 0.04)
+		if (show_update_indicator)
 		{
-			float modulation = clamp(0.4 + abs(mod(global.FrameCount, 90) / 90 - 0.5) * 1.2, 0, 1);
-			modulation = HHLP_EasePowerInOut(modulation, 2);
-			precomp_foreground *= 1 - modulation;
-			precomp_foreground += modulation * vec4(1, 0, 0, 1);
+			float final_aspect = SCREEN_ASPECT;
+			vec2 corner_offset = vec2(0.1, 0.1);
+			vec2 center_coord = vec2(1 - corner_offset.x * final_aspect, 1 - corner_offset.y);
+			vec2 test_coord = vec2(1 - (1 - vTexCoord_precomp.x) * final_aspect, vTexCoord_precomp.y);
+			float distance =  length(test_coord - center_coord);
+
+			if (distance < 0.04)
+			{
+				float modulation = clamp(0.4 + abs(mod(global.FrameCount, 90) / 90 - 0.5) * 1.2, 0, 1);
+				modulation = HHLP_EasePowerInOut(modulation, 2);
+				precomp_foreground *= 1 - modulation;
+				precomp_foreground += modulation * vec4(1, 0, 0, 1);
+			}
 		}
-	}
 	#endif
 
 	// Need to encode final gamma in source pass since only 8bit
