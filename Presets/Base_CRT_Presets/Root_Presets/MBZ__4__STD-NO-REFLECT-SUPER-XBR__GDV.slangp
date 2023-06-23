@@ -12,7 +12,7 @@ filter_linear1 = false
 scale_type1 = source
 scale1 = 1.0
 
-shader2 = ../../../shaders/base/text.slang
+shader2 = ../../../shaders/base/text-pass.slang
 filter_linear2 = false
 float_framebuffer2 = true
 scale_type2 = source
@@ -282,7 +282,7 @@ scale34 = 1.0
 
 # Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 
-shader35 = ../../../shaders/base/bezel-images-under-crt.slang
+shader35 = ../../../shaders/base/bezel-and-image-layers.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
 filter_linear35 = false
 scale_type35 = viewport

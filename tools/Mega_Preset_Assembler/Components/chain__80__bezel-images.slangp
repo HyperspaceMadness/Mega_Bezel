@@ -2,7 +2,7 @@ shaders = 2
 
 # Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 
-shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/bezel-images-under-crt.slang
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/bezel-and-image-layers.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
 filter_linear0 = false
 scale_type0 = viewport

@@ -1,3 +1,8 @@
+#version 450
+
+#include "common/globals-and-screen-scale-params.inc"
+#include "common/common-functions.inc"
+
 /*
     Mega Bezel - Creates a graphic treatment for the game play area to give a retro feel
     Copyright (C) 2019-2021 HyperspaceMadness - HyperspaceMadness@outlook.com

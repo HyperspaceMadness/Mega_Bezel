@@ -1,3 +1,12 @@
+#version 450
+
+#define LAYERS_UNDER_CRT
+
+/////////////// IMPORTS ///////////////
+#include "common/globals-and-image-layers-params.inc"
+#include "common/common-functions.inc"
+#include "common/common-functions-bezel.inc"
+
 /*
     Mega Bezel - Creates a graphic treatment for the game play area to give a retro feel
     Copyright (C) 2019-2023 HyperspaceMadness - HyperspaceMadness@outlook.com
@@ -109,56 +118,6 @@ vec4 BlendModeMaskLayerMix(vec4 color_under, vec4 color_over, float blend_mode, 
 	}
 	return out_color;
 }
-
-// // Assumes Opacity is already encoded in alpha
-// vec4 BlendModeMaskLayerMix(vec4 color_under, vec4 color_over, float blend_mode, bool matte_pass, bool allow_additive_blend, float mask_mode, float cutout_mode, float dualscreen_mode, float layer_opacity)
-// {
-// 	vec4 out_color = color_under;
-
-// 	if ( blend_mode == 0 || (dualscreen_mode != SHOW_ON_DUALSCREEN_MODE_BOTH && dualscreen_mode != SCREEN_INDEX) )
-// 		return out_color;
-	
-// 	float cutout_mask = 1;
-// 	if (cutout_mode == CUTOUT_MODE_INSIDE)
-// 		cutout_mask = CUTOUT_MASK;
-// 	if (cutout_mode == CUTOUT_MODE_OUTSIDE)
-// 		cutout_mask = 1 - CUTOUT_MASK;
-
-// 	if (blend_mode == BLEND_MODE_OFF)
-// 		return out_color;
-	
-// 	// Seems like color_over is being multiplied by alpha twice
-// 	if (blend_mode == BLEND_MODE_NORMAL || blend_mode == BLEND_MODE_ADD)
-// 		color_over *= layer_opacity * GetMask(mask_mode) * cutout_mask;
-		
-// 	if (blend_mode == BLEND_MODE_NORMAL)
-// 	{
-// 		// color_over.rgb *= color_over.a;
-// 		if (matte_pass)
-// 		 	color_over.rgb *= 0;
-
-
-// 		out_color = HSM_PreMultAlphaBlend(color_under, color_over);
-// 	}
-// 	if (blend_mode == BLEND_MODE_ADD && allow_additive_blend)
-// 	{
-// 		// Layer additively by adding color but not affecting alpha
-// 		out_color.rgb += color_over.rgb;
-// 		// vec4 blend_color = color_under;
-// 		// blend_color.rgb = color_under.rgb + color_over.rgb;
-// 		// out_color = vec4(clamp(mix(color_under.rgb, blend_color.rgb, color_over.a), 0, 1), color_under.a);
-// 	}
-// 	if (blend_mode == BLEND_MODE_MULTIPLY)
-// 	{
-// 		vec4 multiplied_color = color_under;
-
-// 		// Un-Premultiply the color
-// 		multiplied_color.rgb = color_under.rgb * (color_over.rgb / (color_over.a + 0.0001));
-// 		out_color = vec4(clamp(mix(color_under.rgb, multiplied_color.rgb, color_over.a), 0, 1), color_under.a);
-// 	}
-
-// 	return clamp(out_color, 0, 1);
-// }
 
 vec2 HSM_GetLayerCoord(vec2 in_viewport_coord, float layer_to_follow, float follow_mode, inout vec2 out_placement_scale)
 {
