@@ -84,7 +84,7 @@ layout(set = 0, binding = 1) uniform sampler2D CacheInfoPass;
 layout(set = 0, binding = 2) uniform sampler2D BackgroundImage;
 layout(set = 0, binding = 3) uniform sampler2D BackgroundVertImage;
 layout(set = 0, binding = 4) uniform sampler2D GlassPresetHighlightImage;
-layout(set = 0, binding = 5) uniform sampler2D TubeFxPass;
+layout(set = 0, binding = 5) uniform sampler2D CrtPass;
 layout(set = 0, binding = 6) uniform sampler2D ReflectPrepLowResPass;
 layout(set = 0, binding = 7) uniform sampler2D ReflectPrepBlurredPass;
 layout(set = 0, binding = 8) uniform sampler2D ReflectPrepDiffusedPass;
@@ -132,7 +132,7 @@ void main()
 	// CRT Pass
 	//----------------------------------------------------
 	// Get the CRT pass and make it in linear space & mask the area outside the screen
-	vec4 crt_linear = texture(TubeFxPass, UNFLIPPED_VIEWPORT_COORD.xy);
+	vec4 crt_linear = texture(CrtPass, UNFLIPPED_VIEWPORT_COORD.xy);
 
 	vec4 blurred_reflection_color = HHLP_GetBilinearTextureSample(ReflectPrepBlurredPass, UNFLIPPED_VIEWPORT_COORD.xy, params.ReflectPrepBlurredPassSize);
 

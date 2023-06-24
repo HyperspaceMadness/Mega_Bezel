@@ -77,10 +77,9 @@ layout(set = 0, binding = 4) uniform sampler2D DeditherPass;
 layout(set = 0, binding = 5) uniform sampler2D ColorCorrectPass;
 layout(set = 0, binding = 6) uniform sampler2D LinearizePass;
 layout(set = 0, binding = 7) uniform sampler2D CrtPass;
-layout(set = 0, binding = 8) uniform sampler2D TubeFxPass;
 
 #ifdef IS_NO_REFLECT_PRESET
-#define MiddlePass TubeFxPass
+#define MiddlePass CrtPass
 #else
 layout(set = 0, binding = 9) uniform sampler2D ReflectPass;
 #define MiddlePass ReflectPass
@@ -138,7 +137,7 @@ void main()
 
 		// TUBE
 		if (HSM_SHOW_PASS_INDEX == 2)
-			FragColor = texture(TubeFxPass, vTexCoord);
+			FragColor = texture(CrtPass, vTexCoord);
 
 		// CRT
 		if (HSM_SHOW_PASS_INDEX == 3)

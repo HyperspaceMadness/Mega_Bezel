@@ -207,8 +207,8 @@ shader23 = ../../../shaders/guest/hsm-gaussian_horizontal.slang
 filter_linear23 = true
 scale_type_x23 = absolute
 scale_x23 = 800.0
-scale_type_y23 = source
-scale_y23 = 1.0 
+scale_type_y23 = absolute
+scale_y23 = 600.0
 float_framebuffer23 = true
 
 shader24 = ../../../shaders/guest/hsm-gaussian_vertical.slang

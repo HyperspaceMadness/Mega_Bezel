@@ -2,6 +2,7 @@
 #reference "../Components/composition__10__cache__all.slangp"
 #reference "../Components/composition__40__pre-crt-chain__std.slangp"
 #reference "../Components/composition__60__crt-prep__std.slangp"
+#reference "../Components/chain__68__tubelayers-default.slangp"
 #reference "../Components/chain__60__crt__easymode.slangp"
 #reference "../Components/chain__68__tubefx-default-delinearize.slangp"
 #reference "../Components/composition__90__post-crt__screen-only.slangp"

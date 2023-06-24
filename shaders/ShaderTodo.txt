@@ -30,20 +30,14 @@ Changes:
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Fix Tube Highlight Cache Update
+  * Fix NTSC pass order
+  * Apply Delinearize and Tubefx in CRT pass
   * Add Same Blend Mode for Tube Gel which uses Alpha
   * Add Debug for Precomps, Maybe checkerboards with different sizes multiplied by alpha
-  * Need reflection passes with/without images for reflection mask?
-  * Tube Graphics Under CRT
-    * Tube
-    * Gel Normal
-    * Highlight
-    * Night 1
-    * Vignette
-    * Night 2
-  * Add Screen Effects to CRT, including Gel, and tube (tube must be here because of reflection)
-  * CRT Multiply only affects Tube
+  * Masks and Night Lighting Pass?
 
-  * Fix DOT Potato Preset
+  * Fix Discs of Tron Potato Preset
   * Integrate Overscan into the Resolution Debug somehow
   * Should put Tube Bg in images? Only add Gel Multiply and Highlight in TubeFx?
   * Update Grade

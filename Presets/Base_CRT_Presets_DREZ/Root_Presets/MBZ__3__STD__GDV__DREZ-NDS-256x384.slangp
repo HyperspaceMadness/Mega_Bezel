@@ -1,4 +1,4 @@
-shaders = 30
+shaders = 31
 
 shader0 = ../../../shaders/base/drez-g-sharp_resampler.slang
 filter_linear0 = false
@@ -98,141 +98,153 @@ scale13 = 1.0
 float_framebuffer13 = true
 alias13 = "LinearizePass"
 
-shader14 = ../../../shaders/guest/hsm-gaussian_horizontal.slang
-filter_linear14 = true
-scale_type_x14 = absolute
-scale_x14 = 800.0
-scale_type_y14 = source
-scale_y14 = 1.0 
-float_framebuffer14 = true
+# Tube Layers ----------------------------------------------------------------
 
-shader15 = ../../../shaders/guest/hsm-gaussian_vertical.slang
-filter_linear15 = true
-scale_type_x15 = absolute
-scale_x15 = 800.0
-scale_type_y15 = absolute
-scale_y15 = 600.0
-float_framebuffer15 = true
-alias15 = GlowPass
-
-shader16 = ../../../shaders/guest/hsm-bloom_horizontal.slang
-filter_linear16 = true
-scale_type_x16 = absolute
-scale_x16 = 800.0
-scale_type_y16 = absolute
-scale_y16 = 600.0 
-float_framebuffer16 = true
-
-shader17 = ../../../shaders/guest/hsm-bloom_vertical.slang
-filter_linear17 = true
-scale_type_x17 = source
-scale_x17 = 1.0
-scale_type_y17 = source
-scale_y17 = 1.0
-float_framebuffer17 = true
-alias17 = BloomPass
-
-shader18 = ../../../shaders/guest/hsm-crt-guest-advanced.slang
-filter_linear18 = true
-scale_type18 = viewport
-scale_x18 = 1.0
-scale_y18 = 1.0
-float_framebuffer18 = true
-
-shader19 = ../../../shaders/guest/hsm-deconvergence.slang
-filter_linear19 = true
-scale_type19 = viewport
-scale_x19 = 1.0
-scale_y19 = 1.0
-float_framebuffer19 = true
-alias19 = "CrtPass"
-
-shader20 = ../../../shaders/base/tubefx-default.slang
+shader14 = ../../../shaders/base/tubelayers-default.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
-filter_linear20 = false
-mipmap_input20 = true
-scale_type20 = viewport
-scale20 = 1.0
-
-# Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
-
-shader21 = ../../../shaders/base/bezel-and-image-layers.slang
-// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
-filter_linear21 = false
-scale_type21 = viewport
-scale21 = 1.0
-alias21 = "SceneLayersPass"
+filter_linear14 = false
+mipmap_input14 = true
+scale_type14 = viewport
+scale14 = 1.0
 
 // This pass IS ABSOLUTELY NECESSARY
 // A pass with filter_linear = false must be placed after a pass which is packing 4 8 Bit values into a 32 Bit output
 // Not having this pass results in incorrect sampling/corrupted values coming from the pass when sampled within another pass
-shader22 = ../../../shaders/base/stock.slang
-mipmap_input22 = false
+shader15 = ../../../shaders/base/do-nothing.slang
+mipmap_input15 = false
+filter_linear15 = false
+scale_type15 = absolute
+scale_x15 = 8
+scale_y15 = 8
+
+shader16 = ../../../shaders/guest/hsm-gaussian_horizontal.slang
+filter_linear16 = true
+scale_type_x16 = absolute
+scale_x16 = 800.0
+scale_type_y16 = absolute
+scale_y16 = 600.0
+float_framebuffer16 = true
+
+shader17 = ../../../shaders/guest/hsm-gaussian_vertical.slang
+filter_linear17 = true
+scale_type_x17 = absolute
+scale_x17 = 800.0
+scale_type_y17 = absolute
+scale_y17 = 600.0
+float_framebuffer17 = true
+alias17 = GlowPass
+
+shader18 = ../../../shaders/guest/hsm-bloom_horizontal.slang
+filter_linear18 = true
+scale_type_x18 = absolute
+scale_x18 = 800.0
+scale_type_y18 = absolute
+scale_y18 = 600.0 
+float_framebuffer18 = true
+
+shader19 = ../../../shaders/guest/hsm-bloom_vertical.slang
+filter_linear19 = true
+scale_type_x19 = source
+scale_x19 = 1.0
+scale_type_y19 = source
+scale_y19 = 1.0
+float_framebuffer19 = true
+alias19 = BloomPass
+
+shader20 = ../../../shaders/guest/hsm-crt-guest-advanced.slang
+filter_linear20 = true
+scale_type20 = viewport
+scale_x20 = 1.0
+scale_y20 = 1.0
+float_framebuffer20 = true
+
+shader21 = ../../../shaders/guest/hsm-deconvergence-with-tubefx.slang
+filter_linear21 = true
+scale_type21 = viewport
+scale_x21 = 1.0
+scale_y21 = 1.0
+float_framebuffer21 = true
+alias21 = "CrtPass"
+
+# Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
+
+shader22 = ../../../shaders/base/bezel-and-image-layers.slang
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
 filter_linear22 = false
-scale_type22 = absolute
-scale_x22 = 8
-scale_y22 = 8
+scale_type22 = viewport
+scale22 = 1.0
+alias22 = "SceneLayersPass"
+
+// This pass IS ABSOLUTELY NECESSARY
+// A pass with filter_linear = false must be placed after a pass which is packing 4 8 Bit values into a 32 Bit output
+// Not having this pass results in incorrect sampling/corrupted values coming from the pass when sampled within another pass
+shader23 = ../../../shaders/base/do-nothing.slang
+mipmap_input23 = false
+filter_linear23 = false
+scale_type23 = absolute
+scale_x23 = 8
+scale_y23 = 8
 
 # Reduce Resolution  ----------------------------------------------------------------
 #      Reduce the resolution to a small static size regardless of final resolution
 #      Allows consistent look and faster at different final resolutions for blur
 #      Mipmap option allows downscaling without artifacts
-shader23 = ../../../shaders/base/linearize-crt.slang
-mipmap_input23 = true
-filter_linear23 = true
-scale_type23 = absolute
-scale_x23 = 800
-scale_y23 = 600
-float_framebuffer23 = true
-alias23 = "ReflectPrepLowResPass"
-
-# Add Blur for the Reflection (Horizontal) ----------------------------------------------------------------
-shader24 = ../../../shaders/base/blur-outside-screen-horiz.slang
+shader24 = ../../../shaders/base/linearize-crt.slang
 mipmap_input24 = true
 filter_linear24 = true
+scale_type24 = absolute
+scale_x24 = 800
+scale_y24 = 600
 float_framebuffer24 = true
+alias24 = "ReflectPrepLowResPass"
 
-# Add Blur for the Reflection (Vertical) ----------------------------------------------------------------
-shader25 = ../../../shaders/base/blur-outside-screen-vert.slang
+# Add Blur for the Reflection (Horizontal) ----------------------------------------------------------------
+shader25 = ../../../shaders/base/blur-outside-screen-horiz.slang
+mipmap_input25 = true
 filter_linear25 = true
 float_framebuffer25 = true
-alias25 = "ReflectPrepBlurredPass"
+
+# Add Blur for the Reflection (Vertical) ----------------------------------------------------------------
+shader26 = ../../../shaders/base/blur-outside-screen-vert.slang
+filter_linear26 = true
+float_framebuffer26 = true
+alias26 = "ReflectPrepBlurredPass"
 
 # Reduce resolution ----------------------------------------------------------------
 # Reduced to a very small amount so we can create a blur which will create a glow from the screen
 #      Mipmap option allows smoother downscaling
-shader26 = ../../../../../blurs/shaders/royale/blur9x9.slang
-mipmap_input26 = true
-filter_linear26 = true
-scale_type26 = absolute
-scale_x26 = 128
-scale_y26 = 128
-float_framebuffer26 = true
-alias26 = "ReflectPrepDiffusedPass"
-
-# Add Diffused glow all around the screen ----------------------------------------------------------------
-#      Blurred so much that it's non directional
-#      Mipmap option allows downscaling without artifacts
 shader27 = ../../../../../blurs/shaders/royale/blur9x9.slang
 mipmap_input27 = true
 filter_linear27 = true
 scale_type27 = absolute
-scale_x27 = 12
-scale_y27 = 12
+scale_x27 = 128
+scale_y27 = 128
 float_framebuffer27 = true
-alias27 = "ReflectPrepFullscreenGlowPass"
+alias27 = "ReflectPrepDiffusedPass"
+
+# Add Diffused glow all around the screen ----------------------------------------------------------------
+#      Blurred so much that it's non directional
+#      Mipmap option allows downscaling without artifacts
+shader28 = ../../../../../blurs/shaders/royale/blur9x9.slang
+mipmap_input28 = true
+filter_linear28 = true
+scale_type28 = absolute
+scale_x28 = 12
+scale_y28 = 12
+float_framebuffer28 = true
+alias28 = "ReflectPrepFullscreenGlowPass"
 
 # Bezel Reflection ----------------------------------------------------------------
-shader28 = ../../../shaders/base/reflection.slang
-scale_type28 = viewport
-float_framebuffer28 = true
-alias28 = "ReflectPass"
+shader29 = ../../../shaders/base/reflection.slang
+scale_type29 = viewport
+float_framebuffer29 = true
+alias29 = "ReflectPass"
 
 # Combine Passes ----------------------------------------------------------------
-shader29 = ../../../shaders/base/combine-passes.slang
+shader30 = ../../../shaders/base/combine-passes.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
-filter_linear29 = false
-scale_type29 = viewport
+filter_linear30 = false
+scale_type30 = viewport
 
 
 # Textures All

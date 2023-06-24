@@ -1,0 +1,32 @@
+shaders = 4
+
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/easymode/hsm-crt-easymode-blur_horiz.slang
+filter_linear0 = false
+srgb_framebuffer0 = true
+
+shader1 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/easymode/hsm-crt-easymode-blur_vert.slang
+filter_linear1 = false
+srgb_framebuffer1 = true
+
+shader2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/easymode/hsm-crt-easymode-threshold.slang
+filter_linear2 = false
+srgb_framebuffer2 = true
+
+# Easymode's Shader!
+shader3 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/easymode/hsm-crt-easymode-halation-with-tubefx.slang
+filter_linear3 = true
+scale_type3 = viewport
+float_framebuffer3 = true
+alias3 = "CrtPass"
+
+
+# -----------------------------------------------------------------------------------------------
+# EASYMODE PARAMETERS
+
+g_gamma_out = 2.45
+g_gamma_out = 2.45
+
+# Easymode Parameters
+gamma_out = 2.2
+
+# -----------------------------------------------------------------------------------------------

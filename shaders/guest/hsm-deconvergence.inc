@@ -22,6 +22,10 @@
    
 */
 
+#include "../base/common/globals-and-bezel-params.inc"
+#include "../base/common/common-functions.inc"
+#include "../base/common/common-functions-bezel.inc"
+
 #pragma parameter GDV_BRIGHTNESS_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter bogus_brightness "[ BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
@@ -255,6 +259,7 @@ layout(set = 0, binding = 7) uniform sampler2D Source;
 
 // HSM Added
 layout(set = 0, binding = 8) uniform sampler2D CacheInfoPass;
+layout(set = 0, binding = 9) uniform sampler2D TubeFxPass;
 
 #define eps 1e-10 
 
@@ -1040,6 +1045,10 @@ if (abs(bloom) > 0.025)
 	float adjusted_bardir = global.bardir < 0 ? TATE : global.bardir;
 	color.rgb *= humbar(mix(pos.y, pos.x, adjusted_bardir));
 
-	FragColor = vec4(color, 1.0);
-	FragColor = HSM_Linearize(FragColor, DEFAULT_SRGB_GAMMA);
+	vec4 crt_color = vec4(color, 1);
+	crt_color = HSM_Linearize(crt_color, DEFAULT_SRGB_GAMMA);
+
+	vec4 image_layers_packed = texture(TubeFxPass, vTexCoord);
+
+	FragColor = HSM_ApplyPackedTubeLayers(crt_color, image_layers_packed);
 }

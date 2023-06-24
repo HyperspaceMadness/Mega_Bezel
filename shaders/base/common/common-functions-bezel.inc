@@ -159,18 +159,3 @@ float HSM_GetBezelCoords(vec2 tube_diffuse_coord,
 }
 
 float MAX_LAYER_ORDER = 12;
-
-bool HSM_GetUseTubeStaticReflection()
-{
-	return HSM_TUBE_STATIC_REFLECTION_IMAGE_ON > 0.5 && HSM_GetUseOnCurrentScreenIndex(HSM_TUBE_STATIC_REFLECTION_IMAGE_DUALSCREEN_VIS_MODE);
-}
-
-bool HSM_GetUseTubeDiffuseImage()
-{
-	return HSM_TUBE_DIFFUSE_MODE == 1 && HSM_GetUseOnCurrentScreenIndex(HSM_TUBE_DIFFUSE_IMAGE_DUALSCREEN_VIS_MODE);
-}
-
-bool HSM_GetUseTubeColoredGelImage()
-{
-	return HSM_TUBE_COLORED_GEL_IMAGE_ON > 0.5 && HSM_GetUseOnCurrentScreenIndex(HSM_TUBE_COLORED_GEL_IMAGE_DUALSCREEN_VIS_MODE);
-}

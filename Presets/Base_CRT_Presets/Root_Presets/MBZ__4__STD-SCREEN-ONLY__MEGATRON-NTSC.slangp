@@ -1,4 +1,4 @@
-shaders = 23
+shaders = 24
 
 shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
@@ -134,34 +134,53 @@ scale_type17 = source
 scale17 = 1.0
 float_framebuffer17 = true
 alias17 = "LinearizePass"
+
+# Tube Layers ----------------------------------------------------------------
+
+shader18 = ../../../shaders/base/tubelayers-default.slang
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear18 = false
+mipmap_input18 = true
+scale_type18 = viewport
+scale18 = 1.0
+
+// This pass IS ABSOLUTELY NECESSARY
+// A pass with filter_linear = false must be placed after a pass which is packing 4 8 Bit values into a 32 Bit output
+// Not having this pass results in incorrect sampling/corrupted values coming from the pass when sampled within another pass
+shader19 = ../../../shaders/base/do-nothing.slang
+mipmap_input19 = false
+filter_linear19 = false
+scale_type19 = absolute
+scale_x19 = 8
+scale_y19 = 8
 feedback_pass = "0"
 
 # Sony Megatron Colour Video Monitor by Major Pain The Cactus
-shader18 = "../../../shaders/megatron/crt-sony-megatron-source-pass.slang"
-filter_linear18 = "false"
-scale_type18 = "source"
-scale18 = "1.0"
-wrap_mode18 = "clamp_to_border"
-mipmap_input18 = "false"
-alias18 = "SourceSDR"
-float_framebuffer18 = "true"
-
-shader19 = "../../../shaders/megatron/crt-sony-megatron-hdr-pass.slang"
-filter_linear19 = "false"
-scale_type19 = "source"
-scale19 = "1.0"
-wrap_mode19 = "clamp_to_border"
-mipmap_input19 = "false"
-alias19 = "SourceHDR"
-float_framebuffer19 = "true"
-
-shader20 = "../../../shaders/megatron/crt-sony-megatron.slang"
+shader20 = "../../../shaders/megatron/crt-sony-megatron-source-pass.slang"
 filter_linear20 = "false"
+scale_type20 = "source"
+scale20 = "1.0"
 wrap_mode20 = "clamp_to_border"
 mipmap_input20 = "false"
-scale_type20 = "viewport"
+alias20 = "SourceSDR"
 float_framebuffer20 = "true"
-alias20 = "CrtPass"
+
+shader21 = "../../../shaders/megatron/crt-sony-megatron-hdr-pass.slang"
+filter_linear21 = "false"
+scale_type21 = "source"
+scale21 = "1.0"
+wrap_mode21 = "clamp_to_border"
+mipmap_input21 = "false"
+alias21 = "SourceHDR"
+float_framebuffer21 = "true"
+
+shader22 = "../../../shaders/megatron/crt-sony-megatron.slang"
+filter_linear22 = "false"
+wrap_mode22 = "clamp_to_border"
+mipmap_input22 = "false"
+scale_type22 = "viewport"
+float_framebuffer22 = "true"
+alias22 = "CrtPass"
 
 
 # -----------------------------------------------------------------------------------------------
@@ -181,17 +200,10 @@ HSM_REFLECT_GLOBAL_AMOUNT = "7.000000"
 
 # -----------------------------------------------------------------------------------------------
 
-shader21 = ../../../shaders/base/tubefx-default.slang
-// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
-filter_linear21 = false
-mipmap_input21 = true
-scale_type21 = viewport
-scale21 = 1.0
-
 # Combine Passes ----------------------------------------------------------------
-shader22 = ../../../shaders/base/output-hdr.slang
-scale_type22 = viewport
-alias22 = "OutputPass"
+shader23 = ../../../shaders/base/output-hdr.slang
+scale_type23 = viewport
+alias23 = "OutputPass"
 
 
 # Textures All

@@ -1,4 +1,4 @@
-shaders = 21
+shaders = 23
 
 shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
@@ -97,61 +97,80 @@ scale13 = 1.0
 float_framebuffer13 = true
 alias13 = "LinearizePass"
 
-shader14 = ../../../shaders/guest/hsm-gaussian_horizontal.slang
-filter_linear14 = true
-scale_type_x14 = absolute
-scale_x14 = 800.0
-scale_type_y14 = source
-scale_y14 = 1.0 
-float_framebuffer14 = true
+# Tube Layers ----------------------------------------------------------------
 
-shader15 = ../../../shaders/guest/hsm-gaussian_vertical.slang
-filter_linear15 = true
-scale_type_x15 = absolute
-scale_x15 = 800.0
-scale_type_y15 = absolute
-scale_y15 = 600.0
-float_framebuffer15 = true
-alias15 = GlowPass
+shader14 = ../../../shaders/base/tubelayers-default.slang
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear14 = false
+mipmap_input14 = true
+scale_type14 = viewport
+scale14 = 1.0
 
-shader16 = ../../../shaders/guest/hsm-bloom_horizontal.slang
+// This pass IS ABSOLUTELY NECESSARY
+// A pass with filter_linear = false must be placed after a pass which is packing 4 8 Bit values into a 32 Bit output
+// Not having this pass results in incorrect sampling/corrupted values coming from the pass when sampled within another pass
+shader15 = ../../../shaders/base/do-nothing.slang
+mipmap_input15 = false
+filter_linear15 = false
+scale_type15 = absolute
+scale_x15 = 8
+scale_y15 = 8
+
+shader16 = ../../../shaders/guest/hsm-gaussian_horizontal.slang
 filter_linear16 = true
 scale_type_x16 = absolute
 scale_x16 = 800.0
 scale_type_y16 = absolute
-scale_y16 = 600.0 
+scale_y16 = 600.0
 float_framebuffer16 = true
 
-shader17 = ../../../shaders/guest/hsm-bloom_vertical.slang
+shader17 = ../../../shaders/guest/hsm-gaussian_vertical.slang
 filter_linear17 = true
-scale_type_x17 = source
-scale_x17 = 1.0
-scale_type_y17 = source
-scale_y17 = 1.0
+scale_type_x17 = absolute
+scale_x17 = 800.0
+scale_type_y17 = absolute
+scale_y17 = 600.0
 float_framebuffer17 = true
-alias17 = BloomPass
+alias17 = GlowPass
 
-shader18 = ../../../shaders/guest/hsm-crt-guest-advanced.slang
+shader18 = ../../../shaders/guest/hsm-bloom_horizontal.slang
 filter_linear18 = true
-scale_type18 = viewport
-scale_x18 = 1.0
-scale_y18 = 1.0
+scale_type_x18 = absolute
+scale_x18 = 800.0
+scale_type_y18 = absolute
+scale_y18 = 600.0 
 float_framebuffer18 = true
 
-shader19 = ../../../shaders/guest/hsm-deconvergence.slang
+shader19 = ../../../shaders/guest/hsm-bloom_vertical.slang
 filter_linear19 = true
-scale_type19 = viewport
+scale_type_x19 = source
 scale_x19 = 1.0
+scale_type_y19 = source
 scale_y19 = 1.0
 float_framebuffer19 = true
-alias19 = "CrtPass"
+alias19 = BloomPass
 
-shader20 = ../../../shaders/base/tubefx-none-delinearize.slang
-// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
-filter_linear20 = false
-mipmap_input20 = true
+shader20 = ../../../shaders/guest/hsm-crt-guest-advanced.slang
+filter_linear20 = true
 scale_type20 = viewport
-scale20 = 1.0
+scale_x20 = 1.0
+scale_y20 = 1.0
+float_framebuffer20 = true
+
+shader21 = ../../../shaders/guest/hsm-deconvergence-with-tubefx.slang
+filter_linear21 = true
+scale_type21 = viewport
+scale_x21 = 1.0
+scale_y21 = 1.0
+float_framebuffer21 = true
+alias21 = "CrtPass"
+
+shader22 = ../../../shaders/base/tubefx-none-delinearize.slang
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear22 = false
+mipmap_input22 = true
+scale_type22 = viewport
+scale22 = 1.0
 
 # Textures All
 # Define textures to be used by the different passes
