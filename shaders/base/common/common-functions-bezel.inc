@@ -77,7 +77,7 @@ float HSM_GetSimpleBezelCoords(vec2 tube_diffuse_coord,
 bool HSM_IsOutsideReflectionBoundary()
 {
 	vec2 cache_bounds_coord = TUBE_COORD;
-	if (HSM_SCREEN_REFLECTION_ALLOW_REFLECTION < 0.5)
+	if (HSM_SCREEN_REFLECTION_ALLOW_REFLECTION > 0.5)
 	{
 		// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
 		vec2 reflection_outer_boundary_coord;

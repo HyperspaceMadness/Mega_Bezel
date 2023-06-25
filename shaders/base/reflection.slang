@@ -96,6 +96,12 @@ layout(set = 0, binding = 10) uniform sampler2D ReflectPassFeedback;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
 {
+	// HSM Added
+	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
+
+	if (HSM_IsOutsideReflectionBoundary())
+		return;
+
 	if (HSM_AB_COMPARE_FREEZE_CRT_TUBE == 1 && HSM_GetIsInABCompareArea(vTexCoord))
 	{
 		FragColor = texture(PassFeedback, vTexCoord);
@@ -104,17 +110,15 @@ void main()
 
 	VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 
-	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
-
-	if (HSM_IsOutsideReflectionBoundary())
-	{
-		vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
-		if (HSM_CACHE_GRAPHICS_ON > 0.5 && feedback_color_test.a < 0 && !CACHE_INFO_CHANGED)
-		{
-			FragColor = texture(PassFeedback, UNFLIPPED_VIEWPORT_COORD);
-			return;
-		}
-	}
+	// if (HSM_IsOutsideReflectionBoundary())
+	// {
+	// 	vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
+	// 	if (HSM_CACHE_GRAPHICS_ON > 0.5 && feedback_color_test.a < 0 && !CACHE_INFO_CHANGED)
+	// 	{
+	// 		FragColor = texture(PassFeedback, UNFLIPPED_VIEWPORT_COORD);
+	// 		return;
+	// 	}
+	// }
 
 	HSM_GetBezelCoords(TUBE_DIFFUSE_COORD, 
 						TUBE_DIFFUSE_SCALE, 

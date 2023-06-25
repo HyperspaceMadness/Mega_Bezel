@@ -448,10 +448,11 @@ layout(set = 0, binding = 15) uniform sampler2D SceneLayersPassFeedback;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
 {
-	HSM_UpdateCacheInfoChanged(CacheInfoPass);
+    HSM_UpdateCacheInfoChanged(CacheInfoPass);
+
 	// vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
 	// vec4 feedback_color_test = vec4(0,0,0,-1);
-	if (HSM_CACHE_GRAPHICS_ON > 0.5 && !CACHE_INFO_CHANGED)
+	if (HSM_CACHE_GRAPHICS_ON > 0.5 && !CACHE_INFO_CHANGED || HSM_AB_COMPARE_FREEZE_GRAPHICS == 1 && HSM_GetIsInABCompareArea(vTexCoord))
 	{
 		FragColor = texture(PassFeedback, vTexCoord);
 		return;
@@ -469,11 +470,6 @@ void main()
 	VIEWPORT_UNSCALED_COORD = HSM_GetViewportCoordWithFlip(vTexCoord_precomp);
 	VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord_precomp);
 
-	if (HSM_AB_COMPARE_FREEZE_GRAPHICS == 1 && HSM_GetIsInABCompareArea(vTexCoord_precomp))
-	{
-		FragColor = texture(PassFeedback, vTexCoord);
-		return;
-	}
 
 	// AMBIENT LIGHTING IMAGES
 	vec3 ambient_rgb = vec3(1);

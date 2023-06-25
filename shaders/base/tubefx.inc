@@ -122,31 +122,17 @@ vec3 HSM_GetTubeHighlight(vec2 tube_curved_coord, bool apply_to_mirror, in sampl
 void main()
 {
 	HSM_UpdateCacheInfoChanged(CacheInfoPass);
-	if (HSM_CACHE_GRAPHICS_ON > 0.5 && !CACHE_INFO_CHANGED)
+	if (HSM_CACHE_GRAPHICS_ON > 0.5 && !CACHE_INFO_CHANGED ||
+		HSM_AB_COMPARE_FREEZE_CRT_TUBE == 1 && HSM_GetIsInABCompareArea(vTexCoord))
 	{
 		FragColor = texture(PassFeedback, vTexCoord);
 		return;
 	}
-
-	if (HSM_AB_COMPARE_FREEZE_CRT_TUBE == 1 && HSM_GetIsInABCompareArea(vTexCoord))
-	{
-		FragColor = texture(PassFeedback, vTexCoord);
-		return;
-	}
-
-	VIEWPORT_UNSCALED_COORD = HSM_GetViewportCoordWithFlip(vTexCoord);
 
 	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
 	
 	if (HSM_IsOutsideReflectionBoundary())
-	{
-		vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
-		if (HSM_CACHE_GRAPHICS_ON > 0.5 && feedback_color_test.a < 0 && !CACHE_INFO_CHANGED)
-		{
-			FragColor = texture(PassFeedback, UNFLIPPED_VIEWPORT_COORD);
-			return;
-		}
-	}
+		return;
 
 	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
 	HSM_GetBezelCoords( TUBE_DIFFUSE_COORD, 
@@ -194,7 +180,7 @@ void main()
 	vec3 ambient_rgb = vec3(1);
 	vec3 ambient2_rgb = vec3(1);
 	HSM_Fill_Ambient_Images(vTexCoord, 
-							VIEWPORT_UNSCALED_COORD, 
+							HSM_GetViewportCoordWithFlip(vTexCoord), 
 							TUBE_DIFFUSE_COORD_MIXED_POS, 
 							TUBE_DIFFUSE_SCALE_1ST_SCREEN, 
 							HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE, 

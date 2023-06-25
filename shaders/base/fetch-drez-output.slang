@@ -123,5 +123,8 @@ void main()
 	// float pixel_changed = max(max(pixel_diff.r, pixel_diff.g), pixel_diff.b ) > 1 / (256.0 * 2.0) ? 1 : 0;
 	// FragColor.a = pixel_changed;
 
+	if (abs(vTexCoord.x - 0.8) < 0.1 && abs(vTexCoord.y - 0.3) < 0.1)
+		FragColor = vec4(0, 1, 1, 1);
+
 	return;
 }

@@ -57,9 +57,15 @@ float clamp_0_1(float in_value)
 
 void main()
 {
+	// HSM Added
+	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
+
+	if (HSM_IsOutsideReflectionBoundary())
+		return;
+
 	if (HSM_REFLECT_BLUR_NUM_SAMPLES > 0)
 	{
-		HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
+		// HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
 
 		vec2 tube_curved_coord_ctr = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 1, TUBE_DIFFUSE_SCALE, TUBE_SCALE, TUBE_DIFFUSE_ASPECT, 1) - 0.5;
 

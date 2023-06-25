@@ -813,10 +813,7 @@ void main()
 	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
 
 	if (HSM_IsOutsideReflectionBoundary())
-	{
-		FragColor = vec4(0);
 		return;
-	}
 	
 	vec2 SourceSize = CROPPED_ROTATED_SIZE_WITH_RES_MULT;
 	float TATE = USE_VERTICAL_SCANLINES;
