@@ -1457,11 +1457,6 @@ void main()
 	precomp_background = HSM_Delinearize(precomp_background, DEFAULT_SRGB_GAMMA);
 	precomp_additive = HSM_Delinearize(precomp_additive, DEFAULT_SRGB_GAMMA);
 
-	// precomp_foreground = round(clamp(precomp_foreground, 0.0, 1.0) * 255.0) / 256;
-	// precomp_middleground = round(clamp(precomp_middleground, 0.0, 1.0) * 255.0) / 256;
-	// precomp_background = round(clamp(precomp_background, 0.0, 1.0) * 255.0) / 256;
-	// precomp_additive = round(clamp(precomp_additive, 0.0, 1.0) * 255.0) / 256;
-
 	vec4 image_layers_packed = HSM_Pack_4_Rgba_To_1_Rgba(precomp_foreground
 														,precomp_middleground
 														,precomp_background

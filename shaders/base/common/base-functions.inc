@@ -89,6 +89,9 @@ vec2 HSM_Unpack_Float_To_Vec2(float in_packed)
 vec4 HSM_Pack_2_Rgba_To_1_Rgba(	vec4 rgba_1, 
 								vec4 rgba_2)
 {
+	// Need to clamp and reduce max value for AMD GPUs
+	rgba_1 = clamp(rgba_1, 0.0, 1.0) * (255.0 / 256.0);
+	rgba_2 = clamp(rgba_2, 0.0, 1.0) * (255.0 / 256.0);
 	vec4 out_color = vec4(	HSM_Pack_Vec2_To_Float(rgba_1.rg),
 							HSM_Pack_Vec2_To_Float(rgba_1.ba),
 							HSM_Pack_Vec2_To_Float(rgba_2.rg),
@@ -108,6 +111,8 @@ void HSM_Unpack_1_Rgba_To_2_Rgba(vec4 packed_rgba,
 
 float HSM_Pack_Rgba_To_Float(vec4 in_rgba)
 {
+	// Need to clamp and reduce max value for AMD GPUs
+	in_rgba = clamp(in_rgba, 0.0, 1.0) * (255.0 / 256.0);
 	return uintBitsToFloat(packUnorm4x8(in_rgba));
 }
 

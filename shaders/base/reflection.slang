@@ -93,6 +93,7 @@ layout(set = 0, binding = 9) uniform sampler2D ReflectPrepFullscreenGlowPass;
 layout(set = 0, binding = 10) uniform sampler2D ReflectPassFeedback;
 #define PassFeedback ReflectPassFeedback
 
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
 {
@@ -134,6 +135,29 @@ void main()
 						FRAME_OUTSIDE_CURVED_COORD);
 
 	float avg_lum_mult = smoothstep(0.01, 0.5, pow(AVERAGE_LUMA, 1.3));
+
+	// // Test of Idea to reduce processing by only updating half the pixels every frame outside the screen
+	// if (HHLP_IsOutsideCoordSpace(SCREEN_COORD))
+	// {
+	// 	vec2 noise_res = global.OutputSize.xy;
+	// 	vec2 quantized_coord = vec2(floor((vTexCoord.x + 0.01) * noise_res.x) / noise_res.x, floor((vTexCoord.y + 0.01) * noise_res.y) / noise_res.y);
+	// 	float e = 2.7182818284590452353602874713527;
+	// 	float G = e + 1 * 1000; //(mod(frame_count, 30)/30 + 1000);
+	// 	vec2 r = (G * sin(G * quantized_coord.xy));
+	// 	float noise = fract(r.x * r.y * (1.0 + quantized_coord.x));
+
+
+	// 	float mod_time = (mod(global.FrameCount, 2) + 1) / 2;
+
+	// 	// int evenframe = int(global.FrameCount & 1);
+	// 	// bool skip_pixel = evenframe == 1 && noise == 1 || evenframe == 0 && noise == 0;
+	// 	bool skip_pixel = mod_time < 0.5 && noise > 0.5 || mod_time > 0.5 && noise < 0.5;
+	// 	if (skip_pixel)
+	// 	{
+	// 		FragColor = texture(PassFeedback, vTexCoord);
+	// 		return;
+	// 	}	
+	// }
 
 	//----------------------------------------------------
 	// CRT Pass
