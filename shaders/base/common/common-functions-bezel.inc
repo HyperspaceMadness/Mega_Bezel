@@ -95,6 +95,11 @@ bool HSM_IsOutsideReflectionBoundary()
 	return HHLP_IsOutsideCoordSpace(cache_bounds_coord);
 }
 
+float HSM_GetReflectionBoundaryMask()
+{
+	return float(!HSM_IsOutsideReflectionBoundary());
+}
+
 float HSM_GetBezelCoords(vec2 tube_diffuse_coord, 
 							vec2 tube_diffuse_scale, 
 							vec2 tube_scale, 

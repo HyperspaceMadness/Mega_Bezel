@@ -117,6 +117,7 @@ void main()
 {
 	UNFLIPPED_VIEWPORT_COORD = vTexCoord;
 	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
+	float reflection_boundary_mask = HSM_GetReflectionBoundaryMask();
 
 	if (HSM_SHOW_PASS_INDEX > 0.5)
 	{
@@ -216,15 +217,16 @@ void main()
 		return;
 	}
 
-	if (HSM_IsOutsideReflectionBoundary())
-	{
-		vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
-		if (HSM_CACHE_GRAPHICS_ON > 0.5 && feedback_color_test.a < 0 && !CACHE_INFO_CHANGED && HSM_RENDER_SIMPLE_MODE < 0.5)
-		{
-			FragColor = texture(PassFeedback, UNFLIPPED_VIEWPORT_COORD);
-			return;
-		}
-	}
+	// // Seems to make it slower
+	// if (HSM_IsOutsideReflectionBoundary())
+	// {
+	// 	vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
+	// 	if (HSM_CACHE_GRAPHICS_ON > 0.5 && feedback_color_test.a < 0 && !CACHE_INFO_CHANGED && HSM_RENDER_SIMPLE_MODE < 0.5)
+	// 	{
+	// 		FragColor = texture(PassFeedback, UNFLIPPED_VIEWPORT_COORD);
+	// 		return;
+	// 	}
+	// }
 
 	HSM_GetBezelCoords(TUBE_DIFFUSE_COORD, 
 						TUBE_DIFFUSE_SCALE, 
@@ -259,7 +261,7 @@ void main()
 	precomp_background.rgb = PrepGraphicsForHDR(precomp_background.rgb);
 	vec4 out_color = precomp_background;
 
-	vec4 crt_layer = texture(MiddlePass, vTexCoord);
+	vec4 crt_layer = texture(MiddlePass, vTexCoord) * reflection_boundary_mask;
 
 	if (HSM_RENDER_SIMPLE_MODE > 0.5)
 		crt_layer.rgb = vec3(0);
@@ -358,8 +360,8 @@ void main()
 	FragColor = HSM_Delinearize(FragColor, DEFAULT_SRGB_GAMMA);
 #endif
 
-	// If we have calculated an image then set -1 as a flag to show that we have
-	if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
-		FragColor.a = -1;
+	// // If we have calculated an image then set -1 as a flag to show that we have
+	// if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
+	// 	FragColor.a = -1;
 
 }

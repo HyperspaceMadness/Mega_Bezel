@@ -1308,12 +1308,6 @@ vec4 HSM_ApplyPackedTubeLayers(vec4 crt_color, vec4 image_layers_packed)
 
 	crt_color *= HSM_POST_CRT_BRIGHTNESS;
 
-	// #endif
-
-	// #ifndef USE_TUBEFX
-	// 	out_color = crt_color;
-	// #endif
-
 	crt_color.rgb *= unpacked_crt_mask;
 
 	// Multiply CRT image by Vignette

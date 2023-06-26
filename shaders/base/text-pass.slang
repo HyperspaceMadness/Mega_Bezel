@@ -668,18 +668,20 @@ float GetText(vec2 in_coord)
 
 void main()
 {
-	vec2 UNFLIPPED_VIEWPORT_COORD = vTexCoord;
-   vec2 VIEWPORT_COORD = vTexCoord;
-	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
+    vec2 UNFLIPPED_VIEWPORT_COORD = vTexCoord;
+    vec2 VIEWPORT_COORD = vTexCoord;
 
-   // vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
-   if (!CACHE_INFO_CHANGED)
-   {
-      FragColor = texture(PassFeedback, UNFLIPPED_VIEWPORT_COORD);
-      return;
-   }
+    // vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
+    HSM_UpdateCacheInfoChanged(CacheInfoPass);
+    if (!CACHE_INFO_CHANGED)
+    {
+        FragColor = texture(PassFeedback, UNFLIPPED_VIEWPORT_COORD);
+        return;
+    }
 
-   // Flip the coordinate vertically if desired
+    HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
+
+    // Flip the coordinate vertically if desired
     VIEWPORT_COORD.y = HSM_FLIP_VIEWPORT_VERTICAL * HSM_FLIP_CORE_VERTICAL * (VIEWPORT_COORD.y - 0.5) + 0.5;
     VIEWPORT_COORD.x = HSM_FLIP_VIEWPORT_HORIZONTAL * HSM_FLIP_CORE_HORIZONTAL * (VIEWPORT_COORD.x - 0.5) + 0.5;
 

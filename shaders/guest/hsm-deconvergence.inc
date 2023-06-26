@@ -1045,7 +1045,13 @@ if (abs(bloom) > 0.025)
 	vec4 crt_color = vec4(color, 1);
 	crt_color = HSM_Linearize(crt_color, DEFAULT_SRGB_GAMMA);
 
-	vec4 image_layers_packed = texture(TubeFxPass, vTexCoord);
+	// // Do AB Compare
+	// if (HSM_AB_COMPARE_SHOW_MODE == 1 && HSM_GetIsInABCompareArea(vTexCoord))
+	// {
+	// 	vec4 drezzed_color = HSM_GetCroppedTexSample(DerezedPass, crt_coord);
+	// 	crt_color = HSM_Linearize(drezzed_color, GAMMA_INPUT);
+	// }
 
+	vec4 image_layers_packed = texture(TubeFxPass, vTexCoord);
 	FragColor = HSM_ApplyPackedTubeLayers(crt_color, image_layers_packed);
 }

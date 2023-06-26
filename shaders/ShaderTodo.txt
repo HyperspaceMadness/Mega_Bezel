@@ -30,7 +30,9 @@ Changes:
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
-  * Fix Tube Highlight Cache Update
+  * Move Simple Render to source passes for +5 FPS
+  * Move Pass Debug? +5 FPS
+  * Fix Tube Highlight Cache Update?
   * Fix NTSC pass order
   * Apply Delinearize and Tubefx in CRT pass
   * Add Same Blend Mode for Tube Gel which uses Alpha
