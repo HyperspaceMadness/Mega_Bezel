@@ -239,7 +239,10 @@ void main()
 	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
 
 	if (HSM_IsOutsideReflectionBoundary())
+	{
+		FragColor = vec4(0);
 		return;
+	}
 
 	float TATE = USE_VERTICAL_SCANLINES;
 

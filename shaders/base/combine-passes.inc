@@ -117,7 +117,6 @@ void main()
 {
 	UNFLIPPED_VIEWPORT_COORD = vTexCoord;
 	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
-	float reflection_boundary_mask = HSM_GetReflectionBoundaryMask();
 
 	if (HSM_SHOW_PASS_INDEX > 0.5)
 	{
@@ -261,7 +260,7 @@ void main()
 	precomp_background.rgb = PrepGraphicsForHDR(precomp_background.rgb);
 	vec4 out_color = precomp_background;
 
-	vec4 crt_layer = texture(MiddlePass, vTexCoord) * reflection_boundary_mask;
+	vec4 crt_layer = texture(MiddlePass, vTexCoord);
 
 	if (HSM_RENDER_SIMPLE_MODE > 0.5)
 		crt_layer.rgb = vec3(0);
@@ -291,8 +290,6 @@ void main()
 	precomp_additive.rgb = PrepGraphicsForHDR(precomp_additive.rgb);
 	out_color = HSM_PreMultAlphaBlend(out_color, precomp_additive * vec4(1, 1, 1, 0));
 
-	FragColor = out_color;
-
 	if (HSM_RENDER_SIMPLE_MODE > 0.5)
 	{
 		vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 1, TUBE_DIFFUSE_SCALE, TUBE_SCALE, TUBE_DIFFUSE_ASPECT, 1);
@@ -311,57 +308,58 @@ void main()
 		FRAME_MASK = OUTSIDE_BEZEL_MASK * (1 - OUTSIDE_FRAME_MASK);
 
 		if ( HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_BLACK_SCREEN )
-			FragColor = HSM_PreMultAlphaBlend(FragColor, vec4(0, 0, 0, 1) * (TUBE_MASK));
+			out_color = HSM_PreMultAlphaBlend(out_color, vec4(0, 0, 0, 1) * (TUBE_MASK));
 
 		if ( HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_BLACK_SCREEN_AND_BG )
-			FragColor = HSM_PreMultAlphaBlend(FragColor, vec4(0, 0, 0, 1) * (TUBE_MASK + OUTSIDE_FRAME_MASK));
+			out_color = HSM_PreMultAlphaBlend(out_color, vec4(0, 0, 0, 1) * (TUBE_MASK + OUTSIDE_FRAME_MASK));
 
 		if ( HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_PINK_MASK )
 		{
 			if ( HSM_RENDER_SIMPLE_MASK_TYPE == RENDER_SIMPLE_MASK_TYPE_SCREEN )
-				FragColor = HSM_PreMultAlphaBlend(FragColor, vec4(1, 0, 1, 1) * (TUBE_DIFFUSE_MASK));
+				out_color = HSM_PreMultAlphaBlend(out_color, vec4(1, 0, 1, 1) * (TUBE_DIFFUSE_MASK));
 
 			if ( HSM_RENDER_SIMPLE_MASK_TYPE == RENDER_SIMPLE_MASK_TYPE_TUBE )
-				FragColor = HSM_PreMultAlphaBlend(FragColor, vec4(1, 0, 1, 1) * (TUBE_MASK));
+				out_color = HSM_PreMultAlphaBlend(out_color, vec4(1, 0, 1, 1) * (TUBE_MASK));
 
 			if ( HSM_RENDER_SIMPLE_MASK_TYPE == RENDER_SIMPLE_MASK_TYPE_BEZEL_AND_FRAME )
-				FragColor = HSM_PreMultAlphaBlend(FragColor, vec4(1, 0, 1, 1) * (TUBE_MASK + OUTSIDE_FRAME_MASK));
+				out_color = HSM_PreMultAlphaBlend(out_color, vec4(1, 0, 1, 1) * (TUBE_MASK + OUTSIDE_FRAME_MASK));
 
 			if ( HSM_RENDER_SIMPLE_MASK_TYPE == RENDER_SIMPLE_MASK_TYPE_BEZEL )
-				FragColor = HSM_PreMultAlphaBlend(FragColor, vec4(1, 0, 1, 1) * (1 - BEZEL_MASK));
+				out_color = HSM_PreMultAlphaBlend(out_color, vec4(1, 0, 1, 1) * (1 - BEZEL_MASK));
 
 			if ( HSM_RENDER_SIMPLE_MASK_TYPE == RENDER_SIMPLE_MASK_TYPE_FRAME )
-				FragColor = HSM_PreMultAlphaBlend(FragColor, vec4(1, 0, 1, 1) * (1 - FRAME_MASK));
+				out_color = HSM_PreMultAlphaBlend(out_color, vec4(1, 0, 1, 1) * (1 - FRAME_MASK));
 		}
 		if ( HSM_RENDER_SIMPLE_MODE == RENDER_SIMPLE_MODE_BLACK_WHITE_MASK )
 		{
 			if ( HSM_RENDER_SIMPLE_MASK_TYPE == RENDER_SIMPLE_MASK_TYPE_SCREEN )
-				FragColor = vec4(1 - TUBE_DIFFUSE_MASK);
+				out_color = vec4(1 - TUBE_DIFFUSE_MASK);
 
 			if ( HSM_RENDER_SIMPLE_MASK_TYPE == RENDER_SIMPLE_MASK_TYPE_TUBE )
-				FragColor = vec4(1 - TUBE_MASK);
+				out_color = vec4(1 - TUBE_MASK);
 
 			if ( HSM_RENDER_SIMPLE_MASK_TYPE == RENDER_SIMPLE_MASK_TYPE_BEZEL_AND_FRAME )
-				FragColor = vec4(1 - TUBE_MASK) - OUTSIDE_FRAME_MASK;
+				out_color = vec4(1 - TUBE_MASK) - OUTSIDE_FRAME_MASK;
 
 			if ( HSM_RENDER_SIMPLE_MASK_TYPE == RENDER_SIMPLE_MASK_TYPE_BEZEL )
-				FragColor = vec4(BEZEL_MASK);
+				out_color = vec4(BEZEL_MASK);
 
 			if ( HSM_RENDER_SIMPLE_MASK_TYPE == RENDER_SIMPLE_MASK_TYPE_FRAME )
-				FragColor = vec4(FRAME_MASK);
+				out_color = vec4(FRAME_MASK);
 		}
 	}
 
 #ifdef IS_HDR_PRESET	
 	vec3 output_colour = vec3(0);
-	LinearToOutputColor(FragColor.rgb, output_colour);
-	FragColor = vec4(output_colour, 1.0f);
+	LinearToOutputColor(out_color.rgb, output_colour);
+	out_color = vec4(output_colour, 1.0f);
 #else
-	FragColor = HSM_Delinearize(FragColor, DEFAULT_SRGB_GAMMA);
+	out_color = HSM_Delinearize(out_color, DEFAULT_SRGB_GAMMA);
 #endif
 
 	// // If we have calculated an image then set -1 as a flag to show that we have
 	// if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
 	// 	FragColor.a = -1;
 
+	FragColor = out_color;
 }

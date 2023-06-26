@@ -128,7 +128,10 @@ void main()
 	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
 	
 	if (HSM_IsOutsideReflectionBoundary())
+	{
+		FragColor = vec4(0);
 		return;
+	}
 
 	// Have to get the scale of the coordinates so we can figure out the size of the onscreen rectangle of the area 
 	HSM_GetBezelCoords( TUBE_DIFFUSE_COORD, 

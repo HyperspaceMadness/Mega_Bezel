@@ -100,7 +100,10 @@ void main()
 	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
 
 	if (HSM_IsOutsideReflectionBoundary())
+	{
+		FragColor = vec4(0);
 		return;
+	}
 
 	if (HSM_AB_COMPARE_FREEZE_CRT_TUBE == 1 && HSM_GetIsInABCompareArea(vTexCoord))
 	{
