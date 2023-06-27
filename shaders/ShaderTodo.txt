@@ -30,6 +30,7 @@ Changes:
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Fix P3st Glass Blend issue (Blending function probably)
   * Move Simple Render to source passes for +5 FPS
   * Move Pass Debug? +5 FPS
   * Fix Tube Highlight Cache Update?

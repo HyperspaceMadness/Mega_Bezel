@@ -61,7 +61,10 @@ void main()
 	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
 
 	if (HSM_IsOutsideReflectionBoundary())
+	{
+		FragColor = vec4(0);
 		return;
+	}
 
 	if (HSM_REFLECT_BLUR_NUM_SAMPLES > 0)
 	{

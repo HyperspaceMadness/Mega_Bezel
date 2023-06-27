@@ -427,7 +427,7 @@ vec2 HSM_GetCrtPiCurvedCoord(vec2 in_coord, vec2 in_curvature)
 	in_curvature *= 5;
 	vec2 barrelScale = 1.0 - (0.23 * in_curvature);
     in_coord -= vec2(0.5);
-    float rsq = in_coord.x * in_coord.x + (HSM_CURVATURE_MODE == 2 ? 0 : in_coord.y * in_coord.y);
+    float rsq = in_coord.x * in_coord.x + (HSM_CURVATURE_MODE == CURVATURE_MODE_2D_CYLINDER ? 0 : in_coord.y * in_coord.y);
     in_coord += in_coord * (in_curvature * rsq);
     in_coord *= barrelScale;
 	in_coord += vec2(0.5);
