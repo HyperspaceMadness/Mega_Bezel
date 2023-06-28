@@ -78,20 +78,20 @@ vec4 HSM_GetTubeFxPrecompRange(float in_precomp_index)
 
 float HSM_Pack_Vec2_To_Float(vec2 in_vec2)
 {
+	// Need to clamp and reduce max value for AMD GPUs
+	in_vec2 = clamp(in_vec2, 0.0, 1.0) * (255.0 / 256.0);
 	return uintBitsToFloat(packUnorm2x16(in_vec2));
 }
 
 vec2 HSM_Unpack_Float_To_Vec2(float in_packed)
 {
-	return unpackUnorm2x16(floatBitsToUint(in_packed));
+	// Need to bring back to the full 0-1 range
+	return unpackUnorm2x16(floatBitsToUint(in_packed)) * (256.0 / 255.0);
 }
 
 vec4 HSM_Pack_2_Rgba_To_1_Rgba(	vec4 rgba_1, 
 								vec4 rgba_2)
 {
-	// Need to clamp and reduce max value for AMD GPUs
-	rgba_1 = clamp(rgba_1, 0.0, 1.0) * (255.0 / 256.0);
-	rgba_2 = clamp(rgba_2, 0.0, 1.0) * (255.0 / 256.0);
 	vec4 out_color = vec4(	HSM_Pack_Vec2_To_Float(rgba_1.rg),
 							HSM_Pack_Vec2_To_Float(rgba_1.ba),
 							HSM_Pack_Vec2_To_Float(rgba_2.rg),
@@ -103,10 +103,10 @@ void HSM_Unpack_1_Rgba_To_2_Rgba(vec4 packed_rgba,
 								inout vec4 rgba_1, 
 								inout vec4 rgba_2)
 {
-	rgba_1.rg = clamp(HSM_Unpack_Float_To_Vec2(packed_rgba.r), 0, 1);
-	rgba_1.ba = clamp(HSM_Unpack_Float_To_Vec2(packed_rgba.g), 0, 1);
-	rgba_2.rg = clamp(HSM_Unpack_Float_To_Vec2(packed_rgba.b), 0, 1);
-	rgba_2.ba = clamp(HSM_Unpack_Float_To_Vec2(packed_rgba.a), 0, 1);
+	rgba_1.rg = HSM_Unpack_Float_To_Vec2(packed_rgba.r);
+	rgba_1.ba = HSM_Unpack_Float_To_Vec2(packed_rgba.g);
+	rgba_2.rg = HSM_Unpack_Float_To_Vec2(packed_rgba.b);
+	rgba_2.ba = HSM_Unpack_Float_To_Vec2(packed_rgba.a);
 }
 
 float HSM_Pack_Rgba_To_Float(vec4 in_rgba)
@@ -118,7 +118,8 @@ float HSM_Pack_Rgba_To_Float(vec4 in_rgba)
 
 vec4 HSM_Unpack_Float_To_Rgba(float in_packed)
 {
-	return unpackUnorm4x8(floatBitsToUint(in_packed));
+	// Need to bring back to the full 0-1 range
+	return unpackUnorm4x8(floatBitsToUint(in_packed)) * (256.0 / 255.0);
 }
 
 vec4 HSM_Pack_4_Rgba_To_1_Rgba(	vec4 rgba_1, 
