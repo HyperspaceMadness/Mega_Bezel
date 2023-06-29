@@ -37,7 +37,7 @@
 
 vec4 HSM_GetImagePrecompRange(float in_precomp_index)
 {
-	return vec4(0, 0, 1, 1);
+	return vec4(0.0, 0.0, 1.0, 1.0);
 
 	vec4 out_range = vec4(0.25, 0.25, 0.5, 0.5);
 	if (in_precomp_index == PRECOMP_INDEX_BACKGROUND)
@@ -47,10 +47,10 @@ vec4 HSM_GetImagePrecompRange(float in_precomp_index)
 		out_range = vec4(0.5, 0, 1, 0.5);
 
 	if (in_precomp_index == PRECOMP_INDEX_FOREGROUND)
-		out_range = vec4(0, 0.5, 0.5, 1);
+		out_range = vec4(0, 0.5, 0.5, 1.0);
 
 	if (in_precomp_index == PRECOMP_INDEX_ADDITIVE)
-		out_range = vec4(0.5, 0.5, 1, 1);
+		out_range = vec4(0.5, 0.5, 1.0, 1.0);
 	
 	return out_range;
 }
@@ -65,13 +65,13 @@ vec4 HSM_GetTubeFxPrecompRange(float in_precomp_index)
 		out_range = vec4(0.5, 0, 1, 0.5);
 
 	if (in_precomp_index == PRECOMP_INDEX_AMBIENT_LIGHT_1)
-		out_range = vec4(0, 0.5, 0.5, 1);
+		out_range = vec4(0, 0.5, 0.5, 1.0);
 
 	if (in_precomp_index == PRECOMP_INDEX_AMBIENT_LIGHT_2)
-		out_range = vec4(0.5, 0.5, 1, 1);
+		out_range = vec4(0.5, 0.5, 1.0, 1.0);
 
 	if (in_precomp_index == PRECOMP_INDEX_STATIC_HIGHLIGHT)
-		out_range = vec4(0.5, 0.5, 1, 1);
+		out_range = vec4(0.5, 0.5, 1.0, 1.0);
 
 	return out_range;
 }
@@ -156,9 +156,9 @@ vec4 HSM_GetPrecompRGBA(sampler2D in_sampler_2D, vec2 in_coord, float in_precomp
 float HSM_GetPrecompIndexFromCoord(vec2 in_coord)
 {
 	return 0;
-	float out_index = -1;
+	float out_index = -1.0;
 
-	for (float i = 0; i < 4; i++)
+	for (float i = 0.0; i < 4; i++)
 	{
 		if (HHLP_IsInsideRange(in_coord, HSM_GetImagePrecompRange(i)))
 		{
@@ -213,7 +213,7 @@ vec2 HSM_GetCacheSampleRangeSize()
 {
 	vec2 cache_image_resolution = global.DerezedPassSize.xy;
 
-	float sample_block_num_pixels = 3;
+	float sample_block_num_pixels = 3.0;
 	vec2 pixel_size = 1 / cache_image_resolution;
 	vec2 range_size = sample_block_num_pixels * pixel_size;
 
@@ -246,7 +246,7 @@ vec4 HSM_GetCacheSampleRange(vec2 in_cell)
 vec2 HSM_GetCacheSampleCoord(vec2 in_cell)
 {
 	vec4 sample_range = HSM_GetCacheSampleRange(in_cell);
-	vec2 sample_coord = sample_range.xy + (sample_range.zw - sample_range.xy) / 2;
+	vec2 sample_coord = sample_range.xy + (sample_range.zw - sample_range.xy) / 2.0;
 	return sample_coord;
 }
 

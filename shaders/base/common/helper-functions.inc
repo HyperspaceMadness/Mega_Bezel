@@ -120,6 +120,8 @@ vec4 HSM_PreMultAlphaBlend(vec4 color_under, vec4 color_over)
 	// // Old Blend Method
 	// vec4 out_color = vec4(color_over.rgb + (color_under.rgb * (1 - color_over.a)), clamp(color_under.a + color_over.a, 0, 1));
 
+	// Important to avoid errors on AMD
+	color_over.a = clamp(color_over.a, 0.0, 1.0);
 	vec4 out_color = color_over + color_under * (1 - color_over.a);
 	out_color.a = color_under.a + color_over.a - color_under.a * color_over.a;
 	return out_color;

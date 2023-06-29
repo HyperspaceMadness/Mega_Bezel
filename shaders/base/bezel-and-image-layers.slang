@@ -107,14 +107,16 @@ vec4 BlendModeMaskLayerMix(vec4 color_under, vec4 color_over, float blend_mode, 
 		if (blend_mode == BLEND_MODE_ADD)  	 		
 		{
 			if (allow_additive_blend)
-				blend_color.rgb = color_under.rgb + color_over.rgb;
+				out_color = HSM_PreMultAlphaBlend(color_under, color_over);
 			else
-				return color_under;
+				out_color = color_under;
 		}
-		if (blend_mode == BLEND_MODE_MULTIPLY)  	
-			blend_color.rgb = color_under.rgb * color_over.rgb / (color_over.a + 0.0001);
+		else if (blend_mode == BLEND_MODE_MULTIPLY)
+		{
 
-		out_color = vec4(clamp(mix(color_under.rgb, blend_color.rgb, color_over.a), 0, 1), color_under.a);
+			blend_color.rgb = color_under.rgb * color_over.rgb / (color_over.a + 0.0001);
+			out_color = vec4(clamp(mix(color_under.rgb, blend_color.rgb, color_over.a), 0, 1), color_under.a);
+		}
 	}
 	return out_color;
 }

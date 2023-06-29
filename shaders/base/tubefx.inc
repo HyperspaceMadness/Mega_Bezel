@@ -237,7 +237,7 @@ void main()
 
 			// HSM_RotateCoordinate(diffuse_coord, HSM_TUBE_DIFFUSE_IMAGE_ROTATION)
 			precomp_tube_diffuse = HSM_GetMipmappedTexSample(TubeDiffuseImage, HSM_RotateCoordinate(diffuse_coord, HSM_TUBE_DIFFUSE_IMAGE_ROTATION), TUBE_SCALE * HSM_TUBE_DIFFUSE_IMAGE_SCALE, 0);
-			precomp_tube_diffuse.rgb = HSM_GLOBAL_GRAPHICS_BRIGHTNESS * HSM_GetPreMultipliedColorLinear(vec4(precomp_tube_diffuse.rgb, 1), SOURCE_MATTE_PREMULTIPLIED, DEFAULT_SRGB_GAMMA).rgb;
+			precomp_tube_diffuse.rgb = HSM_GLOBAL_GRAPHICS_BRIGHTNESS * HSM_GetPreMultipliedColorLinear(vec4(precomp_tube_diffuse.rgb, 1.0), SOURCE_MATTE_PREMULTIPLIED, DEFAULT_SRGB_GAMMA).rgb;
 			precomp_tube_diffuse.rgb = HSM_ApplyHSVAdjustment(precomp_tube_diffuse.rgb, HSM_TUBE_DIFFUSE_IMAGE_HUE, HSM_TUBE_DIFFUSE_IMAGE_SATURATION, HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS, HSM_TUBE_DIFFUSE_IMAGE_COLORIZE_ON, HSM_TUBE_DIFFUSE_IMAGE_GAMMA);
 			precomp_tube_diffuse.rgb *= HSM_TUBE_DIFFUSE_IMAGE_AMOUNT;
 
@@ -273,7 +273,7 @@ void main()
 
 		// Tube Diffuse apply Gel Multiply
 		if (HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT > 0)
-			precomp_tube_diffuse.rgb = mix(precomp_tube_diffuse.rgb, precomp_tube_diffuse.rgb * gel_image.rgb * clamp(HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_BRIGHTNESS * gel_image.rgb, 0, 1), HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT);
+			precomp_tube_diffuse.rgb = mix(precomp_tube_diffuse.rgb, precomp_tube_diffuse.rgb * gel_image.rgb * clamp(HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_BRIGHTNESS * gel_image.rgb, 0, 1.0), HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT);
 
 		// Tube Diffuse apply Gel Additive
 		if (HSM_TUBE_COLORED_GEL_IMAGE_ADDITIVE_AMOUNT > 0)
@@ -283,7 +283,9 @@ void main()
 		precomp_gel = gel_image;
 		// if (HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT > 0)
 		// {
-		precomp_gel.a = clamp( precomp_gel.a - HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD, 0, 1 ) / (1 - HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD);
+		
+		// TODO, Colored Gel Multiply is clipping because of transparency threshold on AMD
+		precomp_gel.a = clamp( precomp_gel.a - HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD, 0, 1.0 ) / (1.0 - HSM_TUBE_COLORED_GEL_IMAGE_TRANSPARENCY_THRESHOLD);
 		precomp_gel.rgb *= HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_BRIGHTNESS;
 
 		if (HSM_TUBE_COLORED_GEL_IMAGE_FAKE_SCANLINE_AMOUNT > 0.001)
@@ -297,6 +299,7 @@ void main()
 
 		// Create a precomp for the normal layering
 		precomp_gel = HSM_BlendModeLayerMix(precomp_gel, vec4(0, 0, 0, 0), BLEND_MODE_NORMAL, HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_AMOUNT);
+		precomp_gel = clamp(precomp_gel, 1.0/255.0, 1.0);
 		// }
 	}
 // #endif
@@ -310,11 +313,13 @@ void main()
 		precomp_tube_highlight.rgb = HSM_ApplyAmbientImage(precomp_tube_highlight.rgb, ambient2_rgb, HSM_TUBE_STATIC_AMBIENT2_LIGHTING);
 
 		precomp_tube_highlight.rgb *= HSM_TUBE_STATIC_SHADOW_OPACITY * tube_shadow + (1 - HSM_TUBE_STATIC_SHADOW_OPACITY);
-		precomp_tube_highlight.rgb = clamp(HSM_TUBE_STATIC_BLACK_LEVEL * (precomp_tube_highlight.rgb - 1) + 1, 0, 1);
+		precomp_tube_highlight.rgb = clamp(HSM_TUBE_STATIC_BLACK_LEVEL * (precomp_tube_highlight.rgb - 1.0) + 1.0, 0, 1.0);
 		precomp_tube_highlight.rgb *= 1 - HSM_TUBE_STATIC_OPACITY_DIFFUSE_MULTIPLY + HSM_TUBE_STATIC_OPACITY_DIFFUSE_MULTIPLY * adjusted_tube_diffuse_amount;
 		precomp_tube_highlight.rgb *= HSM_TUBE_STATIC_REFLECTION_IMAGE_OPACITY;
 	}
-	precomp_tube_highlight.a = vignette_factor;
+
+	// 0.25 is added to avoid clipping issues with AMD GPUs
+	precomp_tube_highlight.a = vignette_factor + 0.25;
 // #endif
 
 	float crt_mask = screen_to_tube_mask_invert;
