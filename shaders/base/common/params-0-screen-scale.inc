@@ -233,6 +233,25 @@ float HSM_CRT_CURVATURE_SCALE = global.HSM_CRT_CURVATURE_SCALE / 100;
 
 
 //---------------------------------------------------------------------------------------------------
+//    ANAMORPHIC DISTORTION
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_ANAMORPHIC_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter HSM_ANAMORPHIC_TITLE								"[ ANAMORPHIC DISTORTION ]:" 0 0 0.001 0.001
+
+#pragma parameter HSM_ANAMORPHIC_DISTORT_ON 			            "          Use Anamorphic Distortion" 0 0 1 1
+float HSM_ANAMORPHIC_DISTORT_ON = global.HSM_ANAMORPHIC_DISTORT_ON;
+
+#pragma parameter HSM_ANAMORPHIC_DISTORT_AMOUNT                     "          Amount - NEGATIVE: KEEP SIDES | POSITIVE: KEEP CENTER" 100.0 -150.0 150.0 2.0
+float HSM_ANAMORPHIC_DISTORT_AMOUNT = global.HSM_ANAMORPHIC_DISTORT_AMOUNT / 10.0;
+
+#pragma parameter HSM_ANAMORPHIC_DISTORT_AUTO_MULTIPLY_MODE 		"       Multiply Amount by Diff between Source and Screen Aspect" 1 0 1 1
+float HSM_ANAMORPHIC_DISTORT_AUTO_MULTIPLY_MODE = global.HSM_ANAMORPHIC_DISTORT_AUTO_MULTIPLY_MODE;
+
+#pragma parameter HSM_ANAMORPHIC_DISTORT_SOURCE_ASPECT 			    "          Source Aspect" 1.33 0.5 3 0.01
+float HSM_ANAMORPHIC_DISTORT_SOURCE_ASPECT = global.HSM_ANAMORPHIC_DISTORT_SOURCE_ASPECT;
+
+
+//---------------------------------------------------------------------------------------------------
 //    CRT SCREEN SCALING GENERAL
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_SCALING_EMPTY_LINE							" " 0 0 0.001 0.001

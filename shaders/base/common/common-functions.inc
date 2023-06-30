@@ -1087,6 +1087,34 @@ vec2 HSM_ApplyRasterBloomOverscan(vec2 in_coord, float raster_bloom_overscan_mod
 	return ctr_coord * 0.5 + 0.5;
 }
 
+/*
+	Anamorphic v1.1b Shader 2020
+	by Nerboruto 
+*/
+float HSM_Anamorphic_Distort_Multiplier(float in_coord_1D, float in_distort_amount)
+{
+	if (in_distort_amount == 0.0) 
+		return 1.0;
+
+	float rx = abs(in_coord_1D);
+	float fx = -radians(in_distort_amount);
+	return (1.0 - fx) / (1.0 - fx * rx);
+}
+
+/*
+	Anamorphic v1.1b Shader 2020
+	by Nerboruto 
+*/
+vec2 HSM_Anamorphic_Distort(vec2 in_coord, float in_distort_amount)
+{
+	if (in_distort_amount == 0.0) return in_coord;
+	
+	vec2 out_coord = in_coord * 2.0 - 1.0;
+	out_coord.x *= HSM_Anamorphic_Distort_Multiplier(out_coord.x, in_distort_amount);
+	out_coord = out_coord * 0.5 + 0.5;
+	return out_coord;
+}
+
 vec2 HSM_GetCrtShaderFinalCoord(vec2 screen_coord,
 								vec2 screen_scale,
 								float raster_bloom_avg_lum,
@@ -1094,7 +1122,20 @@ vec2 HSM_GetCrtShaderFinalCoord(vec2 screen_coord,
 								)
 {
 	// -- START -- This section repeated in function below
-	screen_curved_coord = HSM_GetCRTShaderCurvedCoord(screen_coord);
+	screen_curved_coord = screen_coord;
+	if (HSM_ANAMORPHIC_DISTORT_ON > 0.5)
+	{
+		float anamorph_distort_amount = HSM_ANAMORPHIC_DISTORT_AMOUNT;
+		if (HSM_ANAMORPHIC_DISTORT_AUTO_MULTIPLY_MODE > 0.5)
+		{
+			vec2 screen_size = global.FinalViewportSize.xy * screen_scale;
+			float screen_aspect = screen_size.x / screen_size.y;
+			float amount_auto_multiplier = smoothstep(HSM_ANAMORPHIC_DISTORT_SOURCE_ASPECT, 1.77, screen_aspect);
+			anamorph_distort_amount *= amount_auto_multiplier;
+		}
+		screen_curved_coord = HSM_Anamorphic_Distort(screen_curved_coord, anamorph_distort_amount);
+	}
+	screen_curved_coord = HSM_GetCRTShaderCurvedCoord(screen_curved_coord);
 
 	// Get the Mirrored coord and then add overscan to it
 	vec2 screen_curved_coord_with_overscan_and_mirror = HSM_GetMirrorWrappedCoord(screen_curved_coord);
@@ -1121,8 +1162,21 @@ vec2 HSM_GetCrtShaderFinalCoordExtraVariables(vec2 screen_coord,
 	inout vec2 screen_scale_with_overscan)
 
 {
-	// -- START -- This section repeated from function above
-	screen_curved_coord = HSM_GetCRTShaderCurvedCoord(screen_coord);
+	// -- START -- This section repeated in function below
+	screen_curved_coord = screen_coord;
+	if (HSM_ANAMORPHIC_DISTORT_ON > 0.5)
+	{
+		float anamorph_distort_amount = HSM_ANAMORPHIC_DISTORT_AMOUNT;
+		if (HSM_ANAMORPHIC_DISTORT_AUTO_MULTIPLY_MODE > 0.5)
+		{
+			vec2 screen_size = global.FinalViewportSize.xy * screen_scale;
+			float screen_aspect = screen_size.x / screen_size.y;
+			float amount_auto_multiplier = smoothstep(HSM_ANAMORPHIC_DISTORT_SOURCE_ASPECT, 1.77, screen_aspect);
+			anamorph_distort_amount *= amount_auto_multiplier;
+		}
+		screen_curved_coord = HSM_Anamorphic_Distort(screen_curved_coord, anamorph_distort_amount);
+	}
+	screen_curved_coord = HSM_GetCRTShaderCurvedCoord(screen_curved_coord);
 
 	// Get the Mirrored coord and then add overscan to it
 	vec2 screen_curved_coord_with_overscan_and_mirror = HSM_GetMirrorWrappedCoord(screen_curved_coord);
@@ -1322,6 +1376,8 @@ vec4 HSM_ApplyPackedTubeLayers(vec4 crt_color, vec4 image_layers_packed)
 		crt_color.rgb *= HSM_TUBE_COLORED_GEL_CRT_BRIGHTNESS;
 		if (HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT > 0)
 			crt_color.rgb = mix(crt_color.rgb, crt_color.rgb * clamp(HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_BRIGHTNESS * unpacked_precomp_gel.rgb, 0, 1), HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT);
+
+// TODO Do Vignette here instead of in tubefx pass
 
 		// Add Gel with Over/Normal blending on top of tube before we add the CRT
 		if ( HSM_TUBE_COLORED_GEL_LAYERING_ORDER == 1 )
