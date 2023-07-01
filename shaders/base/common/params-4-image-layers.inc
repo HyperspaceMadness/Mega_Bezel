@@ -67,6 +67,49 @@ float HSM_CAB_GLASS_LAYER_ORDER = global.HSM_CAB_GLASS_LAYER_ORDER;
 float HSM_TOP_LAYER_ORDER = global.HSM_TOP_LAYER_ORDER;
 
 
+//---------------------------------------------------------------------------------------------------
+//    LAYER GROUP VISIBILITY
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_LAYER_GROUP_EMPTY_LINE				" " 0 0 0.001 0.001
+#pragma parameter HSM_LAYER_GROUP_TITLE			            "[ COMPOSITE GROUP VISIBILITY ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_COMPOSITE_BACKGROUND_ON           "          Background Layer Group ON"  1 0 1 1
+float HSM_COMPOSITE_BACKGROUND_ON = global.HSM_COMPOSITE_BACKGROUND_ON;
+
+#pragma parameter HSM_COMPOSITE_MIDDLEGROUND_ON         "          Middleground Layer Group ON"  1 0 1 1
+float HSM_COMPOSITE_MIDDLEGROUND_ON = global.HSM_COMPOSITE_MIDDLEGROUND_ON;
+
+#pragma parameter HSM_COMPOSITE_FOREGROUND_ON           "          Foreground Layer Group ON"  1 0 1 1
+float HSM_COMPOSITE_FOREGROUND_ON = global.HSM_COMPOSITE_FOREGROUND_ON;
+
+#pragma parameter HSM_COMPOSITE_ADDITIVE_ON             "          Additive Composite ON"  1 0 1 1
+float HSM_COMPOSITE_ADDITIVE_ON = global.HSM_COMPOSITE_ADDITIVE_ON;
+
+#pragma parameter HSM_COMPOSITE_CRT_AND_REFLECTION_ON   "          CRT & Reflection Composite ON"  1 0 1 1
+float HSM_COMPOSITE_CRT_AND_REFLECTION_ON = global.HSM_COMPOSITE_CRT_AND_REFLECTION_ON;
+
+
+//---------------------------------------------------------------------------------------------------
+//    RENDER FOR SIMPLIFIED PRESETS
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_RENDER_FOR_SIMPLIFIED_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter HSM_RENDER_FOR_SIMPLIFIED_TITLE       "[ RENDER FOR SIMPLIFIED PRESETS ]:" 0 0 0.001 0.001
+
+#pragma parameter HSM_RENDER_SIMPLE_MODE                "     Mode:  NORM | BLACK-SCREEN | BLACK-BG | PINK-MASK| BW-MASK" 0 0 4 1
+float HSM_RENDER_SIMPLE_MODE = global.HSM_RENDER_SIMPLE_MODE;
+
+#pragma parameter HSM_RENDER_SIMPLE_MASK_TYPE           "      Mask Type:  SCREEN | TUBE | BEZEL & FRAME | BEZEL | FRAME" 0 0 4 1
+float HSM_RENDER_SIMPLE_MASK_TYPE = global.HSM_RENDER_SIMPLE_MASK_TYPE;
+
+
+//---------------------------------------------------------------------------------------------------
+//    MASK DEBUG
+//---------------------------------------------------------------------------------------------------
+#pragma parameter HSM_MASK_DEBUG_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter HSM_MASK_DEBUG_TITLE			"[ MASK DEBUG ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_LAYERING_DEBUG_MASK_MODE    "    Mask - ALL | SCRN | TUBE | BZ- | BZ | BZ+ | FRM | FRM+ | BG" -1 -2 8 1
+float HSM_LAYERING_DEBUG_MASK_MODE = global.HSM_LAYERING_DEBUG_MASK_MODE;
 
 
 //---------------------------------------------------------------------------------------------------
@@ -108,15 +151,6 @@ float HSM_CUTOUT_CORNER_RADIUS = global.HSM_CUTOUT_CORNER_RADIUS;
 //---------------------------------------------------------------------------------------------------
 #include "params-2-reflection-mask.inc"
 
-
-//---------------------------------------------------------------------------------------------------
-//    MASK DEBUG
-//---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_MASK_DEBUG_EMPTY_LINE							" " 0 0 0.001 0.001
-#pragma parameter HSM_MASK_DEBUG_TITLE			"[ MASK DEBUG ]:" 0 0 0.01 0.01
-
-#pragma parameter HSM_LAYERING_DEBUG_MASK_MODE    "    Mask - ALL | SCRN | TUBE | BZ- | BZ | BZ+ | FRM | FRM+ | BG" -1 -2 8 1
-float HSM_LAYERING_DEBUG_MASK_MODE = global.HSM_LAYERING_DEBUG_MASK_MODE;
 
 //---------------------------------------------------------------------------------------------------
 //    BG IMAGE
@@ -756,16 +790,3 @@ float HSM_TOP_POS_Y = global.HSM_TOP_POS_Y / 100;
 
 #pragma parameter HSM_TOP_MIRROR_WRAP                   "          Mirror Wrap" 1 0 1 1
 float HSM_TOP_MIRROR_WRAP = global.HSM_TOP_MIRROR_WRAP;
-
-
-//---------------------------------------------------------------------------------------------------
-//    RENDER FOR SIMPLIFIED PRESETS
-//---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_RENDER_FOR_SIMPLIFIED_EMPTY_LINE							" " 0 0 0.001 0.001
-#pragma parameter HSM_RENDER_FOR_SIMPLIFIED_TITLE       "[ MEGA BEZEL DEV RENDER FOR SIMPLIFIED PRESETS ]:" 0 0 0.001 0.001
-
-#pragma parameter HSM_RENDER_SIMPLE_MODE                "     Mode:  NORM | BLACK-SCREEN | BLACK-BG | PINK-MASK| BW-MASK" 0 0 4 1
-float HSM_RENDER_SIMPLE_MODE = global.HSM_RENDER_SIMPLE_MODE;
-
-#pragma parameter HSM_RENDER_SIMPLE_MASK_TYPE           "      Mask Type:  SCREEN | TUBE | BEZEL & FRAME | BEZEL | FRAME" 0 0 4 1
-float HSM_RENDER_SIMPLE_MASK_TYPE = global.HSM_RENDER_SIMPLE_MASK_TYPE;

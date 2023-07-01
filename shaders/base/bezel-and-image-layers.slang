@@ -90,13 +90,13 @@ vec4 BlendModeMaskLayerMix(vec4 color_under, vec4 color_over, float blend_mode, 
 	if (blend_mode == BLEND_MODE_OFF)
 		return color_under;
 	
-	color_over.a *= layer_opacity * GetMask(mask_mode) * cutout_mask;
+	color_over *= layer_opacity * GetMask(mask_mode) * cutout_mask;
 
 	vec4 out_color = vec4(0);
 
 	if (blend_mode == BLEND_MODE_NORMAL)
 	{
-		color_over.rgb *= color_over.a;
+		// color_over.rgb *= color_over.a;
 		if (matte_pass)
 			color_over.rgb *= 0;
 		out_color = HSM_PreMultAlphaBlend(color_under, color_over);
@@ -113,7 +113,6 @@ vec4 BlendModeMaskLayerMix(vec4 color_under, vec4 color_over, float blend_mode, 
 		}
 		else if (blend_mode == BLEND_MODE_MULTIPLY)
 		{
-
 			blend_color.rgb = color_under.rgb * color_over.rgb / (color_over.a + 0.0001);
 			out_color = vec4(clamp(mix(color_under.rgb, blend_color.rgb, color_over.a), 0, 1), color_under.a);
 		}

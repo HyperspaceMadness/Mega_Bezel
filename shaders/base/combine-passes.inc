@@ -257,41 +257,65 @@ void main()
 	precomp_additive = HSM_Linearize(precomp_additive, DEFAULT_SRGB_GAMMA);
 
 	float reflection_mask = precomp_background.a;
-	precomp_background.rgb = PrepGraphicsForHDR(precomp_background.rgb);
-	vec4 out_color = precomp_background;
+	vec4 out_color = vec4(0);
 
-	vec4 crt_layer = texture(MiddlePass, vTexCoord);
+	if (HSM_COMPOSITE_BACKGROUND_ON > 0.5)
+	{
+		precomp_background.rgb = PrepGraphicsForHDR(precomp_background.rgb);
+		out_color = precomp_background;
+	}
 
-	if (HSM_RENDER_SIMPLE_MODE > 0.5)
-		crt_layer.rgb = vec3(0);
-
-	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
-	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
-		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
-
-	// TODO, need to see how to manage with parameters
-	#ifndef IS_NO_REFLECT_PRESET
-	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 1, TUBE_DIFFUSE_SCALE, TUBE_SCALE, TUBE_DIFFUSE_ASPECT, 1);
-
-	TUBE_MASK =  HSM_GetCornerMask(tube_curved_coord, TUBE_DIFFUSE_ASPECT, bezel_corner_radius, 0.99);
-	// Apply Reflection Image Mask
-	crt_layer *= TUBE_MASK + (1 - TUBE_MASK) * reflection_mask;
-	#endif
-
-	precomp_middleground.rgb = PrepGraphicsForHDR(precomp_middleground.rgb);
-	out_color = HSM_PreMultAlphaBlend(out_color, precomp_middleground);
-
-	if (HSM_RENDER_SIMPLE_MODE < 0.5)
-		out_color = HSM_PreMultAlphaBlend(out_color, crt_layer);
-
-	precomp_foreground.rgb = PrepGraphicsForHDR(precomp_foreground.rgb);
-	out_color = HSM_PreMultAlphaBlend(out_color, precomp_foreground);
-
-	precomp_additive.rgb = PrepGraphicsForHDR(precomp_additive.rgb);
-	out_color = HSM_PreMultAlphaBlend(out_color, precomp_additive * vec4(1, 1, 1, 0));
+	vec4 crt_layer = vec4(0);
+	if (HSM_COMPOSITE_CRT_AND_REFLECTION_ON > 0.5)
+	{
+		crt_layer = texture(MiddlePass, vTexCoord);
+	}
 
 	if (HSM_RENDER_SIMPLE_MODE > 0.5)
 	{
+		crt_layer.rgb = vec3(0);
+	}
+
+	// float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
+	// if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
+	// 	bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
+
+	// // TODO, need to see how to manage with parameters
+	// #ifndef IS_NO_REFLECT_PRESET
+	// vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 1, TUBE_DIFFUSE_SCALE, TUBE_SCALE, TUBE_DIFFUSE_ASPECT, 1);
+
+	// TUBE_MASK =  HSM_GetCornerMask(tube_curved_coord, TUBE_DIFFUSE_ASPECT, bezel_corner_radius, 0.99);
+	// // Apply Reflection Image Mask
+	// crt_layer *= TUBE_MASK + (1 - TUBE_MASK) * reflection_mask;
+	// #endif
+
+	if (HSM_COMPOSITE_MIDDLEGROUND_ON > 0.5)
+	{
+		precomp_middleground.rgb = PrepGraphicsForHDR(precomp_middleground.rgb);
+		out_color = HSM_PreMultAlphaBlend(out_color, precomp_middleground);
+	}
+
+	if (HSM_COMPOSITE_CRT_AND_REFLECTION_ON > 0.5 && HSM_RENDER_SIMPLE_MODE < 0.5)
+		out_color = HSM_PreMultAlphaBlend(out_color, crt_layer);
+
+	if (HSM_COMPOSITE_FOREGROUND_ON > 0.5)
+	{
+		precomp_foreground.rgb = PrepGraphicsForHDR(precomp_foreground.rgb);
+		out_color = HSM_PreMultAlphaBlend(out_color, precomp_foreground);
+	}
+
+	if (HSM_COMPOSITE_ADDITIVE_ON > 0.5)
+	{
+		precomp_additive.rgb = PrepGraphicsForHDR(precomp_additive.rgb);
+		out_color = HSM_PreMultAlphaBlend(out_color, precomp_additive * vec4(1, 1, 1, 0));
+	}
+
+	if (HSM_RENDER_SIMPLE_MODE > 0.5)
+	{
+		float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
+		if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
+			bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
+
 		vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 1, TUBE_DIFFUSE_SCALE, TUBE_SCALE, TUBE_DIFFUSE_ASPECT, 1);
 
 		TUBE_DIFFUSE_CURVED_COORD = HSM_GetCurvedCoord(TUBE_DIFFUSE_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, TUBE_DIFFUSE_ASPECT);
