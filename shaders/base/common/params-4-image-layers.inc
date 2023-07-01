@@ -70,8 +70,8 @@ float HSM_TOP_LAYER_ORDER = global.HSM_TOP_LAYER_ORDER;
 //---------------------------------------------------------------------------------------------------
 //    LAYER GROUP VISIBILITY
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_LAYER_GROUP_EMPTY_LINE				" " 0 0 0.001 0.001
-#pragma parameter HSM_LAYER_GROUP_TITLE			            "[ COMPOSITE GROUP VISIBILITY ]:" 0 0 0.01 0.01
+#pragma parameter HSM_LAYER_GROUP_EMPTY_LINE			" " 0 0 0.001 0.001
+#pragma parameter HSM_LAYER_GROUP_TITLE			        "[ COMPOSITE GROUP VISIBILITY ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_COMPOSITE_BACKGROUND_ON           "          Background Layer Group ON"  1 0 1 1
 float HSM_COMPOSITE_BACKGROUND_ON = global.HSM_COMPOSITE_BACKGROUND_ON;
@@ -88,6 +88,8 @@ float HSM_COMPOSITE_ADDITIVE_ON = global.HSM_COMPOSITE_ADDITIVE_ON;
 #pragma parameter HSM_COMPOSITE_CRT_AND_REFLECTION_ON   "          CRT & Reflection Composite ON"  1 0 1 1
 float HSM_COMPOSITE_CRT_AND_REFLECTION_ON = global.HSM_COMPOSITE_CRT_AND_REFLECTION_ON;
 
+#pragma parameter HSM_COMPOSITE_SHOW_ALPHA              "          Output Color - RGB | ALPHA | ALPHA OVERLAY (RED)"  0 0 2 1
+float HSM_COMPOSITE_SHOW_ALPHA = global.HSM_COMPOSITE_SHOW_ALPHA;
 
 //---------------------------------------------------------------------------------------------------
 //    RENDER FOR SIMPLIFIED PRESETS

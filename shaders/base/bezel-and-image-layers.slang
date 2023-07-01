@@ -1454,9 +1454,16 @@ void main()
 
 	// Need to encode final gamma in source pass since only 8bit
 	precomp_foreground = HSM_Delinearize(precomp_foreground, DEFAULT_SRGB_GAMMA);
+	precomp_foreground.a = pow(precomp_foreground.a, 1 / DEFAULT_SRGB_GAMMA);
+
 	precomp_middleground = HSM_Delinearize(precomp_middleground, DEFAULT_SRGB_GAMMA);
+	precomp_middleground.a = pow(precomp_middleground.a, 1 / DEFAULT_SRGB_GAMMA);
+
 	precomp_background = HSM_Delinearize(precomp_background, DEFAULT_SRGB_GAMMA);
+	precomp_background.a = pow(precomp_background.a, 1 / DEFAULT_SRGB_GAMMA);
+
 	precomp_additive = HSM_Delinearize(precomp_additive, DEFAULT_SRGB_GAMMA);
+	precomp_additive.a = pow(precomp_additive.a, 1 / DEFAULT_SRGB_GAMMA);
 
 	vec4 image_layers_packed = HSM_Pack_4_Rgba_To_1_Rgba(precomp_foreground
 														,precomp_middleground

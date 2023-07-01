@@ -31,6 +31,7 @@ Changes:
 ----------------------------------------------------
 
   * Fix P3st Glass Blend issue (Blending function probably)
+  * Add Show Alpha for Composite Groups
   * Move Simple Render to source passes for +5 FPS
   * Move Pass Debug? +5 FPS
   * Fix Tube Highlight Cache Update?

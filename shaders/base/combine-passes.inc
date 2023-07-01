@@ -251,10 +251,22 @@ void main()
 						precomp_background, 
 						precomp_additive);
 
+
 	precomp_foreground = HSM_Linearize(precomp_foreground, DEFAULT_SRGB_GAMMA);
+	// Gamma added to alpha to avoid clipping on AMD GPUs
+	precomp_foreground.a = pow(precomp_foreground.a, DEFAULT_SRGB_GAMMA);
+
 	precomp_middleground = HSM_Linearize(precomp_middleground, DEFAULT_SRGB_GAMMA);
+	// Gamma added to alpha to avoid clipping on AMD GPUs
+	precomp_middleground.a = pow(precomp_middleground.a, DEFAULT_SRGB_GAMMA);
+	
 	precomp_background = HSM_Linearize(precomp_background, DEFAULT_SRGB_GAMMA);
+	// Gamma added to alpha to avoid clipping on AMD GPUs
+	precomp_background.a = pow(precomp_background.a, DEFAULT_SRGB_GAMMA);
+
 	precomp_additive = HSM_Linearize(precomp_additive, DEFAULT_SRGB_GAMMA);
+	// Gamma added to alpha to avoid clipping on AMD GPUs
+	precomp_additive.a = pow(precomp_additive.a, DEFAULT_SRGB_GAMMA);
 
 	float reflection_mask = precomp_background.a;
 	vec4 out_color = vec4(0);
@@ -373,10 +385,18 @@ void main()
 		}
 	}
 
+	if(HSM_COMPOSITE_SHOW_ALPHA > 0.5)
+	{
+		if (HSM_COMPOSITE_SHOW_ALPHA > 1.5)
+			out_color.rgb = clamp(out_color.rgb * 0.5 + 0.5 * (1 - out_color.a) * vec3(0.5, 0.0, 0.0), 0.0, 1.0);
+		else
+			out_color = out_color.aaaa;
+	}
+
 #ifdef IS_HDR_PRESET	
-	vec3 output_colour = vec3(0);
-	LinearToOutputColor(out_color.rgb, output_colour);
-	out_color = vec4(output_colour, 1.0f);
+	vec3 hdr_colour = vec3(0);
+	LinearToOutputColor(out_color.rgb, hdr_colour);
+	out_color = vec4(hdr_colour, 1.0f);
 #else
 	out_color = HSM_Delinearize(out_color, DEFAULT_SRGB_GAMMA);
 #endif
