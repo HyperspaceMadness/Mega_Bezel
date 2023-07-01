@@ -1,4 +1,4 @@
-shaders = 3
+shaders = 4
 
 shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/stock.slang
 filter_linear0 = true
@@ -22,3 +22,13 @@ scale_type2 = source
 scale2 = 1.0
 float_framebuffer2 = true
 alias2 = "LinearizePass"
+
+// This pass IS ABSOLUTELY NECESSARY
+// A pass with mipmap_input = false, and filter_linear = false must be placed after the linearize pass
+// Not having this pass results in incorrect sampling later
+shader3 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/do-nothing.slang
+mipmap_input3 = false
+filter_linear3 = false
+scale_type3 = absolute
+scale_x3 = 8
+scale_y3 = 8

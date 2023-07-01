@@ -1,4 +1,4 @@
-shaders = 15
+shaders = 16
 
 shader0 = ../../../shaders/base/drez-g-sharp_resampler.slang
 filter_linear0 = false
@@ -95,17 +95,27 @@ scale11 = 1.0
 float_framebuffer11 = true
 alias11 = "LinearizePass"
 
-shader12 = ../../../shaders/base/delinearize.slang
-scale_type12 = source
-float_framebuffer12 = "true"
+// This pass IS ABSOLUTELY NECESSARY
+// A pass with mipmap_input = false, and filter_linear = false must be placed after the linearize pass
+// Not having this pass results in incorrect sampling later
+shader12 = ../../../shaders/base/do-nothing.slang
+mipmap_input12 = false
+filter_linear12 = false
+scale_type12 = absolute
+scale_x12 = 8
+scale_y12 = 8
 
-shader13 = ../../../shaders/guest/hsm-crt-dariusg-gdv-mini.slang
-scale_type13 = viewport
-scale_x13 = 1.0
-scale_y13 = 1.0
-filter_linear13 = true
+shader13 = ../../../shaders/base/delinearize.slang
+scale_type13 = source
 float_framebuffer13 = "true"
-alias13 = "CrtPass"
+
+shader14 = ../../../shaders/guest/hsm-crt-dariusg-gdv-mini.slang
+scale_type14 = viewport
+scale_x14 = 1.0
+scale_y14 = 1.0
+filter_linear14 = true
+float_framebuffer14 = "true"
+alias14 = "CrtPass"
 
 
 # -----------------------------------------------------------------------------------------------
@@ -118,12 +128,12 @@ g_gamma_out = 2.45
 # -----------------------------------------------------------------------------------------------
 
 
-shader14 = ../../../shaders/base/tubefx-none-with-bg-delinearize.slang
+shader15 = ../../../shaders/base/tubefx-none-with-bg-delinearize.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
-filter_linear14 = false
-mipmap_input14 = true
-scale_type14 = viewport
-scale14 = 1.0
+filter_linear15 = false
+mipmap_input15 = true
+scale_type15 = viewport
+scale15 = 1.0
 
 # Textures Potato
 # Define textures to be used by the different passes

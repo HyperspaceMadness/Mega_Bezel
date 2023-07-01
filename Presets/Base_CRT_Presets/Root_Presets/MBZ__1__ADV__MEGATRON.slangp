@@ -1,4 +1,4 @@
-shaders = 40
+shaders = 41
 
 shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
@@ -146,52 +146,62 @@ scale25 = 1.0
 float_framebuffer25 = true
 alias25 = "LinearizePass"
 
+// This pass IS ABSOLUTELY NECESSARY
+// A pass with mipmap_input = false, and filter_linear = false must be placed after the linearize pass
+// Not having this pass results in incorrect sampling later
+shader26 = ../../../shaders/base/do-nothing.slang
+mipmap_input26 = false
+filter_linear26 = false
+scale_type26 = absolute
+scale_x26 = 8
+scale_y26 = 8
+
 # Tube Layers ----------------------------------------------------------------
 
-shader26 = ../../../shaders/base/tubelayers-default.slang
+shader27 = ../../../shaders/base/tubelayers-default.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
-filter_linear26 = false
-mipmap_input26 = true
-scale_type26 = viewport
-scale26 = 1.0
+filter_linear27 = false
+mipmap_input27 = true
+scale_type27 = viewport
+scale27 = 1.0
 
 // This pass IS ABSOLUTELY NECESSARY
 // A pass with filter_linear = false must be placed after a pass which is packing 4 8 Bit values into a 32 Bit output
 // Not having this pass results in incorrect sampling/corrupted values coming from the pass when sampled within another pass
-shader27 = ../../../shaders/base/do-nothing.slang
-mipmap_input27 = false
-filter_linear27 = false
-scale_type27 = absolute
-scale_x27 = 8
-scale_y27 = 8
+shader28 = ../../../shaders/base/do-nothing.slang
+mipmap_input28 = false
+filter_linear28 = false
+scale_type28 = absolute
+scale_x28 = 8
+scale_y28 = 8
 feedback_pass = "0"
 
 # Sony Megatron Colour Video Monitor by Major Pain The Cactus
-shader28 = "../../../shaders/megatron/crt-sony-megatron-source-pass.slang"
-filter_linear28 = "false"
-scale_type28 = "source"
-scale28 = "1.0"
-wrap_mode28 = "clamp_to_border"
-mipmap_input28 = "false"
-alias28 = "SourceSDR"
-float_framebuffer28 = "true"
-
-shader29 = "../../../shaders/megatron/crt-sony-megatron-hdr-pass.slang"
+shader29 = "../../../shaders/megatron/crt-sony-megatron-source-pass.slang"
 filter_linear29 = "false"
 scale_type29 = "source"
 scale29 = "1.0"
 wrap_mode29 = "clamp_to_border"
 mipmap_input29 = "false"
-alias29 = "SourceHDR"
+alias29 = "SourceSDR"
 float_framebuffer29 = "true"
 
-shader30 = "../../../shaders/megatron/crt-sony-megatron.slang"
+shader30 = "../../../shaders/megatron/crt-sony-megatron-hdr-pass.slang"
 filter_linear30 = "false"
+scale_type30 = "source"
+scale30 = "1.0"
 wrap_mode30 = "clamp_to_border"
 mipmap_input30 = "false"
-scale_type30 = "viewport"
+alias30 = "SourceHDR"
 float_framebuffer30 = "true"
-alias30 = "CrtPass"
+
+shader31 = "../../../shaders/megatron/crt-sony-megatron.slang"
+filter_linear31 = "false"
+wrap_mode31 = "clamp_to_border"
+mipmap_input31 = "false"
+scale_type31 = "viewport"
+float_framebuffer31 = "true"
+alias31 = "CrtPass"
 
 
 # -----------------------------------------------------------------------------------------------
@@ -213,81 +223,81 @@ HSM_REFLECT_GLOBAL_AMOUNT = "7.000000"
 
 # Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 
-shader31 = ../../../shaders/base/bezel-and-image-layers.slang
+shader32 = ../../../shaders/base/bezel-and-image-layers.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
-filter_linear31 = false
-scale_type31 = viewport
-scale31 = 1.0
-alias31 = "SceneLayersPass"
+filter_linear32 = false
+scale_type32 = viewport
+scale32 = 1.0
+alias32 = "SceneLayersPass"
 
 // This pass IS ABSOLUTELY NECESSARY
 // A pass with filter_linear = false must be placed after a pass which is packing 4 8 Bit values into a 32 Bit output
 // Not having this pass results in incorrect sampling/corrupted values coming from the pass when sampled within another pass
-shader32 = ../../../shaders/base/do-nothing.slang
-mipmap_input32 = false
-filter_linear32 = false
-scale_type32 = absolute
-scale_x32 = 8
-scale_y32 = 8
+shader33 = ../../../shaders/base/do-nothing.slang
+mipmap_input33 = false
+filter_linear33 = false
+scale_type33 = absolute
+scale_x33 = 8
+scale_y33 = 8
 
 # Reduce Resolution  ----------------------------------------------------------------
 #      Reduce the resolution to a small static size regardless of final resolution
 #      Allows consistent look and faster at different final resolutions for blur
 #      Mipmap option allows downscaling without artifacts
-shader33 = ../../../shaders/base/linearize-crt.slang
-mipmap_input33 = true
-filter_linear33 = true
-scale_type33 = absolute
-scale_x33 = 800
-scale_y33 = 600
-float_framebuffer33 = true
-alias33 = "ReflectPrepLowResPass"
-
-# Add Blur for the Reflection (Horizontal) ----------------------------------------------------------------
-shader34 = ../../../shaders/base/blur-outside-screen-horiz.slang
+shader34 = ../../../shaders/base/linearize-crt.slang
 mipmap_input34 = true
 filter_linear34 = true
+scale_type34 = absolute
+scale_x34 = 800
+scale_y34 = 600
 float_framebuffer34 = true
+alias34 = "ReflectPrepLowResPass"
 
-# Add Blur for the Reflection (Vertical) ----------------------------------------------------------------
-shader35 = ../../../shaders/base/blur-outside-screen-vert.slang
+# Add Blur for the Reflection (Horizontal) ----------------------------------------------------------------
+shader35 = ../../../shaders/base/blur-outside-screen-horiz.slang
+mipmap_input35 = true
 filter_linear35 = true
 float_framebuffer35 = true
-alias35 = "ReflectPrepBlurredPass"
+
+# Add Blur for the Reflection (Vertical) ----------------------------------------------------------------
+shader36 = ../../../shaders/base/blur-outside-screen-vert.slang
+filter_linear36 = true
+float_framebuffer36 = true
+alias36 = "ReflectPrepBlurredPass"
 
 # Reduce resolution ----------------------------------------------------------------
 # Reduced to a very small amount so we can create a blur which will create a glow from the screen
 #      Mipmap option allows smoother downscaling
-shader36 = ../../../../../blurs/shaders/royale/blur9x9.slang
-mipmap_input36 = true
-filter_linear36 = true
-scale_type36 = absolute
-scale_x36 = 128
-scale_y36 = 128
-float_framebuffer36 = true
-alias36 = "ReflectPrepDiffusedPass"
-
-# Add Diffused glow all around the screen ----------------------------------------------------------------
-#      Blurred so much that it's non directional
-#      Mipmap option allows downscaling without artifacts
 shader37 = ../../../../../blurs/shaders/royale/blur9x9.slang
 mipmap_input37 = true
 filter_linear37 = true
 scale_type37 = absolute
-scale_x37 = 12
-scale_y37 = 12
+scale_x37 = 128
+scale_y37 = 128
 float_framebuffer37 = true
-alias37 = "ReflectPrepFullscreenGlowPass"
+alias37 = "ReflectPrepDiffusedPass"
+
+# Add Diffused glow all around the screen ----------------------------------------------------------------
+#      Blurred so much that it's non directional
+#      Mipmap option allows downscaling without artifacts
+shader38 = ../../../../../blurs/shaders/royale/blur9x9.slang
+mipmap_input38 = true
+filter_linear38 = true
+scale_type38 = absolute
+scale_x38 = 12
+scale_y38 = 12
+float_framebuffer38 = true
+alias38 = "ReflectPrepFullscreenGlowPass"
 
 # Bezel Reflection ----------------------------------------------------------------
-shader38 = ../../../shaders/base/reflection.slang
-scale_type38 = viewport
-float_framebuffer38 = true
-alias38 = "ReflectPass"
+shader39 = ../../../shaders/base/reflection.slang
+scale_type39 = viewport
+float_framebuffer39 = true
+alias39 = "ReflectPass"
 
 # Combine Passes ----------------------------------------------------------------
-shader39 = ../../../shaders/base/combine-passes-hdr.slang
-scale_type39 = viewport
+shader40 = ../../../shaders/base/combine-passes-hdr.slang
+scale_type40 = viewport
 
 
 # Textures All

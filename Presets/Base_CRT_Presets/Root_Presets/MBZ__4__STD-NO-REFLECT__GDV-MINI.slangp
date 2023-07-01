@@ -1,4 +1,4 @@
-shaders = 21
+shaders = 22
 
 shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
@@ -97,36 +97,46 @@ scale13 = 1.0
 float_framebuffer13 = true
 alias13 = "LinearizePass"
 
+// This pass IS ABSOLUTELY NECESSARY
+// A pass with mipmap_input = false, and filter_linear = false must be placed after the linearize pass
+// Not having this pass results in incorrect sampling later
+shader14 = ../../../shaders/base/do-nothing.slang
+mipmap_input14 = false
+filter_linear14 = false
+scale_type14 = absolute
+scale_x14 = 8
+scale_y14 = 8
+
 # Tube Layers ----------------------------------------------------------------
 
-shader14 = ../../../shaders/base/tubelayers-default.slang
+shader15 = ../../../shaders/base/tubelayers-default.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
-filter_linear14 = false
-mipmap_input14 = true
-scale_type14 = viewport
-scale14 = 1.0
+filter_linear15 = false
+mipmap_input15 = true
+scale_type15 = viewport
+scale15 = 1.0
 
 // This pass IS ABSOLUTELY NECESSARY
 // A pass with filter_linear = false must be placed after a pass which is packing 4 8 Bit values into a 32 Bit output
 // Not having this pass results in incorrect sampling/corrupted values coming from the pass when sampled within another pass
-shader15 = ../../../shaders/base/do-nothing.slang
-mipmap_input15 = false
-filter_linear15 = false
-scale_type15 = absolute
-scale_x15 = 8
-scale_y15 = 8
+shader16 = ../../../shaders/base/do-nothing.slang
+mipmap_input16 = false
+filter_linear16 = false
+scale_type16 = absolute
+scale_x16 = 8
+scale_y16 = 8
 
-shader16 = ../../../shaders/base/delinearize.slang
-scale_type16 = source
-float_framebuffer16 = "true"
-
-shader17 = ../../../shaders/guest/hsm-crt-dariusg-gdv-mini-with-tubefx.slang
-scale_type17 = viewport
-scale_x17 = 1.0
-scale_y17 = 1.0
-filter_linear17 = true
+shader17 = ../../../shaders/base/delinearize.slang
+scale_type17 = source
 float_framebuffer17 = "true"
-alias17 = "CrtPass"
+
+shader18 = ../../../shaders/guest/hsm-crt-dariusg-gdv-mini-with-tubefx.slang
+scale_type18 = viewport
+scale_x18 = 1.0
+scale_y18 = 1.0
+filter_linear18 = true
+float_framebuffer18 = "true"
+alias18 = "CrtPass"
 
 
 # -----------------------------------------------------------------------------------------------
@@ -141,26 +151,26 @@ g_gamma_out = 2.45
 
 # Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 
-shader18 = ../../../shaders/base/bezel-and-image-layers.slang
+shader19 = ../../../shaders/base/bezel-and-image-layers.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
-filter_linear18 = false
-scale_type18 = viewport
-scale18 = 1.0
-alias18 = "SceneLayersPass"
+filter_linear19 = false
+scale_type19 = viewport
+scale19 = 1.0
+alias19 = "SceneLayersPass"
 
 // This pass IS ABSOLUTELY NECESSARY
 // A pass with filter_linear = false must be placed after a pass which is packing 4 8 Bit values into a 32 Bit output
 // Not having this pass results in incorrect sampling/corrupted values coming from the pass when sampled within another pass
-shader19 = ../../../shaders/base/do-nothing.slang
-mipmap_input19 = false
-filter_linear19 = false
-scale_type19 = absolute
-scale_x19 = 8
-scale_y19 = 8
+shader20 = ../../../shaders/base/do-nothing.slang
+mipmap_input20 = false
+filter_linear20 = false
+scale_type20 = absolute
+scale_x20 = 8
+scale_y20 = 8
 
 # Combine Passes ----------------------------------------------------------------
-shader20 = ../../../shaders/base/combine-passes-no-reflect.slang
-scale_type20 = viewport
+shader21 = ../../../shaders/base/combine-passes-no-reflect.slang
+scale_type21 = viewport
 
 
 # Textures All

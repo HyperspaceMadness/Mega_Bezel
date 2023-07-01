@@ -1,4 +1,4 @@
-shaders = 16
+shaders = 17
 
 shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
@@ -93,34 +93,44 @@ scale_type11 = source
 scale11 = 1.0
 float_framebuffer11 = true
 alias11 = "LinearizePass"
+
+// This pass IS ABSOLUTELY NECESSARY
+// A pass with mipmap_input = false, and filter_linear = false must be placed after the linearize pass
+// Not having this pass results in incorrect sampling later
+shader12 = ../../../shaders/base/do-nothing.slang
+mipmap_input12 = false
+filter_linear12 = false
+scale_type12 = absolute
+scale_x12 = 8
+scale_y12 = 8
 feedback_pass = "0"
 
 # Sony Megatron Colour Video Monitor by Major Pain The Cactus
-shader12 = "../../../shaders/megatron/crt-sony-megatron-source-pass.slang"
-filter_linear12 = "false"
-scale_type12 = "source"
-scale12 = "1.0"
-wrap_mode12 = "clamp_to_border"
-mipmap_input12 = "false"
-alias12 = "SourceSDR"
-float_framebuffer12 = "true"
-
-shader13 = "../../../shaders/megatron/crt-sony-megatron-hdr-pass.slang"
+shader13 = "../../../shaders/megatron/crt-sony-megatron-source-pass.slang"
 filter_linear13 = "false"
 scale_type13 = "source"
 scale13 = "1.0"
 wrap_mode13 = "clamp_to_border"
 mipmap_input13 = "false"
-alias13 = "SourceHDR"
+alias13 = "SourceSDR"
 float_framebuffer13 = "true"
 
-shader14 = "../../../shaders/megatron/crt-sony-megatron.slang"
+shader14 = "../../../shaders/megatron/crt-sony-megatron-hdr-pass.slang"
 filter_linear14 = "false"
+scale_type14 = "source"
+scale14 = "1.0"
 wrap_mode14 = "clamp_to_border"
 mipmap_input14 = "false"
-scale_type14 = "viewport"
+alias14 = "SourceHDR"
 float_framebuffer14 = "true"
-alias14 = "CrtPass"
+
+shader15 = "../../../shaders/megatron/crt-sony-megatron.slang"
+filter_linear15 = "false"
+wrap_mode15 = "clamp_to_border"
+mipmap_input15 = "false"
+scale_type15 = "viewport"
+float_framebuffer15 = "true"
+alias15 = "CrtPass"
 
 
 # -----------------------------------------------------------------------------------------------
@@ -141,9 +151,9 @@ HSM_REFLECT_GLOBAL_AMOUNT = "7.000000"
 # -----------------------------------------------------------------------------------------------
 
 # Combine Passes ----------------------------------------------------------------
-shader15 = ../../../shaders/base/output-hdr.slang
-scale_type15 = viewport
-alias15 = "OutputPass"
+shader16 = ../../../shaders/base/output-hdr.slang
+scale_type16 = viewport
+alias16 = "OutputPass"
 
 
 # Textures Potato

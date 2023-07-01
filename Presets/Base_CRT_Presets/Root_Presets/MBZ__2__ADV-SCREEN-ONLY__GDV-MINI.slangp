@@ -1,4 +1,4 @@
-shaders = 31
+shaders = 32
 
 shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
@@ -146,36 +146,46 @@ scale25 = 1.0
 float_framebuffer25 = true
 alias25 = "LinearizePass"
 
+// This pass IS ABSOLUTELY NECESSARY
+// A pass with mipmap_input = false, and filter_linear = false must be placed after the linearize pass
+// Not having this pass results in incorrect sampling later
+shader26 = ../../../shaders/base/do-nothing.slang
+mipmap_input26 = false
+filter_linear26 = false
+scale_type26 = absolute
+scale_x26 = 8
+scale_y26 = 8
+
 # Tube Layers ----------------------------------------------------------------
 
-shader26 = ../../../shaders/base/tubelayers-default.slang
+shader27 = ../../../shaders/base/tubelayers-default.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
-filter_linear26 = false
-mipmap_input26 = true
-scale_type26 = viewport
-scale26 = 1.0
+filter_linear27 = false
+mipmap_input27 = true
+scale_type27 = viewport
+scale27 = 1.0
 
 // This pass IS ABSOLUTELY NECESSARY
 // A pass with filter_linear = false must be placed after a pass which is packing 4 8 Bit values into a 32 Bit output
 // Not having this pass results in incorrect sampling/corrupted values coming from the pass when sampled within another pass
-shader27 = ../../../shaders/base/do-nothing.slang
-mipmap_input27 = false
-filter_linear27 = false
-scale_type27 = absolute
-scale_x27 = 8
-scale_y27 = 8
+shader28 = ../../../shaders/base/do-nothing.slang
+mipmap_input28 = false
+filter_linear28 = false
+scale_type28 = absolute
+scale_x28 = 8
+scale_y28 = 8
 
-shader28 = ../../../shaders/base/delinearize.slang
-scale_type28 = source
-float_framebuffer28 = "true"
-
-shader29 = ../../../shaders/guest/hsm-crt-dariusg-gdv-mini.slang
-scale_type29 = viewport
-scale_x29 = 1.0
-scale_y29 = 1.0
-filter_linear29 = true
+shader29 = ../../../shaders/base/delinearize.slang
+scale_type29 = source
 float_framebuffer29 = "true"
-alias29 = "CrtPass"
+
+shader30 = ../../../shaders/guest/hsm-crt-dariusg-gdv-mini.slang
+scale_type30 = viewport
+scale_x30 = 1.0
+scale_y30 = 1.0
+filter_linear30 = true
+float_framebuffer30 = "true"
+alias30 = "CrtPass"
 
 
 # -----------------------------------------------------------------------------------------------
@@ -188,12 +198,12 @@ g_gamma_out = 2.45
 # -----------------------------------------------------------------------------------------------
 
 
-shader30 = ../../../shaders/base/tubefx-default-delinearize.slang
+shader31 = ../../../shaders/base/tubefx-default-delinearize.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
-filter_linear30 = false
-mipmap_input30 = true
-scale_type30 = viewport
-scale30 = 1.0
+filter_linear31 = false
+mipmap_input31 = true
+scale_type31 = viewport
+scale31 = 1.0
 
 # Textures All
 # Define textures to be used by the different passes
