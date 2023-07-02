@@ -109,6 +109,10 @@ vec4 HSM_GetPreMultipliedColorLinear(vec4 in_color, float matte_type, float enco
 	if (matte_type == SOURCE_MATTE_NONE)
 		out_color.rgb *= out_color.a;
 
+	// If alpha is 0 then rgb should be 0 too
+	if (in_color.a < 0.0001)
+		out_color.rgb *= 0.0;
+
 	return out_color;
 }
 
