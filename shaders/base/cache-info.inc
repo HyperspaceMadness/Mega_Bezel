@@ -165,6 +165,7 @@ vec2 HSM_GetScreenScale(float screen_aspect, float screen_height_from_image, vec
 				float int_scale_remainder = fract(integer_scale_multiple_vert);
 				int_scale_remainder = (int_scale_remainder < 1 - int_scale_remainder) ? int_scale_remainder : 1 - int_scale_remainder;
 				float remainder_percent_of_screen_height = (int_scale_remainder * cropped_size.y) / (screen_height * global.FinalViewportSize.y);
+				// TODO should support horizontal int scale
 				if (remainder_percent_of_screen_height < HSM_SNAP_TO_CLOSEST_INT_SCALE_TOLERANCE)
 				{
 					integer_scale_multiple_vert = round(integer_scale_multiple_vert);
@@ -204,20 +205,27 @@ vec2 HSM_GetScreenScale(float screen_aspect, float screen_height_from_image, vec
 		float integer_scale_multiple_horz = integer_scale_horz_from_aspect * global.FinalViewportSize.x / cropped_size.x;
 
 		// If we are using vertical scanlines or integer scale is set to both directions make the horizontal multiple an integer
-		float final_int_scale_mode = HSM_INT_SCALE_MODE;
-		if (HSM_INT_SCALE_MODE > 0.5)
+		bool use_vert_scanlines = HSM_GetUseVerticalScanlines(screen_aspect) == 1;
+		bool int_scale_vert_on = HSM_INT_SCALE_MODE == 1 && !use_vert_scanlines || HSM_INT_SCALE_MODE == 2;
+		bool int_scale_horz_on = HSM_INT_SCALE_MODE == 1 && use_vert_scanlines || HSM_INT_SCALE_MODE == 2;
+		bool screen_aspect_is_vertical = screen_aspect - 1 < 0;
+
+		if (int_scale_horz_on)
 		{
-			if (HSM_GetUseVerticalScanlines(screen_aspect) == 1 || HSM_INT_SCALE_MODE == 2)
-			{
-				integer_scale_multiple_horz = round(integer_scale_multiple_horz);
-				final_int_scale_mode = 2;
-			}
+			integer_scale_multiple_horz = round(integer_scale_multiple_horz);
+			// If the vertical integer scaling is not on, then we need to calculate a new vertical height
+			// based on the horizontal integer scale and the aspect ratio
+			if (!int_scale_vert_on)
+				integer_scale_multiple_vert = integer_scale_multiple_horz * cropped_size.x / screen_aspect / cropped_size.y;
 		}
 
-		float both_axes = clamp((final_int_scale_mode - 1) * 10000, 0, 1);
-		integer_scale_multiple_vert += both_axes * abs(clamp((screen_aspect - 1) * 10000, -1, 0)) * HSM_INT_SCALE_MULTIPLE_OFFSET_LONG;
-		integer_scale_multiple_horz += both_axes * abs(clamp((screen_aspect - 1) * 10000,  0, 1)) * HSM_INT_SCALE_MULTIPLE_OFFSET_LONG;
+		// Add int multiple offset on the long axis for each screen aspect orientation
+		if (screen_aspect_is_vertical && int_scale_vert_on)
+			integer_scale_multiple_vert += HSM_INT_SCALE_MULTIPLE_OFFSET_LONG;
+		if (!screen_aspect_is_vertical && int_scale_horz_on)
+			integer_scale_multiple_horz += HSM_INT_SCALE_MULTIPLE_OFFSET_LONG;
 
+		// Get the scales in both directions
 		integer_scale_vert = integer_scale_multiple_vert * cropped_size.y / global.FinalViewportSize.y;
 		float integer_scale_horz = integer_scale_multiple_horz * cropped_size.x / global.FinalViewportSize.x;
 
@@ -836,7 +844,7 @@ float HSM_GetParameterSum()
 					+ HSM_BZL_INNER_CURVATURE_SCALE * 100
 					+ HSM_BZL_INNER_CORNER_RADIUS_SCALE * 100
 
-#ifdef HAS_BEZEL_PARAMS
+		#ifdef HAS_BEZEL_PARAMS
 
 					//	Bezel Params not in Screen Scale
 					+ HSM_BZL_INNER_EDGE_THICKNESS / 0.00007
@@ -894,9 +902,9 @@ float HSM_GetParameterSum()
 					+ HSM_REFLECT_CORNER_ROTATION_OFFSET_TOP
 					+ HSM_REFLECT_CORNER_ROTATION_OFFSET_BOTTOM
 					+ HSM_REFLECT_CORNER_SPREAD_FALLOFF
-#endif
+	#endif
 
-#ifdef HAS_IMAGE_LAYER_PARAMS
+	#ifdef HAS_IMAGE_LAYER_PARAMS
 
 					// Reflection Image Mask
 					+ HSM_REFLECT_MASK_IMAGE_AMOUNT
@@ -1143,7 +1151,7 @@ float HSM_GetParameterSum()
 					+ HSM_TOP_MIRROR_WRAP
 					+ HSM_TOP_MIPMAPPING_BLEND_BIAS
 
-#endif
+	#endif
 
 					);
 	return out_sum;
