@@ -96,11 +96,12 @@ float_framebuffer11 = true
 alias11 = "LinearizePass"
 
 // This pass IS ABSOLUTELY NECESSARY
-// A pass with mipmap_input = false, and filter_linear = false must be placed after the linearize pass
+// A pass with mipmap_input = false, and filter_linear = true must be placed after the linearize pass
 // Not having this pass results in incorrect sampling later
+// Without filter_linear the crt pass has lots of nearest neighbor kind of sampling artifacts
 shader12 = ../../../shaders/base/do-nothing.slang
 mipmap_input12 = false
-filter_linear12 = false
+filter_linear12 = true
 scale_type12 = absolute
 scale_x12 = 8
 scale_y12 = 8

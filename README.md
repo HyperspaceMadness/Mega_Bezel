@@ -696,8 +696,6 @@ Shows the results at different stages of the shader chain
     * **6: DEDITHER** - ADV passes only, at this point dithering should be blended together
     * **7: DREZ** - DREZ passes only, shows result after the downsampling pass
     * **8: CORE** - This is the initial input into the shader pipeline
-    * **9: LAYERS TOP** - Just the pass which composites all the layers which are in front of the CRT tube
-    * **10: LAYERS BOTTOM** - Just the pass which composites all the layers which are behind the CRT tube
 - **Apply Screen Scale & Curvature to Unscaled Passes**
     * **0: Show exact output of the chosen pass**
     * **1: Apply scale and curvature to the output of the chosen pass so it is easier to directly compare between earlier and later passes**
