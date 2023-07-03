@@ -251,7 +251,6 @@ void main()
 						precomp_background, 
 						precomp_additive);
 
-
 	precomp_foreground = HSM_Linearize(precomp_foreground, DEFAULT_SRGB_GAMMA);
 	// Gamma added to alpha to avoid clipping on AMD GPUs
 	precomp_foreground.a = pow(precomp_foreground.a, DEFAULT_SRGB_GAMMA);
@@ -276,10 +275,26 @@ void main()
 	float reflection_mask = precomp_background.a;
 	vec4 out_color = vec4(0);
 
+	vec4 composite_base_color = vec4(0);
+	// Red BG
+	if (HSM_COMPOSITE_BASE_COLOR == 1)
+		composite_base_color = vec4(1.0, 0.0, 0.0, 0.0) * HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS;
+	// Pink (Magenta) BG
+	if (HSM_COMPOSITE_BASE_COLOR == 2)
+		composite_base_color = vec4(1.0, 0.0, 1.0, 0.0) * HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS;
+	// Yellow BG
+	if (HSM_COMPOSITE_BASE_COLOR == 3)
+		composite_base_color = vec4(1.0, 1.0, 0.0, 0.0) * HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS;
+	// Aqua BG
+	if (HSM_COMPOSITE_BASE_COLOR == 4)
+		composite_base_color = vec4(0.0, 1.0, 1.0, 0.0) * HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS;
+
+	out_color = composite_base_color;
+
 	if (HSM_COMPOSITE_BACKGROUND_ON > 0.5)
 	{
 		precomp_background.rgb = PrepGraphicsForHDR(precomp_background.rgb);
-		out_color = precomp_background;
+		out_color = HSM_PreMultAlphaBlend(out_color, precomp_background);
 	}
 
 	vec4 crt_layer = vec4(0);

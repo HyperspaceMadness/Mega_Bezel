@@ -24,20 +24,17 @@ Changes:
   * HSM_BEZEL_LAYER_ORDER_OFFSET_FROM_TUBE 
     * This allows layers to go between the tube and bezel. 
     * Reflection will always be applied at the same level as the tube
-
+  * Added Compositition group visibility controls to help see what is in each layer group
+  * Added Composition Base Color for testing
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
-  * Fix P3st Glass Blend issue (Blending function probably)
-  * Add Show Alpha for Composite Groups
+  * Viewport vignette not worki
+  * Fix Bezel Offset from CRT
   * Move Simple Render to source passes for +5 FPS
   * Move Pass Debug? +5 FPS
-  * Fix Tube Highlight Cache Update?
-  * Fix NTSC pass order
-  * Apply Delinearize and Tubefx in CRT pass
-  * Add Same Blend Mode for Tube Gel which uses Alpha
   * Add Debug for Precomps, Maybe checkerboards with different sizes multiplied by alpha
   * Masks and Night Lighting Pass?
 
