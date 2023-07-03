@@ -264,6 +264,11 @@ void main()
 	// Gamma added to alpha to avoid clipping on AMD GPUs
 	precomp_background.a = pow(precomp_background.a, DEFAULT_SRGB_GAMMA);
 
+	// // WIP
+	// precomp_foreground.rgb = HSM_ApplyHSVAdjustment(precomp_foreground.rgb, HSM_BG_HUE, HSM_BG_SATURATION, HSM_BG_BRIGHTNESS, HSM_BG_COLORIZE_ON, HSM_BG_GAMMA);
+	// precomp_middleground.rgb = HSM_ApplyHSVAdjustment(precomp_middleground.rgb, HSM_BG_HUE, HSM_BG_SATURATION, HSM_BG_BRIGHTNESS, HSM_BG_COLORIZE_ON, HSM_BG_GAMMA);
+	// precomp_background.rgb = HSM_ApplyHSVAdjustment(precomp_background.rgb, HSM_BG_HUE, HSM_BG_SATURATION, HSM_BG_BRIGHTNESS, HSM_BG_COLORIZE_ON, HSM_BG_GAMMA);
+
 	precomp_additive = HSM_Linearize(precomp_additive, DEFAULT_SRGB_GAMMA);
 	// Gamma added to alpha to avoid clipping on AMD GPUs
 	precomp_additive.a = pow(precomp_additive.a, DEFAULT_SRGB_GAMMA);
