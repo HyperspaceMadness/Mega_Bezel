@@ -1,5 +1,5 @@
 shaders = 1
 
 # Combine Passes ----------------------------------------------------------------
-shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/combine-passes-no-reflect-hdr.slang
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/final-composite-no-reflect-hdr.slang
 scale_type0 = viewport

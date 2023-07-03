@@ -2,4 +2,4 @@
 
 #define IS_NO_REFLECT_PRESET
 
-#include "combine-passes.inc"
+#include "final-composite.inc"

@@ -6,4 +6,4 @@
 #include "../megatron/include/gamma_correct.h"
 #include "../megatron/include/inverse_tonemap.h"
 
-#include "combine-passes.inc"
+#include "final-composite.inc"

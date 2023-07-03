@@ -178,7 +178,7 @@ scale_x22 = 8
 scale_y22 = 8
 
 # Combine Passes ----------------------------------------------------------------
-shader23 = ../../../shaders/base/combine-passes-no-reflect.slang
+shader23 = ../../../shaders/base/final-composite-no-reflect.slang
 scale_type23 = viewport
 
 

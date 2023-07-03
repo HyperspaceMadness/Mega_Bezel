@@ -1,5 +1,5 @@
 shaders = 1
 
 # Combine Passes ----------------------------------------------------------------
-shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/combine-passes-hdr.slang
+shader0 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/base/final-composite-hdr.slang
 scale_type0 = viewport

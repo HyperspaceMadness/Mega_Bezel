@@ -9,4 +9,4 @@
 
 #pragma format A2B10G10R10_UNORM_PACK32
 
-#include "combine-passes.inc"
+#include "final-composite.inc"

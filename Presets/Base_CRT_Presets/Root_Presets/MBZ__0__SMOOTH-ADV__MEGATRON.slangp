@@ -357,7 +357,7 @@ float_framebuffer45 = true
 alias45 = "ReflectPass"
 
 # Combine Passes ----------------------------------------------------------------
-shader46 = ../../../shaders/base/combine-passes-hdr.slang
+shader46 = ../../../shaders/base/final-composite-hdr.slang
 scale_type46 = viewport
 
 

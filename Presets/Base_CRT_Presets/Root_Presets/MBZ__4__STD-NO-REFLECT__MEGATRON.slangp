@@ -193,7 +193,7 @@ scale_x21 = 8
 scale_y21 = 8
 
 # Combine Passes ----------------------------------------------------------------
-shader22 = ../../../shaders/base/combine-passes-no-reflect-hdr.slang
+shader22 = ../../../shaders/base/final-composite-no-reflect-hdr.slang
 scale_type22 = viewport
 
 

@@ -266,7 +266,7 @@ scale_x35 = 8
 scale_y35 = 8
 
 # Combine Passes ----------------------------------------------------------------
-shader36 = ../../../shaders/base/combine-passes-no-reflect-hdr.slang
+shader36 = ../../../shaders/base/final-composite-no-reflect-hdr.slang
 scale_type36 = viewport
 
 

@@ -277,7 +277,7 @@ float_framebuffer33 = true
 alias33 = "ReflectPass"
 
 # Combine Passes ----------------------------------------------------------------
-shader34 = ../../../shaders/base/combine-passes.slang
+shader34 = ../../../shaders/base/final-composite.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
 filter_linear34 = false
 scale_type34 = viewport

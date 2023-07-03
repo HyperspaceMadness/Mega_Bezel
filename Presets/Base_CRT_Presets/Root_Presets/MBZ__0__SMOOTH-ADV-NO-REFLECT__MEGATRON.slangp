@@ -302,7 +302,7 @@ scale_x39 = 8
 scale_y39 = 8
 
 # Combine Passes ----------------------------------------------------------------
-shader40 = ../../../shaders/base/combine-passes-no-reflect-hdr.slang
+shader40 = ../../../shaders/base/final-composite-no-reflect-hdr.slang
 scale_type40 = viewport
 
 

@@ -32,7 +32,8 @@ Changes:
 ----------------------------------------------------
 
   * Add Back AB/Switch
-  * Viewport vignette not worki
+  * Viewport vignette not working
+  * Add Night Lighting in Combine Pass
   * Fix Bezel Offset from CRT
   * Move Simple Render to source passes for +5 FPS
   * Move Pass Debug? +5 FPS
