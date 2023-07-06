@@ -41,9 +41,7 @@
 #define RENDER_SIMPLE_MASK_TYPE_BEZEL 3
 #define RENDER_SIMPLE_MASK_TYPE_FRAME 4
 
-vec2 UNFLIPPED_VIEWPORT_COORD = vec2(0.5);
 vec2 FLIPPED_VIEWPORT_COORD = vec2(0.5);
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma stage vertex
@@ -77,17 +75,19 @@ layout(set = 0, binding = 4) uniform sampler2D DeditherPass;
 layout(set = 0, binding = 5) uniform sampler2D ColorCorrectPass;
 layout(set = 0, binding = 6) uniform sampler2D LinearizePass;
 layout(set = 0, binding = 7) uniform sampler2D CrtPass;
+layout(set = 0, binding = 8) uniform sampler2D NightLightingImage;
+layout(set = 0, binding = 9) uniform sampler2D NightLighting2Image;
 
 #ifdef IS_NO_REFLECT_PRESET
 #define MiddlePass CrtPass
 #else
-layout(set = 0, binding = 9) uniform sampler2D ReflectPass;
+layout(set = 0, binding = 10) uniform sampler2D ReflectPass;
 #define MiddlePass ReflectPass
 #endif
 
-layout(set = 0, binding = 10) uniform sampler2D SceneLayersPass;
+layout(set = 0, binding = 11) uniform sampler2D SceneLayersPass;
 
-layout(set = 0, binding = 11) uniform sampler2D CombinePassFeedback;
+layout(set = 0, binding = 12) uniform sampler2D CombinePassFeedback;
 #define PassFeedback CombinePassFeedback
 
 
@@ -115,8 +115,8 @@ vec3 PrepGraphicsForHDR(vec3 in_color)
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
 {
-	UNFLIPPED_VIEWPORT_COORD = vTexCoord;
 	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
+	vec2 VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
 
 	if (HSM_SHOW_PASS_INDEX > 0.5)
 	{
@@ -222,7 +222,7 @@ void main()
 	// 	vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
 	// 	if (HSM_CACHE_GRAPHICS_ON > 0.5 && feedback_color_test.a < 0 && !CACHE_INFO_CHANGED && HSM_RENDER_SIMPLE_MODE < 0.5)
 	// 	{
-	// 		FragColor = texture(PassFeedback, UNFLIPPED_VIEWPORT_COORD);
+	// 		FragColor = texture(PassFeedback, vTexCoord);
 	// 		return;
 	// 	}
 	// }
@@ -275,6 +275,13 @@ void main()
 	float reflection_mask = precomp_background.a;
 	vec4 out_color = vec4(0);
 
+	// AMBIENT LIGHTING IMAGES
+	vec3 ambient_rgb = vec3(1);
+	vec3 ambient2_rgb = vec3(1);
+	HSM_Fill_Ambient_Images(VIEWPORT_COORD, HSM_GetViewportCoordWithFlip(vTexCoord), TUBE_DIFFUSE_COORD, TUBE_DIFFUSE_SCALE, HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE, NightLightingImage, NightLighting2Image, ambient_rgb, ambient2_rgb);
+
+	// See if we need the layer blend mode and Apply in additive mode
+
 	vec4 composite_base_color = vec4(0);
 	// Red BG
 	if (HSM_COMPOSITE_BASE_COLOR == 1)
@@ -293,6 +300,14 @@ void main()
 
 	if (HSM_COMPOSITE_BACKGROUND_ON > 0.5)
 	{
+		precomp_background.rgb = ApplyAmbientImages(	precomp_background.rgb,
+														ambient_rgb,
+														ambient2_rgb,
+														HSM_COMPOSITE_BACKGROUND_NIGHTLIGHT1_MULTIPLIER,
+														HSM_COMPOSITE_BACKGROUND_NIGHTLIGHT2_MULTIPLIER,
+														1, 
+														BLEND_MODE_NORMAL,
+														HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
 		precomp_background.rgb = PrepGraphicsForHDR(precomp_background.rgb);
 		out_color = HSM_PreMultAlphaBlend(out_color, precomp_background);
 	}
@@ -323,6 +338,14 @@ void main()
 
 	if (HSM_COMPOSITE_MIDDLEGROUND_ON > 0.5)
 	{
+		precomp_middleground.rgb = ApplyAmbientImages(	precomp_middleground.rgb,
+														ambient_rgb,
+														ambient2_rgb,
+														HSM_COMPOSITE_MIDDLEGROUND_NIGHTLIGHT1_MULTIPLIER,
+														HSM_COMPOSITE_MIDDLEGROUND_NIGHTLIGHT2_MULTIPLIER,
+														1, 
+														BLEND_MODE_NORMAL,
+														HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
 		precomp_middleground.rgb = PrepGraphicsForHDR(precomp_middleground.rgb);
 		out_color = HSM_PreMultAlphaBlend(out_color, precomp_middleground);
 	}
@@ -332,6 +355,14 @@ void main()
 
 	if (HSM_COMPOSITE_FOREGROUND_ON > 0.5)
 	{
+		precomp_foreground.rgb = ApplyAmbientImages(	precomp_foreground.rgb,
+														ambient_rgb,
+														ambient2_rgb,
+														HSM_COMPOSITE_FOREGROUND_NIGHTLIGHT1_MULTIPLIER,
+														HSM_COMPOSITE_FOREGROUND_NIGHTLIGHT2_MULTIPLIER,
+														1, 
+														BLEND_MODE_NORMAL,
+														HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
 		precomp_foreground.rgb = PrepGraphicsForHDR(precomp_foreground.rgb);
 		out_color = HSM_PreMultAlphaBlend(out_color, precomp_foreground);
 	}
@@ -422,7 +453,7 @@ void main()
 #endif
 
 	// // If we have calculated an image then set -1 as a flag to show that we have
-	// if (UNFLIPPED_VIEWPORT_COORD.x < (2 / global.OutputSize.x) && UNFLIPPED_VIEWPORT_COORD.y < (2 / global.OutputSize.y))
+	// if (vTexCoord.x < (2 / global.OutputSize.x) && vTexCoord.y < (2 / global.OutputSize.y))
 	// 	FragColor.a = -1;
 
 	FragColor = out_color;

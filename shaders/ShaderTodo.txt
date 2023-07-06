@@ -27,9 +27,21 @@ Changes:
   * Added Compositition group visibility controls to help see what is in each layer group
   * Added Composition Base Color for testing
 
+  * Nightlighting parameters renamed, and always only affect when the layer is in add mode
+    * Ambient Lighting has been renamed Night Lighting
+    * The reason we would want this in add mode is for if you are putting a reflection over the screen
+    * but you want the reflection to be adjusted by the Nightlighting
+          HSM_LED_APPLY_AMBIENT_IN_ADD_MODE
+        becomes:
+          HSM_LED_APPLY_NIGHTLIGHTING_IN_ADD_MODE
+
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
+
+  * Can we only have "Apply Nightlighting to ADD Mode" for each layer, then if this is true, 
+       then it gets composited into the normal layer, and night lighting applied on the layer group in the composite
+  * See if night lighting can be optionally applied on additive areas (rgb > 0, alpha near zero )
 
   * Add Back AB/Switch
   * Viewport vignette not working

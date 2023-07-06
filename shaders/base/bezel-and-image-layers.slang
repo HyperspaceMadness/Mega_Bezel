@@ -76,11 +76,27 @@ float GetMask(float mask_mode)
 }
 
 // Assumes Opacity is already encoded in alpha
-vec4 BlendModeMaskLayerMix(vec4 color_under, vec4 color_over, float blend_mode, bool matte_pass, bool allow_additive_blend, float mask_mode, float cutout_mode, float dualscreen_mode, float layer_opacity)
+vec4 BlendModeMaskLayerMix(vec4 color_under, vec4 color_over, float blend_mode, float precomp_index, bool apply_add_blend_only_in_additive_precomp, float mask_mode, float cutout_mode, float dualscreen_mode, float layer_opacity)
 {
 	if ( blend_mode == 0 || (dualscreen_mode != SHOW_ON_DUALSCREEN_MODE_BOTH && dualscreen_mode != SCREEN_INDEX) )
 		return color_under;
-	
+
+	bool is_additive_precomp = precomp_index == PRECOMP_INDEX_ADDITIVE;
+	if (is_additive_precomp)
+	{
+		// If requested do not apply the add mode layer in the additive precomp
+		// Also do not composite multiply mode layers in the additive precomp
+		if (blend_mode == BLEND_MODE_ADD && !apply_add_blend_only_in_additive_precomp ||
+			blend_mode == BLEND_MODE_MULTIPLY)
+			return color_under;
+	}
+	else
+	{
+		// Unless requested, do not composite the add mode layer
+		if (blend_mode == BLEND_MODE_ADD && apply_add_blend_only_in_additive_precomp)
+			return color_under;
+	}
+
 	float cutout_mask = 1;
 	if (cutout_mode == CUTOUT_MODE_INSIDE)
 		cutout_mask = CUTOUT_MASK;
@@ -97,8 +113,11 @@ vec4 BlendModeMaskLayerMix(vec4 color_under, vec4 color_over, float blend_mode, 
 	if (blend_mode == BLEND_MODE_NORMAL)
 	{
 		// color_over.rgb *= color_over.a;
-		if (matte_pass)
+
+		// Apply the normal layer as a black hold-out matte in the additive precomp
+		if (is_additive_precomp)
 			color_over.rgb *= 0;
+
 		out_color = HSM_PreMultAlphaBlend(color_under, color_over);
 	}
 	else
@@ -106,13 +125,8 @@ vec4 BlendModeMaskLayerMix(vec4 color_under, vec4 color_over, float blend_mode, 
 		vec4 blend_color = color_under; 
 		if (blend_mode == BLEND_MODE_ADD)  	 		
 		{
-			if (allow_additive_blend)
-			{
-				color_over.a *= 0;
-				out_color = HSM_PreMultAlphaBlend(color_under, color_over);
-			}
-			else
-				out_color = color_under;
+			color_over.a *= 0;
+			out_color = HSM_PreMultAlphaBlend(color_under, color_over);
 		}
 		else if (blend_mode == BLEND_MODE_MULTIPLY)
 		{
@@ -471,14 +485,14 @@ void main()
 	vec2 vTexCoord_precomp = vTexCoord;
 
 	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord_precomp);
-	VIEWPORT_UNSCALED_COORD = HSM_GetViewportCoordWithFlip(vTexCoord_precomp);
+	VIEWPORT_FLIPPED_UNZOOMED_COORD = HSM_GetViewportCoordWithFlip(vTexCoord_precomp);
 	VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord_precomp);
 
 
 	// AMBIENT LIGHTING IMAGES
 	vec3 ambient_rgb = vec3(1);
 	vec3 ambient2_rgb = vec3(1);
-	HSM_Fill_Ambient_Images(VIEWPORT_COORD, VIEWPORT_UNSCALED_COORD, TUBE_DIFFUSE_COORD, TUBE_DIFFUSE_SCALE, HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE, NightLightingImage, NightLighting2Image, ambient_rgb, ambient2_rgb);
+	HSM_Fill_Ambient_Images(VIEWPORT_COORD, VIEWPORT_FLIPPED_UNZOOMED_COORD, TUBE_DIFFUSE_COORD, TUBE_DIFFUSE_SCALE, HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE, NightLightingImage, NightLighting2Image, ambient_rgb, ambient2_rgb);
 
 	TUBE_DIFFUSE_CURVED_COORD = HSM_GetCurvedCoord(SCREEN_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, TUBE_DIFFUSE_ASPECT);
 
@@ -722,7 +736,6 @@ void main()
 	//----------------------------------------------------
 
 	vec4 bezel_layer = vec4(0);
-	vec4 frame_layer = vec4(0);
 
 	if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
 	{
@@ -732,15 +745,6 @@ void main()
 		// Cut out Tube Area
 		if (HSM_STATIC_LAYERS_GAMMA != 1)
 			bezel_and_frame_rgba = HSM_ApplyGamma(bezel_and_frame_rgba, HSM_STATIC_LAYERS_GAMMA);
-
-		bezel_and_frame_rgba.rgb = ApplyAmbientImages(	bezel_and_frame_rgba.rgb,
-														ambient_rgb,
-														ambient2_rgb,
-														HSM_BZL_AMBIENT_LIGHTING_MULTIPLIER,
-														HSM_BZL_AMBIENT2_LIGHTING_MULTIPLIER,
-														1,
-														HSM_BZL_BLEND_MODE,
-														HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
 
 		// // Contract the tube mask to leave a little extra black ring at the edge of the bezel
 		// // otherwise this will show slivers of the background otherwise
@@ -753,10 +757,11 @@ void main()
 		frame_shadow_layer *= HSM_FRM_SHADOW_OPACITY;
 
 		if (HSM_FRM_SHADOW_OPACITY > 0)
+			// TODO probably best to replace this with standard premultiplied blend
 			bezel_layer = BlendModeMaskLayerMix(	frame_shadow_layer,
 													bezel_layer, 
 													BLEND_MODE_NORMAL, 
-													false,
+													PRECOMP_INDEX_BACKGROUND,
 													true,
 													MASK_MODE_ALL,
 													0, 
@@ -789,7 +794,7 @@ void main()
 	bool bg_use_vert_image = SCREEN_ASPECT < 1 && textureSize(BackgroundVertImage, 0).y > 16 ? true : false; 
 	vec2 bg_size = bg_use_vert_image ? textureSize(BackgroundVertImage, 0) : textureSize(BackgroundImage, 0);
 	BACKGROUND_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
-												VIEWPORT_UNSCALED_COORD,
+												VIEWPORT_FLIPPED_UNZOOMED_COORD,
 												TEXTURE_ASPECT_MODE_EXPLICIT,
 												bg_size.x / bg_size.y,
 												vec2(HSM_BG_POS_X, HSM_BG_POS_Y),
@@ -828,15 +833,6 @@ void main()
 
 		if (HSM_STATIC_LAYERS_GAMMA != 1)
 			bg_image = HSM_ApplyGamma(bg_image, HSM_STATIC_LAYERS_GAMMA);
-
-		bg_image.rgb = ApplyAmbientImages(bg_image.rgb, 
-												ambient_rgb,
-												ambient2_rgb,
-												HSM_BG_AMBIENT_LIGHTING_MULTIPLIER,
-												HSM_BG_AMBIENT2_LIGHTING_MULTIPLIER,
-												HSM_BG_APPLY_AMBIENT_IN_ADD_MODE,
-												HSM_BG_BLEND_MODE,
-												HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
 	}
 
 	//----------------------------------------------------
@@ -845,7 +841,7 @@ void main()
 	bool device_use_vert_image = SCREEN_ASPECT < 1 && textureSize(DeviceVertImage, 0).y > 16 ? true : false; 
 	vec2 device_size = device_use_vert_image ? textureSize(DeviceVertImage, 0) : textureSize(DeviceImage, 0);
 	DEVICE_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
-											VIEWPORT_UNSCALED_COORD,
+											VIEWPORT_FLIPPED_UNZOOMED_COORD,
 											TEXTURE_ASPECT_MODE_EXPLICIT,
 											device_size.x / device_size.y,
 											vec2(HSM_DEVICE_POS_X, HSM_DEVICE_POS_Y),
@@ -874,15 +870,6 @@ void main()
 
 		if (HSM_STATIC_LAYERS_GAMMA != 1)
 			device_image = HSM_ApplyGamma(device_image, HSM_STATIC_LAYERS_GAMMA);
-
-		device_image.rgb = ApplyAmbientImages(device_image.rgb, 
-													ambient_rgb,
-													ambient2_rgb,
-													HSM_DEVICE_AMBIENT_LIGHTING_MULTIPLIER,
-													HSM_DEVICE_AMBIENT2_LIGHTING_MULTIPLIER,
-													HSM_DEVICE_APPLY_AMBIENT_IN_ADD_MODE,
-													HSM_DEVICE_BLEND_MODE,
-													HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
 	}
 
 	//----------------------------------------------------
@@ -890,7 +877,7 @@ void main()
 	//----------------------------------------------------
 	vec2 deviceled_size = textureSize(DeviceLEDImage, 0);
 	DEVICELED_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
-											VIEWPORT_UNSCALED_COORD,
+											VIEWPORT_FLIPPED_UNZOOMED_COORD,
 											TEXTURE_ASPECT_MODE_EXPLICIT,
 											deviceled_size.x / deviceled_size.y,
 											vec2(HSM_DEVICELED_POS_X, HSM_DEVICELED_POS_Y),
@@ -918,15 +905,6 @@ void main()
 
 		if (HSM_STATIC_LAYERS_GAMMA != 1)
 			deviceled_image = HSM_ApplyGamma(deviceled_image, HSM_STATIC_LAYERS_GAMMA);
-
-		deviceled_image.rgb = ApplyAmbientImages(deviceled_image.rgb, 
-													ambient_rgb,
-													ambient2_rgb,
-													HSM_DEVICELED_AMBIENT_LIGHTING_MULTIPLIER,
-													HSM_DEVICELED_AMBIENT2_LIGHTING_MULTIPLIER,
-													HSM_DEVICELED_APPLY_AMBIENT_IN_ADD_MODE,
-													HSM_DEVICELED_BLEND_MODE,
-													HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
 	}
 
 	//----------------------------------------------------
@@ -937,7 +915,7 @@ void main()
 	{
 		vec2 led_size = textureSize(LEDImage, 0);
 		LED_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
-											VIEWPORT_UNSCALED_COORD,
+											VIEWPORT_FLIPPED_UNZOOMED_COORD,
 											TEXTURE_ASPECT_MODE_EXPLICIT,
 											led_size.x / led_size.y, 
 											vec2(HSM_LED_POS_X, HSM_LED_POS_Y), 
@@ -965,15 +943,6 @@ void main()
 			// STATIC GAMMA
 			if (HSM_STATIC_LAYERS_GAMMA != 1)
 				led_image = HSM_ApplyGamma(led_image, HSM_STATIC_LAYERS_GAMMA);
-
-			led_image.rgb = ApplyAmbientImages(led_image.rgb, 
-													ambient_rgb,
-													ambient2_rgb,
-													HSM_LED_AMBIENT_LIGHTING_MULTIPLIER,
-													HSM_LED_AMBIENT2_LIGHTING_MULTIPLIER,
-													HSM_LED_APPLY_AMBIENT_IN_ADD_MODE,
-													HSM_LED_BLEND_MODE,
-													HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
 		}
 	}
 
@@ -982,7 +951,7 @@ void main()
 	//----------------------------------------------------
 	vec2 decal_size = textureSize(DecalImage, 0);
 	DECAL_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
-											VIEWPORT_UNSCALED_COORD,
+											VIEWPORT_FLIPPED_UNZOOMED_COORD,
 											TEXTURE_ASPECT_MODE_EXPLICIT,
 											decal_size.x / decal_size.y,
 											vec2(HSM_DECAL_POS_X, HSM_DECAL_POS_Y), 
@@ -1010,15 +979,6 @@ void main()
 		// STATIC GAMMA
 		if (HSM_STATIC_LAYERS_GAMMA != 1)
 			decal_image = HSM_ApplyGamma(decal_image, HSM_STATIC_LAYERS_GAMMA);
-
-		decal_image.rgb = ApplyAmbientImages(decal_image.rgb, 
-												ambient_rgb,
-												ambient2_rgb,
-												HSM_DECAL_AMBIENT_LIGHTING_MULTIPLIER,
-												HSM_DECAL_AMBIENT2_LIGHTING_MULTIPLIER,
-												HSM_DECAL_APPLY_AMBIENT_IN_ADD_MODE,
-												HSM_DECAL_BLEND_MODE,
-												HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
 	}
 
 //----------------------------------------------------
@@ -1026,7 +986,7 @@ void main()
 //----------------------------------------------------
 	vec2 top_size = textureSize(TopLayerImage, 0);
 	TOP_IMAGE_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
-												VIEWPORT_UNSCALED_COORD,
+												VIEWPORT_FLIPPED_UNZOOMED_COORD,
 												TEXTURE_ASPECT_MODE_EXPLICIT,
 												top_size.x / top_size.y,
 												vec2(HSM_TOP_POS_X, HSM_TOP_POS_Y), 
@@ -1059,15 +1019,6 @@ void main()
 		// STATIC GAMMA
 		if (HSM_STATIC_LAYERS_GAMMA != 1)
 			top_image = HSM_ApplyGamma(top_image, HSM_STATIC_LAYERS_GAMMA);
-
-		top_image.rgb = ApplyAmbientImages(top_image.rgb, 
-											ambient_rgb,
-											ambient2_rgb,
-											HSM_TOP_AMBIENT_LIGHTING_MULTIPLIER,
-											HSM_TOP_AMBIENT2_LIGHTING_MULTIPLIER,
-											HSM_TOP_APPLY_AMBIENT_IN_ADD_MODE,
-											HSM_TOP_BLEND_MODE,
-											HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
 	}
 
 	//----------------------------------------------------
@@ -1079,7 +1030,7 @@ void main()
 	{
 		vec2 cab_glass_size = textureSize(CabinetGlassImage, 0);
 		CAB_GLASS_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
-													VIEWPORT_UNSCALED_COORD,
+													VIEWPORT_FLIPPED_UNZOOMED_COORD,
 													TEXTURE_ASPECT_MODE_EXPLICIT,
 													cab_glass_size.x / cab_glass_size.y,
 													vec2(HSM_CAB_GLASS_POS_X, HSM_CAB_GLASS_POS_Y), 
@@ -1108,15 +1059,6 @@ void main()
 			// STATIC GAMMA
 			if (HSM_STATIC_LAYERS_GAMMA != 1)
 				cab_glass_image = HSM_ApplyGamma(cab_glass_image, HSM_STATIC_LAYERS_GAMMA);
-
-			cab_glass_image.rgb = ApplyAmbientImages(cab_glass_image.rgb, 
-														ambient_rgb,
-														ambient2_rgb,
-														HSM_CAB_GLASS_AMBIENT_LIGHTING_MULTIPLIER,
-														HSM_CAB_GLASS_AMBIENT2_LIGHTING_MULTIPLIER,
-														HSM_CAB_GLASS_APPLY_AMBIENT_IN_ADD_MODE,
-														HSM_CAB_GLASS_BLEND_MODE,
-														HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
 		}
 	}
 
@@ -1135,7 +1077,7 @@ void main()
 		cutout_base_scale_offset *= vec2(DEFAULT_UNCORRECTED_BEZEL_SCALE.y * TUBE_DIFFUSE_ASPECT / output_aspect, DEFAULT_BEZEL_SCALE.y);
 
 	vec2 cutout_coord = HSM_GetScaledCoord(VIEWPORT_COORD,
-											VIEWPORT_UNSCALED_COORD,
+											VIEWPORT_FLIPPED_UNZOOMED_COORD,
 										  	HSM_CUTOUT_ASPECT_MODE,
 											HSM_CUTOUT_EXPLICIT_ASPECT,
 											vec2(HSM_CUTOUT_POS_X, HSM_CUTOUT_POS_Y),
@@ -1159,7 +1101,7 @@ void main()
 	if (HSM_VIEWPORT_VIGNETTE_OPACITY > 0)
 	{
 		vec2 vignette_coord = HSM_GetScaledCoord(VIEWPORT_COORD,
-												VIEWPORT_UNSCALED_COORD,
+												VIEWPORT_FLIPPED_UNZOOMED_COORD,
 												TEXTURE_ASPECT_MODE_VIEWPORT,
 												1,
 												vec2(HSM_VIEWPORT_VIGNETTE_POS_X, HSM_VIEWPORT_VIGNETTE_POS_Y), 
@@ -1239,27 +1181,28 @@ void main()
 				precomp_color = BlendModeMaskLayerMix(precomp_color, 
 														bg_image, 
 														HSM_BG_BLEND_MODE, 
-														matte_pass,
-														allow_additive_blend,
+														precomp_index,
+														HSM_BG_APPLY_NIGHTLIGHTING_IN_ADD_MODE < 0.5,
 														HSM_BG_MASK_MODE, 
 														HSM_BG_CUTOUT_MODE,
 														HSM_BG_DUALSCREEN_VIS_MODE,
 														HSM_BG_OPACITY);
 			}
 
-			// VIGNETTE
-			if (HSM_VIEWPORT_VIGNETTE_LAYER_ORDER == i)
-			{
-				precomp_color = BlendModeMaskLayerMix(precomp_color, 
-														vignette_layer, 
-														BLEND_MODE_NORMAL, 
-														matte_pass,
-														allow_additive_blend,
-														HSM_VIEWPORT_VIGNETTE_MASK_MODE, 
-														HSM_VIEWPORT_VIGNETTE_CUTOUT_MODE,
-														SHOW_ON_DUALSCREEN_MODE_BOTH,
-														HSM_VIEWPORT_VIGNETTE_OPACITY);
-			}
+			// // TODO Vignette needs to be moved to final composite
+			// // VIGNETTE
+			// if (HSM_VIEWPORT_VIGNETTE_LAYER_ORDER == i)
+			// {
+			// 	precomp_color = BlendModeMaskLayerMix(precomp_color, 
+			// 											vignette_layer, 
+			// 											BLEND_MODE_NORMAL, 
+			// 											matte_pass,
+			// 											allow_additive_blend,
+			// 											HSM_VIEWPORT_VIGNETTE_MASK_MODE, 
+			// 											HSM_VIEWPORT_VIGNETTE_CUTOUT_MODE,
+			// 											SHOW_ON_DUALSCREEN_MODE_BOTH,
+			// 											HSM_VIEWPORT_VIGNETTE_OPACITY);
+			// }
 
 			// LED IMAGE
 			if (HSM_LED_LAYER_ORDER == i && HSM_LED_OPACITY > 0)
@@ -1267,8 +1210,8 @@ void main()
 				precomp_color = BlendModeMaskLayerMix(precomp_color, 
 														led_image, 
 														HSM_LED_BLEND_MODE, 
-														matte_pass,
-														allow_additive_blend,
+														precomp_index,
+														HSM_LED_APPLY_NIGHTLIGHTING_IN_ADD_MODE < 0.5,
 														HSM_LED_MASK_MODE, 
 														HSM_LED_CUTOUT_MODE, 
 														HSM_LED_DUALSCREEN_VIS_MODE,
@@ -1281,8 +1224,8 @@ void main()
 				precomp_color = BlendModeMaskLayerMix(precomp_color, 
 														device_image, 
 														HSM_DEVICE_BLEND_MODE, 
-														matte_pass,
-														allow_additive_blend,
+														precomp_index,
+														HSM_DEVICE_APPLY_NIGHTLIGHTING_IN_ADD_MODE < 0.5,
 														HSM_DEVICE_MASK_MODE, 
 														HSM_DEVICE_CUTOUT_MODE, 
 														HSM_DEVICE_DUALSCREEN_VIS_MODE,
@@ -1295,8 +1238,8 @@ void main()
 				precomp_color = BlendModeMaskLayerMix(precomp_color, 
 														deviceled_image, 
 														HSM_DEVICELED_BLEND_MODE, 
-														matte_pass,
-														allow_additive_blend,
+														precomp_index,
+														HSM_DEVICELED_APPLY_NIGHTLIGHTING_IN_ADD_MODE < 0.5,
 														HSM_DEVICELED_MASK_MODE, 
 														HSM_DEVICELED_CUTOUT_MODE, 
 														HSM_DEVICELED_DUALSCREEN_VIS_MODE,
@@ -1313,8 +1256,8 @@ void main()
 					precomp_color = BlendModeMaskLayerMix(precomp_color, 
 															bezel_layer, 
 															HSM_BZL_BLEND_MODE, 
-															matte_pass,
-															allow_additive_blend,
+															precomp_index,
+															true,
 															MASK_MODE_ALL, 
 															0, 
 															SHOW_ON_DUALSCREEN_MODE_BOTH,
@@ -1327,8 +1270,8 @@ void main()
 				precomp_color = BlendModeMaskLayerMix(precomp_color, 
 														decal_image, 
 														HSM_DECAL_BLEND_MODE, 
-														matte_pass,
-														allow_additive_blend,
+														precomp_index,
+														HSM_DECAL_APPLY_NIGHTLIGHTING_IN_ADD_MODE < 0.5,
 														HSM_DECAL_MASK_MODE, 
 														HSM_DECAL_CUTOUT_MODE, 
 														HSM_DECAL_DUALSCREEN_VIS_MODE,
@@ -1338,15 +1281,15 @@ void main()
 			// CABINET GLASS
 			if (HSM_CAB_GLASS_LAYER_ORDER == i && HSM_CAB_GLASS_OPACITY > 0)
 			{
-					precomp_color = BlendModeMaskLayerMix(precomp_color, 
-															cab_glass_image, 
-															HSM_CAB_GLASS_BLEND_MODE, 
-															matte_pass,
-															allow_additive_blend,
-															HSM_CAB_GLASS_MASK_MODE, 
-															HSM_CAB_GLASS_CUTOUT_MODE, 
-															HSM_CAB_GLASS_DUALSCREEN_VIS_MODE,
-															HSM_CAB_GLASS_OPACITY);
+				precomp_color = BlendModeMaskLayerMix(precomp_color, 
+														cab_glass_image, 
+														HSM_CAB_GLASS_BLEND_MODE,
+														precomp_index,
+														HSM_CAB_GLASS_APPLY_NIGHTLIGHTING_IN_ADD_MODE < 0.5,
+														HSM_CAB_GLASS_MASK_MODE, 
+														HSM_CAB_GLASS_CUTOUT_MODE, 
+														HSM_CAB_GLASS_DUALSCREEN_VIS_MODE,
+														HSM_CAB_GLASS_OPACITY);
 			}
 
 			// Top Layer
@@ -1355,8 +1298,8 @@ void main()
 				precomp_color = BlendModeMaskLayerMix(precomp_color, 
 														top_image, 
 														HSM_TOP_BLEND_MODE, 
-														matte_pass,
-														allow_additive_blend,
+														precomp_index,
+														HSM_TOP_APPLY_NIGHTLIGHTING_IN_ADD_MODE < 0.5,
 														HSM_TOP_MASK_MODE, 
 														HSM_TOP_CUTOUT_MODE, 
 														HSM_TOP_DUALSCREEN_VIS_MODE,

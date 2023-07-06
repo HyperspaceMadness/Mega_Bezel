@@ -755,7 +755,7 @@ The color/texture of the tube which appears behind the CRT image
 - **Saturation**
 - **Brightness**
 - **Gamma Adjust**
-- **Ambient Lighting Multiplier**
+- **Add Blend Mode Night Lighting 1 Multiplier**
   - A multiplier on the amount of global ambient lighting applied
 - **Scale**
 - **Scale X**
@@ -803,8 +803,8 @@ Adds a shadow on top of the tube diffuse image and colored gel
 - **Normal Blend Transparency Threshold** - Adjusts at what transparency of the image the area should be appear fully transparent
 - **Normal Multiply by Tube Diffuse Shading** - Darken the gel with the tube diffuse image, allows you to add shading to the gel image
 - **Normal Blend Brightness** - Brightness for these more opaque parts
-- **Ambient Lighting Multiplier** - How much of the global ambient lighting to apply
-- **Ambient 2nd Image Lighting Multiplier** - How much of the global 2nd ambient lighting to apply
+- **Add Blend Mode Night Lighting 1 Multiplier** - How much of the global ambient lighting to apply
+- **Add Blend Mode Night Lighting 2 Multiplier** - How much of the global 2nd ambient lighting to apply
 - **Scale** - Scale the colored gel image
 - **Flip Horizontal** - Flip the colored gel image Horizontally
 - **Flip Vertical** - Flip the colored gel image Vertically
@@ -818,8 +818,8 @@ Adds a shadow on top of the tube diffuse image and colored gel
   - 0: Both Screens**
   - 1: Only the First Screen
   - 2: Only the Second Screen
-- **Ambient Lighting Multiplier** --- How much of the global ambient lighting image to apply, default is 100
-- **Ambient 2nd Image Lighting Multiplier** --- How much of the global 2nd ambient lighting image to apply, default is 0
+- **Add Blend Mode Night Lighting 1 Multiplier** --- How much of the global ambient lighting image to apply, default is 100
+- **Add Blend Mode Night Lighting 2 Multiplier** --- How much of the global 2nd ambient lighting image to apply, default is 0
 - **Scale** --- Scales the tube reflection image from the center of the tube
 - **Shadow Opacity** --- How much of the shadow should appear on the static reflection image
 
@@ -1300,12 +1300,12 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
   - *Adjust Brightness of the Layer, 100 is no change*
 - ***Gamma***
 
-- ***Ambient Lighting Multiplier***
+- ***Add Blend Mode Night Lighting 1 Multiplier***
   - How much of the global ambient lighting to add to the layer
 
-- ***Apply Ambient Lighting in ADD Blend Mode***
+- ***Apply Night Lighting in Add Blend Mode***
     - By default when a layer is in ADD mode ambient lighting is not applied to the image, this works well for things like LEDs
-    - When **Apply Ambient Lighting in ADD Blend Mode** is set to 1 the ambient lighting will be applied when in ADD blend mode
+    - When **Apply Night Lighting in Add Blend Mode** is set to 1 the ambient lighting will be applied when in ADD blend mode
 
 - ***Blend Mode*** *- How the image is applied to the layer underneath Default is 1: Normal Blending*
 
@@ -1391,7 +1391,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Saturation**
 - **Brightness**
 - **Gamma Adjust**
-- **Ambient Lighting Multiplier**
+- **Add Blend Mode Night Lighting 1 Multiplier**
 - **Ambient Lighting in ADD Mode**
 - **Blend Mode**
 - **Source Matte Color**
@@ -1441,7 +1441,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Saturation**
 - **Brightness**
 - **Gamma Adjust**
-- **Ambient Lighting Multiplier**
+- **Add Blend Mode Night Lighting 1 Multiplier**
 - **Ambient Lighting in ADD Mode**
 - **Blend Mode**
 - **Source Matte Color**
@@ -1476,7 +1476,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Saturation**
 - **Brightness**
 - **Gamma Adjust**
-- **Ambient Lighting Multiplier**
+- **Add Blend Mode Night Lighting 1 Multiplier**
 - **Ambient Lighting in ADD Mode**
 - **Blend Mode**
 - **Source Matte Color**
@@ -1510,7 +1510,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Saturation**
 - **Brightness**
 - **Gamma Adjust**
-- **Ambient Lighting Multiplier**
+- **Add Blend Mode Night Lighting 1 Multiplier**
 - **Ambient Lighting in ADD Mode**
 - **Blend Mode**
 - **Source Matte Color**
@@ -1545,7 +1545,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Saturation**
 - **Brightness**
 - **Gamma Adjust**
-- **Ambient Lighting Multiplier**
+- **Add Blend Mode Night Lighting 1 Multiplier**
 - **Ambient Lighting in ADD Mode**
 - **Blend Mode**
 - **Source Matte Color**
@@ -1583,7 +1583,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - **Saturation**
 - **Brightness**
 - **Gamma Adjust**
-- **Ambient Lighting Multiplier**
+- **Add Blend Mode Night Lighting 1 Multiplier**
 - **Ambient Lighting in ADD Mode**
 - **Blend Mode**
 - **Source Matte Color**

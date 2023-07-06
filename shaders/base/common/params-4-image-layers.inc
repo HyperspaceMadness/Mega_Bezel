@@ -27,7 +27,7 @@
 //---------------------------------------------------------------------------------------------------
 //    IMAGE LAYERING START
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_LAYER_ORDER_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter HSM_LAYER_ORDER_EMPTY_LINE	  " " 0 0 0.001 0.001
 #pragma parameter HSM_LAYER_ORDER_TITLE			  "[ LAYER ORDER ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_BG_LAYER_ORDER              "          Background Layer"  0 0 12 1
@@ -68,39 +68,74 @@ float HSM_TOP_LAYER_ORDER = global.HSM_TOP_LAYER_ORDER;
 
 
 //---------------------------------------------------------------------------------------------------
-//    LAYER GROUP VISIBILITY
+//    COMPOSITING LAYER GROUPS
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_LAYER_GROUP_EMPTY_LINE			" " 0 0 0.001 0.001
-#pragma parameter HSM_LAYER_GROUP_TITLE			        "[ COMPOSITE GROUP VISIBILITY ]:" 0 0 0.01 0.01
+#pragma parameter HSM_LAYER_GROUP_EMPTY_LINE			                    " " 0 0 0.001 0.001
+#pragma parameter HSM_LAYER_GROUP_TITLE			                            "[ COMPOSITE BASE COLOR ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_COMPOSITE_SHOW_ALPHA              "          Output Color - RGB | ALPHA"  0 0 1 1
+#pragma parameter HSM_COMPOSITE_SHOW_ALPHA                                  "          Output Color - RGB | ALPHA"  0 0 1 1
 float HSM_COMPOSITE_SHOW_ALPHA = global.HSM_COMPOSITE_SHOW_ALPHA;
 
-#pragma parameter HSM_COMPOSITE_BASE_COLOR              "          Base Color - BLACK | RED | PINK | YELLOW | AQUA"  0 0 4 1
+#pragma parameter HSM_COMPOSITE_BASE_COLOR                                  "          Base Color - BLACK | RED | PINK | YELLOW | AQUA"  0 0 4 1
 float HSM_COMPOSITE_BASE_COLOR = global.HSM_COMPOSITE_BASE_COLOR;
 
-#pragma parameter HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS   "          Base Color Brightness"  10 0 100 1
+#pragma parameter HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS                       "          Base Color Brightness"  10 0 100 1
 float HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS = global.HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS / 100.0;
 
-#pragma parameter HSM_COMPOSITE_BACKGROUND_ON           "          Background Layer Group ON"  1 0 1 1
+
+#pragma parameter HSM_BACKGROUND_LAYER_GROUP_EMPTY_LINE			            " " 0 0 0.001 0.001
+#pragma parameter HSM_BACKGROUND_LAYER_GROUP_TITLE			                "[ COMPOSITE BACKGROUND LAYER GROUP ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_COMPOSITE_BACKGROUND_ON                               "          Layer Group ON"  1 0 1 1
 float HSM_COMPOSITE_BACKGROUND_ON = global.HSM_COMPOSITE_BACKGROUND_ON;
 
-#pragma parameter HSM_COMPOSITE_MIDDLEGROUND_ON         "          Middleground Layer Group ON"  1 0 1 1
+#pragma parameter HSM_COMPOSITE_BACKGROUND_NIGHTLIGHT1_MULTIPLIER           "          Night Lighting 1st Image Multiplier"  0 0 100 1
+float HSM_COMPOSITE_BACKGROUND_NIGHTLIGHT1_MULTIPLIER = global.HSM_COMPOSITE_BACKGROUND_NIGHTLIGHT1_MULTIPLIER / 100;
+
+#pragma parameter HSM_COMPOSITE_BACKGROUND_NIGHTLIGHT2_MULTIPLIER           "          Night Lighting 2nd Image Multiplier"  100 0 100 1
+float HSM_COMPOSITE_BACKGROUND_NIGHTLIGHT2_MULTIPLIER = global.HSM_COMPOSITE_BACKGROUND_NIGHTLIGHT2_MULTIPLIER / 100;
+
+
+#pragma parameter HSM_MIDDLEGROUND_LAYER_GROUP_EMPTY_LINE			        " " 0 0 0.001 0.001
+#pragma parameter HSM_MIDDLEGROUND_LAYER_GROUP_TITLE			            "[ COMPOSITE MIDDLEGROUND LAYER GROUP ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_COMPOSITE_MIDDLEGROUND_ON                             "          Layer Group ON"  1 0 1 1
 float HSM_COMPOSITE_MIDDLEGROUND_ON = global.HSM_COMPOSITE_MIDDLEGROUND_ON;
 
-#pragma parameter HSM_COMPOSITE_FOREGROUND_ON           "          Foreground Layer Group ON"  1 0 1 1
+#pragma parameter HSM_COMPOSITE_MIDDLEGROUND_NIGHTLIGHT1_MULTIPLIER          "          Night Lighting 1st Image Multiplier"  100 0 100 1
+float HSM_COMPOSITE_MIDDLEGROUND_NIGHTLIGHT1_MULTIPLIER = global.HSM_COMPOSITE_MIDDLEGROUND_NIGHTLIGHT1_MULTIPLIER / 100;
+
+#pragma parameter HSM_COMPOSITE_MIDDLEGROUND_NIGHTLIGHT2_MULTIPLIER         "          Night Lighting 2nd Image Multiplier"  0 0 100 1
+float HSM_COMPOSITE_MIDDLEGROUND_NIGHTLIGHT2_MULTIPLIER = global.HSM_COMPOSITE_MIDDLEGROUND_NIGHTLIGHT2_MULTIPLIER / 100;
+
+
+#pragma parameter HSM_FOREGROUND_LAYER_GROUP_EMPTY_LINE			            " " 0 0 0.001 0.001
+#pragma parameter HSM_FOREGROUND_LAYER_GROUP_TITLE			                "[ COMPOSITE FOREGROUND LAYER GROUP ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_COMPOSITE_FOREGROUND_ON                               "          Layer Group ON"  1 0 1 1
 float HSM_COMPOSITE_FOREGROUND_ON = global.HSM_COMPOSITE_FOREGROUND_ON;
 
-#pragma parameter HSM_COMPOSITE_ADDITIVE_ON             "          Additive Composite ON"  1 0 1 1
+#pragma parameter HSM_COMPOSITE_FOREGROUND_NIGHTLIGHT1_MULTIPLIER           "          Night Lighting 1st Image Multiplier"  100 0 100 1
+float HSM_COMPOSITE_FOREGROUND_NIGHTLIGHT1_MULTIPLIER = global.HSM_COMPOSITE_FOREGROUND_NIGHTLIGHT1_MULTIPLIER / 100;
+
+#pragma parameter HSM_COMPOSITE_FOREGROUND_NIGHTLIGHT2_MULTIPLIER           "          Night Lighting 2nd Image Multiplier"  0 0 100 1
+float HSM_COMPOSITE_FOREGROUND_NIGHTLIGHT2_MULTIPLIER = global.HSM_COMPOSITE_FOREGROUND_NIGHTLIGHT2_MULTIPLIER / 100;
+
+
+#pragma parameter HSM_ADDITIVE_LAYER_GROUP_EMPTY_LINE			            " " 0 0 0.001 0.001
+#pragma parameter HSM_ADDITIVE_LAYER_GROUP_TITLE			                "[ COMPOSITE ADDITIVE & CRT ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_COMPOSITE_ADDITIVE_ON                                 "          Additive Composite ON"  1 0 1 1
 float HSM_COMPOSITE_ADDITIVE_ON = global.HSM_COMPOSITE_ADDITIVE_ON;
 
-#pragma parameter HSM_COMPOSITE_CRT_AND_REFLECTION_ON   "          CRT & Reflection Composite ON"  1 0 1 1
+#pragma parameter HSM_COMPOSITE_CRT_AND_REFLECTION_ON                       "          CRT & Reflection Composite ON"  1 0 1 1
 float HSM_COMPOSITE_CRT_AND_REFLECTION_ON = global.HSM_COMPOSITE_CRT_AND_REFLECTION_ON;
+
 
 //---------------------------------------------------------------------------------------------------
 //    RENDER FOR SIMPLIFIED PRESETS
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_RENDER_FOR_SIMPLIFIED_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter HSM_RENDER_FOR_SIMPLIFIED_EMPTY_LINE	" " 0 0 0.001 0.001
 #pragma parameter HSM_RENDER_FOR_SIMPLIFIED_TITLE       "[ RENDER FOR SIMPLIFIED PRESETS ]:" 0 0 0.001 0.001
 
 #pragma parameter HSM_RENDER_SIMPLE_MODE                "     Mode:  NORM | BLACK-SCREEN | BLACK-BG | PINK-MASK| BW-MASK" 0 0 4 1
@@ -113,17 +148,17 @@ float HSM_RENDER_SIMPLE_MASK_TYPE = global.HSM_RENDER_SIMPLE_MASK_TYPE;
 //---------------------------------------------------------------------------------------------------
 //    MASK DEBUG
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_MASK_DEBUG_EMPTY_LINE							" " 0 0 0.001 0.001
-#pragma parameter HSM_MASK_DEBUG_TITLE			"[ MASK DEBUG ]:" 0 0 0.01 0.01
+#pragma parameter HSM_MASK_DEBUG_EMPTY_LINE		    " " 0 0 0.001 0.001
+#pragma parameter HSM_MASK_DEBUG_TITLE			    "[ MASK DEBUG ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_LAYERING_DEBUG_MASK_MODE    "    Mask - ALL | SCRN | TUBE | BZ- | BZ | BZ+ | FRM | FRM+ | BG" -1 -2 8 1
+#pragma parameter HSM_LAYERING_DEBUG_MASK_MODE      "    Mask - ALL | SCRN | TUBE | BZ- | BZ | BZ+ | FRM | FRM+ | BG" -1 -2 8 1
 float HSM_LAYERING_DEBUG_MASK_MODE = global.HSM_LAYERING_DEBUG_MASK_MODE;
 
 
 //---------------------------------------------------------------------------------------------------
 //    CutOut in Image Layers
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_CUTOUT_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter HSM_CUTOUT_EMPTY_LINE			 " " 0 0 0.001 0.001
 #pragma parameter HSM_CUTOUT_TITLE			     "[ CUTOUT ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_CUTOUT_ASPECT_MODE        "         Cutout Aspect- FULL | EXPL. | 4:3 | 3:4 | 16:9 | 9:16" 4 0 5 1
@@ -184,20 +219,14 @@ float HSM_BG_BRIGHTNESS = global.HSM_BG_BRIGHTNESS / 100;
 #pragma parameter HSM_BG_GAMMA                     "          Gamma Adjust" 1 0 5 0.01
 float HSM_BG_GAMMA = global.HSM_BG_GAMMA;
 
-#pragma parameter HSM_BG_AMBIENT_LIGHTING_MULTIPLIER         "          Ambient Lighting Multiplier"  0 0 100 1
-float HSM_BG_AMBIENT_LIGHTING_MULTIPLIER = global.HSM_BG_AMBIENT_LIGHTING_MULTIPLIER / 100;
-
-#pragma parameter HSM_BG_AMBIENT2_LIGHTING_MULTIPLIER         "          Ambient 2nd Image Lighting Multiplier"  100 0 100 1
-float HSM_BG_AMBIENT2_LIGHTING_MULTIPLIER = global.HSM_BG_AMBIENT2_LIGHTING_MULTIPLIER / 100;
-
-#pragma parameter HSM_BG_APPLY_AMBIENT_IN_ADD_MODE         "          Apply Ambient Lighting in ADD Blend Mode"  0 0 1 1
-float HSM_BG_APPLY_AMBIENT_IN_ADD_MODE = global.HSM_BG_APPLY_AMBIENT_IN_ADD_MODE;
-
 #pragma parameter HSM_BG_BLEND_MODE               "          Blend Mode - OFF | NORMAL | ADD | MULTIPLY"  1 -1 3 1
 float HSM_BG_BLEND_MODE = global.HSM_BG_BLEND_MODE;
 
 #pragma parameter HSM_BG_SOURCE_MATTE_TYPE        "          Source Matte Color - BLACK | WHITE | NONE"  2 0 2 1
 float HSM_BG_SOURCE_MATTE_TYPE = global.HSM_BG_SOURCE_MATTE_TYPE;
+
+#pragma parameter HSM_BG_APPLY_NIGHTLIGHTING_IN_ADD_MODE    "          Apply Night Lighting in Add Blend Mode"  0 0 1 1
+float HSM_BG_APPLY_NIGHTLIGHTING_IN_ADD_MODE = global.HSM_BG_APPLY_NIGHTLIGHTING_IN_ADD_MODE;
 
 #pragma parameter HSM_BG_MIPMAPPING_BLEND_BIAS    "          Mipmapping Blend Bias (Affects Sharpness)" 0 -5 5 0.1
 float HSM_BG_MIPMAPPING_BLEND_BIAS = global.HSM_BG_MIPMAPPING_BLEND_BIAS;
@@ -212,47 +241,47 @@ float HSM_BG_CUTOUT_MODE = global.HSM_BG_CUTOUT_MODE;
 float HSM_BG_DUALSCREEN_VIS_MODE = global.HSM_BG_DUALSCREEN_VIS_MODE;
 
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_BG2_EMPTY_LINE							" " 0 0 0.001 0.001
-#pragma parameter HSM_BG_TITLE2			           "[ BACKGROUND SCALE & FOLLOW ]:" 0 0 0.01 0.01
+#pragma parameter HSM_BG2_EMPTY_LINE				" " 0 0 0.001 0.001
+#pragma parameter HSM_BG_TITLE2			            "[ BACKGROUND SCALE & FOLLOW ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_BG_FOLLOW_LAYER               "          Follow Layer - FULL | TUBE | BEZEL" 0 0 2 1
 float HSM_BG_FOLLOW_LAYER = global.HSM_BG_FOLLOW_LAYER;
 
-#pragma parameter HSM_BG_FOLLOW_MODE              "          Follow Mode - FOLLOW SCALE & POS | FOLLOW EXACTLY" 0 0 1 1
+#pragma parameter HSM_BG_FOLLOW_MODE                "          Follow Mode - FOLLOW SCALE & POS | FOLLOW EXACTLY" 0 0 1 1
 float HSM_BG_FOLLOW_MODE = global.HSM_BG_FOLLOW_MODE;
 
-#pragma parameter HSM_BG_FOLLOW_FULL_USES_ZOOM     "          Follow Full also follows Zoom" 1 0 1 1
+#pragma parameter HSM_BG_FOLLOW_FULL_USES_ZOOM      "          Follow Full also follows Zoom" 1 0 1 1
 float HSM_BG_FOLLOW_FULL_USES_ZOOM = global.HSM_BG_FOLLOW_FULL_USES_ZOOM;
 
-#pragma parameter HSM_BG_FILL_MODE                "         Image Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
+#pragma parameter HSM_BG_FILL_MODE                  "         Image Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
 float HSM_BG_FILL_MODE = global.HSM_BG_FILL_MODE;
 
-#pragma parameter HSM_BG_SPLIT_PRESERVE_CENTER    "          Split Mode Preserve Center %"  0 0 500 1
+#pragma parameter HSM_BG_SPLIT_PRESERVE_CENTER      "          Split Mode Preserve Center %"  0 0 500 1
 float HSM_BG_SPLIT_PRESERVE_CENTER = global.HSM_BG_SPLIT_PRESERVE_CENTER / 1000;
 
-#pragma parameter HSM_BG_SPLIT_REPEAT_WIDTH       "          Split Mode Repeat Width %"  0 0 100 1
+#pragma parameter HSM_BG_SPLIT_REPEAT_WIDTH         "          Split Mode Repeat Width %"  0 0 100 1
 float HSM_BG_SPLIT_REPEAT_WIDTH = global.HSM_BG_SPLIT_REPEAT_WIDTH / 1000;
 
-#pragma parameter HSM_BG_SCALE                    "          Scale" 100 0 1000 0.1
+#pragma parameter HSM_BG_SCALE                      "          Scale" 100 0 1000 0.1
 float HSM_BG_SCALE = global.HSM_BG_SCALE / 100;
 
-#pragma parameter HSM_BG_SCALE_X                  "          Scale X" 100 0 1000 0.1
+#pragma parameter HSM_BG_SCALE_X                    "          Scale X" 100 0 1000 0.1
 float HSM_BG_SCALE_X = global.HSM_BG_SCALE_X / 100;
 
-#pragma parameter HSM_BG_POS_X                    "          Position X"  0 -1000 1000 0.05
+#pragma parameter HSM_BG_POS_X                      "          Position X"  0 -1000 1000 0.05
 float HSM_BG_POS_X = global.HSM_BG_POS_X / -100;
 
-#pragma parameter HSM_BG_POS_Y                    "          Position Y"  0 -1000 1000 0.05
+#pragma parameter HSM_BG_POS_Y                      "          Position Y"  0 -1000 1000 0.05
 float HSM_BG_POS_Y = global.HSM_BG_POS_Y / 100;
 
-#pragma parameter HSM_BG_WRAP_MODE                "          Wrap Mode: NONE | TILED | MIRRORED" 1 0 2 1
+#pragma parameter HSM_BG_WRAP_MODE                  "          Wrap Mode: NONE | TILED | MIRRORED" 1 0 2 1
 float HSM_BG_WRAP_MODE = global.HSM_BG_WRAP_MODE;
 
 
 //---------------------------------------------------------------------------------------------------
 //    VIEWPORT VIGNETTE
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_VIEWPORT_VIGNETTE_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter HSM_VIEWPORT_VIGNETTE_EMPTY_LINE	" " 0 0 0.001 0.001
 #pragma parameter HSM_VIEWPORT_VIGNETTE_TITLE		"[ VIEWPORT VIGNETTE LAYER ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_VIEWPORT_VIGNETTE_OPACITY     "          Opacity" 0 0 100 2
@@ -264,7 +293,7 @@ float HSM_VIEWPORT_VIGNETTE_MASK_MODE = global.HSM_VIEWPORT_VIGNETTE_MASK_MODE;
 #pragma parameter HSM_VIEWPORT_VIGNETTE_CUTOUT_MODE  "          Cutout Mask - OFF | ON | INVERT" 0 0 2 1
 float HSM_VIEWPORT_VIGNETTE_CUTOUT_MODE = global.HSM_VIEWPORT_VIGNETTE_CUTOUT_MODE;
 
-#pragma parameter HSM_VIEWPORT_VIGNETTE_FOLLOW_LAYER   "          Follow Layer- FULL | BG | TUBE | BZL" 0 0 5 1
+#pragma parameter HSM_VIEWPORT_VIGNETTE_FOLLOW_LAYER "          Follow Layer- FULL | BG | TUBE | BZL" 0 0 5 1
 float HSM_VIEWPORT_VIGNETTE_FOLLOW_LAYER = global.HSM_VIEWPORT_VIGNETTE_FOLLOW_LAYER;
 
 #pragma parameter HSM_VIEWPORT_VIGNETTE_SCALE        "          Scale" 100 0 1000 0.1
@@ -283,7 +312,7 @@ float HSM_VIEWPORT_VIGNETTE_POS_Y = global.HSM_VIEWPORT_VIGNETTE_POS_Y / 100;
 //---------------------------------------------------------------------------------------------------
 //    LED IMAGE
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_LEDX_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter HSM_LEDX_EMPTY_LINE				" " 0 0 0.001 0.001
 #pragma parameter HSM_LED_TITLE		                "[ LED LAYER ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_LED_OPACITY                   "          Opacity"  100 0 100 1
@@ -304,26 +333,20 @@ float HSM_LED_BRIGHTNESS = global.HSM_LED_BRIGHTNESS / 100;
 #pragma parameter HSM_LED_GAMMA                     "          Gamma Adjust" 1 0 5 0.01
 float HSM_LED_GAMMA = global.HSM_LED_GAMMA;
 
-#pragma parameter HSM_LED_AMBIENT_LIGHTING_MULTIPLIER   "          Ambient Lighting Multiplier"  100 0 100 1
-float HSM_LED_AMBIENT_LIGHTING_MULTIPLIER = global.HSM_LED_AMBIENT_LIGHTING_MULTIPLIER / 100;
-
-#pragma parameter HSM_LED_AMBIENT2_LIGHTING_MULTIPLIER         "          Ambient 2nd Image Lighting Multiplier"  0 0 100 1
-float HSM_LED_AMBIENT2_LIGHTING_MULTIPLIER = global.HSM_LED_AMBIENT2_LIGHTING_MULTIPLIER / 100;
-
-#pragma parameter HSM_LED_APPLY_AMBIENT_IN_ADD_MODE     "          Apply Ambient Lighting in ADD Blend Mode"  0 0 1 1
-float HSM_LED_APPLY_AMBIENT_IN_ADD_MODE = global.HSM_LED_APPLY_AMBIENT_IN_ADD_MODE;
-
 #pragma parameter HSM_LED_BLEND_MODE                    "          Blend Mode - OFF | NORMAL | ADD | MULTIPLY"  2 0 3 1
 float HSM_LED_BLEND_MODE = global.HSM_LED_BLEND_MODE;
 
 #pragma parameter HSM_LED_SOURCE_MATTE_TYPE             "          Source Matte Color - BLACK | WHITE | NONE"  2 0 2 1
 float HSM_LED_SOURCE_MATTE_TYPE = global.HSM_LED_SOURCE_MATTE_TYPE;
 
-#pragma parameter HSM_LED_MASK_MODE                     "    Mask - ALL | SCRN | TUBE | BZ- | BZ | BZ+ | FRM | FRM+ | BG"   0 0 8 1
-float HSM_LED_MASK_MODE = global.HSM_LED_MASK_MODE;
+#pragma parameter HSM_LED_APPLY_NIGHTLIGHTING_IN_ADD_MODE   "          Apply Night Lighting in Add Blend Mode"  0 0 1 1
+float HSM_LED_APPLY_NIGHTLIGHTING_IN_ADD_MODE = global.HSM_LED_APPLY_NIGHTLIGHTING_IN_ADD_MODE;
 
 #pragma parameter HSM_LED_MIPMAPPING_BLEND_BIAS         "          Mipmapping Blend Bias (Affects Sharpness)" 0 -5 5 0.1
 float HSM_LED_MIPMAPPING_BLEND_BIAS = global.HSM_LED_MIPMAPPING_BLEND_BIAS;
+
+#pragma parameter HSM_LED_MASK_MODE                     "    Mask - ALL | SCRN | TUBE | BZ- | BZ | BZ+ | FRM | FRM+ | BG"   0 0 8 1
+float HSM_LED_MASK_MODE = global.HSM_LED_MASK_MODE;
 
 #pragma parameter HSM_LED_CUTOUT_MODE                   "          Cutout Mask - OFF | ON | INVERT" 0 0 2 1
 float HSM_LED_CUTOUT_MODE = global.HSM_LED_CUTOUT_MODE;
@@ -332,7 +355,7 @@ float HSM_LED_CUTOUT_MODE = global.HSM_LED_CUTOUT_MODE;
 float HSM_LED_DUALSCREEN_VIS_MODE = global.HSM_LED_DUALSCREEN_VIS_MODE;
 
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_LED2_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter HSM_LED2_EMPTY_LINE					" " 0 0 0.001 0.001
 #pragma parameter HSM_LED_TITLE2		                "[ LED SCALE & FOLLOW ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_LED_FOLLOW_LAYER                  "             Follow Layer - FULL | TUBE | BEZEL | BG | DEVICE"  3 0 4 1
@@ -341,7 +364,7 @@ float HSM_LED_FOLLOW_LAYER = global.HSM_LED_FOLLOW_LAYER;
 #pragma parameter HSM_LED_FOLLOW_MODE                   "          Follow Mode - FOLLOW SCALE & POS | FOLLOW EXACTLY" 0 0 1 1
 float HSM_LED_FOLLOW_MODE = global.HSM_LED_FOLLOW_MODE;
 
-#pragma parameter HSM_LED_FOLLOW_FULL_USES_ZOOM          "          Follow Full also follows Zoom" 1 0 1 1
+#pragma parameter HSM_LED_FOLLOW_FULL_USES_ZOOM         "          Follow Full also follows Zoom" 1 0 1 1
 float HSM_LED_FOLLOW_FULL_USES_ZOOM = global.HSM_LED_FOLLOW_FULL_USES_ZOOM;
 
 #pragma parameter HSM_LED_FILL_MODE                     "         Image Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
@@ -390,44 +413,38 @@ float HSM_DEVICE_BRIGHTNESS = global.HSM_DEVICE_BRIGHTNESS / 100;
 #pragma parameter HSM_DEVICE_GAMMA                     "          Gamma Adjust" 1 0 5 0.01
 float HSM_DEVICE_GAMMA = global.HSM_DEVICE_GAMMA;
 
-#pragma parameter HSM_DEVICE_AMBIENT_LIGHTING_MULTIPLIER         "          Ambient Lighting Multiplier"  100 0 100 1
-float HSM_DEVICE_AMBIENT_LIGHTING_MULTIPLIER = global.HSM_DEVICE_AMBIENT_LIGHTING_MULTIPLIER / 100;
-
-#pragma parameter HSM_DEVICE_AMBIENT2_LIGHTING_MULTIPLIER         "          Ambient 2nd Image Lighting Multiplier"  0 0 100 1
-float HSM_DEVICE_AMBIENT2_LIGHTING_MULTIPLIER = global.HSM_DEVICE_AMBIENT2_LIGHTING_MULTIPLIER / 100;
-
-#pragma parameter HSM_DEVICE_APPLY_AMBIENT_IN_ADD_MODE         "          Apply Ambient Lighting in ADD Blend Mode"  0 0 1 1
-float HSM_DEVICE_APPLY_AMBIENT_IN_ADD_MODE = global.HSM_DEVICE_APPLY_AMBIENT_IN_ADD_MODE;
-
 #pragma parameter HSM_DEVICE_BLEND_MODE                "          Blend Mode - OFF | NORMAL | ADD | MULTIPLY"  1 0 3 1
 float HSM_DEVICE_BLEND_MODE = global.HSM_DEVICE_BLEND_MODE;
 
 #pragma parameter HSM_DEVICE_SOURCE_MATTE_TYPE         "          Source Matte Color - BLACK | WHITE | NONE"  2 0 2 1
 float HSM_DEVICE_SOURCE_MATTE_TYPE = global.HSM_DEVICE_SOURCE_MATTE_TYPE;
 
+#pragma parameter HSM_DEVICE_APPLY_NIGHTLIGHTING_IN_ADD_MODE    "          Apply Night Lighting in Add Blend Mode"  0 0 1 1
+float HSM_DEVICE_APPLY_NIGHTLIGHTING_IN_ADD_MODE = global.HSM_DEVICE_APPLY_NIGHTLIGHTING_IN_ADD_MODE;
+
+#pragma parameter HSM_DEVICE_MIPMAPPING_BLEND_BIAS     "          Mipmapping Blend Bias (Affects Sharpness)" 0 -5 5 0.1
+float HSM_DEVICE_MIPMAPPING_BLEND_BIAS = global.HSM_DEVICE_MIPMAPPING_BLEND_BIAS;
+
 #pragma parameter HSM_DEVICE_MASK_MODE                 "    Mask - ALL | SCRN | TUBE | BZ- | BZ | BZ+ | FRM | FRM+ | BG" 0 0 8 1
 float HSM_DEVICE_MASK_MODE = global.HSM_DEVICE_MASK_MODE;
-
-#pragma parameter HSM_DEVICE_MIPMAPPING_BLEND_BIAS          "          Mipmapping Blend Bias (Affects Sharpness)" 0 -5 5 0.1
-float HSM_DEVICE_MIPMAPPING_BLEND_BIAS = global.HSM_DEVICE_MIPMAPPING_BLEND_BIAS;
 
 #pragma parameter HSM_DEVICE_CUTOUT_MODE               "          Cutout Mask - OFF | ON | INVERT" 0 0 2 1
 float HSM_DEVICE_CUTOUT_MODE = global.HSM_DEVICE_CUTOUT_MODE;
 
-#pragma parameter HSM_DEVICE_DUALSCREEN_VIS_MODE           "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
+#pragma parameter HSM_DEVICE_DUALSCREEN_VIS_MODE       "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
 float HSM_DEVICE_DUALSCREEN_VIS_MODE = global.HSM_DEVICE_DUALSCREEN_VIS_MODE;
 
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_DEVICE2_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter HSM_DEVICE2_EMPTY_LINE			   " " 0 0 0.001 0.001
 #pragma parameter HSM_DEVICE_TITLE2			           "[ DEVICE SCALE & FOLLOW ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_DEVICE_FOLLOW_LAYER                "          Follow Layer - FULL | TUBE | BEZEL | BG"  1 0 3 1
+#pragma parameter HSM_DEVICE_FOLLOW_LAYER              "          Follow Layer - FULL | TUBE | BEZEL | BG"  1 0 3 1
 float HSM_DEVICE_FOLLOW_LAYER = global.HSM_DEVICE_FOLLOW_LAYER;
 
-#pragma parameter HSM_DEVICE_FOLLOW_MODE                    "          Follow Mode - FOLLOW SCALE & POS | FOLLOW EXACTLY" 0 0 1 1
+#pragma parameter HSM_DEVICE_FOLLOW_MODE               "          Follow Mode - FOLLOW SCALE & POS | FOLLOW EXACTLY" 0 0 1 1
 float HSM_DEVICE_FOLLOW_MODE = global.HSM_DEVICE_FOLLOW_MODE;
 
-#pragma parameter HSM_DEVICE_FOLLOW_FULL_USES_ZOOM      "          Follow Full also follows Zoom" 1 0 1 1
+#pragma parameter HSM_DEVICE_FOLLOW_FULL_USES_ZOOM     "          Follow Full also follows Zoom" 1 0 1 1
 float HSM_DEVICE_FOLLOW_FULL_USES_ZOOM = global.HSM_DEVICE_FOLLOW_FULL_USES_ZOOM;
 
 #pragma parameter HSM_DEVICE_FILL_MODE                 "         Image Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
@@ -456,8 +473,8 @@ float HSM_DEVICE_POS_Y = global.HSM_DEVICE_POS_Y / 100;
 //---------------------------------------------------------------------------------------------------
 //    DEVICELED IMAGE
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_DEVICELED_EMPTY_LINE							" " 0 0 0.001 0.001
-#pragma parameter HSM_DEVICELED_TITLE			           "[ DEVICE LED IMAGE LAYER ]:" 0 0 0.01 0.01
+#pragma parameter HSM_DEVICELED_EMPTY_LINE				    " " 0 0 0.001 0.001
+#pragma parameter HSM_DEVICELED_TITLE			          "[ DEVICE LED IMAGE LAYER ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_DEVICELED_OPACITY                   "          Opacity" 100 0 100 1
 float HSM_DEVICELED_OPACITY = global.HSM_DEVICELED_OPACITY / 100;
@@ -477,26 +494,20 @@ float HSM_DEVICELED_BRIGHTNESS = global.HSM_DEVICELED_BRIGHTNESS / 100;
 #pragma parameter HSM_DEVICELED_GAMMA                     "          Gamma Adjust" 1 0 5 0.01
 float HSM_DEVICELED_GAMMA = global.HSM_DEVICELED_GAMMA;
 
-#pragma parameter HSM_DEVICELED_AMBIENT_LIGHTING_MULTIPLIER "          Ambient Lighting Multiplier"  100 0 100 1
-float HSM_DEVICELED_AMBIENT_LIGHTING_MULTIPLIER = global.HSM_DEVICELED_AMBIENT_LIGHTING_MULTIPLIER / 100;
-
-#pragma parameter HSM_DEVICELED_AMBIENT2_LIGHTING_MULTIPLIER "          Ambient 2nd Image Lighting Multiplier"  0 0 100 1
-float HSM_DEVICELED_AMBIENT2_LIGHTING_MULTIPLIER = global.HSM_DEVICELED_AMBIENT2_LIGHTING_MULTIPLIER / 100;
-
-#pragma parameter HSM_DEVICELED_APPLY_AMBIENT_IN_ADD_MODE "          Apply Ambient Lighting in ADD Blend Mode"  0 0 1 1
-float HSM_DEVICELED_APPLY_AMBIENT_IN_ADD_MODE = global.HSM_DEVICELED_APPLY_AMBIENT_IN_ADD_MODE;
-
 #pragma parameter HSM_DEVICELED_BLEND_MODE                "          Blend Mode - OFF | NORMAL | ADD | MULTIPLY"  2 0 3 1
 float HSM_DEVICELED_BLEND_MODE = global.HSM_DEVICELED_BLEND_MODE;
 
 #pragma parameter HSM_DEVICELED_SOURCE_MATTE_TYPE         "          Source Matte Color - BLACK | WHITE | NONE"  2 0 2 1
 float HSM_DEVICELED_SOURCE_MATTE_TYPE = global.HSM_DEVICELED_SOURCE_MATTE_TYPE;
 
+#pragma parameter HSM_DEVICELED_APPLY_NIGHTLIGHTING_IN_ADD_MODE "          Apply Night Lighting in Add Blend Mode"  0 0 1 1
+float HSM_DEVICELED_APPLY_NIGHTLIGHTING_IN_ADD_MODE = global.HSM_DEVICELED_APPLY_NIGHTLIGHTING_IN_ADD_MODE;
+
+#pragma parameter HSM_DEVICELED_MIPMAPPING_BLEND_BIAS       "          Mipmapping Blend Bias (Affects Sharpness)" 0 -5 5 0.1
+float HSM_DEVICELED_MIPMAPPING_BLEND_BIAS = global.HSM_DEVICELED_MIPMAPPING_BLEND_BIAS;
+
 #pragma parameter HSM_DEVICELED_MASK_MODE                 "    Mask - ALL | SCRN | TUBE | BZ- | BZ | BZ+ | FRM | FRM+ | BG" 0 0 8 1
 float HSM_DEVICELED_MASK_MODE = global.HSM_DEVICELED_MASK_MODE;
-
-#pragma parameter HSM_DEVICELED_MIPMAPPING_BLEND_BIAS          "          Mipmapping Blend Bias (Affects Sharpness)" 0 -5 5 0.1
-float HSM_DEVICELED_MIPMAPPING_BLEND_BIAS = global.HSM_DEVICELED_MIPMAPPING_BLEND_BIAS;
 
 #pragma parameter HSM_DEVICELED_CUTOUT_MODE               "          Cutout Mask - OFF | ON | INVERT" 0 0 2 1
 float HSM_DEVICELED_CUTOUT_MODE = global.HSM_DEVICELED_CUTOUT_MODE;
@@ -563,20 +574,14 @@ float HSM_DECAL_BRIGHTNESS = global.HSM_DECAL_BRIGHTNESS / 100;
 #pragma parameter HSM_DECAL_GAMMA                       "          Gamma Adjust" 1 0 5 0.01
 float HSM_DECAL_GAMMA = global.HSM_DECAL_GAMMA;
 
-#pragma parameter HSM_DECAL_AMBIENT_LIGHTING_MULTIPLIER "          Ambient Lighting Multiplier"  100 0 100 1
-float HSM_DECAL_AMBIENT_LIGHTING_MULTIPLIER = global.HSM_DECAL_AMBIENT_LIGHTING_MULTIPLIER / 100;
-
-#pragma parameter HSM_DECAL_AMBIENT2_LIGHTING_MULTIPLIER "          Ambient 2nd Image Lighting Multiplier"  0 0 100 1
-float HSM_DECAL_AMBIENT2_LIGHTING_MULTIPLIER = global.HSM_DECAL_AMBIENT2_LIGHTING_MULTIPLIER / 100;
-
-#pragma parameter HSM_DECAL_APPLY_AMBIENT_IN_ADD_MODE   "          Apply Ambient Lighting in ADD Blend Mode"  0 0 1 1
-float HSM_DECAL_APPLY_AMBIENT_IN_ADD_MODE = global.HSM_DECAL_APPLY_AMBIENT_IN_ADD_MODE;
-
 #pragma parameter HSM_DECAL_BLEND_MODE                  "          Blend Mode -  OFF | NORMAL | ADD | MULTIPLY"  1 0 3 1
 float HSM_DECAL_BLEND_MODE = global.HSM_DECAL_BLEND_MODE;
 
 #pragma parameter HSM_DECAL_SOURCE_MATTE_TYPE           "          Source Matte Color - BLACK | WHITE | NONE"  2 0 2 1
 float HSM_DECAL_SOURCE_MATTE_TYPE = global.HSM_DECAL_SOURCE_MATTE_TYPE;
+
+#pragma parameter HSM_DECAL_APPLY_NIGHTLIGHTING_IN_ADD_MODE "          Apply Night Lighting in Add Blend Mode"  0 0 1 1
+float HSM_DECAL_APPLY_NIGHTLIGHTING_IN_ADD_MODE = global.HSM_DECAL_APPLY_NIGHTLIGHTING_IN_ADD_MODE;
 
 #pragma parameter HSM_DECAL_MIPMAPPING_BLEND_BIAS       "          Mipmapping Blend Bias (Affects Sharpness)" 0 -5 5 0.1
 float HSM_DECAL_MIPMAPPING_BLEND_BIAS = global.HSM_DECAL_MIPMAPPING_BLEND_BIAS;
@@ -649,20 +654,14 @@ float HSM_CAB_GLASS_BRIGHTNESS = global.HSM_CAB_GLASS_BRIGHTNESS / 100;
 #pragma parameter HSM_CAB_GLASS_GAMMA                       "          Gamma Adjust" 1 0 5 0.01
 float HSM_CAB_GLASS_GAMMA = global.HSM_CAB_GLASS_GAMMA;
 
-#pragma parameter HSM_CAB_GLASS_AMBIENT_LIGHTING_MULTIPLIER "          Ambient Lighting Multiplier"  100 0 100 1
-float HSM_CAB_GLASS_AMBIENT_LIGHTING_MULTIPLIER = global.HSM_CAB_GLASS_AMBIENT_LIGHTING_MULTIPLIER / 100;
-
-#pragma parameter HSM_CAB_GLASS_AMBIENT2_LIGHTING_MULTIPLIER "          Ambient 2nd Image Lighting Multiplier"  0 0 100 1
-float HSM_CAB_GLASS_AMBIENT2_LIGHTING_MULTIPLIER = global.HSM_CAB_GLASS_AMBIENT2_LIGHTING_MULTIPLIER / 100;
-
-#pragma parameter HSM_CAB_GLASS_APPLY_AMBIENT_IN_ADD_MODE         "          Apply Ambient Lighting in ADD Blend Mode"  0 0 1 1
-float HSM_CAB_GLASS_APPLY_AMBIENT_IN_ADD_MODE = global.HSM_CAB_GLASS_APPLY_AMBIENT_IN_ADD_MODE;
-
 #pragma parameter HSM_CAB_GLASS_BLEND_MODE                  "          Blend Mode - OFF | NORMAL | ADD | MULTIPLY"  1 0 3 1
 float HSM_CAB_GLASS_BLEND_MODE = global.HSM_CAB_GLASS_BLEND_MODE;
-
+    
 #pragma parameter HSM_CAB_GLASS_SOURCE_MATTE_TYPE           "          Source Matte Color - BLACK | WHITE | NONE"  2 0 2 1
 float HSM_CAB_GLASS_SOURCE_MATTE_TYPE = global.HSM_CAB_GLASS_SOURCE_MATTE_TYPE;
+
+#pragma parameter HSM_CAB_GLASS_APPLY_NIGHTLIGHTING_IN_ADD_MODE "          Apply Night Lighting in Add Blend Mode"  0 0 1 1
+float HSM_CAB_GLASS_APPLY_NIGHTLIGHTING_IN_ADD_MODE = global.HSM_CAB_GLASS_APPLY_NIGHTLIGHTING_IN_ADD_MODE;
 
 #pragma parameter HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS       "          Mipmapping Blend Bias (Affects Sharpness)" 0 -5 5 0.1
 float HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS = global.HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS;
@@ -735,20 +734,14 @@ float HSM_TOP_BRIGHTNESS = global.HSM_TOP_BRIGHTNESS / 100;
 #pragma parameter HSM_TOP_GAMMA                         "          Gamma Adjust" 1 0 5 0.01
 float HSM_TOP_GAMMA = global.HSM_TOP_GAMMA;
 
-#pragma parameter HSM_TOP_AMBIENT_LIGHTING_MULTIPLIER   "          Ambient Lighting Multiplier"  100 0 100 1
-float HSM_TOP_AMBIENT_LIGHTING_MULTIPLIER = global.HSM_TOP_AMBIENT_LIGHTING_MULTIPLIER / 100;
-
-#pragma parameter HSM_TOP_AMBIENT2_LIGHTING_MULTIPLIER  "          Ambient 2nd Image Lighting Multiplier"  0 0 100 1
-float HSM_TOP_AMBIENT2_LIGHTING_MULTIPLIER = global.HSM_TOP_AMBIENT2_LIGHTING_MULTIPLIER / 100;
-
-#pragma parameter HSM_TOP_APPLY_AMBIENT_IN_ADD_MODE     "          Apply Ambient Lighting in ADD Blend Mode"  0 0 1 1
-float HSM_TOP_APPLY_AMBIENT_IN_ADD_MODE = global.HSM_TOP_APPLY_AMBIENT_IN_ADD_MODE;
-
 #pragma parameter HSM_TOP_BLEND_MODE                    "          Blend Mode - OFF | NORMAL | ADD | MULTIPLY"  1 0 3 1
 float HSM_TOP_BLEND_MODE = global.HSM_TOP_BLEND_MODE;
 
 #pragma parameter HSM_TOP_SOURCE_MATTE_TYPE             "          Source Matte Color - BLACK | WHITE | NONE"  2 0 2 1
 float HSM_TOP_SOURCE_MATTE_TYPE = global.HSM_TOP_SOURCE_MATTE_TYPE;
+
+#pragma parameter HSM_TOP_APPLY_NIGHTLIGHTING_IN_ADD_MODE   "          Apply Night Lighting in Add Blend Mode"  0 0 1 1
+float HSM_TOP_APPLY_NIGHTLIGHTING_IN_ADD_MODE = global.HSM_TOP_APPLY_NIGHTLIGHTING_IN_ADD_MODE;
 
 #pragma parameter HSM_TOP_MIPMAPPING_BLEND_BIAS         "          Mipmapping Blend Bias (Affects Sharpness)" 0 -5 5 0.1
 float HSM_TOP_MIPMAPPING_BLEND_BIAS = global.HSM_TOP_MIPMAPPING_BLEND_BIAS;

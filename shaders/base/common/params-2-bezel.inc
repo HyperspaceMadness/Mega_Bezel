@@ -100,11 +100,11 @@ float HSM_BZL_COLOR_SATURATION = global.HSM_BZL_COLOR_SATURATION / 100;
 #pragma parameter HSM_BZL_COLOR_VALUE				"          Value/Brightness - Def 10" 10 0 100 0.2
 float HSM_BZL_COLOR_VALUE = global.HSM_BZL_COLOR_VALUE / 100;
 
-#pragma parameter HSM_BZL_AMBIENT_LIGHTING_MULTIPLIER         "          Bezel Ambient Lighting Multiplier"  100 0 100 1
-float HSM_BZL_AMBIENT_LIGHTING_MULTIPLIER = global.HSM_BZL_AMBIENT_LIGHTING_MULTIPLIER / 100;
+#pragma parameter HSM_BZL_ADD_MODE_NIGHTLIGHTING1_MULTIPLIER         "          Bezel Add Blend Mode Night Lighting 1 Multiplier"  100 0 100 1
+float HSM_BZL_ADD_MODE_NIGHTLIGHTING1_MULTIPLIER = global.HSM_BZL_ADD_MODE_NIGHTLIGHTING1_MULTIPLIER / 100;
 
-#pragma parameter HSM_BZL_AMBIENT2_LIGHTING_MULTIPLIER         "          Ambient 2nd Image Lighting Multiplier"  0 0 100 1
-float HSM_BZL_AMBIENT2_LIGHTING_MULTIPLIER = global.HSM_BZL_AMBIENT2_LIGHTING_MULTIPLIER / 100;
+#pragma parameter HSM_BZL_ADD_MODE_NIGHTLIGHTING2_MULTIPLIER         "          Add Blend Mode Night Lighting 2 Multiplier"  0 0 100 1
+float HSM_BZL_ADD_MODE_NIGHTLIGHTING2_MULTIPLIER = global.HSM_BZL_ADD_MODE_NIGHTLIGHTING2_MULTIPLIER / 100;
 
 
 //---------------------------------------------------------------------------------------------------

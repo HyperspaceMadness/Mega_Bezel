@@ -702,10 +702,10 @@ float HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS = global.HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNE
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_GAMMA                      "          Gamma Adjust" 1 0 5 0.01
 float HSM_TUBE_DIFFUSE_IMAGE_GAMMA = global.HSM_TUBE_DIFFUSE_IMAGE_GAMMA;
 
-#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING           "          Ambient Lighting Multiplier" 100 0 100 1
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING           "          Add Blend Mode Night Lighting 1 Multiplier" 100 0 100 1
 float HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING = global.HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING / 100;
 
-#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_AMBIENT2_LIGHTING          "          Ambient 2nd Image Lighting Multiplier" 0 0 100 1
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_AMBIENT2_LIGHTING          "          Add Blend Mode Night Lighting 2 Multiplier" 0 0 100 1
 float HSM_TUBE_DIFFUSE_IMAGE_AMBIENT2_LIGHTING = global.HSM_TUBE_DIFFUSE_IMAGE_AMBIENT2_LIGHTING / 100;
 
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_SCALE  			        "          Image Scale" 140 0 1000 1
@@ -767,10 +767,10 @@ float HSM_TUBE_STATIC_OPACITY_DIFFUSE_MULTIPLY = global.HSM_TUBE_STATIC_OPACITY_
 #pragma parameter HSM_TUBE_STATIC_BLACK_LEVEL      "          Black Level"  25 -100 100 0.5
 float HSM_TUBE_STATIC_BLACK_LEVEL = global.HSM_TUBE_STATIC_BLACK_LEVEL / 1000 + 1;
 
-#pragma parameter HSM_TUBE_STATIC_AMBIENT_LIGHTING "          Ambient Lighting Multiplier" 60 0 100 1
+#pragma parameter HSM_TUBE_STATIC_AMBIENT_LIGHTING "          Add Blend Mode Night Lighting 1 Multiplier" 60 0 100 1
 float HSM_TUBE_STATIC_AMBIENT_LIGHTING = global.HSM_TUBE_STATIC_AMBIENT_LIGHTING / 100;
 
-#pragma parameter HSM_TUBE_STATIC_AMBIENT2_LIGHTING "          Ambient 2nd Image Lighting Multiplier" 0 0 100 1
+#pragma parameter HSM_TUBE_STATIC_AMBIENT2_LIGHTING "          Add Blend Mode Night Lighting 2 Multiplier" 0 0 100 1
 float HSM_TUBE_STATIC_AMBIENT2_LIGHTING = global.HSM_TUBE_STATIC_AMBIENT2_LIGHTING / 100;
 
 #pragma parameter HSM_TUBE_STATIC_SCALE  			"          Scale" 120 0 1000 1
@@ -876,10 +876,10 @@ float HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_VIGNETTE = global.HSM_TUBE_COLORED_GEL_I
 #pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_FAKE_SCANLINE_AMOUNT   "          Fake Scanline Amount" 0 0 100 1
 float HSM_TUBE_COLORED_GEL_IMAGE_FAKE_SCANLINE_AMOUNT = global.HSM_TUBE_COLORED_GEL_IMAGE_FAKE_SCANLINE_AMOUNT / 100;
 
-#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING       "          Ambient Lighting Multiplier" 100 0 100 1
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING       "          Add Blend Mode Night Lighting 1 Multiplier" 100 0 100 1
 float HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING = global.HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING / 100;
 
-#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT2_LIGHTING      "          Ambient 2nd Image Lighting Multiplier" 0 0 100 1
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT2_LIGHTING      "          Add Blend Mode Night Lighting 2 Multiplier" 0 0 100 1
 float HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT2_LIGHTING = global.HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT2_LIGHTING / 100;
 
 
