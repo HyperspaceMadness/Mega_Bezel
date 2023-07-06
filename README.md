@@ -1303,9 +1303,9 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - ***Add Blend Mode Night Lighting 1 Multiplier***
   - How much of the global ambient lighting to add to the layer
 
-- ***Apply Night Lighting in Add Blend Mode***
+- ***Add Mode Night Lighting Amount***
     - By default when a layer is in ADD mode ambient lighting is not applied to the image, this works well for things like LEDs
-    - When **Apply Night Lighting in Add Blend Mode** is set to 1 the ambient lighting will be applied when in ADD blend mode
+    - When **Add Mode Night Lighting Amount** is set to 1 the ambient lighting will be applied when in ADD blend mode
 
 - ***Blend Mode*** *- How the image is applied to the layer underneath Default is 1: Normal Blending*
 

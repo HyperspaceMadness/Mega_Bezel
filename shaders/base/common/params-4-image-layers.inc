@@ -225,8 +225,8 @@ float HSM_BG_BLEND_MODE = global.HSM_BG_BLEND_MODE;
 #pragma parameter HSM_BG_SOURCE_MATTE_TYPE        "          Source Matte Color - BLACK | WHITE | NONE"  2 0 2 1
 float HSM_BG_SOURCE_MATTE_TYPE = global.HSM_BG_SOURCE_MATTE_TYPE;
 
-#pragma parameter HSM_BG_APPLY_NIGHTLIGHTING_IN_ADD_MODE    "          Apply Night Lighting in Add Blend Mode"  0 0 1 1
-float HSM_BG_APPLY_NIGHTLIGHTING_IN_ADD_MODE = global.HSM_BG_APPLY_NIGHTLIGHTING_IN_ADD_MODE;
+#pragma parameter HSM_BG_ADD_MODE_NIGHTLIGHTING_AMOUNT    "          Add Mode Night Lighting Amount"  0 0 100 1
+float HSM_BG_ADD_MODE_NIGHTLIGHTING_AMOUNT = global.HSM_BG_ADD_MODE_NIGHTLIGHTING_AMOUNT / 100.0;
 
 #pragma parameter HSM_BG_MIPMAPPING_BLEND_BIAS    "          Mipmapping Blend Bias (Affects Sharpness)" 0 -5 5 0.1
 float HSM_BG_MIPMAPPING_BLEND_BIAS = global.HSM_BG_MIPMAPPING_BLEND_BIAS;
@@ -339,8 +339,8 @@ float HSM_LED_BLEND_MODE = global.HSM_LED_BLEND_MODE;
 #pragma parameter HSM_LED_SOURCE_MATTE_TYPE             "          Source Matte Color - BLACK | WHITE | NONE"  2 0 2 1
 float HSM_LED_SOURCE_MATTE_TYPE = global.HSM_LED_SOURCE_MATTE_TYPE;
 
-#pragma parameter HSM_LED_APPLY_NIGHTLIGHTING_IN_ADD_MODE   "          Apply Night Lighting in Add Blend Mode"  0 0 1 1
-float HSM_LED_APPLY_NIGHTLIGHTING_IN_ADD_MODE = global.HSM_LED_APPLY_NIGHTLIGHTING_IN_ADD_MODE;
+#pragma parameter HSM_LED_ADD_MODE_NIGHTLIGHTING_AMOUNT   "          Add Mode Night Lighting Amount"  0 0 100 1
+float HSM_LED_ADD_MODE_NIGHTLIGHTING_AMOUNT = global.HSM_LED_ADD_MODE_NIGHTLIGHTING_AMOUNT / 100.0;
 
 #pragma parameter HSM_LED_MIPMAPPING_BLEND_BIAS         "          Mipmapping Blend Bias (Affects Sharpness)" 0 -5 5 0.1
 float HSM_LED_MIPMAPPING_BLEND_BIAS = global.HSM_LED_MIPMAPPING_BLEND_BIAS;
@@ -419,8 +419,8 @@ float HSM_DEVICE_BLEND_MODE = global.HSM_DEVICE_BLEND_MODE;
 #pragma parameter HSM_DEVICE_SOURCE_MATTE_TYPE         "          Source Matte Color - BLACK | WHITE | NONE"  2 0 2 1
 float HSM_DEVICE_SOURCE_MATTE_TYPE = global.HSM_DEVICE_SOURCE_MATTE_TYPE;
 
-#pragma parameter HSM_DEVICE_APPLY_NIGHTLIGHTING_IN_ADD_MODE    "          Apply Night Lighting in Add Blend Mode"  0 0 1 1
-float HSM_DEVICE_APPLY_NIGHTLIGHTING_IN_ADD_MODE = global.HSM_DEVICE_APPLY_NIGHTLIGHTING_IN_ADD_MODE;
+#pragma parameter HSM_DEVICE_ADD_MODE_NIGHTLIGHTING_AMOUNT    "          Add Mode Night Lighting Amount"  0 0 100 1
+float HSM_DEVICE_ADD_MODE_NIGHTLIGHTING_AMOUNT = global.HSM_DEVICE_ADD_MODE_NIGHTLIGHTING_AMOUNT / 100.0;
 
 #pragma parameter HSM_DEVICE_MIPMAPPING_BLEND_BIAS     "          Mipmapping Blend Bias (Affects Sharpness)" 0 -5 5 0.1
 float HSM_DEVICE_MIPMAPPING_BLEND_BIAS = global.HSM_DEVICE_MIPMAPPING_BLEND_BIAS;
@@ -500,8 +500,8 @@ float HSM_DEVICELED_BLEND_MODE = global.HSM_DEVICELED_BLEND_MODE;
 #pragma parameter HSM_DEVICELED_SOURCE_MATTE_TYPE         "          Source Matte Color - BLACK | WHITE | NONE"  2 0 2 1
 float HSM_DEVICELED_SOURCE_MATTE_TYPE = global.HSM_DEVICELED_SOURCE_MATTE_TYPE;
 
-#pragma parameter HSM_DEVICELED_APPLY_NIGHTLIGHTING_IN_ADD_MODE "          Apply Night Lighting in Add Blend Mode"  0 0 1 1
-float HSM_DEVICELED_APPLY_NIGHTLIGHTING_IN_ADD_MODE = global.HSM_DEVICELED_APPLY_NIGHTLIGHTING_IN_ADD_MODE;
+#pragma parameter HSM_DEVICELED_ADD_MODE_NIGHTLIGHTING_AMOUNT "          Add Mode Night Lighting Amount"  0 0 100 1
+float HSM_DEVICELED_ADD_MODE_NIGHTLIGHTING_AMOUNT = global.HSM_DEVICELED_ADD_MODE_NIGHTLIGHTING_AMOUNT / 100.0;
 
 #pragma parameter HSM_DEVICELED_MIPMAPPING_BLEND_BIAS       "          Mipmapping Blend Bias (Affects Sharpness)" 0 -5 5 0.1
 float HSM_DEVICELED_MIPMAPPING_BLEND_BIAS = global.HSM_DEVICELED_MIPMAPPING_BLEND_BIAS;
@@ -580,8 +580,8 @@ float HSM_DECAL_BLEND_MODE = global.HSM_DECAL_BLEND_MODE;
 #pragma parameter HSM_DECAL_SOURCE_MATTE_TYPE           "          Source Matte Color - BLACK | WHITE | NONE"  2 0 2 1
 float HSM_DECAL_SOURCE_MATTE_TYPE = global.HSM_DECAL_SOURCE_MATTE_TYPE;
 
-#pragma parameter HSM_DECAL_APPLY_NIGHTLIGHTING_IN_ADD_MODE "          Apply Night Lighting in Add Blend Mode"  0 0 1 1
-float HSM_DECAL_APPLY_NIGHTLIGHTING_IN_ADD_MODE = global.HSM_DECAL_APPLY_NIGHTLIGHTING_IN_ADD_MODE;
+#pragma parameter HSM_DECAL_ADD_MODE_NIGHTLIGHTING_AMOUNT "          Add Mode Night Lighting Amount"  0 0 100 1
+float HSM_DECAL_ADD_MODE_NIGHTLIGHTING_AMOUNT = global.HSM_DECAL_ADD_MODE_NIGHTLIGHTING_AMOUNT / 100.0;
 
 #pragma parameter HSM_DECAL_MIPMAPPING_BLEND_BIAS       "          Mipmapping Blend Bias (Affects Sharpness)" 0 -5 5 0.1
 float HSM_DECAL_MIPMAPPING_BLEND_BIAS = global.HSM_DECAL_MIPMAPPING_BLEND_BIAS;
@@ -660,8 +660,8 @@ float HSM_CAB_GLASS_BLEND_MODE = global.HSM_CAB_GLASS_BLEND_MODE;
 #pragma parameter HSM_CAB_GLASS_SOURCE_MATTE_TYPE           "          Source Matte Color - BLACK | WHITE | NONE"  2 0 2 1
 float HSM_CAB_GLASS_SOURCE_MATTE_TYPE = global.HSM_CAB_GLASS_SOURCE_MATTE_TYPE;
 
-#pragma parameter HSM_CAB_GLASS_APPLY_NIGHTLIGHTING_IN_ADD_MODE "          Apply Night Lighting in Add Blend Mode"  0 0 1 1
-float HSM_CAB_GLASS_APPLY_NIGHTLIGHTING_IN_ADD_MODE = global.HSM_CAB_GLASS_APPLY_NIGHTLIGHTING_IN_ADD_MODE;
+#pragma parameter HSM_CAB_GLASS_ADD_MODE_NIGHTLIGHTING_AMOUNT "          Add Mode Night Lighting Amount"  0 0 100 1
+float HSM_CAB_GLASS_ADD_MODE_NIGHTLIGHTING_AMOUNT = global.HSM_CAB_GLASS_ADD_MODE_NIGHTLIGHTING_AMOUNT / 100.0;
 
 #pragma parameter HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS       "          Mipmapping Blend Bias (Affects Sharpness)" 0 -5 5 0.1
 float HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS = global.HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS;
@@ -740,8 +740,8 @@ float HSM_TOP_BLEND_MODE = global.HSM_TOP_BLEND_MODE;
 #pragma parameter HSM_TOP_SOURCE_MATTE_TYPE             "          Source Matte Color - BLACK | WHITE | NONE"  2 0 2 1
 float HSM_TOP_SOURCE_MATTE_TYPE = global.HSM_TOP_SOURCE_MATTE_TYPE;
 
-#pragma parameter HSM_TOP_APPLY_NIGHTLIGHTING_IN_ADD_MODE   "          Apply Night Lighting in Add Blend Mode"  0 0 1 1
-float HSM_TOP_APPLY_NIGHTLIGHTING_IN_ADD_MODE = global.HSM_TOP_APPLY_NIGHTLIGHTING_IN_ADD_MODE;
+#pragma parameter HSM_TOP_ADD_MODE_NIGHTLIGHTING_AMOUNT   "          Add Mode Night Lighting Amount"  0 0 100 1
+float HSM_TOP_ADD_MODE_NIGHTLIGHTING_AMOUNT = global.HSM_TOP_ADD_MODE_NIGHTLIGHTING_AMOUNT / 100.0;
 
 #pragma parameter HSM_TOP_MIPMAPPING_BLEND_BIAS         "          Mipmapping Blend Bias (Affects Sharpness)" 0 -5 5 0.1
 float HSM_TOP_MIPMAPPING_BLEND_BIAS = global.HSM_TOP_MIPMAPPING_BLEND_BIAS;

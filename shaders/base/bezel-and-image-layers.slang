@@ -76,36 +76,24 @@ float GetMask(float mask_mode)
 }
 
 // Assumes Opacity is already encoded in alpha
-vec4 BlendModeMaskLayerMix(vec4 color_under, vec4 color_over, float blend_mode, float precomp_index, bool apply_add_blend_only_in_additive_precomp, float mask_mode, float cutout_mode, float dualscreen_mode, float layer_opacity)
+vec4 BlendModeMaskLayerMix(vec4 color_under, vec4 color_over, float blend_mode, int precomp_index, float amount_of_add_mode_blend_in_base_precomp, float mask_mode, float cutout_mode, float dualscreen_mode, float layer_opacity)
 {
 	if ( blend_mode == 0 || (dualscreen_mode != SHOW_ON_DUALSCREEN_MODE_BOTH && dualscreen_mode != SCREEN_INDEX) )
 		return color_under;
 
 	bool is_additive_precomp = precomp_index == PRECOMP_INDEX_ADDITIVE;
-	if (is_additive_precomp)
-	{
-		// If requested do not apply the add mode layer in the additive precomp
-		// Also do not composite multiply mode layers in the additive precomp
-		if (blend_mode == BLEND_MODE_ADD && !apply_add_blend_only_in_additive_precomp ||
-			blend_mode == BLEND_MODE_MULTIPLY)
-			return color_under;
-	}
-	else
-	{
-		// Unless requested, do not composite the add mode layer
-		if (blend_mode == BLEND_MODE_ADD && apply_add_blend_only_in_additive_precomp)
-			return color_under;
-	}
+	// Also do not composite multiply mode layers in the additive precomp
+	if (is_additive_precomp && blend_mode == BLEND_MODE_MULTIPLY)
+		return color_under;
 
+	if (blend_mode == BLEND_MODE_OFF)
+		return color_under;
+	
 	float cutout_mask = 1;
 	if (cutout_mode == CUTOUT_MODE_INSIDE)
 		cutout_mask = CUTOUT_MASK;
 	if (cutout_mode == CUTOUT_MODE_OUTSIDE)
 		cutout_mask = 1 - CUTOUT_MASK;
-
-	if (blend_mode == BLEND_MODE_OFF)
-		return color_under;
-	
 	color_over *= layer_opacity * GetMask(mask_mode) * cutout_mask;
 
 	vec4 out_color = vec4(0);
@@ -120,21 +108,23 @@ vec4 BlendModeMaskLayerMix(vec4 color_under, vec4 color_over, float blend_mode, 
 
 		out_color = HSM_PreMultAlphaBlend(color_under, color_over);
 	}
-	else
+
+	if (blend_mode == BLEND_MODE_ADD)  	 		
+	{
+		float add_mode_amount = is_additive_precomp ? 1.0 - amount_of_add_mode_blend_in_base_precomp : amount_of_add_mode_blend_in_base_precomp;
+		color_over.rgb *= add_mode_amount;
+		color_over.a *= 0;
+		out_color = HSM_PreMultAlphaBlend(color_under, color_over);
+	}
+
+	if (blend_mode == BLEND_MODE_MULTIPLY)
 	{
 		vec4 blend_color = color_under; 
-		if (blend_mode == BLEND_MODE_ADD)  	 		
-		{
-			color_over.a *= 0;
-			out_color = HSM_PreMultAlphaBlend(color_under, color_over);
-		}
-		else if (blend_mode == BLEND_MODE_MULTIPLY)
-		{
-			blend_color.rgb = color_under.rgb * color_over.rgb / (color_over.a + 0.0001);
-			out_color.rgb = clamp(mix(color_under.rgb, blend_color.rgb, color_over.a), 0, 1);
-			out_color.a = color_under.a;
-		}
+		blend_color.rgb = color_under.rgb * color_over.rgb / (color_over.a + 0.0001);
+		out_color.rgb = clamp(mix(color_under.rgb, blend_color.rgb, color_over.a), 0, 1);
+		out_color.a = color_under.a;
 	}
+
 	return out_color;
 }
 
@@ -762,7 +752,7 @@ void main()
 													bezel_layer, 
 													BLEND_MODE_NORMAL, 
 													PRECOMP_INDEX_BACKGROUND,
-													true,
+													1,
 													MASK_MODE_ALL,
 													0, 
 													SHOW_ON_DUALSCREEN_MODE_BOTH,
@@ -1153,7 +1143,7 @@ void main()
 			end_layer = int(middle_layer_group_first_layer - 1);
 		}
 
-		if (precomp_index == PRECOMP_INDEX_MIDDLEGROUND)
+		if (precomp_index == PRECOMP_INDEX_MIDDLEGROUND)		
 		{
 			start_layer = int(middle_layer_group_first_layer);
 			end_layer = int(HSM_CRT_LAYER_ORDER);
@@ -1182,7 +1172,7 @@ void main()
 														bg_image, 
 														HSM_BG_BLEND_MODE, 
 														precomp_index,
-														HSM_BG_APPLY_NIGHTLIGHTING_IN_ADD_MODE < 0.5,
+														HSM_BG_ADD_MODE_NIGHTLIGHTING_AMOUNT,
 														HSM_BG_MASK_MODE, 
 														HSM_BG_CUTOUT_MODE,
 														HSM_BG_DUALSCREEN_VIS_MODE,
@@ -1211,7 +1201,7 @@ void main()
 														led_image, 
 														HSM_LED_BLEND_MODE, 
 														precomp_index,
-														HSM_LED_APPLY_NIGHTLIGHTING_IN_ADD_MODE < 0.5,
+														HSM_LED_ADD_MODE_NIGHTLIGHTING_AMOUNT,
 														HSM_LED_MASK_MODE, 
 														HSM_LED_CUTOUT_MODE, 
 														HSM_LED_DUALSCREEN_VIS_MODE,
@@ -1225,7 +1215,7 @@ void main()
 														device_image, 
 														HSM_DEVICE_BLEND_MODE, 
 														precomp_index,
-														HSM_DEVICE_APPLY_NIGHTLIGHTING_IN_ADD_MODE < 0.5,
+														HSM_DEVICE_ADD_MODE_NIGHTLIGHTING_AMOUNT,
 														HSM_DEVICE_MASK_MODE, 
 														HSM_DEVICE_CUTOUT_MODE, 
 														HSM_DEVICE_DUALSCREEN_VIS_MODE,
@@ -1239,7 +1229,7 @@ void main()
 														deviceled_image, 
 														HSM_DEVICELED_BLEND_MODE, 
 														precomp_index,
-														HSM_DEVICELED_APPLY_NIGHTLIGHTING_IN_ADD_MODE < 0.5,
+														HSM_DEVICELED_ADD_MODE_NIGHTLIGHTING_AMOUNT,
 														HSM_DEVICELED_MASK_MODE, 
 														HSM_DEVICELED_CUTOUT_MODE, 
 														HSM_DEVICELED_DUALSCREEN_VIS_MODE,
@@ -1257,7 +1247,7 @@ void main()
 															bezel_layer, 
 															HSM_BZL_BLEND_MODE, 
 															precomp_index,
-															true,
+															1,
 															MASK_MODE_ALL, 
 															0, 
 															SHOW_ON_DUALSCREEN_MODE_BOTH,
@@ -1271,7 +1261,7 @@ void main()
 														decal_image, 
 														HSM_DECAL_BLEND_MODE, 
 														precomp_index,
-														HSM_DECAL_APPLY_NIGHTLIGHTING_IN_ADD_MODE < 0.5,
+														HSM_DECAL_ADD_MODE_NIGHTLIGHTING_AMOUNT,
 														HSM_DECAL_MASK_MODE, 
 														HSM_DECAL_CUTOUT_MODE, 
 														HSM_DECAL_DUALSCREEN_VIS_MODE,
@@ -1285,7 +1275,7 @@ void main()
 														cab_glass_image, 
 														HSM_CAB_GLASS_BLEND_MODE,
 														precomp_index,
-														HSM_CAB_GLASS_APPLY_NIGHTLIGHTING_IN_ADD_MODE < 0.5,
+														HSM_CAB_GLASS_ADD_MODE_NIGHTLIGHTING_AMOUNT,
 														HSM_CAB_GLASS_MASK_MODE, 
 														HSM_CAB_GLASS_CUTOUT_MODE, 
 														HSM_CAB_GLASS_DUALSCREEN_VIS_MODE,
@@ -1299,7 +1289,7 @@ void main()
 														top_image, 
 														HSM_TOP_BLEND_MODE, 
 														precomp_index,
-														HSM_TOP_APPLY_NIGHTLIGHTING_IN_ADD_MODE < 0.5,
+														HSM_TOP_ADD_MODE_NIGHTLIGHTING_AMOUNT,
 														HSM_TOP_MASK_MODE, 
 														HSM_TOP_CUTOUT_MODE, 
 														HSM_TOP_DUALSCREEN_VIS_MODE,
