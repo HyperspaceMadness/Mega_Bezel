@@ -263,6 +263,7 @@ alias28 = "ReflectPrepFullscreenGlowPass"
 # Bezel Reflection ----------------------------------------------------------------
 shader29 = ../../../shaders/base/reflection.slang
 scale_type29 = viewport
+filter_linear29 = true
 float_framebuffer29 = true
 alias29 = "ReflectPass"
 

@@ -90,6 +90,7 @@ layout(set = 0, binding = 11) uniform sampler2D SceneLayersPass;
 layout(set = 0, binding = 12) uniform sampler2D CombinePassFeedback;
 #define PassFeedback CombinePassFeedback
 
+layout(set = 0, binding = 13) uniform sampler2D ReflectPrepFullscreenGlowPass;
 
 vec3 PrepGraphicsForHDR(vec3 in_color)
 {
@@ -280,6 +281,22 @@ void main()
 	vec3 ambient2_rgb = vec3(1);
 	HSM_Fill_Ambient_Images(VIEWPORT_COORD, HSM_GetViewportCoordWithFlip(vTexCoord), TUBE_DIFFUSE_COORD, TUBE_DIFFUSE_SCALE, HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE, NightLightingImage, NightLighting2Image, ambient_rgb, ambient2_rgb);
 
+	vec4 image_layers_packed_shadow_stretch = texture(SceneLayersPass, (vTexCoord - 0.5) / 1.1 + 0.5 + vec2(SCREEN_SCALE.x * 0.02, 0));
+	vec4 precomp_background_shadow_stretch = vec4(0);
+	vec4 precomp_middleground_shadow_stretch = vec4(0);
+	vec4 precomp_foreground_shadow_stretch = vec4(0);
+	vec4 precomp_additive_shadow_stretch = vec4(0);
+
+	HSM_Unpack_1_Rgba_To_4_Rgba(image_layers_packed_shadow_stretch, 
+						precomp_foreground_shadow_stretch, 
+						precomp_middleground_shadow_stretch, 
+						precomp_background_shadow_stretch, 
+						precomp_additive_shadow_stretch);
+
+
+
+	vec4 fullscreen_glow = texture(ReflectPrepFullscreenGlowPass, (vTexCoord - 0.5) / 5 + 0.5);
+
 	// See if we need the layer blend mode and Apply in additive mode
 
 	vec4 composite_base_color = vec4(0);
@@ -300,6 +317,8 @@ void main()
 
 	if (HSM_COMPOSITE_BACKGROUND_ON > 0.5)
 	{
+		precomp_background.rgb *= HSM_COMPOSITE_BACKGROUND_BRIGHTNESS;
+		vec4 precomp_background_orig = precomp_background;
 		precomp_background.rgb = ApplyAmbientImages(	precomp_background.rgb,
 														ambient_rgb,
 														ambient2_rgb,
@@ -308,6 +327,7 @@ void main()
 														1, 
 														BLEND_MODE_NORMAL,
 														HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
+		precomp_background.rgb += precomp_background_orig.rgb * fullscreen_glow.rgb * precomp_background_orig.a * mix((1 - precomp_middleground_shadow_stretch.a), 1, 0.5);
 		precomp_background.rgb = PrepGraphicsForHDR(precomp_background.rgb);
 		out_color = HSM_PreMultAlphaBlend(out_color, precomp_background);
 	}
@@ -338,6 +358,8 @@ void main()
 
 	if (HSM_COMPOSITE_MIDDLEGROUND_ON > 0.5)
 	{
+		precomp_middleground.rgb *= HSM_COMPOSITE_MIDDLEGROUND_BRIGHTNESS;
+		vec4 precomp_middleground_orig = precomp_middleground;
 		precomp_middleground.rgb = ApplyAmbientImages(	precomp_middleground.rgb,
 														ambient_rgb,
 														ambient2_rgb,
@@ -346,6 +368,7 @@ void main()
 														1, 
 														BLEND_MODE_NORMAL,
 														HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
+		precomp_middleground.rgb += precomp_middleground_orig.rgb * fullscreen_glow.rgb * precomp_middleground_orig.a;
 		precomp_middleground.rgb = PrepGraphicsForHDR(precomp_middleground.rgb);
 		out_color = HSM_PreMultAlphaBlend(out_color, precomp_middleground);
 	}
@@ -355,6 +378,8 @@ void main()
 
 	if (HSM_COMPOSITE_FOREGROUND_ON > 0.5)
 	{
+		precomp_foreground.rgb *= HSM_COMPOSITE_FOREGROUND_BRIGHTNESS;
+		vec4 precomp_foreground_orig = precomp_foreground;
 		precomp_foreground.rgb = ApplyAmbientImages(	precomp_foreground.rgb,
 														ambient_rgb,
 														ambient2_rgb,
@@ -363,12 +388,14 @@ void main()
 														1, 
 														BLEND_MODE_NORMAL,
 														HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
+		precomp_foreground.rgb += precomp_foreground_orig.rgb * fullscreen_glow.rgb * precomp_foreground_orig.a;
 		precomp_foreground.rgb = PrepGraphicsForHDR(precomp_foreground.rgb);
 		out_color = HSM_PreMultAlphaBlend(out_color, precomp_foreground);
 	}
 
 	if (HSM_COMPOSITE_ADDITIVE_ON > 0.5)
 	{
+		precomp_additive.rgb *= HSM_COMPOSITE_ADDITIVE_BRIGHTNESS;
 		precomp_additive.rgb = PrepGraphicsForHDR(precomp_additive.rgb);
 		out_color = HSM_PreMultAlphaBlend(out_color, precomp_additive * vec4(1, 1, 1, 0));
 	}
