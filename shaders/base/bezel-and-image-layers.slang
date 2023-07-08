@@ -1,7 +1,5 @@
 #version 450
 
-#define LAYERS_UNDER_CRT
-
 /////////////// IMPORTS ///////////////
 #include "common/globals-and-image-layers-params.inc"
 #include "common/common-functions.inc"
@@ -767,9 +765,6 @@ void main()
 	
 	vec4 tube_bg_layer = vec4(0, 0, 0, TUBE_MASK_EXPAND * HSM_GetTubeOpacity());
 	// vec4 tube_bg_layer = vec4(0, 0, 0, 0);
-
-// end of ifndef LAYERS_UNDER_CRT
-// #endif
 
 	//-----------------------------------------------------------------------------------------
 	// Background

@@ -317,8 +317,8 @@ void main()
 
 	if (HSM_COMPOSITE_BACKGROUND_ON > 0.5)
 	{
-		precomp_background.rgb *= HSM_COMPOSITE_BACKGROUND_BRIGHTNESS;
 		vec4 precomp_background_orig = precomp_background;
+		precomp_background.rgb *= HSM_COMPOSITE_BACKGROUND_BRIGHTNESS;
 		precomp_background.rgb = ApplyAmbientImages(	precomp_background.rgb,
 														ambient_rgb,
 														ambient2_rgb,
@@ -327,7 +327,7 @@ void main()
 														1, 
 														BLEND_MODE_NORMAL,
 														HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
-		precomp_background.rgb += precomp_background_orig.rgb * fullscreen_glow.rgb * precomp_background_orig.a * mix((1 - precomp_middleground_shadow_stretch.a), 1, 0.5);
+		precomp_background.rgb += precomp_background_orig.rgb * HSM_COMPOSITE_BACKGROUND_BOUNCELIGHT_MULTIPLIER * fullscreen_glow.rgb * precomp_background_orig.a * mix((1 - precomp_middleground_shadow_stretch.a), 1, 0.5);
 		precomp_background.rgb = PrepGraphicsForHDR(precomp_background.rgb);
 		out_color = HSM_PreMultAlphaBlend(out_color, precomp_background);
 	}
@@ -358,8 +358,8 @@ void main()
 
 	if (HSM_COMPOSITE_MIDDLEGROUND_ON > 0.5)
 	{
-		precomp_middleground.rgb *= HSM_COMPOSITE_MIDDLEGROUND_BRIGHTNESS;
 		vec4 precomp_middleground_orig = precomp_middleground;
+		precomp_middleground.rgb *= HSM_COMPOSITE_MIDDLEGROUND_BRIGHTNESS;
 		precomp_middleground.rgb = ApplyAmbientImages(	precomp_middleground.rgb,
 														ambient_rgb,
 														ambient2_rgb,
@@ -368,7 +368,7 @@ void main()
 														1, 
 														BLEND_MODE_NORMAL,
 														HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
-		precomp_middleground.rgb += precomp_middleground_orig.rgb * fullscreen_glow.rgb * precomp_middleground_orig.a;
+		precomp_middleground.rgb += precomp_middleground_orig.rgb * HSM_COMPOSITE_MIDDLEGROUND_BOUNCELIGHT_MULTIPLIER * fullscreen_glow.rgb * precomp_middleground_orig.a;
 		precomp_middleground.rgb = PrepGraphicsForHDR(precomp_middleground.rgb);
 		out_color = HSM_PreMultAlphaBlend(out_color, precomp_middleground);
 	}
@@ -378,8 +378,8 @@ void main()
 
 	if (HSM_COMPOSITE_FOREGROUND_ON > 0.5)
 	{
-		precomp_foreground.rgb *= HSM_COMPOSITE_FOREGROUND_BRIGHTNESS;
 		vec4 precomp_foreground_orig = precomp_foreground;
+		precomp_foreground.rgb *= HSM_COMPOSITE_FOREGROUND_BRIGHTNESS;
 		precomp_foreground.rgb = ApplyAmbientImages(	precomp_foreground.rgb,
 														ambient_rgb,
 														ambient2_rgb,
@@ -388,7 +388,7 @@ void main()
 														1, 
 														BLEND_MODE_NORMAL,
 														HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
-		precomp_foreground.rgb += precomp_foreground_orig.rgb * fullscreen_glow.rgb * precomp_foreground_orig.a;
+		precomp_foreground.rgb += precomp_foreground_orig.rgb * HSM_COMPOSITE_FOREGROUND_BOUNCELIGHT_MULTIPLIER * fullscreen_glow.rgb * precomp_foreground_orig.a;
 		precomp_foreground.rgb = PrepGraphicsForHDR(precomp_foreground.rgb);
 		out_color = HSM_PreMultAlphaBlend(out_color, precomp_foreground);
 	}

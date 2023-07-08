@@ -1338,13 +1338,13 @@ vec4 HSM_ApplyPackedTubeLayers(vec4 crt_color, vec4 image_layers_packed)
 	vec4 unpacked_precomp_tube_diffuse = vec4(0);
 	vec4 unpacked_precomp_gel = vec4(0);
 	vec4 unpacked_precomp_tube_highlight = vec4(0);
-	vec4 unpacked_precomp_nightlight = vec4(0);
+	vec4 unpacked_precomp_lighting_mask = vec4(0);
 
 	HSM_Unpack_1_Rgba_To_4_Rgba(image_layers_packed, 
 								unpacked_precomp_tube_diffuse, 
 								unpacked_precomp_gel, 
 								unpacked_precomp_tube_highlight, 
-								unpacked_precomp_nightlight);
+								unpacked_precomp_lighting_mask);
 
 	unpacked_precomp_tube_diffuse = HSM_Linearize(unpacked_precomp_tube_diffuse, DEFAULT_SRGB_GAMMA);
 	unpacked_precomp_gel = HSM_Linearize(unpacked_precomp_gel, DEFAULT_SRGB_GAMMA);
@@ -1353,9 +1353,9 @@ vec4 HSM_ApplyPackedTubeLayers(vec4 crt_color, vec4 image_layers_packed)
 	// 0.25 was added to avoid clipping issues with AMD GPUs
 	float unpacked_vignette = unpacked_precomp_tube_highlight.a - 0.25;
 
-	unpacked_precomp_nightlight = HSM_Linearize(unpacked_precomp_nightlight, DEFAULT_SRGB_GAMMA);
-	float unpacked_crt_mask = unpacked_precomp_nightlight.b;
-	float unpacked_shadow = unpacked_precomp_nightlight.a;
+	unpacked_precomp_lighting_mask = HSM_Linearize(unpacked_precomp_lighting_mask, DEFAULT_SRGB_GAMMA);
+	float unpacked_crt_mask = unpacked_precomp_lighting_mask.b;
+	float unpacked_shadow = unpacked_precomp_lighting_mask.a;
 
 	vec4 out_color = unpacked_precomp_tube_diffuse;
 

@@ -53,10 +53,6 @@ layout(location = 7) in vec2 UNFLIPPED_VIEWPORT_COORD;
 layout(location = 0) out vec4 FragColor;
 
 layout(set = 0, binding = 2) uniform sampler2D CacheInfoPass;
-layout(set = 0, binding = 3) uniform sampler2D DerezedPass;
-
-// layout(set = 0, binding = 4) uniform sampler2D BackgroundImage;
-// layout(set = 0, binding = 5) uniform sampler2D BackgroundVertImage;
 
 // #ifdef USE_TUBEFX
 
@@ -66,11 +62,47 @@ layout(set = 0, binding = 8) uniform sampler2D TubeColoredGelImage;
 layout(set = 0, binding = 9) uniform sampler2D TubeStaticReflectionImage;
 layout(set = 0, binding = 10) uniform sampler2D NightLightingImage;
 layout(set = 0, binding = 11) uniform sampler2D NightLighting2Image;
+layout(set = 0, binding = 12) uniform sampler2D SceneLayersPass;
+
 
 // #endif
 
 layout(set = 0, binding = 13) uniform sampler2D TubeFxPassFeedback;
 #define PassFeedback TubeFxPassFeedback
+
+
+// Generating height & normals from a shadertoy by granito
+const vec3 GrayscaleWeights = vec3(0.2125,0.7154,0.0721);
+
+// Sample map to generate Normal map and Height map
+vec4 GenerateNormalHeight (sampler2D tex, vec2 uv, vec2 res, float width)
+{
+    vec2 texelSize = 1. / (res * width);
+    vec4 h;
+    h[0] = dot(GrayscaleWeights, texture(tex, uv + vec2(texelSize * vec2( 0,-1)) ).rgb);
+    h[1] = dot(GrayscaleWeights, texture(tex, uv + vec2(texelSize * vec2(-1, 0)) ).rgb);
+    h[2] = dot(GrayscaleWeights, texture(tex, uv + vec2(texelSize * vec2( 1, 0)) ).rgb);
+    h[3] = dot(GrayscaleWeights, texture(tex, uv + vec2(texelSize * vec2( 0, 1)) ).rgb);
+    vec3 n;
+    n.y = h[0] - h[3];
+    n.x = h[1] - h[2];
+    n.z = .25;
+    float height = dot(GrayscaleWeights, texture(tex, uv).rgb);
+    return vec4(normalize(n), height);
+}
+
+// Multipass version of above
+vec4 GenerateNormalHeightMultipass (sampler2D tex, vec2 uv, vec2 res)
+{
+    float dist = 0.5;
+    vec4 multi;
+	multi += GenerateNormalHeight(tex, uv, res, 1. * dist);
+	multi += GenerateNormalHeight(tex, uv, res, 2.5 * dist);
+	multi += GenerateNormalHeight(tex, uv, res, 5. * dist);
+	multi += GenerateNormalHeight(tex, uv, res, 10. * dist);    
+    multi *= 0.25;
+    return multi;
+}
 
 // #ifdef USE_TUBEFX
 vec3 HSM_GetTubeHighlight(vec2 tube_curved_coord, bool apply_to_mirror, in sampler2D TubeStaticReflectionImage)
@@ -346,15 +378,15 @@ void main()
 	precomp_gel = HSM_Delinearize(precomp_gel, DEFAULT_SRGB_GAMMA);
 	precomp_tube_highlight = HSM_Delinearize(precomp_tube_highlight, DEFAULT_SRGB_GAMMA);
 
-	vec4 precomp_nightlight = vec4(ambient_rgb, 1);
-	precomp_nightlight = HSM_Delinearize(precomp_nightlight, DEFAULT_SRGB_GAMMA);
-	precomp_nightlight.b = crt_mask;
-	precomp_nightlight.a = tube_shadow;
+	vec4 precomp_lighting_mask = vec4(0);
+	// TODO fill in with lighting shadow masks
+	precomp_lighting_mask.b = 1; //crt_mask;
+	precomp_lighting_mask.a = tube_shadow;
 
 	vec4 image_layers_packed = HSM_Pack_4_Rgba_To_1_Rgba(precomp_tube_diffuse
 														,precomp_gel
 														,precomp_tube_highlight
-														,precomp_nightlight
+														,precomp_lighting_mask
 														);
 
 	vec4 out_color = image_layers_packed;
