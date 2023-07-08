@@ -242,14 +242,14 @@ scale_type34 = absolute
 scale_x34 = 8
 scale_y34 = 8
 
-# Tube Layers ----------------------------------------------------------------
+# Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 
-shader35 = ../../../shaders/base/tubelayers-default.slang
+shader35 = ../../../shaders/base/bezel-and-image-layers.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
 filter_linear35 = false
-mipmap_input35 = true
 scale_type35 = viewport
 scale35 = 1.0
+alias35 = "SceneLayersPass"
 
 // This pass IS ABSOLUTELY NECESSARY
 // A pass with filter_linear = false must be placed after a pass which is packing 4 8 Bit values into a 32 Bit output
@@ -261,82 +261,82 @@ scale_type36 = absolute
 scale_x36 = 8
 scale_y36 = 8
 
-shader37 = ../../../shaders/guest/hsm-crt-guest-advanced-ntsc-pass1.slang
-filter_linear37 = true
-scale_type_x37 = viewport
-scale_x37 = 1.0
-scale_type_y37 = viewport
-scale_y37 = 1.0
-float_framebuffer37 = true
-alias37 = Pass1
+# Tube Layers ----------------------------------------------------------------
 
-shader38 = ../../../shaders/guest/hsm-gaussian_horizontal.slang
-filter_linear38 = true
-scale_type_x38 = absolute
-scale_x38 = 640.0
-scale_type_y38 = absolute
-scale_y38 = 480.0
-float_framebuffer38 = true
+shader37 = ../../../shaders/base/tubelayers-default.slang
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear37 = false
+mipmap_input37 = true
+scale_type37 = viewport
+scale37 = 1.0
 
-shader39 = ../../../shaders/guest/hsm-gaussian_vertical.slang
+// This pass IS ABSOLUTELY NECESSARY
+// A pass with filter_linear = false must be placed after a pass which is packing 4 8 Bit values into a 32 Bit output
+// Not having this pass results in incorrect sampling/corrupted values coming from the pass when sampled within another pass
+shader38 = ../../../shaders/base/do-nothing.slang
+mipmap_input38 = false
+filter_linear38 = false
+scale_type38 = absolute
+scale_x38 = 8
+scale_y38 = 8
+
+shader39 = ../../../shaders/guest/hsm-crt-guest-advanced-ntsc-pass1.slang
 filter_linear39 = true
-scale_type_x39 = absolute
-scale_x39 = 640.0
-scale_type_y39 = absolute
-scale_y39 = 480.0
+scale_type_x39 = viewport
+scale_x39 = 1.0
+scale_type_y39 = viewport
+scale_y39 = 1.0
 float_framebuffer39 = true
-alias39 = GlowPass
+alias39 = Pass1
 
-shader40 = ../../../shaders/guest/hsm-bloom_horizontal.slang
+shader40 = ../../../shaders/guest/hsm-gaussian_horizontal.slang
 filter_linear40 = true
 scale_type_x40 = absolute
 scale_x40 = 640.0
 scale_type_y40 = absolute
-scale_y40 = 480.0 
+scale_y40 = 480.0
 float_framebuffer40 = true
 
-shader41 = ../../../shaders/guest/hsm-bloom_vertical.slang
+shader41 = ../../../shaders/guest/hsm-gaussian_vertical.slang
 filter_linear41 = true
 scale_type_x41 = absolute
 scale_x41 = 640.0
 scale_type_y41 = absolute
 scale_y41 = 480.0
 float_framebuffer41 = true
-alias41 = BloomPass
+alias41 = GlowPass
 
-shader42 = ../../../shaders/guest/hsm-crt-guest-advanced-ntsc-pass2.slang
+shader42 = ../../../shaders/guest/hsm-bloom_horizontal.slang
 filter_linear42 = true
-scale_type42 = viewport
-scale_x42 = 1.0
-scale_y42 = 1.0
+scale_type_x42 = absolute
+scale_x42 = 640.0
+scale_type_y42 = absolute
+scale_y42 = 480.0 
 float_framebuffer42 = true
 
-shader43 = ../../../shaders/guest/hsm-deconvergence-with-tubefx.slang
+shader43 = ../../../shaders/guest/hsm-bloom_vertical.slang
 filter_linear43 = true
-scale_type43 = viewport
-scale_x43 = 1.0
-scale_y43 = 1.0
+scale_type_x43 = absolute
+scale_x43 = 640.0
+scale_type_y43 = absolute
+scale_y43 = 480.0
 float_framebuffer43 = true
-alias43 = "CrtPass"
+alias43 = BloomPass
 
-# Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
-
-shader44 = ../../../shaders/base/bezel-and-image-layers.slang
-// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
-filter_linear44 = false
+shader44 = ../../../shaders/guest/hsm-crt-guest-advanced-ntsc-pass2.slang
+filter_linear44 = true
 scale_type44 = viewport
-scale44 = 1.0
-alias44 = "SceneLayersPass"
+scale_x44 = 1.0
+scale_y44 = 1.0
+float_framebuffer44 = true
 
-// This pass IS ABSOLUTELY NECESSARY
-// A pass with filter_linear = false must be placed after a pass which is packing 4 8 Bit values into a 32 Bit output
-// Not having this pass results in incorrect sampling/corrupted values coming from the pass when sampled within another pass
-shader45 = ../../../shaders/base/do-nothing.slang
-mipmap_input45 = false
-filter_linear45 = false
-scale_type45 = absolute
-scale_x45 = 8
-scale_y45 = 8
+shader45 = ../../../shaders/guest/hsm-deconvergence-with-tubefx.slang
+filter_linear45 = true
+scale_type45 = viewport
+scale_x45 = 1.0
+scale_y45 = 1.0
+float_framebuffer45 = true
+alias45 = "CrtPass"
 
 # Reduce Resolution  ----------------------------------------------------------------
 #      Reduce the resolution to a small static size regardless of final resolution

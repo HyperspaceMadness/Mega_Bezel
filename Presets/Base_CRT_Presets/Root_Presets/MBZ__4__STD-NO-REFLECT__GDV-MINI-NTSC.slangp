@@ -1,4 +1,4 @@
-shaders = 26
+shaders = 28
 
 shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
@@ -146,14 +146,14 @@ scale_type18 = absolute
 scale_x18 = 8
 scale_y18 = 8
 
-# Tube Layers ----------------------------------------------------------------
+# Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 
-shader19 = ../../../shaders/base/tubelayers-default.slang
+shader19 = ../../../shaders/base/bezel-and-image-layers.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
 filter_linear19 = false
-mipmap_input19 = true
 scale_type19 = viewport
 scale19 = 1.0
+alias19 = "SceneLayersPass"
 
 // This pass IS ABSOLUTELY NECESSARY
 // A pass with filter_linear = false must be placed after a pass which is packing 4 8 Bit values into a 32 Bit output
@@ -165,17 +165,36 @@ scale_type20 = absolute
 scale_x20 = 8
 scale_y20 = 8
 
-shader21 = ../../../shaders/base/delinearize.slang
-scale_type21 = source
-float_framebuffer21 = "true"
+# Tube Layers ----------------------------------------------------------------
 
-shader22 = ../../../shaders/guest/hsm-crt-dariusg-gdv-mini-with-tubefx.slang
-scale_type22 = viewport
-scale_x22 = 1.0
-scale_y22 = 1.0
-filter_linear22 = true
-float_framebuffer22 = "true"
-alias22 = "CrtPass"
+shader21 = ../../../shaders/base/tubelayers-default.slang
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear21 = false
+mipmap_input21 = true
+scale_type21 = viewport
+scale21 = 1.0
+
+// This pass IS ABSOLUTELY NECESSARY
+// A pass with filter_linear = false must be placed after a pass which is packing 4 8 Bit values into a 32 Bit output
+// Not having this pass results in incorrect sampling/corrupted values coming from the pass when sampled within another pass
+shader22 = ../../../shaders/base/do-nothing.slang
+mipmap_input22 = false
+filter_linear22 = false
+scale_type22 = absolute
+scale_x22 = 8
+scale_y22 = 8
+
+shader23 = ../../../shaders/base/delinearize.slang
+scale_type23 = source
+float_framebuffer23 = "true"
+
+shader24 = ../../../shaders/guest/hsm-crt-dariusg-gdv-mini-with-tubefx.slang
+scale_type24 = viewport
+scale_x24 = 1.0
+scale_y24 = 1.0
+filter_linear24 = true
+float_framebuffer24 = "true"
+alias24 = "CrtPass"
 
 
 # -----------------------------------------------------------------------------------------------
@@ -190,26 +209,26 @@ g_gamma_out = 2.45
 
 # Bezel Generation & Composite of Image Layers ----------------------------------------------------------------
 
-shader23 = ../../../shaders/base/bezel-and-image-layers.slang
+shader25 = ../../../shaders/base/bezel-and-image-layers.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
-filter_linear23 = false
-scale_type23 = viewport
-scale23 = 1.0
-alias23 = "SceneLayersPass"
+filter_linear25 = false
+scale_type25 = viewport
+scale25 = 1.0
+alias25 = "SceneLayersPass"
 
 // This pass IS ABSOLUTELY NECESSARY
 // A pass with filter_linear = false must be placed after a pass which is packing 4 8 Bit values into a 32 Bit output
 // Not having this pass results in incorrect sampling/corrupted values coming from the pass when sampled within another pass
-shader24 = ../../../shaders/base/do-nothing.slang
-mipmap_input24 = false
-filter_linear24 = false
-scale_type24 = absolute
-scale_x24 = 8
-scale_y24 = 8
+shader26 = ../../../shaders/base/do-nothing.slang
+mipmap_input26 = false
+filter_linear26 = false
+scale_type26 = absolute
+scale_x26 = 8
+scale_y26 = 8
 
 # Combine Passes ----------------------------------------------------------------
-shader25 = ../../../shaders/base/final-composite-no-reflect.slang
-scale_type25 = viewport
+shader27 = ../../../shaders/base/final-composite-no-reflect.slang
+scale_type27 = viewport
 
 
 # Textures All

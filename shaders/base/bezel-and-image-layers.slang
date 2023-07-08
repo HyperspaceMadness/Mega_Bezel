@@ -434,25 +434,25 @@ layout(location = 8) in vec3 BEZEL_FRAME_ORIGINAL_COLOR_RGB;
 layout(location = 0) out vec4 FragColor;
 
 // Pass Framebuffer Textures
-layout(set = 0, binding = 1)  uniform sampler2D CacheInfoPass;
+layout(set = 0, binding = 1)	uniform sampler2D CacheInfoPass;
 
-layout(set = 0, binding = 2)  uniform sampler2D BackgroundImage;
-layout(set = 0, binding = 3)  uniform sampler2D BackgroundVertImage;
-layout(set = 0, binding = 4)  uniform sampler2D NightLightingImage;
-layout(set = 0, binding = 5)  uniform sampler2D NightLighting2Image;
+layout(set = 0, binding = 2)	uniform sampler2D BackgroundImage;
+layout(set = 0, binding = 3)	uniform sampler2D BackgroundVertImage;
 
-layout(set = 0, binding = 6)  uniform sampler2D LEDImage;
-layout(set = 0, binding = 7)  uniform sampler2D FrameTextureImage;
-layout(set = 0, binding = 8)  uniform sampler2D DeviceImage;
-layout(set = 0, binding = 9)  uniform sampler2D DeviceVertImage;
-layout(set = 0, binding = 10) uniform sampler2D DeviceLEDImage;
-layout(set = 0, binding = 11) uniform sampler2D DecalImage;
-layout(set = 0, binding = 12) uniform sampler2D CabinetGlassImage;
-layout(set = 0, binding = 13) uniform sampler2D TopLayerImage;
-layout(set = 0, binding = 14) uniform sampler2D ReflectionMaskImage;
+layout(set = 0, binding = 4)	uniform sampler2D LEDImage;
+layout(set = 0, binding = 5)	uniform sampler2D FrameTextureImage;
+layout(set = 0, binding = 6)	uniform sampler2D DeviceImage;
+layout(set = 0, binding = 7)	uniform sampler2D DeviceVertImage;
+layout(set = 0, binding = 8)	uniform sampler2D DeviceLEDImage;
+layout(set = 0, binding = 9)	uniform sampler2D DecalImage;
+layout(set = 0, binding = 10)	uniform sampler2D CabinetGlassImage;
+layout(set = 0, binding = 11)	uniform sampler2D TopLayerImage;
+layout(set = 0, binding = 12)	uniform sampler2D ReflectionMaskImage;
 
-layout(set = 0, binding = 15) uniform sampler2D SceneLayersPassFeedback;
+layout(set = 0, binding = 13) uniform sampler2D SceneLayersPassFeedback;
 #define PassFeedback SceneLayersPassFeedback
+
+// 15 is the max binding number which can be used
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
@@ -478,14 +478,7 @@ void main()
 	VIEWPORT_FLIPPED_UNZOOMED_COORD = HSM_GetViewportCoordWithFlip(vTexCoord_precomp);
 	VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord_precomp);
 
-
-	// AMBIENT LIGHTING IMAGES
-	vec3 ambient_rgb = vec3(1);
-	vec3 ambient2_rgb = vec3(1);
-	HSM_Fill_Ambient_Images(VIEWPORT_COORD, VIEWPORT_FLIPPED_UNZOOMED_COORD, TUBE_DIFFUSE_COORD, TUBE_DIFFUSE_SCALE, HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE, NightLightingImage, NightLighting2Image, ambient_rgb, ambient2_rgb);
-
 	TUBE_DIFFUSE_CURVED_COORD = HSM_GetCurvedCoord(SCREEN_COORD, HSM_TUBE_BLACK_EDGE_CURVATURE_SCALE, TUBE_DIFFUSE_ASPECT);
-
 
 	// TODO this should probably just use TUBE_COORD
 	// TODO should probably use TUBE_ASPECT
