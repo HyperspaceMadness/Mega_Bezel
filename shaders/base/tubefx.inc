@@ -380,7 +380,7 @@ void main()
 
 	vec4 precomp_lighting_mask = vec4(0);
 	// TODO fill in with lighting shadow masks
-	precomp_lighting_mask.b = 1; //crt_mask;
+	precomp_lighting_mask.b = crt_mask;
 	precomp_lighting_mask.a = tube_shadow;
 
 	vec4 image_layers_packed = HSM_Pack_4_Rgba_To_1_Rgba(precomp_tube_diffuse
