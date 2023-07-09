@@ -26,7 +26,7 @@
 //    REFLECTION MASK
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_REFLECT_MASK_EMPTY_LINE					    " " 0 0 0.001 0.001
-#pragma parameter HSM_REFLECT_MASK_TITLE			                "[ REFLECTION MASK IMAGE - Only in Image Layer Presets ]:" 0 0 0.01 0.01
+#pragma parameter HSM_REFLECT_MASK_TITLE			                "[ REFLECTION MASK IMAGE (BW Image) - Image Layer Presets ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_REFLECT_MASK_IMAGE_AMOUNT 		            "          Reflection Image Mask Amount" 0 0 100 1
 #ifndef HSM_REFLECT_MASK_IMAGE_AMOUNT 

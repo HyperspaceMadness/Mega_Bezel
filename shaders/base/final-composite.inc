@@ -332,6 +332,8 @@ void main()
 		out_color = HSM_PreMultAlphaBlend(out_color, precomp_background);
 	}
 
+	// Add additional shadow depth by darkening bouncelight shadow areas
+
 	vec4 crt_layer = vec4(0);
 	if (HSM_COMPOSITE_CRT_AND_REFLECTION_ON > 0.5)
 	{
@@ -343,17 +345,17 @@ void main()
 		crt_layer.rgb = vec3(0);
 	}
 
-	// float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
-	// if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
-	// 	bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
+	float bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS;
+	if(HSM_BZL_USE_INDEPENDENT_CURVATURE > 0)
+		bezel_corner_radius = HSM_BZL_INNER_CORNER_RADIUS_SCALE * DEFAULT_SCREEN_CORNER_RADIUS;
 
 	// // TODO, need to see how to manage with parameters
 	// #ifndef IS_NO_REFLECT_PRESET
-	// vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 1, TUBE_DIFFUSE_SCALE, TUBE_SCALE, TUBE_DIFFUSE_ASPECT, 1);
+	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 1, TUBE_DIFFUSE_SCALE, TUBE_SCALE, TUBE_DIFFUSE_ASPECT, 1);
 
-	// TUBE_MASK =  HSM_GetCornerMask(tube_curved_coord, TUBE_DIFFUSE_ASPECT, bezel_corner_radius, 0.99);
+	TUBE_MASK =  HSM_GetCornerMask(tube_curved_coord, TUBE_DIFFUSE_ASPECT, bezel_corner_radius, 0.99);
 	// // Apply Reflection Image Mask
-	// crt_layer *= TUBE_MASK + (1 - TUBE_MASK) * reflection_mask;
+	crt_layer *= TUBE_MASK + (1 - TUBE_MASK) * reflection_mask;
 	// #endif
 
 	if (HSM_COMPOSITE_MIDDLEGROUND_ON > 0.5)

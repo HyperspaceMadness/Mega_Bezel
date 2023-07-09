@@ -1287,6 +1287,8 @@ void main()
 
 		if (precomp_index == PRECOMP_INDEX_BACKGROUND)
 		{
+			precomp_background = precomp_color;
+
 			// Store reflection mask in the alpha channel
 			// Usually used to show the uneven brightness of a bumpy surface
 			if (HSM_REFLECT_MASK_IMAGE_AMOUNT > 0)
@@ -1297,12 +1299,10 @@ void main()
 				reflect_mask = clamp(HSM_REFLECT_MASK_BLACK_LEVEL * (reflect_mask - 1) + 1, 0, 1);
 				reflect_mask *= HSM_REFLECT_MASK_BRIGHTNESS;
 
-				precomp_color.a = HSM_REFLECT_MASK_IMAGE_AMOUNT * reflect_mask + (1 - HSM_REFLECT_MASK_IMAGE_AMOUNT);
+				precomp_background.a = HSM_REFLECT_MASK_IMAGE_AMOUNT * reflect_mask + (1 - HSM_REFLECT_MASK_IMAGE_AMOUNT);
 			}
 			else
-				precomp_color.a = 1;
-
-			precomp_background = precomp_color;
+				precomp_background.a = 1;
 
 			// // Add color blocks to precomp for debugging
 			// if (vTexCoord.x < 0.8 && vTexCoord.y < 0.8)
@@ -1330,7 +1330,7 @@ void main()
 		if (precomp_index == PRECOMP_INDEX_ADDITIVE)
 		{
 			precomp_additive = precomp_color;
-
+			precomp_additive.a = 0;
 			// // Add color blocks to precomp for debugging
 			// if (vTexCoord.x > 0.8 && vTexCoord.y > 0.8)
 			// 	precomp_additive.rgb = precomp_additive.rgb + vec3(0, 0, 0.3);
