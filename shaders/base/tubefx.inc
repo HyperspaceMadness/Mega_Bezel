@@ -210,7 +210,7 @@ void main()
 	// AMBIENT LIGHTING IMAGES
 	vec3 ambient_rgb = vec3(1);
 	vec3 ambient2_rgb = vec3(1);
-	HSM_Fill_Ambient_Images(vTexCoord, 
+	HSM_Fill_Nightlight_Images(vTexCoord, 
 							HSM_GetViewportCoordWithFlip(vTexCoord), 
 							TUBE_DIFFUSE_COORD_MIXED_POS, 
 							TUBE_DIFFUSE_SCALE_1ST_SCREEN, 

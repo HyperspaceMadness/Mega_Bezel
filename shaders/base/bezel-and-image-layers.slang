@@ -101,10 +101,15 @@ vec4 BlendModeMaskLayerMix(vec4 color_under, vec4 color_over, float blend_mode, 
 		// color_over.rgb *= color_over.a;
 
 		// Apply the normal layer as a black hold-out matte in the additive precomp
-		if (is_additive_precomp)
-			color_over.rgb *= 0;
+		// if (is_additive_precomp)
+		// 	color_over.rgb *= 0;
 
-		out_color = HSM_PreMultAlphaBlend(color_under, color_over);
+		if (is_additive_precomp)
+		{
+			out_color = color_under * (1 - color_over.a);
+		}
+		else
+			out_color = HSM_PreMultAlphaBlend(color_under, color_over);
 	}
 
 	if (blend_mode == BLEND_MODE_ADD)  	 		
@@ -449,6 +454,9 @@ layout(set = 0, binding = 12)	uniform sampler2D ReflectionMaskImage;
 
 layout(set = 0, binding = 13) uniform sampler2D SceneLayersPassFeedback;
 #define PassFeedback SceneLayersPassFeedback
+
+// layout(set = 0, binding = 14)	uniform sampler2D BackgroundShadowsImage;
+
 
 // 15 is the max binding number which can be used
 
@@ -1072,30 +1080,6 @@ void main()
 	
 	CUTOUT_MASK = 1 - HSM_GetCornerMask(cutout_coord, TUBE_DIFFUSE_ASPECT, HSM_CUTOUT_CORNER_RADIUS, 0.8);
 
-	//-----------------------------------------------------------------------------------------
-	// Full Viewport Vignette
-	//-----------------------------------------------------------------------------------------
-	vec4 vignette_layer = vec4(0);
-	if (HSM_VIEWPORT_VIGNETTE_OPACITY > 0)
-	{
-		vec2 vignette_coord = HSM_GetScaledCoord(VIEWPORT_COORD,
-												VIEWPORT_FLIPPED_UNZOOMED_COORD,
-												TEXTURE_ASPECT_MODE_VIEWPORT,
-												1,
-												vec2(HSM_VIEWPORT_VIGNETTE_POS_X, HSM_VIEWPORT_VIGNETTE_POS_Y), 
-												vec2(vec2(HSM_VIEWPORT_VIGNETTE_SCALE * HSM_VIEWPORT_VIGNETTE_SCALE_X, HSM_VIEWPORT_VIGNETTE_SCALE)), 
-												HSM_VIEWPORT_VIGNETTE_FOLLOW_LAYER,
-												FOLLOW_MODE_SCALE_AND_POS,
-												FOLLOW_LAYER_VIEWPORT,
-												FILL_MODE_STRETCH,
-												0,
-												0,
-												false,
-												temp_coord,
-												temp_scale);
-
-		vignette_layer.a += 0.75 * HHLP_QuadraticBezier(1 - HSM_GetVignetteFactor(vignette_coord, HSM_VIEWPORT_VIGNETTE_OPACITY, 1), vec2(1, 0.5));
-	}
 
 	//-----------------------------------------------------------------------------------------
 	// COMPOSITE ALL LAYERS
@@ -1147,8 +1131,6 @@ void main()
 		{
 			start_layer = 0;
 			end_layer = int(MAX_LAYER_ORDER);
-			matte_pass = true;
-			allow_additive_blend = true;
 		}
 
 		for(int i=start_layer; i <= end_layer; i++)
@@ -1156,36 +1138,22 @@ void main()
 			// BACKGROUND
 			if (HSM_BG_LAYER_ORDER == i)
 			{
-				precomp_color = BlendModeMaskLayerMix(precomp_color, 
-														bg_image, 
-														HSM_BG_BLEND_MODE, 
+				precomp_color = BlendModeMaskLayerMix(	precomp_color,
+														bg_image,
+														HSM_BG_BLEND_MODE,
 														precomp_index,
 														HSM_BG_ADD_MODE_NIGHTLIGHTING_AMOUNT,
-														HSM_BG_MASK_MODE, 
+														HSM_BG_MASK_MODE,
 														HSM_BG_CUTOUT_MODE,
 														HSM_BG_DUALSCREEN_VIS_MODE,
 														HSM_BG_OPACITY);
 			}
 
-			// // TODO Vignette needs to be moved to final composite
-			// // VIGNETTE
-			// if (HSM_VIEWPORT_VIGNETTE_LAYER_ORDER == i)
-			// {
-			// 	precomp_color = BlendModeMaskLayerMix(precomp_color, 
-			// 											vignette_layer, 
-			// 											BLEND_MODE_NORMAL, 
-			// 											matte_pass,
-			// 											allow_additive_blend,
-			// 											HSM_VIEWPORT_VIGNETTE_MASK_MODE, 
-			// 											HSM_VIEWPORT_VIGNETTE_CUTOUT_MODE,
-			// 											SHOW_ON_DUALSCREEN_MODE_BOTH,
-			// 											HSM_VIEWPORT_VIGNETTE_OPACITY);
-			// }
 
 			// LED IMAGE
 			if (HSM_LED_LAYER_ORDER == i && HSM_LED_OPACITY > 0)
 			{		
-				precomp_color = BlendModeMaskLayerMix(precomp_color, 
+				precomp_color = BlendModeMaskLayerMix(	precomp_color, 
 														led_image, 
 														HSM_LED_BLEND_MODE, 
 														precomp_index,
@@ -1288,54 +1256,80 @@ void main()
 		if (precomp_index == PRECOMP_INDEX_BACKGROUND)
 		{
 			precomp_background = precomp_color;
-
-			// Store reflection mask in the alpha channel
-			// Usually used to show the uneven brightness of a bumpy surface
-			if (HSM_REFLECT_MASK_IMAGE_AMOUNT > 0)
-			{
-				vec2 reflect_mask_scale = vec2(0.5);
-				vec2 reflect_mask_coord = HSM_GetLayerCoord(VIEWPORT_COORD, HSM_REFLECT_MASK_FOLLOW_LAYER, HSM_REFLECT_MASK_FOLLOW_MODE, reflect_mask_scale);
-				float reflect_mask = HSM_GetMipmappedTexSample(ReflectionMaskImage, reflect_mask_coord, reflect_mask_scale, HSM_REFLECT_MASK_MIPMAPPING_BLEND_BIAS).r;
-				reflect_mask = clamp(HSM_REFLECT_MASK_BLACK_LEVEL * (reflect_mask - 1) + 1, 0, 1);
-				reflect_mask *= HSM_REFLECT_MASK_BRIGHTNESS;
-
-				precomp_background.a = HSM_REFLECT_MASK_IMAGE_AMOUNT * reflect_mask + (1 - HSM_REFLECT_MASK_IMAGE_AMOUNT);
-			}
-			else
-				precomp_background.a = 1;
-
-			// // Add color blocks to precomp for debugging
-			// if (vTexCoord.x < 0.8 && vTexCoord.y < 0.8)
-			// 	precomp_background.rgb = precomp_background.rgb * 0.8 + vec3(0.3, 0, 0) * 0.2;
 		}
 
 		if (precomp_index == PRECOMP_INDEX_MIDDLEGROUND)
 		{
 			precomp_middleground = precomp_color;
-			
-			// // Add color blocks to precomp for debugging
-			// if (vTexCoord.x < 0.65 && vTexCoord.y < 0.65)
-			// 	precomp_middleground.rgb = precomp_middleground.rgb * 0.8 + vec3(0, 0.3, 0) * 0.2;
 		}
 
 		if (precomp_index == PRECOMP_INDEX_FOREGROUND)
 		{
 			precomp_foreground = precomp_color;
-
-			// // Add color blocks to precomp for debugging
-			// if (vTexCoord.x < 0.45 && vTexCoord.y < 0.45)
-			// 	precomp_foreground.rgb = precomp_foreground.rgb * 0.8 + vec3(0, 0.3, 0.3) * 0.2;
 		}
 
 		if (precomp_index == PRECOMP_INDEX_ADDITIVE)
 		{
 			precomp_additive = precomp_color;
-			precomp_additive.a = 0;
-			// // Add color blocks to precomp for debugging
-			// if (vTexCoord.x > 0.8 && vTexCoord.y > 0.8)
-			// 	precomp_additive.rgb = precomp_additive.rgb + vec3(0, 0, 0.3);
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------
+	// Full Viewport Vignette
+	//-----------------------------------------------------------------------------------------
+	vec4 static_shadow_multiply = vec4(1);
+	if (HSM_VIEWPORT_VIGNETTE_OPACITY > 0)
+	{
+		vec2 vignette_coord = HSM_GetScaledCoord(VIEWPORT_COORD,
+												VIEWPORT_FLIPPED_UNZOOMED_COORD,
+												TEXTURE_ASPECT_MODE_VIEWPORT,
+												1,
+												vec2(HSM_VIEWPORT_VIGNETTE_POS_X, HSM_VIEWPORT_VIGNETTE_POS_Y), 
+												vec2(vec2(HSM_VIEWPORT_VIGNETTE_SCALE * HSM_VIEWPORT_VIGNETTE_SCALE_X, HSM_VIEWPORT_VIGNETTE_SCALE)), 
+												HSM_VIEWPORT_VIGNETTE_FOLLOW_LAYER,
+												FOLLOW_MODE_SCALE_AND_POS,
+												FOLLOW_LAYER_VIEWPORT,
+												FILL_MODE_STRETCH,
+												0,
+												0,
+												false,
+												temp_coord,
+												temp_scale);
+		vec4 vignette_layer = vec4(0);
+		vignette_layer.a += 0.75 * HHLP_QuadraticBezier(1 - HSM_GetVignetteFactor(vignette_coord, HSM_VIEWPORT_VIGNETTE_OPACITY, 1), vec2(1, 0.5));
+
+		static_shadow_multiply = BlendModeMaskLayerMix(	static_shadow_multiply,
+														vignette_layer,
+														BLEND_MODE_NORMAL,
+														PRECOMP_INDEX_BACKGROUND,
+														HSM_BG_ADD_MODE_NIGHTLIGHTING_AMOUNT,
+														HSM_VIEWPORT_VIGNETTE_MASK_MODE, 
+														HSM_VIEWPORT_VIGNETTE_CUTOUT_MODE,
+														SHOW_ON_DUALSCREEN_MODE_BOTH,
+														HSM_VIEWPORT_VIGNETTE_OPACITY);
+	}
+	// This is the mask for all shadows which should always darken areas unless
+	// they are illuminated by bounce light (or ambilight)
+	// Shadow sources: user bg shadow image, height map.
+	precomp_background.a = static_shadow_multiply.r;
+	// precomp_background = static_shadow_multiply;
+
+
+	// Store reflection mask in the alpha channel
+	// Usually used to show the uneven brightness of a bumpy surface
+	if (HSM_REFLECT_MASK_IMAGE_AMOUNT > 0)
+	{
+		vec2 reflect_mask_scale = vec2(0.5);
+		vec2 reflect_mask_coord = HSM_GetLayerCoord(VIEWPORT_COORD, HSM_REFLECT_MASK_FOLLOW_LAYER, HSM_REFLECT_MASK_FOLLOW_MODE, reflect_mask_scale);
+		float reflect_mask = HSM_GetMipmappedTexSample(ReflectionMaskImage, reflect_mask_coord, reflect_mask_scale, HSM_REFLECT_MASK_MIPMAPPING_BLEND_BIAS).r;
+		reflect_mask = clamp(HSM_REFLECT_MASK_BLACK_LEVEL * (reflect_mask - 1) + 1, 0, 1);
+		reflect_mask *= HSM_REFLECT_MASK_BRIGHTNESS;
+
+		precomp_additive.a = HSM_REFLECT_MASK_IMAGE_AMOUNT * reflect_mask + (1 - HSM_REFLECT_MASK_IMAGE_AMOUNT);
+	}
+	else
+		precomp_additive.a = 1;
+
 
 	//-----------------------------------------------------------------------------------------
 	// MASK DEBUG DISPLAY

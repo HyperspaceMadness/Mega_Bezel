@@ -39,9 +39,16 @@ Changes:
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
-  * Can we only have "Apply Nightlighting to ADD Mode" for each layer, then if this is true, 
-       then it gets composited into the normal layer, and night lighting applied on the layer group in the composite
-  * See if night lighting can be optionally applied on additive areas (rgb > 0, alpha near zero )
+
+  * Shadowing Ideas:
+    * Optionally use Alpha on Background as static shadow? (Probably a bad idea)
+    * User supplied shadow map for static shadows (bounce light can appear in these shadows)
+      * Background should not have these shadows and possibly only omnipresent shadows
+    * User defined height map
+    * Layers Pass outputs static shadows, includes Viewport vignette
+    * Tube layer outputs shadow masks for shadows cast by bounce light
+      * User supplied image with bounce shadows per channel for different directions
+    * Normal Map Layer for Normal and Height
 
   * Add Back AB/Switch
   * Viewport vignette not working
