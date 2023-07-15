@@ -39,7 +39,7 @@ Changes:
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
-
+  * Material Brightness, Vs Room Static Brightness?
   * Shadowing Ideas:
     * Optionally use Alpha on Background as static shadow? (Probably a bad idea)
     * User supplied shadow map for static shadows (bounce light can appear in these shadows)

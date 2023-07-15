@@ -804,11 +804,11 @@ void main()
 		// Background
 		//-----------------------------------------------------------------------------------------
 		bool bg_use_vert_image = SCREEN_ASPECT < 1 && textureSize(BackgroundVertImage, 0).y > 16 ? true : false; 
-		vec2 bg_size = bg_use_vert_image ? textureSize(BackgroundVertImage, 0) : textureSize(BackgroundImage, 0);
+		vec2 BACKGROUND_SIZE = bg_use_vert_image ? textureSize(BackgroundVertImage, 0) : textureSize(BackgroundImage, 0);
 		BACKGROUND_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
 													VIEWPORT_FLIPPED_UNZOOMED_COORD,
 													TEXTURE_ASPECT_MODE_EXPLICIT,
-													bg_size.x / bg_size.y,
+													BACKGROUND_SIZE.x / BACKGROUND_SIZE.y,
 													vec2(HSM_BG_POS_X, HSM_BG_POS_Y),
 													vec2(HSM_BG_SCALE * HSM_BG_SCALE_X, HSM_BG_SCALE),
 													HSM_BG_FOLLOW_LAYER,
@@ -829,7 +829,7 @@ void main()
 		if (HSM_BG_WRAP_MODE == 2)
 			BACKGROUND_CURVED_COORD = HSM_GetMirrorWrapCoord(BACKGROUND_CURVED_COORD);
 
-		if (HSM_BG_OPACITY > 0 && bg_size.y > 16)
+		if (HSM_BG_OPACITY > 0 && BACKGROUND_SIZE.y > 16)
 		{
 			if (bg_use_vert_image)
 				bg_image = HSM_GetMipmappedTexSample(BackgroundVertImage, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
@@ -850,11 +850,11 @@ void main()
 		// Device Image
 		//----------------------------------------------------
 		bool device_use_vert_image = SCREEN_ASPECT < 1 && textureSize(DeviceVertImage, 0).y > 16 ? true : false; 
-		vec2 device_size = device_use_vert_image ? textureSize(DeviceVertImage, 0) : textureSize(DeviceImage, 0);
+		vec2 DEVICE_SIZE = device_use_vert_image ? textureSize(DeviceVertImage, 0) : textureSize(DeviceImage, 0);
 		DEVICE_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
 												VIEWPORT_FLIPPED_UNZOOMED_COORD,
 												TEXTURE_ASPECT_MODE_EXPLICIT,
-												device_size.x / device_size.y,
+												DEVICE_SIZE.x / DEVICE_SIZE.y,
 												vec2(HSM_DEVICE_POS_X, HSM_DEVICE_POS_Y),
 												vec2(HSM_DEVICE_SCALE * HSM_DEVICE_SCALE_X, HSM_DEVICE_SCALE),
 												HSM_DEVICE_FOLLOW_LAYER,
@@ -867,7 +867,7 @@ void main()
 												DEVICE_COORD,
 												DEVICE_SCALE);
 
-		if (HSM_DEVICE_OPACITY > 0 && device_size.y > 16)
+		if (HSM_DEVICE_OPACITY > 0 && DEVICE_SIZE.y > 16)
 		{
 			device_image = device_use_vert_image ? 	HSM_GetMipmappedTexSample(DeviceVertImage, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS) :
 													HSM_GetMipmappedTexSample(DeviceImage, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS);
@@ -885,11 +885,11 @@ void main()
 		//----------------------------------------------------
 		// DeviceLED Image
 		//----------------------------------------------------
-		vec2 deviceled_size = textureSize(DeviceLEDImage, 0);
+		DEVICELED_SIZE = textureSize(DeviceLEDImage, 0);
 		DEVICELED_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
 												VIEWPORT_FLIPPED_UNZOOMED_COORD,
 												TEXTURE_ASPECT_MODE_EXPLICIT,
-												deviceled_size.x / deviceled_size.y,
+												DEVICELED_SIZE.x / DEVICELED_SIZE.y,
 												vec2(HSM_DEVICELED_POS_X, HSM_DEVICELED_POS_Y),
 												vec2(HSM_DEVICELED_SCALE * HSM_DEVICELED_SCALE_X, HSM_DEVICELED_SCALE),
 												HSM_DEVICELED_FOLLOW_LAYER,
@@ -902,7 +902,7 @@ void main()
 												DEVICELED_COORD,
 												DEVICELED_SCALE);
 
-		if (HSM_DEVICELED_OPACITY > 0 && deviceled_size.y > 16)
+		if (HSM_DEVICELED_OPACITY > 0 && DEVICELED_SIZE.y > 16)
 		{
 			deviceled_image = HSM_GetMipmappedTexSample(DeviceLEDImage, DEVICELED_CURVED_COORD, DEVICELED_SCALE, HSM_DEVICELED_MIPMAPPING_BLEND_BIAS);
 
