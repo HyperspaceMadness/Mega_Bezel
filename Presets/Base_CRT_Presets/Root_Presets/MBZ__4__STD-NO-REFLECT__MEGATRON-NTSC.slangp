@@ -256,7 +256,7 @@ scale_type28 = viewport
 
 # Textures All
 # Define textures to be used by the different passes
-textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;GlassPresetHighlightImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;GlassPresetHighlightImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;LEDImage;TopLayerImage;NightLightingImage;NightLighting2Image;BackgroundHeightImage;"
 
 SamplerLUT1 = ../../../shaders/guest/lut/trinitron-lut.png
 SamplerLUT1_linear = true 
@@ -330,6 +330,14 @@ DecalImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 DecalImage_linear = true
 DecalImage_mipmap = 1
 
+LEDImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+LEDImage_linear = true
+LEDImage_mipmap = 1
+
+TopLayerImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+TopLayerImage_linear = true
+TopLayerImage_mipmap = 1
+
 NightLightingImage = ../../../shaders/textures/NightLightingClose_1920x1080.png
 NightLightingImage_linear = true
 NightLightingImage_mipmap = 1
@@ -338,13 +346,10 @@ NightLighting2Image = ../../../shaders/textures/NightLightingFar_1920x1080.png
 NightLighting2Image_linear = true
 NightLighting2Image_mipmap = 1
 
-LEDImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-LEDImage_linear = true
-LEDImage_mipmap = 1
-
-TopLayerImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-TopLayerImage_linear = true
-TopLayerImage_mipmap = 1
+BackgroundHeightImage
+BackgroundHeightImage = ../../../shaders/textures/Placeholder_White_16x16.png
+BackgroundHeightImage_linear = true
+BackgroundHeightImage_mipmap = 0
 
 # Use for matching vanilla GDV-Advanced
 # HSM_ASPECT_RATIO_MODE = 6

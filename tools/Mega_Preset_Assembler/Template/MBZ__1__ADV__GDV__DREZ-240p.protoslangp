@@ -2,8 +2,8 @@
 #reference "../Components/composition__10__cache__all.slangp"
 #reference "../Components/composition__40__pre-crt-chain__adv.slangp"
 #reference "../Components/composition__60__crt-prep__adv.slangp"
-#reference "../Components/chain__80__bezel-images.slangp"
-#reference "../Components/chain__68__tubelayers-default.slangp"
+#reference "../Components/chain__59__bezel-images.slangp"
+#reference "../Components/chain__59__tubelayers-default.slangp"
 #reference "../Components/chain__60__crt__gdv-with-tubefx.slangp"
 #reference "../Components/composition__90__post-crt__default.slangp"
 

@@ -456,6 +456,7 @@ layout(set = 0, binding = 13) uniform sampler2D SceneLayersPassFeedback;
 #define PassFeedback SceneLayersPassFeedback
 
 // layout(set = 0, binding = 14)	uniform sampler2D BackgroundShadowsImage;
+// layout(set = 0, binding = 15)	uniform sampler2D BackgroundHeightImage;
 
 
 // 15 is the max binding number which can be used
@@ -551,563 +552,607 @@ void main()
 	BEZEL_MASK = INSIDE_BEZEL_MASK * (1 - TUBE_MASK);
 	FRAME_MASK = OUTSIDE_BEZEL_MASK * (1 - OUTSIDE_FRAME_MASK);
 
-	// #ifdef LAYERS_UNDER_CRT
-	//----------------------------------------------------
-	//  Calculate Corner Highlight Mask
-	//----------------------------------------------------
-	const float pi = 3.1415;
-
-	// Get amount to shift the point at the outer corner to match the overall position offset
-	vec2 pos_shift_offset = vec2(0, HSM_BZL_OUTER_POSITION_Y) * TUBE_DIFFUSE_SCALE.y / outermap_scale;
-	pos_shift_offset *= tube_curved_coord.y > 0.5 ? 1 : -1;
-
-	// Get the direction vector from the inner corner of the bezel pointing at the outer corner 
-	vec2 corner_crease_dir = (outermap_screen_corner_ctr_coord + pos_shift_offset) / vec2(HSM_BZL_HEIGHT + 1, HSM_BZL_WIDTH + 1) - (outermap_screen_corner_ctr_coord) ;
-	corner_crease_dir *= vec2(TUBE_DIFFUSE_ASPECT, 1);
-
-	float aspect_corner_length_scale_offset = TUBE_DIFFUSE_ASPECT > 1 ? 0.9 : 1.5;
-	float corner_crease_length = length(corner_crease_dir * aspect_corner_length_scale_offset);
-
-	// A hack to adjust the angle offset, because without it the corner angle isn't pointing exactly at the corner
-	// This offset is the opposite direction for vertical and horizontal aspect ratio
-	float corner_rotation_offset = (SCREEN_COORD.y < 0.5) ? -HSM_REFLECT_CORNER_ROTATION_OFFSET_TOP : -HSM_REFLECT_CORNER_ROTATION_OFFSET_BOTTOM;
-
-	if (HSM_CURVATURE_MODE == 0)
-		// If we are using a 3d Curvature no offset is necessary
-		corner_rotation_offset += (TUBE_DIFFUSE_ASPECT > 1) ? 2 : 3;
-
-	// Convert direction vector to an angle so we can rotate the corner crease direction
-	float corner_angle_degrees = atan(corner_crease_dir.y / corner_crease_dir.x) / (2 * pi) * 360;
-
-	corner_angle_degrees += corner_rotation_offset;
-	float corner_angle_radians = corner_angle_degrees / 360 * 2 * pi;
-	corner_crease_dir = vec2(cos(corner_angle_radians), sin(corner_angle_radians));
-
-	// Get the distance perpendicular to the crease direction so we can use it to fade later
-	float distance_from_crease = HHLP_GetDistanceToLine(outermap_coord_warped_ctr_at_screen_corner.x, outermap_coord_warped_ctr_at_screen_corner.y, 1, corner_crease_dir.y / corner_crease_dir.x, 0 );
-
-	float fade_out_to_corner = HHLP_QuadraticBezier(clamp(length(outermap_warped_outside_screen_vector) / (corner_crease_length * 2), 0, 1), vec2(0.5, HSM_REFLECT_CORNER_SPREAD_FALLOFF / 100));
-
-	float corner_fade_width_inner = HSM_REFLECT_CORNER_INNER_SPREAD * (TUBE_DIFFUSE_SCALE.x + TUBE_DIFFUSE_SCALE.y) * bezel_corner_radius / 10 / 250 * 1.2;
-	float corner_fade_width_outer = HSM_REFLECT_CORNER_OUTER_SPREAD * (TUBE_DIFFUSE_SCALE.x + TUBE_DIFFUSE_SCALE.y) * HSM_GLOBAL_CORNER_RADIUS * HSM_BZL_OUTER_CORNER_RADIUS_SCALE / 10 / 250 * 1.6;
-	float corner_fade_width = (corner_fade_width_inner + fade_out_to_corner * (corner_fade_width_outer - corner_fade_width_inner));
-
-	// Get a vector perpendicular to the crease that we can shift the crease to blend between bottom/top and sides
-	vec2 corner_crease_perp_dir = normalize(vec2(corner_crease_dir.y, corner_crease_dir.x));
-	vec2 corner_coord_shifted = outermap_coord_warped_ctr_at_screen_corner - corner_crease_perp_dir * corner_fade_width / 2;
-	vec2 corner_crease_dir_shifted = corner_crease_dir - corner_crease_perp_dir * corner_fade_width / 2;
-
-	// Get the distance to this shifted crease
-	float distance_from_crease_shifted = HHLP_GetDistanceToLine(corner_coord_shifted.x, corner_coord_shifted.y, 1, corner_crease_dir_shifted.y / corner_crease_dir_shifted.x, 0 );
-
-	float top_half_mask = smoothstep(0.55, 0.5, tube_curved_coord.y);
-	float left_half_mask = smoothstep(0.55, 0.5, tube_curved_coord.x);
-
-	// Get a mask which transitions between sides and top/bottom at the corner crease  
-	float top_bottom_vs_sides_mask = dot(normalize(corner_coord_shifted), normalize(corner_crease_dir_shifted)) > 0 ? 1 - smoothstep(0, corner_fade_width / 2, distance_from_crease_shifted) : 1;
-
-	// Masks isolating specific parts
-	float sides_mask = 1 - top_bottom_vs_sides_mask;
-	float top_mask = top_half_mask * top_bottom_vs_sides_mask;
-	float bottom_mask = (1 -top_half_mask) * top_bottom_vs_sides_mask;
-
-	float corner_mask = smoothstep(corner_fade_width / 2, 0, distance_from_crease);
-
-	float top_corner_mask = corner_mask * top_half_mask;
-	float bottom_corner_mask = corner_mask * (1 - top_half_mask);
-
-	float frame_inner_edge_mask = (HSM_FRM_INNER_EDGE_THICKNESS == 0) ? 0 : 1 - HSM_GetCornerMask(	(BEZEL_OUTSIDE_CURVED_COORD - 0.5) * (1 + (HSM_FRM_INNER_EDGE_THICKNESS / vec2(TUBE_DIFFUSE_ASPECT, 1))) + 0.5, 
-																										TUBE_DIFFUSE_ASPECT, 
-																										HSM_BZL_OUTER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS, 
-																										0.9);
-	float outside_tube_mask_wider = 1 - HSM_GetCornerMask(tube_curved_coord_ctr * 0.996 + 0.5, TUBE_DIFFUSE_ASPECT, bezel_corner_radius, 0.9);
-	float tube_shadow_mask = HSM_GetCornerMask(tube_curved_coord_ctr + 0.5, TUBE_DIFFUSE_ASPECT, bezel_corner_radius, 0);
-	float tube_edge_shadow_mult = HSM_BZL_INNER_EDGE_SHADOW * (tube_shadow_mask) + (1 - HSM_BZL_INNER_EDGE_SHADOW);
-
-	float edge_highlight_mask = 0;
-
-	// ----------------------------------------------------
-	// Generated Bezel
-	// ----------------------------------------------------
-
-	/* This first bit is to get a mapping of the space outside of the screen which is continuous
-	This is more complicated than you would expect because since we are using curved coordinates 
-	there are discontinuities outside the normal screen corners, e.g. where x > 1 and y > 1
-	So instead of trying to use the coordinates from the screen/tube we use a larger space 
-	and subtract the screen space to see how far we are outside of the sreen
-	*/
-
-	float hmbz_bezel_highlight_edge = 0.9;
-	float hmbz_bezel_highlight_top = 0.2;
-	float hmbz_bezel_highlight_bottom = 0.3;
-	float hmbz_bezel_highlight_sides = 0.2;
-	
-	float hmbz_bezel_highlight_falloff_speed = 0.5;
-	float hmbz_bezel_highlight_width = 0.25;
-
-	float hmbz_bezel_edge_highlight_width = 0.8;
-	
-	float hmbz_bezel_brightness_frame_outer_edge = 0.0;
-	float hmbz_brightness_shadow = 0;
-	float hmbz_frame_brightness = 100;
-
-	// Not sure why we need linearize this but it seems to have a smoother range this way
-	vec3 base_color = HSM_Linearize(vec4(HSM_HSVtoRGB(vec3(HSM_BZL_COLOR_HUE, HSM_BZL_COLOR_SATURATION, HSM_BZL_COLOR_VALUE)), 1), DEFAULT_SRGB_GAMMA).rgb;
-	float noise_mask = clamp(fract(sin(dot(tube_curved_coord_ctr + vec2(0.5, 0.5) + 1, vec2(12.9898, 78.233))) * 43758.5453), 0, 1);
-	vec3 base_color_with_noise = mix(base_color, 1.5 * base_color * noise_mask, HSM_BZL_NOISE);
-	vec3 top_color = HSM_BZL_BRIGHTNESS_MULT_TOP * HSM_BZL_BRIGHTNESS * base_color_with_noise;
-	vec3 bottom_color = HSM_BZL_BRIGHTNESS_MULT_BOTTOM * HSM_BZL_BRIGHTNESS * base_color_with_noise;
-	vec3 sides_color = mix(HSM_BZL_BRIGHTNESS_MULT_SIDES * HSM_BZL_BRIGHTNESS_MULT_SIDE_RIGHT * HSM_BZL_BRIGHTNESS * base_color_with_noise,
-							HSM_BZL_BRIGHTNESS_MULT_SIDES * HSM_BZL_BRIGHTNESS_MULT_SIDE_LEFT * HSM_BZL_BRIGHTNESS * base_color_with_noise,
-							left_half_mask);
-
-	vec3 frame_base_color = base_color;
-	vec3 frame_base_color_with_noise = base_color_with_noise;
-	if (HSM_FRM_USE_INDEPENDENT_COLOR > 0)
-	{
-		frame_base_color = HSM_Linearize(vec4(HSM_HSVtoRGB(vec3(HSM_FRM_COLOR_HUE, HSM_FRM_COLOR_SATURATION, HSM_FRM_COLOR_VALUE)), 1), DEFAULT_SRGB_GAMMA).rgb;
-		frame_base_color_with_noise = mix(frame_base_color, 1.5 * frame_base_color * noise_mask, HSM_FRM_NOISE);
-	}
-
-	vec3 frame_color = hmbz_frame_brightness / 100 * mix(frame_base_color, 1.5 * frame_base_color * noise_mask, 0.6 * HSM_FRM_NOISE);
-	vec3 outside_frame_color = hmbz_brightness_shadow * base_color_with_noise;
-
-	vec3 bezel_diffuse_color = mix(sides_color, top_color, top_mask);
-	bezel_diffuse_color = mix(bezel_diffuse_color, bottom_color, bottom_mask);
-
-	float top_center_highlight_mask 	= hmbz_bezel_highlight_top * top_mask * HHLP_QuadraticBezier(smoothstep(hmbz_bezel_highlight_width, 0, abs(tube_curved_coord_ctr.x)), vec2(0.5, hmbz_bezel_highlight_falloff_speed));
-	float bottom_center_highlight_mask 	= hmbz_bezel_highlight_bottom * bottom_mask * HHLP_QuadraticBezier(smoothstep(hmbz_bezel_highlight_width, 0, abs(tube_curved_coord_ctr.x)), vec2(0.5, hmbz_bezel_highlight_falloff_speed));
-	float sides_highlight_mask 			= hmbz_bezel_highlight_sides * sides_mask * HHLP_QuadraticBezier(smoothstep(hmbz_bezel_highlight_width, 0, abs(tube_curved_coord_ctr.y)), vec2(0.5, hmbz_bezel_highlight_falloff_speed));
-
-	float edge_top_center_highlight_mask 		= hmbz_bezel_highlight_top * top_mask * HHLP_QuadraticBezier(smoothstep(hmbz_bezel_edge_highlight_width, 0, abs(tube_curved_coord_ctr.x)), vec2(0.8, 0));
-	float edge_bottom_center_highlight_mask 	= hmbz_bezel_highlight_bottom * bottom_mask * HHLP_QuadraticBezier(smoothstep(hmbz_bezel_edge_highlight_width, 0, abs(tube_curved_coord_ctr.x)), vec2(0.8, 0));
-	float edge_sides_highlight_mask 			= hmbz_bezel_highlight_sides * sides_mask * HHLP_QuadraticBezier(smoothstep(hmbz_bezel_edge_highlight_width, 0, abs(tube_curved_coord_ctr.y)), vec2(0.8, 0));
-
-	edge_highlight_mask = hmbz_bezel_highlight_edge * edge_mask * (edge_top_center_highlight_mask + edge_bottom_center_highlight_mask + edge_sides_highlight_mask);
-	edge_highlight_mask *= HSM_BZL_INNER_EDGE_HIGHLIGHT;
-
-	// Combine all the individual highlights into one mask
-	float combined_highlight_mask = (1 + 2.5 * HSM_BZL_NOISE) * (1 - noise_mask * 2.5 * HSM_BZL_NOISE) * (top_center_highlight_mask + bottom_center_highlight_mask + sides_highlight_mask);
-	float bezel_highlight_multiplier = HSM_BZL_HIGHLIGHT * combined_highlight_mask + HSM_BZL_HIGHLIGHT * edge_highlight_mask;
-	vec3 bezel_color = bezel_diffuse_color * (1 + 15 * bezel_highlight_multiplier) + 1 * bezel_highlight_multiplier;
-
-	// Add the inner edge highlight on top of the bezel color which has it's own highlight
-	float inner_edge_highlight_multiplier = HSM_FRM_INNER_EDGE_HIGHLIGHT + HSM_BZL_HIGHLIGHT * 10 * HSM_FRM_INNER_EDGE_HIGHLIGHT;
-	vec3 frame_inner_edge_color = frame_base_color * (1 + 15 * inner_edge_highlight_multiplier) +	0.5 * inner_edge_highlight_multiplier;
-
-	bezel_color = mix(bezel_color, frame_inner_edge_color, frame_inner_edge_mask);
-
-	float dist_inside_outer_edge = min(0.50 - abs(frame_outside_coord_ctr.x), 0.50 - abs(frame_outside_coord_ctr.y));
-	float frame_outer_edge_width = HSM_FRM_OUTER_EDGE_THICKNESS;
-	vec3 frame_diffuse_color = mix(frame_color, 0.2 * frame_color, HSM_FRM_OUTER_EDGE_SHADING * smoothstep(frame_outer_edge_width, 0, dist_inside_outer_edge));
-
-	if (HSM_FRM_TEXTURE_OPACITY > 0)
-	{
-		// TODO need to do Mipmapping sample?
-		vec4 frame_texture_color = HSM_Linearize(texture(FrameTextureImage, FRAME_OUTSIDE_CURVED_COORD), DEFAULT_SRGB_GAMMA);
-		frame_diffuse_color = HSM_BlendModeLayerMix(vec4(frame_diffuse_color, 1), frame_texture_color, HSM_FRM_TEXTURE_BLEND_MODE, HSM_FRM_TEXTURE_OPACITY).rgb;
-	}
-
-	// Composite in color from outside the bezel
-	vec3 bezel_and_frame_rgb = mix(bezel_color, frame_diffuse_color, OUTSIDE_BEZEL_MASK);
-
-	// Get masks on side of frame to multiply together to get a shadow around the frame
-	// Get vector from the screen edge outward
-	float frame_edge = 0.495;
-	float dist_outside_frame = length(clamp(abs(frame_outside_coord_ctr * 1.01) - frame_edge, 0, 1) * vec2(TUBE_DIFFUSE_ASPECT, 1));
-
-	vec4 frame_shadow_layer = vec4(0);
-	if (HSM_FRM_OPACITY > 0.001)
-		frame_shadow_layer.a = SHADOW_OUTSIDE_FRAME_MASK * HHLP_QuadraticBezier(smoothstep(HSM_FRM_SHADOW_WIDTH, 0, dist_outside_frame), vec2(1, 0));
-
-	//----------------------------------------------------
-	// Generated Bezel
-	//----------------------------------------------------
-
 	vec4 bezel_layer = vec4(0);
-
-	if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
-	{
-		// Create image of bezel & frame with outside of frame transparent
-		vec4 bezel_and_frame_rgba = vec4(bezel_and_frame_rgb, 1);
-
-		// Cut out Tube Area
-		if (HSM_STATIC_LAYERS_GAMMA != 1)
-			bezel_and_frame_rgba = HSM_ApplyGamma(bezel_and_frame_rgba, HSM_STATIC_LAYERS_GAMMA);
-
-		// // Contract the tube mask to leave a little extra black ring at the edge of the bezel
-		// // otherwise this will show slivers of the background otherwise
-		float tube_mask_contracted = HSM_GetCornerMask((tube_curved_coord - 0.5) * 1.004 + 0.5, TUBE_DIFFUSE_ASPECT, bezel_corner_radius, 0.99);
-		float FRAME_AND_BEZEL_MASK = (1 - tube_mask_contracted) * (1 - OUTSIDE_FRAME_MASK);
-
-		if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
-			bezel_layer = clamp(bezel_and_frame_rgba * FRAME_AND_BEZEL_MASK, 0, 1);
-
-		frame_shadow_layer *= HSM_FRM_SHADOW_OPACITY;
-
-		if (HSM_FRM_SHADOW_OPACITY > 0)
-			// TODO probably best to replace this with standard premultiplied blend
-			bezel_layer = BlendModeMaskLayerMix(	frame_shadow_layer,
-													bezel_layer, 
-													BLEND_MODE_NORMAL, 
-													PRECOMP_INDEX_BACKGROUND,
-													1,
-													MASK_MODE_ALL,
-													0, 
-													SHOW_ON_DUALSCREEN_MODE_BOTH,
-													1);
-
-
-		float bezel_opacity_mult = HSM_BZL_OPACITY + OUTSIDE_BEZEL_MASK * (1 - HSM_BZL_OPACITY);
-		float frame_opacity_mult = HSM_FRM_OPACITY + (1 - OUTSIDE_BEZEL_MASK) * (1 - HSM_FRM_OPACITY);
-
-		bezel_layer *= bezel_opacity_mult * frame_opacity_mult;
-
-		// bezel_layer *= HSM_BZL_OPACITY * (1 - OUTSIDE_BEZEL_MASK) + HSM_FRM_OPACITY * OUTSIDE_BEZEL_MASK;
-	}
-
-	//TODO Need to fill center with opaque black if tube is not transparent
-	//     This will matte out the Self Illuminated pass
-
-	float TUBE_MASK_EXPAND = HSM_GetCornerMask((tube_curved_coord - 0.5) * 0.997 + 0.5, TUBE_DIFFUSE_ASPECT, bezel_corner_radius, 0.99);
-	
-	vec4 tube_bg_layer = vec4(0, 0, 0, TUBE_MASK_EXPAND * HSM_GetTubeOpacity());
-	// vec4 tube_bg_layer = vec4(0, 0, 0, 0);
-
-	//-----------------------------------------------------------------------------------------
-	// Background
-	//-----------------------------------------------------------------------------------------
-	bool bg_use_vert_image = SCREEN_ASPECT < 1 && textureSize(BackgroundVertImage, 0).y > 16 ? true : false; 
-	vec2 bg_size = bg_use_vert_image ? textureSize(BackgroundVertImage, 0) : textureSize(BackgroundImage, 0);
-	BACKGROUND_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
-												VIEWPORT_FLIPPED_UNZOOMED_COORD,
-												TEXTURE_ASPECT_MODE_EXPLICIT,
-												bg_size.x / bg_size.y,
-												vec2(HSM_BG_POS_X, HSM_BG_POS_Y),
-												vec2(HSM_BG_SCALE * HSM_BG_SCALE_X, HSM_BG_SCALE),
-												HSM_BG_FOLLOW_LAYER,
-												HSM_BG_FOLLOW_MODE,
-												HSM_BG_FOLLOW_FULL_USES_ZOOM,
-												HSM_BG_FILL_MODE,
-												HSM_BG_SPLIT_PRESERVE_CENTER,
-												HSM_BG_SPLIT_REPEAT_WIDTH,
-												true,
-												BACKGROUND_COORD,
-												BACKGROUND_SCALE);
-
-	// Tile Wrap the background
-	if (HSM_BG_WRAP_MODE == 1)
-		BACKGROUND_CURVED_COORD = mod(BACKGROUND_CURVED_COORD, 1.0);
-	
-	// Mirror Wrap the bBackground
-	if (HSM_BG_WRAP_MODE == 2)
-		BACKGROUND_CURVED_COORD = HSM_GetMirrorWrapCoord(BACKGROUND_CURVED_COORD);
-
 	vec4 bg_image = vec4(0);
-	if (HSM_BG_OPACITY > 0 && bg_size.y > 16)
-	{
-		if (bg_use_vert_image)
-			bg_image = HSM_GetMipmappedTexSample(BackgroundVertImage, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
-		else
-			bg_image = HSM_GetMipmappedTexSample(BackgroundImage, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
-
-		// Premultiply Alpha
-		bg_image = HSM_GetPreMultipliedColorLinear(bg_image, HSM_BG_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
-
-		// HSV Adjustments
-		bg_image.rgb = HSM_ApplyHSVAdjustment(bg_image.rgb, HSM_BG_HUE, HSM_BG_SATURATION, HSM_BG_BRIGHTNESS, HSM_BG_COLORIZE_ON, HSM_BG_GAMMA);
-
-		if (HSM_STATIC_LAYERS_GAMMA != 1)
-			bg_image = HSM_ApplyGamma(bg_image, HSM_STATIC_LAYERS_GAMMA);
-	}
-
-	//----------------------------------------------------
-	// Device Image
-	//----------------------------------------------------
-	bool device_use_vert_image = SCREEN_ASPECT < 1 && textureSize(DeviceVertImage, 0).y > 16 ? true : false; 
-	vec2 device_size = device_use_vert_image ? textureSize(DeviceVertImage, 0) : textureSize(DeviceImage, 0);
-	DEVICE_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
-											VIEWPORT_FLIPPED_UNZOOMED_COORD,
-											TEXTURE_ASPECT_MODE_EXPLICIT,
-											device_size.x / device_size.y,
-											vec2(HSM_DEVICE_POS_X, HSM_DEVICE_POS_Y),
-											vec2(HSM_DEVICE_SCALE * HSM_DEVICE_SCALE_X, HSM_DEVICE_SCALE),
-											HSM_DEVICE_FOLLOW_LAYER,
-											HSM_DEVICE_FOLLOW_MODE,
-											HSM_DEVICE_FOLLOW_FULL_USES_ZOOM,
-											HSM_DEVICE_FILL_MODE,
-											HSM_DEVICE_SPLIT_PRESERVE_CENTER,
-											HSM_DEVICE_SPLIT_REPEAT_WIDTH,
-											true,
-											DEVICE_COORD,
-											DEVICE_SCALE);
-
 	vec4 device_image = vec4(0);
-	if (HSM_DEVICE_OPACITY > 0 && device_size.y > 16)
-	{
-		device_image = device_use_vert_image ? 	HSM_GetMipmappedTexSample(DeviceVertImage, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS) :
-												HSM_GetMipmappedTexSample(DeviceImage, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS);
-
-		// Premultiply Alpha
-		device_image = HSM_GetPreMultipliedColorLinear(device_image, HSM_DEVICE_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
-
-		// HSV Adjustments
-		device_image.rgb = HSM_ApplyHSVAdjustment(device_image.rgb, HSM_DEVICE_HUE, HSM_DEVICE_SATURATION, HSM_DEVICE_BRIGHTNESS, HSM_DEVICE_COLORIZE_ON, HSM_DEVICE_GAMMA);
-
-		if (HSM_STATIC_LAYERS_GAMMA != 1)
-			device_image = HSM_ApplyGamma(device_image, HSM_STATIC_LAYERS_GAMMA);
-	}
-
-	//----------------------------------------------------
-	// DeviceLED Image
-	//----------------------------------------------------
-	vec2 deviceled_size = textureSize(DeviceLEDImage, 0);
-	DEVICELED_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
-											VIEWPORT_FLIPPED_UNZOOMED_COORD,
-											TEXTURE_ASPECT_MODE_EXPLICIT,
-											deviceled_size.x / deviceled_size.y,
-											vec2(HSM_DEVICELED_POS_X, HSM_DEVICELED_POS_Y),
-											vec2(HSM_DEVICELED_SCALE * HSM_DEVICELED_SCALE_X, HSM_DEVICELED_SCALE),
-											HSM_DEVICELED_FOLLOW_LAYER,
-											HSM_DEVICELED_FOLLOW_MODE,
-											HSM_DEVICELED_FOLLOW_FULL_USES_ZOOM,
-											HSM_DEVICELED_FILL_MODE,
-											HSM_DEVICELED_SPLIT_PRESERVE_CENTER,
-											HSM_DEVICELED_SPLIT_REPEAT_WIDTH,
-											true,
-											DEVICELED_COORD,
-											DEVICELED_SCALE);
-
 	vec4 deviceled_image = vec4(0);
-	if (HSM_DEVICELED_OPACITY > 0 && deviceled_size.y > 16)
-	{
-		deviceled_image = HSM_GetMipmappedTexSample(DeviceLEDImage, DEVICELED_CURVED_COORD, DEVICELED_SCALE, HSM_DEVICELED_MIPMAPPING_BLEND_BIAS);
-
-		// Premultiply Alpha
-		deviceled_image = HSM_GetPreMultipliedColorLinear(deviceled_image, HSM_DEVICELED_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
-
-		// HSV Adjustments
-		deviceled_image.rgb = HSM_ApplyHSVAdjustment(deviceled_image.rgb, HSM_DEVICELED_HUE, HSM_DEVICELED_SATURATION, HSM_DEVICELED_BRIGHTNESS, HSM_DEVICELED_COLORIZE_ON, HSM_DEVICELED_GAMMA);
-
-		if (HSM_STATIC_LAYERS_GAMMA != 1)
-			deviceled_image = HSM_ApplyGamma(deviceled_image, HSM_STATIC_LAYERS_GAMMA);
-	}
-
-	//----------------------------------------------------
-	// LED Image
-	//----------------------------------------------------
 	vec4 led_image = vec4(0);
-	if (HSM_LED_OPACITY > 0)
-	{
-		vec2 led_size = textureSize(LEDImage, 0);
-		LED_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
-											VIEWPORT_FLIPPED_UNZOOMED_COORD,
-											TEXTURE_ASPECT_MODE_EXPLICIT,
-											led_size.x / led_size.y, 
-											vec2(HSM_LED_POS_X, HSM_LED_POS_Y), 
-											vec2(HSM_LED_SCALE * HSM_LED_SCALE_X, HSM_LED_SCALE),
-											HSM_LED_FOLLOW_LAYER,
-											HSM_LED_FOLLOW_MODE,
-											HSM_LED_FOLLOW_FULL_USES_ZOOM,
-											HSM_LED_FILL_MODE,
-											HSM_LED_SPLIT_PRESERVE_CENTER,
-											HSM_LED_SPLIT_REPEAT_WIDTH,
-											true,
-											LED_COORD,
-											LED_SCALE);
-
-		if (HSM_LED_OPACITY > 0 && led_size.y > 16)
-		{
-			led_image = HSM_GetMipmappedTexSample(LEDImage, LED_CURVED_COORD, LED_SCALE, HSM_LED_MIPMAPPING_BLEND_BIAS);
-
-			// Premultiply Alpha
-			led_image = HSM_GetPreMultipliedColorLinear(led_image, HSM_LED_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
-
-			// HSV Adjustments
-			led_image.rgb = HSM_ApplyHSVAdjustment(led_image.rgb, HSM_LED_HUE, HSM_LED_SATURATION, HSM_LED_BRIGHTNESS, HSM_LED_COLORIZE_ON, HSM_LED_GAMMA);
-
-			// STATIC GAMMA
-			if (HSM_STATIC_LAYERS_GAMMA != 1)
-				led_image = HSM_ApplyGamma(led_image, HSM_STATIC_LAYERS_GAMMA);
-		}
-	}
-
-	//----------------------------------------------------
-	// Decal Image
-	//----------------------------------------------------
-	vec2 decal_size = textureSize(DecalImage, 0);
-	DECAL_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
-											VIEWPORT_FLIPPED_UNZOOMED_COORD,
-											TEXTURE_ASPECT_MODE_EXPLICIT,
-											decal_size.x / decal_size.y,
-											vec2(HSM_DECAL_POS_X, HSM_DECAL_POS_Y), 
-											vec2(HSM_DECAL_SCALE * HSM_DECAL_SCALE_X, HSM_DECAL_SCALE),
-											HSM_DECAL_FOLLOW_LAYER,
-											HSM_DECAL_FOLLOW_MODE,
-											HSM_DECAL_FOLLOW_FULL_USES_ZOOM,
-											HSM_DECAL_FILL_MODE,
-											HSM_DECAL_SPLIT_PRESERVE_CENTER,
-											HSM_DECAL_SPLIT_REPEAT_WIDTH,
-											true,
-											DECAL_COORD,
-											DECAL_SCALE);
 	vec4 decal_image = vec4(0);
-	if (HSM_DECAL_OPACITY > 0 && decal_size.y > 16)
-	{
-		decal_image = HSM_GetMipmappedTexSample(DecalImage, DECAL_CURVED_COORD, DECAL_SCALE, HSM_DECAL_MIPMAPPING_BLEND_BIAS);
-		
-		// Premultiply Alpha
-		decal_image = HSM_GetPreMultipliedColorLinear(decal_image, HSM_DECAL_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
-
-		// HSV Adjustments
-		decal_image.rgb = HSM_ApplyHSVAdjustment(decal_image.rgb, HSM_DECAL_HUE, HSM_DECAL_SATURATION, HSM_DECAL_BRIGHTNESS, HSM_DECAL_COLORIZE_ON, HSM_DECAL_GAMMA);
-
-		// STATIC GAMMA
-		if (HSM_STATIC_LAYERS_GAMMA != 1)
-			decal_image = HSM_ApplyGamma(decal_image, HSM_STATIC_LAYERS_GAMMA);
-	}
-
-//----------------------------------------------------
-//  ADV Get Additional Layers and Composite 
-//----------------------------------------------------
-	vec2 top_size = textureSize(TopLayerImage, 0);
-	TOP_IMAGE_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
-												VIEWPORT_FLIPPED_UNZOOMED_COORD,
-												TEXTURE_ASPECT_MODE_EXPLICIT,
-												top_size.x / top_size.y,
-												vec2(HSM_TOP_POS_X, HSM_TOP_POS_Y), 
-												vec2(HSM_TOP_SCALE * HSM_TOP_SCALE_X, HSM_TOP_SCALE),
-												HSM_TOP_FOLLOW_LAYER,
-												HSM_TOP_FOLLOW_MODE,
-												HSM_TOP_FOLLOW_FULL_USES_ZOOM,
-												HSM_TOP_FILL_MODE,
-												HSM_TOP_SPLIT_PRESERVE_CENTER,
-												HSM_TOP_SPLIT_REPEAT_WIDTH,
-												true,
-												TOP_IMAGE_COORD,
-												TOP_IMAGE_SCALE);
-
-	if (HSM_TOP_MIRROR_WRAP == 1)
-		TOP_IMAGE_CURVED_COORD = HSM_GetMirrorWrapCoord(TOP_IMAGE_CURVED_COORD);
-
 	vec4 top_image = vec4(0);
-	if (HSM_TOP_OPACITY > 0 && top_size.y > 16)
-	{
-		// Get the top image color and masking values if needed
-		top_image = HSM_GetMipmappedTexSample(TopLayerImage, TOP_IMAGE_CURVED_COORD, TOP_IMAGE_SCALE, HSM_TOP_MIPMAPPING_BLEND_BIAS);
-
-		// Premultiply Alpha
-		top_image = HSM_GetPreMultipliedColorLinear(top_image, HSM_TOP_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
-
-		// HSV Adjustments
-		top_image.rgb = HSM_ApplyHSVAdjustment(top_image.rgb, HSM_TOP_HUE, HSM_TOP_SATURATION, HSM_TOP_BRIGHTNESS, HSM_TOP_COLORIZE_ON, HSM_TOP_GAMMA);
-
-		// STATIC GAMMA
-		if (HSM_STATIC_LAYERS_GAMMA != 1)
-			top_image = HSM_ApplyGamma(top_image, HSM_STATIC_LAYERS_GAMMA);
-	}
-
-	//----------------------------------------------------
-	// Cabinet Glass Image
-	//----------------------------------------------------
 	vec4 cab_glass_image = vec4(0);
+	vec4 tube_bg_layer = vec4(0);
+	vec4 static_shadow_multiply = vec4(1);
 
-	if (HSM_CAB_GLASS_OPACITY > 0)
-	{
-		vec2 cab_glass_size = textureSize(CabinetGlassImage, 0);
-		CAB_GLASS_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
-													VIEWPORT_FLIPPED_UNZOOMED_COORD,
-													TEXTURE_ASPECT_MODE_EXPLICIT,
-													cab_glass_size.x / cab_glass_size.y,
-													vec2(HSM_CAB_GLASS_POS_X, HSM_CAB_GLASS_POS_Y), 
-													vec2(HSM_CAB_GLASS_SCALE * HSM_CAB_GLASS_SCALE_X, HSM_CAB_GLASS_SCALE),
-													HSM_CAB_GLASS_FOLLOW_LAYER,
-													HSM_CAB_GLASS_FOLLOW_MODE,
-													HSM_CAB_GLASS_FOLLOW_FULL_USES_ZOOM,
-													HSM_CAB_GLASS_FILL_MODE,
-													HSM_CAB_GLASS_SPLIT_PRESERVE_CENTER,
-													HSM_CAB_GLASS_SPLIT_REPEAT_WIDTH,
-													true,
-													CAB_GLASS_COORD,
-													CAB_GLASS_SCALE);
-
-		if (HSM_CAB_GLASS_OPACITY > 0 && cab_glass_size.y > 16)
-		{
-			// Sample Texture
-			cab_glass_image = HSM_GetMipmappedTexSample(CabinetGlassImage, CAB_GLASS_CURVED_COORD, CAB_GLASS_SCALE, HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS);
-
-			// Premultiply Alpha
-			cab_glass_image = HSM_GetPreMultipliedColorLinear(cab_glass_image, HSM_CAB_GLASS_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
-
-			// HSV Adjustments
-			cab_glass_image.rgb = HSM_ApplyHSVAdjustment(cab_glass_image.rgb, HSM_CAB_GLASS_HUE, HSM_CAB_GLASS_SATURATION, HSM_CAB_GLASS_BRIGHTNESS, HSM_CAB_GLASS_COLORIZE_ON, HSM_CAB_GLASS_GAMMA);
-
-			// STATIC GAMMA
-			if (HSM_STATIC_LAYERS_GAMMA != 1)
-				cab_glass_image = HSM_ApplyGamma(cab_glass_image, HSM_STATIC_LAYERS_GAMMA);
-		}
-	}
-
-
-	//-----------------------------------------------------------------------------------------
-	// CUTOUT MASK
-	//-----------------------------------------------------------------------------------------
 	CUTOUT_MASK = 1;
 
-	vec2 temp_scale = vec2(0.5);
-	vec2 temp_coord = vec2(0.5);
+	// ---------------------------------------------------------------------------------------
+	// Generate Layer Coordinates and Sample Images
+	// ---------------------------------------------------------------------------------------
+	{
+		//----------------------------------------------------
+		// Generated Bezel
+		//----------------------------------------------------
 
-	vec2 cutout_base_scale_offset = vec2(0.5);
+		if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
+		{
+			// ---------------------------------------------------------------------------------------
+			// Generate Color with Shading for Bezel & Frame
+			// ---------------------------------------------------------------------------------------
+			vec3 bezel_and_frame_rgb = vec3(0);
+			{
+				// #ifdef LAYERS_UNDER_CRT
+				//----------------------------------------------------
+				//  Calculate Corner Highlight Mask
+				//----------------------------------------------------
+				const float pi = 3.1415;
 
-	if ( HSM_CUTOUT_FOLLOW_LAYER == FOLLOW_LAYER_VIEWPORT )
-		cutout_base_scale_offset *= vec2(DEFAULT_UNCORRECTED_BEZEL_SCALE.y * TUBE_DIFFUSE_ASPECT / output_aspect, DEFAULT_BEZEL_SCALE.y);
+				// Get amount to shift the point at the outer corner to match the overall position offset
+				vec2 pos_shift_offset = vec2(0, HSM_BZL_OUTER_POSITION_Y) * TUBE_DIFFUSE_SCALE.y / outermap_scale;
+				pos_shift_offset *= tube_curved_coord.y > 0.5 ? 1 : -1;
 
-	vec2 cutout_coord = HSM_GetScaledCoord(VIEWPORT_COORD,
-											VIEWPORT_FLIPPED_UNZOOMED_COORD,
-										  	HSM_CUTOUT_ASPECT_MODE,
-											HSM_CUTOUT_EXPLICIT_ASPECT,
-											vec2(HSM_CUTOUT_POS_X, HSM_CUTOUT_POS_Y),
-											vec2(vec2(HSM_CUTOUT_SCALE * HSM_CUTOUT_SCALE_X, HSM_CUTOUT_SCALE) * cutout_base_scale_offset),
-											HSM_CUTOUT_FOLLOW_LAYER,
-											FOLLOW_MODE_SCALE_AND_POS,
-											HSM_CUTOUT_FOLLOW_FULL_USES_ZOOM,
-											FILL_MODE_STRETCH,
-											0,
-											0,
-											false,
-											temp_coord,
-											temp_scale);
-	
-	CUTOUT_MASK = 1 - HSM_GetCornerMask(cutout_coord, TUBE_DIFFUSE_ASPECT, HSM_CUTOUT_CORNER_RADIUS, 0.8);
+				// Get the direction vector from the inner corner of the bezel pointing at the outer corner 
+				vec2 corner_crease_dir = (outermap_screen_corner_ctr_coord + pos_shift_offset) / vec2(HSM_BZL_HEIGHT + 1, HSM_BZL_WIDTH + 1) - (outermap_screen_corner_ctr_coord) ;
+				corner_crease_dir *= vec2(TUBE_DIFFUSE_ASPECT, 1);
+
+				float aspect_corner_length_scale_offset = TUBE_DIFFUSE_ASPECT > 1 ? 0.9 : 1.5;
+				float corner_crease_length = length(corner_crease_dir * aspect_corner_length_scale_offset);
+
+				// A hack to adjust the angle offset, because without it the corner angle isn't pointing exactly at the corner
+				// This offset is the opposite direction for vertical and horizontal aspect ratio
+				float corner_rotation_offset = (SCREEN_COORD.y < 0.5) ? -HSM_REFLECT_CORNER_ROTATION_OFFSET_TOP : -HSM_REFLECT_CORNER_ROTATION_OFFSET_BOTTOM;
+
+				if (HSM_CURVATURE_MODE == 0)
+					// If we are using a 3d Curvature no offset is necessary
+					corner_rotation_offset += (TUBE_DIFFUSE_ASPECT > 1) ? 2 : 3;
+
+				// Convert direction vector to an angle so we can rotate the corner crease direction
+				float corner_angle_degrees = atan(corner_crease_dir.y / corner_crease_dir.x) / (2 * pi) * 360;
+
+				corner_angle_degrees += corner_rotation_offset;
+				float corner_angle_radians = corner_angle_degrees / 360 * 2 * pi;
+				corner_crease_dir = vec2(cos(corner_angle_radians), sin(corner_angle_radians));
+
+				// Get the distance perpendicular to the crease direction so we can use it to fade later
+				float distance_from_crease = HHLP_GetDistanceToLine(outermap_coord_warped_ctr_at_screen_corner.x, outermap_coord_warped_ctr_at_screen_corner.y, 1, corner_crease_dir.y / corner_crease_dir.x, 0 );
+
+				float fade_out_to_corner = HHLP_QuadraticBezier(clamp(length(outermap_warped_outside_screen_vector) / (corner_crease_length * 2), 0, 1), vec2(0.5, HSM_REFLECT_CORNER_SPREAD_FALLOFF / 100));
+
+				float corner_fade_width_inner = HSM_REFLECT_CORNER_INNER_SPREAD * (TUBE_DIFFUSE_SCALE.x + TUBE_DIFFUSE_SCALE.y) * bezel_corner_radius / 10 / 250 * 1.2;
+				float corner_fade_width_outer = HSM_REFLECT_CORNER_OUTER_SPREAD * (TUBE_DIFFUSE_SCALE.x + TUBE_DIFFUSE_SCALE.y) * HSM_GLOBAL_CORNER_RADIUS * HSM_BZL_OUTER_CORNER_RADIUS_SCALE / 10 / 250 * 1.6;
+				float corner_fade_width = (corner_fade_width_inner + fade_out_to_corner * (corner_fade_width_outer - corner_fade_width_inner));
+
+				// Get a vector perpendicular to the crease that we can shift the crease to blend between bottom/top and sides
+				vec2 corner_crease_perp_dir = normalize(vec2(corner_crease_dir.y, corner_crease_dir.x));
+				vec2 corner_coord_shifted = outermap_coord_warped_ctr_at_screen_corner - corner_crease_perp_dir * corner_fade_width / 2;
+				vec2 corner_crease_dir_shifted = corner_crease_dir - corner_crease_perp_dir * corner_fade_width / 2;
+
+				// Get the distance to this shifted crease
+				float distance_from_crease_shifted = HHLP_GetDistanceToLine(corner_coord_shifted.x, corner_coord_shifted.y, 1, corner_crease_dir_shifted.y / corner_crease_dir_shifted.x, 0 );
+
+				float top_half_mask = smoothstep(0.55, 0.5, tube_curved_coord.y);
+				float left_half_mask = smoothstep(0.55, 0.5, tube_curved_coord.x);
+
+				// Get a mask which transitions between sides and top/bottom at the corner crease  
+				float top_bottom_vs_sides_mask = dot(normalize(corner_coord_shifted), normalize(corner_crease_dir_shifted)) > 0 ? 1 - smoothstep(0, corner_fade_width / 2, distance_from_crease_shifted) : 1;
+
+				// Masks isolating specific parts
+				float sides_mask = 1 - top_bottom_vs_sides_mask;
+				float top_mask = top_half_mask * top_bottom_vs_sides_mask;
+				float bottom_mask = (1 -top_half_mask) * top_bottom_vs_sides_mask;
+
+				float corner_mask = smoothstep(corner_fade_width / 2, 0, distance_from_crease);
+
+				float top_corner_mask = corner_mask * top_half_mask;
+				float bottom_corner_mask = corner_mask * (1 - top_half_mask);
+
+				float frame_inner_edge_mask = (HSM_FRM_INNER_EDGE_THICKNESS == 0) ? 0 : 1 - HSM_GetCornerMask(	(BEZEL_OUTSIDE_CURVED_COORD - 0.5) * (1 + (HSM_FRM_INNER_EDGE_THICKNESS / vec2(TUBE_DIFFUSE_ASPECT, 1))) + 0.5, 
+																													TUBE_DIFFUSE_ASPECT, 
+																													HSM_BZL_OUTER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS, 
+																													0.9);
+				float outside_tube_mask_wider = 1 - HSM_GetCornerMask(tube_curved_coord_ctr * 0.996 + 0.5, TUBE_DIFFUSE_ASPECT, bezel_corner_radius, 0.9);
+				float tube_shadow_mask = HSM_GetCornerMask(tube_curved_coord_ctr + 0.5, TUBE_DIFFUSE_ASPECT, bezel_corner_radius, 0);
+				float tube_edge_shadow_mult = HSM_BZL_INNER_EDGE_SHADOW * (tube_shadow_mask) + (1 - HSM_BZL_INNER_EDGE_SHADOW);
+
+				float edge_highlight_mask = 0;
+
+				// ----------------------------------------------------
+				// Generated Bezel
+				// ----------------------------------------------------
+
+				/* This first bit is to get a mapping of the space outside of the screen which is continuous
+				This is more complicated than you would expect because since we are using curved coordinates 
+				there are discontinuities outside the normal screen corners, e.g. where x > 1 and y > 1
+				So instead of trying to use the coordinates from the screen/tube we use a larger space 
+				and subtract the screen space to see how far we are outside of the sreen
+				*/
+
+				float hmbz_bezel_highlight_edge = 0.9;
+				float hmbz_bezel_highlight_top = 0.2;
+				float hmbz_bezel_highlight_bottom = 0.3;
+				float hmbz_bezel_highlight_sides = 0.2;
+				
+				float hmbz_bezel_highlight_falloff_speed = 0.5;
+				float hmbz_bezel_highlight_width = 0.25;
+
+				float hmbz_bezel_edge_highlight_width = 0.8;
+				
+				float hmbz_bezel_brightness_frame_outer_edge = 0.0;
+				float hmbz_brightness_shadow = 0;
+				float hmbz_frame_brightness = 100;
+
+				// Not sure why we need linearize this but it seems to have a smoother range this way
+				vec3 base_color = HSM_Linearize(vec4(HSM_HSVtoRGB(vec3(HSM_BZL_COLOR_HUE, HSM_BZL_COLOR_SATURATION, HSM_BZL_COLOR_VALUE)), 1), DEFAULT_SRGB_GAMMA).rgb;
+				float noise_mask = clamp(fract(sin(dot(tube_curved_coord_ctr + vec2(0.5, 0.5) + 1, vec2(12.9898, 78.233))) * 43758.5453), 0, 1);
+				vec3 base_color_with_noise = mix(base_color, 1.5 * base_color * noise_mask, HSM_BZL_NOISE);
+				vec3 top_color = HSM_BZL_BRIGHTNESS_MULT_TOP * HSM_BZL_BRIGHTNESS * base_color_with_noise;
+				vec3 bottom_color = HSM_BZL_BRIGHTNESS_MULT_BOTTOM * HSM_BZL_BRIGHTNESS * base_color_with_noise;
+				vec3 sides_color = mix(HSM_BZL_BRIGHTNESS_MULT_SIDES * HSM_BZL_BRIGHTNESS_MULT_SIDE_RIGHT * HSM_BZL_BRIGHTNESS * base_color_with_noise,
+										HSM_BZL_BRIGHTNESS_MULT_SIDES * HSM_BZL_BRIGHTNESS_MULT_SIDE_LEFT * HSM_BZL_BRIGHTNESS * base_color_with_noise,
+										left_half_mask);
+
+				vec3 frame_base_color = base_color;
+				vec3 frame_base_color_with_noise = base_color_with_noise;
+				if (HSM_FRM_USE_INDEPENDENT_COLOR > 0)
+				{
+					frame_base_color = HSM_Linearize(vec4(HSM_HSVtoRGB(vec3(HSM_FRM_COLOR_HUE, HSM_FRM_COLOR_SATURATION, HSM_FRM_COLOR_VALUE)), 1), DEFAULT_SRGB_GAMMA).rgb;
+					frame_base_color_with_noise = mix(frame_base_color, 1.5 * frame_base_color * noise_mask, HSM_FRM_NOISE);
+				}
+
+				vec3 frame_color = hmbz_frame_brightness / 100 * mix(frame_base_color, 1.5 * frame_base_color * noise_mask, 0.6 * HSM_FRM_NOISE);
+				vec3 outside_frame_color = hmbz_brightness_shadow * base_color_with_noise;
+
+				vec3 bezel_diffuse_color = mix(sides_color, top_color, top_mask);
+				bezel_diffuse_color = mix(bezel_diffuse_color, bottom_color, bottom_mask);
+
+				float top_center_highlight_mask 	= hmbz_bezel_highlight_top * top_mask * HHLP_QuadraticBezier(smoothstep(hmbz_bezel_highlight_width, 0, abs(tube_curved_coord_ctr.x)), vec2(0.5, hmbz_bezel_highlight_falloff_speed));
+				float bottom_center_highlight_mask 	= hmbz_bezel_highlight_bottom * bottom_mask * HHLP_QuadraticBezier(smoothstep(hmbz_bezel_highlight_width, 0, abs(tube_curved_coord_ctr.x)), vec2(0.5, hmbz_bezel_highlight_falloff_speed));
+				float sides_highlight_mask 			= hmbz_bezel_highlight_sides * sides_mask * HHLP_QuadraticBezier(smoothstep(hmbz_bezel_highlight_width, 0, abs(tube_curved_coord_ctr.y)), vec2(0.5, hmbz_bezel_highlight_falloff_speed));
+
+				float edge_top_center_highlight_mask 		= hmbz_bezel_highlight_top * top_mask * HHLP_QuadraticBezier(smoothstep(hmbz_bezel_edge_highlight_width, 0, abs(tube_curved_coord_ctr.x)), vec2(0.8, 0));
+				float edge_bottom_center_highlight_mask 	= hmbz_bezel_highlight_bottom * bottom_mask * HHLP_QuadraticBezier(smoothstep(hmbz_bezel_edge_highlight_width, 0, abs(tube_curved_coord_ctr.x)), vec2(0.8, 0));
+				float edge_sides_highlight_mask 			= hmbz_bezel_highlight_sides * sides_mask * HHLP_QuadraticBezier(smoothstep(hmbz_bezel_edge_highlight_width, 0, abs(tube_curved_coord_ctr.y)), vec2(0.8, 0));
+
+				edge_highlight_mask = hmbz_bezel_highlight_edge * edge_mask * (edge_top_center_highlight_mask + edge_bottom_center_highlight_mask + edge_sides_highlight_mask);
+				edge_highlight_mask *= HSM_BZL_INNER_EDGE_HIGHLIGHT;
+
+				// Combine all the individual highlights into one mask
+				float combined_highlight_mask = (1 + 2.5 * HSM_BZL_NOISE) * (1 - noise_mask * 2.5 * HSM_BZL_NOISE) * (top_center_highlight_mask + bottom_center_highlight_mask + sides_highlight_mask);
+				float bezel_highlight_multiplier = HSM_BZL_HIGHLIGHT * combined_highlight_mask + HSM_BZL_HIGHLIGHT * edge_highlight_mask;
+				vec3 bezel_color = bezel_diffuse_color * (1 + 15 * bezel_highlight_multiplier) + 1 * bezel_highlight_multiplier;
+
+				// Add the inner edge highlight on top of the bezel color which has it's own highlight
+				float inner_edge_highlight_multiplier = HSM_FRM_INNER_EDGE_HIGHLIGHT + HSM_BZL_HIGHLIGHT * 10 * HSM_FRM_INNER_EDGE_HIGHLIGHT;
+				vec3 frame_inner_edge_color = frame_base_color * (1 + 15 * inner_edge_highlight_multiplier) +	0.5 * inner_edge_highlight_multiplier;
+
+				bezel_color = mix(bezel_color, frame_inner_edge_color, frame_inner_edge_mask);
+
+				float dist_inside_outer_edge = min(0.50 - abs(frame_outside_coord_ctr.x), 0.50 - abs(frame_outside_coord_ctr.y));
+				float frame_outer_edge_width = HSM_FRM_OUTER_EDGE_THICKNESS;
+				vec3 frame_diffuse_color = mix(frame_color, 0.2 * frame_color, HSM_FRM_OUTER_EDGE_SHADING * smoothstep(frame_outer_edge_width, 0, dist_inside_outer_edge));
+
+				if (HSM_FRM_TEXTURE_OPACITY > 0)
+				{
+					// TODO need to do Mipmapping sample?
+					vec4 frame_texture_color = HSM_Linearize(texture(FrameTextureImage, FRAME_OUTSIDE_CURVED_COORD), DEFAULT_SRGB_GAMMA);
+					frame_diffuse_color = HSM_BlendModeLayerMix(vec4(frame_diffuse_color, 1), frame_texture_color, HSM_FRM_TEXTURE_BLEND_MODE, HSM_FRM_TEXTURE_OPACITY).rgb;
+				}
+				
+				// Composite in color from outside the bezel
+				bezel_and_frame_rgb = mix(bezel_color, frame_diffuse_color, OUTSIDE_BEZEL_MASK);
+			}
+
+			// Create image of bezel & frame with outside of frame transparent
+			vec4 bezel_and_frame_rgba = vec4(bezel_and_frame_rgb, 1);
+
+			// Cut out Tube Area
+			if (HSM_STATIC_LAYERS_GAMMA != 1)
+				bezel_and_frame_rgba = HSM_ApplyGamma(bezel_and_frame_rgba, HSM_STATIC_LAYERS_GAMMA);
+
+			// // Contract the tube mask to leave a little extra black ring at the edge of the bezel
+			// // otherwise this will show slivers of the background otherwise
+			float tube_mask_contracted = HSM_GetCornerMask((tube_curved_coord - 0.5) * 1.004 + 0.5, TUBE_DIFFUSE_ASPECT, bezel_corner_radius, 0.99);
+			float FRAME_AND_BEZEL_MASK = (1 - tube_mask_contracted) * (1 - OUTSIDE_FRAME_MASK);
+
+			if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
+				bezel_layer = clamp(bezel_and_frame_rgba * FRAME_AND_BEZEL_MASK, 0, 1);
+
+			// Shadow of Frame onto background
+			if (HSM_FRM_SHADOW_OPACITY > 0)
+			{
+				vec4 frame_shadow_layer = vec4(0);
+				if (HSM_FRM_OPACITY > 0.001)
+				{
+					// Get masks on side of frame to multiply together to get a shadow around the frame
+					// Get vector from the screen edge outward
+					float frame_edge = 0.495;
+
+					float dist_outside_frame = length(clamp(abs(frame_outside_coord_ctr * 1.01) - frame_edge, 0, 1) * vec2(TUBE_DIFFUSE_ASPECT, 1));
+					frame_shadow_layer.a = SHADOW_OUTSIDE_FRAME_MASK * HHLP_QuadraticBezier(smoothstep(HSM_FRM_SHADOW_WIDTH, 0, dist_outside_frame), vec2(1, 0));
+				}
+				frame_shadow_layer *= HSM_FRM_SHADOW_OPACITY;
+
+				// TODO probably best to replace this with standard premultiplied blend
+				bezel_layer = BlendModeMaskLayerMix(	frame_shadow_layer,
+														bezel_layer, 
+														BLEND_MODE_NORMAL, 
+														PRECOMP_INDEX_BACKGROUND,
+														1,
+														MASK_MODE_ALL,
+														0, 
+														SHOW_ON_DUALSCREEN_MODE_BOTH,
+														1);
+			}
 
 
-	//-----------------------------------------------------------------------------------------
-	// COMPOSITE ALL LAYERS
-	//-----------------------------------------------------------------------------------------
+			float bezel_opacity_mult = HSM_BZL_OPACITY + OUTSIDE_BEZEL_MASK * (1 - HSM_BZL_OPACITY);
+			float frame_opacity_mult = HSM_FRM_OPACITY + (1 - OUTSIDE_BEZEL_MASK) * (1 - HSM_FRM_OPACITY);
 
+			bezel_layer *= bezel_opacity_mult * frame_opacity_mult;
+
+			// bezel_layer *= HSM_BZL_OPACITY * (1 - OUTSIDE_BEZEL_MASK) + HSM_FRM_OPACITY * OUTSIDE_BEZEL_MASK;
+		}
+
+		//TODO Need to fill center with opaque black if tube is not transparent
+		//     This will matte out the Self Illuminated pass
+
+		float TUBE_MASK_EXPAND = HSM_GetCornerMask((tube_curved_coord - 0.5) * 0.997 + 0.5, TUBE_DIFFUSE_ASPECT, bezel_corner_radius, 0.99);
+		
+		tube_bg_layer = vec4(0, 0, 0, TUBE_MASK_EXPAND * HSM_GetTubeOpacity());
+		// vec4 tube_bg_layer = vec4(0, 0, 0, 0);
+
+		//-----------------------------------------------------------------------------------------
+		// Background
+		//-----------------------------------------------------------------------------------------
+		bool bg_use_vert_image = SCREEN_ASPECT < 1 && textureSize(BackgroundVertImage, 0).y > 16 ? true : false; 
+		vec2 bg_size = bg_use_vert_image ? textureSize(BackgroundVertImage, 0) : textureSize(BackgroundImage, 0);
+		BACKGROUND_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
+													VIEWPORT_FLIPPED_UNZOOMED_COORD,
+													TEXTURE_ASPECT_MODE_EXPLICIT,
+													bg_size.x / bg_size.y,
+													vec2(HSM_BG_POS_X, HSM_BG_POS_Y),
+													vec2(HSM_BG_SCALE * HSM_BG_SCALE_X, HSM_BG_SCALE),
+													HSM_BG_FOLLOW_LAYER,
+													HSM_BG_FOLLOW_MODE,
+													HSM_BG_FOLLOW_FULL_USES_ZOOM,
+													HSM_BG_FILL_MODE,
+													HSM_BG_SPLIT_PRESERVE_CENTER,
+													HSM_BG_SPLIT_REPEAT_WIDTH,
+													true,
+													BACKGROUND_COORD,
+													BACKGROUND_SCALE);
+
+		// Tile Wrap the background
+		if (HSM_BG_WRAP_MODE == 1)
+			BACKGROUND_CURVED_COORD = mod(BACKGROUND_CURVED_COORD, 1.0);
+		
+		// Mirror Wrap the bBackground
+		if (HSM_BG_WRAP_MODE == 2)
+			BACKGROUND_CURVED_COORD = HSM_GetMirrorWrapCoord(BACKGROUND_CURVED_COORD);
+
+		if (HSM_BG_OPACITY > 0 && bg_size.y > 16)
+		{
+			if (bg_use_vert_image)
+				bg_image = HSM_GetMipmappedTexSample(BackgroundVertImage, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
+			else
+				bg_image = HSM_GetMipmappedTexSample(BackgroundImage, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
+
+			// Premultiply Alpha
+			bg_image = HSM_GetPreMultipliedColorLinear(bg_image, HSM_BG_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
+
+			// HSV Adjustments
+			bg_image.rgb = HSM_ApplyHSVAdjustment(bg_image.rgb, HSM_BG_HUE, HSM_BG_SATURATION, HSM_BG_BRIGHTNESS, HSM_BG_COLORIZE_ON, HSM_BG_GAMMA);
+
+			if (HSM_STATIC_LAYERS_GAMMA != 1)
+				bg_image = HSM_ApplyGamma(bg_image, HSM_STATIC_LAYERS_GAMMA);
+		}
+
+		//----------------------------------------------------
+		// Device Image
+		//----------------------------------------------------
+		bool device_use_vert_image = SCREEN_ASPECT < 1 && textureSize(DeviceVertImage, 0).y > 16 ? true : false; 
+		vec2 device_size = device_use_vert_image ? textureSize(DeviceVertImage, 0) : textureSize(DeviceImage, 0);
+		DEVICE_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
+												VIEWPORT_FLIPPED_UNZOOMED_COORD,
+												TEXTURE_ASPECT_MODE_EXPLICIT,
+												device_size.x / device_size.y,
+												vec2(HSM_DEVICE_POS_X, HSM_DEVICE_POS_Y),
+												vec2(HSM_DEVICE_SCALE * HSM_DEVICE_SCALE_X, HSM_DEVICE_SCALE),
+												HSM_DEVICE_FOLLOW_LAYER,
+												HSM_DEVICE_FOLLOW_MODE,
+												HSM_DEVICE_FOLLOW_FULL_USES_ZOOM,
+												HSM_DEVICE_FILL_MODE,
+												HSM_DEVICE_SPLIT_PRESERVE_CENTER,
+												HSM_DEVICE_SPLIT_REPEAT_WIDTH,
+												true,
+												DEVICE_COORD,
+												DEVICE_SCALE);
+
+		if (HSM_DEVICE_OPACITY > 0 && device_size.y > 16)
+		{
+			device_image = device_use_vert_image ? 	HSM_GetMipmappedTexSample(DeviceVertImage, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS) :
+													HSM_GetMipmappedTexSample(DeviceImage, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS);
+
+			// Premultiply Alpha
+			device_image = HSM_GetPreMultipliedColorLinear(device_image, HSM_DEVICE_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
+
+			// HSV Adjustments
+			device_image.rgb = HSM_ApplyHSVAdjustment(device_image.rgb, HSM_DEVICE_HUE, HSM_DEVICE_SATURATION, HSM_DEVICE_BRIGHTNESS, HSM_DEVICE_COLORIZE_ON, HSM_DEVICE_GAMMA);
+
+			if (HSM_STATIC_LAYERS_GAMMA != 1)
+				device_image = HSM_ApplyGamma(device_image, HSM_STATIC_LAYERS_GAMMA);
+		}
+
+		//----------------------------------------------------
+		// DeviceLED Image
+		//----------------------------------------------------
+		vec2 deviceled_size = textureSize(DeviceLEDImage, 0);
+		DEVICELED_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
+												VIEWPORT_FLIPPED_UNZOOMED_COORD,
+												TEXTURE_ASPECT_MODE_EXPLICIT,
+												deviceled_size.x / deviceled_size.y,
+												vec2(HSM_DEVICELED_POS_X, HSM_DEVICELED_POS_Y),
+												vec2(HSM_DEVICELED_SCALE * HSM_DEVICELED_SCALE_X, HSM_DEVICELED_SCALE),
+												HSM_DEVICELED_FOLLOW_LAYER,
+												HSM_DEVICELED_FOLLOW_MODE,
+												HSM_DEVICELED_FOLLOW_FULL_USES_ZOOM,
+												HSM_DEVICELED_FILL_MODE,
+												HSM_DEVICELED_SPLIT_PRESERVE_CENTER,
+												HSM_DEVICELED_SPLIT_REPEAT_WIDTH,
+												true,
+												DEVICELED_COORD,
+												DEVICELED_SCALE);
+
+		if (HSM_DEVICELED_OPACITY > 0 && deviceled_size.y > 16)
+		{
+			deviceled_image = HSM_GetMipmappedTexSample(DeviceLEDImage, DEVICELED_CURVED_COORD, DEVICELED_SCALE, HSM_DEVICELED_MIPMAPPING_BLEND_BIAS);
+
+			// Premultiply Alpha
+			deviceled_image = HSM_GetPreMultipliedColorLinear(deviceled_image, HSM_DEVICELED_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
+
+			// HSV Adjustments
+			deviceled_image.rgb = HSM_ApplyHSVAdjustment(deviceled_image.rgb, HSM_DEVICELED_HUE, HSM_DEVICELED_SATURATION, HSM_DEVICELED_BRIGHTNESS, HSM_DEVICELED_COLORIZE_ON, HSM_DEVICELED_GAMMA);
+
+			if (HSM_STATIC_LAYERS_GAMMA != 1)
+				deviceled_image = HSM_ApplyGamma(deviceled_image, HSM_STATIC_LAYERS_GAMMA);
+		}
+
+		//----------------------------------------------------
+		// LED Image
+		//----------------------------------------------------
+		if (HSM_LED_OPACITY > 0)
+		{
+			vec2 led_size = textureSize(LEDImage, 0);
+			LED_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
+												VIEWPORT_FLIPPED_UNZOOMED_COORD,
+												TEXTURE_ASPECT_MODE_EXPLICIT,
+												led_size.x / led_size.y, 
+												vec2(HSM_LED_POS_X, HSM_LED_POS_Y), 
+												vec2(HSM_LED_SCALE * HSM_LED_SCALE_X, HSM_LED_SCALE),
+												HSM_LED_FOLLOW_LAYER,
+												HSM_LED_FOLLOW_MODE,
+												HSM_LED_FOLLOW_FULL_USES_ZOOM,
+												HSM_LED_FILL_MODE,
+												HSM_LED_SPLIT_PRESERVE_CENTER,
+												HSM_LED_SPLIT_REPEAT_WIDTH,
+												true,
+												LED_COORD,
+												LED_SCALE);
+
+			if (HSM_LED_OPACITY > 0 && led_size.y > 16)
+			{
+				led_image = HSM_GetMipmappedTexSample(LEDImage, LED_CURVED_COORD, LED_SCALE, HSM_LED_MIPMAPPING_BLEND_BIAS);
+
+				// Premultiply Alpha
+				led_image = HSM_GetPreMultipliedColorLinear(led_image, HSM_LED_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
+
+				// HSV Adjustments
+				led_image.rgb = HSM_ApplyHSVAdjustment(led_image.rgb, HSM_LED_HUE, HSM_LED_SATURATION, HSM_LED_BRIGHTNESS, HSM_LED_COLORIZE_ON, HSM_LED_GAMMA);
+
+				// STATIC GAMMA
+				if (HSM_STATIC_LAYERS_GAMMA != 1)
+					led_image = HSM_ApplyGamma(led_image, HSM_STATIC_LAYERS_GAMMA);
+			}
+		}
+
+		//----------------------------------------------------
+		// Decal Image
+		//----------------------------------------------------
+		vec2 decal_size = textureSize(DecalImage, 0);
+		DECAL_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
+												VIEWPORT_FLIPPED_UNZOOMED_COORD,
+												TEXTURE_ASPECT_MODE_EXPLICIT,
+												decal_size.x / decal_size.y,
+												vec2(HSM_DECAL_POS_X, HSM_DECAL_POS_Y), 
+												vec2(HSM_DECAL_SCALE * HSM_DECAL_SCALE_X, HSM_DECAL_SCALE),
+												HSM_DECAL_FOLLOW_LAYER,
+												HSM_DECAL_FOLLOW_MODE,
+												HSM_DECAL_FOLLOW_FULL_USES_ZOOM,
+												HSM_DECAL_FILL_MODE,
+												HSM_DECAL_SPLIT_PRESERVE_CENTER,
+												HSM_DECAL_SPLIT_REPEAT_WIDTH,
+												true,
+												DECAL_COORD,
+												DECAL_SCALE);
+		if (HSM_DECAL_OPACITY > 0 && decal_size.y > 16)
+		{
+			decal_image = HSM_GetMipmappedTexSample(DecalImage, DECAL_CURVED_COORD, DECAL_SCALE, HSM_DECAL_MIPMAPPING_BLEND_BIAS);
+			
+			// Premultiply Alpha
+			decal_image = HSM_GetPreMultipliedColorLinear(decal_image, HSM_DECAL_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
+
+			// HSV Adjustments
+			decal_image.rgb = HSM_ApplyHSVAdjustment(decal_image.rgb, HSM_DECAL_HUE, HSM_DECAL_SATURATION, HSM_DECAL_BRIGHTNESS, HSM_DECAL_COLORIZE_ON, HSM_DECAL_GAMMA);
+
+			// STATIC GAMMA
+			if (HSM_STATIC_LAYERS_GAMMA != 1)
+				decal_image = HSM_ApplyGamma(decal_image, HSM_STATIC_LAYERS_GAMMA);
+		}
+
+		//----------------------------------------------------
+		//  ADV Get Additional Layers and Composite 
+		//----------------------------------------------------
+		vec2 top_size = textureSize(TopLayerImage, 0);
+		TOP_IMAGE_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
+													VIEWPORT_FLIPPED_UNZOOMED_COORD,
+													TEXTURE_ASPECT_MODE_EXPLICIT,
+													top_size.x / top_size.y,
+													vec2(HSM_TOP_POS_X, HSM_TOP_POS_Y), 
+													vec2(HSM_TOP_SCALE * HSM_TOP_SCALE_X, HSM_TOP_SCALE),
+													HSM_TOP_FOLLOW_LAYER,
+													HSM_TOP_FOLLOW_MODE,
+													HSM_TOP_FOLLOW_FULL_USES_ZOOM,
+													HSM_TOP_FILL_MODE,
+													HSM_TOP_SPLIT_PRESERVE_CENTER,
+													HSM_TOP_SPLIT_REPEAT_WIDTH,
+													true,
+													TOP_IMAGE_COORD,
+													TOP_IMAGE_SCALE);
+
+		if (HSM_TOP_MIRROR_WRAP == 1)
+			TOP_IMAGE_CURVED_COORD = HSM_GetMirrorWrapCoord(TOP_IMAGE_CURVED_COORD);
+
+		if (HSM_TOP_OPACITY > 0 && top_size.y > 16)
+		{
+			// Get the top image color and masking values if needed
+			top_image = HSM_GetMipmappedTexSample(TopLayerImage, TOP_IMAGE_CURVED_COORD, TOP_IMAGE_SCALE, HSM_TOP_MIPMAPPING_BLEND_BIAS);
+
+			// Premultiply Alpha
+			top_image = HSM_GetPreMultipliedColorLinear(top_image, HSM_TOP_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
+
+			// HSV Adjustments
+			top_image.rgb = HSM_ApplyHSVAdjustment(top_image.rgb, HSM_TOP_HUE, HSM_TOP_SATURATION, HSM_TOP_BRIGHTNESS, HSM_TOP_COLORIZE_ON, HSM_TOP_GAMMA);
+
+			// STATIC GAMMA
+			if (HSM_STATIC_LAYERS_GAMMA != 1)
+				top_image = HSM_ApplyGamma(top_image, HSM_STATIC_LAYERS_GAMMA);
+		}
+
+		//----------------------------------------------------
+		// Cabinet Glass Image
+		//----------------------------------------------------
+
+		if (HSM_CAB_GLASS_OPACITY > 0)
+		{
+			vec2 cab_glass_size = textureSize(CabinetGlassImage, 0);
+			CAB_GLASS_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
+														VIEWPORT_FLIPPED_UNZOOMED_COORD,
+														TEXTURE_ASPECT_MODE_EXPLICIT,
+														cab_glass_size.x / cab_glass_size.y,
+														vec2(HSM_CAB_GLASS_POS_X, HSM_CAB_GLASS_POS_Y), 
+														vec2(HSM_CAB_GLASS_SCALE * HSM_CAB_GLASS_SCALE_X, HSM_CAB_GLASS_SCALE),
+														HSM_CAB_GLASS_FOLLOW_LAYER,
+														HSM_CAB_GLASS_FOLLOW_MODE,
+														HSM_CAB_GLASS_FOLLOW_FULL_USES_ZOOM,
+														HSM_CAB_GLASS_FILL_MODE,
+														HSM_CAB_GLASS_SPLIT_PRESERVE_CENTER,
+														HSM_CAB_GLASS_SPLIT_REPEAT_WIDTH,
+														true,
+														CAB_GLASS_COORD,
+														CAB_GLASS_SCALE);
+
+			if (HSM_CAB_GLASS_OPACITY > 0 && cab_glass_size.y > 16)
+			{
+				// Sample Texture
+				cab_glass_image = HSM_GetMipmappedTexSample(CabinetGlassImage, CAB_GLASS_CURVED_COORD, CAB_GLASS_SCALE, HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS);
+
+				// Premultiply Alpha
+				cab_glass_image = HSM_GetPreMultipliedColorLinear(cab_glass_image, HSM_CAB_GLASS_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
+
+				// HSV Adjustments
+				cab_glass_image.rgb = HSM_ApplyHSVAdjustment(cab_glass_image.rgb, HSM_CAB_GLASS_HUE, HSM_CAB_GLASS_SATURATION, HSM_CAB_GLASS_BRIGHTNESS, HSM_CAB_GLASS_COLORIZE_ON, HSM_CAB_GLASS_GAMMA);
+
+				// STATIC GAMMA
+				if (HSM_STATIC_LAYERS_GAMMA != 1)
+					cab_glass_image = HSM_ApplyGamma(cab_glass_image, HSM_STATIC_LAYERS_GAMMA);
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------------------
+		// CUTOUT MASK
+		//-----------------------------------------------------------------------------------------
+		vec2 temp_scale = vec2(0.5);
+		vec2 temp_coord = vec2(0.5);
+
+		vec2 cutout_base_scale_offset = vec2(0.5);
+
+		if ( HSM_CUTOUT_FOLLOW_LAYER == FOLLOW_LAYER_VIEWPORT )
+			cutout_base_scale_offset *= vec2(DEFAULT_UNCORRECTED_BEZEL_SCALE.y * TUBE_DIFFUSE_ASPECT / output_aspect, DEFAULT_BEZEL_SCALE.y);
+
+		vec2 cutout_coord = HSM_GetScaledCoord(VIEWPORT_COORD,
+												VIEWPORT_FLIPPED_UNZOOMED_COORD,
+												HSM_CUTOUT_ASPECT_MODE,
+												HSM_CUTOUT_EXPLICIT_ASPECT,
+												vec2(HSM_CUTOUT_POS_X, HSM_CUTOUT_POS_Y),
+												vec2(vec2(HSM_CUTOUT_SCALE * HSM_CUTOUT_SCALE_X, HSM_CUTOUT_SCALE) * cutout_base_scale_offset),
+												HSM_CUTOUT_FOLLOW_LAYER,
+												FOLLOW_MODE_SCALE_AND_POS,
+												HSM_CUTOUT_FOLLOW_FULL_USES_ZOOM,
+												FILL_MODE_STRETCH,
+												0,
+												0,
+												false,
+												temp_coord,
+												temp_scale);
+		
+		CUTOUT_MASK = 1 - HSM_GetCornerMask(cutout_coord, TUBE_DIFFUSE_ASPECT, HSM_CUTOUT_CORNER_RADIUS, 0.8);
+
+		//-----------------------------------------------------------------------------------------
+		// Full Viewport Vignette
+		//-----------------------------------------------------------------------------------------
+		if (HSM_VIEWPORT_VIGNETTE_OPACITY > 0)
+		{
+			vec2 vignette_coord = HSM_GetScaledCoord(VIEWPORT_COORD,
+													VIEWPORT_FLIPPED_UNZOOMED_COORD,
+													TEXTURE_ASPECT_MODE_VIEWPORT,
+													1,
+													vec2(HSM_VIEWPORT_VIGNETTE_POS_X, HSM_VIEWPORT_VIGNETTE_POS_Y), 
+													vec2(vec2(HSM_VIEWPORT_VIGNETTE_SCALE * HSM_VIEWPORT_VIGNETTE_SCALE_X, HSM_VIEWPORT_VIGNETTE_SCALE)), 
+													HSM_VIEWPORT_VIGNETTE_FOLLOW_LAYER,
+													FOLLOW_MODE_SCALE_AND_POS,
+													FOLLOW_LAYER_VIEWPORT,
+													FILL_MODE_STRETCH,
+													0,
+													0,
+													false,
+													temp_coord,
+													temp_scale);
+			vec4 vignette_layer = vec4(0);
+			vignette_layer.a += 0.75 * HHLP_QuadraticBezier(1 - HSM_GetVignetteFactor(vignette_coord, HSM_VIEWPORT_VIGNETTE_OPACITY, 1), vec2(1, 0.5));
+
+			static_shadow_multiply = BlendModeMaskLayerMix(	static_shadow_multiply,
+															vignette_layer,
+															BLEND_MODE_NORMAL,
+															PRECOMP_INDEX_BACKGROUND,
+															HSM_BG_ADD_MODE_NIGHTLIGHTING_AMOUNT,
+															HSM_VIEWPORT_VIGNETTE_MASK_MODE, 
+															HSM_VIEWPORT_VIGNETTE_CUTOUT_MODE,
+															SHOW_ON_DUALSCREEN_MODE_BOTH,
+															HSM_VIEWPORT_VIGNETTE_OPACITY);
+		}
+	}
+
+	// Used in the layer blend mix function
 	OUTSIDE_TUBE_MASK_FOR_IMAGE = 1 - HSM_GetCornerMask(tube_curved_coord_ctr * 1.003 + 0.5, TUBE_DIFFUSE_ASPECT, HSM_FRM_OUTER_CORNER_RADIUS, 1);
-
-	vec4 frag_color_linear = vec4(0);
-	int start_layer = 0;
-	int end_layer = int(MAX_LAYER_ORDER);
-	bool matte_pass = false;
-	bool allow_additive_blend = false;
-
-	// Make sure bezel layer order is not less than zero
-	float bezel_layer_order = max(0, HSM_CRT_LAYER_ORDER + HSM_BEZEL_LAYER_ORDER_OFFSET_FROM_TUBE);
-	// Make sure the middle layer group's first layer is not greater than the bezel layer order
-	float middle_layer_group_first_layer = min(HSM_MIDDLE_LAYER_GROUP_FIRST_LAYER, bezel_layer_order);
-	// Make sure the base layer is at least 1 less than the middle group first layer, and is not below 0
-	float base_layer_group_first_layer = min(0, middle_layer_group_first_layer - 1);
 
 	vec4 precomp_background = vec4(0);
 	vec4 precomp_middleground = vec4(0);
 	vec4 precomp_foreground = vec4(0);
 	vec4 precomp_additive = vec4(0);
 
+	// ---------------------------------------------------------------------------------------
+	// COMPOSITE LAYERS INTO INDIVIDUAL PRE-COMPOSITES
+	// ---------------------------------------------------------------------------------------
+	int start_layer = 0;
+	int end_layer = int(MAX_LAYER_ORDER);
 	for (int precomp_index = 0; precomp_index < 4; precomp_index++)
 	{
-		vec4 precomp_color = vec4(0);
+		// Make sure bezel layer order is not less than zero
+		float bezel_layer_order = max(0, HSM_CRT_LAYER_ORDER + HSM_BEZEL_LAYER_ORDER_OFFSET_FROM_TUBE);
+		// Make sure the middle layer group's first layer is not greater than the bezel layer order
+		float middle_layer_group_first_layer = min(HSM_MIDDLE_LAYER_GROUP_FIRST_LAYER, bezel_layer_order);
+		// Make sure the base layer is at least 1 less than the middle group first layer, and is not below 0
+		float base_layer_group_first_layer = min(0, middle_layer_group_first_layer - 1);
 
 		if (precomp_index == PRECOMP_INDEX_BACKGROUND)
 		{
@@ -1133,6 +1178,10 @@ void main()
 			end_layer = int(MAX_LAYER_ORDER);
 		}
 
+		// Setup for this Pre-Composite
+		vec4 precomp_color = vec4(0);
+
+		// Do this Pre-Composite by looping through the chosen layers
 		for(int i=start_layer; i <= end_layer; i++)
 		{
 			// BACKGROUND
@@ -1274,40 +1323,6 @@ void main()
 		}
 	}
 
-	//-----------------------------------------------------------------------------------------
-	// Full Viewport Vignette
-	//-----------------------------------------------------------------------------------------
-	vec4 static_shadow_multiply = vec4(1);
-	if (HSM_VIEWPORT_VIGNETTE_OPACITY > 0)
-	{
-		vec2 vignette_coord = HSM_GetScaledCoord(VIEWPORT_COORD,
-												VIEWPORT_FLIPPED_UNZOOMED_COORD,
-												TEXTURE_ASPECT_MODE_VIEWPORT,
-												1,
-												vec2(HSM_VIEWPORT_VIGNETTE_POS_X, HSM_VIEWPORT_VIGNETTE_POS_Y), 
-												vec2(vec2(HSM_VIEWPORT_VIGNETTE_SCALE * HSM_VIEWPORT_VIGNETTE_SCALE_X, HSM_VIEWPORT_VIGNETTE_SCALE)), 
-												HSM_VIEWPORT_VIGNETTE_FOLLOW_LAYER,
-												FOLLOW_MODE_SCALE_AND_POS,
-												FOLLOW_LAYER_VIEWPORT,
-												FILL_MODE_STRETCH,
-												0,
-												0,
-												false,
-												temp_coord,
-												temp_scale);
-		vec4 vignette_layer = vec4(0);
-		vignette_layer.a += 0.75 * HHLP_QuadraticBezier(1 - HSM_GetVignetteFactor(vignette_coord, HSM_VIEWPORT_VIGNETTE_OPACITY, 1), vec2(1, 0.5));
-
-		static_shadow_multiply = BlendModeMaskLayerMix(	static_shadow_multiply,
-														vignette_layer,
-														BLEND_MODE_NORMAL,
-														PRECOMP_INDEX_BACKGROUND,
-														HSM_BG_ADD_MODE_NIGHTLIGHTING_AMOUNT,
-														HSM_VIEWPORT_VIGNETTE_MASK_MODE, 
-														HSM_VIEWPORT_VIGNETTE_CUTOUT_MODE,
-														SHOW_ON_DUALSCREEN_MODE_BOTH,
-														HSM_VIEWPORT_VIGNETTE_OPACITY);
-	}
 	// This is the mask for all shadows which should always darken areas unless
 	// they are illuminated by bounce light (or ambilight)
 	// Shadow sources: user bg shadow image, height map.
@@ -1393,28 +1408,6 @@ void main()
 														,precomp_background
 														,precomp_additive
 														);
-
-	//  vec4 out_color = vec4(0);
-	// 	vec4 unpacked_precomp_background = vec4(0);
-	// 	vec4 unpacked_precomp_middleground = vec4(0);
-	// 	vec4 unpacked_precomp_foreground = vec4(0);
-	// 	vec4 unpacked_precomp_additive = vec4(0);
-
-	// 	HSM_Unpack_1_Rgba_To_4_Rgba(image_layers_packed, 
-	// 						unpacked_precomp_foreground, 
-	// 						unpacked_precomp_middleground, 
-	// 						unpacked_precomp_background, 
-	// 						unpacked_precomp_additive);
-
-	// 	vec2 tex_coord_ctr = vTexCoord - 0.5;
-	// 	if (tex_coord_ctr.x > 0 && tex_coord_ctr.y > 0)
-	// 		out_color = unpacked_precomp_background; //clamp(abs(unpacked_precomp_background - precomp_background) * 1000, 0, 1);
-	// 	if (tex_coord_ctr.x > 0 && tex_coord_ctr.y < 0)
-	// 		out_color = unpacked_precomp_middleground; //clamp(abs(unpacked_precomp_middleground - precomp_middleground) * 1000, 0, 1);
-	// 	if (tex_coord_ctr.x < 0 && tex_coord_ctr.y < 0)
-	// 		out_color = unpacked_precomp_foreground; //clamp(abs(unpacked_precomp_foreground - precomp_background) * 1000, 0, 1);
-	// 	if (tex_coord_ctr.x < 0 && tex_coord_ctr.y > 0)
-	// 		out_color = unpacked_precomp_additive; //clamp(abs(unpacked_precomp_additive - precomp_additive) * 1000, 0, 1);
 
 	FragColor = image_layers_packed;
 	return;

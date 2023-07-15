@@ -140,7 +140,7 @@ for template_filename in [p for p in template_filenames if os.path.splitext(p)[1
         errors.append( '    is Empty\n' )
 
 if successes:
-    print('\nSuccessfully Assembled:')
+    print('\n    Successfully Assembled:')
     for success in successes:
         print('    ' + success)
 
@@ -149,4 +149,7 @@ if errors:
     for error in errors:
         print('    ' + error)
 else:
-    print('All (' + str(num_presets) + ') Presets Completed Successfully!!!')
+    print('')
+    print('SUCCESS!   All (' + str(num_presets) + ') Presets Completed')
+    print('---------------------------------------------------------------------------')
+    print('')

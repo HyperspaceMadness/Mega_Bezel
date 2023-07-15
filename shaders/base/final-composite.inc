@@ -22,7 +22,7 @@
     along with this program.  If not, see [http://www.gnu.org/licenses/].
 */
 
-#pragma name CombinePass
+#pragma name FinalCompositePass
 
 /////////////// IMPORTS ///////////////
 #include "common/globals-and-image-layers-params.inc"
@@ -87,8 +87,8 @@ layout(set = 0, binding = 10) uniform sampler2D ReflectPass;
 
 layout(set = 0, binding = 11) uniform sampler2D SceneLayersPass;
 
-layout(set = 0, binding = 12) uniform sampler2D CombinePassFeedback;
-#define PassFeedback CombinePassFeedback
+layout(set = 0, binding = 12) uniform sampler2D FinalCompositePassFeedback;
+#define PassFeedback FinalCompositePassFeedback
 
 layout(set = 0, binding = 13) uniform sampler2D ReflectPrepFullscreenGlowPass;
 
@@ -277,11 +277,6 @@ void main()
 
 	vec4 out_color = vec4(0);
 
-	// AMBIENT LIGHTING IMAGES
-	vec3 nightlight1_rgb = vec3(1);
-	vec3 nightlight2_rgb = vec3(1);
-	HSM_Fill_Nightlight_Images(VIEWPORT_COORD, HSM_GetViewportCoordWithFlip(vTexCoord), TUBE_DIFFUSE_COORD, TUBE_DIFFUSE_SCALE, HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE, NightLightingImage, NightLighting2Image, nightlight1_rgb, nightlight2_rgb);
-
 	vec4 image_layers_packed_shadow_stretch = texture(SceneLayersPass, (vTexCoord - 0.5) / 1.1 + 0.5 + vec2(SCREEN_SCALE.x * 0.02, 0));
 	vec4 precomp_background_shadow_stretch = vec4(0);
 	vec4 precomp_middleground_shadow_stretch = vec4(0);
@@ -304,19 +299,27 @@ void main()
 
 	// See if we need the layer blend mode and Apply in additive mode
 
+	// Prep the Nightlighting images
+	vec3 nightlight1_rgb = vec3(1);
+	vec3 nightlight2_rgb = vec3(1);
+	HSM_Fill_Nightlight_Images(VIEWPORT_COORD, HSM_GetViewportCoordWithFlip(vTexCoord), TUBE_DIFFUSE_COORD, TUBE_DIFFUSE_SCALE, HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE, NightLightingImage, NightLighting2Image, nightlight1_rgb, nightlight2_rgb);
+
 	vec4 composite_base_color = vec4(0);
-	// Red BG
-	if (HSM_COMPOSITE_BASE_COLOR == 1)
-		composite_base_color = vec4(1.0, 0.0, 0.0, 0.0) * HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS;
-	// Pink (Magenta) BG
-	if (HSM_COMPOSITE_BASE_COLOR == 2)
-		composite_base_color = vec4(1.0, 0.0, 1.0, 0.0) * HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS;
-	// Yellow BG
-	if (HSM_COMPOSITE_BASE_COLOR == 3)
-		composite_base_color = vec4(1.0, 1.0, 0.0, 0.0) * HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS;
-	// Aqua BG
-	if (HSM_COMPOSITE_BASE_COLOR == 4)
-		composite_base_color = vec4(0.0, 1.0, 1.0, 0.0) * HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS;
+	if (HSM_COMPOSITE_BASE_COLOR > 0.5)
+	{
+		// Red BG
+		if (HSM_COMPOSITE_BASE_COLOR == 1)
+			composite_base_color = vec4(1.0, 0.0, 0.0, 0.0) * HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS;
+		// Pink (Magenta) BG
+		if (HSM_COMPOSITE_BASE_COLOR == 2)
+			composite_base_color = vec4(1.0, 0.0, 1.0, 0.0) * HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS;
+		// Yellow BG
+		if (HSM_COMPOSITE_BASE_COLOR == 3)
+			composite_base_color = vec4(1.0, 1.0, 0.0, 0.0) * HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS;
+		// Aqua BG
+		if (HSM_COMPOSITE_BASE_COLOR == 4)
+			composite_base_color = vec4(0.0, 1.0, 1.0, 0.0) * HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS;
+	}
 
 	out_color = composite_base_color;
 
@@ -327,6 +330,8 @@ void main()
 
 		// Adjust brightness and add static shadows
 		precomp_background.rgb *= HSM_COMPOSITE_BACKGROUND_BRIGHTNESS * (1 - clamp(HSM_COMPOSITE_BACKGROUND_STATIC_SHADOW_STRENGTH * (1 - static_lighting), 0, 1));
+		
+		// Apply Night Lighting Images
 		precomp_background.rgb = ApplyNightlightImages(	precomp_background.rgb,
 														nightlight1_rgb,
 														nightlight2_rgb,
@@ -381,6 +386,8 @@ void main()
 
 		// Adjust brightness and add static shadows
 		precomp_middleground.rgb *= HSM_COMPOSITE_MIDDLEGROUND_BRIGHTNESS * static_lighting;
+		
+		// Apply Night Lighting Images
 		precomp_middleground.rgb = ApplyNightlightImages(	precomp_middleground.rgb,
 														nightlight1_rgb,
 														nightlight2_rgb,
@@ -409,6 +416,8 @@ void main()
 
 		// Adjust brightness and add static shadows
 		precomp_foreground.rgb *= HSM_COMPOSITE_FOREGROUND_BRIGHTNESS * static_lighting;
+		
+		// Apply Night Lighting Images
 		precomp_foreground.rgb = ApplyNightlightImages(	precomp_foreground.rgb,
 														nightlight1_rgb,
 														nightlight2_rgb,

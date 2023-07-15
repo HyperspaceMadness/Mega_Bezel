@@ -87,7 +87,7 @@ float HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS = global.HSM_COMPOSITE_BASE_COLOR_BRIG
 #pragma parameter HSM_BOUNCELIGHT_LAYER_GROUP_EMPTY_LINE			            " " 0 0 0.001 0.001
 #pragma parameter HSM_BOUNCELIGHT_LAYER_GROUP_TITLE			                "[ ROOM BOUNCE LIGHT ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_COMPOSITE_GLOBAL_BOUNCELIGHT_MULTIPLIER               "          Global Bouncelight Brightness"  60 0 300 1
+#pragma parameter HSM_COMPOSITE_GLOBAL_BOUNCELIGHT_MULTIPLIER               "          Global Bouncelight Brightness"  60 0 1000 1
 float HSM_COMPOSITE_GLOBAL_BOUNCELIGHT_MULTIPLIER = global.HSM_COMPOSITE_GLOBAL_BOUNCELIGHT_MULTIPLIER / 100;
 
 #pragma parameter HSM_COMPOSITE_GLOBAL_BOUNCELIGHT_SHADOW_STRENGTH               "          Global Bouncelight Shadow Strength"  50 0 100 1
