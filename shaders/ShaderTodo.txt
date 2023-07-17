@@ -41,6 +41,7 @@ Changes:
 
   * Material Brightness, Vs Room Static Brightness?
   * Shadowing Ideas:
+    * Possible add floor 
     * Optionally use Alpha on Background as static shadow? (Probably a bad idea)
     * User supplied shadow map for static shadows (bounce light can appear in these shadows)
       * Background should not have these shadows and possibly only omnipresent shadows

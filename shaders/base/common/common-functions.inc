@@ -789,15 +789,20 @@ float HSM_GetVignetteFactor(vec2 coord, float amount, float size)
 	return 1 - vignette_multiplier + vignette * vignette_multiplier;
 }
 
-float HSM_GetScreenVignetteFactor(vec2 in_coord)
+float HSM_GetStrengthPowerVignetteFactor(vec2 in_coord, float in_strength, float in_power)
 {
 	vec2 vpos = HSM_GetMirrorWrappedCoord(in_coord);
 	vpos = (vpos - 0.5) / 1.01 + 0.5;
 	vpos *= 1.0 - vpos.xy;
-    float vig = vpos.x * vpos.y * HSM_SCREEN_VIGNETTE_STRENGTH;
-    vig = min(pow(vig, HSM_SCREEN_VIGNETTE_POWER), 1.0);
+    float vig = vpos.x * vpos.y * in_strength;
+    vig = min(pow(vig, in_power), 1.0);
 
 	return vig;
+}
+
+float HSM_GetScreenVignetteFactor(vec2 in_coord)
+{
+	return HSM_GetStrengthPowerVignetteFactor(in_coord, HSM_SCREEN_VIGNETTE_STRENGTH, HSM_SCREEN_VIGNETTE_POWER);
 }
 
 bool HSM_GetUseOnCurrentScreenIndex(float dual_screen_vis_mode)

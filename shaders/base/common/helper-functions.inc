@@ -167,6 +167,14 @@ vec4 HSM_BlendModeLayerMix(vec4 color_under, vec4 color_over, float blend_mode, 
 	return out_color;
 }
 
+vec3 HSM_DitheredNoise(vec2 in_coord, vec2 in_output_resolution, float in_strength)
+{
+	vec3 out_color = fract(sin(in_coord.x * in_output_resolution.x * vec3(13,1,11) + in_coord.y * in_output_resolution.y * vec3(1,7,5)) * 158.391832) / 255.0;
+	out_color *= in_strength;
+	return out_color;
+}
+
+// Must be sampling from a pass which has linear filtering on
 vec4 HSM_TextureQuilez(sampler2D in_sampler_2D, vec2 in_texture_size, vec2 p)
 {
 	vec2 tex_size = textureSize(in_sampler_2D, 0);

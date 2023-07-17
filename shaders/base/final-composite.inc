@@ -86,11 +86,11 @@ layout(set = 0, binding = 10) uniform sampler2D ReflectPass;
 #endif
 
 layout(set = 0, binding = 11) uniform sampler2D SceneLayersPass;
-
-layout(set = 0, binding = 12) uniform sampler2D FinalCompositePassFeedback;
-#define PassFeedback FinalCompositePassFeedback
-
+layout(set = 0, binding = 12) uniform sampler2D BounceLightPass;
 layout(set = 0, binding = 13) uniform sampler2D ReflectPrepFullscreenGlowPass;
+
+layout(set = 0, binding = 14) uniform sampler2D FinalCompositePassFeedback;
+#define PassFeedback FinalCompositePassFeedback
 
 vec3 PrepGraphicsForHDR(vec3 in_color)
 {
@@ -265,19 +265,14 @@ void main()
 	precomp_background.a = pow(precomp_background.a, DEFAULT_SRGB_GAMMA);
 	float static_lighting = precomp_background.a;
 
-	if (HSM_COMPOSITE_GLOBAL_BOUNCELIGHT_DISPLAY_MODE == 1)
+	if (HSM_LIGHT_BOUNCE_DISPLAY_MODE == 1)
 	{
-		vec3 material_color = vec3(0.6);
+		vec3 material_color = vec3(0.5);
 		precomp_foreground.rgb = material_color * precomp_foreground.a;
 		precomp_middleground.rgb = material_color * precomp_middleground.a;
 		precomp_background.rgb = material_color;
 		precomp_additive.rgb = vec3(0.0);
 	}
-
-	// // WIP
-	// precomp_foreground.rgb = HSM_ApplyHSVAdjustment(precomp_foreground.rgb, HSM_BG_HUE, HSM_BG_SATURATION, HSM_BG_BRIGHTNESS, HSM_BG_COLORIZE_ON, HSM_BG_GAMMA);
-	// precomp_middleground.rgb = HSM_ApplyHSVAdjustment(precomp_middleground.rgb, HSM_BG_HUE, HSM_BG_SATURATION, HSM_BG_BRIGHTNESS, HSM_BG_COLORIZE_ON, HSM_BG_GAMMA);
-	// precomp_background.rgb = HSM_ApplyHSVAdjustment(precomp_background.rgb, HSM_BG_HUE, HSM_BG_SATURATION, HSM_BG_BRIGHTNESS, HSM_BG_COLORIZE_ON, HSM_BG_GAMMA);
 
 	precomp_additive = HSM_Linearize(precomp_additive, DEFAULT_SRGB_GAMMA);
 	// Gamma added to alpha to avoid clipping on AMD GPUs
@@ -293,30 +288,44 @@ void main()
 	vec4 precomp_additive_shadow_stretch = vec4(0);
 
 	HSM_Unpack_1_Rgba_To_4_Rgba(image_layers_packed_shadow_stretch, 
-						precomp_foreground_shadow_stretch, 
-						precomp_middleground_shadow_stretch, 
-						precomp_background_shadow_stretch, 
-						precomp_additive_shadow_stretch);
+								precomp_foreground_shadow_stretch, 
+								precomp_middleground_shadow_stretch, 
+								precomp_background_shadow_stretch, 
+								precomp_additive_shadow_stretch);
 
+	// Needs to divide by 2
+	float mix_horz = HSM_LIGHT_BOUNCE_MIX_HORZ / 2;
+	float mix_vert = HSM_LIGHT_BOUNCE_MIX_VERT / 2;
 
-	vec2 bounce_coord_ctr = (vTexCoord - 0.5)  / 75;
-	vec4 bounce_light = texture(ReflectPrepFullscreenGlowPass, bounce_coord_ctr + 0.5);
-	vec4 fullscreen_glow_mirrored_x = texture(ReflectPrepFullscreenGlowPass, vec2(-1 * bounce_coord_ctr.x, bounce_coord_ctr.y) + 0.5);
-	vec4 fullscreen_glow_mirrored_y = texture(ReflectPrepFullscreenGlowPass, vec2(bounce_coord_ctr.x, -1 * bounce_coord_ctr.y) + 0.5);
+	vec2 bounce_coord = HSM_Anamorphic_Distort(vTexCoord, HSM_LIGHT_BOUNCE_ANAMORPH);
+	vec2 bounce_coord_ctr = (bounce_coord - 0.5) * SCREEN_SCALE / HSM_LIGHT_BOUNCE_SCALE;
 
-	bounce_light = 0.7 * bounce_light + 0.15 * fullscreen_glow_mirrored_x + 0.15 * fullscreen_glow_mirrored_y;
+	vec4 bounce_light = texture(BounceLightPass, bounce_coord_ctr + 0.5);
+	vec4 bounce_light_center = texture(ReflectPrepFullscreenGlowPass, bounce_coord_ctr * 0.5 + 0.5);
+	vec4 bounce_light_mirrored_x = texture(BounceLightPass, vec2(-1 * bounce_coord_ctr.x, bounce_coord_ctr.y) + 0.5);
+	vec4 bounce_light_mirrored_y = texture(BounceLightPass, vec2(bounce_coord_ctr.x, -1 * bounce_coord_ctr.y) + 0.5);
+	bounce_light = (1 - ( mix_horz + mix_vert)) * bounce_light + 
+					mix_horz * bounce_light_mirrored_x + 
+					mix_vert * bounce_light_mirrored_y;
+
+	float bounce_center_Vignette = clamp(HSM_GetStrengthPowerVignetteFactor(bounce_coord_ctr + 0.5, 20, 2), 0, 1);
+	bounce_light = mix(bounce_light, bounce_light_center, HSM_LIGHT_BOUNCE_MIX_FULLSCREEN_GLOW * bounce_center_Vignette);
+
 
 	// Do HSV alterations on the bounce_light
-	if (HSM_COMPOSITE_GLOBAL_BOUNCELIGHT_SATURATION != 1 || 
-		HSM_COMPOSITE_GLOBAL_BOUNCELIGHT_BRIGHTNESS != 1)
+	if (HSM_LIGHT_BOUNCE_SATURATION != 1 || 
+		HSM_LIGHT_BOUNCE_BRIGHTNESS != 1)
 	{
 		vec3 bounce_light_hsv = HSM_RGBtoHSV(bounce_light.rgb);
-		bounce_light_hsv.y *= HSM_COMPOSITE_GLOBAL_BOUNCELIGHT_SATURATION;
-		bounce_light_hsv.z *= HSM_COMPOSITE_GLOBAL_BOUNCELIGHT_BRIGHTNESS;
+		bounce_light_hsv.y *= HSM_LIGHT_BOUNCE_SATURATION;
+		bounce_light_hsv.z *= HSM_LIGHT_BOUNCE_BRIGHTNESS;
 		bounce_light.rgb = HSM_HSVtoRGB(bounce_light_hsv);
 	}
 
-	// if (HSM_COMPOSITE_GLOBAL_BOUNCELIGHT_DISPLAY_MODE > 0.5)
+	// Add some noise to avoid banding
+	bounce_light.rgb += HSM_DitheredNoise(vTexCoord, global.OutputSize.xy, 1);
+
+	// if (HSM_LIGHT_BOUNCE_DISPLAY_MODE > 0.5)
 	// {
 	// 	FragColor = pow(bounce_light, vec4(1 / DEFAULT_SRGB_GAMMA));
 	// 	return;
@@ -368,7 +377,7 @@ void main()
 		precomp_background.rgb *= 1 - clamp(HSM_COMPOSITE_BACKGROUND_STATIC_SHADOW_STRENGTH * (1 - static_lighting), 0, 1);
 
 		// Add bounce light
-		precomp_background.rgb +=   precomp_background_orig.rgb * HSM_COMPOSITE_BACKGROUND_BOUNCELIGHT_MULTIPLIER * bounce_light.rgb * mix((1 - precomp_middleground_shadow_stretch.a), 1, 1 - HSM_COMPOSITE_GLOBAL_BOUNCELIGHT_SHADOW_STRENGTH);
+		precomp_background.rgb +=   precomp_background_orig.rgb * HSM_COMPOSITE_BACKGROUND_BOUNCELIGHT_MULTIPLIER * bounce_light.rgb * mix((1 - precomp_middleground_shadow_stretch.a), 1, 1 - HSM_LIGHT_BOUNCE_SHADOW_STRENGTH);
 
 		// Prep Color
 		precomp_background.rgb = PrepGraphicsForHDR(precomp_background.rgb);
