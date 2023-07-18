@@ -90,7 +90,7 @@ bool HSM_IsOutsideReflectionBoundary()
 								reflection_outer_boundary_coord,
 								bezel_outside_flat_coord, 
 								frame_outside_flat_coord);
-		cache_bounds_coord = (reflection_outer_boundary_coord - 0.5) * 0.9 + 0.5;
+		cache_bounds_coord = (reflection_outer_boundary_coord - 0.5) * (1 / HSM_SCREEN_REFLECTION_SOURCE_BOUNDARY_SCALE) + 0.5;
 	}
 	return HHLP_IsOutsideCoordSpace(cache_bounds_coord);
 }

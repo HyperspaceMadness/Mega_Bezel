@@ -39,17 +39,17 @@ Changes:
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
-  * Material Brightness, Vs Room Static Brightness?
+  * Add Blue Noise for dithering
+  * Add Frame Shadow to Scene Layers Pass Shadows
   * Shadowing Ideas:
     * Possible add floor 
-    * Optionally use Alpha on Background as static shadow? (Probably a bad idea)
     * User supplied shadow map for static shadows (bounce light can appear in these shadows)
       * Background should not have these shadows and possibly only omnipresent shadows
     * User defined height map
-    * Layers Pass outputs static shadows, includes Viewport vignette
     * Tube layer outputs shadow masks for shadows cast by bounce light
       * User supplied image with bounce shadows per channel for different directions
-    * Normal Map Layer for Normal and Height
+
+  * Use SDFs for Bezel & Frame
 
   * Add Back AB/Switch
   * Viewport vignette not working

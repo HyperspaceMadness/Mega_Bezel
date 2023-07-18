@@ -263,21 +263,29 @@ void main()
 	precomp_background = HSM_Linearize(precomp_background, DEFAULT_SRGB_GAMMA);
 	// Gamma added to alpha to avoid clipping on AMD GPUs
 	precomp_background.a = pow(precomp_background.a, DEFAULT_SRGB_GAMMA);
-	float static_lighting = precomp_background.a;
 
+	float static_shadows = precomp_background.a;
+	precomp_background.a = 1.0;
+
+	precomp_additive = HSM_Linearize(precomp_additive, DEFAULT_SRGB_GAMMA);
+	// Gamma added to alpha to avoid clipping on AMD GPUs
+	precomp_additive.a = pow(precomp_additive.a, DEFAULT_SRGB_GAMMA);
+	float reflection_mask = precomp_additive.a;
+
+	// Gray Material Bounce Light Display Mode
 	if (HSM_LIGHT_BOUNCE_DISPLAY_MODE == 1)
 	{
-		vec3 material_color = vec3(0.5);
+		vec3 material_color = vec3(0.2);
 		precomp_foreground.rgb = material_color * precomp_foreground.a;
 		precomp_middleground.rgb = material_color * precomp_middleground.a;
 		precomp_background.rgb = material_color;
 		precomp_additive.rgb = vec3(0.0);
 	}
 
-	precomp_additive = HSM_Linearize(precomp_additive, DEFAULT_SRGB_GAMMA);
-	// Gamma added to alpha to avoid clipping on AMD GPUs
-	precomp_additive.a = pow(precomp_additive.a, DEFAULT_SRGB_GAMMA);
-	float reflection_mask = precomp_additive.a;
+	// Adjust Albedo Brightness of all non-additive layers
+	precomp_foreground.rgb *= HSM_LIGHT_BOUNCE_ALBEDO_BRIGHTNESS;
+	precomp_middleground.rgb *= HSM_LIGHT_BOUNCE_ALBEDO_BRIGHTNESS;
+	precomp_background.rgb *= HSM_LIGHT_BOUNCE_ALBEDO_BRIGHTNESS;\
 
 	vec4 out_color = vec4(0);
 
@@ -297,7 +305,8 @@ void main()
 	float mix_horz = HSM_LIGHT_BOUNCE_MIX_HORZ / 2;
 	float mix_vert = HSM_LIGHT_BOUNCE_MIX_VERT / 2;
 
-	vec2 bounce_coord = HSM_Anamorphic_Distort(vTexCoord, HSM_LIGHT_BOUNCE_ANAMORPH);
+	vec2 bounce_coord = vTexCoord;
+	// vec2 bounce_coord = HSM_Anamorphic_Distort(bounce_coord, HSM_LIGHT_BOUNCE_ANAMORPH);
 	vec2 bounce_coord_ctr = (bounce_coord - 0.5) * SCREEN_SCALE / HSM_LIGHT_BOUNCE_SCALE;
 
 	vec4 bounce_light = texture(BounceLightPass, bounce_coord_ctr + 0.5);
@@ -308,13 +317,12 @@ void main()
 					mix_horz * bounce_light_mirrored_x + 
 					mix_vert * bounce_light_mirrored_y;
 
-	float bounce_center_Vignette = clamp(HSM_GetStrengthPowerVignetteFactor(bounce_coord_ctr + 0.5, 20, 2), 0, 1);
+	float bounce_center_Vignette = clamp(HSM_GetStrengthPowerVignetteFactor(bounce_coord_ctr * 0.5 + 0.5, 20, 2), 0, 1);
 	bounce_light = mix(bounce_light, bounce_light_center, HSM_LIGHT_BOUNCE_MIX_FULLSCREEN_GLOW * bounce_center_Vignette);
 
 
 	// Do HSV alterations on the bounce_light
-	if (HSM_LIGHT_BOUNCE_SATURATION != 1 || 
-		HSM_LIGHT_BOUNCE_BRIGHTNESS != 1)
+	if (HSM_LIGHT_BOUNCE_SATURATION != 1 || HSM_LIGHT_BOUNCE_BRIGHTNESS != 1)
 	{
 		vec3 bounce_light_hsv = HSM_RGBtoHSV(bounce_light.rgb);
 		bounce_light_hsv.y *= HSM_LIGHT_BOUNCE_SATURATION;
@@ -330,7 +338,6 @@ void main()
 	// 	FragColor = pow(bounce_light, vec4(1 / DEFAULT_SRGB_GAMMA));
 	// 	return;
 	// }
-	// See if we need the layer blend mode and Apply in additive mode
 
 	// Prep the Nightlighting images
 	vec3 nightlight1_rgb = vec3(1);
@@ -362,8 +369,10 @@ void main()
 		vec4 precomp_background_orig = precomp_background;
 
 		// Adjust brightness and add static shadows
-		precomp_background.rgb *= HSM_COMPOSITE_BACKGROUND_BASE_LIGHTING_BRIGHTNESS * (1 - clamp(HSM_COMPOSITE_BACKGROUND_STATIC_SHADOW_STRENGTH * (1 - static_lighting), 0, 1));
-		
+		precomp_background.rgb *= HSM_COMPOSITE_BACKGROUND_STATIC_AMBIENT_MULTIPLIER;
+		precomp_background.rgb *= (1 - clamp(HSM_COMPOSITE_BACKGROUND_STATIC_SHADOW_STRENGTH * (1 - static_shadows), 0, 1));
+		// precomp_background.rgb *= 1 - mix(vec3(0), vec3(static_shadows), HSM_COMPOSITE_BACKGROUND_STATIC_SHADOW_STRENGTH);
+
 		// Apply Night Lighting Images
 		precomp_background.rgb = ApplyNightlightImages(	precomp_background.rgb,
 														nightlight1_rgb,
@@ -374,16 +383,16 @@ void main()
 														BLEND_MODE_NORMAL,
 														HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
 		
-		precomp_background.rgb *= 1 - clamp(HSM_COMPOSITE_BACKGROUND_STATIC_SHADOW_STRENGTH * (1 - static_lighting), 0, 1);
+		precomp_background.rgb *= 1 - clamp(HSM_COMPOSITE_BACKGROUND_STATIC_SHADOW_STRENGTH * (1 - static_shadows), 0, 1);
 
 		// Add bounce light
-		precomp_background.rgb +=   precomp_background_orig.rgb * HSM_COMPOSITE_BACKGROUND_BOUNCELIGHT_MULTIPLIER * bounce_light.rgb * mix((1 - precomp_middleground_shadow_stretch.a), 1, 1 - HSM_LIGHT_BOUNCE_SHADOW_STRENGTH);
+		precomp_background.rgb += precomp_background_orig.rgb * HSM_COMPOSITE_BACKGROUND_BOUNCELIGHT_MULTIPLIER * bounce_light.rgb * mix((1 - precomp_middleground_shadow_stretch.a), 1, 1 - HSM_LIGHT_BOUNCE_SHADOW_STRENGTH);
 
 		// Prep Color
 		precomp_background.rgb = PrepGraphicsForHDR(precomp_background.rgb);
 
-		// Composite
-		out_color = HSM_PreMultAlphaBlend(out_color, precomp_background);
+		// The background is always 100% opaque so we can just replace the out_color
+		out_color = precomp_background;
 	}
 
 	// Add additional shadow depth by darkening bouncelight shadow areas
@@ -418,7 +427,7 @@ void main()
 		vec4 precomp_middleground_orig = precomp_middleground;
 
 		// Adjust brightness and add static shadows
-		precomp_middleground.rgb *= HSM_COMPOSITE_MIDDLEGROUND_BASE_LIGHTING_BRIGHTNESS * static_lighting;
+		precomp_middleground.rgb *= HSM_COMPOSITE_MIDDLEGROUND_STATIC_AMBIENT_MULTIPLIER * static_shadows;
 		
 		// Apply Night Lighting Images
 		precomp_middleground.rgb = ApplyNightlightImages(	precomp_middleground.rgb,
@@ -448,7 +457,7 @@ void main()
 		vec4 precomp_foreground_orig = precomp_foreground;
 
 		// Adjust brightness and add static shadows
-		precomp_foreground.rgb *= HSM_COMPOSITE_FOREGROUND_BASE_LIGHTING_BRIGHTNESS * static_lighting;
+		precomp_foreground.rgb *= HSM_COMPOSITE_FOREGROUND_STATIC_AMBIENT_MULTIPLIER * static_shadows;
 		
 		// Apply Night Lighting Images
 		precomp_foreground.rgb = ApplyNightlightImages(	precomp_foreground.rgb,
