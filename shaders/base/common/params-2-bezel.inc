@@ -177,7 +177,7 @@ float HSM_FRM_OUTER_EDGE_THICKNESS = global.HSM_FRM_OUTER_EDGE_THICKNESS * 0.000
 #pragma parameter HSM_FRM_OUTER_EDGE_SHADING 		    "          Outer Edge Shading" 50 0 100 5
 float HSM_FRM_OUTER_EDGE_SHADING = global.HSM_FRM_OUTER_EDGE_SHADING / 100;
 
-#pragma parameter HSM_FRM_SHADOW_OPACITY	            "          Shadow Opacity" 100 0 300 1
+#pragma parameter HSM_FRM_SHADOW_OPACITY	            "          Shadow Opacity" 70 0 300 1
 float HSM_FRM_SHADOW_OPACITY = global.HSM_FRM_SHADOW_OPACITY / 100;
 
 #pragma parameter HSM_FRM_SHADOW_WIDTH                  "          Shadow Width" 100 0 500 1

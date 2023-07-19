@@ -544,9 +544,8 @@ void main()
 
 	// Get color for the frame area outside of the bezel
 	vec2 frame_outside_coord_ctr = FRAME_OUTSIDE_CURVED_COORD - 0.5;
-	float SHADOW_OUTSIDE_FRAME_MASK = 1 - HSM_GetCornerMask(frame_outside_coord_ctr * 1.01 + 0.5, TUBE_DIFFUSE_ASPECT, HSM_FRM_OUTER_CORNER_RADIUS, 1);
+
 	OUTSIDE_FRAME_MASK = 1 - HSM_GetCornerMask(frame_outside_coord_ctr + 0.5, TUBE_DIFFUSE_ASPECT, HSM_FRM_OUTER_CORNER_RADIUS, 1);
-	OUTSIDE_FRAME_MASK_FOR_IMAGE = 1 - HSM_GetCornerMask(frame_outside_coord_ctr * 0.999 + 0.5, TUBE_DIFFUSE_ASPECT, HSM_FRM_OUTER_CORNER_RADIUS, 1);
 	// Get masks for shadows, from frame as well as sides and top and bottom of viewport
 	INSIDE_BEZEL_MASK = 1 - OUTSIDE_BEZEL_MASK;
 	BEZEL_MASK = INSIDE_BEZEL_MASK * (1 - TUBE_MASK);
@@ -561,7 +560,7 @@ void main()
 	vec4 top_image = vec4(0);
 	vec4 cab_glass_image = vec4(0);
 	vec4 tube_bg_layer = vec4(0);
-	vec4 static_shadow_multiply = vec4(1);
+	float static_shadow_multiply = 1;
 
 	CUTOUT_MASK = 1;
 
@@ -759,28 +758,17 @@ void main()
 			// Shadow of Frame onto background
 			if (HSM_FRM_SHADOW_OPACITY > 0)
 			{
-				vec4 frame_shadow_layer = vec4(0);
 				if (HSM_FRM_OPACITY > 0.001)
 				{
 					// Get masks on side of frame to multiply together to get a shadow around the frame
 					// Get vector from the screen edge outward
 					float frame_edge = 0.495;
-
+					
+					float SHADOW_OUTSIDE_FRAME_MASK = 1 - HSM_GetCornerMask(frame_outside_coord_ctr * 1.01 + 0.5, TUBE_DIFFUSE_ASPECT, HSM_FRM_OUTER_CORNER_RADIUS, 1);
 					float dist_outside_frame = length(clamp(abs(frame_outside_coord_ctr * 1.01) - frame_edge, 0, 1) * vec2(TUBE_DIFFUSE_ASPECT, 1));
-					frame_shadow_layer.a = SHADOW_OUTSIDE_FRAME_MASK * HHLP_QuadraticBezier(smoothstep(HSM_FRM_SHADOW_WIDTH, 0, dist_outside_frame), vec2(1, 0));
+					float frame_shadow_alpha = OUTSIDE_FRAME_MASK * HSM_FRM_SHADOW_OPACITY * SHADOW_OUTSIDE_FRAME_MASK * HHLP_QuadraticBezier(smoothstep(HSM_FRM_SHADOW_WIDTH, 0, dist_outside_frame), vec2(1, 0));
+					static_shadow_multiply *= 1 - frame_shadow_alpha;
 				}
-				frame_shadow_layer *= HSM_FRM_SHADOW_OPACITY;
-
-				// TODO probably best to replace this with standard premultiplied blend
-				bezel_layer = BlendModeMaskLayerMix(	frame_shadow_layer,
-														bezel_layer, 
-														BLEND_MODE_NORMAL, 
-														PRECOMP_INDEX_BACKGROUND,
-														1,
-														MASK_MODE_ALL,
-														0, 
-														SHOW_ON_DUALSCREEN_MODE_BOTH,
-														1);
 			}
 
 
@@ -1120,15 +1108,17 @@ void main()
 			vec4 vignette_layer = vec4(0);
 			vignette_layer.a += 0.75 * HHLP_QuadraticBezier(1 - HSM_GetVignetteFactor(vignette_coord, HSM_VIEWPORT_VIGNETTE_OPACITY, 1), vec2(1, 0.5));
 
-			static_shadow_multiply = BlendModeMaskLayerMix(	static_shadow_multiply,
-															vignette_layer,
-															BLEND_MODE_NORMAL,
-															PRECOMP_INDEX_BACKGROUND,
-															HSM_BG_ADD_MODE_NIGHTLIGHTING_AMOUNT,
-															HSM_VIEWPORT_VIGNETTE_MASK_MODE, 
-															HSM_VIEWPORT_VIGNETTE_CUTOUT_MODE,
-															SHOW_ON_DUALSCREEN_MODE_BOTH,
-															HSM_VIEWPORT_VIGNETTE_OPACITY);
+			// static_shadow_multiply = BlendModeMaskLayerMix(	static_shadow_multiply,
+			// 												vignette_layer,
+			// 												BLEND_MODE_NORMAL,
+			// 												PRECOMP_INDEX_BACKGROUND,
+			// 												HSM_BG_ADD_MODE_NIGHTLIGHTING_AMOUNT,
+			// 												HSM_VIEWPORT_VIGNETTE_MASK_MODE, 
+			// 												HSM_VIEWPORT_VIGNETTE_CUTOUT_MODE,
+			// 												SHOW_ON_DUALSCREEN_MODE_BOTH,
+			// 												HSM_VIEWPORT_VIGNETTE_OPACITY);
+
+			static_shadow_multiply *= 1 - vignette_layer.a;
 		}
 	}
 
@@ -1326,7 +1316,7 @@ void main()
 	// This is the mask for all shadows which should always darken areas unless
 	// they are illuminated by bounce light (or ambilight)
 	// Shadow sources: user bg shadow image, height map.
-	precomp_background.a = static_shadow_multiply.r;
+	precomp_background.a = static_shadow_multiply;
 	// precomp_background = static_shadow_multiply;
 
 

@@ -39,8 +39,9 @@ Changes:
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
-  * Add Blue Noise for dithering
-  * Add Frame Shadow to Scene Layers Pass Shadows
+  * Night Lighting as Procedural 3D lighting with Shadows
+  * Add Blue Noise for dithering including glass highlight
+  * Add Darker Frame Shadow at bottom
   * Shadowing Ideas:
     * Possible add floor 
     * User supplied shadow map for static shadows (bounce light can appear in these shadows)
