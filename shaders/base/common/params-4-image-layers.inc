@@ -97,7 +97,7 @@ float HSM_LIGHT_BOUNCE_ALBEDO_BRIGHTNESS = 1;
 #pragma parameter HSM_LIGHT_BOUNCE_STATIC_AMBIENT_BRIGHTNESS                "          Static Ambient Brightness (When Unlit)"  50 0 100 0.5
 float HSM_LIGHT_BOUNCE_STATIC_AMBIENT_BRIGHTNESS = global.HSM_LIGHT_BOUNCE_STATIC_AMBIENT_BRIGHTNESS / 100;
 
-#pragma parameter HSM_LIGHT_BOUNCE_BRIGHTNESS                               "          Bouncelight Brightness"  20 0 500 1
+#pragma parameter HSM_LIGHT_BOUNCE_BRIGHTNESS                               "          Bouncelight Brightness"  15 0 500 1
 float HSM_LIGHT_BOUNCE_BRIGHTNESS = 10 * global.HSM_LIGHT_BOUNCE_BRIGHTNESS / 100;
 
 #pragma parameter HSM_LIGHT_BOUNCE_SCALE                                    "          Bouncelight Scale"  100 0 500 5
@@ -107,7 +107,7 @@ float HSM_LIGHT_BOUNCE_SCALE = global.HSM_LIGHT_BOUNCE_SCALE / 100;
 // float HSM_LIGHT_BOUNCE_ANAMORPH = global.HSM_LIGHT_BOUNCE_ANAMORPH / 10.0;
 float HSM_LIGHT_BOUNCE_ANAMORPH = 0;
 
-#pragma parameter HSM_LIGHT_BOUNCE_MIX_HORZ                                 "          Bouncelight Mix Horizontal"  0 0 100 1
+#pragma parameter HSM_LIGHT_BOUNCE_MIX_HORZ                                 "          Bouncelight Mix Horizontal"  20 0 100 1
 float HSM_LIGHT_BOUNCE_MIX_HORZ = global.HSM_LIGHT_BOUNCE_MIX_HORZ / 100;
 
 #pragma parameter HSM_LIGHT_BOUNCE_MIX_VERT                                 "          Bouncelight Mix Vertical"  0 0 100 1
@@ -138,6 +138,7 @@ float HSM_COMPOSITE_BACKGROUND_NIGHTLIGHT1_MULTIPLIER = global.HSM_COMPOSITE_BAC
 #pragma parameter HSM_COMPOSITE_BACKGROUND_NIGHTLIGHT2_MULTIPLIER           "          Night Lighting 2nd Image Multiplier"  100 0 100 1
 float HSM_COMPOSITE_BACKGROUND_NIGHTLIGHT2_MULTIPLIER = global.HSM_COMPOSITE_BACKGROUND_NIGHTLIGHT2_MULTIPLIER / 100; 
 
+// Not sure this is helpful, could have params to control how much Background Shadow, Device Shadow, etc
 #pragma parameter HSM_COMPOSITE_BACKGROUND_STATIC_SHADOW_STRENGTH           "          Static Shadow Strength"  100 0 300 1
 float HSM_COMPOSITE_BACKGROUND_STATIC_SHADOW_STRENGTH = global.HSM_COMPOSITE_BACKGROUND_STATIC_SHADOW_STRENGTH / 100; 
 

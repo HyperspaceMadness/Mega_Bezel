@@ -1,4 +1,4 @@
-shaders = 42
+shaders = 44
 
 shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
@@ -249,6 +249,7 @@ g_gamma_out = 2.45
 shader35 = ../../../shaders/base/linearize-crt.slang
 mipmap_input35 = true
 filter_linear35 = true
+wrap_mode35 = "mirrored_repeat"
 scale_type35 = absolute
 scale_x35 = 800
 scale_y35 = 600
@@ -258,12 +259,14 @@ alias35 = "ReflectPrepLowResPass"
 # Add Blur for the Reflection (Horizontal) ----------------------------------------------------------------
 shader36 = ../../../shaders/base/blur-outside-screen-horiz.slang
 mipmap_input36 = true
+wrap_mode36 = "mirrored_repeat"
 filter_linear36 = true
 float_framebuffer36 = true
 
 # Add Blur for the Reflection (Vertical) ----------------------------------------------------------------
 shader37 = ../../../shaders/base/blur-outside-screen-vert.slang
 filter_linear37 = true
+wrap_mode37 = "mirrored_repeat"
 float_framebuffer37 = true
 alias37 = "ReflectPrepBlurredPass"
 
@@ -273,41 +276,62 @@ alias37 = "ReflectPrepBlurredPass"
 shader38 = ../../../../../blurs/shaders/royale/blur9x9.slang
 mipmap_input38 = true
 filter_linear38 = true
+wrap_mode38 = "mirrored_repeat"
 scale_type38 = absolute
 scale_x38 = 128
 scale_y38 = 128
 float_framebuffer38 = true
 alias38 = "ReflectPrepDiffusedPass"
 
-# Add Diffused glow all around the screen ----------------------------------------------------------------
-#      Blurred so much that it's non directional
-#      Mipmap option allows downscaling without artifacts
+# Add more blurred glow, used for Bounce Lighting
 shader39 = ../../../../../blurs/shaders/royale/blur9x9.slang
 mipmap_input39 = true
 filter_linear39 = true
+wrap_mode39 = "mirrored_repeat"
 scale_type39 = absolute
-scale_x39 = 12
-scale_y39 = 12
+scale_x39 = 32
+scale_y39 = 32
 float_framebuffer39 = true
-alias39 = "ReflectPrepFullscreenGlowPass"
+alias39 = "BounceLightPass"
+
+# Add Diffused glow all around the screen ----------------------------------------------------------------
+#      Blurred so much that it's non directional
+#      Mipmap option allows downscaling without artifacts
+shader40 = ../../../../../blurs/shaders/royale/blur9x9.slang
+mipmap_input40 = true
+filter_linear40 = true
+wrap_mode40 = "mirrored_repeat"
+scale_type40 = absolute
+scale_x40 = 12
+scale_y40 = 12
+float_framebuffer40 = true
+alias40 = "ReflectPrepFullscreenGlowPass"
+
+// This pass IS NECESSARY to get the previous pass to be mipmapped
+shader41 = ../../../shaders/base/do-nothing.slang
+mipmap_input41 = true
+filter_linear41 = true
+scale_type41 = absolute
+scale_x41 = 8
+scale_y41 = 8
 
 # Bezel Reflection ----------------------------------------------------------------
-shader40 = ../../../shaders/base/reflection.slang
-scale_type40 = viewport
-filter_linear40 = true
-float_framebuffer40 = true
-alias40 = "ReflectPass"
+shader42 = ../../../shaders/base/reflection.slang
+scale_type42 = viewport
+filter_linear42 = true
+float_framebuffer42 = true
+alias42 = "ReflectPass"
 
 # Combine Passes ----------------------------------------------------------------
-shader41 = ../../../shaders/base/final-composite.slang
+shader43 = ../../../shaders/base/final-composite.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
-filter_linear41 = false
-scale_type41 = viewport
+filter_linear43 = false
+scale_type43 = viewport
 
 
 # Textures All
 # Define textures to be used by the different passes
-textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;GlassPresetHighlightImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;LEDImage;TopLayerImage;NightLightingImage;NightLighting2Image;BackgroundHeightImage;"
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundShadowImage;ReflectionMaskImage;GlassPresetHighlightImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceShadowImage;DeviceLEDImage;DecalImage;LEDImage;TopLayerImage;NightLightingImage;NightLighting2Image;BackgroundHeightImage;"
 
 SamplerLUT1 = ../../../shaders/guest/lut/trinitron-lut.png
 SamplerLUT1_linear = true 
@@ -357,9 +381,10 @@ BackgroundImage = ../../../shaders/textures/BackgroundImage_Carbon_3840x2160.png
 BackgroundImage_linear = true
 BackgroundImage_mipmap = 1
 
-BackgroundVertImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-BackgroundVertImage_linear = true
-BackgroundVertImage_mipmap = 1
+BackgroundShadowImage = ../../../shaders/textures/Placeholder_White_16x16.png
+BackgroundShadowImage_linear = true
+BackgroundShadowImage_mipmap = 1
+BackgroundShadowImage_wrap_mode = "mirrored_repeat"
 
 CabinetGlassImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 CabinetGlassImage_linear = true
@@ -369,9 +394,10 @@ DeviceImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 DeviceImage_linear = true
 DeviceImage_mipmap = 1
 
-DeviceVertImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-DeviceVertImage_linear = true
-DeviceVertImage_mipmap = 1
+DeviceShadowImage = ../../../shaders/textures/Placeholder_White_16x16.png
+DeviceShadowImage_linear = true
+DeviceShadowImage_mipmap = 1
+DeviceShadowImage_wrap_mode = "mirrored_repeat"
 
 DeviceLEDImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 DeviceLEDImage_linear = true

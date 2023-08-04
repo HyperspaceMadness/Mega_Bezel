@@ -15,11 +15,11 @@ FrameTextureImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 
 GlassPresetHighlightImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 
-BackgroundImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-BackgroundVertImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+BackgroundImage = ../../../shaders/textures/Placeholder_White_16x16.png
+BackgroundShadowImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 LEDImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 DeviceImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-DeviceVertImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+DeviceShadowImage = ../../../shaders/textures/Placeholder_White_16x16.png
 DeviceLEDImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 DecalImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 CabinetGlassImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png

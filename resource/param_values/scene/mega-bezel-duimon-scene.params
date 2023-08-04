@@ -1,5 +1,4 @@
 BackgroundImage = ../../../shaders/textures/HSM_Duimon_Super_Famicom_3840x2160.png
-BackgroundVertImage = ../../../shaders/textures/HSM_Duimon_Super_Famicom_3840x2160.png
 
 HSM_BG_FILL_MODE = 1
 

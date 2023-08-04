@@ -332,7 +332,7 @@ scale41 = 1.0
 
 # Textures All
 # Define textures to be used by the different passes
-textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;GlassPresetHighlightImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;LEDImage;TopLayerImage;NightLightingImage;NightLighting2Image;BackgroundHeightImage;"
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundShadowImage;ReflectionMaskImage;GlassPresetHighlightImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceShadowImage;DeviceLEDImage;DecalImage;LEDImage;TopLayerImage;NightLightingImage;NightLighting2Image;BackgroundHeightImage;"
 
 SamplerLUT1 = ../../../shaders/guest/lut/trinitron-lut.png
 SamplerLUT1_linear = true 
@@ -382,9 +382,10 @@ BackgroundImage = ../../../shaders/textures/BackgroundImage_Carbon_3840x2160.png
 BackgroundImage_linear = true
 BackgroundImage_mipmap = 1
 
-BackgroundVertImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-BackgroundVertImage_linear = true
-BackgroundVertImage_mipmap = 1
+BackgroundShadowImage = ../../../shaders/textures/Placeholder_White_16x16.png
+BackgroundShadowImage_linear = true
+BackgroundShadowImage_mipmap = 1
+BackgroundShadowImage_wrap_mode = "mirrored_repeat"
 
 CabinetGlassImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 CabinetGlassImage_linear = true
@@ -394,9 +395,10 @@ DeviceImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 DeviceImage_linear = true
 DeviceImage_mipmap = 1
 
-DeviceVertImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-DeviceVertImage_linear = true
-DeviceVertImage_mipmap = 1
+DeviceShadowImage = ../../../shaders/textures/Placeholder_White_16x16.png
+DeviceShadowImage_linear = true
+DeviceShadowImage_mipmap = 1
+DeviceShadowImage_wrap_mode = "mirrored_repeat"
 
 DeviceLEDImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 DeviceLEDImage_linear = true

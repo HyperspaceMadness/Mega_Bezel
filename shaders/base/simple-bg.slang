@@ -68,12 +68,11 @@ layout(set = 0, binding = 1) uniform sampler2D CacheInfoPass;
 layout(set = 0, binding = 2) uniform sampler2D Source;
 
 layout(set = 0, binding = 3) uniform sampler2D BackgroundImage;
-layout(set = 0, binding = 4) uniform sampler2D BackgroundVertImage;
 
-layout(set = 0, binding = 5) uniform sampler2D CabinetGlassImage;
-layout(set = 0, binding = 6) uniform sampler2D ReflectionMaskImage;
+layout(set = 0, binding = 4) uniform sampler2D CabinetGlassImage;
+layout(set = 0, binding = 5) uniform sampler2D ReflectionMaskImage;
 
-layout(set = 0, binding = 7) uniform sampler2D SimpleBGPassFeedback;
+layout(set = 0, binding = 6) uniform sampler2D SimpleBGPassFeedback;
 #define PassFeedback SimpleBGPassFeedback
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,7 +96,7 @@ void main()
 	// Get the CRT pass and make it in linear space & mask the area outside the screen
 	vec4 frag_color_linear = HSM_Linearize(texture(Source, UNFLIPPED_VIEWPORT_COORD.xy), DEFAULT_SRGB_GAMMA);
 
-	frag_color_linear = HSM_ApplySimpleBG(frag_color_linear, vTexCoord, BackgroundImage, BackgroundVertImage);
+	frag_color_linear = HSM_ApplySimpleBG(frag_color_linear, vTexCoord, BackgroundImage);
 
 	// FragColor = frag_color_linear;
 

@@ -98,7 +98,7 @@ scale10 = 1.0
 
 # Textures Potato
 # Define textures to be used by the different passes
-textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;ScreenPlacementImage;BackgroundImage;BackgroundVertImage"
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;ScreenPlacementImage;BackgroundImage"
 
 SamplerLUT1 = ../../../shaders/guest/lut/trinitron-lut.png
 SamplerLUT1_linear = true 
@@ -115,10 +115,6 @@ ScreenPlacementImage_linear = false
 BackgroundImage = ../../../shaders/textures/Baked_Frame_Carbonfiber_Background.png
 BackgroundImage_linear = true
 BackgroundImage_mipmap = 1
-
-BackgroundVertImage = ../../../shaders/textures/Baked_Frame_Carbonfiber_Background_Vert.png
-BackgroundVertImage_linear = true
-BackgroundVertImage_mipmap = 1
 
 # Parameters
 HSM_ASPECT_RATIO_MODE = 1

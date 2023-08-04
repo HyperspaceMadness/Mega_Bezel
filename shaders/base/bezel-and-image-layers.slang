@@ -439,17 +439,21 @@ layout(location = 0) out vec4 FragColor;
 // Pass Framebuffer Textures
 layout(set = 0, binding = 1)	uniform sampler2D CacheInfoPass;
 
+// Image Layers
 layout(set = 0, binding = 2)	uniform sampler2D BackgroundImage;
-layout(set = 0, binding = 3)	uniform sampler2D BackgroundVertImage;
+layout(set = 0, binding = 3)	uniform sampler2D BackgroundShadowImage;
 
 layout(set = 0, binding = 4)	uniform sampler2D LEDImage;
-layout(set = 0, binding = 5)	uniform sampler2D FrameTextureImage;
-layout(set = 0, binding = 6)	uniform sampler2D DeviceImage;
-layout(set = 0, binding = 7)	uniform sampler2D DeviceVertImage;
-layout(set = 0, binding = 8)	uniform sampler2D DeviceLEDImage;
-layout(set = 0, binding = 9)	uniform sampler2D DecalImage;
-layout(set = 0, binding = 10)	uniform sampler2D CabinetGlassImage;
-layout(set = 0, binding = 11)	uniform sampler2D TopLayerImage;
+
+layout(set = 0, binding = 5)	uniform sampler2D DeviceImage;
+layout(set = 0, binding = 6)	uniform sampler2D DeviceShadowImage;
+
+layout(set = 0, binding = 7)	uniform sampler2D DeviceLEDImage;
+layout(set = 0, binding = 8)	uniform sampler2D DecalImage;
+layout(set = 0, binding = 9)	uniform sampler2D CabinetGlassImage;
+layout(set = 0, binding = 10)	uniform sampler2D TopLayerImage;
+
+layout(set = 0, binding = 11)	uniform sampler2D FrameTextureImage;
 layout(set = 0, binding = 12)	uniform sampler2D ReflectionMaskImage;
 
 layout(set = 0, binding = 13) uniform sampler2D SceneLayersPassFeedback;
@@ -791,8 +795,7 @@ void main()
 		//-----------------------------------------------------------------------------------------
 		// Background
 		//-----------------------------------------------------------------------------------------
-		bool bg_use_vert_image = SCREEN_ASPECT < 1 && textureSize(BackgroundVertImage, 0).y > 16 ? true : false; 
-		vec2 BACKGROUND_SIZE = bg_use_vert_image ? textureSize(BackgroundVertImage, 0) : textureSize(BackgroundImage, 0);
+		vec2 BACKGROUND_SIZE = textureSize(BackgroundImage, 0);
 		BACKGROUND_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
 													VIEWPORT_FLIPPED_UNZOOMED_COORD,
 													TEXTURE_ASPECT_MODE_EXPLICIT,
@@ -819,11 +822,8 @@ void main()
 
 		if (HSM_BG_OPACITY > 0 && BACKGROUND_SIZE.y > 16)
 		{
-			if (bg_use_vert_image)
-				bg_image = HSM_GetMipmappedTexSample(BackgroundVertImage, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
-			else
-				bg_image = HSM_GetMipmappedTexSample(BackgroundImage, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
-
+			bg_image = HSM_GetMipmappedTexSample(BackgroundImage, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
+			static_shadow_multiply *= HSM_GetMipmappedTexSample(BackgroundShadowImage, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS).r;
 			// Premultiply Alpha
 			bg_image = HSM_GetPreMultipliedColorLinear(bg_image, HSM_BG_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
 
@@ -837,8 +837,7 @@ void main()
 		//----------------------------------------------------
 		// Device Image
 		//----------------------------------------------------
-		bool device_use_vert_image = SCREEN_ASPECT < 1 && textureSize(DeviceVertImage, 0).y > 16 ? true : false; 
-		vec2 DEVICE_SIZE = device_use_vert_image ? textureSize(DeviceVertImage, 0) : textureSize(DeviceImage, 0);
+		vec2 DEVICE_SIZE = textureSize(DeviceImage, 0);
 		DEVICE_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
 												VIEWPORT_FLIPPED_UNZOOMED_COORD,
 												TEXTURE_ASPECT_MODE_EXPLICIT,
@@ -857,9 +856,9 @@ void main()
 
 		if (HSM_DEVICE_OPACITY > 0 && DEVICE_SIZE.y > 16)
 		{
-			device_image = device_use_vert_image ? 	HSM_GetMipmappedTexSample(DeviceVertImage, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS) :
-													HSM_GetMipmappedTexSample(DeviceImage, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS);
-
+			device_image = HSM_GetMipmappedTexSample(DeviceImage, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS);
+			static_shadow_multiply = clamp(static_shadow_multiply + device_image.a, 0, 1);
+			static_shadow_multiply *= HSM_GetMipmappedTexSample(DeviceShadowImage, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS).r;
 			// Premultiply Alpha
 			device_image = HSM_GetPreMultipliedColorLinear(device_image, HSM_DEVICE_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
 
@@ -1377,21 +1376,21 @@ void main()
 	#endif
 
 	// Need to encode final gamma in source pass since only 8bit
-	precomp_foreground = HSM_Delinearize(precomp_foreground, DEFAULT_SRGB_GAMMA);
+	// precomp_foreground = HSM_Delinearize(precomp_foreground, DEFAULT_SRGB_GAMMA);
 	// Gamma added to alpha to avoid clipping on AMD GPUs
-	precomp_foreground.a = pow(precomp_foreground.a, 1 / DEFAULT_SRGB_GAMMA);
+	precomp_foreground = pow(precomp_foreground, vec4(1 / DEFAULT_SRGB_GAMMA));
 
 	precomp_middleground = HSM_Delinearize(precomp_middleground, DEFAULT_SRGB_GAMMA);
 	// Gamma added to alpha to avoid clipping on AMD GPUs
-	precomp_middleground.a = pow(precomp_middleground.a, 1 / DEFAULT_SRGB_GAMMA);
+	precomp_middleground = pow(precomp_middleground, vec4(1 / DEFAULT_SRGB_GAMMA));
 
-	precomp_background = HSM_Delinearize(precomp_background, DEFAULT_SRGB_GAMMA);
+	// precomp_background = HSM_Delinearize(precomp_background, DEFAULT_SRGB_GAMMA);
 	// Gamma added to alpha to avoid clipping on AMD GPUs
-	precomp_background.a = pow(precomp_background.a, 1 / DEFAULT_SRGB_GAMMA);
+	precomp_background = pow(precomp_background, vec4(1 / DEFAULT_SRGB_GAMMA));
 
-	precomp_additive = HSM_Delinearize(precomp_additive, DEFAULT_SRGB_GAMMA);
+	// precomp_additive = HSM_Delinearize(precomp_additive, DEFAULT_SRGB_GAMMA);
 	// Gamma added to alpha to avoid clipping on AMD GPUs
-	precomp_additive.a = pow(precomp_additive.a, 1 / DEFAULT_SRGB_GAMMA);
+	precomp_additive = pow(precomp_additive, vec4(1 / DEFAULT_SRGB_GAMMA));
 
 	vec4 image_layers_packed = HSM_Pack_4_Rgba_To_1_Rgba(precomp_foreground
 														,precomp_middleground

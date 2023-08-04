@@ -1224,9 +1224,8 @@ vec2 HSM_GetCrtShaderFinalCoordExtraVariables(vec2 screen_coord,
 }
 
 vec4 HSM_ApplySimpleBGExplicit(	vec4 in_crt_color,
-							vec2 zoomed_viewport_coord, 
-							sampler2D BackgroundImage, 
-							sampler2D BackgroundVertImage,
+							vec2 zoomed_viewport_coord,
+							sampler2D BackgroundImage,
 							float crt_blend_mode,
 							float bg_on_top,
 							float bg_blend_mode,
@@ -1246,8 +1245,7 @@ vec4 HSM_ApplySimpleBGExplicit(	vec4 in_crt_color,
 		// Background
 		//-----------------------------------------------------------------------------------------
 		vec2 bg_coord = zoomed_viewport_coord;
-		bool bg_use_vert_image = SCREEN_ASPECT < 1 && textureSize(BackgroundVertImage, 0).y > 16 ? true : false; 
-		vec2 bg_size = bg_use_vert_image ? textureSize(BackgroundVertImage, 0) : textureSize(BackgroundImage, 0);
+		vec2 bg_size = textureSize(BackgroundImage, 0);
 
 		vec4 bg_layer = vec4(0);
 
@@ -1256,10 +1254,7 @@ vec4 HSM_ApplySimpleBGExplicit(	vec4 in_crt_color,
 			// Correct image coordinate for image aspect ratio
 			bg_coord.x = (bg_coord.x - 0.5) / ((bg_size.x / bg_size.y) / (global.FinalViewportSize.x/global.FinalViewportSize.y)) + 0.5;
 
-			if (bg_use_vert_image)
-				bg_layer = texture(BackgroundVertImage, bg_coord);
-			else
-				bg_layer = texture(BackgroundImage, bg_coord);
+			bg_layer = texture(BackgroundImage, bg_coord);
 			bg_layer = HSM_Linearize(bg_layer, DEFAULT_SRGB_GAMMA);
 
 			vec3 bg_gel = colorize_using_texture * bg_layer.rgb * colorize_brightness + (1 - colorize_using_texture);
@@ -1288,8 +1283,7 @@ vec4 HSM_ApplySimpleBGExplicit(	vec4 in_crt_color,
 
 vec4 HSM_ApplySimpleBG(	vec4 in_crt_color, 
 						vec2 in_vTexCoord,
-						sampler2D BackgroundImage, 
-						sampler2D BackgroundVertImage
+						sampler2D BackgroundImage
 						)
 {
 	if (HSM_SIMPLEBG_OPACITY < 0.001)
@@ -1309,7 +1303,6 @@ vec4 HSM_ApplySimpleBG(	vec4 in_crt_color,
 	return HSM_ApplySimpleBGExplicit(	in_crt_color,
 										zoomed_viewport_coord,
 										BackgroundImage,
-										BackgroundVertImage,
 										crt_blend_mode,
 										bg_on_top,
 										bg_blend_mode,

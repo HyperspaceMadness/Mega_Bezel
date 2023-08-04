@@ -65,19 +65,19 @@ float HSM_STATIC_LAYERS_GAMMA = global.HSM_STATIC_LAYERS_GAMMA;
 //    AMBIENT LIGHTING AKA NIGHTLIGHTING 
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_AMBIENT_EMPTY_LINE							" " 0 0 0.001 0.001
-#pragma parameter HSM_AMBIENT_TITLE                       "[ AMBIENT LIGHTING ]:" 0 0 0.001 0.001
+#pragma parameter HSM_AMBIENT_TITLE                       "[ NIGHT LIGHTING ]:" 0 0 0.001 0.001
 
-#pragma parameter HSM_AMBIENT_LIGHTING_OPACITY                      "          Ambient Global Opacity Multiplier"  0 0 100 1
-float HSM_AMBIENT_LIGHTING_OPACITY = global.HSM_AMBIENT_LIGHTING_OPACITY / 100;
+#pragma parameter HSM_LIGHT_NIGHTLIGHTING_OPACITY          "      Night Lighting Global Opacity Multiplier"  0 0 100 1
+float HSM_LIGHT_NIGHTLIGHTING_OPACITY = global.HSM_LIGHT_NIGHTLIGHTING_OPACITY / 100;
 
-#pragma parameter HSM_AMBIENT1_OPACITY                     "          Ambient 1st Image Opacity"  100 0 100 1
-float HSM_AMBIENT1_OPACITY = global.HSM_AMBIENT1_OPACITY / 100 * global.HSM_AMBIENT_LIGHTING_OPACITY / 100;
+#pragma parameter HSM_AMBIENT1_OPACITY                     "      Night Lighting 1st Image Opacity"  100 0 100 1
+float HSM_AMBIENT1_OPACITY = global.HSM_AMBIENT1_OPACITY / 100 * global.HSM_LIGHT_NIGHTLIGHTING_OPACITY / 100;
 
-#pragma parameter HSM_AMBIENT2_OPACITY                     "          Ambient 2nd Image Opacity (Used for BG by Default)"  100 0 100 1
-float HSM_AMBIENT2_OPACITY = global.HSM_AMBIENT2_OPACITY / 100 * global.HSM_AMBIENT_LIGHTING_OPACITY / 100;
+#pragma parameter HSM_AMBIENT2_OPACITY                     "      Night Lighting 2nd Image Opacity (Used for BG by Default)"  100 0 100 1
+float HSM_AMBIENT2_OPACITY = global.HSM_AMBIENT2_OPACITY / 100 * global.HSM_LIGHT_NIGHTLIGHTING_OPACITY / 100;
 
-#pragma parameter HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE     "          Which Images to Use: BOTH | 1 ONLY | 2 ONLY | SWAP"  0 0 3 1
-float HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE = global.HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE;
+#pragma parameter HSM_LIGHT_NIGHTLIGHTING_SWAP_IMAGE_MODE  "      Which Images to Use: BOTH | 1 ONLY | 2 ONLY | SWAP"  0 0 3 1
+float HSM_LIGHT_NIGHTLIGHTING_SWAP_IMAGE_MODE = global.HSM_LIGHT_NIGHTLIGHTING_SWAP_IMAGE_MODE;
 
 
 //---------------------------------------------------------------------------------------------------
@@ -701,8 +701,8 @@ float HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNESS = global.HSM_TUBE_DIFFUSE_IMAGE_BRIGHTNE
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_GAMMA                      "          Gamma Adjust" 1 0 5 0.01
 float HSM_TUBE_DIFFUSE_IMAGE_GAMMA = global.HSM_TUBE_DIFFUSE_IMAGE_GAMMA;
 
-#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING           "          Add Blend Mode Night Lighting 1 Multiplier" 100 0 100 1
-float HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING = global.HSM_TUBE_DIFFUSE_IMAGE_AMBIENT_LIGHTING / 100;
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_LIGHT_NIGHTLIGHTING           "          Add Blend Mode Night Lighting 1 Multiplier" 100 0 100 1
+float HSM_TUBE_DIFFUSE_IMAGE_LIGHT_NIGHTLIGHTING = global.HSM_TUBE_DIFFUSE_IMAGE_LIGHT_NIGHTLIGHTING / 100;
 
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_AMBIENT2_LIGHTING          "          Add Blend Mode Night Lighting 2 Multiplier" 0 0 100 1
 float HSM_TUBE_DIFFUSE_IMAGE_AMBIENT2_LIGHTING = global.HSM_TUBE_DIFFUSE_IMAGE_AMBIENT2_LIGHTING / 100;
@@ -766,8 +766,8 @@ float HSM_TUBE_STATIC_OPACITY_DIFFUSE_MULTIPLY = global.HSM_TUBE_STATIC_OPACITY_
 #pragma parameter HSM_TUBE_STATIC_BLACK_LEVEL      "          Black Level"  25 -100 100 0.5
 float HSM_TUBE_STATIC_BLACK_LEVEL = global.HSM_TUBE_STATIC_BLACK_LEVEL / 1000 + 1;
 
-#pragma parameter HSM_TUBE_STATIC_AMBIENT_LIGHTING "          Add Blend Mode Night Lighting 1 Multiplier" 60 0 100 1
-float HSM_TUBE_STATIC_AMBIENT_LIGHTING = global.HSM_TUBE_STATIC_AMBIENT_LIGHTING / 100;
+#pragma parameter HSM_TUBE_STATIC_LIGHT_NIGHTLIGHTING "          Add Blend Mode Night Lighting 1 Multiplier" 60 0 100 1
+float HSM_TUBE_STATIC_LIGHT_NIGHTLIGHTING = global.HSM_TUBE_STATIC_LIGHT_NIGHTLIGHTING / 100;
 
 #pragma parameter HSM_TUBE_STATIC_AMBIENT2_LIGHTING "          Add Blend Mode Night Lighting 2 Multiplier" 0 0 100 1
 float HSM_TUBE_STATIC_AMBIENT2_LIGHTING = global.HSM_TUBE_STATIC_AMBIENT2_LIGHTING / 100;
@@ -875,8 +875,8 @@ float HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_VIGNETTE = global.HSM_TUBE_COLORED_GEL_I
 #pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_FAKE_SCANLINE_AMOUNT   "          Fake Scanline Amount" 0 0 100 1
 float HSM_TUBE_COLORED_GEL_IMAGE_FAKE_SCANLINE_AMOUNT = global.HSM_TUBE_COLORED_GEL_IMAGE_FAKE_SCANLINE_AMOUNT / 100;
 
-#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING       "          Add Blend Mode Night Lighting 1 Multiplier" 100 0 100 1
-float HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING = global.HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT_LIGHTING / 100;
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_LIGHT_NIGHTLIGHTING       "          Add Blend Mode Night Lighting 1 Multiplier" 100 0 100 1
+float HSM_TUBE_COLORED_GEL_IMAGE_LIGHT_NIGHTLIGHTING = global.HSM_TUBE_COLORED_GEL_IMAGE_LIGHT_NIGHTLIGHTING / 100;
 
 #pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT2_LIGHTING      "          Add Blend Mode Night Lighting 2 Multiplier" 0 0 100 1
 float HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT2_LIGHTING = global.HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT2_LIGHTING / 100;

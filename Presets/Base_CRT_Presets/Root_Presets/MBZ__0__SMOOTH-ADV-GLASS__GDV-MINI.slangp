@@ -1,4 +1,4 @@
-shaders = 43
+shaders = 45
 
 shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
@@ -266,6 +266,7 @@ g_gamma_out = 2.45
 shader37 = ../../../shaders/base/linearize-crt.slang
 mipmap_input37 = true
 filter_linear37 = true
+wrap_mode37 = "mirrored_repeat"
 scale_type37 = absolute
 scale_x37 = 800
 scale_y37 = 600
@@ -275,12 +276,14 @@ alias37 = "ReflectPrepLowResPass"
 # Add Blur for the Reflection (Horizontal) ----------------------------------------------------------------
 shader38 = ../../../shaders/base/blur-outside-screen-horiz.slang
 mipmap_input38 = true
+wrap_mode38 = "mirrored_repeat"
 filter_linear38 = true
 float_framebuffer38 = true
 
 # Add Blur for the Reflection (Vertical) ----------------------------------------------------------------
 shader39 = ../../../shaders/base/blur-outside-screen-vert.slang
 filter_linear39 = true
+wrap_mode39 = "mirrored_repeat"
 float_framebuffer39 = true
 alias39 = "ReflectPrepBlurredPass"
 
@@ -290,35 +293,57 @@ alias39 = "ReflectPrepBlurredPass"
 shader40 = ../../../../../blurs/shaders/royale/blur9x9.slang
 mipmap_input40 = true
 filter_linear40 = true
+wrap_mode40 = "mirrored_repeat"
 scale_type40 = absolute
 scale_x40 = 128
 scale_y40 = 128
 float_framebuffer40 = true
 alias40 = "ReflectPrepDiffusedPass"
 
-# Add Diffused glow all around the screen ----------------------------------------------------------------
-#      Blurred so much that it's non directional
-#      Mipmap option allows downscaling without artifacts
+# Add more blurred glow, used for Bounce Lighting
 shader41 = ../../../../../blurs/shaders/royale/blur9x9.slang
 mipmap_input41 = true
 filter_linear41 = true
+wrap_mode41 = "mirrored_repeat"
 scale_type41 = absolute
-scale_x41 = 12
-scale_y41 = 12
+scale_x41 = 32
+scale_y41 = 32
 float_framebuffer41 = true
-alias41 = "ReflectPrepFullscreenGlowPass"
+alias41 = "BounceLightPass"
+
+# Add Diffused glow all around the screen ----------------------------------------------------------------
+#      Blurred so much that it's non directional
+#      Mipmap option allows downscaling without artifacts
+shader42 = ../../../../../blurs/shaders/royale/blur9x9.slang
+mipmap_input42 = true
+filter_linear42 = true
+wrap_mode42 = "mirrored_repeat"
+scale_type42 = absolute
+scale_x42 = 12
+scale_y42 = 12
+float_framebuffer42 = true
+alias42 = "ReflectPrepFullscreenGlowPass"
+
+// This pass IS NECESSARY to get the previous pass to be mipmapped
+shader43 = ../../../shaders/base/do-nothing.slang
+mipmap_input43 = true
+filter_linear43 = true
+scale_type43 = absolute
+scale_x43 = 8
+scale_y43 = 8
 
 # Bezel Reflection ----------------------------------------------------------------
-shader42 = ../../../shaders/base/reflection.slang
-scale_type42 = viewport
-filter_linear42 = true
-float_framebuffer42 = true
-alias42 = "ReflectPass"
+shader44 = ../../../shaders/base/reflection.slang
+scale_type44 = viewport
+filter_linear44 = true
+float_framebuffer44 = true
+alias44 = "ReflectPass"
 
 
 # Textures Glass
 # Define textures to be used by the different passes
-textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;GlassPresetHighlightImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;NightLightingImage;NightLighting2Image;"
+//ReflectionMaskImage;GlassPresetHighlightImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
 SamplerLUT1 = ../../../shaders/guest/lut/trinitron-lut.png
 SamplerLUT1_linear = true 
@@ -368,29 +393,21 @@ BackgroundImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 BackgroundImage_linear = true
 BackgroundImage_mipmap = 1
 
-BackgroundVertImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-BackgroundVertImage_linear = true
-BackgroundVertImage_mipmap = 1
+// CabinetGlassImage = ../../../shaders/textures/TopLayerImageGradient_3840x2160.png
+// CabinetGlassImage_linear = true
+// CabinetGlassImage_mipmap = 1
 
-CabinetGlassImage = ../../../shaders/textures/TopLayerImageGradient_3840x2160.png
-CabinetGlassImage_linear = true
-CabinetGlassImage_mipmap = 1
+// DeviceImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+// DeviceImage_linear = true
+// DeviceImage_mipmap = 1
 
-DeviceImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-DeviceImage_linear = true
-DeviceImage_mipmap = 1
+// DeviceLEDImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+// DeviceLEDImage_linear = true
+// DeviceLEDImage_mipmap = 1
 
-DeviceVertImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-DeviceVertImage_linear = true
-DeviceVertImage_mipmap = 1
-
-DeviceLEDImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-DeviceLEDImage_linear = true
-DeviceLEDImage_mipmap = 1
-
-DecalImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-DecalImage_linear = true
-DecalImage_mipmap = 1
+// DecalImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+// DecalImage_linear = true
+// DecalImage_mipmap = 1
 
 NightLightingImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 NightLightingImage_linear = true
@@ -400,13 +417,13 @@ NightLighting2Image = ../../../shaders/textures/Placeholder_Transparent_16x16.pn
 NightLighting2Image_linear = true
 NightLighting2Image_mipmap = 1
 
-LEDImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-LEDImage_linear = true
-LEDImage_mipmap = 1
+// LEDImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+// LEDImage_linear = true
+// LEDImage_mipmap = 1
 
-TopLayerImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-TopLayerImage_linear = true
-TopLayerImage_mipmap = 1
+// TopLayerImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+// TopLayerImage_linear = true
+// TopLayerImage_mipmap = 1
 
 
 

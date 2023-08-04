@@ -1,7 +1,7 @@
 
 # Textures Glass-Reshade
 # Define textures to be used by the different passes
-textures = "Dirt;Sprite;SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundVertImage;ReflectionMaskImage;GlassPresetHighlightImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceVertImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
+textures = "Dirt;Sprite;SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;ReflectionMaskImage;GlassPresetHighlightImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
 
 Dirt = :/shaders/shaders_slang/reshade/shaders/bloom/LensDB.png
 Dirt_wrap_mode = "clamp_to_border"
@@ -59,10 +59,6 @@ BackgroundImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/TopL
 BackgroundImage_linear = true
 BackgroundImage_mipmap = 1
 
-BackgroundVertImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Placeholder_Transparent_16x16.png
-BackgroundVertImage_linear = true
-BackgroundVertImage_mipmap = 1
-
 CabinetGlassImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Placeholder_Transparent_16x16.png
 CabinetGlassImage_linear = true
 CabinetGlassImage_mipmap = 1
@@ -70,10 +66,6 @@ CabinetGlassImage_mipmap = 1
 DeviceImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Placeholder_Transparent_16x16.png
 DeviceImage_linear = true
 DeviceImage_mipmap = 1
-
-DeviceVertImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Placeholder_Transparent_16x16.png
-DeviceVertImage_linear = true
-DeviceVertImage_mipmap = 1
 
 DeviceLEDImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Placeholder_Transparent_16x16.png
 DeviceLEDImage_linear = true

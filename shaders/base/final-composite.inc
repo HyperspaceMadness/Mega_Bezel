@@ -342,7 +342,7 @@ void main()
 	// Prep the Nightlighting images
 	vec3 nightlight1_rgb = vec3(1);
 	vec3 nightlight2_rgb = vec3(1);
-	HSM_Fill_Nightlight_Images(VIEWPORT_COORD, HSM_GetViewportCoordWithFlip(vTexCoord), TUBE_DIFFUSE_COORD, TUBE_DIFFUSE_SCALE, HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE, NightLightingImage, NightLighting2Image, nightlight1_rgb, nightlight2_rgb);
+	HSM_Fill_Nightlight_Images(VIEWPORT_COORD, HSM_GetViewportCoordWithFlip(vTexCoord), TUBE_DIFFUSE_COORD, TUBE_DIFFUSE_SCALE, HSM_LIGHT_NIGHTLIGHTING_SWAP_IMAGE_MODE, NightLightingImage, NightLighting2Image, nightlight1_rgb, nightlight2_rgb);
 
 	vec4 composite_base_color = vec4(0);
 	if (HSM_COMPOSITE_BASE_COLOR > 0.5)
@@ -381,7 +381,7 @@ void main()
 														HSM_COMPOSITE_BACKGROUND_NIGHTLIGHT2_MULTIPLIER,
 														1, 
 														BLEND_MODE_NORMAL,
-														HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
+														HSM_LIGHT_NIGHTLIGHTING_SWAP_IMAGE_MODE);
 		
 		precomp_background.rgb *= 1 - clamp(HSM_COMPOSITE_BACKGROUND_STATIC_SHADOW_STRENGTH * (1 - static_shadows), 0, 1);
 
@@ -437,7 +437,7 @@ void main()
 														HSM_COMPOSITE_MIDDLEGROUND_NIGHTLIGHT2_MULTIPLIER,
 														1, 
 														BLEND_MODE_NORMAL,
-														HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
+														HSM_LIGHT_NIGHTLIGHTING_SWAP_IMAGE_MODE);
 		// Add Bounce Light
 		precomp_middleground.rgb += precomp_middleground_orig.rgb * HSM_COMPOSITE_MIDDLEGROUND_BOUNCELIGHT_MULTIPLIER * bounce_light.rgb * precomp_middleground_orig.a;
 
@@ -467,7 +467,7 @@ void main()
 														HSM_COMPOSITE_FOREGROUND_NIGHTLIGHT2_MULTIPLIER,
 														1, 
 														BLEND_MODE_NORMAL,
-														HSM_AMBIENT_LIGHTING_SWAP_IMAGE_MODE);
+														HSM_LIGHT_NIGHTLIGHTING_SWAP_IMAGE_MODE);
 
 		// Add Bounce Light
 		precomp_foreground.rgb += precomp_foreground_orig.rgb * HSM_COMPOSITE_FOREGROUND_BOUNCELIGHT_MULTIPLIER * bounce_light.rgb * precomp_foreground_orig.a;

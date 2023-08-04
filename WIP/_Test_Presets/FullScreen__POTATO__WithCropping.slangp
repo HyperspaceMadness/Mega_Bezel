@@ -1,7 +1,6 @@
 #reference "MBZ__5__POTATO__GDV__Cropping.slangp"
 
 BackgroundImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
-BackgroundVertImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
 NightLightingImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
 FrameTextureImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
 
