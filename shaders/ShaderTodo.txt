@@ -39,6 +39,7 @@ Changes:
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Need a gamma/remap for bright color bounce light
   * Night Lighting as Procedural 3D lighting with Shadows
   * Add Blue Noise for dithering including glass highlight
   * Add Darker Frame Shadow at bottom
