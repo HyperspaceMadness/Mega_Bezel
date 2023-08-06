@@ -16,7 +16,7 @@ FrameHighlight = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 GlassPresetHighlight = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 
 Background = ../../../shaders/textures/Placeholder_White_16x16.png
-BgShadow = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+BackgroundShadow = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 BackgroundLED = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 Device = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 DeviceShadow = ../../../shaders/textures/Placeholder_White_16x16.png

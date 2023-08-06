@@ -91,12 +91,15 @@ layout(set = 0, binding = 1)	uniform sampler2D CacheInfoPass;
 
 //  Layers
 layout(set = 0, binding = 2)	uniform sampler2D Background;
-// layout(set = 0, binding = 3)	uniform sampler2D BgHeight;
-// layout(set = 0, binding = 4)	uniform sampler2D BgNormals;
+layout(set = 0, binding = 3)	uniform sampler2D BackgroundNormals;
+layout(set = 0, binding = 4)	uniform sampler2D BackgroundHeight;
 
-// layout(set = 0, binding = 5)	uniform sampler2D Device;
-// layout(set = 0, binding = 7)	uniform sampler2D DeviceHeight;
-// layout(set = 0, binding = 6)	uniform sampler2D DeviceNormals;
+layout(set = 0, binding = 5)	uniform sampler2D Device;
+layout(set = 0, binding = 6)	uniform sampler2D DeviceNormals;
+layout(set = 0, binding = 7)	uniform sampler2D DeviceHeight;
+
+layout(set = 0, binding = 8)	uniform sampler2D HeightAndNormalsPassFeedback;
+#define PassFeedback HeightAndNormalsPassFeedback
 
 // layout(set = 0, binding = 8)	uniform sampler2D ReflectionMask;
 
@@ -104,26 +107,128 @@ layout(set = 0, binding = 2)	uniform sampler2D Background;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
 {
-	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord);
-	vec2 VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord);
+    HSM_UpdateCacheInfoChanged(CacheInfoPass);
 
-	// HSM_GetBezelCoords(TUBE_DIFFUSE_COORD, 
-	// 					TUBE_DIFFUSE_SCALE, 
-	// 					TUBE_SCALE, 
-	// 					TUBE_DIFFUSE_ASPECT,
-	// 					HSM_RENDER_SIMPLE_MODE > 0.5,
-	// 					BEZEL_OUTSIDE_SCALE,
-	// 					BEZEL_OUTSIDE_COORD, 
-	// 					BEZEL_OUTSIDE_CURVED_COORD, 
-	// 					FRAME_OUTSIDE_CURVED_COORD);
-	
-	// vec4 image_layers_packed = texture(SceneLayersPass, vTexCoord, 0);
+	// vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
+	if (HSM_CACHE_GRAPHICS_ON > 0.5 && !CACHE_INFO_CHANGED || HSM_AB_COMPARE_FREEZE_GRAPHICS == 1 && HSM_GetIsInABCompareArea(vTexCoord))
+	{
+		FragColor = texture(PassFeedback, vTexCoord);
+		return;
+	}
 
-	// int bg_channel_index = 0;
-	// 			// vec4 GenerateNormalHeightMultipass (sampler2D tex, vec2 uv, int channel_index, vec2 res)
+	vec2 vTexCoord_precomp = vTexCoord;
 
-	// vec4 out_color = GenerateNormalHeightMultipass(Background, vTexCoord, vec2(1920, 1080));
-	// out_color = vec4(out_color.a);
-	// out_color = texture(Background, vTexCoord);
-	// FragColor = out_color;
+	HSM_UpdateGlobalScreenValuesFromCache(CacheInfoPass, vTexCoord_precomp);
+	VIEWPORT_FLIPPED_UNZOOMED_COORD = HSM_GetViewportCoordWithFlip(vTexCoord_precomp);
+	vec2 VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord_precomp);
+
+	HSM_UpdateBezelAndTubeGlobalValuesAndMasks(TUBE_DIFFUSE_COORD, 
+												TUBE_DIFFUSE_SCALE, 
+												TUBE_SCALE, 
+												TUBE_DIFFUSE_ASPECT, 
+												BEZEL_OUTSIDE_SCALE,
+												BEZEL_OUTSIDE_COORD, 
+												BEZEL_OUTSIDE_CURVED_COORD, 
+												FRAME_OUTSIDE_CURVED_COORD,
+												OUTSIDE_BEZEL_MASK,
+												OUTSIDE_FRAME_MASK,
+												INSIDE_BEZEL_MASK,
+												BEZEL_MASK,
+												FRAME_MASK,
+												OUTSIDE_TUBE_MASK
+												);
+
+	float output_aspect = global.OutputSize.x / global.OutputSize.y;
+
+    vec3 neutral_normals = vec3(0.5, 0.5, 1);
+    float neutral_height = 0.5;
+
+	vec4 out_color = vec4(0, 0, 0, 1);
+	float out_height = neutral_height;
+	vec3 out_normals = neutral_normals;
+
+	CUTOUT_MASK = 1;
+
+    //-----------------------------------------------------------------------------------------
+    // Background
+    //-----------------------------------------------------------------------------------------
+    vec2 BACKGROUND_SIZE = textureSize(Background, 0);
+    if (HSM_BG_OPACITY > 0 && BACKGROUND_SIZE.y > 16)
+    {
+        BACKGROUND_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
+                                                    VIEWPORT_FLIPPED_UNZOOMED_COORD,
+                                                    TEXTURE_ASPECT_MODE_EXPLICIT,
+                                                    BACKGROUND_SIZE.x / BACKGROUND_SIZE.y,
+                                                    vec2(HSM_BG_POS_X, HSM_BG_POS_Y),
+                                                    vec2(HSM_BG_SCALE * HSM_BG_SCALE_X, HSM_BG_SCALE),
+                                                    HSM_BG_FOLLOW_LAYER,
+                                                    HSM_BG_FOLLOW_MODE,
+                                                    HSM_BG_FOLLOW_FULL_USES_ZOOM,
+                                                    HSM_BG_FILL_MODE,
+                                                    HSM_BG_SPLIT_PRESERVE_CENTER,
+                                                    HSM_BG_SPLIT_REPEAT_WIDTH,
+                                                    true,
+                                                    BACKGROUND_COORD,
+                                                    BACKGROUND_SCALE);
+
+        // Tile Wrap the background
+        if (HSM_BG_WRAP_MODE == 1)
+            BACKGROUND_CURVED_COORD = mod(BACKGROUND_CURVED_COORD, 1.0);
+        
+        // Mirror Wrap the bBackground
+        if (HSM_BG_WRAP_MODE == 2)
+            BACKGROUND_CURVED_COORD = HSM_GetMirrorWrapCoord(BACKGROUND_CURVED_COORD);
+
+        vec4 bg_layer = HSM_GetMipmappedTexSample(Background, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
+        vec3 bg_normals = HSM_GetMipmappedTexSample(BackgroundNormals, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS).rgb;
+        vec4 bg_normals_layer = vec4(bg_normals * bg_layer.a, bg_layer.a);
+        float bg_height = HSM_GetMipmappedTexSample(BackgroundHeight, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS).r;
+        out_color = HSM_PreMultAlphaBlend(out_color, bg_layer);
+    }
+
+    //----------------------------------------------------
+    // Device 
+    //----------------------------------------------------
+    vec2 DEVICE_SIZE = textureSize(Device, 0);
+    if (HSM_DEVICE_OPACITY > 0 && DEVICE_SIZE.y > 16)
+    {
+        DEVICE_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
+                                                VIEWPORT_FLIPPED_UNZOOMED_COORD,
+                                                TEXTURE_ASPECT_MODE_EXPLICIT,
+                                                DEVICE_SIZE.x / DEVICE_SIZE.y,
+                                                vec2(HSM_DEVICE_POS_X, HSM_DEVICE_POS_Y),
+                                                vec2(HSM_DEVICE_SCALE * HSM_DEVICE_SCALE_X, HSM_DEVICE_SCALE),
+                                                HSM_DEVICE_FOLLOW_LAYER,
+                                                HSM_DEVICE_FOLLOW_MODE,
+                                                HSM_DEVICE_FOLLOW_FULL_USES_ZOOM,
+                                                HSM_DEVICE_FILL_MODE,
+                                                HSM_DEVICE_SPLIT_PRESERVE_CENTER,
+                                                HSM_DEVICE_SPLIT_REPEAT_WIDTH,
+                                                true,
+                                                DEVICE_COORD,
+                                                DEVICE_SCALE);
+
+            vec4 device_layer = HSM_GetMipmappedTexSample(Background, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
+            vec3 device_normals = HSM_GetMipmappedTexSample(BackgroundNormals, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS).rgb;
+            vec4 device_normals_layer = vec4(device_normals * device_layer.a, device_layer.a);
+            float device_height = HSM_GetMipmappedTexSample(BackgroundHeight, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS).r;
+            out_color = HSM_PreMultAlphaBlend(out_color, device_layer);
+    }
+
+    //----------------------------------------------------
+    // Generated Bezel
+    //----------------------------------------------------
+    if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
+    {
+        bool generate_normals = true;
+        vec4 frame_highlight_color = vec4(0);
+        float static_shadow_multiply = 1;
+        vec4 tube_bg_layer = vec4(0);
+        vec4 bezel_normals_layer = HSM_GetBezelLayer(generate_normals, frame_highlight_color, static_shadow_multiply, tube_bg_layer);
+
+        float bezel_height = neutral_height;
+        out_color = HSM_PreMultAlphaBlend(out_color, bezel_normals_layer);
+    }
+
+    FragColor = out_color;
 }

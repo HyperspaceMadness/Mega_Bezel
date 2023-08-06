@@ -446,7 +446,7 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 	return out_coord;
 }
 
-vec4 HSM_GetBezelLayer( vec4 frame_highlight_color, inout float static_shadow_multiply, inout vec4 tube_bg_layer)
+vec4 HSM_GetBezelLayer( bool generate_normals, vec4 frame_highlight_color, inout float static_shadow_multiply, inout vec4 tube_bg_layer)
 {
 	vec4 bezel_layer = vec4(0);
 

@@ -155,7 +155,7 @@ layout(set = 0, binding = 1)	uniform sampler2D CacheInfoPass;
 
 //  Layers
 layout(set = 0, binding = 2)	uniform sampler2D Background;
-layout(set = 0, binding = 3)	uniform sampler2D BgShadow;
+layout(set = 0, binding = 3)	uniform sampler2D BackgroundShadow;
 
 layout(set = 0, binding = 4)	uniform sampler2D BackgroundLED;
 
@@ -174,7 +174,7 @@ layout(set = 0, binding = 13) uniform sampler2D SceneLayersPassFeedback;
 #define PassFeedback SceneLayersPassFeedback
 
 // layout(set = 0, binding = 14)	uniform sampler2D BackgroundShadows;
-// layout(set = 0, binding = 15)	uniform sampler2D BgHeight;
+// layout(set = 0, binding = 15)	uniform sampler2D BackgroundHeight;
 
 
 // 15 is the max binding number which can be used
@@ -237,7 +237,8 @@ void main()
 		if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
 		{
 			vec4 frame_highlight_color = HSM_Linearize(texture(FrameHighlight, FRAME_OUTSIDE_CURVED_COORD), DEFAULT_SRGB_GAMMA);
-			bezel_layer = HSM_GetBezelLayer(frame_highlight_color, static_shadow_multiply, tube_bg_layer);
+            bool generate_normals = false;
+			bezel_layer = HSM_GetBezelLayer(generate_normals, frame_highlight_color, static_shadow_multiply, tube_bg_layer);
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -271,7 +272,7 @@ void main()
 		if (HSM_BG_OPACITY > 0 && BACKGROUND_SIZE.y > 16)
 		{
 			bg_image = HSM_GetMipmappedTexSample(Background, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
-			static_shadow_multiply *= HSM_GetMipmappedTexSample(BgShadow, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS).r;
+			static_shadow_multiply *= HSM_GetMipmappedTexSample(BackgroundShadow, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS).r;
 			// Premultiply Alpha
 			bg_image = HSM_GetPreMultipliedColorLinear(bg_image, HSM_BG_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
 

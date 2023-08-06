@@ -4,7 +4,7 @@
 #reference "../../resource/param_values/tube-effect/tube-effects.params"
 #reference "../../resource/param_values/light/basic__night.params"
 
-BgShadow = "../../shaders/textures/Background_Shadow.png"
+BackgroundShadow = "../../shaders/textures/Background_Shadow.png"
 Device = "../../shaders/textures/Sony_Profeel_Device.png"
 DeviceShadow = "../../shaders/textures/Sony_Profeel_Device_Shadow.png"
 

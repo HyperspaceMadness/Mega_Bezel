@@ -363,7 +363,7 @@ scale_type48 = viewport
 
 # Textures All
 # Define textures to be used by the different passes
-textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;DitherNoise;IntroLogo;ScreenPlacement;TubeDiffuse;TubeColoredGel;TubeShadow;TubeHighlight;Background;BgShadow;BgHeight;BgNormals;ReflectionMask;GlassPresetHighlight;FrameHighlight;CabinetGlass;Device;DeviceShadow;DeviceHeight;DeviceNormals;DeviceBackgroundLED;Decal;BackgroundLED;TopLayer;NightLighting;NightLighting2;"
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;DitherNoise;IntroLogo;ScreenPlacement;TubeDiffuse;TubeColoredGel;TubeShadow;TubeHighlight;Background;BackgroundShadow;BackgroundHeight;BackgroundNormals;ReflectionMask;GlassPresetHighlight;FrameHighlight;CabinetGlass;Device;DeviceShadow;DeviceHeight;DeviceNormals;DeviceBackgroundLED;Decal;BackgroundLED;TopLayer;NightLighting;NightLighting2;"
 
 SamplerLUT1 = ../../../shaders/guest/lut/trinitron-lut.png
 SamplerLUT1_linear = true 
@@ -419,20 +419,20 @@ Background_linear = true
 Background_mipmap = 1
 Background_wrap_mode = "mirrored_repeat"
 
-BgShadow = ../../../shaders/textures/Placeholder_White_16x16.png
-BgShadow_linear = true
-BgShadow_mipmap = 1
-BgShadow_wrap_mode = "mirrored_repeat"
+BackgroundShadow = ../../../shaders/textures/Placeholder_White_16x16.png
+BackgroundShadow_linear = true
+BackgroundShadow_mipmap = 1
+BackgroundShadow_wrap_mode = "mirrored_repeat"
 
-BgHeight = ../../../shaders/textures/Placeholder_Height_16x16.png
-BgHeight_linear = true
-BgHeight_mipmap = 1
-BgHeight_wrap_mode = "mirrored_repeat"
+BackgroundHeight = ../../../shaders/textures/Placeholder_Height_16x16.png
+BackgroundHeight_linear = true
+BackgroundHeight_mipmap = 1
+BackgroundHeight_wrap_mode = "mirrored_repeat"
 
-BgNormals = ../../../shaders/textures/Placeholder_Normals_16x16.png
-BgNormals_linear = true
-BgNormals_mipmap = 1
-BgNormals_wrap_mode = "mirrored_repeat"
+BackgroundNormals = ../../../shaders/textures/Placeholder_Normals_16x16.png
+BackgroundNormals_linear = true
+BackgroundNormals_mipmap = 1
+BackgroundNormals_wrap_mode = "mirrored_repeat"
 
 CabinetGlass = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 CabinetGlass_linear = true
@@ -481,10 +481,10 @@ NightLighting2 = ../../../shaders/textures/NightLightingFar.png
 NightLighting2_linear = true
 NightLighting2_mipmap = 1
 
-BgHeight
-BgHeight = ../../../shaders/textures/Placeholder_White_16x16.png
-BgHeight_linear = true
-BgHeight_mipmap = 0
+BackgroundHeight
+BackgroundHeight = ../../../shaders/textures/Placeholder_White_16x16.png
+BackgroundHeight_linear = true
+BackgroundHeight_mipmap = 0
 
 # Use for matching vanilla GDV-Advanced
 # HSM_ASPECT_RATIO_MODE = 6
