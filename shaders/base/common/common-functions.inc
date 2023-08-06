@@ -1174,6 +1174,8 @@ vec2 HSM_GetCrtShaderFinalCoordExtraVariables(vec2 screen_coord,
 	inout vec2 screen_scale_with_overscan)
 
 {
+	// TODO take into account horizontal integer scale, right now the tube image just slides into the bezel area
+
 	// -- START -- This section repeated in function below
 	screen_curved_coord = screen_coord;
 	if (HSM_ANAMORPHIC_DISTORT_ON > 0.5)

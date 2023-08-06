@@ -34,13 +34,14 @@ Changes:
           HSM_LED_APPLY_AMBIENT_IN_ADD_MODE
         becomes:
           HSM_LED_ADD_MODE_NIGHTLIGHTING_AMOUNT
-  FrameTextureImage -> FrameHighlight
-  IntroImage -> IntroLogo
-  LEDImage becomes BackgroundLED
-  "Image" has been replaced by ""
-  TubeStaticReflectionImage -> tube_highlight
-  HSM_Duimon_Super_Famicom -> Background_Sfc_Duimon
-  "_3840x2160" -> ""
+  * IMPORTANT Many texture names have changed 
+    * FrameTextureImage -> FrameHighlight
+    * IntroImage -> IntroLogo
+    * LEDImage becomes BackgroundLED
+    * "Image" has been replaced by ""
+    * TubeStaticReflectionImage -> tube_highlight
+    * HSM_Duimon_Super_Famicom -> Background_Sfc_Duimon
+    * "_3840x2160" -> ""
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
