@@ -773,6 +773,13 @@ vec4 HSM_GetCroppedTexSample(sampler2D in_sampler, vec2 in_screen_coord)
 	return HSM_GetTexSampleFromSampleStartAndSize(in_sampler, in_screen_coord, SAMPLE_AREA_START_PIXEL_COORD, CROPPED_ROTATED_SIZE);
 }
 
+vec4 HSM_TextureAbsolute(sampler2D in_sampler, vec2 in_viewport_coord)
+{
+	vec2 tex_size = textureSize(in_sampler, 0);
+	vec2 sampling_scale = global.OutputSize.xy / tex_size;
+	return texture(in_sampler, in_viewport_coord * sampling_scale);
+}
+
 float HSM_GetVignetteFactor(vec2 coord, float amount, float size)
 {
 	float orig_mamehlsl_amount = amount;

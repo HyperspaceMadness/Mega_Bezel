@@ -56,13 +56,14 @@ layout(set = 0, binding = 2) uniform sampler2D CacheInfoPass;
 
 // #ifdef USE_TUBEFX
 
-layout(set = 0, binding = 6) uniform sampler2D TubeDiffuseImage;
-layout(set = 0, binding = 7) uniform sampler2D TubeShadowImage;
-layout(set = 0, binding = 8) uniform sampler2D TubeColoredGelImage;
-layout(set = 0, binding = 9) uniform sampler2D TubeStaticReflectionImage;
-layout(set = 0, binding = 10) uniform sampler2D NightLighting;
-layout(set = 0, binding = 11) uniform sampler2D NightLighting2;
-layout(set = 0, binding = 12) uniform sampler2D SceneLayersPass;
+layout(set = 0, binding = 3) uniform sampler2D DitheringNoise;
+layout(set = 0, binding = 4) uniform sampler2D TubeDiffuseImage;
+layout(set = 0, binding = 5) uniform sampler2D TubeShadowImage;
+layout(set = 0, binding = 6) uniform sampler2D TubeColoredGelImage;
+layout(set = 0, binding = 7) uniform sampler2D TubeStaticReflectionImage;
+layout(set = 0, binding = 8) uniform sampler2D NightLighting;
+layout(set = 0, binding = 9) uniform sampler2D NightLighting2;
+layout(set = 0, binding = 10) uniform sampler2D SceneLayersPass;
 
 
 // #endif
@@ -105,7 +106,7 @@ vec4 GenerateNormalHeightMultipass (sampler2D tex, vec2 uv, vec2 res)
 }
 
 // #ifdef USE_TUBEFX
-vec3 HSM_GetTubeHighlight(vec2 tube_curved_coord, bool apply_to_mirror, in sampler2D TubeStaticReflectionImage)
+vec3 HSM_GetTubeHighlight(vec2 tube_curved_coord, bool apply_to_mirror, in sampler2D tube_highlight_sampler2d, in sampler2D dithering_noise_sampler2d)
 {
 	tube_curved_coord = HSM_GetViewportCoordWithFlip(tube_curved_coord);
 
@@ -125,15 +126,10 @@ vec3 HSM_GetTubeHighlight(vec2 tube_curved_coord, bool apply_to_mirror, in sampl
 
 	vec4 tube_highlight_image = vec4(0);
 
-	// Dithering for the glass reflection if needed to reduce banding
-	if (HSM_TUBE_STATIC_DITHER_SAMPLES > 0)
-		tube_highlight_image = HSM_GetStoichaicBlurredSample(TubeStaticReflectionImage, 
-															tube_highlight_coord, 
-															HSM_TUBE_STATIC_DITHER_SAMPLES, 
-															HSM_TUBE_STATIC_DITHER_DISTANCE, 
-															HSM_TUBE_STATIC_DITHER_AMOUNT);
-	else
-		tube_highlight_image = HSM_GetMipmappedTexSample(TubeStaticReflectionImage, tube_highlight_coord, TUBE_SCALE, 0);
+
+	tube_highlight_image = HSM_GetMipmappedTexSample(tube_highlight_sampler2d, tube_highlight_coord, TUBE_SCALE, 0);
+
+	tube_highlight_image.rgb *= (1 - HSM_TUBE_STATIC_DITHER_AMOUNT) + HSM_TUBE_STATIC_DITHER_AMOUNT * HSM_TextureAbsolute(dithering_noise_sampler2d, vTexCoord).rgb * 1.9;
 
 	// Mask the very outer edge of the tube for a very small shadowing effect
 	float tube_highlight_mask = HSM_GetCornerMask((tube_curved_coord - 0.5) + 0.5, TUBE_DIFFUSE_ASPECT, HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS, 0.9);
@@ -340,7 +336,7 @@ void main()
 	vec4 precomp_tube_highlight = vec4(0);
 	if (HSM_GetUseTubeStaticReflection())
 	{
-		precomp_tube_highlight.rgb = HSM_GetTubeHighlight(tube_curved_coord, false, TubeStaticReflectionImage);
+		precomp_tube_highlight.rgb = HSM_GetTubeHighlight(tube_curved_coord, false, TubeStaticReflectionImage, DitheringNoise);
 		precomp_tube_highlight.rgb = HSM_ApplyAmbientImage(precomp_tube_highlight.rgb, ambient_rgb, HSM_TUBE_STATIC_LIGHT_NIGHTLIGHTING);
 		precomp_tube_highlight.rgb = HSM_ApplyAmbientImage(precomp_tube_highlight.rgb, ambient2_rgb, HSM_TUBE_STATIC_AMBIENT2_LIGHTING);
 

@@ -787,13 +787,7 @@ float HSM_TUBE_STATIC_POS_Y = global.HSM_TUBE_STATIC_POS_Y / 1000;
 #pragma parameter HSM_TUBE_STATIC_SHADOW_OPACITY  	"          Shadow Opacity" 0 0 100 1
 float HSM_TUBE_STATIC_SHADOW_OPACITY = global.HSM_TUBE_STATIC_SHADOW_OPACITY / 100;
 
-#pragma parameter HSM_TUBE_STATIC_DITHER_SAMPLES  "          Noise Samples (Reduces Banding)" 0 0 10 1
-float HSM_TUBE_STATIC_DITHER_SAMPLES = global.HSM_TUBE_STATIC_DITHER_SAMPLES;
-
-#pragma parameter HSM_TUBE_STATIC_DITHER_DISTANCE  "          Noise Distance" 5 0 10 0.5
-float HSM_TUBE_STATIC_DITHER_DISTANCE = global.HSM_TUBE_STATIC_DITHER_DISTANCE;
-
-#pragma parameter HSM_TUBE_STATIC_DITHER_AMOUNT "          Noise Amount" 0.6 0 10 0.1
+#pragma parameter HSM_TUBE_STATIC_DITHER_AMOUNT "          Noise Amount (Reduces Banding)" 0.6 0 10 0.1
 float HSM_TUBE_STATIC_DITHER_AMOUNT = global.HSM_TUBE_STATIC_DITHER_AMOUNT;
 
 

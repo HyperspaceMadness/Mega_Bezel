@@ -406,7 +406,7 @@ scale_type54 = viewport
 
 # Textures All
 # Define textures to be used by the different passes
-textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BgShadow;BgHeight;BgNormals;ReflectionMask;GlassHighlight;FrameHighlight;CabinetGlassImage;DeviceImage;DeviceShadow;DeviceHeight;DeviceNormals;DeviceLEDImage;DecalImage;LEDImage;TopLayerImage;NightLighting;NightLighting2;"
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;DitheringNoise;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BgShadow;BgHeight;BgNormals;ReflectionMask;GlassHighlight;FrameHighlight;CabinetGlassImage;DeviceImage;DeviceShadow;DeviceHeight;DeviceNormals;DeviceLEDImage;DecalImage;LEDImage;TopLayerImage;NightLighting;NightLighting2;"
 
 SamplerLUT1 = ../../../shaders/guest/lut/trinitron-lut.png
 SamplerLUT1_linear = true 
@@ -416,6 +416,11 @@ SamplerLUT3 = ../../../shaders/guest/lut/nec-lut.png
 SamplerLUT3_linear = true
 SamplerLUT4 = ../../../shaders/guest/lut/ntsc-lut.png
 SamplerLUT4_linear = true
+
+DitheringNoise = ../../../shaders/textures/BlueNoise_LowContrast.png
+DitheringNoise_linear = false
+DitheringNoise_mipmap = false
+DitheringNoise_wrap_mode = "repeat"
 
 IntroImage = ../../../shaders/textures/IntroImage_MegaBezelLogo.png
 IntroImage_linear = true
@@ -539,7 +544,7 @@ HSM_NON_USER_INFO_POST_CRT_PROCESS = 0
 
 # Textures All-Reshade-Fx
 # Define textures to be used by the different passes
-textures = "Dirt;Sprite;SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BgShadow;BgHeight;BgNormals;ReflectionMask;GlassHighlight;FrameHighlight;CabinetGlassImage;DeviceImage;DeviceShadow;DeviceHeight;DeviceNormals;DeviceLEDImage;DecalImage;LEDImage;TopLayerImage;NightLighting;NightLighting2;"
+textures = "Dirt;Sprite;SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;DitheringNoise;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BgShadow;BgHeight;BgNormals;ReflectionMask;GlassHighlight;FrameHighlight;CabinetGlassImage;DeviceImage;DeviceShadow;DeviceHeight;DeviceNormals;DeviceLEDImage;DecalImage;LEDImage;TopLayerImage;NightLighting;NightLighting2;"
 
 Dirt = ../../../../../reshade/shaders/bloom/LensDB.png
 Dirt_wrap_mode = "clamp_to_border"
@@ -557,6 +562,11 @@ SamplerLUT3 = ../../../shaders/guest/lut/nec-lut.png
 SamplerLUT3_linear = true
 SamplerLUT4 = ../../../shaders/guest/lut/ntsc-lut.png
 SamplerLUT4_linear = true
+
+DitheringNoise = ../../../shaders/textures/BlueNoise_LowContrast.png
+DitheringNoise_linear = false
+DitheringNoise_mipmap = false
+DitheringNoise_wrap_mode = "repeat"
 
 IntroImage = ../../../shaders/textures/IntroImage_MegaBezelLogo.png
 IntroImage_linear = true

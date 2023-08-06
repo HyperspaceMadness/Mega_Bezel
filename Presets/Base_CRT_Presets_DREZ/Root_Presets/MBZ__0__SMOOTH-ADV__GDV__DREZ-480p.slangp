@@ -394,7 +394,7 @@ scale_type51 = viewport
 
 # Textures All
 # Define textures to be used by the different passes
-textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BgShadow;BgHeight;BgNormals;ReflectionMask;GlassHighlight;FrameHighlight;CabinetGlassImage;DeviceImage;DeviceShadow;DeviceHeight;DeviceNormals;DeviceLEDImage;DecalImage;LEDImage;TopLayerImage;NightLighting;NightLighting2;"
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;DitheringNoise;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BgShadow;BgHeight;BgNormals;ReflectionMask;GlassHighlight;FrameHighlight;CabinetGlassImage;DeviceImage;DeviceShadow;DeviceHeight;DeviceNormals;DeviceLEDImage;DecalImage;LEDImage;TopLayerImage;NightLighting;NightLighting2;"
 
 SamplerLUT1 = ../../../shaders/guest/lut/trinitron-lut.png
 SamplerLUT1_linear = true 
@@ -404,6 +404,11 @@ SamplerLUT3 = ../../../shaders/guest/lut/nec-lut.png
 SamplerLUT3_linear = true
 SamplerLUT4 = ../../../shaders/guest/lut/ntsc-lut.png
 SamplerLUT4_linear = true
+
+DitheringNoise = ../../../shaders/textures/BlueNoise_LowContrast.png
+DitheringNoise_linear = false
+DitheringNoise_mipmap = false
+DitheringNoise_wrap_mode = "repeat"
 
 IntroImage = ../../../shaders/textures/IntroImage_MegaBezelLogo.png
 IntroImage_linear = true
