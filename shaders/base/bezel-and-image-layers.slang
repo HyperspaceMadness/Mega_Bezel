@@ -153,19 +153,19 @@ layout(location = 0) out vec4 FragColor;
 // Pass Framebuffer Textures
 layout(set = 0, binding = 1)	uniform sampler2D CacheInfoPass;
 
-// Image Layers
-layout(set = 0, binding = 2)	uniform sampler2D BackgroundImage;
+//  Layers
+layout(set = 0, binding = 2)	uniform sampler2D Background;
 layout(set = 0, binding = 3)	uniform sampler2D BgShadow;
 
-layout(set = 0, binding = 4)	uniform sampler2D LEDImage;
+layout(set = 0, binding = 4)	uniform sampler2D BackgroundLED;
 
-layout(set = 0, binding = 5)	uniform sampler2D DeviceImage;
+layout(set = 0, binding = 5)	uniform sampler2D Device;
 layout(set = 0, binding = 6)	uniform sampler2D DeviceShadow;
 
-layout(set = 0, binding = 7)	uniform sampler2D DeviceLEDImage;
-layout(set = 0, binding = 8)	uniform sampler2D DecalImage;
-layout(set = 0, binding = 9)	uniform sampler2D CabinetGlassImage;
-layout(set = 0, binding = 10)	uniform sampler2D TopLayerImage;
+layout(set = 0, binding = 7)	uniform sampler2D DeviceBackgroundLED;
+layout(set = 0, binding = 8)	uniform sampler2D Decal;
+layout(set = 0, binding = 9)	uniform sampler2D CabinetGlass;
+layout(set = 0, binding = 10)	uniform sampler2D TopLayer;
 
 layout(set = 0, binding = 11)	uniform sampler2D FrameHighlight;
 layout(set = 0, binding = 12)	uniform sampler2D ReflectionMask;
@@ -173,7 +173,7 @@ layout(set = 0, binding = 12)	uniform sampler2D ReflectionMask;
 layout(set = 0, binding = 13) uniform sampler2D SceneLayersPassFeedback;
 #define PassFeedback SceneLayersPassFeedback
 
-// layout(set = 0, binding = 14)	uniform sampler2D BackgroundShadowsImage;
+// layout(set = 0, binding = 14)	uniform sampler2D BackgroundShadows;
 // layout(set = 0, binding = 15)	uniform sampler2D BgHeight;
 
 
@@ -197,21 +197,21 @@ void main()
 	VIEWPORT_FLIPPED_UNZOOMED_COORD = HSM_GetViewportCoordWithFlip(vTexCoord_precomp);
 	VIEWPORT_COORD = HSM_GetViewportCoordWithZoomAndPan(vTexCoord_precomp);
 
-	UpdateBezelAndTubeGlobalValuesAndMasks(TUBE_DIFFUSE_COORD, 
-											TUBE_DIFFUSE_SCALE, 
-											TUBE_SCALE, 
-											TUBE_DIFFUSE_ASPECT, 
-											BEZEL_OUTSIDE_SCALE,
-											BEZEL_OUTSIDE_COORD, 
-											BEZEL_OUTSIDE_CURVED_COORD, 
-											FRAME_OUTSIDE_CURVED_COORD,
-											OUTSIDE_BEZEL_MASK,
-											OUTSIDE_FRAME_MASK,
-											INSIDE_BEZEL_MASK,
-											BEZEL_MASK,
-											FRAME_MASK,
-											OUTSIDE_TUBE_MASK
-											);
+	HSM_UpdateBezelAndTubeGlobalValuesAndMasks(TUBE_DIFFUSE_COORD, 
+												TUBE_DIFFUSE_SCALE, 
+												TUBE_SCALE, 
+												TUBE_DIFFUSE_ASPECT, 
+												BEZEL_OUTSIDE_SCALE,
+												BEZEL_OUTSIDE_COORD, 
+												BEZEL_OUTSIDE_CURVED_COORD, 
+												FRAME_OUTSIDE_CURVED_COORD,
+												OUTSIDE_BEZEL_MASK,
+												OUTSIDE_FRAME_MASK,
+												INSIDE_BEZEL_MASK,
+												BEZEL_MASK,
+												FRAME_MASK,
+												OUTSIDE_TUBE_MASK
+												);
 
 	float output_aspect = global.OutputSize.x / global.OutputSize.y;
 	vec4 bezel_layer = vec4(0);
@@ -228,7 +228,7 @@ void main()
 	CUTOUT_MASK = 1;
 
 	// ---------------------------------------------------------------------------------------
-	// Generate Layer Coordinates and Sample Images
+	// Generate Layer Coordinates and Sample s
 	// ---------------------------------------------------------------------------------------
 	{
 		//----------------------------------------------------
@@ -237,13 +237,13 @@ void main()
 		if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
 		{
 			vec4 frame_highlight_color = HSM_Linearize(texture(FrameHighlight, FRAME_OUTSIDE_CURVED_COORD), DEFAULT_SRGB_GAMMA);
-			bezel_layer = GetBezelLayer(frame_highlight_color, static_shadow_multiply, tube_bg_layer);
+			bezel_layer = HSM_GetBezelLayer(frame_highlight_color, static_shadow_multiply, tube_bg_layer);
 		}
 
 		//-----------------------------------------------------------------------------------------
 		// Background
 		//-----------------------------------------------------------------------------------------
-		vec2 BACKGROUND_SIZE = textureSize(BackgroundImage, 0);
+		vec2 BACKGROUND_SIZE = textureSize(Background, 0);
 		BACKGROUND_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
 													VIEWPORT_FLIPPED_UNZOOMED_COORD,
 													TEXTURE_ASPECT_MODE_EXPLICIT,
@@ -270,7 +270,7 @@ void main()
 
 		if (HSM_BG_OPACITY > 0 && BACKGROUND_SIZE.y > 16)
 		{
-			bg_image = HSM_GetMipmappedTexSample(BackgroundImage, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
+			bg_image = HSM_GetMipmappedTexSample(Background, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
 			static_shadow_multiply *= HSM_GetMipmappedTexSample(BgShadow, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS).r;
 			// Premultiply Alpha
 			bg_image = HSM_GetPreMultipliedColorLinear(bg_image, HSM_BG_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
@@ -283,9 +283,9 @@ void main()
 		}
 
 		//----------------------------------------------------
-		// Device Image
+		// Device 
 		//----------------------------------------------------
-		vec2 DEVICE_SIZE = textureSize(DeviceImage, 0);
+		vec2 DEVICE_SIZE = textureSize(Device, 0);
 		DEVICE_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
 												VIEWPORT_FLIPPED_UNZOOMED_COORD,
 												TEXTURE_ASPECT_MODE_EXPLICIT,
@@ -304,7 +304,7 @@ void main()
 
 		if (HSM_DEVICE_OPACITY > 0 && DEVICE_SIZE.y > 16)
 		{
-			device_image = HSM_GetMipmappedTexSample(DeviceImage, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS);
+			device_image = HSM_GetMipmappedTexSample(Device, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS);
 			static_shadow_multiply = clamp(static_shadow_multiply + device_image.a, 0, 1);
 			static_shadow_multiply *= HSM_GetMipmappedTexSample(DeviceShadow, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS).r;
 			// Premultiply Alpha
@@ -318,9 +318,9 @@ void main()
 		}
 
 		//----------------------------------------------------
-		// DeviceLED Image
+		// DeviceLED 
 		//----------------------------------------------------
-		DEVICELED_SIZE = textureSize(DeviceLEDImage, 0);
+		DEVICELED_SIZE = textureSize(DeviceBackgroundLED, 0);
 		DEVICELED_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
 												VIEWPORT_FLIPPED_UNZOOMED_COORD,
 												TEXTURE_ASPECT_MODE_EXPLICIT,
@@ -339,7 +339,7 @@ void main()
 
 		if (HSM_DEVICELED_OPACITY > 0 && DEVICELED_SIZE.y > 16)
 		{
-			deviceled_image = HSM_GetMipmappedTexSample(DeviceLEDImage, DEVICELED_CURVED_COORD, DEVICELED_SCALE, HSM_DEVICELED_MIPMAPPING_BLEND_BIAS);
+			deviceled_image = HSM_GetMipmappedTexSample(DeviceBackgroundLED, DEVICELED_CURVED_COORD, DEVICELED_SCALE, HSM_DEVICELED_MIPMAPPING_BLEND_BIAS);
 
 			// Premultiply Alpha
 			deviceled_image = HSM_GetPreMultipliedColorLinear(deviceled_image, HSM_DEVICELED_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
@@ -352,11 +352,11 @@ void main()
 		}
 
 		//----------------------------------------------------
-		// LED Image
+		// LED 
 		//----------------------------------------------------
 		if (HSM_LED_OPACITY > 0)
 		{
-			vec2 led_size = textureSize(LEDImage, 0);
+			vec2 led_size = textureSize(BackgroundLED, 0);
 			LED_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
 												VIEWPORT_FLIPPED_UNZOOMED_COORD,
 												TEXTURE_ASPECT_MODE_EXPLICIT,
@@ -375,7 +375,7 @@ void main()
 
 			if (HSM_LED_OPACITY > 0 && led_size.y > 16)
 			{
-				led_image = HSM_GetMipmappedTexSample(LEDImage, LED_CURVED_COORD, LED_SCALE, HSM_LED_MIPMAPPING_BLEND_BIAS);
+				led_image = HSM_GetMipmappedTexSample(BackgroundLED, LED_CURVED_COORD, LED_SCALE, HSM_LED_MIPMAPPING_BLEND_BIAS);
 
 				// Premultiply Alpha
 				led_image = HSM_GetPreMultipliedColorLinear(led_image, HSM_LED_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
@@ -390,9 +390,9 @@ void main()
 		}
 
 		//----------------------------------------------------
-		// Decal Image
+		// Decal 
 		//----------------------------------------------------
-		vec2 decal_size = textureSize(DecalImage, 0);
+		vec2 decal_size = textureSize(Decal, 0);
 		DECAL_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
 												VIEWPORT_FLIPPED_UNZOOMED_COORD,
 												TEXTURE_ASPECT_MODE_EXPLICIT,
@@ -410,7 +410,7 @@ void main()
 												DECAL_SCALE);
 		if (HSM_DECAL_OPACITY > 0 && decal_size.y > 16)
 		{
-			decal_image = HSM_GetMipmappedTexSample(DecalImage, DECAL_CURVED_COORD, DECAL_SCALE, HSM_DECAL_MIPMAPPING_BLEND_BIAS);
+			decal_image = HSM_GetMipmappedTexSample(Decal, DECAL_CURVED_COORD, DECAL_SCALE, HSM_DECAL_MIPMAPPING_BLEND_BIAS);
 			
 			// Premultiply Alpha
 			decal_image = HSM_GetPreMultipliedColorLinear(decal_image, HSM_DECAL_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
@@ -426,7 +426,7 @@ void main()
 		//----------------------------------------------------
 		//  ADV Get Additional Layers and Composite 
 		//----------------------------------------------------
-		vec2 top_size = textureSize(TopLayerImage, 0);
+		vec2 top_size = textureSize(TopLayer, 0);
 		TOP_IMAGE_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
 													VIEWPORT_FLIPPED_UNZOOMED_COORD,
 													TEXTURE_ASPECT_MODE_EXPLICIT,
@@ -449,7 +449,7 @@ void main()
 		if (HSM_TOP_OPACITY > 0 && top_size.y > 16)
 		{
 			// Get the top image color and masking values if needed
-			top_image = HSM_GetMipmappedTexSample(TopLayerImage, TOP_IMAGE_CURVED_COORD, TOP_IMAGE_SCALE, HSM_TOP_MIPMAPPING_BLEND_BIAS);
+			top_image = HSM_GetMipmappedTexSample(TopLayer, TOP_IMAGE_CURVED_COORD, TOP_IMAGE_SCALE, HSM_TOP_MIPMAPPING_BLEND_BIAS);
 
 			// Premultiply Alpha
 			top_image = HSM_GetPreMultipliedColorLinear(top_image, HSM_TOP_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
@@ -463,12 +463,12 @@ void main()
 		}
 
 		//----------------------------------------------------
-		// Cabinet Glass Image
+		// Cabinet Glass 
 		//----------------------------------------------------
 
 		if (HSM_CAB_GLASS_OPACITY > 0)
 		{
-			vec2 cab_glass_size = textureSize(CabinetGlassImage, 0);
+			vec2 cab_glass_size = textureSize(CabinetGlass, 0);
 			CAB_GLASS_CURVED_COORD = HSM_GetScaledCoord(VIEWPORT_COORD,
 														VIEWPORT_FLIPPED_UNZOOMED_COORD,
 														TEXTURE_ASPECT_MODE_EXPLICIT,
@@ -488,7 +488,7 @@ void main()
 			if (HSM_CAB_GLASS_OPACITY > 0 && cab_glass_size.y > 16)
 			{
 				// Sample Texture
-				cab_glass_image = HSM_GetMipmappedTexSample(CabinetGlassImage, CAB_GLASS_CURVED_COORD, CAB_GLASS_SCALE, HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS);
+				cab_glass_image = HSM_GetMipmappedTexSample(CabinetGlass, CAB_GLASS_CURVED_COORD, CAB_GLASS_SCALE, HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS);
 
 				// Premultiply Alpha
 				cab_glass_image = HSM_GetPreMultipliedColorLinear(cab_glass_image, HSM_CAB_GLASS_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);

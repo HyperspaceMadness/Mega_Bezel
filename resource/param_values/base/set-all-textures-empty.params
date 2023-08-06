@@ -1,26 +1,26 @@
 
-IntroImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-ScreenPlacementImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+IntroLogo = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+ScreenPlacement = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 
 NightLighting = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 NightLighting2 = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 
-TubeDiffuseImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-TubeColoredGelImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-TubeShadowImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-TubeStaticReflectionImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+TubeDiffuse = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+TubeColoredGel = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+TubeShadow = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+TubeHighlight = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 
 ReflectionMask = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 FrameHighlight = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 
-GlassHighlight = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+GlassPresetHighlight = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 
-BackgroundImage = ../../../shaders/textures/Placeholder_White_16x16.png
+Background = ../../../shaders/textures/Placeholder_White_16x16.png
 BgShadow = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-LEDImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-DeviceImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+BackgroundLED = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+Device = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 DeviceShadow = ../../../shaders/textures/Placeholder_White_16x16.png
-DeviceLEDImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-DecalImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-CabinetGlassImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-TopLayerImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+DeviceBackgroundLED = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+Decal = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+CabinetGlass = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+TopLayer = ../../../shaders/textures/Placeholder_Transparent_16x16.png

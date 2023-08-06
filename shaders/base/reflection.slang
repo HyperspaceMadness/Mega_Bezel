@@ -81,14 +81,15 @@ layout(location = 0) out vec4 FragColor;
 // Pass Framebuffer Textures
 layout(set = 0, binding = 1) uniform sampler2D CacheInfoPass;
 
-layout(set = 0, binding = 2) uniform sampler2D GlassHighlight;
-layout(set = 0, binding = 3) uniform sampler2D CrtPass;
-layout(set = 0, binding = 4) uniform sampler2D ReflectPrepLowResPass;
-layout(set = 0, binding = 5) uniform sampler2D ReflectPrepBlurredPass;
-layout(set = 0, binding = 6) uniform sampler2D ReflectPrepDiffusedPass;
-layout(set = 0, binding = 7) uniform sampler2D ReflectPrepFullscreenGlowPass;
+layout(set = 0, binding = 2) uniform sampler2D DitherNoise;
+layout(set = 0, binding = 3) uniform sampler2D GlassPresetHighlight;
+layout(set = 0, binding = 4) uniform sampler2D CrtPass;
+layout(set = 0, binding = 5) uniform sampler2D ReflectPrepLowResPass;
+layout(set = 0, binding = 6) uniform sampler2D ReflectPrepBlurredPass;
+layout(set = 0, binding = 7) uniform sampler2D ReflectPrepDiffusedPass;
+layout(set = 0, binding = 8) uniform sampler2D ReflectPrepFullscreenGlowPass;
 
-layout(set = 0, binding = 8) uniform sampler2D ReflectPassFeedback;
+layout(set = 0, binding = 9) uniform sampler2D ReflectPassFeedback;
 #define PassFeedback ReflectPassFeedback
 
 
@@ -428,9 +429,11 @@ void main()
 
 	if (HSM_NON_USER_PARAM_IS_GLASS_PRESET > 0.5)
 	{
-		vec4 glass_highlight_image = HSM_GetMipmappedTexSample(GlassHighlight, VIEWPORT_COORD, vec2(1), 0);
-		
+		vec4 glass_highlight_image = HSM_GetMipmappedTexSample(GlassPresetHighlight, VIEWPORT_COORD, vec2(1), 0);
+
 		glass_highlight_image = HSM_Linearize(glass_highlight_image, DEFAULT_SRGB_GAMMA);
+		float dithering_amount = 1;
+		glass_highlight_image.rgb *= (1 - dithering_amount) + dithering_amount * HSM_TextureAbsolute(DitherNoise, vTexCoord).rgb * 1.9;
 
 		glass_highlight_image.a *= outside_tube_mask_wider * (1 - edge_mask);
 

@@ -27,7 +27,7 @@ layout(set = 0, binding = 2) uniform sampler2D Source;
 layout(set = 0, binding = 3) uniform sampler2D OriginalHistory1;
 layout(set = 0, binding = 4) uniform sampler2D OriginalHistory2;
 layout(set = 0, binding = 5) uniform sampler2D OriginalHistory3;
-layout(set = 0, binding = 7) uniform sampler2D IntroImage;
+layout(set = 0, binding = 7) uniform sampler2D IntroLogo;
 #endif
 
 layout(set = 0, binding = 8) uniform sampler2D CacheInfoPass;

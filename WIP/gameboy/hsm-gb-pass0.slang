@@ -135,19 +135,19 @@ layout(set = 0, binding = 6) uniform sampler2D OriginalHistory4;
 layout(set = 0, binding = 7) uniform sampler2D OriginalHistory5;
 layout(set = 0, binding = 8) uniform sampler2D OriginalHistory6;
 layout(set = 0, binding = 9) uniform sampler2D OriginalHistory7;
-layout(set = 0, binding = 10) uniform sampler2D DMG0ColorPaletteImage;
-layout(set = 0, binding = 11) uniform sampler2D DMG1ColorPaletteImage;
-layout(set = 0, binding = 12) uniform sampler2D DMG2ColorPaletteImage;
-layout(set = 0, binding = 13) uniform sampler2D PocketColorPaletteImage;
-layout(set = 0, binding = 14) uniform sampler2D LightColorPaletteImage;
-layout(set = 0, binding = 15) uniform sampler2D CustomColorPaletteImage;
+layout(set = 0, binding = 10) uniform sampler2D DMG0ColorPalette;
+layout(set = 0, binding = 11) uniform sampler2D DMG1ColorPalette;
+layout(set = 0, binding = 12) uniform sampler2D DMG2ColorPalette;
+layout(set = 0, binding = 13) uniform sampler2D PocketColorPalette;
+layout(set = 0, binding = 14) uniform sampler2D LightColorPalette;
+layout(set = 0, binding = 15) uniform sampler2D CustomColorPalette;
 
 ////////////////////////////////////////////////////////////////////////////////
 //fragment definitions                                                        //
 ////////////////////////////////////////////////////////////////////////////////
 
 // HSM Removed
-// #define foreground_color texture(DMG0ColorPaletteImage, vec2(0.75, 0.5)).rgb                 //hardcoded to look up the foreground color from the right half of the palette image
+// #define foreground_color texture(DMG0ColorPalette, vec2(0.75, 0.5)).rgb                 //hardcoded to look up the foreground color from the right half of the palette image
 //#define rgb_to_alpha(rgb) ( ((rgb.r + rgb.g + rgb.b) / 3.0) + (is_on_dot * vec2(params.baseline_alpha), 1.0) )       //averages rgb values (allows it to work with color games), modified for contrast and base alpha
 
 
@@ -165,17 +165,17 @@ void main()
 {
     vec3 foreground_color = vec3(0, 0, 0);
     if (params.gameboy_color_palette == 0)
-        foreground_color = texture(DMG0ColorPaletteImage, vec2(0.75, 0.5)).rgb;
+        foreground_color = texture(DMG0ColorPalette, vec2(0.75, 0.5)).rgb;
     if (params.gameboy_color_palette == 1)
-        foreground_color = texture(DMG1ColorPaletteImage, vec2(0.75, 0.5)).rgb;
+        foreground_color = texture(DMG1ColorPalette, vec2(0.75, 0.5)).rgb;
     if (params.gameboy_color_palette == 2)
-        foreground_color = texture(DMG2ColorPaletteImage, vec2(0.75, 0.5)).rgb;
+        foreground_color = texture(DMG2ColorPalette, vec2(0.75, 0.5)).rgb;
     if (params.gameboy_color_palette == 3)
-        foreground_color = texture(PocketColorPaletteImage, vec2(0.75, 0.5)).rgb;
+        foreground_color = texture(PocketColorPalette, vec2(0.75, 0.5)).rgb;
     if (params.gameboy_color_palette == 4)
-        foreground_color = texture(LightColorPaletteImage, vec2(0.75, 0.5)).rgb;
+        foreground_color = texture(LightColorPalette, vec2(0.75, 0.5)).rgb;
     if (params.gameboy_color_palette == 5)
-        foreground_color = texture(CustomColorPaletteImage, vec2(0.75, 0.5)).rgb;
+        foreground_color = texture(CustomColorPalette, vec2(0.75, 0.5)).rgb;
 
     vec2 screen_curved_coord = HSM_GetCurvedCoord(MY_SCREEN_SCALE, HSM_CRT_CURVATURE_SCALE, MY_SCREEN_ASPECT);
 	vec2 screen_curved_coord_mirrored = HSM_GetMirrorWrappedCoord(screen_curved_coord);

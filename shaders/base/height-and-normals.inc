@@ -89,12 +89,12 @@ layout(location = 0) out vec4 FragColor;
 // Pass Framebuffer Textures
 layout(set = 0, binding = 1)	uniform sampler2D CacheInfoPass;
 
-// Image Layers
-layout(set = 0, binding = 2)	uniform sampler2D BackgroundImage;
+//  Layers
+layout(set = 0, binding = 2)	uniform sampler2D Background;
 // layout(set = 0, binding = 3)	uniform sampler2D BgHeight;
 // layout(set = 0, binding = 4)	uniform sampler2D BgNormals;
 
-// layout(set = 0, binding = 5)	uniform sampler2D DeviceImage;
+// layout(set = 0, binding = 5)	uniform sampler2D Device;
 // layout(set = 0, binding = 7)	uniform sampler2D DeviceHeight;
 // layout(set = 0, binding = 6)	uniform sampler2D DeviceNormals;
 
@@ -122,8 +122,8 @@ void main()
 	// int bg_channel_index = 0;
 	// 			// vec4 GenerateNormalHeightMultipass (sampler2D tex, vec2 uv, int channel_index, vec2 res)
 
-	// vec4 out_color = GenerateNormalHeightMultipass(BackgroundImage, vTexCoord, vec2(1920, 1080));
+	// vec4 out_color = GenerateNormalHeightMultipass(Background, vTexCoord, vec2(1920, 1080));
 	// out_color = vec4(out_color.a);
-	// out_color = texture(BackgroundImage, vTexCoord);
+	// out_color = texture(Background, vTexCoord);
 	// FragColor = out_color;
 }

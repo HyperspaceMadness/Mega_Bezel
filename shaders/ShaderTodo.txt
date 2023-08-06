@@ -35,8 +35,12 @@ Changes:
         becomes:
           HSM_LED_ADD_MODE_NIGHTLIGHTING_AMOUNT
   FrameTextureImage -> FrameHighlight
-  ReflectionMaskImage -> ReflectionMask
-
+  IntroImage -> IntroLogo
+  LEDImage becomes BackgroundLED
+  "Image" has been replaced by ""
+  TubeStaticReflectionImage -> tube_highlight
+  HSM_Duimon_Super_Famicom -> Background_Sfc_Duimon
+  "_3840x2160" -> ""
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------

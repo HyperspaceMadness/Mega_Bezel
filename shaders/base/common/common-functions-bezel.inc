@@ -446,7 +446,7 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 	return out_coord;
 }
 
-vec4 GetBezelLayer( vec4 frame_highlight_color, inout float static_shadow_multiply, inout vec4 tube_bg_layer)
+vec4 HSM_GetBezelLayer( vec4 frame_highlight_color, inout float static_shadow_multiply, inout vec4 tube_bg_layer)
 {
 	vec4 bezel_layer = vec4(0);
 
@@ -704,7 +704,7 @@ vec4 GetBezelLayer( vec4 frame_highlight_color, inout float static_shadow_multip
 	return bezel_layer;
 }
 							
-void UpdateBezelAndTubeGlobalValuesAndMasks(vec2 tube_diffuse_coord, 
+void HSM_UpdateBezelAndTubeGlobalValuesAndMasks(vec2 tube_diffuse_coord, 
 											vec2 tube_diffuse_scale, 
 											vec2 tube_scale, 
 											float tube_diffuse_aspect,

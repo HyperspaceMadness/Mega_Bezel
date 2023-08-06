@@ -32,74 +32,74 @@ alias4 = "TubeFxPass"
 shaders = 5
 
 // Define textures to be used by the different passes
-textures = "DMG0ColorPaletteImage;DMG1ColorPaletteImage;DMG2ColorPaletteImage;PocketColorPaletteImage;LightColorPaletteImage;CustomColorPaletteImage;LCDBackgroundImage;IntroImage;ScreenPlacementImage;TubeColoredGelImage;TubeStaticReflectionImage;BackgroundImage;ReflectionMask;GlassHighlight;FrameHighlight;CabinetGlassImage;DeviceImage;DeviceLEDImage;DecalImage;NightLighting;LEDImage;TopLayerImage;"
+textures = "DMG0ColorPalette;DMG1ColorPalette;DMG2ColorPalette;PocketColorPalette;LightColorPalette;CustomColorPalette;LCDBackground;IntroLogo;ScreenPlacement;TubeColoredGel;TubeHighlight;Background;ReflectionMask;TubeHighlight;FrameHighlight;CabinetGlass;Device;DeviceBackgroundLED;Decal;NightLighting;BackgroundLED;TopLayer;"
 
-DMG0ColorPaletteImage = ../shaders/hsm-gameboy/palette-gameboy-dmg-0.png
-DMG0ColorPaletteImage_linear = false
+DMG0ColorPalette = ../shaders/hsm-gameboy/palette-gameboy-dmg-0.png
+DMG0ColorPalette_linear = false
 
-DMG1ColorPaletteImage = ../shaders/hsm-gameboy/palette-gameboy-dmg-1.png
-DMG1ColorPaletteImage_linear = false
+DMG1ColorPalette = ../shaders/hsm-gameboy/palette-gameboy-dmg-1.png
+DMG1ColorPalette_linear = false
 
-DMG2ColorPaletteImage = ../shaders/hsm-gameboy/palette-gameboy-dmg-2.png
-DMG2ColorPaletteImage_linear = false
+DMG2ColorPalette = ../shaders/hsm-gameboy/palette-gameboy-dmg-2.png
+DMG2ColorPalette_linear = false
 
-PocketColorPaletteImage = ../shaders/hsm-gameboy/palette-gameboy-pocket.png
-PocketColorPaletteImage_linear = false
+PocketColorPalette = ../shaders/hsm-gameboy/palette-gameboy-pocket.png
+PocketColorPalette_linear = false
 
-LightColorPaletteImage = ../shaders/hsm-gameboy/palette-gameboy-light.png
-LightColorPaletteImage_linear = false
+LightColorPalette = ../shaders/hsm-gameboy/palette-gameboy-light.png
+LightColorPalette_linear = false
 
-CustomColorPaletteImage = ../shaders/hsm-gameboy/palette-gameboy-custom.png
-CustomColorPaletteImage_linear = false
+CustomColorPalette = ../shaders/hsm-gameboy/palette-gameboy-custom.png
+CustomColorPalette_linear = false
 
-LCDBackgroundImage = ../shaders/hsm-gameboy/bg-gameboy-dmg.png
-LCDBackgroundImage_linear = true
-BackgroundImage_mipmap = 1
+LCDBackground = ../shaders/hsm-gameboy/bg-gameboy-dmg.png
+LCDBackground_linear = true
+Background_mipmap = 1
 
-IntroImage = ../shaders/textures/IntroImage_MegaBezelLogo.png
-IntroImage_linear = true
-IntroImage_mipmap = 1
+IntroLogo = ../shaders/textures/IntroLogo_MegaBezel.png
+IntroLogo_linear = true
+IntroLogo_mipmap = 1
 
-TubeColoredGelImage = ../shaders/textures/Placeholder_Transparent_16x16.png
-TubeColoredGelImage_linear = true
-TubeColoredGelImage_mipmap = 1
+TubeColoredGel = ../shaders/textures/Placeholder_Transparent_16x16.png
+TubeColoredGel_linear = true
+TubeColoredGel_mipmap = 1
 
-TubeStaticReflectionImage = ../shaders/textures/TubeGlassOverlayImageCropped_1440x1080.png
-TubeStaticReflectionImage_linear = true
-TubeStaticReflectionImage_mipmap = 1
+TubeHighlight = ../shaders/textures/TubeHighlightCropped.png
+TubeHighlight_linear = true
+TubeHighlight_mipmap = 1
 
-BackgroundImage = ../shaders/textures/Placeholder_Transparent_16x16.png
-BackgroundImage_linear = true
-BackgroundImage_mipmap = 1
+Background = ../shaders/textures/Placeholder_Transparent_16x16.png
+Background_linear = true
+Background_mipmap = 1
 
-FrameHighlight = ../shaders/textures/FrameTexture_2800x2120.png
+FrameHighlight = ../shaders/textures/FrameHighlight.png
 FrameHighlight_linear = true
 FrameHighlight_mipmap = 1
 
-CabinetGlassImage = ../shaders/textures/Placeholder_Transparent_16x16.png
-CabinetGlassImage_linear = true
-CabinetGlassImage_mipmap = 1
+CabinetGlass = ../shaders/textures/Placeholder_Transparent_16x16.png
+CabinetGlass_linear = true
+CabinetGlass_mipmap = 1
 
-DeviceImage = ../shaders/textures/Placeholder_Transparent_16x16.png
-DeviceImage_linear = true
-DeviceImage_mipmap = 1
+Device = ../shaders/textures/Placeholder_Transparent_16x16.png
+Device_linear = true
+Device_mipmap = 1
 
 
-DecalImage = ../shaders/textures/Placeholder_Transparent_16x16.png
-DecalImage_linear = true
-DecalImage_mipmap = 1
+Decal = ../shaders/textures/Placeholder_Transparent_16x16.png
+Decal_linear = true
+Decal_mipmap = 1
 
-NightLighting = ../shaders/textures/NightLightingClose_1920x1080.png
-NightLightingImage_linear = true
-NightLightingImage_mipmap = 1
+NightLighting = ../shaders/textures/NightLightingClose.png
+NightLighting_linear = true
+NightLighting_mipmap = 1
 
-LEDImage = ../shaders/textures/Placeholder_Transparent_16x16.png
-LEDImage_linear = true
-LEDImage_mipmap = 1
+BackgroundLED = ../shaders/textures/Placeholder_Transparent_16x16.png
+BackgroundLED_linear = true
+BackgroundLED_mipmap = 1
 
-TopLayerImage = ../shaders/textures/Placeholder_Transparent_16x16.png
-TopLayerImage_linear = true
-TopLayerImage_mipmap = 1
+TopLayer = ../shaders/textures/Placeholder_Transparent_16x16.png
+TopLayer_linear = true
+TopLayer_mipmap = 1
 
 HSM_INT_SCALE_MODE = "2.000000"
 HSM_INT_SCALE_BORDER_MIN_HEIGHT = "7.00000"

@@ -153,7 +153,7 @@ float shadow (vec3 p, vec3 lpos) {
     }
 }
 
-void mainImage( out vec4 fragColor, in vec2 fragCoord )
+void main( out vec4 fragColor, in vec2 fragCoord )
 {
     // Normalized pixel coordinates (from 0 to 1)
     vec2 uv = fragCoord/iResolution.xy - .5;

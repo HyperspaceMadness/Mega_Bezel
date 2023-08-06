@@ -261,8 +261,7 @@ alias28 = "OutputPass"
 
 # Textures Glass
 # Define textures to be used by the different passes
-textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;NightLighting;NightLighting2;"
-//ReflectionMask;GlassHighlight;FrameHighlight;CabinetGlassImage;DeviceImage;DeviceLEDImage;DecalImage;NightLighting;NightLighting2;LEDImage;TopLayerImage;"
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;DitherNoise;IntroLogo;ScreenPlacement;TubeDiffuse;TubeColoredGel;TubeShadow;TubeHighlight;Background;GlassPresetHighlight;NightLighting;NightLighting2;"
 
 SamplerLUT1 = ../../../shaders/guest/lut/trinitron-lut.png
 SamplerLUT1_linear = true 
@@ -273,76 +272,81 @@ SamplerLUT3_linear = true
 SamplerLUT4 = ../../../shaders/guest/lut/ntsc-lut.png
 SamplerLUT4_linear = true
 
-IntroImage = ../../../shaders/textures/IntroImage_MegaBezelLogo.png
-IntroImage_linear = true
-IntroImage_mipmap = 1
+DitherNoise = ../../../shaders/textures/DitherNoise_BlueNoise_LowContrast.png
+DitherNoise_linear = false
+DitherNoise_mipmap = false
+DitherNoise_wrap_mode = "repeat"
 
-ScreenPlacementImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-ScreenPlacementImage_linear = false
+IntroLogo = ../../../shaders/textures/IntroLogo_MegaBezel.png
+IntroLogo_linear = true
+IntroLogo_mipmap = 1
 
-TubeStaticReflectionImage = ../../../shaders/textures/TubeGlassOverlayImageCropped_1440x1080.png
-TubeStaticReflectionImage_linear = true
-TubeStaticReflectionImage_mipmap = 1
+ScreenPlacement = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+ScreenPlacement_linear = false
 
-TubeDiffuseImage = ../../../shaders/textures/Tube_Diffuse_2390x1792.png
-TubeDiffuseImage_linear = true
-TubeDiffuseImage_mipmap = 1
+TubeHighlight = ../../../shaders/textures/TubeHighlightCropped.png
+TubeHighlight_linear = true
+TubeHighlight_mipmap = 1
 
-TubeShadowImage = ../../../shaders/textures/Tube_Shadow_1600x1200.png
-TubeShadowImage_linear = true
-TubeShadowImage_mipmap = 1
+TubeDiffuse = ../../../shaders/textures/Tube_Diffuse.png
+TubeDiffuse_linear = true
+TubeDiffuse_mipmap = 1
 
-TubeColoredGelImage = ../../../shaders/textures/Colored_Gel_Rainbow.png
-TubeColoredGelImage_linear = true
-TubeColoredGelImage_mipmap = 1
+TubeShadow = ../../../shaders/textures/Tube_Shadow.png
+TubeShadow_linear = true
+TubeShadow_mipmap = 1
+
+TubeColoredGel = ../../../shaders/textures/ColoredGel_Rainbow.png
+TubeColoredGel_linear = true
+TubeColoredGel_mipmap = 1
 
 ReflectionMask = ../../../shaders/textures/Placeholder_White_16x16.png
 ReflectionMask_linear = true
 ReflectionMask_mipmap = 1
 
-GlassHighlight = ../../../shaders/textures/TopLayerImageGradient_3840x2160.png
-GlassHighlight_linear = true
-GlassHighlight_mipmap = 1
+GlassPresetHighlight = ../../../shaders/textures/GlassPresetHighlight.png
+GlassPresetHighlight_linear = true
+GlassPresetHighlight_mipmap = 1
 
 FrameHighlight = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 FrameHighlight_linear = true
 FrameHighlight_mipmap = 1
 
-BackgroundImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-BackgroundImage_linear = true
-BackgroundImage_mipmap = 1
+Background = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+Background_linear = true
+Background_mipmap = 1
 
-// CabinetGlassImage = ../../../shaders/textures/TopLayerImageGradient_3840x2160.png
-// CabinetGlassImage_linear = true
-// CabinetGlassImage_mipmap = 1
+// CabinetGlass = ../../../shaders/textures/GlassPresetHighlight.png
+// CabinetGlass_linear = true
+// CabinetGlass_mipmap = 1
 
-// DeviceImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-// DeviceImage_linear = true
-// DeviceImage_mipmap = 1
+// Device = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+// Device_linear = true
+// Device_mipmap = 1
 
-// DeviceLEDImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-// DeviceLEDImage_linear = true
-// DeviceLEDImage_mipmap = 1
+// DeviceBackgroundLED = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+// DeviceBackgroundLED_linear = true
+// DeviceBackgroundLED_mipmap = 1
 
-// DecalImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-// DecalImage_linear = true
-// DecalImage_mipmap = 1
+// Decal = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+// Decal_linear = true
+// Decal_mipmap = 1
 
 NightLighting = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-NightLightingImage_linear = true
-NightLightingImage_mipmap = 1
+NightLighting_linear = true
+NightLighting_mipmap = 1
 
 NightLighting2 = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-NightLighting2Image_linear = true
-NightLighting2Image_mipmap = 1
+NightLighting2_linear = true
+NightLighting2_mipmap = 1
 
-// LEDImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-// LEDImage_linear = true
-// LEDImage_mipmap = 1
+// BackgroundLED = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+// BackgroundLED_linear = true
+// BackgroundLED_mipmap = 1
 
-// TopLayerImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-// TopLayerImage_linear = true
-// TopLayerImage_mipmap = 1
+// TopLayer = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+// TopLayer_linear = true
+// TopLayer_mipmap = 1
 
 
 

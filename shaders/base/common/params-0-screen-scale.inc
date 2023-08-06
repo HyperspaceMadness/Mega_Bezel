@@ -70,13 +70,13 @@ float HSM_STATIC_LAYERS_GAMMA = global.HSM_STATIC_LAYERS_GAMMA;
 #pragma parameter HSM_LIGHT_NIGHTLIGHTING_OPACITY          "      Night Lighting Global Opacity Multiplier"  0 0 100 1
 float HSM_LIGHT_NIGHTLIGHTING_OPACITY = global.HSM_LIGHT_NIGHTLIGHTING_OPACITY / 100;
 
-#pragma parameter HSM_AMBIENT1_OPACITY                     "      Night Lighting 1st Image Opacity"  100 0 100 1
+#pragma parameter HSM_AMBIENT1_OPACITY                     "      Night Lighting 1st  Opacity"  100 0 100 1
 float HSM_AMBIENT1_OPACITY = global.HSM_AMBIENT1_OPACITY / 100 * global.HSM_LIGHT_NIGHTLIGHTING_OPACITY / 100;
 
-#pragma parameter HSM_AMBIENT2_OPACITY                     "      Night Lighting 2nd Image Opacity (Used for BG by Default)"  100 0 100 1
+#pragma parameter HSM_AMBIENT2_OPACITY                     "      Night Lighting 2nd  Opacity (Used for BG by Default)"  100 0 100 1
 float HSM_AMBIENT2_OPACITY = global.HSM_AMBIENT2_OPACITY / 100 * global.HSM_LIGHT_NIGHTLIGHTING_OPACITY / 100;
 
-#pragma parameter HSM_LIGHT_NIGHTLIGHTING_SWAP_IMAGE_MODE  "      Which Images to Use: BOTH | 1 ONLY | 2 ONLY | SWAP"  0 0 3 1
+#pragma parameter HSM_LIGHT_NIGHTLIGHTING_SWAP_IMAGE_MODE  "      Which s to Use: BOTH | 1 ONLY | 2 ONLY | SWAP"  0 0 3 1
 float HSM_LIGHT_NIGHTLIGHTING_SWAP_IMAGE_MODE = global.HSM_LIGHT_NIGHTLIGHTING_SWAP_IMAGE_MODE;
 
 
@@ -130,11 +130,11 @@ float HSM_FLIP_VIEWPORT_VERTICAL = -(global.HSM_FLIP_VIEWPORT_VERTICAL * 2 - 1);
 #pragma parameter HSM_FLIP_VIEWPORT_HORIZONTAL						"          Flip Viewport Horizontal"  0 0 1 1
 float HSM_FLIP_VIEWPORT_HORIZONTAL = -(global.HSM_FLIP_VIEWPORT_HORIZONTAL * 2 - 1);
 
-#pragma parameter HSM_FLIP_CORE_VERTICAL							"          Flip Core Image Vertical"  0 0 1 1
+#pragma parameter HSM_FLIP_CORE_VERTICAL							"          Flip Core  Vertical"  0 0 1 1
 // float HSM_FLIP_CORE_VERTICAL = global.HSM_FLIP_CORE_VERTICAL;
 float HSM_FLIP_CORE_VERTICAL = -(global.HSM_FLIP_CORE_VERTICAL * 2 - 1);
 
-#pragma parameter HSM_FLIP_CORE_HORIZONTAL							"          Flip Core Image Horizontal"  0 0 1 1
+#pragma parameter HSM_FLIP_CORE_HORIZONTAL							"          Flip Core  Horizontal"  0 0 1 1
 // float HSM_FLIP_CORE_HORIZONTAL = global.HSM_FLIP_CORE_HORIZONTAL;
 float HSM_FLIP_CORE_HORIZONTAL = -(global.HSM_FLIP_CORE_HORIZONTAL * 2 - 1);
 
@@ -322,13 +322,13 @@ float HSM_PHYSICAL_SIM_TUBE_DIAGONAL_SIZE = global.HSM_PHYSICAL_SIM_TUBE_DIAGONA
 #pragma parameter HSM_AUTOMATIC_SCREEN_SCALE_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_AUTOMATIC_SCREEN_SCALE_TITLE					"[ NON-INTEGER - AUTOMATIC SCREEN SCALE & PLACEMENT ]:" 0 0 0.001 0.001
 
-#pragma parameter HSM_USE_IMAGE_FOR_PLACEMENT 						"          Use Image For Automatic Placement (Scale and Y Pos)" 0 0 1 1
+#pragma parameter HSM_USE_IMAGE_FOR_PLACEMENT 						"          Use  For Automatic Placement (Scale and Y Pos)" 0 0 1 1
 float HSM_USE_IMAGE_FOR_PLACEMENT = global.HSM_USE_IMAGE_FOR_PLACEMENT;
 
 #pragma parameter HSM_PLACEMENT_IMAGE_USE_HORIZONTAL 				"          Auto Place Horizontal (X Pos)" 0 0 1 1
 float HSM_PLACEMENT_IMAGE_USE_HORIZONTAL = global.HSM_PLACEMENT_IMAGE_USE_HORIZONTAL;
 
-#pragma parameter HSM_PLACEMENT_IMAGE_MODE 						    "          Placement Image Mode: TRANSPARENCY : WHITE ON BLACK" 0 0 1 1
+#pragma parameter HSM_PLACEMENT_IMAGE_MODE 						    "          Placement  Mode: TRANSPARENCY : WHITE ON BLACK" 0 0 1 1
 float HSM_PLACEMENT_IMAGE_MODE = global.HSM_PLACEMENT_IMAGE_MODE;
 
 
@@ -667,7 +667,7 @@ float HSM_MONOCHROME_DUALSCREEN_VIS_MODE = global.HSM_MONOCHROME_DUALSCREEN_VIS_
 #pragma parameter HSM_TUBE_EMPTY_THICKNESS_X_SCALE 			        "          Empty Tube Thicknes X Scale" 100 0 3000 1
 #define HSM_TUBE_EMPTY_THICKNESS_X_SCALE (global.HSM_TUBE_EMPTY_THICKNESS_X_SCALE / 100)
 
-#pragma parameter HSM_SCREEN_CORNER_RADIUS_SCALE 			        "          Screen (Game Image) Corner Radius Scale" 100 5 3000 1
+#pragma parameter HSM_SCREEN_CORNER_RADIUS_SCALE 			        "          Screen (Game ) Corner Radius Scale" 100 5 3000 1
 #define HSM_SCREEN_CORNER_RADIUS_SCALE (global.HSM_SCREEN_CORNER_RADIUS_SCALE / 100)
 
 
@@ -707,13 +707,13 @@ float HSM_TUBE_DIFFUSE_IMAGE_LIGHT_NIGHTLIGHTING = global.HSM_TUBE_DIFFUSE_IMAGE
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_AMBIENT2_LIGHTING          "          Add Blend Mode Night Lighting 2 Multiplier" 0 0 100 1
 float HSM_TUBE_DIFFUSE_IMAGE_AMBIENT2_LIGHTING = global.HSM_TUBE_DIFFUSE_IMAGE_AMBIENT2_LIGHTING / 100;
 
-#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_SCALE  			        "          Image Scale" 140 0 1000 1
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_SCALE  			        "           Scale" 140 0 1000 1
 float HSM_TUBE_DIFFUSE_IMAGE_SCALE = global.HSM_TUBE_DIFFUSE_IMAGE_SCALE / 100;
 
-#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_SCALE_X  			        "          Image Scale X" 100 0 1000 1
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_SCALE_X  			        "           Scale X" 100 0 1000 1
 float HSM_TUBE_DIFFUSE_IMAGE_SCALE_X = global.HSM_TUBE_DIFFUSE_IMAGE_SCALE_X / 100;
 
-#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_ROTATION  			        "          Image Rotation: -1: 270 | 0 | 1: 90" 0 -1 1 1
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_ROTATION  			        "           Rotation: -1: 270 | 0 | 1: 90" 0 -1 1 1
 float HSM_TUBE_DIFFUSE_IMAGE_ROTATION = global.HSM_TUBE_DIFFUSE_IMAGE_ROTATION;
 
 
@@ -723,7 +723,7 @@ float HSM_TUBE_DIFFUSE_IMAGE_ROTATION = global.HSM_TUBE_DIFFUSE_IMAGE_ROTATION;
 #pragma parameter HSM_TUBE_SHADOW_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_TUBE_SHADOW_IMAGE_TITLE					"[ TUBE SHADOW IMAGE ]:" 0 0 0.001 0.001
 
-#pragma parameter HSM_TUBE_SHADOW_IMAGE_ON  					"          Tube Shadow Image - OFF | ON" 1 0 1 1
+#pragma parameter HSM_TUBE_SHADOW_IMAGE_ON  					"          Tube Shadow  - OFF | ON" 1 0 1 1
 float HSM_TUBE_SHADOW_IMAGE_ON = global.HSM_TUBE_SHADOW_IMAGE_ON;
 
 #pragma parameter HSM_TUBE_SHADOW_IMAGE_OPACITY                 "          Opacity" 60 0 100 2
@@ -751,7 +751,7 @@ float HSM_TUBE_SHADOW_CURVATURE_SCALE = global.HSM_TUBE_SHADOW_CURVATURE_SCALE /
 #pragma parameter HSM_TUBE_STATIC_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_TUBE_STATIC_TITLE			"[ TUBE GLASS STATIC REFLECTION IMAGE ]:" 0 0 0.001 0.001
 
-#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_ON  				"          Use Tube Static Reflection Image - OFF | ON" 0 0 1 1
+#pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_ON  				"          Use Tube Static Reflection  - OFF | ON" 0 0 1 1
 float HSM_TUBE_STATIC_REFLECTION_IMAGE_ON = global.HSM_TUBE_STATIC_REFLECTION_IMAGE_ON;
 
 #pragma parameter HSM_TUBE_STATIC_REFLECTION_IMAGE_DUALSCREEN_VIS_MODE    "          Dual Screen Visibility - BOTH | SCREEN 1 | SCREEN 2" 0 0 2 1
@@ -937,13 +937,13 @@ float HSM_SIMPLEBG_COLORIZE_BRIGHTNESS = global.HSM_SIMPLEBG_COLORIZE_BRIGHTNESS
 #pragma parameter HSM_DUALSCREEN_MODE								"          Dual Screen Mode - OFF | VERTICAL | HORIZONTAL" 0 0 2 1
 float HSM_DUALSCREEN_MODE = global.HSM_DUALSCREEN_MODE;
 
-#pragma parameter HSM_DUALSCREEN_CORE_IMAGE_SPLIT_MODE				"          Core Image Split Mode  - AUTO | VERTICAL | HORIZONTAL" 1 0 2 1
+#pragma parameter HSM_DUALSCREEN_CORE_IMAGE_SPLIT_MODE				"          Core  Split Mode  - AUTO | VERTICAL | HORIZONTAL" 1 0 2 1
 float HSM_DUALSCREEN_CORE_IMAGE_SPLIT_MODE = global.HSM_DUALSCREEN_CORE_IMAGE_SPLIT_MODE;
 
-#pragma parameter HSM_DUALSCREEN_CORE_IMAGE_SWAP_SCREENS			"          Core Image Swap Screen Content" 0 0 1 1
+#pragma parameter HSM_DUALSCREEN_CORE_IMAGE_SWAP_SCREENS			"          Core  Swap Screen Content" 0 0 1 1
 float HSM_DUALSCREEN_CORE_IMAGE_SWAP_SCREENS = global.HSM_DUALSCREEN_CORE_IMAGE_SWAP_SCREENS;
 
-#pragma parameter HSM_DUALSCREEN_CORE_IMAGE_SPLIT_OFFSET			"          Core Image Split Offset" 0 -100 100 1
+#pragma parameter HSM_DUALSCREEN_CORE_IMAGE_SPLIT_OFFSET			"          Core  Split Offset" 0 -100 100 1
 float HSM_DUALSCREEN_CORE_IMAGE_SPLIT_OFFSET = global.HSM_DUALSCREEN_CORE_IMAGE_SPLIT_OFFSET / 1000;
 
 // #pragma parameter HSM_2ND_SCREEN_SIDES_CROP				"          Crop % from Edges of 2nd Screen" 0 0 100 0.1
@@ -1064,7 +1064,7 @@ float HSM_AMBIENT1_DITHERING_SAMPLES = 0;
 
 
 //---------------------------------------------------------------------------------------------------
-//    Ambient Lighting Image 2
+//    Ambient Lighting  2
 //---------------------------------------------------------------------------------------------------
 
 #pragma parameter HSM_AMBIENT2_EMPTY_LINE							" " 0 0 0.001 0.001

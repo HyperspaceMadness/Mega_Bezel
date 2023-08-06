@@ -4,8 +4,8 @@
 #reference "../../resource/param_values/tube-effect/tube-effects.params"
 #reference "../../resource/param_values/light/basic__night.params"
 
-BgShadow = "../../shaders/textures/BG_Shadow_3840x2160.png"
-DeviceImage = "../../shaders/textures/Sony_Profeel_Device.png"
+BgShadow = "../../shaders/textures/Background_Shadow.png"
+Device = "../../shaders/textures/Sony_Profeel_Device.png"
 DeviceShadow = "../../shaders/textures/Sony_Profeel_Device_Shadow.png"
 
 HSM_CURVATURE_MODE = "2.000000"

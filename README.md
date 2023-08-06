@@ -104,7 +104,7 @@ This shader package is meant for you to experiment with and make your own creati
 ***
 **EDITING PRESETS**
   * You can then open this Simple Preset file and add other parameter adjustments or set textures as you see fit. E.G. add the following lines to change the background image: 
-    * `BackgroundImage = "MyImage.jpg"`
+    * `Background = "My.jpg"`
   * Or change the path indicated on the `#reference` line to point at a different base preset
 
 ***
@@ -189,7 +189,7 @@ And of course I probably would never have started this without seeing the great 
 
   * In general there is a background image which fills the screen, then the scaled down game screen with an automatically generated bezel image is drawn on top. 
   * The bezel and frame you see around the screen is auto generated and not part of the background image
-  * Additional Images can be layered on top to augment the look
+  * Additional s can be layered on top to augment the look
   * Most things can be changed to your taste with adjustment of the parameters, so try them out!
 
 ----------------------------------------
@@ -211,7 +211,7 @@ And of course I probably would never have started this without seeing the great 
 
 - All in the root of the Presets folder use @guest.r's awesome Guest-Advanced CRT shader which is considered the default CRT shader for the Mega Bezel, the only exception to this is the POTATO preset which uses GDV-MINI for performance reasons. The following table is sorted by GPU performance and GPU RAM requirements
 
-|Category                        |Reflection  |Image Layers |Tube Fx  |Pre-CRT Chain   |Smooth Upscale  
+|Category                        |Reflection  | Layers |Tube Fx  |Pre-CRT Chain   |Smooth Upscale  
 |--------------------------------|------------|-------------|---------|----------------|---------------
 | MBZ__0__SMOOTH-ADV             | ✔          | ✔          | ✔       | ADV + ScaleFx  | 3X          
 | MBZ__0__SMOOTH-ADV-NO-REFLECT  |            | ✔          | ✔       | ADV + ScaleFx  | 3X          
@@ -242,7 +242,7 @@ And of course I probably would never have started this without seeing the great 
 | Resolution Text                        | ✔           | ✔   | ✔   | 
 | Intro Animation                        | ✔           | ✔   | ✔   |
 | De-Dithering                           | ✔           | ✔   |      |
-| Image Sharpening                       | ✔           | ✔   | ✔   |
+|  Sharpening                       | ✔           | ✔   | ✔   |
 | Uprezed Edge Contour Smoothing         | ✔           |     |      |
 | Bandwidth Horizontal Blurring (GTU)    | ✔           | ✔   |     |
 | NTSC Signal Processing (NTSC Adaptive) | ✔           | ✔   | ✔   | ✔
@@ -269,12 +269,12 @@ NTSC Processing is only included in NTSC Presets, and GTU Horizontal blurring is
     * Includes whatever the category's Pre-CRT shader chain but removes the bezel, images and reflection
   * **Glass** 
     * Presets which show a blurry reflection in the area around the screen
-  * **Image Layering**
+  * ** Layering**
     * Layering of multiple images for background, CRT housing, LEDs etc
     * Includes the Automatically Generated Bezel & Frame
   * **Tube Effects**
     * Tube Static Reflection Highlight
-    * Tube Diffuse Image & Shadow
+    * Tube Diffuse  & Shadow
     * Tube Colored Gel
     * All presets include Tube Effects except the Potato
 
@@ -405,15 +405,15 @@ NTSC Processing is only included in NTSC Presets, and GTU Horizontal blurring is
 
 -----------------------------------------------------------------------------------------------
 **[ AMBIENT LIGHTING ]:** - Usually used to apply night lighting on all graphics
-- **Ambient 1st Image Opacity**
+- **Ambient 1st  Opacity**
   - How much of the ambient lighting darkening effect is applied when using the first image
-- **Ambient 2nd Image Opacity**
+- **Ambient 2nd  Opacity**
   - How much of the ambient lighting darkening effect is applied when using the second image
-* **Which Images to Use** 
-  * **0 - BOTH** - Normal Mode, Use Both Images
+* **Which s to Use** 
+  * **0 - BOTH** - Normal Mode, Use Both s
   * **1 - 1 ONLY** - Use the first image for both slots
   * **2 - 2 ONLY** - Use the second image for both slots
-  * **3 - Swap** - Swap the Images
+  * **3 - Swap** - Swap the s
 
 
 -----------------------------------------------------------------------------------------------
@@ -438,8 +438,8 @@ NTSC Processing is only included in NTSC Presets, and GTU Horizontal blurring is
 
 * **Flip Viewport Vertical** --- Some cores flip the viewport (full monitor area), this flips it back
 * **Flip Viewport Horizontal**
-* **Flip Core Image Vertical** --- Some cores flip the core image, this flips it back
-* **Flip Core Image Horizontal**
+* **Flip Core  Vertical** --- Some cores flip the core image, this flips it back
+* **Flip Core  Horizontal**
 * **Rotate CRT Tube** --- Turns the tube 90 degrees counter counter-clockwise
 
 -----------------------------------------------------------------------------------------------
@@ -507,12 +507,12 @@ NTSC Processing is only included in NTSC Presets, and GTU Horizontal blurring is
 -----------------------------------------------------------------------------------------------
 **[ NON-INTEGER - AUTOMATIC SCREEN SCALE & PLACEMENT ]:**
 
-- **Use Image For Automatic Placement (Scale and Y Pos)**
+- **Use  For Automatic Placement (Scale and Y Pos)**
   - When on the placement image is inspected to find where to place and scale the screen image
 - **Auto Place Horizontal (X Pos)**
   - 0 - OFF  Screen placed in the center 
   - 1 - ON Tries to place the screen in the center of the hole in the placement image
-- **Placement Image Mode: TRANSPARENCY : WHITE ON BLACK**
+- **Placement  Mode: TRANSPARENCY : WHITE ON BLACK**
   - What channel of the texture to look at to find the hole in the image, either the transparent part, or a white rectangle on top of a black background
 
 -----------------------------------------------------------------------------------------------
@@ -738,7 +738,7 @@ Shows the results at different stages of the shader chain
   - Amount of Empty tube around the game image
 - **Empty Tube Thicknes X Scale**
   - Amount of Empty tube around the game image horizontally
-- **Screen (Game Image) Corner Radius Scale**
+- **Screen (Game ) Corner Radius Scale**
   - How round are the corners of the CRT image on top of empty area of the tube
 
 
@@ -748,7 +748,7 @@ Shows the results at different stages of the shader chain
 The color/texture of the tube which appears behind the CRT image
 - **Tube Diffuse Color** 
   - 0: Black - Game image is shown over 100% black
-  - 1: Image - Shows an grayish image of crt tube with lighting
+  - 1:  - Shows an grayish image of crt tube with lighting
   - 2: Transparent - See through the CRT tube to the background
 - **Colorize On** - Colorize the image
 - **Hue Offset**
@@ -764,7 +764,7 @@ The color/texture of the tube which appears behind the CRT image
 **[ TUBE SHADOW IMAGE ]:**
 
 Adds a shadow on top of the tube diffuse image and colored gel
-- **Tube Shadow Image - OFF | ON** 
+- **Tube Shadow  - OFF | ON** 
   - Apply a shadow on the top of the tube diffuse coloring
 - **Opacity** 
   - Opacity of the shadow, and how dark the shadow is
@@ -780,7 +780,7 @@ Adds a shadow on top of the tube diffuse image and colored gel
 
 - **Tube Opacity**
   - Opacity of the tube, with opacity of 0 you will see through to the background, good for things like Tron's Deadly Discs 
-- **CRT On Tube Diffuse Blend Mode** - How to apply the CRT (Game Image) on top of the tube
+- **CRT On Tube Diffuse Blend Mode** - How to apply the CRT (Game ) on top of the tube
   - 0: OFF - Don't apply the game image
   - 1: ADD - Apply the game image additively this is the normal behavior
   - 2: Multiply - Darken the tube diffuse image with the game image 
@@ -795,9 +795,9 @@ Adds a shadow on top of the tube diffuse image and colored gel
   - 0: Both Screens
   - 1: Only the First Screen
   - 2: Only the Second Screen
-- **Multiply Blend Amount** - Image applied like a colored gel in photography
+- **Multiply Blend Amount** -  applied like a colored gel in photography
   - Used to make vector games which output black and white colored, E.G Battlezone
-- **Additive Blend Amount** - Image applied as a brightening of the tube area
+- **Additive Blend Amount** -  applied as a brightening of the tube area
   - Used to add color to the screen as if it was the gel being diffusely lit from outside the monitor
 - **Normal Blend Amount** - Used for the more opaque parts of a gel image like for the Vectrex
 - **Normal Blend Transparency Threshold** - Adjusts at what transparency of the image the area should be appear fully transparent
@@ -812,7 +812,7 @@ Adds a shadow on top of the tube diffuse image and colored gel
 
 -----------------------------------------------------------------------------------------------
 **[ TUBE STATIC REFLECTION IMAGE  ]:**
-- **Use Tube Static Reflection Image - OFF | ON** --- Apply the effect or not
+- **Use Tube Static Reflection  - OFF | ON** --- Apply the effect or not
 - **Opacity** --- This is the shine on the tube which imitates reflection from the environment
 - **Dual Screen Visibility** --- Which screen the static reflection is shown
   - 0: Both Screens**
@@ -844,11 +844,11 @@ Adds a shadow on top of the tube diffuse image and colored gel
   - 1 - VERTICAL - Split into 2 screens one on the top and one on the bottom
   - 2 - HORIZONTAL - Split into 2 screens one on the left and one on the right
   
-- **Core Image Split Mode**
+- **Core  Split Mode**
   - 0 - AUTO - Split in the same direction as the dual screen mode
   - 1 - VERTICAL
   - 2 - HORIZONTAL
-- **Core Image Split Offset**
+- **Core  Split Offset**
   - Adjusts where we split the core image into two
   - This is an offset in pixels from the center
    the screen 
@@ -920,7 +920,7 @@ Adds a shadow on top of the tube diffuse image and colored gel
 
 
 -----------------------------------------------------------------------------------------------
-**[ AMBIENT LIGHTING IMAGE 2 ]:** - Has the same parameters as Ambient Image 1
+**[ AMBIENT LIGHTING IMAGE 2 ]:** - Has the same parameters as Ambient  1
 
 
 -----------------------------------------------------------------------------------------------
@@ -946,7 +946,7 @@ Adds a shadow on top of the tube diffuse image and colored gel
   - **0 - Off**
   - **1 - Normal Blending**
   - **2 - Additive Blending** - Added on as added with a projector
-  - **3 - Multiply Blending** - Image is applied by darkening the under layer
+  - **3 - Multiply Blending** -  is applied by darkening the under layer
 
 - **Width**
   - Thickness of the bezel on the sides of the tube, default is 125
@@ -1155,9 +1155,9 @@ Adds a shadow on top of the tube diffuse image and colored gel
 
 
 -----------------------------------------------------------------------------------------------
-**[ REFLECTION MASK IMAGE - Only in Image Layer Presets ]:**
+**[ REFLECTION MASK IMAGE - Only in  Layer Presets ]:**
 
-- **Reflection Image Mask Amount**
+- **Reflection  Mask Amount**
   - How much the image darkens the reflection
 - **Follow Layer**
   - Which layer should the image mask match, Default is 4, Following the Device
@@ -1196,10 +1196,10 @@ Adds a shadow on top of the tube diffuse image and colored gel
 
 - **Background Blend Mode** - Default is Additive
 
-  - **OFF** - Image is not applied
+  - **OFF** -  is not applied
   - **NORMAL**
   - **ADD** - Adds the image as if it is being projected on top
-  - **MULTIPLY** - Image is applied as if it was a colored plastic film
+  - **MULTIPLY** -  is applied as if it was a colored plastic film
 
 - **Opacity**
 
@@ -1218,11 +1218,11 @@ Adds a shadow on top of the tube diffuse image and colored gel
 -----------------------------------------------------------------------------------------------
 **[ GLASS BACKGROUND IMAGE ]:**
 
-- **Background Image Opacity**
+- **Background  Opacity**
 
 - **Background Blend Mode** - Default is Additive
 
-  - **Off** - Image is not applied
+  - **Off** -  is not applied
 
   - **Normal**
 
@@ -1236,15 +1236,15 @@ Adds a shadow on top of the tube diffuse image and colored gel
 
 Layer order adjusts the order in which the layers are composited or "layered" on top of each other, the index 0 is the bottom or base layer. If two layers are given the same index they fall back to being composited in the order seen here.
 
-- **Background Image**
+- **Background **
 - **Viewport Vignette**
-- **LED Image**
-- **Device Image**
-- **Device LED Image**
+- **LED **
+- **Device **
+- **Device LED **
 - **CRT Screen**
-- **Decal Image**
-- **Cabinet Glass Image**
-- **Top Image**
+- **Decal **
+- **Cabinet Glass **
+- **Top **
 
 -----------------------------------------------------------------------------------------------
 **[ CUTOUT ]:**
@@ -1256,9 +1256,9 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
   - **0 - Full** - Scale to the viewport 
   - **1 - Tube** - Follow the Tube Scaling
   - **2 - Bezel** - Follow the Bezel Scaling
-  - **3 - Background** - Follow the Background Image Scaling
-  - **4 - Bezel Image** - Follow the Bezel Image Scaling
-  - **5 - Decal Image** - Follow the Decal Image Scaling
+  - **3 - Background** - Follow the Background  Scaling
+  - **4 - Bezel ** - Follow the Bezel  Scaling
+  - **5 - Decal ** - Follow the Decal  Scaling
 - **Scale**
   - Scales cutout in both directions
 - **Scale X**
@@ -1350,10 +1350,10 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
   - ***Full / Fullscreen*** *- Scale to the viewport*
   - ***Tube*** *- Follow the Tube Scaling*
   - ***Bezel*** *- Follow the Bezel Scaling*
-  - ***Background*** *- Follow the Background Image Scaling*
-  - ***Bezel Image*** *- Follow the Bezel Image Scaling*
-  - ***Decal Image*** *- Follow the Decal Image Scaling*
-  - ***Top Extra Image*** *- Follow the Top Extra Image Scaling*
+  - ***Background*** *- Follow the Background  Scaling*
+  - ***Bezel *** *- Follow the Bezel  Scaling*
+  - ***Decal *** *- Follow the Decal  Scaling*
+  - ***Top Extra *** *- Follow the Top Extra  Scaling*
 
 - ***Follow Mode***
   - *Controls if this layer follows another layer's scaling* 
@@ -1363,7 +1363,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
 - ***Follow Full also follows Zoom***
   - When the layer Follow Layer is in **FULL** mode this controls if the layer should scale with the global zoom or not, this defaults to ON
 
-- ***Image Fill Mode***
+- *** Fill Mode***
   - **0 - USE TEXURE ASPECT** --- Keeps the aspect of the teture
   - **1 - SPLIT HORIZONTAL** --- Splits the image in the center and slide it out towards the sides to match the required aspect
   - **2 - STRETCH** --- Stretch the image across the whole area to match the required aspect
@@ -1407,7 +1407,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
   - **2 - Bezel**
 - **Follow Layer**
 - **Follow Full also follows Zoom**
-- **Image Fill Mode**
+- ** Fill Mode**
 - **Split Mode Preserve Center %**
 - **Scale**
 - **Scale X**
@@ -1459,7 +1459,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
   - **4 - Device**
 - **Follow Mode**
 - **Follow Full also follows Zoom**
-- **Image Fill Mode**
+- ** Fill Mode**
 - **Split Mode Preserve Center %**
 - **Scale**
 - **Scale X**
@@ -1493,7 +1493,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
   - **3 - BG**
 - **Follow Mode**
 - **Follow Full also follows Zoom**
-- **Image Fill Mode**
+- ** Fill Mode**
 - **Split Mode Preserve Center %**
 - **Scale**
 - **Scale X**
@@ -1528,7 +1528,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
   - **4 - Device**
 - **Follow Mode**
 - **Follow Full also follows Zoom**
-- **Image Fill Mode**
+- ** Fill Mode**
 - **Split Mode Preserve Center %**
 - **Scale**
 - **Scale X**
@@ -1564,7 +1564,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
   - **5 - Decal**
 - **Follow Mode**
 - **Follow Full also follows Zoom**
-- **Image Fill Mode**
+- ** Fill Mode**
 - **Split Mode Preserve Center %**
 - **Scale**
 - **Scale X**
@@ -1602,7 +1602,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
   - **5 - Decal**
 - **Follow Mode**
 - **Follow Full also follows Zoom**
-- **Image Fill Mode**
+- ** Fill Mode**
 - **Split Mode Preserve Center %**
 - **Scale**
 - **Scale X**
@@ -1632,7 +1632,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
   - 0 - Off
   - 1 - Normal Blending
   - 2 - Additive Blending - Added on as added with a projector
-  - 3 - Multiply Blending - Image is applied by darkening the under layer
+  - 3 - Multiply Blending -  is applied by darkening the under layer
 - **Logo Over Solid Color**
   - 0 - Off - The Logo is layered under the solid color
   - 1 - ON - The Logo is layered over the solid color
@@ -1663,7 +1663,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
   - 0 - Off
   - 1 - Normal Blending
   - 2 - Additive Blending - Added on as added with a projector
-  - 3 - Multiply Blending - Image is applied by darkening the under layer
+  - 3 - Multiply Blending -  is applied by darkening the under layer
 - **Solid Color Hue**
 - **Solid Color Saturation**
 - **Solid Color Value**
@@ -1678,7 +1678,7 @@ Used to cut a rectangular area from the layers, for example cutting out the hole
   - **0 - Off**
   - **1 - Normal Blending**
   - **2 - Additive Blending** - Added on as added with a projector
-  - **3 - Multiply Blending** - Image is applied by darkening the under layer
+  - **3 - Multiply Blending** -  is applied by darkening the under layer
 - **Static Noise Hold Frames**
   - How many frames to hold the static noise
 - **Static Noise Fade Out Frames**

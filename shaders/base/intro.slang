@@ -49,7 +49,7 @@ layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 1) uniform sampler2D CacheInfoPass;
 layout(set = 0, binding = 2) uniform sampler2D Source;
-layout(set = 0, binding = 3) uniform sampler2D IntroImage;
+layout(set = 0, binding = 3) uniform sampler2D IntroLogo;
 
 #define eps 1e-3
 
@@ -171,11 +171,11 @@ vec4 GetColorWithIntro(vec4 in_color, vec2 in_coord, in sampler2D in_logo_image_
 
       if (HSM_DUALSCREEN_MODE > 0.5)
       {
-         if (HSM_GetCoreImageSplitDirection() == 1)
+         if (HSM_GetCoreSplitDirection() == 1)
          {
             in_coord.y = in_coord.y * 2 - MAX_NEGATIVE_CROP;
          }
-         if (HSM_GetCoreImageSplitDirection() == 2)
+         if (HSM_GetCoreSplitDirection() == 2)
          {
             in_coord.x = in_coord.x * 2 - MAX_NEGATIVE_CROP;
          }
@@ -200,7 +200,7 @@ vec4 GetColorWithIntro(vec4 in_color, vec2 in_coord, in sampler2D in_logo_image_
          coord_in_intro_image = (in_coord - (1 - intro_image_scale)) / intro_image_scale;
 
       // Quilez gives a better rescaling weighted more to the center of the pixel like bicubic
-      vec4 intro_image = HSM_TextureQuilez(IntroImage, intro_image_res, coord_in_intro_image);
+      vec4 intro_image = HSM_TextureQuilez(IntroLogo, intro_image_res, coord_in_intro_image);
       float logo_opacity = 1 - HHLP_EasePowerOut(clamp(1 - (frame_count - mask_wait - mask_fade_horizontal/4) / intro_logo_fade_in, 0, 1), 1.5);
       logo_opacity *=  clamp(clamp((frame_count - intro_logo_wait) / intro_logo_fade_in, 0, 1) - 
                               clamp((frame_count - (intro_logo_wait + intro_logo_fade_in + intro_logo_hold)) / intro_logo_fade_out, 0, 1), 
@@ -235,6 +235,6 @@ void main()
    FragColor = texture(Source, vTexCoord);
 
    if (HSM_INTRO_WHEN_TO_SHOW > 0)
-      FragColor = GetColorWithIntro(FragColor, viewport_coord_adjusted, IntroImage);
+      FragColor = GetColorWithIntro(FragColor, viewport_coord_adjusted, IntroLogo);
 }
 

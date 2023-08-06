@@ -42,7 +42,7 @@ layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 1) uniform sampler2D Source;
 layout(set = 0, binding = 2) uniform sampler2D CacheInfoPassFeedback;
-layout(set = 0, binding = 3) uniform sampler2D ScreenPlacementImage;
+layout(set = 0, binding = 3) uniform sampler2D ScreenPlacement;
 
 // Get the original size with split area added
 vec2 HSM_GetScreenCorePreppedSize(float screen_index)
@@ -50,7 +50,7 @@ vec2 HSM_GetScreenCorePreppedSize(float screen_index)
 	vec2 core_prepped_size = global.DerezedPassSize.xy;
 
 	if (HSM_DUALSCREEN_MODE > 0)
-		if (HSM_GetCoreImageSplitDirection() == 1)
+		if (HSM_GetCoreSplitDirection() == 1)
 			core_prepped_size.y *= 0.5;
 		else
 			core_prepped_size.x *= 0.5;
@@ -69,7 +69,7 @@ vec2 HSM_GetRotatedScreenDerezedSize()
 	vec2 pass_size = global.DerezedPassSize.xy;
 
 	if (HSM_DUALSCREEN_MODE > 0)
-		if (HSM_GetCoreImageSplitDirection() == 1)
+		if (HSM_GetCoreSplitDirection() == 1)
 			pass_size.y *= 0.5;
 		else
 			pass_size.x *= 0.5;
@@ -483,7 +483,7 @@ void HSM_GetCroppedRotatedSizeAndPixelSampleAreaStart(float screen_index, sample
 			crop_bottom_px = floor(HSM_2ND_SCREEN_CROP_PERCENT_BOTTOM * rotated_negative_crop_added_size.y);
 			zoom_crop = HSM_2ND_SCREEN_CROP_PERCENT_ZOOM;
 
-			if (HSM_GetCoreImageSplitDirection() == 1)
+			if (HSM_GetCoreSplitDirection() == 1)
 			{
 				default_crop_top_px = floor(rotated_negative_crop_added_size.y * (0.5 - HSM_DUALSCREEN_CORE_IMAGE_SPLIT_OFFSET));
 				crop_top_px = floor(crop_top_px / 2);
@@ -499,7 +499,7 @@ void HSM_GetCroppedRotatedSizeAndPixelSampleAreaStart(float screen_index, sample
 		else
 		{
 			zoom_crop = HSM_CROP_PERCENT_ZOOM;
-			if (HSM_GetCoreImageSplitDirection() == 1)
+			if (HSM_GetCoreSplitDirection() == 1)
 			{
 				default_crop_bottom_px = floor(rotated_negative_crop_added_size.y * (0.5 + HSM_DUALSCREEN_CORE_IMAGE_SPLIT_OFFSET));
 				crop_top_px = floor(crop_top_px / 2);
@@ -515,7 +515,7 @@ void HSM_GetCroppedRotatedSizeAndPixelSampleAreaStart(float screen_index, sample
 
 		vec2 base_cropped_size = rotated_negative_crop_added_size - vec2(final_crop_left_px + final_crop_right_px, final_crop_top_px + final_crop_bottom_px);
 
-		if (HSM_GetCoreImageSplitDirection() == 1)
+		if (HSM_GetCoreSplitDirection() == 1)
 		{
 			zoom_crop_top_px = floor(base_cropped_size.x * zoom_crop / 2);
 		}
@@ -904,7 +904,7 @@ float HSM_GetParameterSum()
 
 	#ifdef HAS_IMAGE_LAYER_PARAMS
 
-					// Reflection Image Mask
+					// Reflection  Mask
 					+ HSM_REFLECT_MASK_IMAGE_AMOUNT
 					+ HSM_REFLECT_MASK_FOLLOW_LAYER
 					+ HSM_REFLECT_MASK_FOLLOW_MODE
@@ -1130,7 +1130,7 @@ float HSM_GetParameterSum()
 					+ HSM_CAB_GLASS_POS_Y * 100
 					+ HSM_CAB_GLASS_MIPMAPPING_BLEND_BIAS
 
-					// Top Image
+					// Top 
 					+ HSM_TOP_OPACITY * 100
 					+ HSM_TOP_COLORIZE_ON
 					+ HSM_TOP_HUE * 360
@@ -1459,5 +1459,5 @@ void main()
    FragColor = HSM_GetColorForScreenInfoCache(vTexCoord, 
    											  CacheInfoPassFeedback, 
 											  Source, 
-											  ScreenPlacementImage);
+											  ScreenPlacement);
 }

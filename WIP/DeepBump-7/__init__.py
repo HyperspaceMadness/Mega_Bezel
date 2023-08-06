@@ -132,7 +132,7 @@ class DEEPBUMP_OT_ColorToNormalsOperator(Operator):
     def poll(self, context):
         if context.active_node is not None :
             selected_node_type = context.active_node.bl_idname
-            return (context.area.type == 'NODE_EDITOR') and (selected_node_type == 'ShaderNodeTexImage')
+            return (context.area.type == 'NODE_EDITOR') and (selected_node_type == 'ShaderNodeTex')
         return False
 
     def progress_print(self, current, total):
@@ -173,7 +173,7 @@ class DEEPBUMP_OT_ColorToNormalsOperator(Operator):
 
         # Create new node for normal map
         output_node = context.material.node_tree.nodes.new(
-            type='ShaderNodeTexImage')
+            type='ShaderNodeTex')
         output_node.location = input_node.location
         output_node.location[1] -= input_node.width*1.2
         output_node.image = output_bl_img
@@ -210,7 +210,7 @@ class DEEPBUMP_OT_NormalsToHeightOperator(Operator):
     def poll(self, context):
         if context.active_node is not None :
             selected_node_type = context.active_node.bl_idname
-            return (context.area.type == 'NODE_EDITOR') and (selected_node_type == 'ShaderNodeTexImage')
+            return (context.area.type == 'NODE_EDITOR') and (selected_node_type == 'ShaderNodeTex')
         return False
 
     def progress_print(self, current, total):
@@ -256,7 +256,7 @@ class DEEPBUMP_OT_NormalsToHeightOperator(Operator):
 
         # Create new node for curvature map
         output_node = context.material.node_tree.nodes.new(
-            type='ShaderNodeTexImage')
+            type='ShaderNodeTex')
         output_node.location = input_node.location
         output_node.location[1] -= input_node.width*1.2
         output_node.image = output_bl_img
@@ -276,7 +276,7 @@ class DEEPBUMP_OT_NormalsToCurvatureOperator(Operator):
     def poll(self, context):
         if context.active_node is not None :
             selected_node_type = context.active_node.bl_idname
-            return (context.area.type == 'NODE_EDITOR') and (selected_node_type == 'ShaderNodeTexImage')
+            return (context.area.type == 'NODE_EDITOR') and (selected_node_type == 'ShaderNodeTex')
         return False
 
     def progress_print(self, current, total):
@@ -322,7 +322,7 @@ class DEEPBUMP_OT_NormalsToCurvatureOperator(Operator):
 
         # Create new node for curvature map
         output_node = context.material.node_tree.nodes.new(
-            type='ShaderNodeTexImage')
+            type='ShaderNodeTex')
         output_node.location = input_node.location
         output_node.location[1] -= input_node.width*1.2
         output_node.image = output_bl_img

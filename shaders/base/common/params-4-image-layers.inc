@@ -132,10 +132,10 @@ float HSM_COMPOSITE_BACKGROUND_ON = global.HSM_COMPOSITE_BACKGROUND_ON;
 #pragma parameter HSM_COMPOSITE_BACKGROUND_STATIC_AMBIENT_MULTIPLIER         "          Static Ambient Brightness Multiplier"  100 0 300 1
 float HSM_COMPOSITE_BACKGROUND_STATIC_AMBIENT_MULTIPLIER = global.HSM_COMPOSITE_BACKGROUND_STATIC_AMBIENT_MULTIPLIER / 100 * HSM_LIGHT_BOUNCE_STATIC_AMBIENT_BRIGHTNESS;
 
-#pragma parameter HSM_COMPOSITE_BACKGROUND_NIGHTLIGHT1_MULTIPLIER           "          Night Lighting 1st Image Multiplier"  0 0 100 1
+#pragma parameter HSM_COMPOSITE_BACKGROUND_NIGHTLIGHT1_MULTIPLIER           "          Night Lighting 1st  Multiplier"  0 0 100 1
 float HSM_COMPOSITE_BACKGROUND_NIGHTLIGHT1_MULTIPLIER = global.HSM_COMPOSITE_BACKGROUND_NIGHTLIGHT1_MULTIPLIER / 100;
 
-#pragma parameter HSM_COMPOSITE_BACKGROUND_NIGHTLIGHT2_MULTIPLIER           "          Night Lighting 2nd Image Multiplier"  100 0 100 1
+#pragma parameter HSM_COMPOSITE_BACKGROUND_NIGHTLIGHT2_MULTIPLIER           "          Night Lighting 2nd  Multiplier"  100 0 100 1
 float HSM_COMPOSITE_BACKGROUND_NIGHTLIGHT2_MULTIPLIER = global.HSM_COMPOSITE_BACKGROUND_NIGHTLIGHT2_MULTIPLIER / 100; 
 
 // Not sure this is helpful, could have params to control how much Background Shadow, Device Shadow, etc
@@ -156,10 +156,10 @@ float HSM_COMPOSITE_MIDDLEGROUND_ON = global.HSM_COMPOSITE_MIDDLEGROUND_ON;
 #pragma parameter HSM_COMPOSITE_MIDDLEGROUND_STATIC_AMBIENT_MULTIPLIER        "          Static Ambient Brightness Multiplier"  100 0 300 1
 float HSM_COMPOSITE_MIDDLEGROUND_STATIC_AMBIENT_MULTIPLIER = global.HSM_COMPOSITE_MIDDLEGROUND_STATIC_AMBIENT_MULTIPLIER / 100 * HSM_LIGHT_BOUNCE_STATIC_AMBIENT_BRIGHTNESS;
 
-#pragma parameter HSM_COMPOSITE_MIDDLEGROUND_NIGHTLIGHT1_MULTIPLIER          "          Night Lighting 1st Image Multiplier"  100 0 100 1
+#pragma parameter HSM_COMPOSITE_MIDDLEGROUND_NIGHTLIGHT1_MULTIPLIER          "          Night Lighting 1st  Multiplier"  100 0 100 1
 float HSM_COMPOSITE_MIDDLEGROUND_NIGHTLIGHT1_MULTIPLIER = global.HSM_COMPOSITE_MIDDLEGROUND_NIGHTLIGHT1_MULTIPLIER / 100;
 
-#pragma parameter HSM_COMPOSITE_MIDDLEGROUND_NIGHTLIGHT2_MULTIPLIER         "          Night Lighting 2nd Image Multiplier"  0 0 100 1
+#pragma parameter HSM_COMPOSITE_MIDDLEGROUND_NIGHTLIGHT2_MULTIPLIER         "          Night Lighting 2nd  Multiplier"  0 0 100 1
 float HSM_COMPOSITE_MIDDLEGROUND_NIGHTLIGHT2_MULTIPLIER = global.HSM_COMPOSITE_MIDDLEGROUND_NIGHTLIGHT2_MULTIPLIER / 100;
 
 #pragma parameter HSM_COMPOSITE_MIDDLEGROUND_BOUNCELIGHT_MULTIPLIER         "          Bouncelight Brightness Multiplier"  100 0 300 1
@@ -175,10 +175,10 @@ float HSM_COMPOSITE_FOREGROUND_ON = global.HSM_COMPOSITE_FOREGROUND_ON;
 #pragma parameter HSM_COMPOSITE_FOREGROUND_STATIC_AMBIENT_MULTIPLIER         "          Static Ambient Brightness Multiplier"  100 0 300 1
 float HSM_COMPOSITE_FOREGROUND_STATIC_AMBIENT_MULTIPLIER = global.HSM_COMPOSITE_FOREGROUND_STATIC_AMBIENT_MULTIPLIER / 100 * HSM_LIGHT_BOUNCE_STATIC_AMBIENT_BRIGHTNESS;
 
-#pragma parameter HSM_COMPOSITE_FOREGROUND_NIGHTLIGHT1_MULTIPLIER           "          Night Lighting 1st Image Multiplier"  100 0 100 1
+#pragma parameter HSM_COMPOSITE_FOREGROUND_NIGHTLIGHT1_MULTIPLIER           "          Night Lighting 1st  Multiplier"  100 0 100 1
 float HSM_COMPOSITE_FOREGROUND_NIGHTLIGHT1_MULTIPLIER = global.HSM_COMPOSITE_FOREGROUND_NIGHTLIGHT1_MULTIPLIER / 100;
 
-#pragma parameter HSM_COMPOSITE_FOREGROUND_NIGHTLIGHT2_MULTIPLIER           "          Night Lighting 2nd Image Multiplier"  0 0 100 1
+#pragma parameter HSM_COMPOSITE_FOREGROUND_NIGHTLIGHT2_MULTIPLIER           "          Night Lighting 2nd  Multiplier"  0 0 100 1
 float HSM_COMPOSITE_FOREGROUND_NIGHTLIGHT2_MULTIPLIER = global.HSM_COMPOSITE_FOREGROUND_NIGHTLIGHT2_MULTIPLIER / 100;
 
 #pragma parameter HSM_COMPOSITE_FOREGROUND_BOUNCELIGHT_MULTIPLIER           "          Bouncelight Brightness Multiplier"  100 0 300 1
@@ -223,7 +223,7 @@ float HSM_LAYERING_DEBUG_MASK_MODE = global.HSM_LAYERING_DEBUG_MASK_MODE;
 
 
 //---------------------------------------------------------------------------------------------------
-//    CutOut in Image Layers
+//    CutOut in  Layers
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_CUTOUT_EMPTY_LINE			 " " 0 0 0.001 0.001
 #pragma parameter HSM_CUTOUT_TITLE			     "[ CUTOUT ]:" 0 0 0.01 0.01
@@ -320,7 +320,7 @@ float HSM_BG_FOLLOW_MODE = global.HSM_BG_FOLLOW_MODE;
 #pragma parameter HSM_BG_FOLLOW_FULL_USES_ZOOM      "          Follow Full also follows Zoom" 1 0 1 1
 float HSM_BG_FOLLOW_FULL_USES_ZOOM = global.HSM_BG_FOLLOW_FULL_USES_ZOOM;
 
-#pragma parameter HSM_BG_FILL_MODE                  "         Image Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
+#pragma parameter HSM_BG_FILL_MODE                  "          Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
 float HSM_BG_FILL_MODE = global.HSM_BG_FILL_MODE;
 
 #pragma parameter HSM_BG_SPLIT_PRESERVE_CENTER      "          Split Mode Preserve Center %"  0 0 500 1
@@ -434,7 +434,7 @@ float HSM_LED_FOLLOW_MODE = global.HSM_LED_FOLLOW_MODE;
 #pragma parameter HSM_LED_FOLLOW_FULL_USES_ZOOM         "          Follow Full also follows Zoom" 1 0 1 1
 float HSM_LED_FOLLOW_FULL_USES_ZOOM = global.HSM_LED_FOLLOW_FULL_USES_ZOOM;
 
-#pragma parameter HSM_LED_FILL_MODE                     "         Image Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
+#pragma parameter HSM_LED_FILL_MODE                     "          Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
 float HSM_LED_FILL_MODE = global.HSM_LED_FILL_MODE;
 
 #pragma parameter HSM_LED_SPLIT_PRESERVE_CENTER         "          Split Mode Preserve Center %"  0 0 500 1
@@ -514,7 +514,7 @@ float HSM_DEVICE_FOLLOW_MODE = global.HSM_DEVICE_FOLLOW_MODE;
 #pragma parameter HSM_DEVICE_FOLLOW_FULL_USES_ZOOM     "          Follow Full also follows Zoom" 1 0 1 1
 float HSM_DEVICE_FOLLOW_FULL_USES_ZOOM = global.HSM_DEVICE_FOLLOW_FULL_USES_ZOOM;
 
-#pragma parameter HSM_DEVICE_FILL_MODE                 "         Image Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
+#pragma parameter HSM_DEVICE_FILL_MODE                 "          Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
 float HSM_DEVICE_FILL_MODE = global.HSM_DEVICE_FILL_MODE;
 
 #pragma parameter HSM_DEVICE_SPLIT_PRESERVE_CENTER     "          Split Mode Preserve Center %"  0 0 500 1
@@ -595,7 +595,7 @@ float HSM_DEVICELED_FOLLOW_MODE = global.HSM_DEVICELED_FOLLOW_MODE;
 #pragma parameter HSM_DEVICELED_FOLLOW_FULL_USES_ZOOM     "          Follow Full also follows Zoom" 1 0 1 1
 float HSM_DEVICELED_FOLLOW_FULL_USES_ZOOM = global.HSM_DEVICELED_FOLLOW_FULL_USES_ZOOM;
 
-#pragma parameter HSM_DEVICELED_FILL_MODE                 "         Image Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
+#pragma parameter HSM_DEVICELED_FILL_MODE                 "          Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
 float HSM_DEVICELED_FILL_MODE = global.HSM_DEVICELED_FILL_MODE;
 
 #pragma parameter HSM_DEVICELED_SPLIT_PRESERVE_CENTER     "          Split Mode Preserve Center %"  0 0 500 1
@@ -675,7 +675,7 @@ float HSM_DECAL_FOLLOW_MODE = global.HSM_DECAL_FOLLOW_MODE;
 #pragma parameter HSM_DECAL_FOLLOW_FULL_USES_ZOOM       "          Follow Full also follows Zoom" 1 0 1 1
 float HSM_DECAL_FOLLOW_FULL_USES_ZOOM = global.HSM_DECAL_FOLLOW_FULL_USES_ZOOM;
 
-#pragma parameter HSM_DECAL_FILL_MODE                   "         Image Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
+#pragma parameter HSM_DECAL_FILL_MODE                   "          Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
 float HSM_DECAL_FILL_MODE = global.HSM_DECAL_FILL_MODE;
 
 #pragma parameter HSM_DECAL_SPLIT_PRESERVE_CENTER       "          Split Mode Preserve Center %"  0 0 500 1
@@ -755,7 +755,7 @@ float HSM_CAB_GLASS_FOLLOW_MODE = global.HSM_CAB_GLASS_FOLLOW_MODE;
 #pragma parameter HSM_CAB_GLASS_FOLLOW_FULL_USES_ZOOM       "          Follow Full also follows Zoom" 1 0 1 1
 float HSM_CAB_GLASS_FOLLOW_FULL_USES_ZOOM = global.HSM_CAB_GLASS_FOLLOW_FULL_USES_ZOOM;
 
-#pragma parameter HSM_CAB_GLASS_FILL_MODE                   "         Image Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
+#pragma parameter HSM_CAB_GLASS_FILL_MODE                   "          Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
 float HSM_CAB_GLASS_FILL_MODE = global.HSM_CAB_GLASS_FILL_MODE;
 
 #pragma parameter HSM_CAB_GLASS_SPLIT_PRESERVE_CENTER       "          Split Mode Preserve Center %"  0 0 500 1
@@ -835,7 +835,7 @@ float HSM_TOP_FOLLOW_MODE = global.HSM_TOP_FOLLOW_MODE;
 #pragma parameter HSM_TOP_FOLLOW_FULL_USES_ZOOM          "          Follow Full also follows Zoom" 1 0 1 1
 float HSM_TOP_FOLLOW_FULL_USES_ZOOM = global.HSM_TOP_FOLLOW_FULL_USES_ZOOM;
 
-#pragma parameter HSM_TOP_FILL_MODE                     "         Image Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
+#pragma parameter HSM_TOP_FILL_MODE                     "          Fill Mode - KEEP TEXURE ASPECT | SPLIT | STRETCH"  0 0 2 1
 float HSM_TOP_FILL_MODE = global.HSM_TOP_FILL_MODE;
 
 #pragma parameter HSM_TOP_SPLIT_PRESERVE_CENTER       "          Split Mode Preserve Center %"  0 0 500 1

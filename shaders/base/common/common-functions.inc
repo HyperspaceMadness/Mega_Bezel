@@ -139,7 +139,7 @@ vec2 HSM_AddPosScaleToCoord(vec2 in_base_coord, vec2 in_pos, vec2 in_scale)
 	return out_coord;
 }
 
-vec2 GetSimpleImageScaledCoord(vec2 in_viewport_coord, vec2 in_viewport_unscaled_coord, vec2 in_tube_coord, vec2 in_tube_scale, in sampler2D in_sampler, vec2 in_pos, float in_inherit_pos, vec2 in_scale, float in_scale_inherit_mode, float in_keep_aspect, float in_mirror_horz, float in_rotate )
+vec2 GetSimpleScaledCoord(vec2 in_viewport_coord, vec2 in_viewport_unscaled_coord, vec2 in_tube_coord, vec2 in_tube_scale, in sampler2D in_sampler, vec2 in_pos, float in_inherit_pos, vec2 in_scale, float in_scale_inherit_mode, float in_keep_aspect, float in_mirror_horz, float in_rotate )
 {
 	float output_aspect = global.FinalViewportSize.x / global.FinalViewportSize.y;
 
@@ -852,7 +852,7 @@ vec3 HSM_GetNightLightingMultiplyColor( vec2 in_coord, float hue, float saturati
 	return out_color;
 }
 
-bool HSM_Fill_Nightlight_Images(vec2 in_viewport_coord, vec2 in_viewport_unscaled_coord, vec2 in_tube_coord, vec2 in_tube_scale, float in_swap_images, in sampler2D in_ambient_sampler, in sampler2D in_ambient2_sampler, inout vec3 ambient_rgb, inout vec3 ambient2_rgb)
+bool HSM_Fill_Nightlight_s(vec2 in_viewport_coord, vec2 in_viewport_unscaled_coord, vec2 in_tube_coord, vec2 in_tube_scale, float in_swap_images, in sampler2D in_ambient_sampler, in sampler2D in_ambient2_sampler, inout vec3 ambient_rgb, inout vec3 ambient2_rgb)
 {
 		ambient_rgb = vec3(1);
 		ambient2_rgb = vec3(1);
@@ -863,7 +863,7 @@ bool HSM_Fill_Nightlight_Images(vec2 in_viewport_coord, vec2 in_viewport_unscale
 			if (HSM_AMBIENT1_SCALE_INHERIT_MODE == 1 && HSM_AMBIENT1_SCALE * HSM_VIEWPORT_ZOOM < 1)
 				ambient1_scale = 1 / HSM_VIEWPORT_ZOOM;
 
-			vec2 lighting_coord = GetSimpleImageScaledCoord(in_viewport_coord, 
+			vec2 lighting_coord = GetSimpleScaledCoord(in_viewport_coord, 
 															in_viewport_unscaled_coord,
 															in_tube_coord,
 															in_tube_scale,
@@ -891,7 +891,7 @@ bool HSM_Fill_Nightlight_Images(vec2 in_viewport_coord, vec2 in_viewport_unscale
 			if (HSM_AMBIENT2_SCALE_INHERIT_MODE == 1 && HSM_AMBIENT2_SCALE * HSM_VIEWPORT_ZOOM < 1)
 				ambient2_scale = 1 / HSM_VIEWPORT_ZOOM;
 
-			vec2 lighting2_coord = GetSimpleImageScaledCoord(in_viewport_coord, 
+			vec2 lighting2_coord = GetSimpleScaledCoord(in_viewport_coord, 
 															in_viewport_unscaled_coord,
 															in_tube_coord,
 															in_tube_scale,
@@ -923,9 +923,9 @@ bool HSM_Fill_Nightlight_Images(vec2 in_viewport_coord, vec2 in_viewport_unscale
 	return true;
 }
 
-vec3 ApplyNightlightImages(vec3 base_image, vec3 ambient_image, vec3 ambient2_image, float blend_ambient, float blend_ambient2, float apply_in_add_mode, float layer_blend_mode, float swap_images) 
+vec3 ApplyNightlights(vec3 base_image, vec3 ambient_image, vec3 ambient2_image, float blend_ambient, float blend_ambient2, float apply_in_add_mode, float layer_blend_mode, float swap_images) 
 {
-	vec3 outImage = base_image;
+	vec3 out_color = base_image;
 
 	if (swap_images == 1)
 		ambient2_image = ambient_image;
@@ -944,16 +944,16 @@ vec3 ApplyNightlightImages(vec3 base_image, vec3 ambient_image, vec3 ambient2_im
 		{
 			if (blend_ambient > 0)
 			{
-				outImage = (1 - blend_ambient) * outImage.rgb + blend_ambient * outImage.rgb * ambient_image.rgb;
+				out_color = (1 - blend_ambient) * out_color.rgb + blend_ambient * out_color.rgb * ambient_image.rgb;
 			}
 			if (blend_ambient2 > 0)
 			{
-				outImage = (1 - blend_ambient2) * outImage.rgb + blend_ambient2 * outImage.rgb * ambient2_image.rgb;
+				out_color = (1 - blend_ambient2) * out_color.rgb + blend_ambient2 * out_color.rgb * ambient2_image.rgb;
 			}
 		}
 	}
 
-	return outImage;
+	return out_color;
 }
 
 vec4 HSM_ApplyMonochrome(vec4 in_color)
@@ -983,7 +983,7 @@ float HSM_GetTubeOpacity()
 	return HSM_TUBE_DIFFUSE_MODE < 1.5 ? HSM_TUBE_OPACITY : 0;
 }
 
-vec3 HSM_ApplyAmbientImage(vec3 base_image, vec3 ambient_image, float layer_blend_amount) 
+vec3 HSM_ApplyAmbient(vec3 base_image, vec3 ambient_image, float layer_blend_amount) 
 {
 	if (layer_blend_amount > 0)
 		return (1 - layer_blend_amount) * base_image.rgb + layer_blend_amount * base_image.rgb * ambient_image.rgb;
@@ -1232,7 +1232,7 @@ vec2 HSM_GetCrtShaderFinalCoordExtraVariables(vec2 screen_coord,
 
 vec4 HSM_ApplySimpleBGExplicit(	vec4 in_crt_color,
 							vec2 zoomed_viewport_coord,
-							sampler2D BackgroundImage,
+							sampler2D Background,
 							float crt_blend_mode,
 							float bg_on_top,
 							float bg_blend_mode,
@@ -1252,7 +1252,7 @@ vec4 HSM_ApplySimpleBGExplicit(	vec4 in_crt_color,
 		// Background
 		//-----------------------------------------------------------------------------------------
 		vec2 bg_coord = zoomed_viewport_coord;
-		vec2 bg_size = textureSize(BackgroundImage, 0);
+		vec2 bg_size = textureSize(Background, 0);
 
 		vec4 bg_layer = vec4(0);
 
@@ -1261,7 +1261,7 @@ vec4 HSM_ApplySimpleBGExplicit(	vec4 in_crt_color,
 			// Correct image coordinate for image aspect ratio
 			bg_coord.x = (bg_coord.x - 0.5) / ((bg_size.x / bg_size.y) / (global.FinalViewportSize.x/global.FinalViewportSize.y)) + 0.5;
 
-			bg_layer = texture(BackgroundImage, bg_coord);
+			bg_layer = texture(Background, bg_coord);
 			bg_layer = HSM_Linearize(bg_layer, DEFAULT_SRGB_GAMMA);
 
 			vec3 bg_gel = colorize_using_texture * bg_layer.rgb * colorize_brightness + (1 - colorize_using_texture);
@@ -1290,7 +1290,7 @@ vec4 HSM_ApplySimpleBGExplicit(	vec4 in_crt_color,
 
 vec4 HSM_ApplySimpleBG(	vec4 in_crt_color, 
 						vec2 in_vTexCoord,
-						sampler2D BackgroundImage
+						sampler2D Background
 						)
 {
 	if (HSM_SIMPLEBG_OPACITY < 0.001)
@@ -1309,7 +1309,7 @@ vec4 HSM_ApplySimpleBG(	vec4 in_crt_color,
 
 	return HSM_ApplySimpleBGExplicit(	in_crt_color,
 										zoomed_viewport_coord,
-										BackgroundImage,
+										Background,
 										crt_blend_mode,
 										bg_on_top,
 										bg_blend_mode,
@@ -1323,17 +1323,17 @@ vec4 HSM_ApplySimpleBG(	vec4 in_crt_color,
 }
 
 
-bool HSM_GetUseTubeStaticReflection()
+bool HSM_GetUseTubeHighlight()
 {
 	return HSM_TUBE_STATIC_REFLECTION_IMAGE_ON > 0.5 && HSM_GetUseOnCurrentScreenIndex(HSM_TUBE_STATIC_REFLECTION_IMAGE_DUALSCREEN_VIS_MODE);
 }
 
-bool HSM_GetUseTubeDiffuseImage()
+bool HSM_GetUseTubeDiffuse()
 {
 	return HSM_TUBE_DIFFUSE_MODE == 1 && HSM_GetUseOnCurrentScreenIndex(HSM_TUBE_DIFFUSE_IMAGE_DUALSCREEN_VIS_MODE);
 }
 
-bool HSM_GetUseTubeColoredGelImage()
+bool HSM_GetUseTubeColoredGel()
 {
 	return HSM_TUBE_COLORED_GEL_IMAGE_ON > 0.5 && HSM_GetUseOnCurrentScreenIndex(HSM_TUBE_COLORED_GEL_IMAGE_DUALSCREEN_VIS_MODE);
 }
@@ -1376,7 +1376,7 @@ vec4 HSM_ApplyPackedTubeLayers(vec4 crt_color, vec4 image_layers_packed)
 		crt_color.rgb *= unpacked_vignette;
 
 	// Multiply CRT image by gel
-	if (HSM_GetUseTubeColoredGelImage())
+	if (HSM_GetUseTubeColoredGel())
 	{
 		crt_color.rgb *= HSM_TUBE_COLORED_GEL_CRT_BRIGHTNESS;
 		if (HSM_TUBE_COLORED_GEL_IMAGE_MULTIPLY_AMOUNT > 0)
@@ -1409,7 +1409,7 @@ vec4 HSM_ApplyPackedTubeLayers(vec4 crt_color, vec4 image_layers_packed)
 		out_color = HSM_BlendModeLayerMix(out_color, crt_color, BLEND_MODE_NORMAL, HSM_CRT_BLEND_AMOUNT);
 	}
 
-	if (HSM_GetUseTubeColoredGelImage())
+	if (HSM_GetUseTubeColoredGel())
 	{
 		// Put Gel on top of CRT (Default situation)
 		unpacked_precomp_gel.rgb *= unpacked_shadow;

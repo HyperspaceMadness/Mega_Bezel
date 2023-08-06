@@ -342,7 +342,7 @@ void main()
 	// Prep the Nightlighting images
 	vec3 nightlight1_rgb = vec3(1);
 	vec3 nightlight2_rgb = vec3(1);
-	HSM_Fill_Nightlight_Images(VIEWPORT_COORD, HSM_GetViewportCoordWithFlip(vTexCoord), TUBE_DIFFUSE_COORD, TUBE_DIFFUSE_SCALE, HSM_LIGHT_NIGHTLIGHTING_SWAP_IMAGE_MODE, NightLighting, NightLighting2, nightlight1_rgb, nightlight2_rgb);
+	HSM_Fill_Nightlight_s(VIEWPORT_COORD, HSM_GetViewportCoordWithFlip(vTexCoord), TUBE_DIFFUSE_COORD, TUBE_DIFFUSE_SCALE, HSM_LIGHT_NIGHTLIGHTING_SWAP_IMAGE_MODE, NightLighting, NightLighting2, nightlight1_rgb, nightlight2_rgb);
 
 	vec4 composite_base_color = vec4(0);
 	if (HSM_COMPOSITE_BASE_COLOR > 0.5)
@@ -373,8 +373,8 @@ void main()
 		precomp_background.rgb *= (1 - clamp(HSM_COMPOSITE_BACKGROUND_STATIC_SHADOW_STRENGTH * (1 - static_shadows), 0, 1));
 		// precomp_background.rgb *= 1 - mix(vec3(0), vec3(static_shadows), HSM_COMPOSITE_BACKGROUND_STATIC_SHADOW_STRENGTH);
 
-		// Apply Night Lighting Images
-		precomp_background.rgb = ApplyNightlightImages(	precomp_background.rgb,
+		// Apply Night Lighting s
+		precomp_background.rgb = ApplyNightlights(	precomp_background.rgb,
 														nightlight1_rgb,
 														nightlight2_rgb,
 														HSM_COMPOSITE_BACKGROUND_NIGHTLIGHT1_MULTIPLIER,
@@ -417,7 +417,7 @@ void main()
 	vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 1, TUBE_DIFFUSE_SCALE, TUBE_SCALE, TUBE_DIFFUSE_ASPECT, 1);
 
 	TUBE_MASK =  HSM_GetCornerMask(tube_curved_coord, TUBE_DIFFUSE_ASPECT, bezel_corner_radius, 0.99);
-	// // Apply Reflection Image Mask
+	// // Apply Reflection  Mask
 	crt_layer *= TUBE_MASK + (1 - TUBE_MASK) * reflection_mask;
 	// #endif
 
@@ -429,8 +429,8 @@ void main()
 		// Adjust brightness and add static shadows
 		precomp_middleground.rgb *= HSM_COMPOSITE_MIDDLEGROUND_STATIC_AMBIENT_MULTIPLIER * static_shadows;
 		
-		// Apply Night Lighting Images
-		precomp_middleground.rgb = ApplyNightlightImages(	precomp_middleground.rgb,
+		// Apply Night Lighting s
+		precomp_middleground.rgb = ApplyNightlights(	precomp_middleground.rgb,
 														nightlight1_rgb,
 														nightlight2_rgb,
 														HSM_COMPOSITE_MIDDLEGROUND_NIGHTLIGHT1_MULTIPLIER,
@@ -459,8 +459,8 @@ void main()
 		// Adjust brightness and add static shadows
 		precomp_foreground.rgb *= HSM_COMPOSITE_FOREGROUND_STATIC_AMBIENT_MULTIPLIER * static_shadows;
 		
-		// Apply Night Lighting Images
-		precomp_foreground.rgb = ApplyNightlightImages(	precomp_foreground.rgb,
+		// Apply Night Lighting s
+		precomp_foreground.rgb = ApplyNightlights(	precomp_foreground.rgb,
 														nightlight1_rgb,
 														nightlight2_rgb,
 														HSM_COMPOSITE_FOREGROUND_NIGHTLIGHT1_MULTIPLIER,

@@ -63,7 +63,7 @@ layout(push_constant) uniform Push
 } params;
 
 // HSM Removed
-// #pragma parameter use_frame "Use Frame Image" 0.0 0.0 1.0 1.0
+// #pragma parameter use_frame "Use Frame " 0.0 0.0 1.0 1.0
 // #define use_frame params.use_frame
 // #pragma parameter curvature "Curvature" 2.0 0.0001 4.0 0.25
 #pragma parameter wiggle_toggle "[NEWPIXIE]   Interference" 0.0 0.0 1.0 1.0

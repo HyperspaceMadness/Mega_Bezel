@@ -121,20 +121,20 @@ layout(location = 2) in vec2 MY_SCREEN_COORD;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 1) uniform sampler2D Source;
 layout(set = 0, binding = 2) uniform sampler2D PreMdaptPass;
-layout(set = 0, binding = 3) uniform sampler2D DMG0ColorPaletteImage;
-layout(set = 0, binding = 4) uniform sampler2D DMG1ColorPaletteImage;
-layout(set = 0, binding = 5) uniform sampler2D DMG2ColorPaletteImage;
-layout(set = 0, binding = 6) uniform sampler2D PocketColorPaletteImage;
-layout(set = 0, binding = 7) uniform sampler2D LightColorPaletteImage;
-layout(set = 0, binding = 8) uniform sampler2D CustomColorPaletteImage;
-layout(set = 0, binding = 9) uniform sampler2D LCDBackgroundImage;
-layout(set = 0, binding = 10) uniform sampler2D BackgroundImage;
-layout(set = 0, binding = 12) uniform sampler2D TubeColoredGelImage;
-layout(set = 0, binding = 13) uniform sampler2D TubeStaticReflectionImage;
+layout(set = 0, binding = 3) uniform sampler2D DMG0ColorPalette;
+layout(set = 0, binding = 4) uniform sampler2D DMG1ColorPalette;
+layout(set = 0, binding = 5) uniform sampler2D DMG2ColorPalette;
+layout(set = 0, binding = 6) uniform sampler2D PocketColorPalette;
+layout(set = 0, binding = 7) uniform sampler2D LightColorPalette;
+layout(set = 0, binding = 8) uniform sampler2D CustomColorPalette;
+layout(set = 0, binding = 9) uniform sampler2D LCDBackground;
+layout(set = 0, binding = 10) uniform sampler2D Background;
+layout(set = 0, binding = 12) uniform sampler2D TubeColoredGel;
+layout(set = 0, binding = 13) uniform sampler2D TubeHighlight;
 
 layout(set = 0, binding = 14) uniform sampler2D CacheInfoPass;
 
-// #define bg_color texture(DMG0ColorPaletteImage, vec2(0.25, 0.5)) 
+// #define bg_color texture(DMG0ColorPalette, vec2(0.25, 0.5)) 
 
 // Sample the background color from the palette
 #define shadow_alpha (params.contrast * params.shadow_opacity)
@@ -156,17 +156,17 @@ void main()
 
     vec4 bg_color = vec4(0, 0, 0, 1);
     if (params.gameboy_color_palette == 0)
-        bg_color = texture(DMG0ColorPaletteImage, vec2(0.25, 0.5));
+        bg_color = texture(DMG0ColorPalette, vec2(0.25, 0.5));
     if (params.gameboy_color_palette == 1)
-        bg_color = texture(DMG1ColorPaletteImage, vec2(0.25, 0.5));
+        bg_color = texture(DMG1ColorPalette, vec2(0.25, 0.5));
     if (params.gameboy_color_palette == 2)
-        bg_color = texture(DMG2ColorPaletteImage, vec2(0.25, 0.5));
+        bg_color = texture(DMG2ColorPalette, vec2(0.25, 0.5));
     if (params.gameboy_color_palette == 3)
-        bg_color = texture(PocketColorPaletteImage, vec2(0.25, 0.5));
+        bg_color = texture(PocketColorPalette, vec2(0.25, 0.5));
     if (params.gameboy_color_palette == 4)
-        bg_color = texture(LightColorPaletteImage, vec2(0.25, 0.5));
+        bg_color = texture(LightColorPalette, vec2(0.25, 0.5));
     if (params.gameboy_color_palette == 5)
-        bg_color = texture(CustomColorPaletteImage, vec2(0.25, 0.5));
+        bg_color = texture(CustomColorPalette, vec2(0.25, 0.5));
 
 	vec2 screen_curved_coord = HSM_GetCurvedCoord(MY_SCREEN_COORD, HSM_CRT_CURVATURE_SCALE, MY_SCREEN_ASPECT);
 	vec2 screen_curved_coord_mirrored = HSM_GetMirrorWrappedCoord(screen_curved_coord);
@@ -177,7 +177,7 @@ void main()
     
     // Sample all the relevant textures
     vec4 foreground = texture(PreMdaptPass, tex - screen_offset);
-    vec4 background = texture(LCDBackgroundImage, MY_SCREEN_COORD);
+    vec4 background = texture(LCDBackground, MY_SCREEN_COORD);
     vec4 shadows    = texture(Source, vTexCoord - (shadow_offset + screen_offset));
     vec4 background_color = bg_color;
 
@@ -211,6 +211,6 @@ void main()
     FragColor = HSM_Linearize(out_color, DEFAULT_CRT_GAMMA);
 
     // Prep and add output gamma
-	FragColor = HSM_GetPostCrtPreppedColor(FragColor, vTexCoord, screen_curved_coord, LinearizePass, true, TubeColoredGelImage, TubeStaticReflectionImage, BackgroundImage);
+	FragColor = HSM_GetPostCrtPreppedColor(FragColor, vTexCoord, screen_curved_coord, LinearizePass, true, TubeColoredGel, TubeHighlight, Background);
 	// End Addition
 }

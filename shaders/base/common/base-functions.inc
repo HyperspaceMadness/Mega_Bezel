@@ -35,7 +35,7 @@
 #define PRECOMP_INDEX_STATIC_HIGHLIGHT 4
 
 
-vec4 HSM_GetImagePrecompRange(float in_precomp_index)
+vec4 HSM_GetPrecompRange(float in_precomp_index)
 {
 	return vec4(0.0, 0.0, 1.0, 1.0);
 
@@ -148,7 +148,7 @@ void HSM_Unpack_1_Rgba_To_4_Rgba(vec4 packed_rgba,
 
 vec4 HSM_GetPrecompRGBA(sampler2D in_sampler_2D, vec2 in_coord, float in_precomp_index)
 {
-	vec4 precomp_range = HSM_GetImagePrecompRange(in_precomp_index);
+	vec4 precomp_range = HSM_GetPrecompRange(in_precomp_index);
 	vec2 sample_coord = precomp_range.xy + in_coord * vec2(precomp_range.z - precomp_range.x, precomp_range.w - precomp_range.y);
 	return texture(in_sampler_2D, sample_coord);
 }
@@ -160,7 +160,7 @@ float HSM_GetPrecompIndexFromCoord(vec2 in_coord)
 
 	for (float i = 0.0; i < 4; i++)
 	{
-		if (HHLP_IsInsideRange(in_coord, HSM_GetImagePrecompRange(i)))
+		if (HHLP_IsInsideRange(in_coord, HSM_GetPrecompRange(i)))
 		{
 			out_index = i;
 			break;
@@ -171,7 +171,7 @@ float HSM_GetPrecompIndexFromCoord(vec2 in_coord)
 }
 
 // Returns 1 for vertical split, 2 for horizontal split
-float HSM_GetCoreImageSplitDirection()
+float HSM_GetCoreSplitDirection()
 {
 	float core_image_split_direction = 1;
 

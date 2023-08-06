@@ -1,6 +1,6 @@
 #reference "MBZ__5__POTATO__GDV__Cropping.slangp"
 
-BackgroundImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
+Background = ../../shaders/textures/Placeholder_Transparent_16x16.png
 NightLighting = ../../shaders/textures/Placeholder_Transparent_16x16.png
 FrameHighlight = ../../shaders/textures/Placeholder_Transparent_16x16.png
 
