@@ -32,7 +32,7 @@ alias4 = "TubeFxPass"
 shaders = 5
 
 // Define textures to be used by the different passes
-textures = "DMG0ColorPaletteImage;DMG1ColorPaletteImage;DMG2ColorPaletteImage;PocketColorPaletteImage;LightColorPaletteImage;CustomColorPaletteImage;LCDBackgroundImage;IntroImage;ScreenPlacementImage;TubeColoredGelImage;TubeStaticReflectionImage;BackgroundImage;ReflectionMaskImage;GlassPresetHighlightImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceLEDImage;DecalImage;NightLightingImage;LEDImage;TopLayerImage;"
+textures = "DMG0ColorPaletteImage;DMG1ColorPaletteImage;DMG2ColorPaletteImage;PocketColorPaletteImage;LightColorPaletteImage;CustomColorPaletteImage;LCDBackgroundImage;IntroImage;ScreenPlacementImage;TubeColoredGelImage;TubeStaticReflectionImage;BackgroundImage;ReflectionMask;GlassHighlight;FrameHighlight;CabinetGlassImage;DeviceImage;DeviceLEDImage;DecalImage;NightLighting;LEDImage;TopLayerImage;"
 
 DMG0ColorPaletteImage = ../shaders/hsm-gameboy/palette-gameboy-dmg-0.png
 DMG0ColorPaletteImage_linear = false
@@ -72,9 +72,9 @@ BackgroundImage = ../shaders/textures/Placeholder_Transparent_16x16.png
 BackgroundImage_linear = true
 BackgroundImage_mipmap = 1
 
-FrameTextureImage = ../shaders/textures/FrameTexture_2800x2120.png
-FrameTextureImage_linear = true
-FrameTextureImage_mipmap = 1
+FrameHighlight = ../shaders/textures/FrameTexture_2800x2120.png
+FrameHighlight_linear = true
+FrameHighlight_mipmap = 1
 
 CabinetGlassImage = ../shaders/textures/Placeholder_Transparent_16x16.png
 CabinetGlassImage_linear = true
@@ -89,7 +89,7 @@ DecalImage = ../shaders/textures/Placeholder_Transparent_16x16.png
 DecalImage_linear = true
 DecalImage_mipmap = 1
 
-NightLightingImage = ../shaders/textures/NightLightingClose_1920x1080.png
+NightLighting = ../shaders/textures/NightLightingClose_1920x1080.png
 NightLightingImage_linear = true
 NightLightingImage_mipmap = 1
 

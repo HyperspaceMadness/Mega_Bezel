@@ -815,7 +815,7 @@ bool HSM_GetUseScreenVignette()
 	return HSM_SCREEN_VIGNETTE_ON > 0.5 && HSM_GetUseOnCurrentScreenIndex(HSM_SCREEN_VIGNETTE_DUALSCREEN_VIS_MODE);
 }
 
-vec3 HSM_GetNightLightingMultiplyColor( vec2 in_coord, float hue, float saturation, float value, float contrast, float global_ambient_opacity, in sampler2D NightLightingImage )
+vec3 HSM_GetNightLightingMultiplyColor( vec2 in_coord, float hue, float saturation, float value, float contrast, float global_ambient_opacity, in sampler2D NightLighting )
 {
 	vec4 lighting_image = vec4(0);
 	// if (HSM_AMBIENT1_DITHERING_SAMPLES > 0.5)
@@ -823,10 +823,10 @@ vec3 HSM_GetNightLightingMultiplyColor( vec2 in_coord, float hue, float saturati
 	// 	// Dithering if needed to reduce banding
 	// 	float blur_max_size = 1;
 	// 	float blur_amount = 0.2;
-	// 	lighting_image = HSM_GetStoichaicBlurredSample(NightLightingImage, in_coord.xy, HSM_AMBIENT1_DITHERING_SAMPLES, blur_max_size, blur_amount);
+	// 	lighting_image = HSM_GetStoichaicBlurredSample(NightLighting, in_coord.xy, HSM_AMBIENT1_DITHERING_SAMPLES, blur_max_size, blur_amount);
 	// }
 	// else
-	lighting_image = HSM_GetMipmappedTexSample(NightLightingImage, in_coord.xy, vec2(1), 0);
+	lighting_image = HSM_GetMipmappedTexSample(NightLighting, in_coord.xy, vec2(1), 0);
 	lighting_image = HSM_Linearize(lighting_image, DEFAULT_SRGB_GAMMA);
 
 	lighting_image = contrast * (lighting_image - 0.5) + 0.5;

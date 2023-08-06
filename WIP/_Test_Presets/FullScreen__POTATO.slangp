@@ -1,8 +1,8 @@
 #reference "../../Presets/Base_CRT_Presets/MBZ__5__POTATO__GDV.slangp"
 
 BackgroundImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
-NightLightingImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
-FrameTextureImage = ../../shaders/textures/Placeholder_Transparent_16x16.png
+NightLighting = ../../shaders/textures/Placeholder_Transparent_16x16.png
+FrameHighlight = ../../shaders/textures/Placeholder_Transparent_16x16.png
 
 // Parameters
 HSM_ASPECT_RATIO_MODE = 6

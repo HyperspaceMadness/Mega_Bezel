@@ -233,8 +233,8 @@ alias26 = "ReflectPass"
 
 # Textures Glass
 # Define textures to be used by the different passes
-textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;NightLightingImage;NightLighting2Image;"
-//ReflectionMaskImage;GlassPresetHighlightImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;NightLighting;NightLighting2;"
+//ReflectionMask;GlassHighlight;FrameHighlight;CabinetGlassImage;DeviceImage;DeviceLEDImage;DecalImage;NightLighting;NightLighting2;LEDImage;TopLayerImage;"
 
 SamplerLUT1 = ../../../shaders/guest/lut/trinitron-lut.png
 SamplerLUT1_linear = true 
@@ -268,17 +268,17 @@ TubeColoredGelImage = ../../../shaders/textures/Colored_Gel_Rainbow.png
 TubeColoredGelImage_linear = true
 TubeColoredGelImage_mipmap = 1
 
-ReflectionMaskImage = ../../../shaders/textures/Placeholder_White_16x16.png
-ReflectionMaskImage_linear = true
-ReflectionMaskImage_mipmap = 1
+ReflectionMask = ../../../shaders/textures/Placeholder_White_16x16.png
+ReflectionMask_linear = true
+ReflectionMask_mipmap = 1
 
-GlassPresetHighlightImage = ../../../shaders/textures/TopLayerImageGradient_3840x2160.png
-GlassPresetHighlightImage_linear = true
-GlassPresetHighlightImage_mipmap = 1
+GlassHighlight = ../../../shaders/textures/TopLayerImageGradient_3840x2160.png
+GlassHighlight_linear = true
+GlassHighlight_mipmap = 1
 
-FrameTextureImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-FrameTextureImage_linear = true
-FrameTextureImage_mipmap = 1
+FrameHighlight = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+FrameHighlight_linear = true
+FrameHighlight_mipmap = 1
 
 BackgroundImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 BackgroundImage_linear = true
@@ -300,11 +300,11 @@ BackgroundImage_mipmap = 1
 // DecalImage_linear = true
 // DecalImage_mipmap = 1
 
-NightLightingImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+NightLighting = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 NightLightingImage_linear = true
 NightLightingImage_mipmap = 1
 
-NightLighting2Image = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+NightLighting2 = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 NightLighting2Image_linear = true
 NightLighting2Image_mipmap = 1
 

@@ -1,7 +1,7 @@
 
 # Textures Glass-Reshade
 # Define textures to be used by the different passes
-textures = "Dirt;Sprite;SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;ReflectionMaskImage;GlassPresetHighlightImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceLEDImage;DecalImage;NightLightingImage;NightLighting2Image;LEDImage;TopLayerImage;"
+textures = "Dirt;Sprite;SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;ReflectionMask;GlassHighlight;FrameHighlight;CabinetGlassImage;DeviceImage;DeviceLEDImage;DecalImage;NightLighting;NightLighting2;LEDImage;TopLayerImage;"
 
 Dirt = :/shaders/shaders_slang/reshade/shaders/bloom/LensDB.png
 Dirt_wrap_mode = "clamp_to_border"
@@ -43,17 +43,17 @@ TubeColoredGelImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/
 TubeColoredGelImage_linear = true
 TubeColoredGelImage_mipmap = 1
 
-ReflectionMaskImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Placeholder_White_16x16.png
-ReflectionMaskImage_linear = true
-ReflectionMaskImage_mipmap = 1
+ReflectionMask = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Placeholder_White_16x16.png
+ReflectionMask_linear = true
+ReflectionMask_mipmap = 1
 
-GlassPresetHighlightImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/TopLayerImageGradient_3840x2160.png
-GlassPresetHighlightImage_linear = true
-GlassPresetHighlightImage_mipmap = 1
+GlassHighlight = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/TopLayerImageGradient_3840x2160.png
+GlassHighlight_linear = true
+GlassHighlight_mipmap = 1
 
-FrameTextureImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Placeholder_Transparent_16x16.png
-FrameTextureImage_linear = true
-FrameTextureImage_mipmap = 1
+FrameHighlight = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Placeholder_Transparent_16x16.png
+FrameHighlight_linear = true
+FrameHighlight_mipmap = 1
 
 BackgroundImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/TopLayerImageGradient_3840x2160.png
 BackgroundImage_linear = true
@@ -75,11 +75,11 @@ DecalImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Placehold
 DecalImage_linear = true
 DecalImage_mipmap = 1
 
-NightLightingImage = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Placeholder_Transparent_16x16.png
+NightLighting = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Placeholder_Transparent_16x16.png
 NightLightingImage_linear = true
 NightLightingImage_mipmap = 1
 
-NightLighting2Image = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Placeholder_Transparent_16x16.png
+NightLighting2 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/Placeholder_Transparent_16x16.png
 NightLighting2Image_linear = true
 NightLighting2Image_mipmap = 1
 

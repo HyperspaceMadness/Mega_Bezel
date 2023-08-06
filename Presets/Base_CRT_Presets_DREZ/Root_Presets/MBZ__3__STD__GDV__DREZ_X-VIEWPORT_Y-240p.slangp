@@ -285,7 +285,7 @@ scale_type33 = viewport
 
 # Textures All
 # Define textures to be used by the different passes
-textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BackgroundShadowImage;ReflectionMaskImage;GlassPresetHighlightImage;FrameTextureImage;CabinetGlassImage;DeviceImage;DeviceShadowImage;DeviceLEDImage;DecalImage;LEDImage;TopLayerImage;NightLightingImage;NightLighting2Image;BackgroundHeightImage;"
+textures = "SamplerLUT1;SamplerLUT2;SamplerLUT3;SamplerLUT4;IntroImage;ScreenPlacementImage;TubeDiffuseImage;TubeColoredGelImage;TubeShadowImage;TubeStaticReflectionImage;BackgroundImage;BgShadow;BgHeight;BgNormals;ReflectionMask;GlassHighlight;FrameHighlight;CabinetGlassImage;DeviceImage;DeviceShadow;DeviceHeight;DeviceNormals;DeviceLEDImage;DecalImage;LEDImage;TopLayerImage;NightLighting;NightLighting2;"
 
 SamplerLUT1 = ../../../shaders/guest/lut/trinitron-lut.png
 SamplerLUT1_linear = true 
@@ -319,26 +319,37 @@ TubeStaticReflectionImage = ../../../shaders/textures/TubeGlassOverlayImageCropp
 TubeStaticReflectionImage_linear = true
 TubeStaticReflectionImage_mipmap = 1
 
-ReflectionMaskImage = ../../../shaders/textures/Placeholder_White_16x16.png
-ReflectionMaskImage_linear = true
-ReflectionMaskImage_mipmap = 1
+ReflectionMask = ../../../shaders/textures/Placeholder_White_16x16.png
+ReflectionMask_linear = true
+ReflectionMask_mipmap = 1
 
-GlassPresetHighlightImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
-GlassPresetHighlightImage_linear = true
-GlassPresetHighlightImage_mipmap = 1
+GlassHighlight = ../../../shaders/textures/Placeholder_Transparent_16x16.png
+GlassHighlight_linear = true
+GlassHighlight_mipmap = 1
 
-FrameTextureImage = ../../../shaders/textures/FrameTexture_2800x2120.png
-FrameTextureImage_linear = true
-FrameTextureImage_mipmap = 1
+FrameHighlight = ../../../shaders/textures/FrameTexture_2800x2120.png
+FrameHighlight_linear = true
+FrameHighlight_mipmap = 1
 
 BackgroundImage = ../../../shaders/textures/BackgroundImage_Carbon_3840x2160.png
 BackgroundImage_linear = true
 BackgroundImage_mipmap = 1
+BackgroundImage_wrap_mode = "mirrored_repeat"
 
-BackgroundShadowImage = ../../../shaders/textures/Placeholder_White_16x16.png
-BackgroundShadowImage_linear = true
-BackgroundShadowImage_mipmap = 1
-BackgroundShadowImage_wrap_mode = "mirrored_repeat"
+BgShadow = ../../../shaders/textures/Placeholder_White_16x16.png
+BgShadow_linear = true
+BgShadow_mipmap = 1
+BgShadow_wrap_mode = "mirrored_repeat"
+
+BgHeight = ../../../shaders/textures/Placeholder_Height_16x16.png
+BgHeight_linear = true
+BgHeight_mipmap = 1
+BgHeight_wrap_mode = "mirrored_repeat"
+
+BgNormals = ../../../shaders/textures/Placeholder_Normals_16x16.png
+BgNormals_linear = true
+BgNormals_mipmap = 1
+BgNormals_wrap_mode = "mirrored_repeat"
 
 CabinetGlassImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 CabinetGlassImage_linear = true
@@ -348,10 +359,20 @@ DeviceImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 DeviceImage_linear = true
 DeviceImage_mipmap = 1
 
-DeviceShadowImage = ../../../shaders/textures/Placeholder_White_16x16.png
+DeviceShadow = ../../../shaders/textures/Placeholder_White_16x16.png
 DeviceShadowImage_linear = true
 DeviceShadowImage_mipmap = 1
 DeviceShadowImage_wrap_mode = "mirrored_repeat"
+
+DeviceHeight = ../../../shaders/textures/Placeholder_Height_16x16.png
+DeviceHeightImage_linear = true
+DeviceHeightImage_mipmap = 1
+DeviceHeightImage_wrap_mode = "mirrored_repeat"
+
+DeviceNormals = ../../../shaders/textures/Placeholder_Normals_16x16.png
+DeviceNormalsImage_linear = true
+DeviceNormalsImage_mipmap = 1
+DeviceNormalsImage_wrap_mode = "mirrored_repeat"
 
 DeviceLEDImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 DeviceLEDImage_linear = true
@@ -369,18 +390,18 @@ TopLayerImage = ../../../shaders/textures/Placeholder_Transparent_16x16.png
 TopLayerImage_linear = true
 TopLayerImage_mipmap = 1
 
-NightLightingImage = ../../../shaders/textures/NightLightingClose_1920x1080.png
+NightLighting = ../../../shaders/textures/NightLightingClose_1920x1080.png
 NightLightingImage_linear = true
 NightLightingImage_mipmap = 1
 
-NightLighting2Image = ../../../shaders/textures/NightLightingFar_1920x1080.png
+NightLighting2 = ../../../shaders/textures/NightLightingFar_1920x1080.png
 NightLighting2Image_linear = true
 NightLighting2Image_mipmap = 1
 
-BackgroundHeightImage
-BackgroundHeightImage = ../../../shaders/textures/Placeholder_White_16x16.png
-BackgroundHeightImage_linear = true
-BackgroundHeightImage_mipmap = 0
+BgHeight
+BgHeight = ../../../shaders/textures/Placeholder_White_16x16.png
+BgHeight_linear = true
+BgHeight_mipmap = 0
 
 # Use for matching vanilla GDV-Advanced
 # HSM_ASPECT_RATIO_MODE = 6

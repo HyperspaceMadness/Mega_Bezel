@@ -75,8 +75,8 @@ layout(set = 0, binding = 4) uniform sampler2D DeditherPass;
 layout(set = 0, binding = 5) uniform sampler2D ColorCorrectPass;
 layout(set = 0, binding = 6) uniform sampler2D LinearizePass;
 layout(set = 0, binding = 7) uniform sampler2D CrtPass;
-layout(set = 0, binding = 8) uniform sampler2D NightLightingImage;
-layout(set = 0, binding = 9) uniform sampler2D NightLighting2Image;
+layout(set = 0, binding = 8) uniform sampler2D NightLighting;
+layout(set = 0, binding = 9) uniform sampler2D NightLighting2;
 
 #ifdef IS_NO_REFLECT_PRESET
 #define MiddlePass CrtPass
@@ -342,7 +342,7 @@ void main()
 	// Prep the Nightlighting images
 	vec3 nightlight1_rgb = vec3(1);
 	vec3 nightlight2_rgb = vec3(1);
-	HSM_Fill_Nightlight_Images(VIEWPORT_COORD, HSM_GetViewportCoordWithFlip(vTexCoord), TUBE_DIFFUSE_COORD, TUBE_DIFFUSE_SCALE, HSM_LIGHT_NIGHTLIGHTING_SWAP_IMAGE_MODE, NightLightingImage, NightLighting2Image, nightlight1_rgb, nightlight2_rgb);
+	HSM_Fill_Nightlight_Images(VIEWPORT_COORD, HSM_GetViewportCoordWithFlip(vTexCoord), TUBE_DIFFUSE_COORD, TUBE_DIFFUSE_SCALE, HSM_LIGHT_NIGHTLIGHTING_SWAP_IMAGE_MODE, NightLighting, NightLighting2, nightlight1_rgb, nightlight2_rgb);
 
 	vec4 composite_base_color = vec4(0);
 	if (HSM_COMPOSITE_BASE_COLOR > 0.5)

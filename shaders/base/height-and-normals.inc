@@ -19,112 +19,53 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+/////////////// IMPORTS ///////////////
 #include "common/globals-and-image-layers-params.inc"
 #include "common/common-functions.inc"
-// #include "common/common-functions-bezel.inc"
+#include "common/common-functions-bezel.inc"
 
 #pragma name HeightAndNormalsPass
 
 // Float format so we can avoid banding
 #pragma format R32G32B32A32_SFLOAT
 
-// Generating height & normals from a shadertoy by granito
-const vec3 GrayscaleWeights = vec3(0.2125,0.7154,0.0721);
-
-// Sample map to generate Normal map and Height map
-vec4 GenerateNormalHeight (sampler2D tex, vec2 uv, vec2 res, float width)
-{
-    vec2 texelSize = 1. / (res * width);
-    vec4 h;
-    h[0] = dot(GrayscaleWeights, texture(tex, uv + vec2(texelSize * vec2( 0,-1)) ).rgb);
-    h[1] = dot(GrayscaleWeights, texture(tex, uv + vec2(texelSize * vec2(-1, 0)) ).rgb);
-    h[2] = dot(GrayscaleWeights, texture(tex, uv + vec2(texelSize * vec2( 1, 0)) ).rgb);
-    h[3] = dot(GrayscaleWeights, texture(tex, uv + vec2(texelSize * vec2( 0, 1)) ).rgb);
-    vec3 n;
-    n.y = h[0] - h[3];
-    n.x = h[1] - h[2];
-    n.z = .25;
-    float height = dot(GrayscaleWeights, texture(tex, uv).rgb);
-    // return vec4(normalize(n), height);
-
-	return vec4(height);
-}
-
-// Multipass version of above
-vec4 GenerateNormalHeightMultipass (sampler2D tex, vec2 uv, vec2 res)
-{
-    float dist = 0.5;
-    vec4 multi = vec4(0.);
-	multi += GenerateNormalHeight(tex, uv, res, 1. * dist);
-	multi += GenerateNormalHeight(tex, uv, res, 2.5 * dist);
-	multi += GenerateNormalHeight(tex, uv, res, 5. * dist);
-	multi += GenerateNormalHeight(tex, uv, res, 10. * dist);    
-    multi *= 0.25;
-
-	// multi = GenerateNormalHeight(tex, uv, res, 1. * dist);
-    return multi;
-}
-
 // // Generating height & normals from a shadertoy by granito
 // const vec3 GrayscaleWeights = vec3(0.2125,0.7154,0.0721);
 
-// vec4 textureFromPacked(sampler2D texture_packed, vec2 uv, int channel_index)
-// {
-// 	vec4 unpacked_0_rgba = vec4(0);
-// 	vec4 unpacked_1_rgba = vec4(0);
-// 	vec4 unpacked_2_rgba = vec4(0);
-// 	vec4 unpacked_3_rgba = vec4(0);
-
-// 	HSM_Unpack_1_Rgba_To_4_Rgba(texture(texture_packed, uv), 
-// 								unpacked_0_rgba, 
-// 								unpacked_1_rgba, 
-// 								unpacked_2_rgba, 
-// 								unpacked_3_rgba);
-
-// 	vec4 out_rgba = vec4(0.5, 0, 0, 0.5);
-// 	if (channel_index == 0)
-// 		out_rgba = unpacked_0_rgba;
-// 	if (channel_index == 1)
-// 		out_rgba = unpacked_1_rgba;
-// 	if (channel_index == 2)
-// 		out_rgba = unpacked_2_rgba;
-// 	if (channel_index == 3)
-// 		out_rgba = unpacked_3_rgba;
-
-// 	// Linearize output
-// 	out_rgba = pow(out_rgba, vec4(DEFAULT_SRGB_GAMMA));
-// 	return out_rgba;
-// }
-
 // // Sample map to generate Normal map and Height map
-// vec4 GenerateNormalHeightFromPacked (sampler2D tex, vec2 uv, int channel_index, vec2 res, float width)
+// vec4 GenerateNormalHeight (sampler2D tex, vec2 uv, vec2 res, float width)
 // {
 //     vec2 texelSize = 1. / (res * width);
 //     vec4 h;
-//     h[0] = dot(GrayscaleWeights, textureFromPacked(tex, uv + vec2(texelSize * vec2( 0,-1)), channel_index).rgb);
-//     h[1] = dot(GrayscaleWeights, textureFromPacked(tex, uv + vec2(texelSize * vec2(-1, 0)), channel_index).rgb);
-//     h[2] = dot(GrayscaleWeights, textureFromPacked(tex, uv + vec2(texelSize * vec2( 1, 0)), channel_index).rgb);
-//     h[3] = dot(GrayscaleWeights, textureFromPacked(tex, uv + vec2(texelSize * vec2( 0, 1)), channel_index).rgb);
+//     h[0] = dot(GrayscaleWeights, texture(tex, uv + vec2(texelSize * vec2( 0,-1)) ).rgb);
+//     h[1] = dot(GrayscaleWeights, texture(tex, uv + vec2(texelSize * vec2(-1, 0)) ).rgb);
+//     h[2] = dot(GrayscaleWeights, texture(tex, uv + vec2(texelSize * vec2( 1, 0)) ).rgb);
+//     h[3] = dot(GrayscaleWeights, texture(tex, uv + vec2(texelSize * vec2( 0, 1)) ).rgb);
 //     vec3 n;
 //     n.y = h[0] - h[3];
 //     n.x = h[1] - h[2];
 //     n.z = .25;
-//     float height = dot(GrayscaleWeights, textureFromPacked(tex, uv, channel_index).rgb);
-//     return vec4(normalize(n), height);
+//     float height = dot(GrayscaleWeights, texture(tex, uv).rgb);
+//     // return vec4(normalize(n), height);
+
+// 	return vec4(height);
 // }
 
 // // Multipass version of above
-// vec4 GenerateNormalHeightMultipassFromPacked (sampler2D tex, vec2 uv, int channel_index, vec2 res)
+// vec4 GenerateNormalHeightMultipass (sampler2D tex, vec2 uv, vec2 res)
 // {
 //     float dist = 0.5;
-//     vec4 multi;
-// 	multi += GenerateNormalHeightFromPacked(tex, uv, channel_index, res, 1. * dist);
-// 	multi += GenerateNormalHeightFromPacked(tex, uv, channel_index, res, 2.5 * dist);
-// 	multi += GenerateNormalHeightFromPacked(tex, uv, channel_index, res, 5. * dist);
-// 	multi += GenerateNormalHeightFromPacked(tex, uv, channel_index, res, 10. * dist);    
+//     vec4 multi = vec4(0.);
+// 	multi += GenerateNormalHeight(tex, uv, res, 1. * dist);
+// 	multi += GenerateNormalHeight(tex, uv, res, 2.5 * dist);
+// 	multi += GenerateNormalHeight(tex, uv, res, 5. * dist);
+// 	multi += GenerateNormalHeight(tex, uv, res, 10. * dist);    
 //     multi *= 0.25;
+
+// 	// multi = GenerateNormalHeight(tex, uv, res, 1. * dist);
 //     return multi;
 // }
+
 
 #pragma stage vertex
 
@@ -146,10 +87,18 @@ layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 
 // Pass Framebuffer Textures
-layout(set = 0, binding = 1) uniform sampler2D CacheInfoPass;
-layout(set = 0, binding = 2) uniform sampler2D SceneLayersPass;
-layout(set = 0, binding = 3) uniform sampler2D BackgroundHeightImage;
-layout(set = 0, binding = 4) uniform sampler2D BackgroundImage;
+layout(set = 0, binding = 1)	uniform sampler2D CacheInfoPass;
+
+// Image Layers
+layout(set = 0, binding = 2)	uniform sampler2D BackgroundImage;
+// layout(set = 0, binding = 3)	uniform sampler2D BgHeight;
+// layout(set = 0, binding = 4)	uniform sampler2D BgNormals;
+
+// layout(set = 0, binding = 5)	uniform sampler2D DeviceImage;
+// layout(set = 0, binding = 7)	uniform sampler2D DeviceHeight;
+// layout(set = 0, binding = 6)	uniform sampler2D DeviceNormals;
+
+// layout(set = 0, binding = 8)	uniform sampler2D ReflectionMask;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,15 +117,13 @@ void main()
 	// 					BEZEL_OUTSIDE_CURVED_COORD, 
 	// 					FRAME_OUTSIDE_CURVED_COORD);
 	
-	
-	
 	// vec4 image_layers_packed = texture(SceneLayersPass, vTexCoord, 0);
 
-	int bg_channel_index = 0;
-				// vec4 GenerateNormalHeightMultipass (sampler2D tex, vec2 uv, int channel_index, vec2 res)
+	// int bg_channel_index = 0;
+	// 			// vec4 GenerateNormalHeightMultipass (sampler2D tex, vec2 uv, int channel_index, vec2 res)
 
-	vec4 out_color = GenerateNormalHeightMultipass(BackgroundImage, vTexCoord, vec2(1920, 1080));
+	// vec4 out_color = GenerateNormalHeightMultipass(BackgroundImage, vTexCoord, vec2(1920, 1080));
 	// out_color = vec4(out_color.a);
 	// out_color = texture(BackgroundImage, vTexCoord);
-	FragColor = out_color;
+	// FragColor = out_color;
 }

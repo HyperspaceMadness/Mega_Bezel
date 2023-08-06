@@ -81,7 +81,7 @@ layout(location = 0) out vec4 FragColor;
 // Pass Framebuffer Textures
 layout(set = 0, binding = 1) uniform sampler2D CacheInfoPass;
 
-layout(set = 0, binding = 2) uniform sampler2D GlassPresetHighlightImage;
+layout(set = 0, binding = 2) uniform sampler2D GlassHighlight;
 layout(set = 0, binding = 3) uniform sampler2D CrtPass;
 layout(set = 0, binding = 4) uniform sampler2D ReflectPrepLowResPass;
 layout(set = 0, binding = 5) uniform sampler2D ReflectPrepBlurredPass;
@@ -428,7 +428,7 @@ void main()
 
 	if (HSM_NON_USER_PARAM_IS_GLASS_PRESET > 0.5)
 	{
-		vec4 glass_highlight_image = HSM_GetMipmappedTexSample(GlassPresetHighlightImage, VIEWPORT_COORD, vec2(1), 0);
+		vec4 glass_highlight_image = HSM_GetMipmappedTexSample(GlassHighlight, VIEWPORT_COORD, vec2(1), 0);
 		
 		glass_highlight_image = HSM_Linearize(glass_highlight_image, DEFAULT_SRGB_GAMMA);
 

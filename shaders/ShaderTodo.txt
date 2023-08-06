@@ -34,6 +34,8 @@ Changes:
           HSM_LED_APPLY_AMBIENT_IN_ADD_MODE
         becomes:
           HSM_LED_ADD_MODE_NIGHTLIGHTING_AMOUNT
+  FrameTextureImage -> FrameHighlight
+  ReflectionMaskImage -> ReflectionMask
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------

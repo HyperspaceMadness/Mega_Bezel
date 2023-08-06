@@ -60,8 +60,8 @@ layout(set = 0, binding = 6) uniform sampler2D TubeDiffuseImage;
 layout(set = 0, binding = 7) uniform sampler2D TubeShadowImage;
 layout(set = 0, binding = 8) uniform sampler2D TubeColoredGelImage;
 layout(set = 0, binding = 9) uniform sampler2D TubeStaticReflectionImage;
-layout(set = 0, binding = 10) uniform sampler2D NightLightingImage;
-layout(set = 0, binding = 11) uniform sampler2D NightLighting2Image;
+layout(set = 0, binding = 10) uniform sampler2D NightLighting;
+layout(set = 0, binding = 11) uniform sampler2D NightLighting2;
 layout(set = 0, binding = 12) uniform sampler2D SceneLayersPass;
 
 
@@ -215,8 +215,8 @@ void main()
 							TUBE_DIFFUSE_COORD_MIXED_POS, 
 							TUBE_DIFFUSE_SCALE_1ST_SCREEN, 
 							HSM_LIGHT_NIGHTLIGHTING_SWAP_IMAGE_MODE, 
-							NightLightingImage, 
-							NightLighting2Image, 
+							NightLighting, 
+							NightLighting2, 
 							ambient_rgb, 
 							ambient2_rgb);
 

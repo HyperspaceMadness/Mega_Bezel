@@ -70,7 +70,7 @@ layout(set = 0, binding = 2) uniform sampler2D Source;
 layout(set = 0, binding = 3) uniform sampler2D BackgroundImage;
 
 layout(set = 0, binding = 4) uniform sampler2D CabinetGlassImage;
-layout(set = 0, binding = 5) uniform sampler2D ReflectionMaskImage;
+layout(set = 0, binding = 5) uniform sampler2D ReflectionMask;
 
 layout(set = 0, binding = 6) uniform sampler2D SimpleBGPassFeedback;
 #define PassFeedback SimpleBGPassFeedback
