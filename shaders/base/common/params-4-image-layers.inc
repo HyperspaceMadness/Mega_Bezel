@@ -129,7 +129,7 @@ float HSM_LIGHT_BOUNCE_SHADOW_STRENGTH = global.HSM_LIGHT_BOUNCE_SHADOW_STRENGTH
 #pragma parameter HSM_HEIGHT_SHADOW_DEBUG                                                   "          Shadow Debug - NONE | SHADOW | HEIGHT | NORMALS"  1 0 3 1
 float HSM_HEIGHT_SHADOW_DEBUG = global.HSM_HEIGHT_SHADOW_DEBUG;
 
-#pragma parameter HSM_HEIGHT_SHADOW_DEBUG_BLEND                                             "          Shadow Debug Blend"  30 0 100 1
+#pragma parameter HSM_HEIGHT_SHADOW_DEBUG_BLEND                                             "          Shadow Debug Blend"  100 0 100 1
 float HSM_HEIGHT_SHADOW_DEBUG_BLEND = global.HSM_HEIGHT_SHADOW_DEBUG_BLEND / 100.0;
 
 
@@ -142,13 +142,19 @@ float HSM_HEIGHT_SHADOW_LIGHT_POS_Y = global.HSM_HEIGHT_SHADOW_LIGHT_POS_Y / 100
 #pragma parameter HSM_HEIGHT_SHADOW_LIGHT_POS_Z                                             "          Light Pos Z (Depth)"  100 0 300 1
 float HSM_HEIGHT_SHADOW_LIGHT_POS_Z = global.HSM_HEIGHT_SHADOW_LIGHT_POS_Z / 100.0;
 
-#pragma parameter HSM_HEIGHT_SHADOW_SAMPLES                                                 "          Shadow Samples"  100 5 600 5
+#pragma parameter HSM_HEIGHT_SHADOW_SAMPLES                                                 "          Shadow Samples"  100 5 600 1
 float HSM_HEIGHT_SHADOW_SAMPLES = global.HSM_HEIGHT_SHADOW_SAMPLES;
 
-#pragma parameter HSM_HEIGHT_SHADOW_FALLOFF                                                 "          Shadow Falloff"  150 15 500 5
+#pragma parameter HSM_HEIGHT_SHADOW_SAMPLE_RANDOM_HEIGHT_OFFSET                             "          Shadow Sample Random Height Offset"  100 0 600 20
+float HSM_HEIGHT_SHADOW_SAMPLE_RANDOM_HEIGHT_OFFSET = global.HSM_HEIGHT_SHADOW_SAMPLE_RANDOM_HEIGHT_OFFSET / 100;
+
+#pragma parameter HSM_HEIGHT_SHADOW_FALLOFF                                                 "          Shadow Falloff"  150 5 500 5
 float HSM_HEIGHT_SHADOW_FALLOFF = global.HSM_HEIGHT_SHADOW_FALLOFF / 100.0;
 
-#pragma parameter HSM_HEIGHT_SHADOW_SOLID_VS_FALLOFF_BLEND                                  "          Shadow Solid vs Falloff Ratio"  100 0 100 2
+#pragma parameter HSM_HEIGHT_SHADOW_SPREAD_NOISE                                            "          Shadow Spread Noise"  50 0 500 5
+float HSM_HEIGHT_SHADOW_SPREAD_NOISE = global.HSM_HEIGHT_SHADOW_SPREAD_NOISE / 100.0;
+
+#pragma parameter HSM_HEIGHT_SHADOW_SOLID_VS_FALLOFF_BLEND                                  "          Shadow Solid vs Falloff Ratio"  0 0 100 2
 float HSM_HEIGHT_SHADOW_SOLID_VS_FALLOFF_BLEND = global.HSM_HEIGHT_SHADOW_SOLID_VS_FALLOFF_BLEND / 100.0;
 
 

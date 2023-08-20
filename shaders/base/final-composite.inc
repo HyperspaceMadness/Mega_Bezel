@@ -139,42 +139,58 @@ float random(vec2 st) {
 
 
 vec3 GetShadow(in sampler2D in_heightmap, 
-				vec3 wPos, 
-				vec3 lVector, 
-				float NdL, 
-				float in_samples, 
-				float in_noise, 
-				float shadow_falloff, 
+				vec3 wPos,
+				vec3 lVector,
+				float NdL,
+				float in_samples,
+				float in_height_random_offset,
+				float in_noise,
+				float shadow_falloff,
+				float shadow_falloff_spread,
 				float shadow_solid_falloff_blend)
 {
 	float bias = 0.01;
 	vec3 p;
 	vec3 p_random;
 
+	vec3 lVectorNormOrig = normalize(lVector);
 	vec3 lVectorNorm = normalize(lVector);
+	vec3 lVectorNorm_random = normalize(lVector);
 
 	float falloff_shadow = 1.0;
 	float solid_shadow = 1.0;
-	float random_sample_offset = (random(wPos.xy) * 2.0) / in_samples;
+	float random_sample_offset = (random(wPos.xy) * in_height_random_offset) / in_samples;
 
-	// TODO try to use WPOS to put more samples between 0 wPos and 1.
+	float height_range = 1.01 - wPos.z;
+	float sample_dist = 1.0 / in_samples;
 
-	for (float i = 1.0 / in_samples; i <= 1.0; i += 1.0 / in_samples)
+	wPos.xy += global.OutputSize.zw * (random(wPos.xy) - 0.5) * 0.25;
+
+	for (float i = 1; i <= in_samples; i += 1)
 	{
 		// TODO to spread out the light positions as we are farther away from the top
 		// lVectorOrig.xy += (random( wPos.xy + i * vec2(0.0005)) - 0.5) * (1 - i * 1 / in_samples) * vec2(0.02) ;
 
-		p = wPos + lVectorNorm * i;
-		p_random = wPos + lVectorNorm * (i + random_sample_offset);
+		lVectorNorm = lVectorNormOrig;
+		p = wPos + lVectorNorm * (i * sample_dist + random_sample_offset * 0.01);
 
-		float height_at_sample = getHeightValue(in_heightmap, vec2(p_random.x, p_random.y));
-		falloff_shadow *= clamp(HHLP_EasePowerOut(p_random.z / height_at_sample, shadow_falloff), 0.0, 1.0);
-
-		height_at_sample = getHeightValue(in_heightmap, vec2(p.x, p.y));
+		float height_at_sample = getHeightValue(in_heightmap, vec2(p.x, p.y));
 		if (p.z < height_at_sample)
 			solid_shadow = 0.0;
+
+		lVectorNorm_random = lVectorNormOrig;
+		lVectorNorm_random.xy += shadow_falloff_spread * (random( wPos.xy + i * vec2(0.0005)) - 0.5) * i * sample_dist * vec2(0.1) ;
+		lVectorNorm_random = normalize(lVectorNorm_random);
+		p_random = wPos + lVectorNorm_random * (i * sample_dist + random_sample_offset);
+
+		height_at_sample = getHeightValue(in_heightmap, vec2(p_random.x, p_random.y));
+		falloff_shadow *= clamp(p_random.z / height_at_sample, 0.0, 1.0);
+
+		if (p.z > 1.01 || falloff_shadow < 0.01)
+			break;
 	}
 
+	falloff_shadow = HHLP_EasePowerOut(falloff_shadow, shadow_falloff);
 	float final_shadow = mix(solid_shadow, falloff_shadow, shadow_solid_falloff_blend);
 
 	return vec3(final_shadow);
@@ -198,7 +214,9 @@ vec3 GetHeightShadow( in sampler2D height_map,
 						vec3 light_position, 
 						float in_samples, 
 						float in_noise, 
+						float in_height_random_offset, 
 						float shadow_falloff, 
+						float shadow_falloff_spread, 
 						float shadow_solid_falloff_blend)
 {
 	//UV Setup -normalized coords and aspect ratio correction
@@ -231,7 +249,7 @@ vec3 GetHeightShadow( in sampler2D height_map,
 	// color += ambient;
 
 	float NdotL = 0;
-	color = vec3(GetShadow(height_map, worldPos, lightVector, NdotL, in_samples, in_noise, shadow_falloff, shadow_solid_falloff_blend));
+	color = vec3(GetShadow(height_map, worldPos, lightVector, NdotL, in_samples, in_height_random_offset, in_noise, shadow_falloff, shadow_falloff_spread, shadow_solid_falloff_blend));
 	return color;
 }
 
@@ -774,7 +792,7 @@ void main()
 	float output_aspect = global.OutputSize.x / global.OutputSize.y;
 
 	float noise = HSM_TextureAbsolute(DitherNoise, vTexCoord).r; // * 1.9;
-	vec3 height_shadows = clamp(GetHeightShadow(NormalsAndHeightPass, vTexCoord, 1.0, light_coord, HSM_HEIGHT_SHADOW_SAMPLES, noise, HSM_HEIGHT_SHADOW_FALLOFF, HSM_HEIGHT_SHADOW_SOLID_VS_FALLOFF_BLEND), 0, 1);
+	vec3 height_shadows = clamp(GetHeightShadow(NormalsAndHeightPass, vTexCoord, 1.0, light_coord, HSM_HEIGHT_SHADOW_SAMPLES, noise, HSM_HEIGHT_SHADOW_SAMPLE_RANDOM_HEIGHT_OFFSET, HSM_HEIGHT_SHADOW_FALLOFF, HSM_HEIGHT_SHADOW_SPREAD_NOISE, HSM_HEIGHT_SHADOW_SOLID_VS_FALLOFF_BLEND), 0, 1);
 
 	// float bounce_shadow = 1 - precomp_middleground_shadow_stretch.a;
 	float bounce_shadow = height_shadows.r;
