@@ -4,8 +4,14 @@
 #reference "../../resource/param_values/tube-effect/tube-effects.params"
 #reference "../../resource/param_values/light/basic__night.params"
 
+Background = "../../shaders/textures/Background_Sfc_Duimon.png"
 BackgroundShadow = "../../shaders/textures/Background_Shadow.png"
+BackgroundNormals = "../../shaders/textures/Background_Sfc_Duimon_Normals.png"
+BackgroundHeight = "../../shaders/textures/Background_Sfc_Duimon_Height.png"
+
 Device = "../../shaders/textures/Sony_Profeel_Device.png"
+DeviceHeight = "../../shaders/textures/Sony_Profeel_Device_Height.png"
+DeviceNormals = "../../shaders/textures/Sony_Profeel_Device_Normals.png"
 DeviceShadow = "../../shaders/textures/Sony_Profeel_Device_Shadow.png"
 
 HSM_CURVATURE_MODE = "2.000000"

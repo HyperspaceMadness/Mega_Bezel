@@ -69,11 +69,12 @@ layout(location = 0) out vec4 FragColor;
 
 // Pass Framebuffer Textures
 layout(set = 0, binding = 1) uniform sampler2D CacheInfoPass;
+
 layout(set = 0, binding = 2) uniform sampler2D Original;
 layout(set = 0, binding = 3) uniform sampler2D FetchDrezPass;
 layout(set = 0, binding = 4) uniform sampler2D DeditherPass;
-layout(set = 0, binding = 5) uniform sampler2D ColorCorrectPass;
-layout(set = 0, binding = 6) uniform sampler2D LinearizePass;
+// layout(set = 0, binding = 5) uniform sampler2D ColorCorrectPass;
+// layout(set = 0, binding = 6) uniform sampler2D LinearizePass;
 layout(set = 0, binding = 7) uniform sampler2D CrtPass;
 layout(set = 0, binding = 8) uniform sampler2D NightLighting;
 layout(set = 0, binding = 9) uniform sampler2D NightLighting2;
@@ -89,8 +90,14 @@ layout(set = 0, binding = 11) uniform sampler2D SceneLayersPass;
 layout(set = 0, binding = 12) uniform sampler2D BounceLightPass;
 layout(set = 0, binding = 13) uniform sampler2D ReflectPrepFullscreenGlowPass;
 
-layout(set = 0, binding = 14) uniform sampler2D FinalCompositePassFeedback;
+layout(set = 0, binding = 14) uniform sampler2D NormalsAndHeightPass;
+
+layout(set = 0, binding = 15) uniform sampler2D FinalCompositePassFeedback;
 #define PassFeedback FinalCompositePassFeedback
+
+
+layout(set = 0, binding = 5) uniform sampler2D DitherNoise;
+
 
 vec3 PrepGraphicsForHDR(vec3 in_color)
 {
@@ -99,12 +106,12 @@ vec3 PrepGraphicsForHDR(vec3 in_color)
 	out_color *= HSM_GLOBAL_GRAPHICS_BRIGHTNESS;
 	
 	#ifdef IS_HDR_PRESET
-   if((HCRT_HDR < 1.0f) && (HCRT_COLOUR_ACCURATE < 1.0f))
-      if(HCRT_OUTPUT_COLOUR_SPACE == 2.0f)
-         out_color= (out_color * k709_to_XYZ) * kXYZ_to_DCIP3; 
+	if((HCRT_HDR < 1.0f) && (HCRT_COLOUR_ACCURATE < 1.0f))
+		if(HCRT_OUTPUT_COLOUR_SPACE == 2.0f)
+			out_color= (out_color * k709_to_XYZ) * kXYZ_to_DCIP3; 
 
-   if(HCRT_HDR > 0.5f)
-      out_color = InverseTonemap(out_color, HCRT_MAX_NITS, HCRT_PAPER_WHITE_NITS);
+	if(HCRT_HDR > 0.5f)
+		out_color = InverseTonemap(out_color, HCRT_MAX_NITS, HCRT_PAPER_WHITE_NITS);
 
 	if((HCRT_HDR >= 1.0f) && (HCRT_COLOUR_ACCURATE < 1.0f))
 		out_color  *= k2020Gamuts[uint(HCRT_EXPAND_GAMUT)] * (HCRT_PAPER_WHITE_NITS / kMaxNitsFor2084);
@@ -112,6 +119,431 @@ vec3 PrepGraphicsForHDR(vec3 in_color)
 
 	return out_color;
 }
+
+float getHeightValue(in sampler2D in_heightmap, vec2 coords)
+{
+	float n = 0.0;
+	return max(n, texture(in_heightmap, coords).a);
+}
+
+
+float get_diffuse(vec3 n, vec3 l)
+{
+	return max(0.0, dot(n, l));
+}
+
+float random(vec2 st) {
+    return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+}
+
+
+
+vec3 GetShadow(in sampler2D in_heightmap, 
+				vec3 wPos, 
+				vec3 lVector, 
+				float NdL, 
+				float in_samples, 
+				float in_noise, 
+				float shadow_falloff, 
+				float shadow_solid_falloff_blend)
+{
+   float bias = 0.01;
+   vec3 p;
+
+	vec3 lVectorOrig = lVector;
+
+	float falloff_shadow = 1.0;
+	float solid_shadow = 1.0;
+	float start_sample_val = (random(wPos.xy) * 2.0 + 1.0) / in_samples;
+
+	for (float i = start_sample_val; i <= 1.0; i += 1.0 / in_samples)
+	{
+		// TODO to spread out the light positions as we are farther away from the top
+		// lVectorOrig.xy += (random( wPos.xy + i * vec2(0.0005)) - 0.5) * (1 - i * 1 / in_samples) * vec2(0.02) ;
+		lVector = normalize(lVectorOrig);
+
+		p = wPos + lVector * i;
+
+		float height_at_sample = getHeightValue(in_heightmap, vec2(p.x, p.y));
+		falloff_shadow *= clamp(HHLP_EasePowerOut(p.z / height_at_sample, shadow_falloff), 0.0, 1.0);
+
+		if (p.z < height_at_sample)
+			solid_shadow = 0.0;
+	}
+
+	float final_shadow = mix(solid_shadow, falloff_shadow, shadow_solid_falloff_blend);
+
+	return vec3(final_shadow);
+}
+
+
+vec3 getNormal(in sampler2D height_map, vec2 coords, float intensity)
+{
+    float offset = 0.0025;
+    vec3 a = vec3(coords.x - offset, 0.0, getHeightValue(height_map, vec2(coords.x - offset, coords.y)) * intensity);
+    vec3 b = vec3(coords.x + offset, 0.0, getHeightValue(height_map, vec2(coords.x + offset, coords.y)) * intensity);
+    vec3 c = vec3(0.0, coords.y + offset, getHeightValue(height_map, vec2(coords.x, coords.y + offset)) * intensity);
+    vec3 d = vec3(0.0, coords.y - offset, getHeightValue(height_map, vec2(coords.x, coords.y - offset)) * intensity);
+
+    return normalize(cross(b-a, c-d));
+}
+
+vec3 GetHeightShadow( in sampler2D height_map, 
+						vec2 uv, 
+						float output_aspect, 
+						vec3 light_position, 
+						float in_samples, 
+						float in_noise, 
+						float shadow_falloff, 
+						float shadow_solid_falloff_blend)
+{
+	//UV Setup -normalized coords and aspect ratio correction
+	uv.x *= output_aspect;
+
+	//Mouse
+	light_position.xy = light_position.xy * 2.0 - 1.0;
+	light_position.x *= output_aspect;
+
+	vec3 color;
+
+	// Light gets higher as it gets closer to the center
+	// float phi = length(light_pos_2d);
+	// float light_height = cos(phi);
+	// float light_height = 1.1;
+	// vec3 lightVector = normalize(vec3(light_pos_2d.x, light_pos_2d.y, light_height));
+
+	vec3 lightVector = normalize(light_position);
+
+	vec3 worldPos = vec3(vec2(uv), getHeightValue(height_map, uv));
+	// vec3 normal = getNormal(height_map, uv, 0.2);
+
+	// float NdotL = max(dot(normal, lightVector), 0.0);
+	// color = vec3(get_diffuse(normal, lightVector)) * 0.7;
+	// color *= vec3(GetShadow(height_map, worldPos, lightVector, NdotL, in_samples));
+
+	// color = vec3(GetShadow(height_map, worldPos, lightVector, NdotL, in_samples));
+
+	// float ambient = get_diffuse(normal, vec3(0.0, 0.0, 1.0)) * 0.3;
+	// color += ambient;
+
+	float NdotL = 0;
+	color = vec3(GetShadow(height_map, worldPos, lightVector, NdotL, in_samples, in_noise, shadow_falloff, shadow_solid_falloff_blend));
+	return color;
+}
+
+
+// // ------------------------------------------------------------------------------------------------
+// // From deadiablo on Shadertoy
+// // https://www.shadertoy.com/view/WscyRl
+
+// // #define heightMapChannel iChannel0
+// // #define heightMapResolution iChannelResolution[0].xy
+// #define DEPTH 30.0
+
+// // #define cubeMap iChannel1
+// // #define cubeMapResolution iChannelResolution[1].xy
+
+// #define HEIGHT_LIGHT 75.0
+// #define HEIGHT_PLANE 0.0
+
+// #define LIGHT_RADIANCE 300.0
+// #define LIGHT_COLOR vec3(1.0, 1.0, 1.0)
+
+// #define ALBEDO vec3(1.0, 1.0, 1.0)
+// #define METALNESS 0.2
+// #define ROUGHNESS 0.2
+
+// #define DIFFUSE_LOD 8.0
+
+// #define AO_SAMPLES 8.0
+// #define AO_ATTENUATION 5.0
+// #define AO_RADIUS 0.1
+// #define AO_POWER 4.0
+
+// #define SHADOW_STEPS 16.0
+// #define SHADOW_POWER 8.0
+// #define SHADOW_COLOR vec3(0.0)
+
+// const float PI = 3.14159265359;
+
+// //HEIGHT MAP TO NORMAL MAP
+// float getHeight(sampler2D heightMap, vec2 uv)
+// {
+//     vec4 height = texture(heightMap, uv);
+//     float mix_mask = smoothstep(0.5, 0.6, uv.x);
+//     height = mix(height, vec4(0.0), mix_mask);
+
+//   	return height.a;
+// }
+
+// vec3 normalFromHeight(sampler2D heightMap, vec2 uv, vec2 resolution, float depth)
+// {    
+//     vec2 delta = 1.0 / resolution;
+//     //float height = getHeight(heightMap, uv);
+//     //float dxHeight = height - getHeight(heightMap, uv + vec2(delta.x, 0.0));
+//     //float dyHeight = height - getHeight(heightMap, uv + vec2(0.0, delta.y));
+//     float dxHeight = getHeight(heightMap, uv - vec2(delta.x, 0.0)) - getHeight(heightMap, uv + vec2(delta.x, 0.0));
+//     float dyHeight = getHeight(heightMap, uv - vec2(0.0, delta.y)) - getHeight(heightMap, uv + vec2(0.0, delta.y));
+
+//     return normalize(vec3(dxHeight, dyHeight, 1.0 / depth));
+// }
+
+//AO
+// float random(vec2 st) {
+//     return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+// }
+
+// float AOfromHeight(sampler2D heightMap, vec2 uv)
+// {
+//     float height = getHeight(heightMap, uv);
+    
+//     float result = 0.0;
+//     for (float f = 0.0; f < 1.0; f += 1.0 / AO_SAMPLES)
+//     {
+//         float randUoffset = random(vec2(f * 16524.56, f * 23532.43));
+//         float randVoffset = random(vec2(f * 21384.12, f * 11835.78));
+//         vec2 offset = vec2(randUoffset, randVoffset) * 2.0 - 1.0;
+//         offset *= AO_RADIUS;
+//         result += max(texture(heightMap, uv + offset).r - height, 0.0);
+
+//     }
+//     result /= AO_SAMPLES;
+//     result = pow(1.0 - result, AO_POWER);
+//     return result;
+// }
+
+// //Shadow
+// float Shadow(vec3 lightPosition, sampler2D heightMap, vec2 uv)
+// {
+//     float height = getHeight(heightMap, uv);
+//     float lightHeight = lightPosition.z / DEPTH;
+//     float deltaZ = lightHeight - height;
+    
+//     float shadow = 0.0;
+    
+//     vec2 lightUV = lightPosition.xy;
+//     vec2 offsetUV = (lightUV - uv);
+    
+//     for (float delta = 0.0; delta < 1.0; delta += 1.0 / SHADOW_STEPS)
+//     {
+//         float pointHeight = getHeight(heightMap, uv + delta * offsetUV);
+//         float rayHeight = height + delta * deltaZ;
+//         shadow += max(0.0, pointHeight - rayHeight);
+//     }
+//     return clamp(shadow * SHADOW_POWER, 0.0, 1.0);
+// }
+
+// //PBR
+// float DistributionGGX(vec3 N, vec3 H, float roughness)
+// {
+//     float a      = roughness*roughness;
+//     float a2     = a*a;
+//     float NdotH  = max(dot(N, H), 0.0);
+//     float NdotH2 = NdotH*NdotH;
+
+//     float denom = (NdotH2 * (a2 - 1.0) + 1.0);
+//     denom = PI * denom * denom;
+	
+//     return a2 / denom;
+// }
+
+// float GeometrySchlickGGX(float NdotV, float roughness)
+// {
+//     float r = (roughness + 1.0);
+//     float k = (r*r) / 8.0;
+
+//     float num   = NdotV;
+//     float denom = NdotV * (1.0 - k) + k;
+	
+//     return num / denom;
+// }
+
+// float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
+// {
+//     float NdotV = max(dot(N, V), 0.0);
+//     float NdotL = max(dot(N, L), 0.0);
+//     float ggx2  = GeometrySchlickGGX(NdotV, roughness);
+//     float ggx1  = GeometrySchlickGGX(NdotL, roughness);
+	
+//     return ggx1 * ggx2;
+// } 
+
+// vec3 fresnelSchlick(vec3 F0, float cosTheta)
+// {
+//     return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
+// }
+
+// vec3 fresnelSchlickRoughness(vec3 F0, float cosTheta, float roughness)
+// {
+//     return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(1.0 - cosTheta, 5.0);
+// }
+
+// void mainImage(out vec4 fragColor, in vec2 fragCoord)
+// {
+//     vec2 offset = vec2(iResolution.x / iResolution.y, 1.0);
+//     vec2 resolution = iResolution.yy;
+//   	vec2 uv = fragCoord.xy / resolution; // * 2.0 - offset;
+    
+//     vec3 lightPoint = vec3((iMouse.xy / resolution * 2.0 - offset) * heightMapResolution, HEIGHT_LIGHT);
+//     vec3 planePoint = vec3(uv * heightMapResolution, HEIGHT_PLANE);
+    
+//     vec3 albedo = ALBEDO;
+//     float metalness = METALNESS;
+//     float roughness = ROUGHNESS;
+//     float ao = AOfromHeight(heightMapChannel, uv);
+
+//     vec3 F0 = vec3(0.04); 
+//     F0 = mix(F0, albedo, metalness);
+    
+//     vec3 N = normalFromHeight(heightMapChannel, uv, heightMapResolution, DEPTH);
+//     vec3 V = vec3(0.0, 0.0, 1.0);
+    
+//     vec3 directLighting = vec3(0);
+//     {
+//         vec3 L = normalize(lightPoint - planePoint);
+//         vec3 H = normalize(V + L);
+
+//         float distance = length(lightPoint - planePoint);
+//         float attenuation = LIGHT_RADIANCE * LIGHT_RADIANCE / (distance * distance);
+//         vec3 radiance = LIGHT_COLOR * attenuation; 
+
+//         float NdotL = max(dot(N, L), 0.0);
+//         float VdotH = max(dot(V, H), 0.0);
+//         float NdotV = max(dot(N, V), 0.0);
+
+//         float D = DistributionGGX(N, H, roughness); 
+//         vec3 F = fresnelSchlick(F0, VdotH);      
+//         float G = GeometrySmith(N, V, L, roughness);
+
+//         vec3 numerator = (D * G) * F;
+//         float denominator = 4.0 * NdotV * NdotL;
+
+//         vec3 kS = F;
+//         vec3 kD = vec3(1.0) - kS;
+//         kD *= 1.0 - metalness;
+
+//         vec3 specular = numerator / max(denominator, 0.001);   
+//         vec3 diffuse = kD * albedo / PI * ao;
+        
+//         vec3 color = (diffuse + specular) * radiance * NdotL;
+
+//         color = color / (color + vec3(1.0));
+//         directLighting = pow(color, vec3(1.0/2.2));  
+//     }
+    
+//     vec3 indirectLighting = vec3(0);
+//     {
+//         float NdotV = max(dot(N, V), 0.0);
+//         vec3 F = fresnelSchlickRoughness(F0, NdotV, roughness);
+//         vec3 kS = F;
+//         vec3 kD = vec3(1.0) - kS;
+//         kD *= 1.0 - metalness;
+
+//         vec3 irradiance = textureLod(cubeMap, N, DIFFUSE_LOD).rgb;
+//         vec3 diffuseIBL = kD * albedo * irradiance * ao;
+
+//         vec3 R = -reflect(V, N);
+//         vec3 specularColor = textureLod(cubeMap, R, roughness * DIFFUSE_LOD).rgb;
+//         vec3 specularIBL = specularColor * kS;
+
+//         indirectLighting = diffuseIBL + specularIBL;
+//     }
+
+//     float shadow = Shadow(lightPoint, heightMapChannel, uv);
+//     fragColor = vec4(1.0 - shadow);
+//     return;
+    
+//     directLighting = mix(directLighting, SHADOW_COLOR, shadow);
+    
+//     fragColor = vec4(directLighting + indirectLighting, 1.0);
+// }
+
+
+// -----------------------------------------------------------------------------------------------
+
+// Shadertoy by consoleartist
+// https://www.shadertoy.com/view/Xlsfzl#
+
+// float getHeightValue(vec2 coords)
+// {
+ 
+//     float n = 0.33;
+//     return max(n, texture(iChannel0, coords).x);
+// }
+
+
+// float get_diffuse(vec3 n, vec3 l)
+// {
+// 	return max(0.0, dot(n,l));
+// }
+
+// vec3 shadow(vec3 wPos, vec3 lVector, float NdL)
+// {
+//    float bias = 0.01;
+//    vec3 p;
+//    float shadow = 1.0;
+
+//    if (NdL > 0.0)
+//    	{
+//    		for (float i = 0.0; i <= 1.0; i += 0.01) 
+//     		{
+//      			p = wPos + lVector * i;
+//                 shadow *= clamp(p.z/getHeightValue(vec2(p.x, p.y)),0.,1.);
+//              }
+//    	}
+// 	return vec3(shadow);
+// }
+
+
+// vec3 getNormal(vec2 coords, float intensity)
+// {
+//     float offset = 0.0025;
+//     vec3 a = vec3(coords.x - offset, 0.0, getHeightValue(vec2(coords.x - offset, coords.y)) * intensity);
+//     vec3 b = vec3(coords.x + offset, 0.0, getHeightValue(vec2(coords.x + offset, coords.y)) * intensity);
+//     vec3 c = vec3(0.0, coords.y + offset, getHeightValue(vec2(coords.x, coords.y + offset)) * intensity);
+//     vec3 d = vec3(0.0, coords.y - offset, getHeightValue(vec2(coords.x, coords.y - offset)) * intensity);
+
+//     return normalize(cross(b-a, c-d));
+// }
+
+// void mainImage( out vec4 fragColor, in vec2 fragCoord )
+// {
+
+//     //UV Setup -normalized coords and aspect ratio correction
+// 	vec2 uv = fragCoord.xy / iResolution.xy;
+//     float aspect = iResolution.x/iResolution.y;
+// 	uv.x *= aspect;
+   
+//     //Mouse
+//     vec2 daMouse = iMouse.xy/ iResolution.xy;
+//     daMouse = daMouse * 2.0 - 1.0;
+//     daMouse.x *= aspect;
+    
+//     vec3 color;
+
+// 	float phi = length(daMouse / 10.0);
+//     vec3 lightVector = normalize(vec3(daMouse.x,
+//                                       daMouse.y,
+//                                       cos(phi))
+//                                 );
+    
+//     vec3 worldPos = vec3(vec2(uv), getHeightValue(uv));
+//     vec3 normal = getNormal(uv, 0.2);
+    
+//     float NdotL = max(dot(normal, lightVector), 0.0);
+//     color = vec3(get_diffuse(normal, lightVector))*0.7;
+//     color *= vec3(shadow(worldPos, lightVector, NdotL));
+    
+//     float ambient = get_diffuse(normal, vec3(0.0,0.0,1.0))*0.3;
+//     color += ambient;
+
+
+//     fragColor = vec4(color, 1.0);
+// }
+
+
+
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void main()
@@ -144,19 +576,19 @@ void main()
 		if (HSM_SHOW_PASS_INDEX == 3)
 			FragColor = texture(CrtPass, vTexCoord);
 
-		// INTERLACE & LINEARIZE
-		if (HSM_SHOW_PASS_INDEX == 4)
-		{
-			FragColor = texture(LinearizePass, (floor(coord_for_raw_passes * textureSize(LinearizePass, 0)) + 0.5) / textureSize(LinearizePass, 0));
-			pass_needs_delinearize = HSM_NON_USER_LINEARIZE_INTERLACE_PASS > 0.5;
-		}
+		// // INTERLACE & LINEARIZE
+		// if (HSM_SHOW_PASS_INDEX == 4)
+		// {
+		// 	FragColor = texture(LinearizePass, (floor(coord_for_raw_passes * textureSize(LinearizePass, 0)) + 0.5) / textureSize(LinearizePass, 0));
+		// 	pass_needs_delinearize = HSM_NON_USER_LINEARIZE_INTERLACE_PASS > 0.5;
+		// }
 
-		// COLOR CORRECT & UPSCALE
-		if (HSM_SHOW_PASS_INDEX == 5)
-		{
-			FragColor = texture(ColorCorrectPass, (floor(coord_for_raw_passes * textureSize(ColorCorrectPass, 0)) + 0.5) / textureSize(ColorCorrectPass, 0));
-			pass_needs_delinearize = false;
-		}
+		// // COLOR CORRECT & UPSCALE
+		// if (HSM_SHOW_PASS_INDEX == 5)
+		// {
+		// 	FragColor = texture(ColorCorrectPass, (floor(coord_for_raw_passes * textureSize(ColorCorrectPass, 0)) + 0.5) / textureSize(ColorCorrectPass, 0));
+		// 	pass_needs_delinearize = false;
+		// }
 
 		// DEDITHER
 		if (HSM_SHOW_PASS_INDEX == 6)
@@ -289,6 +721,8 @@ void main()
 
 	vec4 out_color = vec4(0);
 
+	vec4 normals_and_height = texture(NormalsAndHeightPass, vTexCoord);
+
 	vec4 image_layers_packed_shadow_stretch = texture(SceneLayersPass, (vTexCoord - 0.5) / 1.1 + 0.5 + vec2(SCREEN_SCALE.x * 0.02, 0));
 	vec4 precomp_background_shadow_stretch = vec4(0);
 	vec4 precomp_middleground_shadow_stretch = vec4(0);
@@ -320,6 +754,26 @@ void main()
 	float bounce_center_Vignette = clamp(HSM_GetStrengthPowerVignetteFactor(bounce_coord_ctr * 0.5 + 0.5, 20, 2), 0, 1);
 	bounce_light = mix(bounce_light, bounce_light_center, HSM_LIGHT_BOUNCE_MIX_FULLSCREEN_GLOW * bounce_center_Vignette);
 
+	// vec2 heightMapResolution = global.NormalsAndHeightPassSize.xy;
+	// // vec2 heightMapResolution = textureSize(NormalsAndHeightPass, 0);
+
+    // vec2 offset = vec2(global.OutputSize.x / global.OutputSize.y, 1.0);
+  	// vec2 uv = vTexCoord;
+
+    // vec3 lightPoint = vec3((vec2(0.75, 0.25)), HEIGHT_LIGHT);
+    // vec3 planePoint = vec3(uv, HEIGHT_PLANE);
+
+	// vec3 lightPoint = vec3(0.5, 0.75, HEIGHT_LIGHT);
+	// float height_shadows = Shadow(lightPoint, NormalsAndHeightPass, vTexCoord);
+
+	vec3 light_coord = vec3(HSM_HEIGHT_SHADOW_LIGHT_POS_X, HSM_HEIGHT_SHADOW_LIGHT_POS_Y, HSM_HEIGHT_SHADOW_LIGHT_POS_Z);
+	float output_aspect = global.OutputSize.x / global.OutputSize.y;
+
+	float noise = HSM_TextureAbsolute(DitherNoise, vTexCoord).r; // * 1.9;
+	vec3 height_shadows = clamp(GetHeightShadow(NormalsAndHeightPass, vTexCoord, 1.0, light_coord, HSM_HEIGHT_SHADOW_SAMPLES, noise, HSM_HEIGHT_SHADOW_FALLOFF, HSM_HEIGHT_SHADOW_SOLID_VS_FALLOFF_BLEND), 0, 1);
+
+	// float bounce_shadow = 1 - precomp_middleground_shadow_stretch.a;
+	float bounce_shadow = height_shadows.r;
 
 	// Do HSV alterations on the bounce_light
 	if (HSM_LIGHT_BOUNCE_SATURATION != 1 || HSM_LIGHT_BOUNCE_BRIGHTNESS != 1)
@@ -386,7 +840,8 @@ void main()
 		precomp_background.rgb *= 1 - clamp(HSM_COMPOSITE_BACKGROUND_STATIC_SHADOW_STRENGTH * (1 - static_shadows), 0, 1);
 
 		// Add bounce light
-		precomp_background.rgb += precomp_background_orig.rgb * HSM_COMPOSITE_BACKGROUND_BOUNCELIGHT_MULTIPLIER * bounce_light.rgb * mix((1 - precomp_middleground_shadow_stretch.a), 1, 1 - HSM_LIGHT_BOUNCE_SHADOW_STRENGTH);
+		// height_shadows.r;
+		precomp_background.rgb += precomp_background_orig.rgb * HSM_COMPOSITE_BACKGROUND_BOUNCELIGHT_MULTIPLIER * bounce_light.rgb * mix(bounce_shadow, 1, 1 - HSM_LIGHT_BOUNCE_SHADOW_STRENGTH);
 
 		// Prep Color
 		precomp_background.rgb = PrepGraphicsForHDR(precomp_background.rgb);
@@ -556,6 +1011,15 @@ void main()
 		else
 			out_color = out_color.aaaa;
 	}
+
+	if (HSM_HEIGHT_SHADOW_DEBUG == 1)
+		out_color = mix(out_color, height_shadows.rrrr, HSM_HEIGHT_SHADOW_DEBUG_BLEND);
+
+	if (HSM_HEIGHT_SHADOW_DEBUG == 2)
+		out_color = mix(out_color, normals_and_height.aaaa, HSM_HEIGHT_SHADOW_DEBUG_BLEND);
+
+	if (HSM_HEIGHT_SHADOW_DEBUG == 3)
+		out_color = mix(out_color, normals_and_height, HSM_HEIGHT_SHADOW_DEBUG_BLEND);
 
 #ifdef IS_HDR_PRESET	
 	vec3 hdr_colour = vec3(0);

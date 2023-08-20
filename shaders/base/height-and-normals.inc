@@ -24,13 +24,13 @@
 #include "common/common-functions.inc"
 #include "common/common-functions-bezel.inc"
 
-#pragma name HeightAndNormalsPass
+#pragma name NormalsAndHeightPass
 
 // Float format so we can avoid banding
 #pragma format R32G32B32A32_SFLOAT
 
-// // Generating height & normals from a shadertoy by granito
-// const vec3 GrayscaleWeights = vec3(0.2125,0.7154,0.0721);
+// Generating height & normals from a shadertoy by granito
+const vec3 GrayscaleWeights = vec3(0.2125,0.7154,0.0721);
 
 // // Sample map to generate Normal map and Height map
 // vec4 GenerateNormalHeight (sampler2D tex, vec2 uv, vec2 res, float width)
@@ -42,13 +42,12 @@
 //     h[2] = dot(GrayscaleWeights, texture(tex, uv + vec2(texelSize * vec2( 1, 0)) ).rgb);
 //     h[3] = dot(GrayscaleWeights, texture(tex, uv + vec2(texelSize * vec2( 0, 1)) ).rgb);
 //     vec3 n;
-//     n.y = h[0] - h[3];
+//     n.y = h[3] - h[0];
 //     n.x = h[1] - h[2];
 //     n.z = .25;
 //     float height = dot(GrayscaleWeights, texture(tex, uv).rgb);
-//     // return vec4(normalize(n), height);
-
-// 	return vec4(height);
+//     n = normalize(n);
+//     return vec4(n, height);
 // }
 
 // // Multipass version of above
@@ -62,7 +61,7 @@
 // 	multi += GenerateNormalHeight(tex, uv, res, 10. * dist);    
 //     multi *= 0.25;
 
-// 	// multi = GenerateNormalHeight(tex, uv, res, 1. * dist);
+// 	multi = GenerateNormalHeight(tex, uv, res, 1. * dist);
 //     return multi;
 // }
 
@@ -98,8 +97,8 @@ layout(set = 0, binding = 5)	uniform sampler2D Device;
 layout(set = 0, binding = 6)	uniform sampler2D DeviceNormals;
 layout(set = 0, binding = 7)	uniform sampler2D DeviceHeight;
 
-layout(set = 0, binding = 8)	uniform sampler2D HeightAndNormalsPassFeedback;
-#define PassFeedback HeightAndNormalsPassFeedback
+layout(set = 0, binding = 8)	uniform sampler2D NormalsAndHeightPassFeedback;
+#define PassFeedback NormalsAndHeightPassFeedback
 
 // layout(set = 0, binding = 8)	uniform sampler2D ReflectionMask;
 
@@ -147,6 +146,9 @@ void main()
 	float out_height = neutral_height;
 	vec3 out_normals = neutral_normals;
 
+    vec4 out_normal_color = vec4(neutral_normals, 1.0);
+    vec4 out_height_color = vec4(vec3(neutral_height), 1.0);
+
 	CUTOUT_MASK = 1;
 
     //-----------------------------------------------------------------------------------------
@@ -180,10 +182,16 @@ void main()
             BACKGROUND_CURVED_COORD = HSM_GetMirrorWrapCoord(BACKGROUND_CURVED_COORD);
 
         vec4 bg_layer = HSM_GetMipmappedTexSample(Background, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
-        vec3 bg_normals = HSM_GetMipmappedTexSample(BackgroundNormals, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS).rgb;
-        vec4 bg_normals_layer = vec4(bg_normals * bg_layer.a, bg_layer.a);
-        float bg_height = HSM_GetMipmappedTexSample(BackgroundHeight, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS).r;
-        out_color = HSM_PreMultAlphaBlend(out_color, bg_layer);
+        vec4 bg_normals_layer = bg_layer.a * HSM_GetMipmappedTexSample(BackgroundNormals, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
+
+        vec4 bg_height_layer = HSM_GetMipmappedTexSample(BackgroundHeight, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
+        bg_height_layer.rgb = (bg_height_layer.rgb - HSM_HEIGHT_SHADOW_BG_CONTRAST_CENTER) * HSM_HEIGHT_SHADOW_BG_CONTRAST + HSM_HEIGHT_SHADOW_BG_CONTRAST_CENTER;
+        bg_height_layer.rgb += HSM_HEIGHT_SHADOW_BG_OFFSET_Z;
+        bg_height_layer.rgb *= clamp(bg_height_layer.rgb, 0, 1);
+        bg_height_layer.rgb *= bg_layer.a;
+
+        out_normal_color = HSM_PreMultAlphaBlend(out_normal_color, bg_normals_layer);
+        out_height_color = HSM_PreMultAlphaBlend(out_height_color, bg_height_layer);
     }
 
     //----------------------------------------------------
@@ -208,27 +216,41 @@ void main()
                                                 DEVICE_COORD,
                                                 DEVICE_SCALE);
 
-            vec4 device_layer = HSM_GetMipmappedTexSample(Background, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
-            vec3 device_normals = HSM_GetMipmappedTexSample(BackgroundNormals, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS).rgb;
-            vec4 device_normals_layer = vec4(device_normals * device_layer.a, device_layer.a);
-            float device_height = HSM_GetMipmappedTexSample(BackgroundHeight, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS).r;
-            out_color = HSM_PreMultAlphaBlend(out_color, device_layer);
+            vec4 device_layer = HSM_GetMipmappedTexSample(Device, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
+
+            // vec3 device_normals = GenerateNormalHeightMultipass (DeviceHeight, DEVICE_CURVED_COORD, DEVICE_SIZE).rgb;
+            // device_normals.r += 0.5;
+            // device_normals.g += 0.5;
+
+            vec4 device_normals_layer = device_layer.a * HSM_GetMipmappedTexSample(DeviceNormals, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
+
+            vec4 device_height_layer = HSM_GetMipmappedTexSample(DeviceHeight, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
+
+            // TODO UNFINISHED Need to scale from end of the range at 1 instead of from 0
+            device_height_layer.rgb = (device_height_layer.rgb - HSM_HEIGHT_SHADOW_DEVICE_CONTRAST_CENTER) * HSM_HEIGHT_SHADOW_DEVICE_CONTRAST + HSM_HEIGHT_SHADOW_DEVICE_CONTRAST_CENTER;
+            device_height_layer.rgb += HSM_HEIGHT_SHADOW_DEVICE_OFFSET_Z;
+            device_height_layer.rgb *= clamp(device_height_layer.rgb, 0, 1);
+            device_height_layer *= device_layer.a;
+
+            out_normal_color = HSM_PreMultAlphaBlend(out_normal_color, device_normals_layer);
+            out_height_color = HSM_PreMultAlphaBlend(out_height_color, device_height_layer);
     }
 
-    //----------------------------------------------------
-    // Generated Bezel
-    //----------------------------------------------------
-    if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
-    {
-        bool generate_normals = true;
-        vec4 frame_highlight_color = vec4(0);
-        float static_shadow_multiply = 1;
-        vec4 tube_bg_layer = vec4(0);
-        vec4 bezel_normals_layer = HSM_GetBezelLayer(generate_normals, frame_highlight_color, static_shadow_multiply, tube_bg_layer);
+    // //----------------------------------------------------
+    // // Generated Bezel
+    // //----------------------------------------------------
+    // if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
+    // {
+    //     bool generate_normals = true;
+    //     vec4 frame_highlight_color = vec4(0);
+    //     float static_shadow_multiply = 1;
+    //     vec4 tube_bg_layer = vec4(0);
+    //     vec4 bezel_normals_layer = HSM_GetBezelLayer(generate_normals, frame_highlight_color, static_shadow_multiply, tube_bg_layer);
 
-        float bezel_height = neutral_height;
-        out_color = HSM_PreMultAlphaBlend(out_color, bezel_normals_layer);
-    }
+    //     float bezel_height = neutral_height;
+    //     out_color = HSM_PreMultAlphaBlend(out_color, bezel_normals_layer);
+    // }
 
-    FragColor = out_color;
+    out_height_color *= 0.33;
+    FragColor = vec4(out_normal_color.rgb, out_height_color.r);
 }

@@ -42,14 +42,19 @@ Changes:
     * TubeStaticReflectionImage -> tube_highlight
     * HSM_Duimon_Super_Famicom -> Background_Sfc_Duimon
     * "_3840x2160" -> ""
+  * Add Noise for dithering tube highlight
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Squeeze rgb (3 channels) into 2 channels with 1/2 color fidelity using YUV
+    * This would free up 3 additional channels
+
+  * Normals Lighting with Specular in last pass
   * Need a gamma/remap for bright color bounce light
   * Night Lighting as Procedural 3D lighting with Shadows
-  * Add Blue Noise for dithering including glass highlight
+
   * Add Darker Frame Shadow at bottom
   * Shadowing Ideas:
     * Possible add floor 
