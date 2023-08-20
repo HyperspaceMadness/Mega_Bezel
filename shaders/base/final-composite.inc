@@ -147,26 +147,30 @@ vec3 GetShadow(in sampler2D in_heightmap,
 				float shadow_falloff, 
 				float shadow_solid_falloff_blend)
 {
-   float bias = 0.01;
-   vec3 p;
+	float bias = 0.01;
+	vec3 p;
+	vec3 p_random;
 
-	vec3 lVectorOrig = lVector;
+	vec3 lVectorNorm = normalize(lVector);
 
 	float falloff_shadow = 1.0;
 	float solid_shadow = 1.0;
-	float start_sample_val = (random(wPos.xy) * 2.0 + 1.0) / in_samples;
+	float random_sample_offset = (random(wPos.xy) * 2.0) / in_samples;
 
-	for (float i = start_sample_val; i <= 1.0; i += 1.0 / in_samples)
+	// TODO try to use WPOS to put more samples between 0 wPos and 1.
+
+	for (float i = 1.0 / in_samples; i <= 1.0; i += 1.0 / in_samples)
 	{
 		// TODO to spread out the light positions as we are farther away from the top
 		// lVectorOrig.xy += (random( wPos.xy + i * vec2(0.0005)) - 0.5) * (1 - i * 1 / in_samples) * vec2(0.02) ;
-		lVector = normalize(lVectorOrig);
 
-		p = wPos + lVector * i;
+		p = wPos + lVectorNorm * i;
+		p_random = wPos + lVectorNorm * (i + random_sample_offset);
 
-		float height_at_sample = getHeightValue(in_heightmap, vec2(p.x, p.y));
-		falloff_shadow *= clamp(HHLP_EasePowerOut(p.z / height_at_sample, shadow_falloff), 0.0, 1.0);
+		float height_at_sample = getHeightValue(in_heightmap, vec2(p_random.x, p_random.y));
+		falloff_shadow *= clamp(HHLP_EasePowerOut(p_random.z / height_at_sample, shadow_falloff), 0.0, 1.0);
 
+		height_at_sample = getHeightValue(in_heightmap, vec2(p.x, p.y));
 		if (p.z < height_at_sample)
 			solid_shadow = 0.0;
 	}
