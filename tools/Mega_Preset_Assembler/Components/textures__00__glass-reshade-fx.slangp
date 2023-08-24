@@ -11,7 +11,7 @@ Sprite = :/shaders/shaders_slang/reshade/shaders/bloom/LensSprite.png
 Sprite_wrap_mode = "clamp_to_border"
 Sprite_mipmap = "false"
 
-DitherNoise = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/DitherNoise_BlueNoise_LowContrast.png
+DitherNoise = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/textures/DitherNoise_BlueNoise.png
 DitherNoise_linear = false
 DitherNoise_mipmap = false
 DitherNoise_wrap_mode = "repeat"

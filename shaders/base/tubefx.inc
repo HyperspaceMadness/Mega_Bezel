@@ -105,7 +105,7 @@ vec4 GenerateNormalHeightMultipass (sampler2D tex, vec2 uv, vec2 res)
 }
 
 // #ifdef USE_TUBEFX
-vec3 HSM_GetTubeHighlight(vec2 tube_curved_coord, bool apply_to_mirror, in sampler2D tube_highlight_sampler2d, in sampler2D dithering_noise_sampler2d)
+vec3 HSM_GetTubeHighlight(vec2 tube_curved_coord, bool apply_to_mirror, in sampler2D highlight_map, in sampler2D noise_map)
 {
 	tube_curved_coord = HSM_GetViewportCoordWithFlip(tube_curved_coord);
 
@@ -123,12 +123,8 @@ vec3 HSM_GetTubeHighlight(vec2 tube_curved_coord, bool apply_to_mirror, in sampl
 	tube_highlight_coord.x = (tube_highlight_coord.x + HSM_TUBE_STATIC_POS_X - 0.5) * HSM_FLIP_VIEWPORT_HORIZONTAL + 0.5;
 	tube_highlight_coord.y = (tube_highlight_coord.y + HSM_TUBE_STATIC_POS_Y - 0.5) * HSM_FLIP_VIEWPORT_VERTICAL + 0.5;
 
-	vec4 tube_highlight_image = vec4(0);
-
-
-	tube_highlight_image = HSM_GetMipmappedTexSample(tube_highlight_sampler2d, tube_highlight_coord, TUBE_SCALE, 0);
-
-	tube_highlight_image.rgb *= (1 - HSM_TUBE_STATIC_DITHER_AMOUNT) + HSM_TUBE_STATIC_DITHER_AMOUNT * HSM_TextureAbsolute(dithering_noise_sampler2d, vTexCoord).rgb * 1.9;
+	vec4 tube_highlight_image = HSM_GetMipmappedTexSample(highlight_map, tube_highlight_coord, TUBE_SCALE, 0);
+	tube_highlight_image.rgb *= 1 - HSM_TextureAbsolute(noise_map, vTexCoord).rgb * HSM_TUBE_STATIC_DITHER_AMOUNT;
 
 	// Mask the very outer edge of the tube for a very small shadowing effect
 	float tube_highlight_mask = HSM_GetCornerMask((tube_curved_coord - 0.5) + 0.5, TUBE_DIFFUSE_ASPECT, HSM_BZL_INNER_CORNER_RADIUS_SCALE * HSM_GLOBAL_CORNER_RADIUS, 0.9);

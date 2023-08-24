@@ -432,8 +432,7 @@ void main()
 		vec4 glass_highlight_image = HSM_GetMipmappedTexSample(GlassPresetHighlight, VIEWPORT_COORD, vec2(1), 0);
 
 		glass_highlight_image = HSM_Linearize(glass_highlight_image, DEFAULT_SRGB_GAMMA);
-		glass_highlight_image.rgb *= (1 - HSM_GLASSPRESET_HIGHLIGHT_NOISE_AMOUNT) + HSM_GLASSPRESET_HIGHLIGHT_NOISE_AMOUNT * HSM_TextureAbsolute(DitherNoise, vTexCoord).rgb * 1.9;
-
+		glass_highlight_image.rgb *= 1 - HSM_TextureAbsolute(DitherNoise, vTexCoord).rgb * HSM_GLASSPRESET_HIGHLIGHT_NOISE_AMOUNT;
 		glass_highlight_image.a *= outside_tube_mask_wider * (1 - edge_mask);
 
 		vec4 frag_color_linear = crt_linear;

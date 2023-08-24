@@ -279,7 +279,7 @@ SamplerLUT3_linear = true
 SamplerLUT4 = ../../../shaders/guest/lut/ntsc-lut.png
 SamplerLUT4_linear = true
 
-DitherNoise = ../../../shaders/textures/DitherNoise_BlueNoise_LowContrast.png
+DitherNoise = ../../../shaders/textures/DitherNoise_BlueNoise.png
 DitherNoise_linear = false
 DitherNoise_mipmap = false
 DitherNoise_wrap_mode = "repeat"
