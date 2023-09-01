@@ -185,8 +185,8 @@ void main()
         vec4 bg_normals_layer = bg_layer.a * HSM_GetMipmappedTexSample(BackgroundNormals, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
 
         vec4 bg_height_layer = HSM_GetMipmappedTexSample(BackgroundHeight, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
-        bg_height_layer.rgb = (bg_height_layer.rgb - HSM_HEIGHT_SHADOW_BG_CONTRAST_CENTER) * HSM_HEIGHT_SHADOW_BG_CONTRAST + HSM_HEIGHT_SHADOW_BG_CONTRAST_CENTER;
-        bg_height_layer.rgb += HSM_HEIGHT_SHADOW_BG_OFFSET_Z;
+        bg_height_layer.rgb = (bg_height_layer.rgb - HSM_HSHADOW_BG_CONTRAST_CENTER) * HSM_HSHADOW_BG_CONTRAST + HSM_HSHADOW_BG_CONTRAST_CENTER;
+        bg_height_layer.rgb += HSM_HSHADOW_BG_OFFSET_Z;
         bg_height_layer.rgb *= clamp(bg_height_layer.rgb, 0, 1);
         bg_height_layer.rgb *= bg_layer.a;
 
@@ -227,8 +227,8 @@ void main()
             vec4 device_height_layer = HSM_GetMipmappedTexSample(DeviceHeight, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
 
             // TODO UNFINISHED Need to scale from end of the range at 1 instead of from 0
-            device_height_layer.rgb = (device_height_layer.rgb - HSM_HEIGHT_SHADOW_DEVICE_CONTRAST_CENTER) * HSM_HEIGHT_SHADOW_DEVICE_CONTRAST + HSM_HEIGHT_SHADOW_DEVICE_CONTRAST_CENTER;
-            device_height_layer.rgb += HSM_HEIGHT_SHADOW_DEVICE_OFFSET_Z;
+            device_height_layer.rgb = (device_height_layer.rgb - HSM_HSHADOW_DEVICE_CONTRAST_CENTER) * HSM_HSHADOW_DEVICE_CONTRAST + HSM_HSHADOW_DEVICE_CONTRAST_CENTER;
+            device_height_layer.rgb += HSM_HSHADOW_DEVICE_OFFSET_Z;
             device_height_layer.rgb *= clamp(device_height_layer.rgb, 0, 1);
             device_height_layer *= device_layer.a;
 

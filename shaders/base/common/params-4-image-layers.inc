@@ -126,56 +126,81 @@ float HSM_LIGHT_BOUNCE_SHADOW_STRENGTH = global.HSM_LIGHT_BOUNCE_SHADOW_STRENGTH
 #pragma parameter HSM_HEIGHTMAP_SHADOWS_EMPTY_LINE			            " " 0 0 0.001 0.001
 #pragma parameter HSM_HEIGHTMAP_SHADOWS_TITLE			                "[ HEIGHT MAP SHADOWS ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_HEIGHT_SHADOW_DEBUG                                                   "          Shadow Debug - NONE | SHADOW | HEIGHT | NORMALS"  1 0 3 1
-float HSM_HEIGHT_SHADOW_DEBUG = global.HSM_HEIGHT_SHADOW_DEBUG;
+#pragma parameter HSM_HSHADOW_DEBUG                                                   "          Shadow Debug - NONE | SHADOW | HEIGHT | NORMALS"  0 0 3 1
+float HSM_HSHADOW_DEBUG = global.HSM_HSHADOW_DEBUG;
 
-#pragma parameter HSM_HEIGHT_SHADOW_DEBUG_BLEND                                             "          Shadow Debug Blend"  100 0 100 1
-float HSM_HEIGHT_SHADOW_DEBUG_BLEND = global.HSM_HEIGHT_SHADOW_DEBUG_BLEND / 100.0;
-
-
-#pragma parameter HSM_HEIGHT_SHADOW_LIGHT_POS_X                                             "          Light Pos X"  75 0 300 1
-float HSM_HEIGHT_SHADOW_LIGHT_POS_X = global.HSM_HEIGHT_SHADOW_LIGHT_POS_X / 100.0;
-
-#pragma parameter HSM_HEIGHT_SHADOW_LIGHT_POS_Y                                             "          Light Pos Y"  25 0 300 1
-float HSM_HEIGHT_SHADOW_LIGHT_POS_Y = global.HSM_HEIGHT_SHADOW_LIGHT_POS_Y / 100.0;
-
-#pragma parameter HSM_HEIGHT_SHADOW_LIGHT_POS_Z                                             "          Light Pos Z (Depth)"  100 0 300 1
-float HSM_HEIGHT_SHADOW_LIGHT_POS_Z = global.HSM_HEIGHT_SHADOW_LIGHT_POS_Z / 100.0;
-
-#pragma parameter HSM_HEIGHT_SHADOW_SAMPLES                                                 "          Shadow Samples"  100 5 600 1
-float HSM_HEIGHT_SHADOW_SAMPLES = global.HSM_HEIGHT_SHADOW_SAMPLES;
-
-#pragma parameter HSM_HEIGHT_SHADOW_SAMPLE_RANDOM_HEIGHT_OFFSET                             "          Shadow Sample Random Height Offset"  100 0 600 20
-float HSM_HEIGHT_SHADOW_SAMPLE_RANDOM_HEIGHT_OFFSET = global.HSM_HEIGHT_SHADOW_SAMPLE_RANDOM_HEIGHT_OFFSET / 100;
-
-#pragma parameter HSM_HEIGHT_SHADOW_FALLOFF                                                 "          Shadow Falloff"  150 5 500 5
-float HSM_HEIGHT_SHADOW_FALLOFF = global.HSM_HEIGHT_SHADOW_FALLOFF / 100.0;
-
-#pragma parameter HSM_HEIGHT_SHADOW_SPREAD_NOISE                                            "          Shadow Spread Noise"  50 0 500 5
-float HSM_HEIGHT_SHADOW_SPREAD_NOISE = global.HSM_HEIGHT_SHADOW_SPREAD_NOISE / 100.0;
-
-#pragma parameter HSM_HEIGHT_SHADOW_SOLID_VS_FALLOFF_BLEND                                  "          Shadow Solid vs Falloff Ratio"  100 0 100 2
-float HSM_HEIGHT_SHADOW_SOLID_VS_FALLOFF_BLEND = global.HSM_HEIGHT_SHADOW_SOLID_VS_FALLOFF_BLEND / 100.0;
+#pragma parameter HSM_HSHADOW_DEBUG_BLEND                                             "          Shadow Debug Blend"  100 0 100 1
+float HSM_HSHADOW_DEBUG_BLEND = global.HSM_HSHADOW_DEBUG_BLEND / 100.0;
 
 
-#pragma parameter HSM_HEIGHT_SHADOW_BG_CONTRAST_CENTER                                      "          BG Height Contrast Center"  0 0 100 1
-float HSM_HEIGHT_SHADOW_BG_CONTRAST_CENTER = global.HSM_HEIGHT_SHADOW_BG_CONTRAST_CENTER / 100.0;
+#pragma parameter HSM_HSHADOW_LIGHT_POS_X                                             "          Light Pos X"  35 -500 500 1
+float HSM_HSHADOW_LIGHT_POS_X = global.HSM_HSHADOW_LIGHT_POS_X / 100.0;
 
-#pragma parameter HSM_HEIGHT_SHADOW_BG_CONTRAST                                             "          BG Height Contrast (Depth Details Multiplier)"  100 0 300 1
-float HSM_HEIGHT_SHADOW_BG_CONTRAST = global.HSM_HEIGHT_SHADOW_BG_CONTRAST / 100.0;
+#pragma parameter HSM_HSHADOW_LIGHT_POS_Y                                             "          Light Pos Y"  30 -500 500 1
+float HSM_HSHADOW_LIGHT_POS_Y = global.HSM_HSHADOW_LIGHT_POS_Y / 100.0 * -1.0;
 
-#pragma parameter HSM_HEIGHT_SHADOW_BG_OFFSET_Z                                             "          BG Height Offset Z (Depth)"  0 -100 300 1
-float HSM_HEIGHT_SHADOW_BG_OFFSET_Z = global.HSM_HEIGHT_SHADOW_BG_OFFSET_Z / 100.0;
+#pragma parameter HSM_HSHADOW_LIGHT_POS_Z                                             "          Light Pos Z (Depth)"  300 -500 1000 1
+float HSM_HSHADOW_LIGHT_POS_Z = global.HSM_HSHADOW_LIGHT_POS_Z / 100.0;
+
+#pragma parameter HSM_HSHADOW_DIRECTIONAL                                             "          Light Directional Amount"  100 0 100 0.5
+float HSM_HSHADOW_DIRECTIONAL = global.HSM_HSHADOW_DIRECTIONAL / 100.0;
+
+#pragma parameter HSM_HSHADOW_SAMPLES                                                 "          Samples"  50 5 600 1 // at 140 artifacts seem to disappear 
+float HSM_HSHADOW_SAMPLES = global.HSM_HSHADOW_SAMPLES;
+
+#pragma parameter HSM_HSHADOW_BIAS                                                      "          Sample Bias"  1 0 1000 1
+float HSM_HSHADOW_BIAS = global.HSM_HSHADOW_BIAS / 1000;
+
+#pragma parameter HSM_HSHADOW_NOISE                                                     "          Noise Amount"  50 0 600 5
+float HSM_HSHADOW_NOISE = global.HSM_HSHADOW_NOISE / 100;
+
+#pragma parameter HSM_HSHADOW_NOISE_FALLOFF_START                                       "          Noise Height Falloff Start"  50 0 600 5
+float HSM_HSHADOW_NOISE_FALLOFF_START = global.HSM_HSHADOW_NOISE_FALLOFF_START / 100;
+
+#pragma parameter HSM_HSHADOW_NOISE_FALLOFF_END                                         "          Noise Height Falloff End"  100 0 600 5
+float HSM_HSHADOW_NOISE_FALLOFF_END = global.HSM_HSHADOW_NOISE_FALLOFF_END / 100;
+
+#pragma parameter HSM_HSHADOW_DIST_UMBRA                                                "          Umbra Distance (Solid Shadow)"  0 0 3000 5
+float HSM_HSHADOW_DIST_UMBRA = global.HSM_HSHADOW_DIST_UMBRA / 1000.0;
+
+#pragma parameter HSM_HSHADOW_DIST_PENUMBRA                                             "          Penumbra Distance (Where Faded Shadow is Gone)"  100 0 1000 5
+float HSM_HSHADOW_DIST_PENUMBRA = max(global.HSM_HSHADOW_DIST_PENUMBRA / 100.0, HSM_HSHADOW_DIST_UMBRA);
 
 
-#pragma parameter HSM_HEIGHT_SHADOW_DEVICE_CONTRAST_CENTER                                  "          Device Height Contrast Center"  100 0 100 1
-float HSM_HEIGHT_SHADOW_DEVICE_CONTRAST_CENTER = global.HSM_HEIGHT_SHADOW_DEVICE_CONTRAST_CENTER / 100.0;
 
-#pragma parameter HSM_HEIGHT_SHADOW_DEVICE_CONTRAST                                         "          Device Height Contrast (Depth Details Multiplier)"  100 0 300 1
-float HSM_HEIGHT_SHADOW_DEVICE_CONTRAST = global.HSM_HEIGHT_SHADOW_DEVICE_CONTRAST / 100.0;
+// #pragma parameter HSM_HSHADOW_FALLOFF_EDGE_CLAMP                                      "          Shadow Falloff Edge Clamp"  50 0 100 5
+// float HSM_HSHADOW_FALLOFF_EDGE_CLAMP = global.HSM_HSHADOW_FALLOFF_EDGE_CLAMP / 100.0;
+float HSM_HSHADOW_FALLOFF_EDGE_CLAMP = 0;
 
-#pragma parameter HSM_HEIGHT_SHADOW_DEVICE_OFFSET_Z                                         "          Device Height Offset Z"  0 -100 300 1
-float HSM_HEIGHT_SHADOW_DEVICE_OFFSET_Z = global.HSM_HEIGHT_SHADOW_DEVICE_OFFSET_Z / 100.0;
+// #pragma parameter HSM_HSHADOW_SPREAD_NOISE                                            "          Shadow Spread Noise"  50 0 500 5
+// float HSM_HSHADOW_SPREAD_NOISE = global.HSM_HSHADOW_SPREAD_NOISE / 100.0;
+float HSM_HSHADOW_SPREAD_NOISE = 0;
+
+// #pragma parameter HSM_HSHADOW_SOLID_VS_FALLOFF                                          "          Shadow Solid vs Falloff Mix"  100 0 100 5
+// float HSM_HSHADOW_SOLID_VS_FALLOFF = global.HSM_HSHADOW_SOLID_VS_FALLOFF / 100.0;
+float HSM_HSHADOW_SOLID_VS_FALLOFF = 1.0;
+
+#pragma parameter HSM_HSHADOW_GAMMA                                                     "          Shadow Gamma"  100 1 1000 1
+float HSM_HSHADOW_GAMMA = global.HSM_HSHADOW_GAMMA / 100.0;
+
+#pragma parameter HSM_HSHADOW_BG_CONTRAST_CENTER                                      "          BG Height Contrast Center"  0 0 100 1
+float HSM_HSHADOW_BG_CONTRAST_CENTER = global.HSM_HSHADOW_BG_CONTRAST_CENTER / 100.0;
+
+#pragma parameter HSM_HSHADOW_BG_CONTRAST                                             "          BG Height Contrast (Depth Details Multiplier)"  100 0 300 1
+float HSM_HSHADOW_BG_CONTRAST = global.HSM_HSHADOW_BG_CONTRAST / 100.0;
+
+#pragma parameter HSM_HSHADOW_BG_OFFSET_Z                                             "          BG Height Offset Z (Depth)"  0 -100 300 1
+float HSM_HSHADOW_BG_OFFSET_Z = global.HSM_HSHADOW_BG_OFFSET_Z / 100.0;
+
+
+#pragma parameter HSM_HSHADOW_DEVICE_CONTRAST_CENTER                                  "          Device Height Contrast Center"  100 0 100 1
+float HSM_HSHADOW_DEVICE_CONTRAST_CENTER = global.HSM_HSHADOW_DEVICE_CONTRAST_CENTER / 100.0;
+
+#pragma parameter HSM_HSHADOW_DEVICE_CONTRAST                                         "          Device Height Contrast (Depth Details Multiplier)"  100 0 300 1
+float HSM_HSHADOW_DEVICE_CONTRAST = global.HSM_HSHADOW_DEVICE_CONTRAST / 100.0;
+
+#pragma parameter HSM_HSHADOW_DEVICE_OFFSET_Z                                         "          Device Height Offset Z"  0 -100 300 1
+float HSM_HSHADOW_DEVICE_OFFSET_Z = global.HSM_HSHADOW_DEVICE_OFFSET_Z / 100.0;
 
 
 #pragma parameter HSM_BACKGROUND_LAYER_GROUP_EMPTY_LINE			            " " 0 0 0.001 0.001

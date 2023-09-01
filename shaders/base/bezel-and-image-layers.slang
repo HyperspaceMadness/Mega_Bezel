@@ -306,8 +306,10 @@ void main()
 		if (HSM_DEVICE_OPACITY > 0 && DEVICE_SIZE.y > 16)
 		{
 			device_image = HSM_GetMipmappedTexSample(Device, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS);
+			// Fill Device area with white
 			static_shadow_multiply = clamp(static_shadow_multiply + device_image.a, 0, 1);
-			static_shadow_multiply *= HSM_GetMipmappedTexSample(DeviceShadow, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS).r;
+
+			static_shadow_multiply *= mix(1.0, HSM_GetMipmappedTexSample(DeviceShadow, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS).r, device_image.a);
 			// Premultiply Alpha
 			device_image = HSM_GetPreMultipliedColorLinear(device_image, HSM_DEVICE_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
 
