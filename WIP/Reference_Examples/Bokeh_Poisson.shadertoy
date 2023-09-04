@@ -1,0 +1,55 @@
+// Bokehs and Chromatic Aberration 
+// https://www.shadertoy.com/view/Ds2XRR by Poisson
+
+
+// bokeh blur function
+// b is the blur value
+vec4 bokeh(sampler2D sam, vec2 p, float b) {    
+    vec4 col = vec4(0);
+    const int N = 7; // quality
+    
+    for (int i=-N; i<=N; i++)
+    for (int j=-N; j<=N; j++) {
+        vec2 off = vec2(i,j) / float(N); // offset
+
+        if (dot(off, off)<1.) { // inside disk
+            // blurred image
+            col += texture(iChannel0, p + b*off*vec2(9./16.,1));
+        }
+    }
+    return col/col.a;
+}
+
+// more realistic color range
+vec3 ACES(vec3 x) {
+    float a = 2.51;
+    float b =  .03;
+    float c = 2.43;
+    float d =  .59;
+    float e =  .14;
+    return (x*(a*x+b))/(x*(c*x+d)+e);
+}
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    // normalized pixel coordinates
+    vec2 p = fragCoord/iResolution.xy;
+    
+    vec2 off = (p-.5)*.01; // CA offset
+    
+    // blur value
+    float b = (1.-iMouse.x/iResolution.x)*.05*abs(p.y-iMouse.y/iResolution.y);
+    
+    vec3 col = vec3(bokeh(iChannel0, p+off, b).r,
+                    bokeh(iChannel0, p, b).g,
+                    bokeh(iChannel0, p-off, b).b);
+    
+    col = pow(col,vec3(.4545)); // gamma correction
+    col = ACES(col);
+                
+    // vignette
+    col *= .5+.5*clamp(pow(100. *p.x*p.y*(1.-p.x)*(1.-p.y),.1), 0., 1.);
+                
+    // output
+    fragColor = vec4(col,1.0);
+}

@@ -1,0 +1,153 @@
+// Correct Sphere Soft shadow 
+// https://www.shadertoy.com/view/ddKGD1 by Poisson
+
+#define AA 4 // antialiasing
+
+// ray sphere intersection function
+// thanks to iq: https://iquilezles.org/articles/intersectors/
+float sphIntersect(vec3 ro, vec3 rd, vec4 sph) {
+    vec3 oc = ro - sph.xyz;
+    float b = dot(oc, rd);
+    float c = dot(oc, oc) - sph.w*sph.w;
+    float h = b*b - c;
+    
+    if (h<0.) return -1.;
+    h = sqrt(h);
+    return -b - h;
+}
+
+// sphere soft shadow function
+// k is the softness of the shadow
+float sphSoftShadow(vec3 ro, vec3 rd, vec4 sph, float k) {
+    vec3 oc = ro - sph.xyz;
+    float b = dot(oc, rd);
+    float c = dot(oc, oc) - sph.w*sph.w;
+    float h = b*b - c;
+    
+    #if 1
+    // correct soft shadow, penumbra inside
+    
+    // distance
+    // float d = length(cross(oc, rd)) - sph.w;
+    float d = sqrt(max(0.,sph.w*sph.w-h)) - sph.w;
+    float t = -b - sqrt(max(h,0.)); // intersection distance
+            
+    float res = b>0. ? 1. : .5+.5*clamp(k*d/t, -1., 1.);
+    
+    #elif 0
+    // cheap approximation, penumbra inside
+    
+    float res = b>0. ? 1. : .5+.5*clamp(k*h/b, -1., 1.);
+    
+    #elif 0
+    // old way, penumbra outside
+    
+    // distance
+    // float d = length(cross(oc, rd)) - sph.w;
+    float d = sqrt(max(0.,sph.w*sph.w-h)) - sph.w;
+    float t = -b - sqrt(max(h,0.)); // intersection distance
+    
+    float res = b>0. ? 1. : clamp(k*d/t, 0., 1.);
+    
+    #endif
+    return res*res*(3.-2.*res); // S curve
+}
+
+// sphere occlusion
+// thanks to iq: https://www.shadertoy.com/view/4d2XWV
+float sphOcclusion(vec3 p, vec3 n, vec4 sph) {
+    vec3 r = sph.xyz - p;
+    float l = length(r);
+    return dot(n,r) * sph.w*sph.w/(l*l*l);
+}
+
+// sphere
+const vec4 sph = vec4(0,0,0,.5);
+
+// rendering
+vec3 render(vec3 ro, vec3 rd) {
+    vec3 col = vec3(0); // background
+        
+    float t = 1e10; // final distance
+    vec3 n; // normal
+    float occ = 1.; // occlusion
+    
+    // sphere
+    float t1 = sphIntersect(ro, rd, sph);
+    if (t1>0.) {
+        t = t1;
+        vec3 p = ro + rd*t;
+        n = (p - sph.xyz) / sph.w;
+        occ = .5+.5*n.y; // plane occlusion
+    }
+    
+    // plane
+    float t2 = (-.5-ro.y) / rd.y;
+    if (t2>0. && t2<t) {
+        t = t2;
+        vec3 p = ro + rd*t;
+        n = vec3(0,1,0);
+        occ = 1.-sphOcclusion(p, n, sph); // sphere occlusion
+    }
+    
+    if (t<1e10) { // we hit the surface
+        vec3 p = ro + rd*t; // hit point
+        
+        const vec3 lig = vec3(.57735); // light direction
+        float dif = clamp(dot( n, lig), 0., 1.); // diffuse light
+        float bac = clamp(dot(-n, lig), 0., 1.); // bac light
+        float bou = .5-.5*n.y; // bounce light
+        
+        float k = .5+12.*(.5+.5*sin(2.*iTime)); // shadow softness
+        float sha = sphSoftShadow(p, lig, sph, k); // shadow
+        
+        col = vec3(0);
+        col += vec3(1,.8,.6) * dif*sha; // direct light
+        col += .25*vec3(1,.8,.6) * occ*(.5+bac)*bou; // indirect light
+        col += .2*vec3(.3,.6,1) * occ; // sky light
+        
+        col = mix(col, vec3(0), 1.-exp(-t*t*.02)); // fog
+    }
+    
+    return 1.5*col/(1.+col); // tonemapping
+}
+
+// camera function
+mat3 setCamera(vec3 ro, vec3 ta) {
+    vec3 w = normalize(ta - ro);
+    vec3 u = normalize(cross(w, vec3(0,1,0)));
+    vec3 v = cross(u, w);
+    return mat3(u, v, w);
+}
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    // pixel coordinates centered at the origin
+    vec2 m = (iMouse.xy - .5*iResolution.xy) / iResolution.y;
+    
+    float an = .2*iTime + m.x*3.141592; // camera xz rotation
+    vec3 ro = vec3(2.5*sin(an),1,2.5*cos(an)); // ray origin
+    vec3 ta = vec3(0); // target
+    mat3 ca = setCamera(ro, ta); // camera matrix
+    
+    vec3 tot = vec3(0); // accumulated color
+    for (int m=0; m<AA; m++)
+    for (int n=0; n<AA; n++) {
+        vec2 off = vec2(m,n) / float(AA) - .5; // AA offset
+        // pixel coordinates centered at the origin
+        vec2 p = (fragCoord+off - .5*iResolution.xy) / iResolution.y;
+
+        vec3 rd = ca * normalize(vec3(p,1.5)); // ray direction
+        vec3 col = render(ro, rd); // render
+
+        col = pow(col, vec3(.4545)); // gamma correction
+        tot += col;
+    }
+    tot /= float(AA*AA);
+
+    // vignette
+    vec2 q = fragCoord/iResolution.xy;
+    tot *= .5+.5*pow(16. * q.x*q.y*(1.-q.x)*(1.-q.y), .1);
+
+    fragColor = vec4(tot,1.0);
+}

@@ -70,102 +70,121 @@ float HSM_TOP_LAYER_ORDER = global.HSM_TOP_LAYER_ORDER;
 //---------------------------------------------------------------------------------------------------
 //    COMPOSITING LAYER GROUPS
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_LAYER_GROUP_EMPTY_LINE			                    " " 0 0 0.001 0.001
-#pragma parameter HSM_LAYER_GROUP_TITLE			                            "[ COMPOSITE BASE COLOR ]:" 0 0 0.01 0.01
+#pragma parameter HSM_LAYER_GROUP_EMPTY_LINE			                                " " 0 0 0.001 0.001
+#pragma parameter HSM_LAYER_GROUP_TITLE			                                        "[ COMPOSITE BASE COLOR ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_COMPOSITE_SHOW_ALPHA                                  "          Output Color - RGB | ALPHA"  0 0 1 1
+#pragma parameter HSM_COMPOSITE_SHOW_ALPHA                                              "          Output Color - RGB | ALPHA"  0 0 1 1
 float HSM_COMPOSITE_SHOW_ALPHA = global.HSM_COMPOSITE_SHOW_ALPHA;
 
-#pragma parameter HSM_COMPOSITE_BASE_COLOR                                  "          Base Color - BLACK | RED | PINK | YELLOW | AQUA"  0 0 4 1
+#pragma parameter HSM_COMPOSITE_BASE_COLOR                                              "          Base Color - BLACK | RED | PINK | YELLOW | AQUA"  0 0 4 1
 float HSM_COMPOSITE_BASE_COLOR = global.HSM_COMPOSITE_BASE_COLOR;
 
-#pragma parameter HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS                       "          Base Color Brightness"  10 0 100 1
+#pragma parameter HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS                                   "          Base Color Brightness"  10 0 100 1
 float HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS = global.HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS / 100.0;
 
 
 
-#pragma parameter HSM_BOUNCELIGHT_LAYER_GROUP_EMPTY_LINE			        " " 0 0 0.001 0.001
-#pragma parameter HSM_BOUNCELIGHT_LAYER_GROUP_TITLE			                "[ GLOBAL ROOM BOUNCE LIGHT ]:" 0 0 0.01 0.01
+#pragma parameter HSM_BOUNCELIGHT_LAYER_GROUP_EMPTY_LINE			                    " " 0 0 0.001 0.001
+#pragma parameter HSM_BOUNCELIGHT_LAYER_GROUP_TITLE			                            "[ GLOBAL ROOM BOUNCE LIGHT ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_LIGHT_BOUNCE_DISPLAY_MODE                             "          Bouncelight Debug - NORMAL | GRAY MATERIAL"  0 0 1 1
+#pragma parameter HSM_LIGHT_BOUNCE_DISPLAY_MODE                                         "          Bouncelight Debug - NORMAL | GRAY MATERIAL"  0 0 1 1
 float HSM_LIGHT_BOUNCE_DISPLAY_MODE = global.HSM_LIGHT_BOUNCE_DISPLAY_MODE;
 
-// #pragma parameter HSM_LIGHT_BOUNCE_ALBEDO_BRIGHTNESS                        "         Texture Brightness (When Fully Lit by Bounce 'Albedo')"  100 0 1000 0.5
+// #pragma parameter HSM_LIGHT_BOUNCE_ALBEDO_BRIGHTNESS                                 "         Texture Brightness (When Fully Lit by Bounce 'Albedo')"  100 0 1000 0.5
 // float HSM_LIGHT_BOUNCE_ALBEDO_BRIGHTNESS = global.HSM_LIGHT_BOUNCE_ALBEDO_BRIGHTNESS / 100;
 float HSM_LIGHT_BOUNCE_ALBEDO_BRIGHTNESS = 1;
 
-#pragma parameter HSM_LIGHT_BOUNCE_STATIC_AMBIENT_BRIGHTNESS                "          Static Ambient Brightness (When Unlit)"  50 0 100 0.5
+#pragma parameter HSM_LIGHT_BOUNCE_STATIC_AMBIENT_BRIGHTNESS                            "          Static Ambient Brightness (When Unlit)"  50 0 100 0.5
 float HSM_LIGHT_BOUNCE_STATIC_AMBIENT_BRIGHTNESS = global.HSM_LIGHT_BOUNCE_STATIC_AMBIENT_BRIGHTNESS / 100;
 
-#pragma parameter HSM_LIGHT_BOUNCE_BRIGHTNESS                               "          Bouncelight Brightness"  15 0 500 1
+#pragma parameter HSM_LIGHT_BOUNCE_BRIGHTNESS                                           "          Bouncelight Brightness"  15 0 500 1
 float HSM_LIGHT_BOUNCE_BRIGHTNESS = 10 * global.HSM_LIGHT_BOUNCE_BRIGHTNESS / 100;
 
-#pragma parameter HSM_LIGHT_BOUNCE_SCALE                                    "          Bouncelight Scale"  100 0 500 5
+#pragma parameter HSM_LIGHT_BOUNCE_SCALE                                                "          Bouncelight Scale"  100 0 500 5
 float HSM_LIGHT_BOUNCE_SCALE = global.HSM_LIGHT_BOUNCE_SCALE / 100;
 
-// #pragma parameter HSM_LIGHT_BOUNCE_ANAMORPH                                 "        Anamorph - NEGATIVE: KEEP SIDES | POSITIVE: KEEP CENTER" 0.0 -500.0 500.0 20
+// #pragma parameter HSM_LIGHT_BOUNCE_ANAMORPH                                          "        Anamorph - NEGATIVE: KEEP SIDES | POSITIVE: KEEP CENTER" 0.0 -500.0 500.0 20
 // float HSM_LIGHT_BOUNCE_ANAMORPH = global.HSM_LIGHT_BOUNCE_ANAMORPH / 10.0;
 float HSM_LIGHT_BOUNCE_ANAMORPH = 0;
 
-#pragma parameter HSM_LIGHT_BOUNCE_MIX_HORZ                                 "          Bouncelight Mix Horizontal"  20 0 100 1
+#pragma parameter HSM_LIGHT_BOUNCE_MIX_HORZ                                             "          Bouncelight Mix Horizontal"  20 0 100 1
 float HSM_LIGHT_BOUNCE_MIX_HORZ = global.HSM_LIGHT_BOUNCE_MIX_HORZ / 100;
 
-#pragma parameter HSM_LIGHT_BOUNCE_MIX_VERT                                 "          Bouncelight Mix Vertical"  0 0 100 1
+#pragma parameter HSM_LIGHT_BOUNCE_MIX_VERT                                             "          Bouncelight Mix Vertical"  0 0 100 1
 float HSM_LIGHT_BOUNCE_MIX_VERT = global.HSM_LIGHT_BOUNCE_MIX_VERT / 100;
 
-#pragma parameter HSM_LIGHT_BOUNCE_MIX_FULLSCREEN_GLOW                      "          Bouncelight Mix Fullscreen Glow"  50 0 100 1
+#pragma parameter HSM_LIGHT_BOUNCE_MIX_FULLSCREEN_GLOW                                  "          Bouncelight Mix Fullscreen Glow"  50 0 100 1
 float HSM_LIGHT_BOUNCE_MIX_FULLSCREEN_GLOW = global.HSM_LIGHT_BOUNCE_MIX_FULLSCREEN_GLOW / 100;
 
-#pragma parameter HSM_LIGHT_BOUNCE_SATURATION                               "          Bouncelight Saturation"  100 0 1000 1
+#pragma parameter HSM_LIGHT_BOUNCE_SATURATION                                           "          Bouncelight Saturation"  100 0 1000 1
 float HSM_LIGHT_BOUNCE_SATURATION = global.HSM_LIGHT_BOUNCE_SATURATION / 100;
 
-#pragma parameter HSM_LIGHT_BOUNCE_SHADOW_STRENGTH                          "          Bouncelight Shadow Strength"  70 0 100 1
+#pragma parameter HSM_LIGHT_BOUNCE_SHADOW_STRENGTH                                      "          Bouncelight Shadow Strength"  70 0 100 1
 float HSM_LIGHT_BOUNCE_SHADOW_STRENGTH = global.HSM_LIGHT_BOUNCE_SHADOW_STRENGTH / 100;
 
 
-#pragma parameter HSM_HEIGHTMAP_SHADOWS_EMPTY_LINE			            " " 0 0 0.001 0.001
-#pragma parameter HSM_HEIGHTMAP_SHADOWS_TITLE			                "[ HEIGHT MAP SHADOWS ]:" 0 0 0.01 0.01
+#pragma parameter HSM_LIGHTING_EMPTY_LINE			                                    " " 0 0 0.001 0.001
+#pragma parameter HSM_LIGHTING_TITLE			                                        "[ GENERATED LIGHTING & SHADING]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_HSHADOW_DEBUG                                                   "          Shadow Debug - NONE | SHADOW | HEIGHT | NORMALS"  0 0 3 1
-float HSM_HSHADOW_DEBUG = global.HSM_HSHADOW_DEBUG;
+#pragma parameter HSM_LIGHTING_DEBUG                                                     "          Debug - NONE | SHADOW | HEIGHT | NORMALS"  0 0 3 1
+float HSM_LIGHTING_DEBUG = global.HSM_LIGHTING_DEBUG;
 
-#pragma parameter HSM_HSHADOW_DEBUG_BLEND                                             "          Shadow Debug Blend"  100 0 100 1
-float HSM_HSHADOW_DEBUG_BLEND = global.HSM_HSHADOW_DEBUG_BLEND / 100.0;
+#pragma parameter HSM_LIGHTING_DEBUG_BLEND                                               "          Shadow Debug Blend"  100 0 100 1
+float HSM_LIGHTING_DEBUG_BLEND = global.HSM_LIGHTING_DEBUG_BLEND / 100.0;
 
+#pragma parameter HSM_LIGHTING_LIGHT_POS_X                                               "          Light Pos X"  100 -500 500 0.5
+float HSM_LIGHTING_LIGHT_POS_X = global.HSM_LIGHTING_LIGHT_POS_X / 100.0;
 
-#pragma parameter HSM_HSHADOW_LIGHT_POS_X                                             "          Light Pos X"  35 -500 500 1
-float HSM_HSHADOW_LIGHT_POS_X = global.HSM_HSHADOW_LIGHT_POS_X / 100.0;
+#pragma parameter HSM_LIGHTING_LIGHT_POS_Y                                               "          Light Pos Y"  100 -500 500 0.5
+float HSM_LIGHTING_LIGHT_POS_Y = global.HSM_LIGHTING_LIGHT_POS_Y / 100.0 * -1.0;
 
-#pragma parameter HSM_HSHADOW_LIGHT_POS_Y                                             "          Light Pos Y"  30 -500 500 1
-float HSM_HSHADOW_LIGHT_POS_Y = global.HSM_HSHADOW_LIGHT_POS_Y / 100.0 * -1.0;
+#pragma parameter HSM_LIGHTING_LIGHT_POS_Z                                               "          Light Pos Z (Depth)"  300 -500 1000 0.5
+float HSM_LIGHTING_LIGHT_POS_Z = global.HSM_LIGHTING_LIGHT_POS_Z / 100.0;
 
-#pragma parameter HSM_HSHADOW_LIGHT_POS_Z                                             "          Light Pos Z (Depth)"  300 -500 1000 1
-float HSM_HSHADOW_LIGHT_POS_Z = global.HSM_HSHADOW_LIGHT_POS_Z / 100.0;
+#pragma parameter HSM_LIGHTING_DIRECTIONAL                                               "          Light Directional Amount"  100 0 100 0.5
+float HSM_LIGHTING_DIRECTIONAL = global.HSM_LIGHTING_DIRECTIONAL / 100.0;
 
-#pragma parameter HSM_HSHADOW_DIRECTIONAL                                             "          Light Directional Amount"  100 0 100 0.5
-float HSM_HSHADOW_DIRECTIONAL = global.HSM_HSHADOW_DIRECTIONAL / 100.0;
+#pragma parameter HSM_LIGHTING_AMBIENT_AMOUNT                                            "          Ambient Brightness"  18 0 200 1
+float HSM_LIGHTING_AMBIENT_AMOUNT = global.HSM_LIGHTING_AMBIENT_AMOUNT / 100.0;
 
-#pragma parameter HSM_HSHADOW_SAMPLES                                                 "          Samples"  50 5 600 1 // at 140 artifacts seem to disappear 
+#pragma parameter HSM_LIGHTING_SPECULAR_AMOUNT                                          "          Specular Amount"  20 0 100 1
+float HSM_LIGHTING_SPECULAR_AMOUNT = global.HSM_LIGHTING_SPECULAR_AMOUNT / 100.0;
+
+#pragma parameter HSM_LIGHTING_ROUGHNESS                                                "          Roughness"  50 0 100 1
+float HSM_LIGHTING_ROUGHNESS = global.HSM_LIGHTING_ROUGHNESS / 100.0;
+
+#pragma parameter HSM_LIGHTING_AO                                                       "          AO"  100 0 100 1
+float HSM_LIGHTING_AO = global.HSM_LIGHTING_AO / 100.0;
+
+// TODO need to add Shadow Strength?
+
+#pragma parameter HSM_HEIGHTMAP_SHADOWS_EMPTY_LINE			                            " " 0 0 0.001 0.001
+#pragma parameter HSM_HEIGHTMAP_SHADOWS_TITLE			                                "[ HEIGHT MAP SHADOWS ]:" 0 0 0.01 0.01
+
+#pragma parameter HSM_HSHADOW_SAMPLES                                                   "          Samples"  50 5 600 1 // at 140 artifacts seem to disappear 
 float HSM_HSHADOW_SAMPLES = global.HSM_HSHADOW_SAMPLES;
 
-#pragma parameter HSM_HSHADOW_BIAS                                                      "          Sample Bias"  1 0 1000 1
-float HSM_HSHADOW_BIAS = global.HSM_HSHADOW_BIAS / 1000;
+// #pragma parameter HSM_HSHADOW_BIAS                                                      "          Sample Bias"  1 0 1000 1
+// float HSM_HSHADOW_BIAS = global.HSM_HSHADOW_BIAS / 1000;
+float HSM_HSHADOW_BIAS = 1.0 / 1000;
 
-#pragma parameter HSM_HSHADOW_NOISE                                                     "          Noise Amount"  50 0 600 5
-float HSM_HSHADOW_NOISE = global.HSM_HSHADOW_NOISE / 100;
+// #pragma parameter HSM_HSHADOW_NOISE                                                     "          Noise Amount"  100 0 600 5
+// float HSM_HSHADOW_NOISE = global.HSM_HSHADOW_NOISE / 100;
+float HSM_HSHADOW_NOISE = 100 / 100;
 
-#pragma parameter HSM_HSHADOW_NOISE_FALLOFF_START                                       "          Noise Height Falloff Start"  50 0 600 5
-float HSM_HSHADOW_NOISE_FALLOFF_START = global.HSM_HSHADOW_NOISE_FALLOFF_START / 100;
+// #pragma parameter HSM_HSHADOW_NOISE_FALLOFF_START                                       "          Noise Height Falloff Start"  50 0 600 5
+// float HSM_HSHADOW_NOISE_FALLOFF_START = global.HSM_HSHADOW_NOISE_FALLOFF_START / 100;
+float HSM_HSHADOW_NOISE_FALLOFF_START = 50 / 100;
 
-#pragma parameter HSM_HSHADOW_NOISE_FALLOFF_END                                         "          Noise Height Falloff End"  100 0 600 5
-float HSM_HSHADOW_NOISE_FALLOFF_END = global.HSM_HSHADOW_NOISE_FALLOFF_END / 100;
+// #pragma parameter HSM_HSHADOW_NOISE_FALLOFF_END                                         "          Noise Height Falloff End"  100 0 600 5
+// float HSM_HSHADOW_NOISE_FALLOFF_END = global.HSM_HSHADOW_NOISE_FALLOFF_END / 100;
+float HSM_HSHADOW_NOISE_FALLOFF_END = 100 / 100;
 
-#pragma parameter HSM_HSHADOW_DIST_UMBRA                                                "          Umbra Distance (Solid Shadow)"  0 0 3000 5
+#pragma parameter HSM_HSHADOW_DIST_UMBRA                                                "          Umbra Distance (Solid Shadow)"  45 0 3000 5
 float HSM_HSHADOW_DIST_UMBRA = global.HSM_HSHADOW_DIST_UMBRA / 1000.0;
 
-#pragma parameter HSM_HSHADOW_DIST_PENUMBRA                                             "          Penumbra Distance (Where Faded Shadow is Gone)"  100 0 1000 5
+#pragma parameter HSM_HSHADOW_DIST_PENUMBRA                                             "          Penumbra Distance (Where Faded Shadow is Gone)"  45 0 1000 5
 float HSM_HSHADOW_DIST_PENUMBRA = max(global.HSM_HSHADOW_DIST_PENUMBRA / 100.0, HSM_HSHADOW_DIST_UMBRA);
-
 
 
 // #pragma parameter HSM_HSHADOW_FALLOFF_EDGE_CLAMP                                      "          Shadow Falloff Edge Clamp"  50 0 100 5
@@ -176,30 +195,30 @@ float HSM_HSHADOW_FALLOFF_EDGE_CLAMP = 0;
 // float HSM_HSHADOW_SPREAD_NOISE = global.HSM_HSHADOW_SPREAD_NOISE / 100.0;
 float HSM_HSHADOW_SPREAD_NOISE = 0;
 
-// #pragma parameter HSM_HSHADOW_SOLID_VS_FALLOFF                                          "          Shadow Solid vs Falloff Mix"  100 0 100 5
+// #pragma parameter HSM_HSHADOW_SOLID_VS_FALLOFF                                        "          Shadow Solid vs Falloff Mix"  100 0 100 5
 // float HSM_HSHADOW_SOLID_VS_FALLOFF = global.HSM_HSHADOW_SOLID_VS_FALLOFF / 100.0;
 float HSM_HSHADOW_SOLID_VS_FALLOFF = 1.0;
 
 #pragma parameter HSM_HSHADOW_GAMMA                                                     "          Shadow Gamma"  100 1 1000 1
 float HSM_HSHADOW_GAMMA = global.HSM_HSHADOW_GAMMA / 100.0;
 
-#pragma parameter HSM_HSHADOW_BG_CONTRAST_CENTER                                      "          BG Height Contrast Center"  0 0 100 1
+#pragma parameter HSM_HSHADOW_BG_CONTRAST_CENTER                                        "          BG Height Contrast Center"  0 0 100 1
 float HSM_HSHADOW_BG_CONTRAST_CENTER = global.HSM_HSHADOW_BG_CONTRAST_CENTER / 100.0;
 
-#pragma parameter HSM_HSHADOW_BG_CONTRAST                                             "          BG Height Contrast (Depth Details Multiplier)"  100 0 300 1
+#pragma parameter HSM_HSHADOW_BG_CONTRAST                                               "          BG Height Contrast (Depth Details Multiplier)"  100 0 300 1
 float HSM_HSHADOW_BG_CONTRAST = global.HSM_HSHADOW_BG_CONTRAST / 100.0;
 
-#pragma parameter HSM_HSHADOW_BG_OFFSET_Z                                             "          BG Height Offset Z (Depth)"  0 -100 300 1
+#pragma parameter HSM_HSHADOW_BG_OFFSET_Z                                               "          BG Height Offset Z (Depth)"  0 -100 300 1
 float HSM_HSHADOW_BG_OFFSET_Z = global.HSM_HSHADOW_BG_OFFSET_Z / 100.0;
 
 
-#pragma parameter HSM_HSHADOW_DEVICE_CONTRAST_CENTER                                  "          Device Height Contrast Center"  100 0 100 1
+#pragma parameter HSM_HSHADOW_DEVICE_CONTRAST_CENTER                                    "          Device Height Contrast Center"  100 0 100 1
 float HSM_HSHADOW_DEVICE_CONTRAST_CENTER = global.HSM_HSHADOW_DEVICE_CONTRAST_CENTER / 100.0;
 
-#pragma parameter HSM_HSHADOW_DEVICE_CONTRAST                                         "          Device Height Contrast (Depth Details Multiplier)"  100 0 300 1
+#pragma parameter HSM_HSHADOW_DEVICE_CONTRAST                                           "          Device Height Contrast (Depth Details Multiplier)"  100 0 300 1
 float HSM_HSHADOW_DEVICE_CONTRAST = global.HSM_HSHADOW_DEVICE_CONTRAST / 100.0;
 
-#pragma parameter HSM_HSHADOW_DEVICE_OFFSET_Z                                         "          Device Height Offset Z"  0 -100 300 1
+#pragma parameter HSM_HSHADOW_DEVICE_OFFSET_Z                                           "          Device Height Offset Z"  0 -100 300 1
 float HSM_HSHADOW_DEVICE_OFFSET_Z = global.HSM_HSHADOW_DEVICE_OFFSET_Z / 100.0;
 
 

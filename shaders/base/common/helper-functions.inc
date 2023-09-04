@@ -302,6 +302,31 @@ vec4 HHLP_GetBilinearTextureSample(sampler2D in_sampler, vec2 in_coord, vec4 in_
    return result;
 }
 
+vec4 HHLP_GetAveragedTextureSample(sampler2D in_sampler, vec2 in_coord, vec4 in_size)
+{
+   vec2 uv = in_coord * in_size.xy; // Shift by 0.5 since the texel sampling points are in the texel center.
+   vec2 a = fract(uv);
+   vec2 tex = (floor(uv) + 0.5) * in_size.zw; // Build a sampling point which is in the center of the texel.
+
+   // Sample the bilinear footprint.
+   vec4 t0 = texture(in_sampler, vec2(uv.x, uv.y) * in_size.zw);
+   vec4 t1 = texture(in_sampler, vec2(uv.x + 1, uv.y) * in_size.zw);
+   vec4 t2 = texture(in_sampler, vec2(uv.x + 1, uv.y + 1) * in_size.zw);
+   vec4 t3 = texture(in_sampler, vec2(uv.x - 1, uv.y - 1) * in_size.zw);
+   vec4 t4 = texture(in_sampler, vec2(uv.x - 1, uv.y) * in_size.zw);
+//    vec4 t3 = textureLodOffset(in_sampler, tex, 0.0, ivec2(1, 1));
+   vec4 t5 = texture(in_sampler, vec2(uv.x, uv.y + 1) * in_size.zw);
+   vec4 t6 = texture(in_sampler, vec2(uv.x - 1, uv.y + 1) * in_size.zw);
+   vec4 t7 = texture(in_sampler, vec2(uv.x + 1, uv.y - 1) * in_size.zw);
+   vec4 t8 = texture(in_sampler, vec2(uv.x, uv.y - 1) * in_size.zw);
+//    vec4 t6 = textureLodOffset(in_sampler, tex, 0.0, ivec2(-1, -1));
+
+   // Bilinear filter.
+   vec4 result = (t0 + t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8) / 9.0;
+
+   return result;
+}
+
 vec2 HHLP_ConvertCoordInRangeToZeroToOne( vec2 in_coord, vec4 in_range)
 {
 	return (in_coord - in_range.xy) / vec2(in_range.z - in_range.x, in_range.w - in_range.y);
