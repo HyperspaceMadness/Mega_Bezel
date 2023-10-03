@@ -161,30 +161,27 @@ vec3 GetNormalFromHeight(in sampler2D height_map, vec2 coords, float intensity)
 // https://www.shadertoy.com/view/Xlsfzl#
 vec3 GetHeightShadow(in sampler2D in_heightmap, 
 						vec2 uv,
-						vec3 light_position, 
+						vec3 light_point3, 
 						float directional_amount,
 						float in_samples,
 						float in_sample_bias,
 						float in_noise,
 						float in_height_noise_amount,
-						float in_height_noise_falloff_start,
-						float in_height_noise_falloff_end,
 						float shadow_dist_umbra,
 						float shadow_dist_penumbra,
 						float shadow_falloff_spread,
 						float shadow_gamma)
 {
-	vec3 light_vector_directional = normalize(light_position);
-	vec3 light_vector = normalize(vec3(light_position.xy, light_position.z) - vec3(uv * 2.0 - 1.0, getHeightValue(in_heightmap, uv)));
-	light_vector = mix(light_vector, light_vector_directional, directional_amount);
+	light_point3.y *= -1;
+	vec3 light_vector_directional = normalize(light_point3);
+	vec3 light_vector = normalize(vec3(light_point3.xy, light_point3.z) - vec3(uv * 2.0 - 1.0, getHeightValue(in_heightmap, uv)));
+	light_vector = normalize(mix(light_vector, light_vector_directional, directional_amount));
 
 	vec3 light_vector_orig = light_vector;
 	vec3 light_vector_solid_orig = normalize(vec3(light_vector.x, light_vector.y, light_vector.z + 0.05));
 
 	vec2 random_xy = vec2(0); //global.OutputSize.zw * in_noise / 4;
 	vec3 world_pos = vec3(uv + random_xy, getHeightValue(in_heightmap, uv + random_xy));
-
-	vec3 ray_sample_pos_random;
 
 	// float random_sample_offset = (random(world_pos.xy) * in_height_noise_amount) / in_samples;
 
@@ -196,16 +193,16 @@ vec3 GetHeightShadow(in sampler2D in_heightmap,
 
 	float falloff_shadow = 1.0;
 
-	vec3 light_vector_solid = vec3(0);
 	vec3 light_vector_falloff = vec3(0);
 
-	float xy_samples = 1;
 	float dist_to_occlusion = 1000000;
-	float dist_to_return_to_unoccluded = 0;
 
 	// Make sure falloff start is before the end
+	float in_height_noise_falloff_start = 0.5;
+	float in_height_noise_falloff_end = 1.0;
 	in_height_noise_falloff_start = min(in_height_noise_falloff_start, in_height_noise_falloff_end - 0.0001);
 
+	vec3 ray_sample_pos_random;
 	for (float i = 1; i <= in_samples; i += 1)
 	{
 		float position_in_noise_falloff = smoothstep(in_height_noise_falloff_start, in_height_noise_falloff_end, world_pos.z);
@@ -217,7 +214,7 @@ vec3 GetHeightShadow(in sampler2D in_heightmap,
 		ray_sample_pos_random = world_pos + light_vector_falloff * (i * sample_dist + random_sample_offset);
 		float height_at_sample = getHeightValue(in_heightmap, vec2(ray_sample_pos_random.x, ray_sample_pos_random.y));
 
-		if (dist_to_occlusion > 100000 && ray_sample_pos_random.z < height_at_sample - in_sample_bias)
+		if (dist_to_occlusion > 100000 && ray_sample_pos_random.z < (height_at_sample - in_sample_bias))
 			dist_to_occlusion = length(ray_sample_pos_random - world_pos);
 
 		if (ray_sample_pos_random.z > 1.0 + 2 * sample_dist)
@@ -226,10 +223,7 @@ vec3 GetHeightShadow(in sampler2D in_heightmap,
 
 	falloff_shadow = dist_to_occlusion > 999999 ? 1 : clamp(smoothstep(shadow_dist_umbra, shadow_dist_penumbra, dist_to_occlusion), 0, 1);
 
-
 	float final_shadow = falloff_shadow;
-
-	final_shadow = pow(final_shadow, 1/shadow_gamma);
 
 	return vec3(final_shadow);
 }
@@ -336,32 +330,53 @@ vec3 lighting(int type, vec3 n, vec3 l, vec3 rd, vec3 kl, vec3 kd, vec3 ks, floa
     return kl * ndl * (kd + ks * kr * ggx); // diffuse + specular
 }
 
-// TODO need to add all attributes & in color, AO, Roughness
 vec3 ApplyLighting(vec2 uv, 
+					vec4 normal_and_height_color,
 					vec3 light_point, 
+					float light_directional_amount, 
 					vec3 light_color, 
+					float ao,
 					vec3 albedo_color, 
 					vec3 ambient_color, 
+					float ambient_ao_amount, 
 					float roughness, 
 					float specular_amount, 
-					float ao, 
-					float ao_amount, 
-					float shadow)
+					float specular_ao_amount, 
+					in sampler2D specular_color_map,
+					float diffuse_ao_amount, 
+					float shadow,
+					float shadow_amount)
 {
-    vec4 normal_and_height = texture(heightMapChannel, uv);
-
 	vec2 offset = vec2(global.OutputSize.x / global.OutputSize.y, 1.0);
 
-    vec3 normal = normal_and_height.rgb;
+	// Get world normal from tangent normal map
+    vec3 normal = normal_and_height_color.rgb * 2 - 1;
 
 	float HEIGHT_PLANE = 0;
-	vec3 planePoint = vec3(vTexCoord * 2 - 1, HEIGHT_PLANE);
+	vec3 planePoint = vec3(vTexCoord * 2 - 1, normal_and_height_color.a);
 	planePoint.y *= -1;
-	vec3 rd = -normalize(vec3(0, 0, -3.5) - planePoint);
-	vec3 light_dir = normalize(light_point - planePoint);
-	
+	vec3 view_vector = normalize(vec3(0, 0, -3.5) - (1 - planePoint));
+	vec3 rd = -view_vector;
+	// vec3 rd = -normalize(vec3(0, 0, -3.5) - planePoint);
+
+	vec3 light_dir_pointlight = normalize(light_point - planePoint);
+	vec3 light_dir_directional = normalize(light_point);
+	vec3 light_dir = mix(light_dir_directional, light_dir_pointlight, light_directional_amount);
+
+	vec3 reflect_vector = reflect(-view_vector, normal);
+	// vec3 refl = reflect(rd, normal);
+	vec3 refl = reflect(vec3(0, 0, 1), normal);
+	// vec2 refl_uv = (planePoint.xy + refl.xy + 1) / 2;
+	vec2 refl_uv = vec2(dot(refl, vec3(-1, 0, 0)) / 2 + 0.5, 1 - (dot(refl, vec3(0, -1, 0)) / 2 + 0.5));//1 - dot(refl, vec3(0, 1, 0)));
+	// vec2 refl_uv = vec2(dot(refl, vec3(-1, 0, 0)), 0);//1 - dot(refl, vec3(0, 1, 0)));
+
+	vec3 R = dot(normal, rd) * normal * 2.0 - rd;
+
 	vec3 difCol = albedo_color;
+
+	shadow = mix(1.0, shadow, shadow_amount);
 	vec3 lightCol = light_color * shadow;
+
 	vec3 speCol;
 	float rou = roughness; // 0-1 roughness
 	float ior;
@@ -374,8 +389,9 @@ vec3 ApplyLighting(vec2 uv,
 	{ // dielectric
 		// difCol = vec3(.5,.1,.01);
 		// speCol = vec3(1); // dieletrics have always white specular
-		speCol = lightCol; // dieletrics have always white specular
+		// EnvBRDFApprox(vec3 specularColor, float roughness, float ndotv)
 		ior = 1.65;
+		speCol = texture(specular_color_map, refl_uv).rgb ; // dieletrics have always white specular
 	} 
 	else // metal or blinn
 	{
@@ -386,23 +402,31 @@ vec3 ApplyLighting(vec2 uv,
 	}
 	rou = 0.002 + 0.998 * rou * rou * 1.5;
 
-	// ao = pow(ao, 1.0 / 0.1);
-	float ao_diffuse_amount = mix(ao_amount, 1.0, ao_amount);
-	float ao_diffuse = mix(1.0, ao, ao_diffuse_amount); //clamp(ao + 0.4, 0, 1);
-
-	float ao_specular_amount = 0.5;
-	float ao_specular = mix(1.0, ao, ao_specular_amount); //clamp(ao + 0.4, 0, 1);
+	// ao = pow(ao, 1.0 / 0.1);;
+	float ao_ambient = mix(1.0, ao, ambient_ao_amount); //clamp(ao + 0.4, 0, 1);
 	vec3 col = lighting(type,
 						normal,
 						light_dir,
 						rd,
 						lightCol,
 						difCol * ao_diffuse,
-						speCol * ao_specular * specular_amount,
+						speCol * ao_specular,
 						rou,
 						ior);
 
-	col += ambient_color * albedo_color;
+	vec3 half_vector = normalize(light_dir + rd);
+
+	// Add Ambient
+	col = albedo_color * ambient_color * ao_ambient;
+
+	// Add Diffuse
+	float ao_diffuse = mix(1.0, ao, diffuse_ao_amount);
+	col += albedo_color * ao_diffuse * lightCol * dot(half_vector, normal);
+
+	// Add Specular
+	float env_spec_mult = pow(EnvBRDFApproxNonmetal( roughness, dot(normal_and_height_color.rgb, vec3(0, 0, 1)) ) * 12, 3);
+	float ao_specular = specular_amount * mix(1.0, ao, specular_ao_amount);
+	col += speCol * ao_specular * specular_amount * env_spec_mult;
 
 	return col;
 }
@@ -567,10 +591,23 @@ void main()
 	precomp_additive.a = pow(precomp_additive.a, DEFAULT_SRGB_GAMMA);
 	float reflection_mask = precomp_additive.a;
 
-	// Gray Material Bounce Light Display Mode
-	if (HSM_LIGHT_BOUNCE_DISPLAY_MODE == 1)
+	// Debug Material Display Modes
+	if (HSM_LIGHTING_DEBUG_MATERIAL > 0.5 || HSM_LIGHTING_DEBUG_SHADING_MODE > 4.5)
 	{
-		vec3 material_color = vec3(0.2);
+		vec3 material_color = vec3(0);
+
+		// Gray Material
+		if (HSM_LIGHTING_DEBUG_MATERIAL == 1)
+			material_color = vec3(0.2);
+			
+		// White Material
+		if (HSM_LIGHTING_DEBUG_MATERIAL == 2)
+			material_color = vec3(1.0);
+
+		// Black Material (To show only the specular addition)
+		if (HSM_LIGHTING_DEBUG_SHADING_MODE == 5)
+			material_color = vec3(0.0);
+		
 		precomp_foreground.rgb = material_color * precomp_foreground.a;
 		precomp_middleground.rgb = material_color * precomp_middleground.a;
 		precomp_background.rgb = material_color;
@@ -616,27 +653,59 @@ void main()
 	float bounce_center_Vignette = clamp(HSM_GetStrengthPowerVignetteFactor(bounce_coord_ctr * 0.5 + 0.5, 20, 2), 0, 1);
 	bounce_light = mix(bounce_light, bounce_light_center, HSM_LIGHT_BOUNCE_MIX_FULLSCREEN_GLOW * bounce_center_Vignette);
 
-	vec3 light_position = vec3(HSM_LIGHTING_LIGHT_POS_X, HSM_LIGHTING_LIGHT_POS_Y, HSM_LIGHTING_LIGHT_POS_Z);
 	float noise_sample = HSM_TextureAbsolute(DitherNoise, vTexCoord * 1).r; // * 1.9;
+	float shadow_bias = 0.001;
 
 	float output_aspect = global.OutputSize.x / global.OutputSize.y;
-	vec3 height_shadows = clamp(GetHeightShadow(NormalsAndHeightPass, 
+
+	// Middle shadow should probably be soft
+	float middle_umbra = 0.0;
+	float middle_penumbra = 0.3;
+	float middle_directional = 0.0;
+	float bounce_shadow_from_middle = clamp(GetHeightShadow(NormalsAndHeightPass, 
+															vTexCoord, 
+															vec3(0.0, 0.0, 5.0),
+															middle_directional,
+															HSM_HSHADOW_SAMPLES, 
+															shadow_bias, 
+															noise_sample, 
+															HSM_HSHADOW_NOISE, 
+															middle_umbra,
+															middle_penumbra,
+															HSM_HSHADOW_SPREAD_NOISE,
+															HSM_HSHADOW_GAMMA), 0, 1).r;
+	vec3 shadow_light_point = HSM_LIGHTING_LIGHT_POINT;
+	shadow_light_point.z *= HSM_HSHADOW_DEPTH_MULT;
+
+	// float bounce_shadow_from_top_right = 1 - precomp_middleground_shadow_stretch.a;
+	float bounce_shadow_from_top_right = clamp(GetHeightShadow(NormalsAndHeightPass, 
 												vTexCoord, 
-												light_position,
+												shadow_light_point,
 												HSM_LIGHTING_DIRECTIONAL,
 												HSM_HSHADOW_SAMPLES, 
-												HSM_HSHADOW_BIAS, 
+												shadow_bias, 
 												noise_sample, 
 												HSM_HSHADOW_NOISE, 
-												HSM_HSHADOW_NOISE_FALLOFF_START, 
-												HSM_HSHADOW_NOISE_FALLOFF_END, 
 												HSM_HSHADOW_DIST_UMBRA,
 												HSM_HSHADOW_DIST_PENUMBRA,
 												HSM_HSHADOW_SPREAD_NOISE,
-												HSM_HSHADOW_GAMMA), 0, 1);
+												HSM_HSHADOW_GAMMA), 0, 1).r;
 
-	// float bounce_shadow = 1 - precomp_middleground_shadow_stretch.a;
-	float bounce_shadow = height_shadows.r;
+	float left_umbra = 0.0;
+	float left_penumbra = 0.5;
+	float bounce_shadow_from_top_left = clamp(GetHeightShadow(NormalsAndHeightPass, 
+															vTexCoord, 
+															vec3(shadow_light_point.x * -0.75, shadow_light_point.y * 0.85, shadow_light_point.z),
+															HSM_LIGHTING_DIRECTIONAL,
+															HSM_HSHADOW_SAMPLES, 
+															shadow_bias, 
+															noise_sample, 
+															HSM_HSHADOW_NOISE, 
+															left_umbra,
+															left_penumbra,
+															HSM_HSHADOW_SPREAD_NOISE,
+															HSM_HSHADOW_GAMMA), 0, 1).r;
+
 
 	// Do HSV alterations on the bounce_light
 	if (HSM_LIGHT_BOUNCE_SATURATION != 1 || HSM_LIGHT_BOUNCE_BRIGHTNESS != 1)
@@ -650,7 +719,7 @@ void main()
 	// Add some noise to avoid banding
 	bounce_light.rgb += HSM_DitheredNoise(vTexCoord, global.OutputSize.xy, 1);
 
-	// if (HSM_LIGHT_BOUNCE_DISPLAY_MODE > 0.5)
+	// if (HSM_LIGHTING_DEBUG_SHADING_MODE > 0.5)
 	// {
 	// 	FragColor = pow(bounce_light, vec4(1 / DEFAULT_SRGB_GAMMA));
 	// 	return;
@@ -704,7 +773,7 @@ void main()
 
 		// Add bounce light
 		// height_shadows.r;
-		// precomp_background.rgb += precomp_background_orig.rgb * HSM_COMPOSITE_BACKGROUND_BOUNCELIGHT_MULTIPLIER * bounce_light.rgb * mix(bounce_shadow, 1, 1 - HSM_LIGHT_BOUNCE_SHADOW_STRENGTH);
+		// precomp_background.rgb += precomp_background_orig.rgb * HSM_COMPOSITE_BACKGROUND_BOUNCELIGHT_MULTIPLIER * bounce_light.rgb * mix(bounce_shadow_from_top_right, 1, 1 - HSM_LIGHT_BOUNCE_SHADOW_STRENGTH);
 
 		// Prep Color
 		// precomp_background.rgb = PrepGraphicsForHDR(precomp_background.rgb);
@@ -768,32 +837,119 @@ void main()
 
 
 	// // Need to consolidate per group lighting & surface lighting, or add it separately on each
-    // out_color.rgb = GetSurfaceWithLighting(	NormalsAndHeightPass,
-	// 										vTexCoord,
-	// 										out_color.rgb,
-	// 										bounce_light.rgb,
-	// 										light_position,
-	// 										HSM_LIGHTING_AMBIENT_AMOUNT,
-	// 										bounce_shadow,
-	// 										HSM_LIGHTING_DIRECTIONAL);
-	    
-    float ao = AmbientOcclusion(NormalsAndHeightPass, vTexCoord);
-	float ao_amount = 0.6;
 
-	vec3 ambient_color = vec3(HSM_LIGHTING_AMBIENT_AMOUNT);
-	float specular_amount = HSM_LIGHTING_SPECULAR_AMOUNT;
-	float roughness = HSM_LIGHTING_ROUGHNESS;
+	float ao = smoothstep(0, HSM_LIGHTING_AO_HEIGHT_CUTOFF, texture(NormalsAndHeightPass, vTexCoord).a);
+	// FragColor = vec4(ao);
+	// return;
+	vec4 normal_and_height_color = texture(NormalsAndHeightPass, vTexCoord);
+	
+	float specular_amount = HSM_LIGHTING_DEBUG_SHADING_MODE > 0.5 && HSM_LIGHTING_DEBUG_SHADING_MODE < 3.5 ? 0 : HSM_LIGHTING_SPECULAR_AMOUNT;
+	vec3 ambient_color = HSM_HSVtoRGB(vec3(HSM_LIGHTING_AMBIENT_HUE, HSM_LIGHTING_AMBIENT_SATURATION, HSM_LIGHTING_AMBIENT_VALUE));
+	ambient_color = HSM_LIGHTING_DEBUG_SHADING_MODE == 2 ? vec3(0) : ambient_color;
 
-	out_color.rgb = ApplyLighting(vTexCoord, 
-									light_position, 
-									bounce_light.rgb, 
-									out_color.rgb, 
-									ambient_color, 
-									HSM_LIGHTING_ROUGHNESS, 
-									HSM_LIGHTING_SPECULAR_AMOUNT, 
-									ao, 
-									HSM_LIGHTING_AO, 
-									bounce_shadow);
+	// float luma_pos_right = luminance(texture(BounceLightPass, vec2(0.3, 0.5)).rgb);
+	// float luma_pos_right_top = luminance(texture(BounceLightPass, vec2(0.85, 0.15)).rgb);
+	// float luma_pos_right_bottom = luminance(texture(BounceLightPass, vec2(0.85, 0.85)).rgb);
+
+	// float luma_pos_left_top = luminance(texture(BounceLightPass, vec2(0.15, 0.15)).rgb);
+	// float luma_pos_left_bottom = luminance(texture(BounceLightPass, vec2(0.15, 0.85)).rgb);
+	// float luma_pos_left = luminance(texture(BounceLightPass, vec2(0.7, 0.5)).rgb);
+
+	// float luma_ratio_right = luma_pos_right / (luma_pos_right + luma_pos_left);
+	// // Push values toward top and bottom of range
+	// luma_ratio_right = HHLP_EasePowerInOut(luma_ratio_right, 1.0);
+	// float luma_ratio_left = 1 - luma_ratio_right;
+
+	// // Measure how close both items are to 0.5, when both are close to 0.5 this maps to 1
+	// // as both shadows become close to 0.5 then we want more of the middle shadow and less of the side shadows
+	// float middle_weight = smoothstep(0.5, 0, abs(luma_ratio_right - 0.5) + abs(luma_ratio_right - 0.5));
+
+	bounce_shadow_from_middle = mix(1.0, pow(bounce_shadow_from_middle, 1 / HSM_HSHADOW_GAMMA), HSM_LIGHTING_SHADOW_FROM_MIDDLE_AMOUNT);// * middle_weight)
+	bounce_shadow_from_top_right = mix(1.0, pow(bounce_shadow_from_top_right, 1 / HSM_HSHADOW_GAMMA), HSM_LIGHTING_SHADOW_FROM_RIGHT_AMOUNT);// * luma_ratio_left * (1 - middle_weight))
+	bounce_shadow_from_top_left = mix(1.0, pow(bounce_shadow_from_top_left, 1 / HSM_HSHADOW_GAMMA), HSM_LIGHTING_SHADOW_FROM_LEFT_AMOUNT);// * luma_ratio_right * (1 - middle_weight));
+
+	vec3 light_point_right = HSM_LIGHTING_LIGHT_POINT;
+	vec3 light_point_left = vec3(HSM_LIGHTING_LIGHT_POINT.x * -1.0, HSM_LIGHTING_LIGHT_POINT.y * 0.85, HSM_LIGHTING_LIGHT_POINT.z);
+	vec3 light_point_middle = vec3(0.0, 0, 5.0);
+
+	vec3 ambient_color_black = vec3(0);
+	// float blended_shadow = 	mix(1.0, bounce_shadow_from_middle, HSM_LIGHTING_SHADOW_FROM_MIDDLE_AMOUNT * middle_weight) * 
+	// 						mix(1.0, bounce_shadow_from_top_right, HSM_LIGHTING_SHADOW_FROM_RIGHT_AMOUNT * luma_ratio_left * (1 - middle_weight)) *
+	// 						mix(1.0, bounce_shadow_from_top_left, HSM_LIGHTING_SHADOW_FROM_LEFT_AMOUNT * luma_ratio_right * (1 - middle_weight));
+
+	// blended_shadow = clamp(pow(blended_shadow, 1 / HSM_HSHADOW_GAMMA), 0, 1);
+
+	// out_color.rgb = ApplyLighting(vTexCoord, 
+	// 							normal_and_height_color,
+	// 							HSM_LIGHTING_LIGHT_POINT,
+	// 							HSM_LIGHTING_DIRECTIONAL,
+	// 							bounce_light.rgb, 
+	// 							ao, 
+	// 							out_color.rgb,
+	// 							ambient_color,
+	// 							HSM_LIGHTING_AMBIENT_AO,
+	// 							HSM_LIGHTING_ROUGHNESS, 
+	// 							specular_amount, 
+	// 							HSM_LIGHTING_SPECULAR_AO, 
+	// 							BounceLightPass,
+	// 							HSM_LIGHTING_DIFFUSE_AO, 
+	// 							blended_shadow,
+	// 							1.0);
+	vec3 prelit_color = out_color.rgb;
+	bounce_light.rgb = HSM_LIGHTING_DEBUG_SHADING_MODE == 1 ? vec3(0) : bounce_light.rgb;
+
+	out_color.rgb = 0.5 * ApplyLighting(vTexCoord, 
+								normal_and_height_color,
+								light_point_middle,
+								HSM_LIGHTING_DIRECTIONAL,
+								bounce_light.rgb,
+								ao,
+								prelit_color,
+								ambient_color,
+								HSM_LIGHTING_AMBIENT_AO,
+								HSM_LIGHTING_ROUGHNESS,
+								specular_amount,
+								HSM_LIGHTING_SPECULAR_AO,
+								BounceLightPass,
+								HSM_LIGHTING_DIFFUSE_AO,
+								bounce_shadow_from_middle,
+								1.0);
+
+	out_color.rgb += 0.25 * ApplyLighting(vTexCoord, 
+								normal_and_height_color,
+								light_point_right,
+								HSM_LIGHTING_DIRECTIONAL,
+								bounce_light.rgb,
+								ao,
+								prelit_color,
+								ambient_color_black,
+								HSM_LIGHTING_AMBIENT_AO,
+								HSM_LIGHTING_ROUGHNESS,
+								specular_amount,
+								HSM_LIGHTING_SPECULAR_AO,
+								BounceLightPass,
+								HSM_LIGHTING_DIFFUSE_AO,
+								bounce_shadow_from_top_right,
+								1.0);
+
+	out_color.rgb += 0.25 * ApplyLighting(vTexCoord, 
+								normal_and_height_color,
+								light_point_left,
+								HSM_LIGHTING_DIRECTIONAL,
+								bounce_light.rgb,
+								ao,
+								prelit_color,
+								ambient_color_black,
+								HSM_LIGHTING_AMBIENT_AO,
+								HSM_LIGHTING_ROUGHNESS,
+								specular_amount,
+								HSM_LIGHTING_SPECULAR_AO,
+								BounceLightPass,
+								HSM_LIGHTING_DIFFUSE_AO,
+								bounce_shadow_from_top_left,
+								1.0);
+
+
 
 	if (HSM_COMPOSITE_CRT_AND_REFLECTION_ON > 0.5 && HSM_RENDER_SIMPLE_MODE < 0.5)
 		out_color = HSM_PreMultAlphaBlend(out_color, crt_layer);
@@ -904,14 +1060,14 @@ void main()
 			out_color = out_color.aaaa;
 	}
 
-	if (HSM_LIGHTING_DEBUG == 1)
-		out_color = mix(out_color, height_shadows.rrrr, HSM_LIGHTING_DEBUG_BLEND);
+	if (HSM_LIGHTING_DEBUG_MAPS == 1)
+		out_color = vec4(bounce_shadow_from_top_right);
 
-	if (HSM_LIGHTING_DEBUG == 2)
-		out_color = mix(out_color, texture(NormalsAndHeightPass, vTexCoord).aaaa, HSM_LIGHTING_DEBUG_BLEND);
+	if (HSM_LIGHTING_DEBUG_MAPS == 2)
+		out_color = texture(NormalsAndHeightPass, vTexCoord).aaaa;
 
-	if (HSM_LIGHTING_DEBUG == 3)
-		out_color = mix(out_color, texture(NormalsAndHeightPass, vTexCoord), HSM_LIGHTING_DEBUG_BLEND);
+	if (HSM_LIGHTING_DEBUG_MAPS == 3)
+		out_color = texture(NormalsAndHeightPass, vTexCoord);
 
 #ifdef IS_HDR_PRESET	
 	vec3 hdr_colour = vec3(0);

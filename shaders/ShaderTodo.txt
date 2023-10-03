@@ -48,6 +48,9 @@ Changes:
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Add Night Lighting texture as lighting
+  * Try out new 3D asset textures
+  * Place bounce light farther away so they hit the sides of the TV 
   * Squeeze rgb (3 channels) into 2 channels with 1/2 color fidelity using YUV
     * This would free up 3 additional channels
 

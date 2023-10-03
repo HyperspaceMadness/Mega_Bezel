@@ -29,42 +29,61 @@
 // Float format so we can avoid banding
 #pragma format R32G32B32A32_SFLOAT
 
+float random(vec2 st)
+{
+    return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+}
+
 // Generating height & normals from a shadertoy by granito
 const vec3 GrayscaleWeights = vec3(0.2125,0.7154,0.0721);
 
-// // Sample map to generate Normal map and Height map
-// vec4 GenerateNormalHeight (sampler2D tex, vec2 uv, vec2 res, float width)
+// Sample map to generate Normal map and Height map
+vec4 GenerateNormalHeight (sampler2D tex, vec2 uv, vec2 res, float width)
+{
+    vec2 texelSize = 1.0 / (res * width);
+    vec4 h;
+    h[0] = dot(GrayscaleWeights, HSM_Linearize(texture(tex, uv + vec2(texelSize * vec2( 0,-1)) ), DEFAULT_SRGB_GAMMA).rgb);
+    h[1] = dot(GrayscaleWeights, HSM_Linearize(texture(tex, uv + vec2(texelSize * vec2(-1, 0)) ), DEFAULT_SRGB_GAMMA).rgb);
+    h[2] = dot(GrayscaleWeights, HSM_Linearize(texture(tex, uv + vec2(texelSize * vec2( 1, 0)) ), DEFAULT_SRGB_GAMMA).rgb);
+    h[3] = dot(GrayscaleWeights, HSM_Linearize(texture(tex, uv + vec2(texelSize * vec2( 0, 1)) ), DEFAULT_SRGB_GAMMA).rgb);
+    vec3 n;
+    n.y = h[3] - h[0];
+    n.x = h[1] - h[2];
+    n.z = .25;
+    float height = dot(GrayscaleWeights, texture(tex, uv).rgb);
+    n = normalize(n);
+    return vec4(n, height);
+}
+
+// Multipass version of above
+vec4 GenerateNormalHeightMultipass (sampler2D tex, vec2 uv, vec2 res)
+{
+    // uv += 1.0 / res * (random(uv) - 0.5) * 3;
+    float dist = 0.5;
+    vec4 multi = vec4(0.);
+	multi += GenerateNormalHeight(tex, uv, res, 1. * dist);
+	multi += GenerateNormalHeight(tex, uv, res, 2.5 * dist);
+	multi += GenerateNormalHeight(tex, uv, res, 5. * dist);
+	multi += GenerateNormalHeight(tex, uv, res, 10. * dist);    
+    multi *= 0.25;
+
+	multi = GenerateNormalHeight(tex, uv, res, 1. * dist);
+    return multi;
+}
+
+// TODO see if there is a simpler way
+// vec3 GetNormalFromHeight(in sampler2D height_map, vec2 uv, float intensity, float width, vec2 map_res)
 // {
-//     vec2 texelSize = 1. / (res * width);
-//     vec4 h;
-//     h[0] = dot(GrayscaleWeights, texture(tex, uv + vec2(texelSize * vec2( 0,-1)) ).rgb);
-//     h[1] = dot(GrayscaleWeights, texture(tex, uv + vec2(texelSize * vec2(-1, 0)) ).rgb);
-//     h[2] = dot(GrayscaleWeights, texture(tex, uv + vec2(texelSize * vec2( 1, 0)) ).rgb);
-//     h[3] = dot(GrayscaleWeights, texture(tex, uv + vec2(texelSize * vec2( 0, 1)) ).rgb);
-//     vec3 n;
-//     n.y = h[3] - h[0];
-//     n.x = h[1] - h[2];
-//     n.z = .25;
-//     float height = dot(GrayscaleWeights, texture(tex, uv).rgb);
-//     n = normalize(n);
-//     return vec4(n, height);
+//     vec2 offset = 1 / map_res * width;
+//     vec2 coord_plus_offset = uv + offset;
+//     vec2 coord_minus_offset = uv - offset;
+//     vec3 a = vec3(coord_minus_offset.x, 0.0, texture(height_map, vec2(coord_minus_offset.x, uv.y)).a * intensity);
+//     vec3 b = vec3(coord_plus_offset.x, 0.0, texture(height_map, vec2(coord_plus_offset.x, uv.y)).a * intensity);
+//     vec3 c = vec3(0.0, coord_plus_offset.y, texture(height_map, vec2(uv.x, coord_plus_offset.y)).a * intensity);
+//     vec3 d = vec3(0.0, coord_minus_offset.y, texture(height_map, vec2(uv.x, coord_minus_offset.y)).a * intensity);
+
+//     return normalize(cross(b-a, c-d));
 // }
-
-// // Multipass version of above
-// vec4 GenerateNormalHeightMultipass (sampler2D tex, vec2 uv, vec2 res)
-// {
-//     float dist = 0.5;
-//     vec4 multi = vec4(0.);
-// 	multi += GenerateNormalHeight(tex, uv, res, 1. * dist);
-// 	multi += GenerateNormalHeight(tex, uv, res, 2.5 * dist);
-// 	multi += GenerateNormalHeight(tex, uv, res, 5. * dist);
-// 	multi += GenerateNormalHeight(tex, uv, res, 10. * dist);    
-//     multi *= 0.25;
-
-// 	multi = GenerateNormalHeight(tex, uv, res, 1. * dist);
-//     return multi;
-// }
-
 
 #pragma stage vertex
 
@@ -151,6 +170,8 @@ void main()
 
 	CUTOUT_MASK = 1;
 
+    float normal_intensity = 1;
+    float normal_width = 1;
     //-----------------------------------------------------------------------------------------
     // Background
     //-----------------------------------------------------------------------------------------
@@ -182,12 +203,25 @@ void main()
             BACKGROUND_CURVED_COORD = HSM_GetMirrorWrapCoord(BACKGROUND_CURVED_COORD);
 
         vec4 bg_layer = HSM_GetMipmappedTexSample(Background, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
-        vec4 bg_normals_layer = bg_layer.a * HSM_GetMipmappedTexSample(BackgroundNormals, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
+
+        vec4 bg_normals_layer = vec4(neutral_normals * bg_layer.a, bg_layer.a);
+        if (HSM_LIGHTING_NORMAL_SOURCE == 1)
+        {
+            bg_normals_layer = HSM_GetMipmappedTexSample(BackgroundNormals, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
+            bg_normals_layer = HSM_Linearize(bg_normals_layer, DEFAULT_SRGB_GAMMA);
+        }
+        if (HSM_LIGHTING_NORMAL_SOURCE == 2)
+            bg_normals_layer = vec4(GenerateNormalHeightMultipass(BackgroundHeight, BACKGROUND_CURVED_COORD, textureSize(BackgroundHeight, 0)).rgb, 1);
+        bg_normals_layer.rg *= HSM_LIGHTING_NORMAL_STRENGTH;
+        bg_normals_layer.rgb = (normalize(bg_normals_layer.rgb) + 1) / 2;
+        bg_normals_layer *= bg_layer.a;
+
 
         vec4 bg_height_layer = HSM_GetMipmappedTexSample(BackgroundHeight, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
+        bg_height_layer = HSM_Linearize(bg_height_layer, DEFAULT_SRGB_GAMMA);
         bg_height_layer.rgb = (bg_height_layer.rgb - HSM_HSHADOW_BG_CONTRAST_CENTER) * HSM_HSHADOW_BG_CONTRAST + HSM_HSHADOW_BG_CONTRAST_CENTER;
         bg_height_layer.rgb += HSM_HSHADOW_BG_OFFSET_Z;
-        bg_height_layer.rgb *= clamp(bg_height_layer.rgb, 0, 1);
+        bg_height_layer.rgb *= clamp(bg_height_layer.rgb, -0.1, 1);
         bg_height_layer.rgb *= bg_layer.a;
 
         out_normal_color = HSM_PreMultAlphaBlend(out_normal_color, bg_normals_layer);
@@ -218,13 +252,22 @@ void main()
 
             vec4 device_layer = HSM_GetMipmappedTexSample(Device, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
 
-            // vec3 device_normals = GenerateNormalHeightMultipass (DeviceHeight, DEVICE_CURVED_COORD, DEVICE_SIZE).rgb;
-            // device_normals.r += 0.5;
-            // device_normals.g += 0.5;
+            vec4 device_normals_layer = vec4(neutral_normals, 1);
+            if (HSM_LIGHTING_NORMAL_SOURCE == 1)
+            {
+                // device_normals_layer = HSM_GetMipmappedTexSample(DeviceNormals, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS) * 2.0 - 1.0;
+                device_normals_layer = HSM_GetMipmappedTexSample(DeviceNormals, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
+                device_normals_layer = HSM_Linearize(device_normals_layer, DEFAULT_SRGB_GAMMA);
+            }
+            if (HSM_LIGHTING_NORMAL_SOURCE == 2)
+                device_normals_layer = vec4(GenerateNormalHeightMultipass(DeviceHeight, DEVICE_CURVED_COORD, textureSize(DeviceHeight, 0)).rgb, 1);
+            device_normals_layer.rg *= HSM_LIGHTING_NORMAL_STRENGTH;
+            device_normals_layer.rgb = (normalize(device_normals_layer.rgb) + 1) / 2;;
+            device_normals_layer *= device_layer.a;
 
-            vec4 device_normals_layer = device_layer.a * HSM_GetMipmappedTexSample(DeviceNormals, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
 
             vec4 device_height_layer = HSM_GetMipmappedTexSample(DeviceHeight, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
+            device_height_layer = HSM_Linearize(device_height_layer, DEFAULT_SRGB_GAMMA);
 
             // TODO UNFINISHED Need to scale from end of the range at 1 instead of from 0
             device_height_layer.rgb = (device_height_layer.rgb - HSM_HSHADOW_DEVICE_CONTRAST_CENTER) * HSM_HSHADOW_DEVICE_CONTRAST + HSM_HSHADOW_DEVICE_CONTRAST_CENTER;
@@ -251,6 +294,6 @@ void main()
     //     out_color = HSM_PreMultAlphaBlend(out_color, bezel_normals_layer);
     // }
 
-    out_height_color *= 0.33;
+    // out_height_color *= 0.33;
     FragColor = vec4(out_normal_color.rgb, out_height_color.r);
 }
