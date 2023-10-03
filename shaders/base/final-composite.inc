@@ -135,26 +135,14 @@ vec3 PrepGraphicsForHDR(vec3 in_color)
 	return out_color;
 }
 
-float getHeightValue(in sampler2D in_heightmap, vec2 coords)
+float GetHeightValue(in sampler2D in_heightmap, vec2 coords)
 {
 	return clamp(texture(in_heightmap, coords).a, 0.0, 1.0);
 }
 
-float random(vec2 st) 
+float Random(vec2 st) 
 {
     return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
-}
-
-// TODO see if there is a simpler way
-vec3 GetNormalFromHeight(in sampler2D height_map, vec2 coords, float intensity)
-{
-    float offset = 0.0025;
-    vec3 a = vec3(coords.x - offset, 0.0, getHeightValue(height_map, vec2(coords.x - offset, coords.y)) * intensity);
-    vec3 b = vec3(coords.x + offset, 0.0, getHeightValue(height_map, vec2(coords.x + offset, coords.y)) * intensity);
-    vec3 c = vec3(0.0, coords.y + offset, getHeightValue(height_map, vec2(coords.x, coords.y + offset)) * intensity);
-    vec3 d = vec3(0.0, coords.y - offset, getHeightValue(height_map, vec2(coords.x, coords.y - offset)) * intensity);
-
-    return normalize(cross(b-a, c-d));
 }
 
 // Shadertoy by consoleartist
@@ -174,16 +162,16 @@ vec3 GetHeightShadow(in sampler2D in_heightmap,
 {
 	light_point3.y *= -1;
 	vec3 light_vector_directional = normalize(light_point3);
-	vec3 light_vector = normalize(vec3(light_point3.xy, light_point3.z) - vec3(uv * 2.0 - 1.0, getHeightValue(in_heightmap, uv)));
+	vec3 light_vector = normalize(vec3(light_point3.xy, light_point3.z) - vec3(uv * 2.0 - 1.0, GetHeightValue(in_heightmap, uv)));
 	light_vector = normalize(mix(light_vector, light_vector_directional, directional_amount));
 
 	vec3 light_vector_orig = light_vector;
 	vec3 light_vector_solid_orig = normalize(vec3(light_vector.x, light_vector.y, light_vector.z + 0.05));
 
 	vec2 random_xy = vec2(0); //global.OutputSize.zw * in_noise / 4;
-	vec3 world_pos = vec3(uv + random_xy, getHeightValue(in_heightmap, uv + random_xy));
+	vec3 world_pos = vec3(uv + random_xy, GetHeightValue(in_heightmap, uv + random_xy));
 
-	// float random_sample_offset = (random(world_pos.xy) * in_height_noise_amount) / in_samples;
+	// float random_sample_offset = (Random(world_pos.xy) * in_height_noise_amount) / in_samples;
 
 	// Adjust Noise by the number of samples
 	float random_sample_offset_orig = in_noise * in_height_noise_amount / in_samples;
@@ -209,10 +197,10 @@ vec3 GetHeightShadow(in sampler2D in_heightmap,
 		float random_sample_offset = mix(random_sample_offset_orig, 0.0, position_in_noise_falloff);
 
 		light_vector_falloff = light_vector_orig;
-		light_vector_falloff.xy += shadow_falloff_spread * (random( world_pos.xy + i * vec2(0.0005)) - 0.5) * i * sample_dist * vec2(0.1) ;
+		light_vector_falloff.xy += shadow_falloff_spread * (Random( world_pos.xy + i * vec2(0.0005)) - 0.5) * i * sample_dist * vec2(0.1) ;
 		light_vector_falloff = normalize(light_vector_falloff);
 		ray_sample_pos_random = world_pos + light_vector_falloff * (i * sample_dist + random_sample_offset);
-		float height_at_sample = getHeightValue(in_heightmap, vec2(ray_sample_pos_random.x, ray_sample_pos_random.y));
+		float height_at_sample = GetHeightValue(in_heightmap, vec2(ray_sample_pos_random.x, ray_sample_pos_random.y));
 
 		if (dist_to_occlusion > 100000 && ray_sample_pos_random.z < (height_at_sample - in_sample_bias))
 			dist_to_occlusion = length(ray_sample_pos_random - world_pos);
@@ -289,47 +277,6 @@ float luminance(vec3 col) {
     return dot(col, vec3(0.299, 0.587, 0.114));
 }
 
-// lighting model https://www.shadertoy.com/view/cl3GWr by Poisson
-// lambert + blinn/phong ggx + shlick
-
-// type -> blinn or phong
-// n -> normal
-// l -> light direction
-// rd -> ray direction
-// kl -> light color
-// kd -> diffuse color
-// ks -> specular color
-// km -> roughness / microfacet amount
-// kn -> refraction index
-vec3 lighting(int type, vec3 n, vec3 l, vec3 rd, vec3 kl, vec3 kd, vec3 ks, float km, float kn) 
-{
-    float ndl = clamp(dot(n, l), 0., 1.); // diffuse/lambert / N⋅L
-    float ndh;
-
-    if (type==0) // blinn
-	{ 
-        vec3 h = normalize(l - rd); // half vector
-        ndh = dot(n, h); // N⋅H
-    } else // phong
-	{
-        vec3 r = reflect(rd, n); // reflected vector
-        ndh = dot(r, l); // R⋅L
-    }
-    // ggx / Trowbridge and Reitz specular model approximation
-    float g = ndh * ndh * (km * km - 1.) + 1.;
-    float ggx = km * km / (3.141592 * g * g);
-
-    // shlick approximation
-    float fre = 1.0 + dot(rd, n); // fresnel
-    // fresnel amount
-    float f0 = (kn - 1.) / (kn + 1.);
-    f0 = f0 * f0;
-
-    float kr = f0 + (1.0 - f0) * (1.0 - km)*(1.0 - km) * pow(fre, 5.); // reflectivity
-    
-    return kl * ndl * (kd + ks * kr * ggx); // diffuse + specular
-}
-
 vec3 ApplyLighting(vec2 uv, 
 					vec4 normal_and_height_color,
 					vec3 light_point, 
@@ -347,88 +294,53 @@ vec3 ApplyLighting(vec2 uv,
 					float shadow,
 					float shadow_amount)
 {
-	vec2 offset = vec2(global.OutputSize.x / global.OutputSize.y, 1.0);
-
 	// Get world normal from tangent normal map
     vec3 normal = normal_and_height_color.rgb * 2 - 1;
 
 	float HEIGHT_PLANE = 0;
 	vec3 planePoint = vec3(vTexCoord * 2 - 1, normal_and_height_color.a);
 	planePoint.y *= -1;
+
 	vec3 view_vector = normalize(vec3(0, 0, -3.5) - (1 - planePoint));
 	vec3 rd = -view_vector;
-	// vec3 rd = -normalize(vec3(0, 0, -3.5) - planePoint);
 
 	vec3 light_dir_pointlight = normalize(light_point - planePoint);
 	vec3 light_dir_directional = normalize(light_point);
 	vec3 light_dir = mix(light_dir_directional, light_dir_pointlight, light_directional_amount);
 
-	vec3 reflect_vector = reflect(-view_vector, normal);
-	// vec3 refl = reflect(rd, normal);
-	vec3 refl = reflect(vec3(0, 0, 1), normal);
-	// vec2 refl_uv = (planePoint.xy + refl.xy + 1) / 2;
-	vec2 refl_uv = vec2(dot(refl, vec3(-1, 0, 0)) / 2 + 0.5, 1 - (dot(refl, vec3(0, -1, 0)) / 2 + 0.5));//1 - dot(refl, vec3(0, 1, 0)));
-	// vec2 refl_uv = vec2(dot(refl, vec3(-1, 0, 0)), 0);//1 - dot(refl, vec3(0, 1, 0)));
+	// Start with the color as black
+	vec3 out_color = vec3(0);
 
-	vec3 R = dot(normal, rd) * normal * 2.0 - rd;
+	// Add Ambient
+	float ao_ambient = mix(1.0, ao, ambient_ao_amount);
+	out_color += albedo_color * ambient_color * ao_ambient;
 
-	vec3 difCol = albedo_color;
-
+	// Light color/shadow for diffuse and specular
 	shadow = mix(1.0, shadow, shadow_amount);
 	vec3 lightCol = light_color * shadow;
 
-	vec3 speCol;
-	float rou = roughness; // 0-1 roughness
-	float ior;
-
-	int type = 0; // dielectric (non-metal) blinn
-	// shader_type = 1; // metal blinn
-	// shader_type = 2; // metal phong
-
-	if (type == 0) // dielectric (non-metal) blinn
-	{ // dielectric
-		// difCol = vec3(.5,.1,.01);
-		// speCol = vec3(1); // dieletrics have always white specular
-		// EnvBRDFApprox(vec3 specularColor, float roughness, float ndotv)
-		ior = 1.65;
-		speCol = texture(specular_color_map, refl_uv).rgb ; // dieletrics have always white specular
-	} 
-	else // metal or blinn
-	{
-		difCol = vec3(0);
-		speCol = albedo_color * 2;
-		// speCol = vec3(1,.5,.1);
-		ior = 0.; // 0 ior for metals (full specular)
-	}
-	rou = 0.002 + 0.998 * rou * rou * 1.5;
-
-	// ao = pow(ao, 1.0 / 0.1);;
-	float ao_ambient = mix(1.0, ao, ambient_ao_amount); //clamp(ao + 0.4, 0, 1);
-	vec3 col = lighting(type,
-						normal,
-						light_dir,
-						rd,
-						lightCol,
-						difCol * ao_diffuse,
-						speCol * ao_specular,
-						rou,
-						ior);
-
-	vec3 half_vector = normalize(light_dir + rd);
-
-	// Add Ambient
-	col = albedo_color * ambient_color * ao_ambient;
-
 	// Add Diffuse
+	vec3 half_vector = normalize(light_dir + rd);
 	float ao_diffuse = mix(1.0, ao, diffuse_ao_amount);
-	col += albedo_color * ao_diffuse * lightCol * dot(half_vector, normal);
+	out_color += albedo_color * ao_diffuse * lightCol * dot(half_vector, normal);
 
-	// Add Specular
+	// Specular
+	// Get a reflected vector and position in the uv of the reflected light texture
+	vec3 refl = reflect(vec3(0, 0, 1), normal);
+	vec2 refl_uv = vec2(dot(refl, vec3(-1, 0, 0)) / 2 + 0.5, 1 - (dot(refl, vec3(0, -1, 0)) / 2 + 0.5));
+	vec3 speCol = texture(specular_color_map, refl_uv).rgb;
+
+	// Get a fresnel-esque multiplier based on normal angles
+	// TODO should we try to use EnvRemap on EnvBRDFApproxNonmetal
 	float env_spec_mult = pow(EnvBRDFApproxNonmetal( roughness, dot(normal_and_height_color.rgb, vec3(0, 0, 1)) ) * 12, 3);
-	float ao_specular = specular_amount * mix(1.0, ao, specular_ao_amount);
-	col += speCol * ao_specular * specular_amount * env_spec_mult;
 
-	return col;
+	// AO so we do not reflect from inside deep grooves
+	float ao_specular = specular_amount * mix(1.0, ao, specular_ao_amount);
+
+	// Add the specular
+	out_color += speCol * ao_specular * specular_amount * env_spec_mult;
+
+	return out_color;
 }
 
 
