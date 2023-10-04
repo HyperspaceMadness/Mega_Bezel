@@ -145,6 +145,76 @@ float Random(vec2 st)
     return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
 }
 
+#define pow2(x) (x * x)
+
+const float pi = atan(1.0) * 4.0;
+const int samples = 10; // Was 35 originally
+const float sigma = float(samples) * 0.25;
+
+float gaussian(vec2 i) {
+    return 1.0 / (2.0 * pi * pow2(sigma)) * exp(-((pow2(i.x) + pow2(i.y)) / (2.0 * pow2(sigma))));
+}
+
+vec3 blur(sampler2D sp, vec2 uv, vec2 scale) {
+    vec3 col = vec3(0.0);
+    float accum = 0.0;
+    float weight;
+    vec2 offset;
+    
+    for (int x = -samples / 2; x < samples / 2; ++x) {
+        for (int y = -samples / 2; y < samples / 2; ++y) {
+            offset = vec2(x, y);
+            weight = gaussian(offset);
+            col += texture(sp, uv + scale * offset).rgb * weight;
+            accum += weight;
+        }
+    }
+    
+    return col / accum;
+}
+
+float GetBlurredMiddleShadow(sampler2D sp, vec2 uv, float scale_multiplier, float noise_amount) {
+    float blurred_alpha = 0.0;
+    float accum = 0.0;
+    float weight;
+    vec2 offset;
+    
+	vec2 scale = scale_multiplier * 1 / global.OutputSize.xy;
+
+	float max_blur_size = noise_amount;
+	float p = max_blur_size / global.SourceSize.y;
+	// srand
+	float radius = sin(dot(uv, vec2(1233.224, 1743.335)));
+	
+	// The following are all unrolled otherwise they won't compile in D3D11
+	uv += vec2(HSM_rand(radius), HSM_rand(radius)) * p;
+
+    for (int x = -samples / 2; x < samples / 2; ++x) {
+        for (int y = -samples / 2; y < samples / 2; ++y) {
+            offset = vec2(x, y);
+            weight = gaussian(offset);
+
+			vec4 precomp_background = vec4(0);
+			vec4 precomp_middleground = vec4(0);
+			vec4 precomp_foreground = vec4(0);
+			vec4 precomp_additive = vec4(0);
+
+			vec4 image_layers_packed = texture(sp, uv + scale * offset);
+			HSM_Unpack_1_Rgba_To_4_Rgba(image_layers_packed, 
+										precomp_foreground, 
+										precomp_middleground, 
+										precomp_background, 
+										precomp_additive);
+
+            blurred_alpha += precomp_middleground.a * weight;
+            accum += weight;
+        }
+    }
+    
+    return 1 - blurred_alpha / accum;
+}
+
+
 // Shadertoy by consoleartist
 // https://www.shadertoy.com/view/Xlsfzl#
 vec3 GetHeightShadow(in sampler2D in_heightmap, 
@@ -618,6 +688,15 @@ void main()
 															HSM_HSHADOW_SPREAD_NOISE,
 															HSM_HSHADOW_GAMMA), 0, 1).r;
 
+	vec2 bshadow_offset = vec2(-0.07, 0.07) / (global.OutputSize.x / global.OutputSize.y);
+	float bshadow_opacity = 0.8;
+	float bshadow_noise = 4;
+	float bshadow_blur_scale_mult = 8;
+	float middleground_bshadow = clamp(GetBlurredMiddleShadow(SceneLayersPass, vTexCoord - bshadow_offset, bshadow_blur_scale_mult, bshadow_noise) + precomp_middleground.a, 0, 1);
+	middleground_bshadow = mix(1, middleground_bshadow, bshadow_opacity);
+
+	// FragColor = vec4(middleground_bshadow);
+	// return;
 
 	// Do HSV alterations on the bounce_light
 	if (HSM_LIGHT_BOUNCE_SATURATION != 1 || HSM_LIGHT_BOUNCE_BRIGHTNESS != 1)
@@ -824,7 +903,7 @@ void main()
 								HSM_LIGHTING_SPECULAR_AO,
 								BounceLightPass,
 								HSM_LIGHTING_DIFFUSE_AO,
-								bounce_shadow_from_middle,
+								bounce_shadow_from_middle * middleground_bshadow,
 								1.0);
 
 	out_color.rgb += 0.25 * ApplyLighting(vTexCoord, 
@@ -841,7 +920,7 @@ void main()
 								HSM_LIGHTING_SPECULAR_AO,
 								BounceLightPass,
 								HSM_LIGHTING_DIFFUSE_AO,
-								bounce_shadow_from_top_right,
+								bounce_shadow_from_top_right * middleground_bshadow,
 								1.0);
 
 	out_color.rgb += 0.25 * ApplyLighting(vTexCoord, 
@@ -858,7 +937,7 @@ void main()
 								HSM_LIGHTING_SPECULAR_AO,
 								BounceLightPass,
 								HSM_LIGHTING_DIFFUSE_AO,
-								bounce_shadow_from_top_left,
+								bounce_shadow_from_top_left * middleground_bshadow,
 								1.0);
 
 
