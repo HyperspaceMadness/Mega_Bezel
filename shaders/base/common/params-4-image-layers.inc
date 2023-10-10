@@ -138,16 +138,16 @@ float HSM_LGHT_SPOT_AMBIENT = global.HSM_LGHT_SPOT_AMBIENT / 100.0;
 #pragma parameter HSM_LGHT_SPOT_SHADOW_STRENGTH                                         "          Spot Shadow Strength"  100 0 100 1
 float HSM_LGHT_SPOT_SHADOW_STRENGTH = global.HSM_LGHT_SPOT_SHADOW_STRENGTH / 100;
 
-#pragma parameter HSM_LGHT_SPOT1_POINTX                                                   "          Spot 1 Pos X"  30 -200 200 1
+#pragma parameter HSM_LGHT_SPOT1_POINTX                                                   "          Spot 1 Pos X"  -70 -200 200 1
 float HSM_LGHT_SPOT1_POINTX = global.HSM_LGHT_SPOT1_POINTX / 100;
 
-#pragma parameter HSM_LGHT_SPOT1_POINTY                                                   "          Spot 1 Pos Y"  30 -200 200 1
+#pragma parameter HSM_LGHT_SPOT1_POINTY                                                   "          Spot 1 Pos Y"  70 -200 200 1
 float HSM_LGHT_SPOT1_POINTY = global.HSM_LGHT_SPOT1_POINTY / 100;
 
-#pragma parameter HSM_LGHT_SPOT2_POINTX                                                   "          Spot 2 Pos X"  80 -200 200 1
+#pragma parameter HSM_LGHT_SPOT2_POINTX                                                   "          Spot 2 Pos X"  70 -200 200 1
 float HSM_LGHT_SPOT2_POINTX = global.HSM_LGHT_SPOT2_POINTX / 100;
 
-#pragma parameter HSM_LGHT_SPOT2_POINTY                                                   "          Spot 2 Pos Y"  80 -200 200 1
+#pragma parameter HSM_LGHT_SPOT2_POINTY                                                   "          Spot 2 Pos Y"  -70 -200 200 1
 float HSM_LGHT_SPOT2_POINTY = global.HSM_LGHT_SPOT2_POINTY / 100;
 
 

@@ -272,7 +272,12 @@ void main()
 		if (HSM_BG_OPACITY > 0 && BACKGROUND_SIZE.y > 16)
 		{
 			bg_image = HSM_GetMipmappedTexSample(Background, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
+
 			static_shadow_multiply *= HSM_GetMipmappedTexSample(BackgroundShadow, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS).r;
+
+			if (textureSize(BackgroundShadow, 0).y > 16);
+				static_shadow_multiply *= HSM_GetMipmappedTexSample(BackgroundShadow, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS).r;
+
 			// Premultiply Alpha
 			bg_image = HSM_GetPreMultipliedColorLinear(bg_image, HSM_BG_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
 
@@ -306,10 +311,10 @@ void main()
 		if (HSM_DEVICE_OPACITY > 0 && DEVICE_SIZE.y > 16)
 		{
 			device_image = HSM_GetMipmappedTexSample(Device, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS);
-			// Fill Device area with white
-			static_shadow_multiply = clamp(static_shadow_multiply + device_image.a, 0, 1);
 
-			static_shadow_multiply *= mix(1.0, HSM_GetMipmappedTexSample(DeviceShadow, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS).r, device_image.a);
+			if (textureSize(DeviceShadow, 0).y > 16);
+				static_shadow_multiply *= mix(1.0, HSM_GetMipmappedTexSample(DeviceShadow, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_DEVICE_MIPMAPPING_BLEND_BIAS).r, device_image.a);
+
 			// Premultiply Alpha
 			device_image = HSM_GetPreMultipliedColorLinear(device_image, HSM_DEVICE_SOURCE_MATTE_TYPE, DEFAULT_SRGB_GAMMA);
 

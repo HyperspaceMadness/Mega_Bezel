@@ -12,7 +12,6 @@ BackgroundHeight = "../../shaders/textures/Background_Sfc_Duimon_Height.png"
 Device = "../../shaders/textures/Sony_Profeel_Device.png"
 DeviceHeight = "../../shaders/textures/Sony_Profeel_Device_Height.png"
 DeviceNormals = "../../shaders/textures/Sony_Profeel_Device_Normals.png"
-DeviceShadow = "../../shaders/textures/Sony_Profeel_Device_Shadow.png"
 
 HSM_CURVATURE_MODE = "2.000000"
 HSM_CURVATURE_2D_SCALE_SHORT_AXIS = "140.000000"

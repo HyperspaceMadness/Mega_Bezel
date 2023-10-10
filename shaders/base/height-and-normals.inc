@@ -221,7 +221,7 @@ void main()
         bg_height_layer = HSM_Linearize(bg_height_layer, DEFAULT_SRGB_GAMMA);
         bg_height_layer.rgb = (bg_height_layer.rgb - HSM_HSHADOW_BG_CONTRAST_CENTER) * HSM_HSHADOW_BG_CONTRAST + HSM_HSHADOW_BG_CONTRAST_CENTER;
         bg_height_layer.rgb += HSM_HSHADOW_BG_OFFSET_Z;
-        bg_height_layer.rgb *= clamp(bg_height_layer.rgb, -0.1, 1);
+        bg_height_layer.rgb *= clamp(bg_height_layer.rgb, 0, 1);
         bg_height_layer.rgb *= bg_layer.a;
 
         out_normal_color = HSM_PreMultAlphaBlend(out_normal_color, bg_normals_layer);

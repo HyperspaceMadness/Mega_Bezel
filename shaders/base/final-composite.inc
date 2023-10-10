@@ -111,7 +111,8 @@ layout(set = 0, binding = 15) uniform sampler2D FinalCompositePassFeedback;
 #define PassFeedback FinalCompositePassFeedback
 
 
-layout(set = 0, binding = 5) uniform sampler2D DitherNoise;
+// layout(set = 0, binding = 5) uniform sampler2D DitherNoise;
+layout(set = 0, binding = 5) uniform sampler2D Device;
 
 
 vec3 PrepGraphicsForHDR(vec3 in_color)
@@ -218,10 +219,10 @@ float GetBlurredMiddleShadow(sampler2D sp, vec2 uv, float scale_multiplier, floa
 // Shadertoy by consoleartist
 // https://www.shadertoy.com/view/Xlsfzl#
 vec3 GetHeightShadow(in sampler2D in_heightmap, 
-						float valid_height_area_mask,
+						in sampler2D in_scene_layers_map, 
 						vec2 uv,
 						vec3 light_point3, 
-						float directional_amount,
+						float omni_amount,
 						float in_samples,
 						float in_sample_bias,
 						float in_noise,
@@ -234,7 +235,7 @@ vec3 GetHeightShadow(in sampler2D in_heightmap,
 	light_point3.y *= -1;
 	vec3 light_vector_directional = normalize(light_point3);
 	vec3 light_vector = normalize(vec3(light_point3.xy, light_point3.z) - vec3(uv * 2.0 - 1.0, GetHeightValue(in_heightmap, uv)));
-	light_vector = normalize(mix(light_vector, light_vector_directional, directional_amount));
+	light_vector = normalize(mix(light_vector_directional, light_vector, omni_amount));
 
 	vec3 light_vector_orig = light_vector;
 	vec3 light_vector_solid_orig = normalize(vec3(light_vector.x, light_vector.y, light_vector.z + 0.05));
@@ -250,7 +251,7 @@ vec3 GetHeightShadow(in sampler2D in_heightmap,
 	float height_range = 1.1 - world_pos.z;
 	float sample_dist = 1 / in_samples;
 
-	float falloff_shadow = 1.0;
+	float shadow = 1.0;
 
 	vec3 light_vector_falloff = vec3(0);
 
@@ -260,6 +261,18 @@ vec3 GetHeightShadow(in sampler2D in_heightmap,
 	float in_height_noise_falloff_start = 0.5;
 	float in_height_noise_falloff_end = 1.0;
 	in_height_noise_falloff_start = min(in_height_noise_falloff_start, in_height_noise_falloff_end - 0.0001);
+
+	// TODO investigate why masking is doing nothing
+
+	vec4 precomp_background = vec4(0);
+	vec4 precomp_middleground = vec4(0);
+	vec4 precomp_foreground = vec4(0);
+	vec4 precomp_additive = vec4(0);
+
+
+	// return vec3(precomp_middleground.a);
+	// FragColor = vec3(texture(Device, vTexCoord).a, precomp_middleground.a, 0);
+
 
 	vec3 ray_sample_pos_random;
 	for (float i = 1; i <= in_samples; i += 1)
@@ -271,20 +284,40 @@ vec3 GetHeightShadow(in sampler2D in_heightmap,
 		light_vector_falloff.xy += shadow_falloff_spread * (Random( world_pos.xy + i * vec2(0.0005)) - 0.5) * i * sample_dist * vec2(0.1) ;
 		light_vector_falloff = normalize(light_vector_falloff);
 		ray_sample_pos_random = world_pos + light_vector_falloff * (i * sample_dist + random_sample_offset);
+
+		vec4 image_layers_packed = texture(in_scene_layers_map, ray_sample_pos_random.xy);
+		HSM_Unpack_1_Rgba_To_4_Rgba(image_layers_packed, 
+									precomp_foreground, 
+									precomp_middleground, 
+									precomp_background, 
+									precomp_additive);
+
+		if(precomp_middleground.a > 0.5)
+			break;
+
+		// TODO need to sample the mask at the ray position
 		float height_at_sample = GetHeightValue(in_heightmap, vec2(ray_sample_pos_random.x, ray_sample_pos_random.y));
 
 		if (dist_to_occlusion > 100000 && ray_sample_pos_random.z < (height_at_sample - in_sample_bias))
+		{
 			dist_to_occlusion = length(ray_sample_pos_random - world_pos);
+			break;
+		}
 
 		if (ray_sample_pos_random.z > 1.0 + 2 * sample_dist)
 			break;
+	
 	}
 
-	falloff_shadow = dist_to_occlusion > 999999 ? 1 : clamp(smoothstep(shadow_dist_umbra, shadow_dist_penumbra, dist_to_occlusion), 0, 1);
+	vec4 image_layers_packed = texture(in_scene_layers_map, uv);
+	HSM_Unpack_1_Rgba_To_4_Rgba(image_layers_packed, 
+								precomp_foreground, 
+								precomp_middleground, 
+								precomp_background, 
+								precomp_additive);
 
-	float final_shadow = falloff_shadow;
-
-	return vec3(final_shadow);
+	shadow = dist_to_occlusion > 999999 ? 1 : clamp(smoothstep(shadow_dist_umbra, shadow_dist_penumbra, dist_to_occlusion), 0, 1);
+	return vec3(shadow, precomp_middleground.a, 0);
 }
 
 float EnvBRDFApproxNonmetal( float Roughness, float NdotV )
@@ -440,7 +473,6 @@ vec3 ApplySpotlight(vec2 uv,
 
 	return out_color;
 }
-
 
 
 vec3 ApplyLighting(vec2 uv, 
@@ -686,19 +718,6 @@ void main()
 
 	vec4 out_color = vec4(0);
 
-
-	vec4 image_layers_packed_shadow_stretch = texture(SceneLayersPass, (vTexCoord - 0.5) / 1.1 + 0.5 + vec2(SCREEN_SCALE.x * 0.02, 0));
-	vec4 precomp_background_shadow_stretch = vec4(0);
-	vec4 precomp_middleground_shadow_stretch = vec4(0);
-	vec4 precomp_foreground_shadow_stretch = vec4(0);
-	vec4 precomp_additive_shadow_stretch = vec4(0);
-
-	HSM_Unpack_1_Rgba_To_4_Rgba(image_layers_packed_shadow_stretch, 
-								precomp_foreground_shadow_stretch, 
-								precomp_middleground_shadow_stretch, 
-								precomp_background_shadow_stretch, 
-								precomp_additive_shadow_stretch);
-
 	// Needs to divide by 2
 	float mix_horz = HSM_LGHT_BOUNCE_MIX_HORZ / 2;
 	float mix_vert = HSM_LGHT_BOUNCE_MIX_VERT / 2;
@@ -718,22 +737,20 @@ void main()
 	float bounce_center_Vignette = clamp(HSM_GetStrengthPowerVignetteFactor(bounce_coord_ctr * 0.5 + 0.5, 20, 2), 0, 1);
 	bounce_light = mix(bounce_light, bounce_light_center, HSM_LGHT_BOUNCE_MIX_FULLSCREEN_GLOW * bounce_center_Vignette);
 
-	float noise_sample = HSM_TextureAbsolute(DitherNoise, vTexCoord * 1).r; // * 1.9;
+	float noise_sample = 1;
+	// float noise_sample = HSM_TextureAbsolute(DitherNoise	, vTexCoord * 1).r; // * 1.9;
 	float shadow_bias = 0.001;
 
 	// Middle shadow should probably be soft
 	float middle_umbra = 0.0;
 	float middle_penumbra = 0.3;
-	float middle_directional = 0.0;
-
-	// Only look at the height in the masked area when doing the shadow calculation
-	float valid_height_area_mask = 1 - precomp_middleground.a;
+	float middle_omni = 1.0;
 
 	float bounce_shadow_from_middle = clamp(GetHeightShadow(NormalsAndHeightPass, 
-															valid_height_area_mask,
+															SceneLayersPass,
 															vTexCoord, 
 															vec3(0.0, 0.0, 5.0),
-															middle_directional,
+															middle_omni,
 															HSM_HSHADOW_SAMPLES, 
 															shadow_bias, 
 															noise_sample, 
@@ -745,9 +762,24 @@ void main()
 	vec3 shadow_light_point = HSM_LGHT_LIGHT_POINT;
 	shadow_light_point.z *= HSM_HSHADOW_DEPTH_MULT;
 
-	// float bounce_shadow_from_top_right = 1 - precomp_middleground_shadow_stretch.a;
+	vec3 shadow_out = GetHeightShadow(NormalsAndHeightPass, 
+												SceneLayersPass,
+												vTexCoord, 
+												shadow_light_point,
+												HSM_LGHT_OMNI,
+												HSM_HSHADOW_SAMPLES, 
+												shadow_bias, 
+												noise_sample, 
+												HSM_HSHADOW_NOISE, 
+												HSM_HSHADOW_DIST_UMBRA,
+												HSM_HSHADOW_DIST_PENUMBRA,
+												HSM_HSHADOW_SPREAD_NOISE,
+												HSM_HSHADOW_GAMMA);
+	FragColor = vec4(shadow_out, 0);
+	return;
+
 	float bounce_shadow_from_top_right = clamp(GetHeightShadow(NormalsAndHeightPass, 
-												valid_height_area_mask,
+												SceneLayersPass,
 												vTexCoord, 
 												shadow_light_point,
 												HSM_LGHT_OMNI,
@@ -763,7 +795,7 @@ void main()
 	float left_umbra = 0.0;
 	float left_penumbra = 0.5;
 	float bounce_shadow_from_top_left = clamp(GetHeightShadow(NormalsAndHeightPass, 
-															valid_height_area_mask,
+															SceneLayersPass,
 															vTexCoord, 
 															vec3(shadow_light_point.x * -0.75, shadow_light_point.y * 0.85, shadow_light_point.z),
 															HSM_LGHT_OMNI,
@@ -1159,7 +1191,7 @@ void main()
 	}
 
 	if (HSM_LGHT_DEBUG_MAPS == 1)
-		out_color = vec4(bounce_shadow_from_top_right);
+		out_color = vec4(bounce_shadow_from_top_right * bounce_shadow_from_top_left * bounce_shadow_from_middle);
 
 	if (HSM_LGHT_DEBUG_MAPS == 2)
 		out_color = texture(NormalsAndHeightPass, vTexCoord).aaaa;
