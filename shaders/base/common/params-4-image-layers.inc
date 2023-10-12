@@ -201,7 +201,7 @@ float HSM_LGHT_BOUNCE_SATURATION = 1.0;
 #pragma parameter HSM_LGHT_LIGHT_POS_Y                                               "          Light Pos Y"  100 -3000 3000 5
 // float HSM_LGHT_LIGHT_POS_Y = global.HSM_LGHT_LIGHT_POS_Y / 100.0 * -1.0;
 
-#pragma parameter HSM_LGHT_LIGHT_POS_Z                                               "          Light Pos Z (Depth)"  300 -3000 3000 5
+#pragma parameter HSM_LGHT_LIGHT_POS_Z                                               "          Light Pos Z (Depth)"  500 -3000 3000 5
 // float HSM_LGHT_LIGHT_POS_Z = global.HSM_LGHT_LIGHT_POS_Z / 100.0;
 
 vec3 HSM_LGHT_LIGHT_POINT = vec3(global.HSM_LGHT_LIGHT_POS_X / 100.0, global.HSM_LGHT_LIGHT_POS_Y / 100.0, global.HSM_LGHT_LIGHT_POS_Z / 100.0);
@@ -256,7 +256,7 @@ float HSM_HSHADOW_SAMPLES = global.HSM_HSHADOW_SAMPLES;
 // float HSM_HSHADOW_NOISE = global.HSM_HSHADOW_NOISE / 100;
 float HSM_HSHADOW_NOISE = 100 / 100;
 
-#pragma parameter HSM_HSHADOW_DEPTH_MULT                                                "          Shadow Light Distance Multiplier"  1000 0 5000 20
+#pragma parameter HSM_HSHADOW_DEPTH_MULT                                                "          Shadow Light Distance Multiplier"  300 0 5000 20
 float HSM_HSHADOW_DEPTH_MULT = global.HSM_HSHADOW_DEPTH_MULT / 100.0;
 
 #pragma parameter HSM_HSHADOW_DIST_UMBRA                                                "          Umbra Distance (Solid Shadow)"  45 0 3000 5
@@ -278,7 +278,7 @@ float HSM_HSHADOW_BG_CONTRAST_CENTER = global.HSM_HSHADOW_BG_CONTRAST_CENTER / 1
 #pragma parameter HSM_HSHADOW_BG_CONTRAST                                               "          BG Height Contrast (Depth Details Multiplier)"  100 0 300 1
 float HSM_HSHADOW_BG_CONTRAST = global.HSM_HSHADOW_BG_CONTRAST / 100.0;
 
-#pragma parameter HSM_HSHADOW_BG_OFFSET_Z                                               "          BG Height Offset Z (Depth)"  0 -100 300 1
+#pragma parameter HSM_HSHADOW_BG_OFFSET_Z                                               "          BG Height Offset Z (Depth)"  20 -100 300 1
 float HSM_HSHADOW_BG_OFFSET_Z = global.HSM_HSHADOW_BG_OFFSET_Z / 100.0;
 
 
