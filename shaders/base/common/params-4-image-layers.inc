@@ -84,7 +84,7 @@ float HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS = global.HSM_COMPOSITE_BASE_COLOR_BRIG
 
 
 #pragma parameter HSM_LGHT_DEBUG_EMPTY_LINE			                                    " " 0 0 0.001 0.001
-#pragma parameter HSM_LGHT_DEBUG_TITLE			                                     "[ STATIC LIGHTIING E.G. INCANDESCENT]:" 0 0 0.01 0.01
+#pragma parameter HSM_LGHT_DEBUG_TITLE			                                     "[ SHADING DEBUG ]:" 0 0 0.01 0.01
 
 #pragma parameter HSM_LGHT_DEBUG_MAPS                                                "          Debug - SHADED | SHADOW | HEIGHT | NORMALS"  0 0 3 1
 float HSM_LGHT_DEBUG_MAPS = global.HSM_LGHT_DEBUG_MAPS;
@@ -99,13 +99,13 @@ float HSM_LGHT_DEBUG_SHADING_MODE = global.HSM_LGHT_DEBUG_SHADING_MODE;
 #pragma parameter HSM_LGHT_EMPTY_LINE			                                    " " 0 0 0.001 0.001
 #pragma parameter HSM_LGHT_PARAMETRIC_TITLE			                                     "[ STATIC LIGHTIING E.G. INCANDESCENT]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_LGHT_NATURAL_AMBIENT_HUE                                              "          Natural Ambient Hue"  230 0 360 1
+#pragma parameter HSM_LGHT_NATURAL_AMBIENT_HUE                                           "          Natural Ambient Hue"  230 0 360 1
 float HSM_LGHT_NATURAL_AMBIENT_HUE = global.HSM_LGHT_NATURAL_AMBIENT_HUE / 360.0;
 
-#pragma parameter HSM_LGHT_NATURAL_AMBIENT_SATURATION                                       "          Natural Ambient Saturation"  60 0 100 1
+#pragma parameter HSM_LGHT_NATURAL_AMBIENT_SATURATION                                    "          Natural Ambient Saturation"  60 0 100 1
 float HSM_LGHT_NATURAL_AMBIENT_SATURATION = global.HSM_LGHT_NATURAL_AMBIENT_SATURATION / 100.0;
 
-#pragma parameter HSM_LGHT_NATURAL_AMBIENT_VALUE                                            "          Natural Ambient Value"  10 0 100 1
+#pragma parameter HSM_LGHT_NATURAL_AMBIENT_VALUE                                         "          Natural Ambient Value"  10 0 100 1
 float HSM_LGHT_NATURAL_AMBIENT_VALUE = global.HSM_LGHT_NATURAL_AMBIENT_VALUE / 100.0;
 
 #pragma parameter HSM_LGHT_SPOT_BRIGHTNESS                                               "          Spot Brightness"  100 0 500 5
@@ -114,19 +114,19 @@ float HSM_LGHT_SPOT_BRIGHTNESS = global.HSM_LGHT_SPOT_BRIGHTNESS / 100;
 #pragma parameter HSM_LGHT_SPOT_GLOBAL_SCALE                                             "          Spot Global Scale"  100 0 500 5
 float HSM_LGHT_SPOT_GLOBAL_SCALE = global.HSM_LGHT_SPOT_GLOBAL_SCALE / 100;
 
-#pragma parameter HSM_LGHT_SPOT_WIDTH                                                    "          Spot Width"  80 0 500 5
-float HSM_LGHT_SPOT_WIDTH = global.HSM_LGHT_SPOT_WIDTH / 100;
+#pragma parameter HSM_LGHT_SPOT_WIDTH                                                    "          Spot Width"  100 0 500 5
+float HSM_LGHT_SPOT_WIDTH = global.HSM_LGHT_SPOT_WIDTH / 100 * 1.3;
 
-#pragma parameter HSM_LGHT_SPOT_FALLOFF                                                 "          Spot Falloff"  4 0.1 20 0.1
+#pragma parameter HSM_LGHT_SPOT_FALLOFF                                                 "          Spot Falloff"  2 0.1 20 0.1
 float HSM_LGHT_SPOT_FALLOFF = global.HSM_LGHT_SPOT_FALLOFF;
 
 // #pragma parameter HSM_LGHT_SPOT_HUE                                                  "          Spot 1 Hue"  43 0 360 1
 // float HSM_LGHT_SPOT_HUE = global.HSM_LGHT_SPOT_HUE / 360.0;
 float HSM_LGHT_SPOT_HUE = 43;
 
-// #pragma parameter HSM_LGHT_SPOT_SATURATION                                           "          Spot 1 Saturation"  62 0 100 1
-// float HSM_LGHT_SPOT_SATURATION = global.HSM_LGHT_SPOT_SATURATION / 100.0;
-float HSM_LGHT_SPOT_SATURATION = 62;
+#pragma parameter HSM_LGHT_SPOT_SATURATION                                           "          Spot 1 Saturation"  62 0 100 1
+float HSM_LGHT_SPOT_SATURATION = global.HSM_LGHT_SPOT_SATURATION / 100.0;
+// float HSM_LGHT_SPOT_SATURATION = 62;
 
 // #pragma parameter HSM_LGHT_SPOT_VALUE                                                "          Spot 1 Value"  77 0 100 1
 // float HSM_LGHT_SPOT_VALUE = global.HSM_LGHT_SPOT_VALUE / 100.0;
@@ -137,6 +137,9 @@ float HSM_LGHT_SPOT_AMBIENT = global.HSM_LGHT_SPOT_AMBIENT / 100.0;
 
 #pragma parameter HSM_LGHT_SPOT_SHADOW_STRENGTH                                         "          Spot Shadow Strength"  100 0 100 1
 float HSM_LGHT_SPOT_SHADOW_STRENGTH = global.HSM_LGHT_SPOT_SHADOW_STRENGTH / 100;
+
+#pragma parameter HSM_LGHT_3D_LIGHT_BLEND                                               "          3D Light vs Night Light Blend"  100 0 100 100
+float HSM_LGHT_3D_LIGHT_BLEND = global.HSM_LGHT_3D_LIGHT_BLEND / 100;
 
 #pragma parameter HSM_LGHT_SPOT1_POINTX                                                   "          Spot 1 Pos X"  -70 -200 200 1
 float HSM_LGHT_SPOT1_POINTX = global.HSM_LGHT_SPOT1_POINTX / 100;
@@ -269,8 +272,9 @@ float HSM_HSHADOW_DIST_PENUMBRA = max(global.HSM_HSHADOW_DIST_PENUMBRA / 100.0, 
 // float HSM_HSHADOW_SPREAD_NOISE = global.HSM_HSHADOW_SPREAD_NOISE / 100.0;
 float HSM_HSHADOW_SPREAD_NOISE = 0;
 
-#pragma parameter HSM_HSHADOW_GAMMA                                                     "          Shadow Gamma"  100 1 1000 1
-float HSM_HSHADOW_GAMMA = global.HSM_HSHADOW_GAMMA / 100.0;
+// #pragma parameter HSM_HSHADOW_GAMMA                                                     "          Shadow Gamma"  100 1 1000 1
+// float HSM_HSHADOW_GAMMA = global.HSM_HSHADOW_GAMMA / 100.0;
+float HSM_HSHADOW_GAMMA = 1.0;
 
 #pragma parameter HSM_HSHADOW_BG_CONTRAST_CENTER                                        "          BG Height Contrast Center"  0 0 100 1
 float HSM_HSHADOW_BG_CONTRAST_CENTER = global.HSM_HSHADOW_BG_CONTRAST_CENTER / 100.0;

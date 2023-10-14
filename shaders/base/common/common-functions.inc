@@ -852,7 +852,7 @@ vec3 HSM_GetNightLightingMultiplyColor( vec2 in_coord, float hue, float saturati
 	return out_color;
 }
 
-bool HSM_Fill_Nightlight_s(vec2 in_viewport_coord, vec2 in_viewport_unscaled_coord, vec2 in_tube_coord, vec2 in_tube_scale, float in_swap_images, in sampler2D in_ambient_sampler, in sampler2D in_ambient2_sampler, inout vec3 ambient_rgb, inout vec3 ambient2_rgb)
+bool HSM_Fill_Nightlight_Images(vec2 in_viewport_coord, vec2 in_viewport_unscaled_coord, vec2 in_tube_coord, vec2 in_tube_scale, float in_swap_images, in sampler2D in_ambient_sampler, in sampler2D in_ambient2_sampler, inout vec3 ambient_rgb, inout vec3 ambient2_rgb)
 {
 		ambient_rgb = vec3(1);
 		ambient2_rgb = vec3(1);
