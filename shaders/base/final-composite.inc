@@ -385,9 +385,9 @@ float luminance(vec3 col) {
 // #endif
 //     }
 
-vec3 ApplyAmbient( vec3 albedo_color, vec3 natural_ambient_color)
+vec3 ApplyAmbient( vec3 albedo_color, vec3 ambient_color)
 {
-	return albedo_color * natural_ambient_color;
+	return albedo_color * ambient_color;
 }
 
 vec3 ApplySpotlight(vec2 uv, 
@@ -977,10 +977,11 @@ void main()
 		out_color = HSM_PreMultAlphaBlend(out_color, precomp_middleground);
 	}
 
+	// float ao = smoothstep(0, HSM_LGHT_AO_HEIGHT_CUTOFF, texture(NormalsAndHeightPass, vTexCoord).a);
+	
+	// AO is disabled because it doesn't have a very noticeable effect
+	float ao = 1;
 
-	// // Need to consolidate per group lighting & surface lighting, or add it separately on each
-
-	float ao = smoothstep(0, HSM_LGHT_AO_HEIGHT_CUTOFF, texture(NormalsAndHeightPass, vTexCoord).a);
 	// FragColor = vec4(ao);
 	// return;
 	vec4 normal_and_height_color = texture(NormalsAndHeightPass, vTexCoord);
@@ -988,8 +989,35 @@ void main()
 	float spot_specular_amount = HSM_LGHT_DEBUG_SHADING_MODE > 0.5 && HSM_LGHT_DEBUG_SHADING_MODE < 3.5 ? 0 : HSM_LGHT_SPECULAR_AMOUNT;
 	float bounce_specular_amount = HSM_LGHT_DEBUG_SHADING_MODE > 0.5 && HSM_LGHT_DEBUG_SHADING_MODE < 3.5 ? 0 : HSM_LGHT_SPECULAR_AMOUNT * bounce_light_brightness;
 
-	vec3 natural_ambient_color = HSM_HSVtoRGB(vec3(HSM_LGHT_NATURAL_AMBIENT_HUE, HSM_LGHT_NATURAL_AMBIENT_SATURATION, HSM_LGHT_NATURAL_AMBIENT_VALUE));
-	natural_ambient_color = HSM_LGHT_DEBUG_SHADING_MODE == 2 ? vec3(0) : natural_ambient_color;
+	vec3 spot_color = pow(HSM_HSVtoRGB(vec3(HSM_LGHT_SPOT_HUE, HSM_LGHT_SPOT_SATURATION, HSM_LGHT_SPOT_VALUE)), vec3(2.2)) * HSM_LGHT_SPOT_BRIGHTNESS;
+
+
+	// vec3 blue_ambient_hsv = vec3(230.0 / 360.0, 0.60, 0.10);
+	vec3 blue_ambient_hsv = vec3(230.0 / 360.0, 0.80, 0.70);
+	vec3 incandescent_ambient_hsv = vec3(HSM_LGHT_SPOT_HUE, HSM_LGHT_SPOT_SATURATION, HSM_LGHT_SPOT_VALUE);
+	vec3 custom_ambient_hsv = vec3(HSM_LGHT_AMBIENT_HUE, HSM_LGHT_AMBIENT_SATURATION, HSM_LGHT_AMBIENT_VALUE);
+
+	vec3 ambient_hsv = vec3(0);
+	// Blue Ambient
+	if (HSM_LGHT_AMBIENT_BASE_COLOR == 0)
+		ambient_hsv = blue_ambient_hsv;
+	// Incandescent Ambient matching Spots
+	if (HSM_LGHT_AMBIENT_BASE_COLOR == 1)
+		ambient_hsv = incandescent_ambient_hsv;
+	// Custom Ambient 
+	if (HSM_LGHT_AMBIENT_BASE_COLOR == 2)
+		ambient_hsv = custom_ambient_hsv;
+	
+	// vec3 ambient_color = pow(HSM_HSVtoRGB(ambient_hsv), vec3(2.2)) * HSM_LGHT_AMBIENT_BRIGHTNESS;
+	vec3 ambient_color = HSM_HSVtoRGB(ambient_hsv) * HSM_LGHT_AMBIENT_BRIGHTNESS;
+
+	if (HSM_LGHT_DEBUG_SHADING_MODE == 2)
+		ambient_color = vec3(0);
+
+	// out_color.rgb += ApplyAmbient(prelit_color, spot_color * HSM_LGHT_AMBIENT_BRIGHTNESS * HSM_LGHT_SPOT_BRIGHTNESS * middleground_bshadow * shadow_from_top_right);
+
+	// vec3 ambient_color = HSM_HSVtoRGB(vec3(HSM_LGHT_CUSTOM_AMBIENT_HUE, HSM_LGHT_CUSTOM_AMBIENT_SATURATION, HSM_LGHT_CUSTOM_AMBIENT_VALUE));
+	// ambient_color = HSM_LGHT_DEBUG_SHADING_MODE == 2 ? vec3(0) : ambient_color;
 
 	float luma_right_top = luminance(texture(BounceLightPass, vec2(0.85, 0.15)).rgb);
 	float luma_right_middle = luminance(texture(BounceLightPass, vec2(0.7, 0.5)).rgb);
@@ -1023,10 +1051,8 @@ void main()
 	out_color.rgb = vec3(0);
 
 	// Add Natural Ambient Light often a bluish light
-	out_color.rgb += ApplyAmbient(prelit_color, natural_ambient_color);
+	out_color.rgb += ApplyAmbient(prelit_color, ambient_color);
 
-// TODO need to set color from HSV
-	vec3 spot_color = HSM_HSVtoRGB(vec3(HSM_LGHT_SPOT_HUE, HSM_LGHT_SPOT_SATURATION, HSM_LGHT_SPOT_VALUE));
 	// vec3 spot_color = pow(vec3(0.92, 0.84, 0.63), vec3(2.2)) * HSM_LGHT_SPOT_BRIGHTNESS;
 	// vec3 spot_color = pow(vec3(0.99, 0.88, 0.55), vec3(2.2)) * HSM_LGHT_SPOT_BRIGHTNESS;
 	// vec3 spot_color = pow(vec3(0.96, 0.86, 0.59), vec3(2.2)) * HSM_LGHT_SPOT_BRIGHTNESS;
@@ -1036,10 +1062,6 @@ void main()
 	// --------------------------------------------------------------------------------------------------
 	// SPOT LIGHTS
 	// --------------------------------------------------------------------------------------------------
-
-	// Add Spot Ambient Light spot light is usually incandescent
-	vec3 prelit_with_ambient = ApplyAmbient(prelit_color, spot_color * HSM_LGHT_SPOT_AMBIENT * HSM_LGHT_SPOT_BRIGHTNESS * middleground_bshadow * shadow_from_top_right);
-	out_color.rgb += prelit_with_ambient;
 
 
 	// shadow_from_middle = mix(1.0, pow(shadow_from_middle, 1 / HSM_HSHADOW_GAMMA), HSM_LGHT_SHADOW_FROM_MIDDLE_AMOUNT);// * middle_weight)
@@ -1093,7 +1115,7 @@ void main()
 	// --------------------------------------------------------------------------------------------------
 
 	// Blend between 3d and Image based incandescent lighting
-	out_color.rgb = mix(prelit_with_ambient + nightlight1_rgb * prelit_color, out_color.rgb, HSM_LGHT_3D_LIGHT_BLEND);
+	out_color.rgb = mix(nightlight1_rgb * prelit_color, out_color.rgb, HSM_LGHT_3D_LIGHT_BLEND);
 
 
 
@@ -1119,7 +1141,6 @@ void main()
 
 	float t_shadow_from_top_right = mix(1.0, pow(shadow_from_top_right, 1 / HSM_HSHADOW_GAMMA), luma_ratio_right);// * luma_ratio_left * (1 - middle_weight))
 	float t_shadow_from_top_left = mix(1.0, pow(shadow_from_top_left, 1 / HSM_HSHADOW_GAMMA), luma_ratio_left);// * luma_ratio_right * (1 - middle_weight));
-	float t_shadow_from_middle = mix(1.0, shadow_from_middle, 0.0);// * luma_ratio_right * (1 - middle_weight));
 	
 	out_color.rgb += 0.33 * ApplyLighting(vTexCoord, 
 								normal_and_height_color,
@@ -1132,7 +1153,7 @@ void main()
 								bounce_specular_amount,
 								BounceLightPass,
 								HSM_LGHT_DIFFUSE_AO,
-								t_shadow_from_top_right * bounce_middleground_bshadow);// * t_shadow_from_middle);
+								t_shadow_from_top_right * bounce_middleground_bshadow);
 
 	// t_shadow_from_top_right = mix(1.0, pow(shadow_from_top_right, 1 / HSM_HSHADOW_GAMMA), luma_ratio_left);// * luma_ratio_left * (1 - middle_weight))
 	// t_shadow_from_top_left = mix(1.0, pow(shadow_from_top_left, 1 / HSM_HSHADOW_GAMMA), luma_ratio_right);// * luma_ratio_right * (1 - middle_weight));
@@ -1147,11 +1168,7 @@ void main()
 								bounce_specular_amount,
 								BounceLightPass,
 								HSM_LGHT_DIFFUSE_AO,
-								t_shadow_from_top_left * bounce_middleground_bshadow);// * t_shadow_from_middle);
-
-	out_color = HSM_Delinearize(out_color, DEFAULT_SRGB_GAMMA);
-	FragColor = out_color;
-	return;
+								t_shadow_from_top_left * bounce_middleground_bshadow);
 
 
 	if (HSM_COMPOSITE_CRT_AND_REFLECTION_ON > 0.5 && HSM_RENDER_SIMPLE_MODE < 0.5)
