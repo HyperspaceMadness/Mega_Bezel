@@ -105,15 +105,15 @@ float HSM_LGHT_AMBIENT_BRIGHTNESS = global.HSM_LGHT_AMBIENT_BRIGHTNESS / 100.0;
 #pragma parameter HSM_LGHT_AMBIENT_BASE_COLOR                                       "          Ambient Color - Blue | Incandescent | Custom"  0 0 2 1
 float HSM_LGHT_AMBIENT_BASE_COLOR = global.HSM_LGHT_AMBIENT_BASE_COLOR;
 
-#pragma parameter HSM_LGHT_AMBIENT_HUE                                              "          Ambient Hue"  230 -180 360 1
-float HSM_LGHT_AMBIENT_HUE = global.HSM_LGHT_AMBIENT_HUE / 360.0;
-// float HSM_LGHT_AMBIENT_HUE = 230.0 / 360.0;
+#pragma parameter HSM_LGHT_CUSTOM_AMBIENT_HUE                                              "          Ambient Hue"  230 -180 360 1
+float HSM_LGHT_CUSTOM_AMBIENT_HUE = global.HSM_LGHT_CUSTOM_AMBIENT_HUE / 360.0;
+// float HSM_LGHT_CUSTOM_AMBIENT_HUE = 230.0 / 360.0;
 
-#pragma parameter HSM_LGHT_AMBIENT_SATURATION                                       "          Ambient Saturation"  80 0 100 1
-float HSM_LGHT_AMBIENT_SATURATION = global.HSM_LGHT_AMBIENT_SATURATION / 100.0;
+#pragma parameter HSM_LGHT_CUSTOM_AMBIENT_SATURATION                                       "          Ambient Saturation"  80 0 100 1
+float HSM_LGHT_CUSTOM_AMBIENT_SATURATION = global.HSM_LGHT_CUSTOM_AMBIENT_SATURATION / 100.0;
 
-#pragma parameter HSM_LGHT_AMBIENT_VALUE                                            "          Ambient Value"  70 0 100 0.2
-float HSM_LGHT_AMBIENT_VALUE = global.HSM_LGHT_AMBIENT_VALUE / 100.0;
+#pragma parameter HSM_LGHT_CUSTOM_AMBIENT_VALUE                                            "          Ambient Value"  70 0 100 0.2
+float HSM_LGHT_CUSTOM_AMBIENT_VALUE = global.HSM_LGHT_CUSTOM_AMBIENT_VALUE / 100.0;
 
 
 #pragma parameter HSM_LGHT_SPOT_BRIGHTNESS                                          "          Spot Brightness"  100 0 500 5
@@ -275,8 +275,9 @@ float HSM_HSHADOW_SAMPLES = global.HSM_HSHADOW_SAMPLES;
 // float HSM_HSHADOW_NOISE = global.HSM_HSHADOW_NOISE / 100;
 float HSM_HSHADOW_NOISE = 100 / 100;
 
-#pragma parameter HSM_HSHADOW_DEPTH_MULT                                                "          Shadow Light Distance Multiplier"  300 0 5000 20
-float HSM_HSHADOW_DEPTH_MULT = global.HSM_HSHADOW_DEPTH_MULT / 100.0;
+// #pragma parameter HSM_HSHADOW_DEPTH_MULT                                                "          Shadow Light Distance Multiplier"  300 0 5000 20
+// float HSM_HSHADOW_DEPTH_MULT = global.HSM_HSHADOW_DEPTH_MULT / 100.0;
+float HSM_HSHADOW_DEPTH_MULT = 3.0;
 
 // #pragma parameter HSM_HSHADOW_DIST_UMBRA                                                "          Umbra Distance (Solid Shadow)"  0 0 3000 5
 // float HSM_HSHADOW_DIST_UMBRA = global.HSM_HSHADOW_DIST_UMBRA / 1000.0;
@@ -294,8 +295,9 @@ float HSM_HSHADOW_SPREAD_NOISE = 0;
 // float HSM_HSHADOW_GAMMA = global.HSM_HSHADOW_GAMMA / 100.0;
 float HSM_HSHADOW_GAMMA = 1.0;
 
-#pragma parameter HSM_HSHADOW_BG_CONTRAST_CENTER                                        "          BG Height Contrast Center"  0 0 100 1
-float HSM_HSHADOW_BG_CONTRAST_CENTER = global.HSM_HSHADOW_BG_CONTRAST_CENTER / 100.0;
+// #pragma parameter HSM_HSHADOW_BG_CONTRAST_CENTER                                        "          BG Height Contrast Center"  0 0 100 1
+// float HSM_HSHADOW_BG_CONTRAST_CENTER = global.HSM_HSHADOW_BG_CONTRAST_CENTER / 100.0;
+float HSM_HSHADOW_BG_CONTRAST_CENTER = 0.0;
 
 #pragma parameter HSM_HSHADOW_BG_CONTRAST                                               "          BG Height Contrast (Depth Details Multiplier)"  100 0 300 1
 float HSM_HSHADOW_BG_CONTRAST = global.HSM_HSHADOW_BG_CONTRAST / 100.0;
@@ -304,8 +306,9 @@ float HSM_HSHADOW_BG_CONTRAST = global.HSM_HSHADOW_BG_CONTRAST / 100.0;
 float HSM_HSHADOW_BG_OFFSET_Z = global.HSM_HSHADOW_BG_OFFSET_Z / 100.0;
 
 
-#pragma parameter HSM_HSHADOW_DEVICE_CONTRAST_CENTER                                    "          Device Height Contrast Center"  100 0 100 1
-float HSM_HSHADOW_DEVICE_CONTRAST_CENTER = global.HSM_HSHADOW_DEVICE_CONTRAST_CENTER / 100.0;
+// #pragma parameter HSM_HSHADOW_DEVICE_CONTRAST_CENTER                                    "          Device Height Contrast Center"  100 0 100 1
+// float HSM_HSHADOW_DEVICE_CONTRAST_CENTER = global.HSM_HSHADOW_DEVICE_CONTRAST_CENTER / 100.0;
+float HSM_HSHADOW_DEVICE_CONTRAST_CENTER = 1.0;
 
 #pragma parameter HSM_HSHADOW_DEVICE_CONTRAST                                           "          Device Height Contrast (Depth Details Multiplier)"  100 0 300 1
 float HSM_HSHADOW_DEVICE_CONTRAST = global.HSM_HSHADOW_DEVICE_CONTRAST / 100.0;

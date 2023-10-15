@@ -995,7 +995,7 @@ void main()
 	// vec3 blue_ambient_hsv = vec3(230.0 / 360.0, 0.60, 0.10);
 	vec3 blue_ambient_hsv = vec3(230.0 / 360.0, 0.80, 0.70);
 	vec3 incandescent_ambient_hsv = vec3(HSM_LGHT_SPOT_HUE, HSM_LGHT_SPOT_SATURATION, HSM_LGHT_SPOT_VALUE);
-	vec3 custom_ambient_hsv = vec3(HSM_LGHT_AMBIENT_HUE, HSM_LGHT_AMBIENT_SATURATION, HSM_LGHT_AMBIENT_VALUE);
+	vec3 custom_ambient_hsv = vec3(HSM_LGHT_CUSTOM_AMBIENT_HUE, HSM_LGHT_CUSTOM_AMBIENT_SATURATION, HSM_LGHT_CUSTOM_AMBIENT_VALUE);
 
 	vec3 ambient_hsv = vec3(0);
 	// Blue Ambient
