@@ -242,7 +242,7 @@ vec3 GetHeightShadow(in sampler2D in_heightmap,
 	vec3 light_vector_solid_orig = normalize(vec3(light_vector.x, light_vector.y, light_vector.z + 0.05));
 
 	vec2 random_xy = vec2(0); //global.OutputSize.zw * in_noise / 4;
-	vec3 world_pos = vec3(uv + random_xy, GetHeightValue(in_heightmap, uv + random_xy));
+	vec3 world_pos = vec3(uv + random_xy, GetHeightValue(in_heightmap, uv + random_xy) - in_sample_bias);
 
 	// float random_sample_offset = (Random(world_pos.xy) * in_height_noise_amount) / in_samples;
 
@@ -447,8 +447,6 @@ vec3 ApplySpotlight(vec2 uv,
 	vec3 speCol = light_color;
 
 	// Get a fresnel-esque multiplier based on normal angles
-	// TODO should we try to use EnvRemap on EnvBRDFApproxNonmetal
-	// float env_spec_mult = pow(EnvBRDFApproxNonmetal( roughness, dot(normal_and_height_color.rgb, vec3(0, 0, 1)) ) * 12, 3);
 	float light_brightness = 1;
 	float specular_incidence_mult = pow(clamp(dot(half_vector, normal), 0.0, 1.0), light_brightness);
 
@@ -513,6 +511,24 @@ vec3 ApplyLighting(vec2 uv,
 	out_color += speCol * ao * bounce_specular_amount * env_spec_mult;
 
 	return out_color;
+}
+
+// Color temperature (sRGB) stuff
+// Copyright (C) 2014 by Benjamin 'BeRo' Rosseaux
+// Because the german law knows no public domain in the usual sense,
+// this code is licensed under the CC0 license 
+// http://creativecommons.org/publicdomain/zero/1.0/
+
+// Valid from 1000 to 40000 K (and additionally 0 for pure full white)
+vec3 colorTemperatureToRGB(const in float temperature){
+  // Values from: http://blenderartists.org/forum/showthread.php?270332-OSL-Goodness&p=2268693&viewfull=1#post2268693   
+  mat3 m = (temperature <= 6500.0) ? mat3(vec3(0.0, -2902.1955373783176, -8257.7997278925690),
+	                                      vec3(0.0, 1669.5803561666639, 2575.2827530017594),
+	                                      vec3(1.0, 1.3302673723350029, 1.8993753891711275)) : 
+	 								 mat3(vec3(1745.0425298314172, 1216.6168361476490, -8257.7997278925690),
+   	                                      vec3(-2666.3474220535695, -2173.1012343082230, 2575.2827530017594),
+	                                      vec3(0.55995389139931482, 0.70381203140554553, 1.8993753891711275)); 
+  return mix(clamp(vec3(m[0] / (vec3(clamp(temperature, 1000.0, 40000.0)) + m[1]) + m[2]), vec3(0.0), vec3(1.0)), vec3(1.0), smoothstep(1000.0, 0.0, temperature));
 }
 
 
@@ -737,35 +753,52 @@ void main()
 	float shadow_from_middle = clamp(GetHeightShadow(NormalsAndHeightPass, 
 															SceneLayersPass,
 															vTexCoord, 
-															vec3(0.0, 0.0, 10.0),
+															vec3(0.0, -0.2, 10.0),
 															light_vector_x_mult,
 															middle_omni,
 															HSM_HSHADOW_SAMPLES, 
 															shadow_bias, 
 															noise_sample, 
 															HSM_HSHADOW_NOISE, 
-															middle_umbra,
-															middle_penumbra,
+															HSM_HSHADOW_DIST_UMBRA,
+															HSM_HSHADOW_DIST_PENUMBRA,
+															HSM_HSHADOW_SPREAD_NOISE,
+															HSM_HSHADOW_GAMMA), 0, 1).r;
+
+	shadow_from_middle = mix(1.0, shadow_from_middle, HSM_LGHT_SHADOW_FROM_MIDDLE_AMOUNT);
+
+	float shadow_from_middle_top = clamp(GetHeightShadow(NormalsAndHeightPass, 
+															SceneLayersPass,
+															vTexCoord, 
+															vec3(0.5, 4.0, 30.0),
+															light_vector_x_mult,
+															middle_omni,
+															HSM_HSHADOW_SAMPLES, 
+															shadow_bias, 
+															noise_sample, 
+															HSM_HSHADOW_NOISE, 
+															HSM_HSHADOW_DIST_UMBRA,
+															HSM_HSHADOW_DIST_PENUMBRA,
 															HSM_HSHADOW_SPREAD_NOISE,
 															HSM_HSHADOW_GAMMA), 0, 1).r;
 
 	light_vector_x_mult = -0.2;
 	float shadow_from_inverted_middle = 1; 
 	
-												// clamp(GetHeightShadow(NormalsAndHeightPass, 
-												// 			SceneLayersPass,
-												// 			vTexCoord, 
-												// 			vec3(0.0, 0.0, 5.0),
-												// 			light_vector_x_mult,
-												// 			middle_omni,
-												// 			HSM_HSHADOW_SAMPLES, 
-												// 			shadow_bias, 
-												// 			noise_sample, 
-												// 			HSM_HSHADOW_NOISE, 
-												// 			middle_umbra,
-												// 			middle_penumbra,
-												// 			HSM_HSHADOW_SPREAD_NOISE,
-												// 			HSM_HSHADOW_GAMMA), 0, 1).r;
+	// float shadow_from_inverted_middle = clamp(GetHeightShadow(NormalsAndHeightPass, 
+	// 														SceneLayersPass,
+	// 														vTexCoord, 
+	// 														vec3(0.0, 0.0, 5.0),
+	// 														light_vector_x_mult,
+	// 														middle_omni,
+	// 														HSM_HSHADOW_SAMPLES, 
+	// 														shadow_bias, 
+	// 														noise_sample, 
+	// 														HSM_HSHADOW_NOISE, 
+	// 														middle_umbra,
+	// 														middle_penumbra,
+	// 														HSM_HSHADOW_SPREAD_NOISE,
+	// 														HSM_HSHADOW_GAMMA), 0, 1).r;
 
 	vec3 shadow_light_point = HSM_LGHT_LIGHT_POINT;
 	shadow_light_point.z *= HSM_HSHADOW_DEPTH_MULT;
@@ -786,12 +819,15 @@ void main()
 												HSM_HSHADOW_SPREAD_NOISE,
 												HSM_HSHADOW_GAMMA), 0, 1).r;
 
+	shadow_from_top_right = mix(1.0, shadow_from_top_right, HSM_LGHT_SHADOW_FROM_RIGHT_AMOUNT);
+
 	float left_umbra = 0.0;
 	float left_penumbra = 0.5;
 	float shadow_from_top_left = clamp(GetHeightShadow(NormalsAndHeightPass, 
 														SceneLayersPass,
 														vTexCoord, 
-														vec3(shadow_light_point.x * -0.75, shadow_light_point.y * 0.85, shadow_light_point.z),
+														vec3(shadow_light_point.x * -1, shadow_light_point.y * 1.2, shadow_light_point.z),
+														// vec3(shadow_light_point.x * -0.75, shadow_light_point.y * 0.85, shadow_light_point.z),
 														light_vector_x_mult,
 														HSM_LGHT_OMNI,
 														HSM_HSHADOW_SAMPLES, 
@@ -803,26 +839,27 @@ void main()
 														HSM_HSHADOW_SPREAD_NOISE,
 														HSM_HSHADOW_GAMMA), 0, 1).r;
 
+	shadow_from_top_left = mix(1.0, shadow_from_top_left, HSM_LGHT_SHADOW_FROM_LEFT_AMOUNT);
+
 	vec2 bshadow_offset = vec2(-0.07, 0.07) / (global.OutputSize.x / global.OutputSize.y);
 	float bshadow_opacity = 0.8;
 	float bshadow_noise = 4;
 	float bshadow_blur_scale_mult = 8;
 	float middleground_bshadow = clamp(GetBlurredMiddleShadow(SceneLayersPass, vTexCoord - bshadow_offset, bshadow_blur_scale_mult, bshadow_noise) + precomp_middleground.a, 0, 1);
 
-	// FragColor = vec4(middleground_bshadow);
-	// return;
-
 	// Do HSV alterations on the bounce_light
-	if (HSM_LGHT_BOUNCE_SATURATION != 1 || HSM_LGHT_BOUNCE_BRIGHTNESS != 1)
+	float bounce_light_brightness = HSM_LGHT_BOUNCE_BRIGHTNESS * 10.0;
+	if (HSM_LGHT_BOUNCE_SATURATION != 1 || bounce_light_brightness != 1)
 	{
 		vec3 bounce_light_hsv = HSM_RGBtoHSV(bounce_light.rgb);
 		bounce_light_hsv.y *= HSM_LGHT_BOUNCE_SATURATION;
-		bounce_light_hsv.z *= HSM_LGHT_BOUNCE_BRIGHTNESS;
+		bounce_light_hsv.z *= bounce_light_brightness;
 		bounce_light.rgb = HSM_HSVtoRGB(bounce_light_hsv);
 	}
 
 	// Add some noise to avoid banding
-	bounce_light.rgb += HSM_DitheredNoise(vTexCoord, global.OutputSize.xy, 1);
+	vec3 dithered_noise = HSM_DitheredNoise(vTexCoord, global.OutputSize.xy, 1);
+	bounce_light.rgb += dithered_noise * HSM_LGHT_BOUNCE_BRIGHTNESS;
 
 	// if (HSM_LGHT_DEBUG_SHADING_MODE > 0.5)
 	// {
@@ -949,24 +986,25 @@ void main()
 	vec4 normal_and_height_color = texture(NormalsAndHeightPass, vTexCoord);
 	
 	float spot_specular_amount = HSM_LGHT_DEBUG_SHADING_MODE > 0.5 && HSM_LGHT_DEBUG_SHADING_MODE < 3.5 ? 0 : HSM_LGHT_SPECULAR_AMOUNT;
-	float bounce_specular_amount = HSM_LGHT_DEBUG_SHADING_MODE > 0.5 && HSM_LGHT_DEBUG_SHADING_MODE < 3.5 ? 0 : HSM_LGHT_SPECULAR_AMOUNT * HSM_LGHT_BOUNCE_BRIGHTNESS;
+	float bounce_specular_amount = HSM_LGHT_DEBUG_SHADING_MODE > 0.5 && HSM_LGHT_DEBUG_SHADING_MODE < 3.5 ? 0 : HSM_LGHT_SPECULAR_AMOUNT * bounce_light_brightness;
 
 	vec3 natural_ambient_color = HSM_HSVtoRGB(vec3(HSM_LGHT_NATURAL_AMBIENT_HUE, HSM_LGHT_NATURAL_AMBIENT_SATURATION, HSM_LGHT_NATURAL_AMBIENT_VALUE));
 	natural_ambient_color = HSM_LGHT_DEBUG_SHADING_MODE == 2 ? vec3(0) : natural_ambient_color;
 
 	float luma_right_top = luminance(texture(BounceLightPass, vec2(0.85, 0.15)).rgb);
-	float luma_right_middle = luminance(texture(BounceLightPass, vec2(0.3, 0.5)).rgb);
+	float luma_right_middle = luminance(texture(BounceLightPass, vec2(0.7, 0.5)).rgb);
 	float luma_right_bottom = luminance(texture(BounceLightPass, vec2(0.85, 0.85)).rgb);
 	float luma_right = (luma_right_top + luma_right_middle + luma_right_bottom) / 3;
 
 	float luma_left_top = luminance(texture(BounceLightPass, vec2(0.15, 0.15)).rgb);
-	float luma_left_middle = luminance(texture(BounceLightPass, vec2(0.7, 0.5)).rgb);
+	float luma_left_middle = luminance(texture(BounceLightPass, vec2(0.3, 0.5)).rgb);
 	float luma_left_bottom = luminance(texture(BounceLightPass, vec2(0.15, 0.85)).rgb);
 	float luma_left = (luma_left_top + luma_left_middle + luma_left_bottom) / 3;
 
-	float luma_ratio_right = luma_right / (luma_right + luma_left);
+	float luma_ratio_right = (luma_right + luma_left * 0.05) / (luma_right + luma_left);
+	// luma_ratio_right = clamp((luma_ratio_right - 0.5) * 2 + 0.5, 0, 1);
 	// Push values toward top and bottom of range
-	luma_ratio_right = HHLP_EasePowerInOut(luma_ratio_right, 1.0);
+	luma_ratio_right = HHLP_EasePowerInOut(luma_ratio_right, 3.0);
 	float luma_ratio_left = 1 - luma_ratio_right;
 
 	// // Measure how close both items are to 0.5, when both are close to 0.5 this maps to 1
@@ -987,9 +1025,12 @@ void main()
 	// Add Natural Ambient Light often a bluish light
 	out_color.rgb += ApplyAmbient(prelit_color, natural_ambient_color);
 
-	// vec3 spot_shared_color = pow(vec3(0.92, 0.84, 0.63), vec3(2.2)) * HSM_LGHT_SPOT_BRIGHTNESS;
-	// vec3 spot_shared_color = pow(vec3(0.99, 0.88, 0.55), vec3(2.2)) * HSM_LGHT_SPOT_BRIGHTNESS;
-	vec3 spot_shared_color = pow(vec3(0.96, 0.86, 0.59), vec3(2.2)) * HSM_LGHT_SPOT_BRIGHTNESS;
+// TODO need to set color from HSV
+	vec3 spot_color = HSM_HSVtoRGB(vec3(HSM_LGHT_SPOT_HUE, HSM_LGHT_SPOT_SATURATION, HSM_LGHT_SPOT_VALUE));
+	// vec3 spot_color = pow(vec3(0.92, 0.84, 0.63), vec3(2.2)) * HSM_LGHT_SPOT_BRIGHTNESS;
+	// vec3 spot_color = pow(vec3(0.99, 0.88, 0.55), vec3(2.2)) * HSM_LGHT_SPOT_BRIGHTNESS;
+	// vec3 spot_color = pow(vec3(0.96, 0.86, 0.59), vec3(2.2)) * HSM_LGHT_SPOT_BRIGHTNESS;
+
 	float omnidirectional = 1;
 
 	// --------------------------------------------------------------------------------------------------
@@ -997,8 +1038,9 @@ void main()
 	// --------------------------------------------------------------------------------------------------
 
 	// Add Spot Ambient Light spot light is usually incandescent
-	vec3 prelit_with_ambient = ApplyAmbient(prelit_color, spot_shared_color * HSM_LGHT_SPOT_AMBIENT * HSM_LGHT_SPOT_BRIGHTNESS * middleground_bshadow * shadow_from_top_right);
+	vec3 prelit_with_ambient = ApplyAmbient(prelit_color, spot_color * HSM_LGHT_SPOT_AMBIENT * HSM_LGHT_SPOT_BRIGHTNESS * middleground_bshadow * shadow_from_top_right);
 	out_color.rgb += prelit_with_ambient;
+
 
 	// shadow_from_middle = mix(1.0, pow(shadow_from_middle, 1 / HSM_HSHADOW_GAMMA), HSM_LGHT_SHADOW_FROM_MIDDLE_AMOUNT);// * middle_weight)
 	// shadow_from_top_right = mix(1.0, pow(shadow_from_top_right, 1 / HSM_HSHADOW_GAMMA), HSM_LGHT_SHADOW_FROM_RIGHT_AMOUNT);// * luma_ratio_left * (1 - middle_weight))
@@ -1016,13 +1058,15 @@ void main()
 									HSM_LGHT_SPOT_GLOBAL_SCALE,
 									HSM_LGHT_SPOT_WIDTH,
 									HSM_LGHT_SPOT_FALLOFF,
-									spot_shared_color,
+									spot_color,
 									ao,
 									prelit_color,
 									HSM_LGHT_ROUGHNESS,
 									spot_specular_amount,
 									HSM_LGHT_DIFFUSE_AO,
-									mix(1.0, mix(1.0, pow(shadow_from_top_right, 1 / HSM_HSHADOW_GAMMA), 0.8) * middleground_bshadow, HSM_LGHT_SPOT_SHADOW_STRENGTH));
+									mix(1.0, shadow_from_middle_top * middleground_bshadow, HSM_LGHT_SPOT_SHADOW_STRENGTH));
+									// mix(1.0, mix(1.0, pow(shadow_from_top_right, 1 / HSM_HSHADOW_GAMMA), 0.8) * middleground_bshadow, HSM_LGHT_SPOT_SHADOW_STRENGTH));
+
 
 	vec3 spot2_point = vec3(HSM_LGHT_SPOT2_POINTX, HSM_LGHT_SPOT2_POINTY, 1);
 
@@ -1033,13 +1077,16 @@ void main()
 									HSM_LGHT_SPOT_GLOBAL_SCALE,
 									HSM_LGHT_SPOT_WIDTH,
 									HSM_LGHT_SPOT_FALLOFF,
-									spot_shared_color,
+									spot_color,
 									ao,
 									prelit_color,
 									HSM_LGHT_ROUGHNESS,
 									spot_specular_amount,
 									HSM_LGHT_DIFFUSE_AO,
-									mix(1.0, mix(1.0, pow(shadow_from_top_left, 1 / HSM_HSHADOW_GAMMA), 0.4) * middleground_bshadow, HSM_LGHT_SPOT_SHADOW_STRENGTH));
+									mix(1.0, shadow_from_middle_top * middleground_bshadow, HSM_LGHT_SPOT_SHADOW_STRENGTH));
+									// mix(1.0, mix(1.0, pow(shadow_from_top_left, 1 / HSM_HSHADOW_GAMMA), 0.4) * middleground_bshadow, HSM_LGHT_SPOT_SHADOW_STRENGTH));
+
+	out_color.rgb += spot_color * dithered_noise;
 
 	// --------------------------------------------------------------------------------------------------
 	// BLEND BACK TO PRELIT COLOR AS NIGHTLIGHTING GOES TO 0
@@ -1048,59 +1095,63 @@ void main()
 	// Blend between 3d and Image based incandescent lighting
 	out_color.rgb = mix(prelit_with_ambient + nightlight1_rgb * prelit_color, out_color.rgb, HSM_LGHT_3D_LIGHT_BLEND);
 
-	out_color.rgb = mix(prelit_color, out_color.rgb, HSM_LIGHT_NIGHTLIGHTING_OPACITY);
 
+
+	// out_color.rgb = mix(prelit_color, out_color.rgb, HSM_LIGHT_NIGHTLIGHTING_OPACITY);
 
 	// // --------------------------------------------------------------------------------------------------
 	// // BOUNCE LIGHT
 	// // --------------------------------------------------------------------------------------------------
 	float bounce_middleground_bshadow = mix(1, middleground_bshadow, HSM_LGHT_SHADOW_PROJECTED_AMOUNT);
 
-	// out_color.rgb += 0.5 * ApplyLighting(vTexCoord, 
-	// 							normal_and_height_color,
-	// 							light_point_middle,
-	// 							HSM_LGHT_OMNI,
-	// 							bounce_light.rgb,
-	// 							ao,
-	// 							prelit_color,
-	// 							HSM_LGHT_ROUGHNESS,
-	// 							bounce_specular_amount,
-	// 							BounceLightPass,
-	// 							HSM_LGHT_DIFFUSE_AO,
-	// 							shadow_from_middle * bounce_middleground_bshadow);
+	out_color.rgb += 0.33 * ApplyLighting(vTexCoord, 
+								normal_and_height_color,
+								light_point_middle,
+								HSM_LGHT_OMNI,
+								bounce_light.rgb,
+								ao,
+								prelit_color,
+								HSM_LGHT_ROUGHNESS,
+								bounce_specular_amount,
+								BounceLightPass,
+								HSM_LGHT_DIFFUSE_AO,
+								shadow_from_middle * bounce_middleground_bshadow);
 
-	// float t_shadow_from_top_right = mix(1.0, pow(shadow_from_top_right, 1 / HSM_HSHADOW_GAMMA), luma_ratio_right);// * luma_ratio_left * (1 - middle_weight))
-	// float t_shadow_from_top_left = mix(1.0, pow(shadow_from_top_left, 1 / HSM_HSHADOW_GAMMA), luma_ratio_left * 0.5);// * luma_ratio_right * (1 - middle_weight));
-	// float t_shadow_from_inverted_middle = mix(1.0, pow(shadow_from_inverted_middle, 1 / HSM_HSHADOW_GAMMA), 0.0);// * luma_ratio_right * (1 - middle_weight));
+	float t_shadow_from_top_right = mix(1.0, pow(shadow_from_top_right, 1 / HSM_HSHADOW_GAMMA), luma_ratio_right);// * luma_ratio_left * (1 - middle_weight))
+	float t_shadow_from_top_left = mix(1.0, pow(shadow_from_top_left, 1 / HSM_HSHADOW_GAMMA), luma_ratio_left);// * luma_ratio_right * (1 - middle_weight));
+	float t_shadow_from_middle = mix(1.0, shadow_from_middle, 0.0);// * luma_ratio_right * (1 - middle_weight));
 	
-	// out_color.rgb += 0.25 * ApplyLighting(vTexCoord, 
-	// 							normal_and_height_color,
-	// 							light_point_right,
-	// 							HSM_LGHT_OMNI,
-	// 							bounce_light.rgb,
-	// 							ao,
-	// 							prelit_color,
-	// 							HSM_LGHT_ROUGHNESS,
-	// 							bounce_specular_amount,
-	// 							BounceLightPass,
-	// 							HSM_LGHT_DIFFUSE_AO,
-	// 							t_shadow_from_top_right * t_shadow_from_top_left * bounce_middleground_bshadow * t_shadow_from_inverted_middle);
+	out_color.rgb += 0.33 * ApplyLighting(vTexCoord, 
+								normal_and_height_color,
+								light_point_right,
+								HSM_LGHT_OMNI,
+								bounce_light.rgb,
+								ao,
+								prelit_color,
+								HSM_LGHT_ROUGHNESS,
+								bounce_specular_amount,
+								BounceLightPass,
+								HSM_LGHT_DIFFUSE_AO,
+								t_shadow_from_top_right * bounce_middleground_bshadow);// * t_shadow_from_middle);
 
-	// t_shadow_from_top_right = mix(1.0, pow(shadow_from_top_right, 1 / HSM_HSHADOW_GAMMA), luma_ratio_right * 0.5);// * luma_ratio_left * (1 - middle_weight))
-	// t_shadow_from_top_left = mix(1.0, pow(shadow_from_top_left, 1 / HSM_HSHADOW_GAMMA), luma_ratio_left);// * luma_ratio_right * (1 - middle_weight));
-	// out_color.rgb += 0.25 * ApplyLighting(vTexCoord, 
-	// 							normal_and_height_color,
-	// 							light_point_left,
-	// 							HSM_LGHT_OMNI,
-	// 							bounce_light.rgb,
-	// 							ao,
-	// 							prelit_color,
-	// 							HSM_LGHT_ROUGHNESS,
-	// 							bounce_specular_amount,
-	// 							BounceLightPass,
-	// 							HSM_LGHT_DIFFUSE_AO,
-	// 							t_shadow_from_top_right * t_shadow_from_top_left * bounce_middleground_bshadow * t_shadow_from_inverted_middle);
+	// t_shadow_from_top_right = mix(1.0, pow(shadow_from_top_right, 1 / HSM_HSHADOW_GAMMA), luma_ratio_left);// * luma_ratio_left * (1 - middle_weight))
+	// t_shadow_from_top_left = mix(1.0, pow(shadow_from_top_left, 1 / HSM_HSHADOW_GAMMA), luma_ratio_right);// * luma_ratio_right * (1 - middle_weight));
+	out_color.rgb += 0.33 * ApplyLighting(vTexCoord, 
+								normal_and_height_color,
+								light_point_left,
+								HSM_LGHT_OMNI,
+								bounce_light.rgb,
+								ao,
+								prelit_color,
+								HSM_LGHT_ROUGHNESS,
+								bounce_specular_amount,
+								BounceLightPass,
+								HSM_LGHT_DIFFUSE_AO,
+								t_shadow_from_top_left * bounce_middleground_bshadow);// * t_shadow_from_middle);
 
+	out_color = HSM_Delinearize(out_color, DEFAULT_SRGB_GAMMA);
+	FragColor = out_color;
+	return;
 
 
 	if (HSM_COMPOSITE_CRT_AND_REFLECTION_ON > 0.5 && HSM_RENDER_SIMPLE_MODE < 0.5)
@@ -1228,6 +1279,7 @@ void main()
 #else
 	out_color = HSM_Delinearize(out_color, DEFAULT_SRGB_GAMMA);
 #endif
+
 
 	// // If we have calculated an image then set -1 as a flag to show that we have
 	// if (vTexCoord.x < (2 / global.OutputSize.x) && vTexCoord.y < (2 / global.OutputSize.y))
