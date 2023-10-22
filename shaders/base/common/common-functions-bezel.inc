@@ -446,7 +446,14 @@ vec2 HSM_GetScaledCoord(vec2 in_viewport_coord,
 	return out_coord;
 }
 
-vec4 HSM_GetBezelLayer( bool generate_normals, vec4 frame_highlight_color, inout float static_shadow_multiply, inout vec4 tube_bg_layer)
+void HSM_GenerateBezelLayer( bool generate_normals_and_height, 
+								float bezel_outer_edge_height, 
+								vec4 frame_highlight_color, 
+								inout float static_shadow_multiply, 
+								inout vec4 color_layer, 
+								inout vec4 normals_layer, 
+								inout vec4 height_layer, 
+								inout vec4 tube_bg_layer)
 {
 	vec4 bezel_layer = vec4(0);
 
@@ -485,8 +492,10 @@ vec4 HSM_GetBezelLayer( bool generate_normals, vec4 frame_highlight_color, inout
 
 	// Get a range width from the outer tube edge to the outer edge of the outermap
 	float outermap_range = 0.5 * outermap_scale * 0.7;
+	vec2 outermap_screen_size_from_center = vec2(0.5, 0.5);
 	vec2 outermap_warped_outside_screen_vector = (tube_curved_coord_ctr - clamp(tube_curved_coord_ctr, -0.490, 0.490)) * vec2(1 / TUBE_DIFFUSE_ASPECT, 1);
 	float output_aspect = global.OutputSize.x / global.OutputSize.y;
+	float outside_ratio_warped = clamp(length(outermap_warped_outside_screen_vector) / outermap_range, 0, 1);
 	vec2 outermap_screen_corner_ctr_coord = vec2(0.5, -0.5);
 
 	// Get a coordinate offset so it is centered around the corner
@@ -554,6 +563,8 @@ vec4 HSM_GetBezelLayer( bool generate_normals, vec4 frame_highlight_color, inout
 
 	// Masks isolating specific parts
 	float sides_mask = 1 - top_bottom_vs_sides_mask;
+	float left_mask = sides_mask * left_half_mask;
+	float right_mask = sides_mask * (1 - left_half_mask);
 	float top_mask = top_half_mask * top_bottom_vs_sides_mask;
 	float bottom_mask = (1 -top_half_mask) * top_bottom_vs_sides_mask;
 
@@ -701,7 +712,48 @@ vec4 HSM_GetBezelLayer( bool generate_normals, vec4 frame_highlight_color, inout
 	// This will matte out the Self Illuminated pass
 	tube_bg_layer = vec4(0, 0, 0, TUBE_MASK_EXPAND * HSM_GetTubeOpacity());
 
-	return bezel_layer;
+	color_layer = bezel_layer;
+
+	// Same radial fade as reflection
+	float radial_fade_width = 0.5;
+	float radial_fade_height = 0.5;
+	float radial_fade_speed = 100;
+	float radial_fade_sides = HHLP_QuadraticBezier(clamp((outside_ratio_warped / (radial_fade_width)), 0, 1), vec2(1 - (radial_fade_speed / 100), 1));
+	float radial_fade_top_bottom = HHLP_QuadraticBezier(clamp((outside_ratio_warped / (radial_fade_height)), 0, 1), vec2(1 - (radial_fade_speed / 100), 1));
+	float radial_fade_mask = clamp((1 - sides_mask) * radial_fade_top_bottom
+									  + sides_mask * radial_fade_sides, 0, 1);
+	radial_fade_mask = radial_fade_mask / 2 + 0.5;
+
+	height_layer = vec4(vec3(radial_fade_mask), 1);
+	height_layer *= bezel_layer.a;
+
+	vec4 tube_height_layer = vec4(vec3(1 - length(((TUBE_DIFFUSE_CURVED_COORD * 2 - 1) / 4) * vec2(TUBE_DIFFUSE_ASPECT, 1))), 1);
+	// tube_height_layer *= TUBE_MASK;
+
+    height_layer = mix(height_layer, tube_height_layer, TUBE_MASK); // HSM_PreMultAlphaBlend(height_layer, tube_height_layer);
+
+	// height_layer += tube_height_layer;
+	height_layer.rgb = height_layer.rgb - (1 - bezel_outer_edge_height);
+	height_layer = clamp(height_layer, 0, 1);
+
+	vec3 top_normals = vec3(0.58, 0.25, 0.78);
+	vec3 bottom_normals = vec3(0.63, 0.95, 0.89) * bottom_mask;
+	vec3 left_normals = vec3(0.40, 0.61, 0.90);
+	vec3 right_normals = vec3(0.98, 0.61, 0.80);
+	// vec3 normals = top_normals * top_mask +
+	// 				bottom_normals * bottom_mask +
+	// 				left_normals * left_mask +
+	// 				right_normals * right_mask;
+
+
+	vec3 sides_normals = mix(right_normals, left_normals, left_half_mask);
+	// vec3 normals = vec3(0.5, 0.5, 1);
+	vec3 normals = mix(sides_normals, top_normals, top_mask);
+	normals = mix(normals, bottom_normals, bottom_mask);
+
+	normals_layer = vec4(normals, 1);
+	normals_layer *= bezel_layer.a;
+	normals_layer = HSM_Linearize(normals_layer, DEFAULT_SRGB_GAMMA);
 }
 							
 void HSM_UpdateBezelAndTubeGlobalValuesAndMasks(vec2 tube_diffuse_coord, 

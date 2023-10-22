@@ -294,7 +294,7 @@ BackgroundShadow_linear = true
 BackgroundShadow_mipmap = 1
 BackgroundShadow_wrap_mode = "mirrored_repeat"
 
-BackgroundHeight = ../../../shaders/textures/Placeholder_Height_16x16.png
+BackgroundHeight = ../../../shaders/textures/Placeholder_Height-BG_16x16.png
 BackgroundHeight_linear = true
 BackgroundHeight_mipmap = 1
 BackgroundHeight_wrap_mode = "mirrored_repeat"
@@ -317,7 +317,7 @@ DeviceShadow_linear = true
 DeviceShadow_mipmap = 1
 DeviceShadow_wrap_mode = "mirrored_repeat"
 
-DeviceHeight = ../../../shaders/textures/Placeholder_Height_16x16.png
+DeviceHeight = ../../../shaders/textures/Placeholder_Height-Device_16x16.png
 DeviceHeight_linear = true
 DeviceHeight_mipmap = 1
 DeviceHeight_wrap_mode = "mirrored_repeat"

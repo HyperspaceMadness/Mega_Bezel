@@ -172,6 +172,7 @@ void main()
 
     float normal_intensity = 1;
     float normal_width = 1;
+
     //-----------------------------------------------------------------------------------------
     // Background
     //-----------------------------------------------------------------------------------------
@@ -211,26 +212,32 @@ void main()
             bg_normals_layer = HSM_Linearize(bg_normals_layer, DEFAULT_SRGB_GAMMA);
         }
         if (HSM_LGHT_NORMAL_SOURCE == 2)
+        {
             bg_normals_layer = vec4(GenerateNormalHeightMultipass(BackgroundHeight, BACKGROUND_CURVED_COORD, textureSize(BackgroundHeight, 0)).rgb, 1);
-        bg_normals_layer.rg *= HSM_LGHT_NORMAL_STRENGTH;
-        bg_normals_layer.rgb = (normalize(bg_normals_layer.rgb) + 1) / 2;
-        bg_normals_layer *= bg_layer.a;
+            bg_normals_layer.rgb = (normalize(bg_normals_layer.rgb) + 1) / 2;
+        }
 
+        bg_normals_layer *= bg_layer.a;
 
         vec4 bg_height_layer = HSM_GetMipmappedTexSample(BackgroundHeight, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
         bg_height_layer = HSM_Linearize(bg_height_layer, DEFAULT_SRGB_GAMMA);
         bg_height_layer.rgb = (bg_height_layer.rgb - HSM_HSHADOW_BG_CONTRAST_CENTER) * HSM_HSHADOW_BG_CONTRAST + HSM_HSHADOW_BG_CONTRAST_CENTER;
         bg_height_layer.rgb += HSM_HSHADOW_BG_OFFSET_Z;
-        bg_height_layer.rgb *= clamp(bg_height_layer.rgb, 0, 1);
+        bg_height_layer.rgb = clamp(bg_height_layer.rgb, 0, 1);
         bg_height_layer.rgb *= bg_layer.a;
 
         out_normal_color = HSM_PreMultAlphaBlend(out_normal_color, bg_normals_layer);
         out_height_color = HSM_PreMultAlphaBlend(out_height_color, bg_height_layer);
+
     }
 
     //----------------------------------------------------
     // Device 
     //----------------------------------------------------
+    float device_center_height = HSM_Linearize(HSM_GetMipmappedTexSample(DeviceHeight, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS), DEFAULT_SRGB_GAMMA).r;
+    device_center_height = (device_center_height - HSM_HSHADOW_DEVICE_CONTRAST_CENTER) * HSM_HSHADOW_DEVICE_CONTRAST + HSM_HSHADOW_DEVICE_CONTRAST_CENTER;
+    device_center_height += HSM_HSHADOW_DEVICE_OFFSET_Z;
+
     vec2 DEVICE_SIZE = textureSize(Device, 0);
     if (HSM_DEVICE_OPACITY > 0 && DEVICE_SIZE.y > 16)
     {
@@ -260,40 +267,71 @@ void main()
                 device_normals_layer = HSM_Linearize(device_normals_layer, DEFAULT_SRGB_GAMMA);
             }
             if (HSM_LGHT_NORMAL_SOURCE == 2)
+            {
                 device_normals_layer = vec4(GenerateNormalHeightMultipass(DeviceHeight, DEVICE_CURVED_COORD, textureSize(DeviceHeight, 0)).rgb, 1);
-            device_normals_layer.rg *= HSM_LGHT_NORMAL_STRENGTH;
-            device_normals_layer.rgb = (normalize(device_normals_layer.rgb) + 1) / 2;;
-            device_normals_layer *= device_layer.a;
+                device_normals_layer.rgb = (normalize(device_normals_layer.rgb) + 1) / 2;
+            }
 
+            device_normals_layer *= device_layer.a;
 
             vec4 device_height_layer = HSM_GetMipmappedTexSample(DeviceHeight, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
             device_height_layer = HSM_Linearize(device_height_layer, DEFAULT_SRGB_GAMMA);
 
-            // TODO UNFINISHED Need to scale from end of the range at 1 instead of from 0
             device_height_layer.rgb = (device_height_layer.rgb - HSM_HSHADOW_DEVICE_CONTRAST_CENTER) * HSM_HSHADOW_DEVICE_CONTRAST + HSM_HSHADOW_DEVICE_CONTRAST_CENTER;
             device_height_layer.rgb += HSM_HSHADOW_DEVICE_OFFSET_Z;
-            device_height_layer.rgb *= clamp(device_height_layer.rgb, 0, 1);
+            device_height_layer.rgb = clamp(device_height_layer.rgb, 0, 1);
             device_height_layer *= device_layer.a;
 
             out_normal_color = HSM_PreMultAlphaBlend(out_normal_color, device_normals_layer);
             out_height_color = HSM_PreMultAlphaBlend(out_height_color, device_height_layer);
+
+    }
+// (normalize(device_normals_layer.rgb) + 1) / 2;
+    
+    out_normal_color.rgb = out_normal_color.rgb * 2 - 1;
+    out_normal_color.rg *= HSM_LGHT_NORMAL_STRENGTH;
+    out_normal_color.rgb = (normalize(out_normal_color.rgb) + 1) / 2;
+    out_normal_color = normalize(out_normal_color);
+
+    //----------------------------------------------------
+    // Generated Bezel
+    //----------------------------------------------------
+    if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
+    {
+
+        bool generate_normals_and_height = true;
+        vec4 frame_highlight_color = vec4(0);
+        float static_shadow_multiply = 1;
+        vec4 tube_bg_layer = vec4(0);
+
+        vec4 bezel_color_layer = vec4(0);
+        vec4 bezel_normals_layer = vec4(0);
+        vec4 bezel_height_layer = vec4(0);
+
+        // TODO - This is Temp
+        device_center_height = 1;
+        float bezel_outer_edge_height = device_center_height + HSM_HSHADOW_BEZEL_OFFSET_Z;
+
+        // TODO need to pass in more channels, e.g. color rgba, normals rgba, height float
+        HSM_GenerateBezelLayer(generate_normals_and_height,
+                                bezel_outer_edge_height, 
+                                frame_highlight_color, 
+                                static_shadow_multiply, 
+                                bezel_color_layer, 
+                                bezel_normals_layer, 
+                                bezel_height_layer, 
+                                tube_bg_layer);
+
+        // TODO need to offset by frame height as well
+        // bezel_height_layer.rgb = bezel_height_layer.rgb - bezel_height_layer.a * ((1 - device_center_height) + HSM_HSHADOW_BEZEL_OFFSET_Z);
+        // bezel_height = clamp(bezel_height, 0, 1);
+
+        out_normal_color = HSM_PreMultAlphaBlend(out_normal_color, bezel_normals_layer);
+        out_height_color = HSM_PreMultAlphaBlend(out_height_color, bezel_height_layer);
     }
 
-    // //----------------------------------------------------
-    // // Generated Bezel
-    // //----------------------------------------------------
-    // if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
-    // {
-    //     bool generate_normals = true;
-    //     vec4 frame_highlight_color = vec4(0);
-    //     float static_shadow_multiply = 1;
-    //     vec4 tube_bg_layer = vec4(0);
-    //     vec4 bezel_normals_layer = HSM_GetBezelLayer(generate_normals, frame_highlight_color, static_shadow_multiply, tube_bg_layer);
-
-    //     float bezel_height = neutral_height;
-    //     out_color = HSM_PreMultAlphaBlend(out_color, bezel_normals_layer);
-    // }
-
     // out_height_color *= 0.33;
+    out_normal_color.rgb = normalize(out_normal_color.rgb);
+    out_normal_color = HSM_Delinearize(out_normal_color, DEFAULT_SRGB_GAMMA);
     FragColor = vec4(out_normal_color.rgb, out_height_color.r);
 }

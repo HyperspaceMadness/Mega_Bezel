@@ -237,8 +237,21 @@ void main()
 		if (HSM_BZL_OPACITY > 0 || HSM_FRM_OPACITY > 0)
 		{
 			vec4 frame_highlight_color = HSM_Linearize(texture(FrameHighlight, FRAME_OUTSIDE_CURVED_COORD), DEFAULT_SRGB_GAMMA);
-            bool generate_normals = false;
-			bezel_layer = HSM_GetBezelLayer(generate_normals, frame_highlight_color, static_shadow_multiply, tube_bg_layer);
+            bool generate_normals_and_height = false;
+
+			// Set up some additional in/out variables for the function that we actualy won't use the results of
+			vec4 bezel_normals_layer = vec4(0);
+			vec4 bezel_height_layer = vec4(0);
+			float bezel_outer_edge_height = 0;
+			
+			HSM_GenerateBezelLayer(generate_normals_and_height, 
+									bezel_outer_edge_height,
+									frame_highlight_color, 
+									static_shadow_multiply, 
+									bezel_layer, 
+									bezel_normals_layer, 
+									bezel_height_layer, 
+									tube_bg_layer);
 		}
 
 		//-----------------------------------------------------------------------------------------

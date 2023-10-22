@@ -48,15 +48,22 @@ Changes:
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
-  * Add Night Lighting texture as lighting
-  * Try out new 3D asset textures
-  * Place bounce light farther away so they hit the sides of the TV 
+  * Add Biasing of light response based on how much the angle is toward or away from the center
+    or vice versa
+  * Mask / Project shadow using BG depth map
+  * Figure out where to put generated shadows, 
+    * Static Shadow, Bounce Shadow, Spot Shadow?,
+  * 3 shadows for different directions or other shadows could easily be packed into a user's texture 
+  * Put Spot lighting mask in a channel too?
+
+  * Need a gamma/remap for bright color bounce light
+    * Tone Map?
+
+  * Fix Height Shadows, and get shadows in deep areas coming from the sides
+  * More control for curvature at top vs bottom?
+
   * Squeeze rgb (3 channels) into 2 channels with 1/2 color fidelity using YUV
     * This would free up 3 additional channels
-
-  * Normals Lighting with Specular in last pass
-  * Need a gamma/remap for bright color bounce light
-  * Night Lighting as Procedural 3D lighting with Shadows
 
   * Add Darker Frame Shadow at bottom
   * Shadowing Ideas:

@@ -70,23 +70,10 @@ float HSM_TOP_LAYER_ORDER = global.HSM_TOP_LAYER_ORDER;
 //---------------------------------------------------------------------------------------------------
 //    COMPOSITING LAYER GROUPS
 //---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_LAYER_GROUP_EMPTY_LINE			                                " " 0 0 0.001 0.001
-#pragma parameter HSM_LAYER_GROUP_TITLE			                                        "[ COMPOSITE BASE COLOR ]:" 0 0 0.01 0.01
-
-#pragma parameter HSM_COMPOSITE_SHOW_ALPHA                                              "          Output Color - RGB | ALPHA"  0 0 1 1
-float HSM_COMPOSITE_SHOW_ALPHA = global.HSM_COMPOSITE_SHOW_ALPHA;
-
-#pragma parameter HSM_COMPOSITE_BASE_COLOR                                              "          Base Color - BLACK | RED | PINK | YELLOW | AQUA"  0 0 4 1
-float HSM_COMPOSITE_BASE_COLOR = global.HSM_COMPOSITE_BASE_COLOR;
-
-#pragma parameter HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS                                   "          Base Color Brightness"  10 0 100 1
-float HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS = global.HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS / 100.0;
-
-
 #pragma parameter HSM_LGHT_DEBUG_EMPTY_LINE			                                " " 0 0 0.001 0.001
 #pragma parameter HSM_LGHT_DEBUG_TITLE			                                    "[ SHADING DEBUG ]:" 0 0 0.01 0.01
 
-#pragma parameter HSM_LGHT_DEBUG_MAPS                                               "          Debug - SHADED | SHADOW | HEIGHT | NORMALS"  0 0 3 1
+#pragma parameter HSM_LGHT_DEBUG_MAPS                                               "          Debug - SHADED | SHADOW | HEIGHT | NORMALS | ALPHA"  0 0 4 1
 float HSM_LGHT_DEBUG_MAPS = global.HSM_LGHT_DEBUG_MAPS;
 
 #pragma parameter HSM_LGHT_DEBUG_MATERIAL                                           "     Material Color - TEXTURE | GRAY | WHITE"  0 0 2 1
@@ -312,6 +299,9 @@ float HSM_HSHADOW_DEVICE_CONTRAST = global.HSM_HSHADOW_DEVICE_CONTRAST / 100.0;
 
 #pragma parameter HSM_HSHADOW_DEVICE_OFFSET_Z                                           "          Device Height Offset Z"  0 -100 300 1
 float HSM_HSHADOW_DEVICE_OFFSET_Z = global.HSM_HSHADOW_DEVICE_OFFSET_Z / 100.0;
+
+#pragma parameter HSM_HSHADOW_BEZEL_OFFSET_Z                                           "          Bezel Height Offset Z"  0 -100 100 1
+float HSM_HSHADOW_BEZEL_OFFSET_Z = global.HSM_HSHADOW_BEZEL_OFFSET_Z / 100.0;
 
 
 #pragma parameter HSM_BACKGROUND_LAYER_GROUP_EMPTY_LINE			            " " 0 0 0.001 0.001

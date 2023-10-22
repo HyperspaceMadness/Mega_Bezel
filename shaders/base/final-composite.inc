@@ -301,8 +301,6 @@ vec3 GetHeightShadow(in sampler2D in_heightmap,
 			break;
 	}
 
-
-
 	shadow = dist_to_occlusion > 999999 ? 1 : clamp(smoothstep(shadow_dist_umbra, shadow_dist_penumbra, dist_to_occlusion), 0, 1);
 	return vec3(shadow);
 }
@@ -872,24 +870,7 @@ void main()
 	vec3 nightlight2_rgb = vec3(1);
 	HSM_Fill_Nightlight_Images(VIEWPORT_COORD, HSM_GetViewportCoordWithFlip(vTexCoord), TUBE_DIFFUSE_COORD, TUBE_DIFFUSE_SCALE, HSM_LIGHT_NIGHTLIGHTING_SWAP_IMAGE_MODE, NightLighting, NightLighting2, nightlight1_rgb, nightlight2_rgb);
 
-	vec4 composite_base_color = vec4(0);
-	if (HSM_COMPOSITE_BASE_COLOR > 0.5)
-	{
-		// Red BG
-		if (HSM_COMPOSITE_BASE_COLOR == 1)
-			composite_base_color = vec4(1.0, 0.0, 0.0, 0.0) * HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS;
-		// Pink (Magenta) BG
-		if (HSM_COMPOSITE_BASE_COLOR == 2)
-			composite_base_color = vec4(1.0, 0.0, 1.0, 0.0) * HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS;
-		// Yellow BG
-		if (HSM_COMPOSITE_BASE_COLOR == 3)
-			composite_base_color = vec4(1.0, 1.0, 0.0, 0.0) * HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS;
-		// Aqua BG
-		if (HSM_COMPOSITE_BASE_COLOR == 4)
-			composite_base_color = vec4(0.0, 1.0, 1.0, 0.0) * HSM_COMPOSITE_BASE_COLOR_BRIGHTNESS;
-	}
-
-	out_color = composite_base_color;
+	out_color = vec4(0);
 
 	if (HSM_COMPOSITE_BACKGROUND_ON > 0.5)
 	{
@@ -991,7 +972,7 @@ void main()
 
 	// vec3 spot_rgb = HSM_HSVtoRGB(vec3(HSM_LGHT_SPOT_HUE, HSM_LGHT_SPOT_SATURATION, HSM_LGHT_SPOT_VALUE)) * HSM_LGHT_SPOT_BRIGHTNESS;
 
-	// HSV isnt hooked up for spots
+	// HSV isnt hooked up for spot
 	vec3 incandescent_rgb = pow(vec3(1.0, 0.88, 0.55), vec3(2.2));
 	vec3 spot_rgb = incandescent_rgb * HSM_LGHT_SPOT_BRIGHTNESS;
 	vec3 blue_ambient_rgb = pow(vec3(0.2, 0.5, 1.0), vec3(2.2));
@@ -1012,7 +993,7 @@ void main()
 	{
 		vec3 ambient_hsv = HSM_RGBtoHSV(ambient_rgb);
 		ambient_hsv += vec3(HSM_LGHT_AMBIENT_OFFSET_HUE, HSM_LGHT_AMBIENT_OFFSET_SATURATION, HSM_LGHT_AMBIENT_OFFSET_VALUE);
-		ambient_rgb = HSM_HSVtoRGB(ambient_rgb);
+		ambient_rgb = HSM_HSVtoRGB(ambient_hsv);
 	}
 
 	ambient_rgb *= HSM_LGHT_AMBIENT_BRIGHTNESS;
@@ -1079,6 +1060,7 @@ void main()
 
 	vec3 spot1_point = vec3(HSM_LGHT_SPOT1_POINTX, HSM_LGHT_SPOT1_POINTY, 1);
 
+	// TODO control Spec from Incandescent separate from Bounce?
 
 	out_color.rgb += ApplySpotlight(vTexCoord, 
 									normal_and_height_color,
@@ -1125,6 +1107,8 @@ void main()
 
 
 	// out_color.rgb = mix(prelit_color, out_color.rgb, HSM_LIGHT_NIGHTLIGHTING_OPACITY);
+
+	// TODO need to increase response when angles are facing towards the center
 
 	// // --------------------------------------------------------------------------------------------------
 	// // BOUNCE LIGHT
@@ -1277,12 +1261,9 @@ void main()
 		}
 	}
 
-	if(HSM_COMPOSITE_SHOW_ALPHA > 0.5)
+	if (HSM_LGHT_DEBUG_MAPS == 4)
 	{
-		if (HSM_COMPOSITE_SHOW_ALPHA > 1.5)
-			out_color.rgb = clamp(out_color.rgb * 0.5 + 0.5 * (1 - out_color.a) * vec3(0.5, 0.0, 0.0), 0.0, 1.0);
-		else
-			out_color = out_color.aaaa;
+		out_color = out_color.aaaa;
 	}
 
 	if (HSM_LGHT_DEBUG_MAPS == 1)
