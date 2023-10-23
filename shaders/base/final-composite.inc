@@ -156,7 +156,7 @@ float gaussian(vec2 i) {
     return 1.0 / (2.0 * pi * pow2(sigma)) * exp(-((pow2(i.x) + pow2(i.y)) / (2.0 * pow2(sigma))));
 }
 
-vec3 blur(sampler2D sp, vec2 uv, vec2 scale) {
+vec3 blur(sampler2D sp, vec2 uv, vec2 blur_scale) {
     vec3 col = vec3(0.0);
     float accum = 0.0;
     float weight;
@@ -166,7 +166,7 @@ vec3 blur(sampler2D sp, vec2 uv, vec2 scale) {
         for (int y = -samples / 2; y < samples / 2; ++y) {
             offset = vec2(x, y);
             weight = gaussian(offset);
-            col += texture(sp, uv + scale * offset).rgb * weight;
+            col += texture(sp, uv + blur_scale * offset).rgb * weight;
             accum += weight;
         }
     }
@@ -174,21 +174,68 @@ vec3 blur(sampler2D sp, vec2 uv, vec2 scale) {
     return col / accum;
 }
 
-float GetBlurredMiddleShadow(sampler2D sp, vec2 uv, float scale_multiplier, float noise_amount) {
+float GetBlurredMiddleShadow(vec2 uv, 
+							vec3 light_position, 
+							sampler2D scene_layers_map, 
+							sampler2D normal_height_map, 
+							float occlusion_height, 
+							float blur_scale, 
+							float noise_radius) 
+{
+	// If we are in front of the occluding object then there should be no shadow
+	float sample_height = texture(normal_height_map, vTexCoord).a;
+	if (sample_height > occlusion_height)
+		return 1.0;
+
+// Derivation of intersection of a line to a point on a plane
+// origin = vec3(0.1, 0,1, 0.0)
+// dir    = vec3(0.5, 0.5, 0.5)
+
+// x = origin.x + dir.x * t;
+// y = origin.y + dir.y * t;
+// z = origin.z + dir.z * t;
+
+// //plane
+// z = 1;
+// origin.z + dir.z * t = 1;
+// dir.z * t = 1 - origin.z;
+// float t = (1 - origin.z) / dir.z;
+
+// //substitute t in line equation
+
+// vec3 intersect_point = vec3(origin.x + dir.x * t,
+//                             origin.y + dir.y * t,
+//                             origin.z + dir.z * t)
+
+	vec3 origin = vec3(vec2(uv.x, 1 - uv.y) * 2 - 1, sample_height);
+	vec3 dir    = normalize(light_position - origin);
+	// vec3 dir    = normalize(light_position - vec3(0,0,0));
+
+	float t = (occlusion_height - origin.z) / dir.z;
+	vec3 intersect_point = vec3(origin.x + dir.x * t,
+								origin.y + dir.y * t,
+								origin.z + dir.z * t);
+	
+	// Gete the position in texture space
+	vec2 intersect_uv = (intersect_point.xy + 1) / 2;
+	intersect_uv.y = 1 - intersect_uv.y;
+
     float blurred_alpha = 0.0;
     float accum = 0.0;
     float weight;
     vec2 offset;
     
-	vec2 scale = scale_multiplier * 1 / global.OutputSize.xy;
+	float shadow_spread_amount = smoothstep(occlusion_height, 0.25, sample_height) + 0.2;
+	blur_scale *= shadow_spread_amount;
+	vec2 blur_scale_2d = blur_scale * 1 / global.OutputSize.xy;
 
-	float max_blur_size = noise_amount;
-	float p = max_blur_size / global.SourceSize.y;
-	// srand
+	// TODO Shadow gets less opaque as gets farther away from occlusion
+	//      Probably because of blur getting larger
+
 	float radius = sin(dot(uv, vec2(1233.224, 1743.335)));
-	
-	// The following are all unrolled otherwise they won't compile in D3D11
-	uv += vec2(HSM_rand(radius), HSM_rand(radius)) * p;
+	float p = noise_radius / global.SourceSize.y;
+	// srand
+	intersect_uv += shadow_spread_amount * vec2(HSM_rand(radius), HSM_rand(radius)) * p;
 
     for (int x = -samples / 2; x < samples / 2; ++x) {
         for (int y = -samples / 2; y < samples / 2; ++y) {
@@ -200,14 +247,14 @@ float GetBlurredMiddleShadow(sampler2D sp, vec2 uv, float scale_multiplier, floa
 			vec4 precomp_foreground = vec4(0);
 			vec4 precomp_additive = vec4(0);
 
-			vec4 image_layers_packed = texture(sp, uv + scale * offset);
-			HSM_Unpack_1_Rgba_To_4_Rgba(image_layers_packed, 
+			vec4 packed_layers = texture(scene_layers_map, intersect_uv + blur_scale_2d * offset);
+			HSM_Unpack_1_Rgba_To_4_Rgba(packed_layers, 
 										precomp_foreground, 
 										precomp_middleground, 
 										precomp_background, 
 										precomp_additive);
 
-            blurred_alpha += precomp_middleground.a * weight;
+			blurred_alpha += precomp_middleground.a * weight;
             accum += weight;
         }
     }
@@ -218,8 +265,8 @@ float GetBlurredMiddleShadow(sampler2D sp, vec2 uv, float scale_multiplier, floa
 
 // Shadertoy by consoleartist
 // https://www.shadertoy.com/view/Xlsfzl#
-vec3 GetHeightShadow(in sampler2D in_heightmap, 
-						in sampler2D in_scene_layers_map, 
+vec3 GetHeightShadow(in sampler2D height_map, 
+						in sampler2D scene_layers_map, 
 						vec2 uv,
 						vec3 light_point3, 
 						float light_vector_x_mult,
@@ -235,14 +282,14 @@ vec3 GetHeightShadow(in sampler2D in_heightmap,
 {
 	light_point3.y *= -1;
 	vec3 light_vector_directional = normalize(light_point3);
-	vec3 light_vector = normalize(light_point3 - vec3(uv * 2.0 - 1.0, GetHeightValue(in_heightmap, uv)));
+	vec3 light_vector = normalize(light_point3 - vec3(uv * 2.0 - 1.0, GetHeightValue(height_map, uv)));
 	light_vector = normalize(mix(light_vector_directional, light_vector, omni_amount) * vec3(light_vector_x_mult, 1, 1));
 
 	vec3 light_vector_orig = light_vector;
 	vec3 light_vector_solid_orig = normalize(vec3(light_vector.x, light_vector.y, light_vector.z + 0.05));
 
 	vec2 random_xy = vec2(0); //global.OutputSize.zw * in_noise / 4;
-	vec3 world_pos = vec3(uv + random_xy, GetHeightValue(in_heightmap, uv + random_xy) - in_sample_bias);
+	vec3 world_pos = vec3(uv + random_xy, GetHeightValue(height_map, uv + random_xy) - in_sample_bias);
 
 	// float random_sample_offset = (Random(world_pos.xy) * in_height_noise_amount) / in_samples;
 
@@ -278,7 +325,7 @@ vec3 GetHeightShadow(in sampler2D in_heightmap,
 		vec4 precomp_middleground = vec4(0);
 		vec4 precomp_foreground = vec4(0);
 		vec4 precomp_additive = vec4(0);
-		vec4 image_layers_packed = texture(in_scene_layers_map, ray_sample_pos_random.xy);
+		vec4 image_layers_packed = texture(scene_layers_map, ray_sample_pos_random.xy);
 		HSM_Unpack_1_Rgba_To_4_Rgba(image_layers_packed, 
 									precomp_foreground, 
 									precomp_middleground, 
@@ -289,7 +336,7 @@ vec3 GetHeightShadow(in sampler2D in_heightmap,
 			break;
 
 		// TODO need to sample the mask at the ray position
-		float height_at_sample = GetHeightValue(in_heightmap, vec2(ray_sample_pos_random.x, ray_sample_pos_random.y));
+		float height_at_sample = GetHeightValue(height_map, vec2(ray_sample_pos_random.x, ray_sample_pos_random.y));
 
 		if (dist_to_occlusion > 100000 && ray_sample_pos_random.z < (height_at_sample - in_sample_bias))
 		{
@@ -744,8 +791,11 @@ void main()
 	vec2 bshadow_offset = vec2(-0.07, 0.07) / (global.OutputSize.x / global.OutputSize.y);
 	float bshadow_opacity = 0.8;
 	float bshadow_noise = 4;
-	float bshadow_blur_scale_mult = 8;
-	float middleground_bshadow = clamp(GetBlurredMiddleShadow(SceneLayersPass, vTexCoord - bshadow_offset, bshadow_blur_scale_mult, bshadow_noise) + precomp_middleground.a, 0, 1);
+	float bshadow_blur_scale_mult = HSM_LGHT_SPOT_SHADOW_SOFTNESS * 8;
+	// Get the height behind which the shadow will appear
+	float occlusion_height = texture(NormalsAndHeightPass, vec2(0.5)).a;
+	vec3 light_point_projected_shadow = vec3(1, 1, 7);
+	float middleground_bshadow = clamp(GetBlurredMiddleShadow(vTexCoord, light_point_projected_shadow, SceneLayersPass, NormalsAndHeightPass, occlusion_height, bshadow_blur_scale_mult, bshadow_noise) + precomp_middleground.a, 0, 1);
 
 	float noise_sample = 1;
 	// float noise_sample = HSM_TextureAbsolute(DitherNoise	, vTexCoord * 1).r; // * 1.9;

@@ -131,6 +131,9 @@ float HSM_LGHT_SPOT_VALUE = global.HSM_LGHT_SPOT_VALUE / 100.0;
 #pragma parameter HSM_LGHT_SPOT_SHADOW_STRENGTH                                     "          Spot Shadow Strength"  100 0 100 1
 float HSM_LGHT_SPOT_SHADOW_STRENGTH = global.HSM_LGHT_SPOT_SHADOW_STRENGTH / 100;
 
+#pragma parameter HSM_LGHT_SPOT_SHADOW_SOFTNESS                                     "          Spot Shadow Softness"  100 0 300 1
+float HSM_LGHT_SPOT_SHADOW_SOFTNESS = global.HSM_LGHT_SPOT_SHADOW_SOFTNESS / 100;
+
 #pragma parameter HSM_LGHT_3D_LIGHT_BLEND                                           "          Incandescent 3D Light vs Night Light Blend"  100 0 100 100
 float HSM_LGHT_3D_LIGHT_BLEND = global.HSM_LGHT_3D_LIGHT_BLEND / 100;
 
@@ -301,7 +304,7 @@ float HSM_HSHADOW_DEVICE_CONTRAST = global.HSM_HSHADOW_DEVICE_CONTRAST / 100.0;
 float HSM_HSHADOW_DEVICE_OFFSET_Z = global.HSM_HSHADOW_DEVICE_OFFSET_Z / 100.0;
 
 #pragma parameter HSM_HSHADOW_BEZEL_OFFSET_Z                                           "          Bezel Height Offset Z"  0 -100 100 1
-float HSM_HSHADOW_BEZEL_OFFSET_Z = global.HSM_HSHADOW_BEZEL_OFFSET_Z / 100.0;
+float HSM_HSHADOW_BEZEL_OFFSET_Z = global.HSM_HSHADOW_BEZEL_OFFSET_Z / 100.0 + HSM_HSHADOW_DEVICE_OFFSET_Z;
 
 
 #pragma parameter HSM_BACKGROUND_LAYER_GROUP_EMPTY_LINE			            " " 0 0 0.001 0.001
