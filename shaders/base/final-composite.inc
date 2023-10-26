@@ -1088,7 +1088,7 @@ void main()
 	out_color.rgb = vec3(0);
 
 	// Add Natural Ambient Light often a bluish light
-	out_color.rgb += ApplyAmbient(prelit_color, ambient_rgb);
+	out_color.rgb += static_shadows * ApplyAmbient(prelit_color, ambient_rgb);
 
 	// vec3 spot_rgb = pow(vec3(0.92, 0.84, 0.63), vec3(2.2)) * HSM_LGHT_SPOT_BRIGHTNESS;
 	// vec3 spot_rgb = pow(vec3(0.99, 0.88, 0.55), vec3(2.2)) * HSM_LGHT_SPOT_BRIGHTNESS;
@@ -1112,7 +1112,7 @@ void main()
 
 	// TODO control Spec from Incandescent separate from Bounce?
 
-	out_color.rgb += ApplySpotlight(vTexCoord, 
+	out_color.rgb += static_shadows * ApplySpotlight(vTexCoord, 
 									normal_and_height_color,
 									spot1_point,
 									omnidirectional,
@@ -1130,7 +1130,7 @@ void main()
 
 	vec3 spot2_point = vec3(HSM_LGHT_SPOT2_POINTX, HSM_LGHT_SPOT2_POINTY, 1);
 
-	out_color.rgb += ApplySpotlight(vTexCoord, 
+	out_color.rgb += static_shadows * ApplySpotlight(vTexCoord, 
 									normal_and_height_color,
 									spot2_point,
 									omnidirectional,

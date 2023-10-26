@@ -218,15 +218,17 @@ float HSM_LGHT_NORMAL_STRENGTH = global.HSM_LGHT_NORMAL_STRENGTH / 100.0;
 // float HSM_LGHT_DIFFUSE_AO = global.HSM_LGHT_DIFFUSE_AO / 100.0;
 float HSM_LGHT_DIFFUSE_AO = 0.0;
 
-#pragma parameter HSM_LGHT_ROUGHNESS                                                "          Roughness"  25 0 100 1
-float HSM_LGHT_ROUGHNESS = global.HSM_LGHT_ROUGHNESS / 100.0;
+// #pragma parameter HSM_LGHT_ROUGHNESS                                                "          Roughness"  25 0 100 1
+// float HSM_LGHT_ROUGHNESS = global.HSM_LGHT_ROUGHNESS / 100.0;
+float HSM_LGHT_ROUGHNESS = 0;
 
 // #pragma parameter HSM_LGHT_AO_HEIGHT_CUTOFF                                          "          Specular and Diffuse AO Height Cutoff"  100 0 1000 1
 // float HSM_LGHT_AO_HEIGHT_CUTOFF = global.HSM_LGHT_AO_HEIGHT_CUTOFF / 10000.0;
 float HSM_LGHT_AO_HEIGHT_CUTOFF = 100 / 10000.0;
 
-#pragma parameter HSM_LGHT_SPECULAR_AMOUNT                                          "          Specular Amount"  20 0 400 1
-float HSM_LGHT_SPECULAR_AMOUNT = global.HSM_LGHT_SPECULAR_AMOUNT / 100.0;
+// #pragma parameter HSM_LGHT_SPECULAR_AMOUNT                                          "          Specular Amount"  20 0 400 1
+// float HSM_LGHT_SPECULAR_AMOUNT = global.HSM_LGHT_SPECULAR_AMOUNT / 100.0;
+float HSM_LGHT_SPECULAR_AMOUNT = 0;
 
 // #pragma parameter HSM_LGHT_SPECULAR_AO                                              "          Specular Ambient Occlusion"  100 0 100 1
 // float HSM_LGHT_SPECULAR_AO = global.HSM_LGHT_SPECULAR_AO / 100.0;

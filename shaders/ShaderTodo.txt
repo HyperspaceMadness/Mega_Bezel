@@ -48,6 +48,8 @@ Changes:
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Add White color Spot Light
+  * Need to apply BG shadows
   * Add Biasing of light response based on how much the angle is toward or away from the center
     or vice versa
   * Mask / Project shadow using BG depth map
