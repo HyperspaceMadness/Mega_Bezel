@@ -206,12 +206,12 @@ void main()
         vec4 bg_layer = HSM_GetMipmappedTexSample(Background, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
 
         vec4 bg_normals_layer = vec4(neutral_normals * bg_layer.a, bg_layer.a);
-        if (HSM_LGHT_NORMAL_SOURCE == 1)
+        if (HSM_3DSHADING_NORMAL_SOURCE == 1)
         {
             bg_normals_layer = HSM_GetMipmappedTexSample(BackgroundNormals, BACKGROUND_CURVED_COORD, BACKGROUND_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
             bg_normals_layer = HSM_Linearize(bg_normals_layer, DEFAULT_SRGB_GAMMA);
         }
-        if (HSM_LGHT_NORMAL_SOURCE == 2)
+        if (HSM_3DSHADING_NORMAL_SOURCE == 2)
         {
             bg_normals_layer = vec4(GenerateNormalHeightMultipass(BackgroundHeight, BACKGROUND_CURVED_COORD, textureSize(BackgroundHeight, 0)).rgb, 1);
             bg_normals_layer.rgb = (normalize(bg_normals_layer.rgb) + 1) / 2;
@@ -260,13 +260,13 @@ void main()
             vec4 device_layer = HSM_GetMipmappedTexSample(Device, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
 
             vec4 device_normals_layer = vec4(neutral_normals, 1);
-            if (HSM_LGHT_NORMAL_SOURCE == 1)
+            if (HSM_3DSHADING_NORMAL_SOURCE == 1)
             {
                 // device_normals_layer = HSM_GetMipmappedTexSample(DeviceNormals, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS) * 2.0 - 1.0;
                 device_normals_layer = HSM_GetMipmappedTexSample(DeviceNormals, DEVICE_CURVED_COORD, DEVICE_SCALE, HSM_BG_MIPMAPPING_BLEND_BIAS);
                 device_normals_layer = HSM_Linearize(device_normals_layer, DEFAULT_SRGB_GAMMA);
             }
-            if (HSM_LGHT_NORMAL_SOURCE == 2)
+            if (HSM_3DSHADING_NORMAL_SOURCE == 2)
             {
                 device_normals_layer = vec4(GenerateNormalHeightMultipass(DeviceHeight, DEVICE_CURVED_COORD, textureSize(DeviceHeight, 0)).rgb, 1);
                 device_normals_layer.rgb = (normalize(device_normals_layer.rgb) + 1) / 2;
@@ -289,7 +289,7 @@ void main()
 // (normalize(device_normals_layer.rgb) + 1) / 2;
     
     out_normal_color.rgb = out_normal_color.rgb * 2 - 1;
-    out_normal_color.rg *= HSM_LGHT_NORMAL_STRENGTH;
+    out_normal_color.rg *= HSM_3DSHADING_NORMAL_STRENGTH;
     out_normal_color.rgb = (normalize(out_normal_color.rgb) + 1) / 2;
     out_normal_color = normalize(out_normal_color);
 

@@ -201,10 +201,14 @@ void main()
 	// AMBIENT LIGHTING IMAGES
 	vec3 ambient_rgb = vec3(1);
 	vec3 ambient2_rgb = vec3(1);
+	float nightlight1_opacity = HSM_NIGHTLIGHT1_OPACITY;
+	float nightlight2_opacity = HSM_NIGHTLIGHT2_OPACITY;
 	HSM_Fill_Nightlight_Images(vTexCoord, 
 							HSM_GetViewportCoordWithFlip(vTexCoord), 
 							TUBE_DIFFUSE_COORD_MIXED_POS, 
 							TUBE_DIFFUSE_SCALE_1ST_SCREEN, 
+							nightlight1_opacity,
+							nightlight2_opacity,
 							HSM_LIGHT_NIGHTLIGHTING_SWAP_IMAGE_MODE, 
 							NightLighting, 
 							NightLighting2, 
@@ -269,7 +273,7 @@ void main()
 
 		// If CRT Blend Mode is Multiply (2) then the tube must be fully opaque
 		precomp_tube_diffuse.rgb = HSM_ApplyAmbient(precomp_tube_diffuse.rgb, ambient_rgb, HSM_TUBE_DIFFUSE_IMAGE_LIGHT_NIGHTLIGHTING);
-		precomp_tube_diffuse.rgb = HSM_ApplyAmbient(precomp_tube_diffuse.rgb, ambient2_rgb, HSM_TUBE_DIFFUSE_IMAGE_AMBIENT2_LIGHTING);
+		precomp_tube_diffuse.rgb = HSM_ApplyAmbient(precomp_tube_diffuse.rgb, ambient2_rgb, HSM_TUBE_DIFFUSE_IMAGE_NIGHTLIGHT2_LIGHTING);
 	}
 	if (HSM_TUBE_DIFFUSE_MODE == 2)
 	{
@@ -315,7 +319,7 @@ void main()
 			precomp_gel.rgb = HSM_ApplyScanlineMask(precomp_gel, SCREEN_SCALE, SCREEN_COORD, screen_curved_coord, tube_curved_coord, HSM_TUBE_COLORED_GEL_IMAGE_FAKE_SCANLINE_AMOUNT).rgb;
 
 		precomp_gel.rgb = HSM_ApplyAmbient(precomp_gel.rgb, ambient_rgb, HSM_TUBE_COLORED_GEL_IMAGE_LIGHT_NIGHTLIGHTING);
-		precomp_gel.rgb = HSM_ApplyAmbient(precomp_gel.rgb, ambient2_rgb, HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT2_LIGHTING);
+		precomp_gel.rgb = HSM_ApplyAmbient(precomp_gel.rgb, ambient2_rgb, HSM_TUBE_COLORED_GEL_IMAGE_NIGHTLIGHT2_LIGHTING);
 
 		// Multiply needs to take into account premultiplied color
 		precomp_gel = HSM_BlendModeLayerMix(precomp_gel, vec4(vec3(vignette_factor), 1), BLEND_MODE_MULTIPLY, HSM_TUBE_COLORED_GEL_IMAGE_NORMAL_VIGNETTE);
@@ -333,7 +337,7 @@ void main()
 	{
 		precomp_tube_highlight.rgb = HSM_GetTubeHighlight(tube_curved_coord, false, TubeHighlight, DitherNoise);
 		precomp_tube_highlight.rgb = HSM_ApplyAmbient(precomp_tube_highlight.rgb, ambient_rgb, HSM_TUBE_STATIC_LIGHT_NIGHTLIGHTING);
-		precomp_tube_highlight.rgb = HSM_ApplyAmbient(precomp_tube_highlight.rgb, ambient2_rgb, HSM_TUBE_STATIC_AMBIENT2_LIGHTING);
+		precomp_tube_highlight.rgb = HSM_ApplyAmbient(precomp_tube_highlight.rgb, ambient2_rgb, HSM_TUBE_STATIC_NIGHTLIGHT2_LIGHTING);
 
 		precomp_tube_highlight.rgb *= HSM_TUBE_STATIC_SHADOW_OPACITY * tube_shadow + (1 - HSM_TUBE_STATIC_SHADOW_OPACITY);
 		precomp_tube_highlight.rgb = clamp(HSM_TUBE_STATIC_BLACK_LEVEL * (precomp_tube_highlight.rgb - 1.0) + 1.0, 0, 1.0);

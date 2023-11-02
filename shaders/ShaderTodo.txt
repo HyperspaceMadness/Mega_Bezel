@@ -34,6 +34,10 @@ Changes:
           HSM_LED_APPLY_AMBIENT_IN_ADD_MODE
         becomes:
           HSM_LED_ADD_MODE_NIGHTLIGHTING_AMOUNT
+    * _AMBIENT1_ ranamed to _NIGHTLIGHT1_
+    * _AMBIENT2_ ranamed to _NIGHTLIGHT2_
+    * HSM_LIGHT_NIGHTLIGHTING_OPACITY renamed to HSM_SHADE_NIGHTLIGHT_AND_STATIC_SHADING_BLEND 
+
   * IMPORTANT Many texture names have changed 
     * FrameTextureImage -> FrameHighlight
     * IntroImage -> IntroLogo
@@ -42,6 +46,7 @@ Changes:
     * TubeStaticReflectionImage -> tube_highlight
     * HSM_Duimon_Super_Famicom -> Background_Sfc_Duimon
     * "_3840x2160" -> ""
+  
   * Add Noise for dithering tube highlight
 
 ----------------------------------------------------

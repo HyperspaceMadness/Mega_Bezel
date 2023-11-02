@@ -825,12 +825,12 @@ bool HSM_GetUseScreenVignette()
 vec3 HSM_GetNightLightingMultiplyColor( vec2 in_coord, float hue, float saturation, float value, float contrast, float global_ambient_opacity, in sampler2D NightLighting )
 {
 	vec4 lighting_image = vec4(0);
-	// if (HSM_AMBIENT1_DITHERING_SAMPLES > 0.5)
+	// if (HSM_NIGHTLIGHT1_DITHERING_SAMPLES > 0.5)
 	// {
 	// 	// Dithering if needed to reduce banding
 	// 	float blur_max_size = 1;
 	// 	float blur_amount = 0.2;
-	// 	lighting_image = HSM_GetStoichaicBlurredSample(NightLighting, in_coord.xy, HSM_AMBIENT1_DITHERING_SAMPLES, blur_max_size, blur_amount);
+	// 	lighting_image = HSM_GetStoichaicBlurredSample(NightLighting, in_coord.xy, HSM_NIGHTLIGHT1_DITHERING_SAMPLES, blur_max_size, blur_amount);
 	// }
 	// else
 	lighting_image = HSM_GetMipmappedTexSample(NightLighting, in_coord.xy, vec2(1), 0);
@@ -852,15 +852,25 @@ vec3 HSM_GetNightLightingMultiplyColor( vec2 in_coord, float hue, float saturati
 	return out_color;
 }
 
-bool HSM_Fill_Nightlight_Images(vec2 in_viewport_coord, vec2 in_viewport_unscaled_coord, vec2 in_tube_coord, vec2 in_tube_scale, float in_swap_images, in sampler2D in_ambient_sampler, in sampler2D in_ambient2_sampler, inout vec3 ambient_rgb, inout vec3 ambient2_rgb)
+bool HSM_Fill_Nightlight_Images(vec2 in_viewport_coord, 
+								vec2 in_viewport_unscaled_coord, 
+								vec2 in_tube_coord, 
+								vec2 in_tube_scale, 
+								float nightlight1_opacity,
+								float nightlight2_opacity,
+								float in_swap_images, 
+								in sampler2D in_ambient_sampler, 
+								in sampler2D in_ambient2_sampler, 
+								inout vec3 nightlight1_rgb, 
+								inout vec3 nightlight2_rgb)
 {
-		ambient_rgb = vec3(1);
-		ambient2_rgb = vec3(1);
+		nightlight1_rgb = vec3(1);
+		nightlight2_rgb = vec3(1);
 
-		if (HSM_AMBIENT1_OPACITY > 0)
+		if (nightlight1_opacity > 0)
 		{
-			float ambient1_scale = HSM_AMBIENT1_SCALE;
-			if (HSM_AMBIENT1_SCALE_INHERIT_MODE == 1 && HSM_AMBIENT1_SCALE * HSM_VIEWPORT_ZOOM < 1)
+			float ambient1_scale = HSM_NIGHTLIGHT1_SCALE;
+			if (HSM_NIGHTLIGHT1_SCALE_INHERIT_MODE == 1 && HSM_NIGHTLIGHT1_SCALE * HSM_VIEWPORT_ZOOM < 1)
 				ambient1_scale = 1 / HSM_VIEWPORT_ZOOM;
 
 			vec2 lighting_coord = GetSimpleScaledCoord(in_viewport_coord, 
@@ -868,27 +878,27 @@ bool HSM_Fill_Nightlight_Images(vec2 in_viewport_coord, vec2 in_viewport_unscale
 															in_tube_coord,
 															in_tube_scale,
 															in_ambient_sampler,
-															vec2(HSM_AMBIENT1_POSITION_X, HSM_AMBIENT1_POSITION_Y),
-															HSM_AMBIENT1_POS_INHERIT_MODE, 
-															vec2(ambient1_scale * HSM_AMBIENT1_SCALE_X, ambient1_scale), 
-															HSM_AMBIENT1_SCALE_INHERIT_MODE, 
-															HSM_AMBIENT1_SCALE_KEEP_ASPECT,
-															HSM_AMBIENT1_MIRROR_HORZ,
-															HSM_AMBIENT1_ROTATE );
+															vec2(HSM_NIGHTLIGHT1_POSITION_X, HSM_NIGHTLIGHT1_POSITION_Y),
+															HSM_NIGHTLIGHT1_POS_INHERIT_MODE, 
+															vec2(ambient1_scale * HSM_NIGHTLIGHT1_SCALE_X, ambient1_scale), 
+															HSM_NIGHTLIGHT1_SCALE_INHERIT_MODE, 
+															HSM_NIGHTLIGHT1_SCALE_KEEP_ASPECT,
+															HSM_NIGHTLIGHT1_MIRROR_HORZ,
+															HSM_NIGHTLIGHT1_ROTATE );
 
-			ambient_rgb = HSM_GetNightLightingMultiplyColor( lighting_coord,
-																		HSM_AMBIENT1_HUE,
-																		HSM_AMBIENT1_SATURATION,
-																		HSM_AMBIENT1_VALUE,
-																		HSM_AMBIENT1_CONTRAST,
-																		HSM_AMBIENT1_OPACITY,
+			nightlight1_rgb = HSM_GetNightLightingMultiplyColor( lighting_coord,
+																		HSM_NIGHTLIGHT1_HUE,
+																		HSM_NIGHTLIGHT1_SATURATION,
+																		HSM_NIGHTLIGHT1_VALUE,
+																		HSM_NIGHTLIGHT1_CONTRAST,
+																		nightlight1_opacity,
 																		in_ambient_sampler );
 		}
 
-		if (HSM_AMBIENT2_OPACITY > 0)
+		if (nightlight2_opacity > 0)
 		{
-			float ambient2_scale = HSM_AMBIENT2_SCALE;
-			if (HSM_AMBIENT2_SCALE_INHERIT_MODE == 1 && HSM_AMBIENT2_SCALE * HSM_VIEWPORT_ZOOM < 1)
+			float ambient2_scale = HSM_NIGHTLIGHT2_SCALE;
+			if (HSM_NIGHTLIGHT2_SCALE_INHERIT_MODE == 1 && HSM_NIGHTLIGHT2_SCALE * HSM_VIEWPORT_ZOOM < 1)
 				ambient2_scale = 1 / HSM_VIEWPORT_ZOOM;
 
 			vec2 lighting2_coord = GetSimpleScaledCoord(in_viewport_coord, 
@@ -896,59 +906,59 @@ bool HSM_Fill_Nightlight_Images(vec2 in_viewport_coord, vec2 in_viewport_unscale
 															in_tube_coord,
 															in_tube_scale,
 															in_ambient2_sampler,
-															vec2(HSM_AMBIENT2_POSITION_X, HSM_AMBIENT2_POSITION_Y),
-															HSM_AMBIENT2_POS_INHERIT_MODE, 
-															vec2(ambient2_scale * HSM_AMBIENT2_SCALE_X, ambient2_scale), 
-															HSM_AMBIENT2_SCALE_INHERIT_MODE, 
-															HSM_AMBIENT2_SCALE_KEEP_ASPECT,
-															HSM_AMBIENT2_MIRROR_HORZ,
-															HSM_AMBIENT2_ROTATE );
+															vec2(HSM_NIGHTLIGHT2_POSITION_X, HSM_NIGHTLIGHT2_POSITION_Y),
+															HSM_NIGHTLIGHT2_POS_INHERIT_MODE, 
+															vec2(ambient2_scale * HSM_NIGHTLIGHT2_SCALE_X, ambient2_scale), 
+															HSM_NIGHTLIGHT2_SCALE_INHERIT_MODE, 
+															HSM_NIGHTLIGHT2_SCALE_KEEP_ASPECT,
+															HSM_NIGHTLIGHT2_MIRROR_HORZ,
+															HSM_NIGHTLIGHT2_ROTATE );
 
-			ambient2_rgb = HSM_GetNightLightingMultiplyColor( lighting2_coord,
-																		HSM_AMBIENT2_HUE,
-																		HSM_AMBIENT2_SATURATION,
-																		HSM_AMBIENT2_VALUE,
-																		HSM_AMBIENT2_CONTRAST,
-																		HSM_AMBIENT2_OPACITY,
+			nightlight2_rgb = HSM_GetNightLightingMultiplyColor( lighting2_coord,
+																		HSM_NIGHTLIGHT2_HUE,
+																		HSM_NIGHTLIGHT2_SATURATION,
+																		HSM_NIGHTLIGHT2_VALUE,
+																		HSM_NIGHTLIGHT2_CONTRAST,
+																		nightlight2_opacity,
 																		in_ambient2_sampler );
 		}
 
 	// if (in_swap_images == 1)
 	// {
-	// 	vec4 temp_image = ambient_rgb;
-	// 	ambient_rgb = ambient2_rgb;
-	// 	ambient2_rgb = temp_image;
+	// 	vec4 temp_image = nightlight1_rgb;
+	// 	nightlight1_rgb = nightlight2_rgb;
+	// 	nightlight2_rgb = temp_image;
 	// }
 
 	return true;
 }
 
-vec3 ApplyNightlights(vec3 base_image, vec3 ambient_image, vec3 ambient2_image, float blend_ambient, float blend_ambient2, float apply_in_add_mode, float layer_blend_mode, float swap_images) 
+vec3 ApplyNightlights(vec3 base_image, vec3 nightlight1_rgb, vec3 nightlight2_rgb, float blend_ambient, float blend_ambient2, float apply_in_add_mode, float layer_blend_mode, float swap_images) 
 {
 	vec3 out_color = base_image;
 
 	if (swap_images == 1)
-		ambient2_image = ambient_image;
+		nightlight2_rgb = nightlight1_rgb;
 	if (swap_images == 2)
-		ambient_image = ambient2_image;
+		nightlight1_rgb = nightlight2_rgb;
 	if (swap_images == 3)
 	{
-		vec3 temp_image = ambient_image;
-		ambient_image = ambient2_image;
-		ambient2_image = temp_image;
+		vec3 temp_image = nightlight1_rgb;
+		nightlight1_rgb = nightlight2_rgb;
+		nightlight2_rgb = temp_image;
 	}
 
-	if ( (HSM_AMBIENT1_OPACITY > 0 || HSM_AMBIENT2_OPACITY > 0) && (blend_ambient > 0 || blend_ambient2 > 0) )
+	if ( (HSM_NIGHTLIGHT1_OPACITY > 0 || HSM_NIGHTLIGHT2_OPACITY > 0) && (blend_ambient > 0 || blend_ambient2 > 0) )
 	{
 		if(	apply_in_add_mode == 1 || layer_blend_mode != BLEND_MODE_ADD)
 		{
 			if (blend_ambient > 0)
 			{
-				out_color = (1 - blend_ambient) * out_color.rgb + blend_ambient * out_color.rgb * ambient_image.rgb;
+				out_color = (1 - blend_ambient) * out_color.rgb + blend_ambient * out_color.rgb * nightlight1_rgb.rgb;
 			}
 			if (blend_ambient2 > 0)
 			{
-				out_color = (1 - blend_ambient2) * out_color.rgb + blend_ambient2 * out_color.rgb * ambient2_image.rgb;
+				out_color = (1 - blend_ambient2) * out_color.rgb + blend_ambient2 * out_color.rgb * nightlight2_rgb.rgb;
 			}
 		}
 	}
@@ -983,10 +993,10 @@ float HSM_GetTubeOpacity()
 	return HSM_TUBE_DIFFUSE_MODE < 1.5 ? HSM_TUBE_OPACITY : 0;
 }
 
-vec3 HSM_ApplyAmbient(vec3 base_image, vec3 ambient_image, float layer_blend_amount) 
+vec3 HSM_ApplyAmbient(vec3 base_image, vec3 nightlight_rgb, float layer_blend_amount) 
 {
 	if (layer_blend_amount > 0)
-		return (1 - layer_blend_amount) * base_image.rgb + layer_blend_amount * base_image.rgb * ambient_image.rgb;
+		return (1 - layer_blend_amount) * base_image.rgb + layer_blend_amount * base_image.rgb * nightlight_rgb.rgb;
 	else
 		return base_image;
 }

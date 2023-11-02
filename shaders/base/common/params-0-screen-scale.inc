@@ -65,16 +65,19 @@ float HSM_STATIC_LAYERS_GAMMA = global.HSM_STATIC_LAYERS_GAMMA;
 //    AMBIENT LIGHTING AKA NIGHTLIGHTING 
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_AMBIENT_EMPTY_LINE							" " 0 0 0.001 0.001
-#pragma parameter HSM_AMBIENT_TITLE                       "[ NIGHT LIGHTING ]:" 0 0 0.001 0.001
+#pragma parameter HSM_AMBIENT_TITLE                       "[ LIGHTING / SHADING ]:" 0 0 0.001 0.001
 
-#pragma parameter HSM_LIGHT_NIGHTLIGHTING_OPACITY          "      Night Lighting Global Opacity Multiplier"  0 0 100 1
-float HSM_LIGHT_NIGHTLIGHTING_OPACITY = global.HSM_LIGHT_NIGHTLIGHTING_OPACITY / 100;
+#pragma parameter HSM_LIGHTING_MODE 				      "         Lighting  Mode - NONE | 2D | 3D Shading"  2 0 2 1
+float HSM_LIGHTING_MODE = global.HSM_LIGHTING_MODE;
 
-#pragma parameter HSM_AMBIENT1_OPACITY                     "      Night Lighting 1st  Opacity"  100 0 100 1
-float HSM_AMBIENT1_OPACITY = global.HSM_AMBIENT1_OPACITY / 100 * global.HSM_LIGHT_NIGHTLIGHTING_OPACITY / 100;
+#pragma parameter HSM_LIGHTING_BLEND                         "         Lighting Blend - 100 for Lighting ON"  100 0 100 1
+float HSM_LIGHTING_BLEND = global.HSM_LIGHTING_BLEND / 100;
 
-#pragma parameter HSM_AMBIENT2_OPACITY                     "      Night Lighting 2nd  Opacity (Used for BG by Default)"  100 0 100 1
-float HSM_AMBIENT2_OPACITY = global.HSM_AMBIENT2_OPACITY / 100 * global.HSM_LIGHT_NIGHTLIGHTING_OPACITY / 100;
+#pragma parameter HSM_NIGHTLIGHT1_OPACITY                     "      Night Lighting 1st  Opacity"  100 0 100 1
+float HSM_NIGHTLIGHT1_OPACITY = global.HSM_NIGHTLIGHT1_OPACITY / 100 * global.HSM_LIGHTING_BLEND / 100;
+
+#pragma parameter HSM_NIGHTLIGHT2_OPACITY                     "      Night Lighting 2nd  Opacity (Used for BG by Default)"  100 0 100 1
+float HSM_NIGHTLIGHT2_OPACITY = global.HSM_NIGHTLIGHT2_OPACITY / 100 * global.HSM_LIGHTING_BLEND / 100;
 
 #pragma parameter HSM_LIGHT_NIGHTLIGHTING_SWAP_IMAGE_MODE  "      Which s to Use: BOTH | 1 ONLY | 2 ONLY | SWAP"  0 0 3 1
 float HSM_LIGHT_NIGHTLIGHTING_SWAP_IMAGE_MODE = global.HSM_LIGHT_NIGHTLIGHTING_SWAP_IMAGE_MODE;
@@ -704,8 +707,8 @@ float HSM_TUBE_DIFFUSE_IMAGE_GAMMA = global.HSM_TUBE_DIFFUSE_IMAGE_GAMMA;
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_LIGHT_NIGHTLIGHTING           "          Add Blend Mode Night Lighting 1 Multiplier" 100 0 100 1
 float HSM_TUBE_DIFFUSE_IMAGE_LIGHT_NIGHTLIGHTING = global.HSM_TUBE_DIFFUSE_IMAGE_LIGHT_NIGHTLIGHTING / 100;
 
-#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_AMBIENT2_LIGHTING          "          Add Blend Mode Night Lighting 2 Multiplier" 0 0 100 1
-float HSM_TUBE_DIFFUSE_IMAGE_AMBIENT2_LIGHTING = global.HSM_TUBE_DIFFUSE_IMAGE_AMBIENT2_LIGHTING / 100;
+#pragma parameter HSM_TUBE_DIFFUSE_IMAGE_NIGHTLIGHT2_LIGHTING          "          Add Blend Mode Night Lighting 2 Multiplier" 0 0 100 1
+float HSM_TUBE_DIFFUSE_IMAGE_NIGHTLIGHT2_LIGHTING = global.HSM_TUBE_DIFFUSE_IMAGE_NIGHTLIGHT2_LIGHTING / 100;
 
 #pragma parameter HSM_TUBE_DIFFUSE_IMAGE_SCALE  			        "           Scale" 140 0 1000 1
 float HSM_TUBE_DIFFUSE_IMAGE_SCALE = global.HSM_TUBE_DIFFUSE_IMAGE_SCALE / 100;
@@ -769,8 +772,8 @@ float HSM_TUBE_STATIC_BLACK_LEVEL = global.HSM_TUBE_STATIC_BLACK_LEVEL / 1000 + 
 #pragma parameter HSM_TUBE_STATIC_LIGHT_NIGHTLIGHTING "          Add Blend Mode Night Lighting 1 Multiplier" 60 0 100 1
 float HSM_TUBE_STATIC_LIGHT_NIGHTLIGHTING = global.HSM_TUBE_STATIC_LIGHT_NIGHTLIGHTING / 100;
 
-#pragma parameter HSM_TUBE_STATIC_AMBIENT2_LIGHTING "          Add Blend Mode Night Lighting 2 Multiplier" 0 0 100 1
-float HSM_TUBE_STATIC_AMBIENT2_LIGHTING = global.HSM_TUBE_STATIC_AMBIENT2_LIGHTING / 100;
+#pragma parameter HSM_TUBE_STATIC_NIGHTLIGHT2_LIGHTING "          Add Blend Mode Night Lighting 2 Multiplier" 0 0 100 1
+float HSM_TUBE_STATIC_NIGHTLIGHT2_LIGHTING = global.HSM_TUBE_STATIC_NIGHTLIGHT2_LIGHTING / 100;
 
 #pragma parameter HSM_TUBE_STATIC_SCALE  			"          Scale" 120 0 1000 1
 float HSM_TUBE_STATIC_SCALE = global.HSM_TUBE_STATIC_SCALE / 100.0;
@@ -872,8 +875,8 @@ float HSM_TUBE_COLORED_GEL_IMAGE_FAKE_SCANLINE_AMOUNT = global.HSM_TUBE_COLORED_
 #pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_LIGHT_NIGHTLIGHTING       "          Add Blend Mode Night Lighting 1 Multiplier" 100 0 100 1
 float HSM_TUBE_COLORED_GEL_IMAGE_LIGHT_NIGHTLIGHTING = global.HSM_TUBE_COLORED_GEL_IMAGE_LIGHT_NIGHTLIGHTING / 100;
 
-#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT2_LIGHTING      "          Add Blend Mode Night Lighting 2 Multiplier" 0 0 100 1
-float HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT2_LIGHTING = global.HSM_TUBE_COLORED_GEL_IMAGE_AMBIENT2_LIGHTING / 100;
+#pragma parameter HSM_TUBE_COLORED_GEL_IMAGE_NIGHTLIGHT2_LIGHTING      "          Add Blend Mode Night Lighting 2 Multiplier" 0 0 100 1
+float HSM_TUBE_COLORED_GEL_IMAGE_NIGHTLIGHT2_LIGHTING = global.HSM_TUBE_COLORED_GEL_IMAGE_NIGHTLIGHT2_LIGHTING / 100;
 
 
 //---------------------------------------------------------------------------------------------------
@@ -1015,99 +1018,99 @@ float HSM_SCREEN_REFLECTION_POS_Y = global.HSM_SCREEN_REFLECTION_POS_Y / 600;
 
 
 
-#pragma parameter HSM_AMBIENT1_EMPTY_LINE							" " 0 0 0.001 0.001
-#pragma parameter HSM_AMBIENT1_TITLE                       "[ AMBIENT LIGHTING IMAGE 1 ]:" 0 0 0.001 0.001
+#pragma parameter HSM_NIGHTLIGHT1_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter HSM_NIGHTLIGHT1_TITLE                       "[ AMBIENT LIGHTING IMAGE 1 ]:" 0 0 0.001 0.001
 
-#pragma parameter HSM_AMBIENT1_HUE                 	        "          Hue"  0 -180 180 1
-float HSM_AMBIENT1_HUE = global.HSM_AMBIENT1_HUE / 360;
+#pragma parameter HSM_NIGHTLIGHT1_HUE                 	        "          Hue"  0 -180 180 1
+float HSM_NIGHTLIGHT1_HUE = global.HSM_NIGHTLIGHT1_HUE / 360;
 
-#pragma parameter HSM_AMBIENT1_SATURATION          	        "          Saturation"  100 0 300 1
-float HSM_AMBIENT1_SATURATION = global.HSM_AMBIENT1_SATURATION / 100;
+#pragma parameter HSM_NIGHTLIGHT1_SATURATION          	        "          Saturation"  100 0 300 1
+float HSM_NIGHTLIGHT1_SATURATION = global.HSM_NIGHTLIGHT1_SATURATION / 100;
 
-#pragma parameter HSM_AMBIENT1_VALUE               	        "          Value"  120 0 400 1
-float HSM_AMBIENT1_VALUE = global.HSM_AMBIENT1_VALUE / 100;
+#pragma parameter HSM_NIGHTLIGHT1_VALUE               	        "          Value"  120 0 400 1
+float HSM_NIGHTLIGHT1_VALUE = global.HSM_NIGHTLIGHT1_VALUE / 100;
 
-#pragma parameter HSM_AMBIENT1_CONTRAST               	    "          Contrast"  100 0 200 0.5
-float HSM_AMBIENT1_CONTRAST = global.HSM_AMBIENT1_CONTRAST / 100;
+#pragma parameter HSM_NIGHTLIGHT1_CONTRAST               	    "          Contrast"  100 0 200 0.5
+float HSM_NIGHTLIGHT1_CONTRAST = global.HSM_NIGHTLIGHT1_CONTRAST / 100;
 
-#pragma parameter HSM_AMBIENT1_SCALE_KEEP_ASPECT           "        Scale Aspect - MATCH VIEWPORT | USE TEXURE ASPECT"  1 0 1 1
-float HSM_AMBIENT1_SCALE_KEEP_ASPECT = global.HSM_AMBIENT1_SCALE_KEEP_ASPECT;
+#pragma parameter HSM_NIGHTLIGHT1_SCALE_KEEP_ASPECT           "        Scale Aspect - MATCH VIEWPORT | USE TEXURE ASPECT"  1 0 1 1
+float HSM_NIGHTLIGHT1_SCALE_KEEP_ASPECT = global.HSM_NIGHTLIGHT1_SCALE_KEEP_ASPECT;
 
-#pragma parameter HSM_AMBIENT1_SCALE_INHERIT_MODE         	"          Scale Inheritance - OFF | ZOOM | TUBE"  2 0 2 1
-float HSM_AMBIENT1_SCALE_INHERIT_MODE = global.HSM_AMBIENT1_SCALE_INHERIT_MODE;
+#pragma parameter HSM_NIGHTLIGHT1_SCALE_INHERIT_MODE         	"          Scale Inheritance - OFF | ZOOM | TUBE"  2 0 2 1
+float HSM_NIGHTLIGHT1_SCALE_INHERIT_MODE = global.HSM_NIGHTLIGHT1_SCALE_INHERIT_MODE;
 
-#pragma parameter HSM_AMBIENT1_SCALE             	        "          Scale Offset"  250 10 1000 1
-float HSM_AMBIENT1_SCALE = global.HSM_AMBIENT1_SCALE / 100;
+#pragma parameter HSM_NIGHTLIGHT1_SCALE             	        "          Scale Offset"  250 10 1000 1
+float HSM_NIGHTLIGHT1_SCALE = global.HSM_NIGHTLIGHT1_SCALE / 100;
 
-#pragma parameter HSM_AMBIENT1_SCALE_X             	        "          Scale Offset X"  100 10 1000 0.5
-float HSM_AMBIENT1_SCALE_X = global.HSM_AMBIENT1_SCALE_X / 100;
+#pragma parameter HSM_NIGHTLIGHT1_SCALE_X             	        "          Scale Offset X"  100 10 1000 0.5
+float HSM_NIGHTLIGHT1_SCALE_X = global.HSM_NIGHTLIGHT1_SCALE_X / 100;
 
-#pragma parameter HSM_AMBIENT1_ROTATE         	            "          Rotate"  0 0 1 1
-float HSM_AMBIENT1_ROTATE = global.HSM_AMBIENT1_ROTATE;
+#pragma parameter HSM_NIGHTLIGHT1_ROTATE         	            "          Rotate"  0 0 1 1
+float HSM_NIGHTLIGHT1_ROTATE = global.HSM_NIGHTLIGHT1_ROTATE;
 
-#pragma parameter HSM_AMBIENT1_MIRROR_HORZ         	        "          Mirror Horizontal"  0 0 1 1
-float HSM_AMBIENT1_MIRROR_HORZ = global.HSM_AMBIENT1_MIRROR_HORZ;
+#pragma parameter HSM_NIGHTLIGHT1_MIRROR_HORZ         	        "          Mirror Horizontal"  0 0 1 1
+float HSM_NIGHTLIGHT1_MIRROR_HORZ = global.HSM_NIGHTLIGHT1_MIRROR_HORZ;
 
-#pragma parameter HSM_AMBIENT1_POS_INHERIT_MODE         	"          Position Inheritance - OFF | ON"  1 0 1 1
-float HSM_AMBIENT1_POS_INHERIT_MODE = global.HSM_AMBIENT1_POS_INHERIT_MODE;
+#pragma parameter HSM_NIGHTLIGHT1_POS_INHERIT_MODE         	"          Position Inheritance - OFF | ON"  1 0 1 1
+float HSM_NIGHTLIGHT1_POS_INHERIT_MODE = global.HSM_NIGHTLIGHT1_POS_INHERIT_MODE;
 
-#pragma parameter HSM_AMBIENT1_POSITION_X 					"          Position X" 0 -1500 1500 1
-float HSM_AMBIENT1_POSITION_X = global.HSM_AMBIENT1_POSITION_X / -1000;
+#pragma parameter HSM_NIGHTLIGHT1_POSITION_X 					"          Position X" 0 -1500 1500 1
+float HSM_NIGHTLIGHT1_POSITION_X = global.HSM_NIGHTLIGHT1_POSITION_X / -1000;
 
-#pragma parameter HSM_AMBIENT1_POSITION_Y 					"          Position Y" 0 -1500 1500 1
-float HSM_AMBIENT1_POSITION_Y = -1 * global.HSM_AMBIENT1_POSITION_Y / -1000;
+#pragma parameter HSM_NIGHTLIGHT1_POSITION_Y 					"          Position Y" 0 -1500 1500 1
+float HSM_NIGHTLIGHT1_POSITION_Y = -1 * global.HSM_NIGHTLIGHT1_POSITION_Y / -1000;
 
 // Commented out because I don't think anyone is using this
-// #pragma parameter HSM_AMBIENT1_DITHERING_SAMPLES   "          Dithering Noise Samples (Reduces Banding)" 0 0 10 1
-// float HSM_AMBIENT1_DITHERING_SAMPLES = global.HSM_AMBIENT1_DITHERING_SAMPLES;
-float HSM_AMBIENT1_DITHERING_SAMPLES = 0;
+// #pragma parameter HSM_NIGHTLIGHT1_DITHERING_SAMPLES   "          Dithering Noise Samples (Reduces Banding)" 0 0 10 1
+// float HSM_NIGHTLIGHT1_DITHERING_SAMPLES = global.HSM_NIGHTLIGHT1_DITHERING_SAMPLES;
+float HSM_NIGHTLIGHT1_DITHERING_SAMPLES = 0;
 
 
 //---------------------------------------------------------------------------------------------------
 //    Ambient Lighting  2
 //---------------------------------------------------------------------------------------------------
 
-#pragma parameter HSM_AMBIENT2_EMPTY_LINE							" " 0 0 0.001 0.001
-#pragma parameter HSM_AMBIENT2_TITLE                            "[ AMBIENT LIGHTING IMAGE 2 ]:" 0 0 0.001 0.001
+#pragma parameter HSM_NIGHTLIGHT2_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter HSM_NIGHTLIGHT2_TITLE                            "[ AMBIENT LIGHTING IMAGE 2 ]:" 0 0 0.001 0.001
 
-#pragma parameter HSM_AMBIENT2_HUE                 	            "          Hue"  0 -180 180 1
-float HSM_AMBIENT2_HUE = global.HSM_AMBIENT2_HUE / 360;
+#pragma parameter HSM_NIGHTLIGHT2_HUE                 	            "          Hue"  0 -180 180 1
+float HSM_NIGHTLIGHT2_HUE = global.HSM_NIGHTLIGHT2_HUE / 360;
 
-#pragma parameter HSM_AMBIENT2_SATURATION          	            "          Saturation"  100 0 300 1
-float HSM_AMBIENT2_SATURATION = global.HSM_AMBIENT2_SATURATION / 100;
+#pragma parameter HSM_NIGHTLIGHT2_SATURATION          	            "          Saturation"  100 0 300 1
+float HSM_NIGHTLIGHT2_SATURATION = global.HSM_NIGHTLIGHT2_SATURATION / 100;
 
-#pragma parameter HSM_AMBIENT2_VALUE               	            "          Value"  100 0 400 1
-float HSM_AMBIENT2_VALUE = global.HSM_AMBIENT2_VALUE / 100;
+#pragma parameter HSM_NIGHTLIGHT2_VALUE               	            "          Value"  100 0 400 1
+float HSM_NIGHTLIGHT2_VALUE = global.HSM_NIGHTLIGHT2_VALUE / 100;
 
-#pragma parameter HSM_AMBIENT2_CONTRAST               	        "          Contrast"  100 0 200 0.5
-float HSM_AMBIENT2_CONTRAST = global.HSM_AMBIENT2_CONTRAST / 100;
+#pragma parameter HSM_NIGHTLIGHT2_CONTRAST               	        "          Contrast"  100 0 200 0.5
+float HSM_NIGHTLIGHT2_CONTRAST = global.HSM_NIGHTLIGHT2_CONTRAST / 100;
 
-#pragma parameter HSM_AMBIENT2_SCALE_KEEP_ASPECT                "        Scale Aspect - MATCH VIEWPORT | USE TEXURE ASPECT"  0 0 1 1
-float HSM_AMBIENT2_SCALE_KEEP_ASPECT = global.HSM_AMBIENT2_SCALE_KEEP_ASPECT;
+#pragma parameter HSM_NIGHTLIGHT2_SCALE_KEEP_ASPECT                "        Scale Aspect - MATCH VIEWPORT | USE TEXURE ASPECT"  0 0 1 1
+float HSM_NIGHTLIGHT2_SCALE_KEEP_ASPECT = global.HSM_NIGHTLIGHT2_SCALE_KEEP_ASPECT;
 
-#pragma parameter HSM_AMBIENT2_SCALE_INHERIT_MODE         	    "          Scale Inheritance - OFF | ZOOM | TUBE"  1 0 2 1
-float HSM_AMBIENT2_SCALE_INHERIT_MODE = global.HSM_AMBIENT2_SCALE_INHERIT_MODE;
+#pragma parameter HSM_NIGHTLIGHT2_SCALE_INHERIT_MODE         	    "          Scale Inheritance - OFF | ZOOM | TUBE"  1 0 2 1
+float HSM_NIGHTLIGHT2_SCALE_INHERIT_MODE = global.HSM_NIGHTLIGHT2_SCALE_INHERIT_MODE;
 
-#pragma parameter HSM_AMBIENT2_SCALE             	            "          Scale Offset"  100 10 1000 0.5
-float HSM_AMBIENT2_SCALE = global.HSM_AMBIENT2_SCALE / 100;
+#pragma parameter HSM_NIGHTLIGHT2_SCALE             	            "          Scale Offset"  100 10 1000 0.5
+float HSM_NIGHTLIGHT2_SCALE = global.HSM_NIGHTLIGHT2_SCALE / 100;
 
-#pragma parameter HSM_AMBIENT2_SCALE_X             	            "          Scale Offset X"  100 10 1000 0.5
-float HSM_AMBIENT2_SCALE_X = global.HSM_AMBIENT2_SCALE_X / 100;
+#pragma parameter HSM_NIGHTLIGHT2_SCALE_X             	            "          Scale Offset X"  100 10 1000 0.5
+float HSM_NIGHTLIGHT2_SCALE_X = global.HSM_NIGHTLIGHT2_SCALE_X / 100;
 
-#pragma parameter HSM_AMBIENT2_ROTATE         	                "          Rotate"  0 0 1 1
-float HSM_AMBIENT2_ROTATE = global.HSM_AMBIENT2_ROTATE;
+#pragma parameter HSM_NIGHTLIGHT2_ROTATE         	                "          Rotate"  0 0 1 1
+float HSM_NIGHTLIGHT2_ROTATE = global.HSM_NIGHTLIGHT2_ROTATE;
 
-#pragma parameter HSM_AMBIENT2_MIRROR_HORZ         	            "          Mirror Horizontal"  0 0 1 1
-float HSM_AMBIENT2_MIRROR_HORZ = global.HSM_AMBIENT2_MIRROR_HORZ;
+#pragma parameter HSM_NIGHTLIGHT2_MIRROR_HORZ         	            "          Mirror Horizontal"  0 0 1 1
+float HSM_NIGHTLIGHT2_MIRROR_HORZ = global.HSM_NIGHTLIGHT2_MIRROR_HORZ;
 
-#pragma parameter HSM_AMBIENT2_POS_INHERIT_MODE         	    "          Position Inheritance - OFF | ON"  1 0 1 1
-float HSM_AMBIENT2_POS_INHERIT_MODE = global.HSM_AMBIENT2_POS_INHERIT_MODE;
+#pragma parameter HSM_NIGHTLIGHT2_POS_INHERIT_MODE         	    "          Position Inheritance - OFF | ON"  1 0 1 1
+float HSM_NIGHTLIGHT2_POS_INHERIT_MODE = global.HSM_NIGHTLIGHT2_POS_INHERIT_MODE;
 
-#pragma parameter HSM_AMBIENT2_POSITION_X 						"          Position X" 0 -1000 1000 1
-float HSM_AMBIENT2_POSITION_X = global.HSM_AMBIENT2_POSITION_X / -1000;
+#pragma parameter HSM_NIGHTLIGHT2_POSITION_X 						"          Position X" 0 -1000 1000 1
+float HSM_NIGHTLIGHT2_POSITION_X = global.HSM_NIGHTLIGHT2_POSITION_X / -1000;
 
-#pragma parameter HSM_AMBIENT2_POSITION_Y 						"          Position Y" 0 -1000 1000 1
-float HSM_AMBIENT2_POSITION_Y = -1 * global.HSM_AMBIENT2_POSITION_Y / -1000;
+#pragma parameter HSM_NIGHTLIGHT2_POSITION_Y 						"          Position Y" 0 -1000 1000 1
+float HSM_NIGHTLIGHT2_POSITION_Y = -1 * global.HSM_NIGHTLIGHT2_POSITION_Y / -1000;
 
 
 //---------------------------------------------------------------------------------------------------
