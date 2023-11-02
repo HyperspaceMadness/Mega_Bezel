@@ -3,7 +3,7 @@
 /*
    CRT - Guest - Advanced - Fastest - Pass2
    
-   Copyright (C) 2018-2022 guest(r) - guest.r@gmail.com
+   Copyright (C) 2018-2023 guest(r) - guest.r@gmail.com
 
    Incorporates many good ideas and suggestions from Dr. Venom.
    I would also like give thanks to many Libretro forums members for continuous feedback, suggestions and caring about the shader.
@@ -52,7 +52,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float no_scanlines;
 	float intres;
 	float fcompat;
-	float smask_mit;	
+	float smask_mit;
+	float ssharp;
+	float mask_bloom;
 } global;
 
 #pragma parameter fcompat "          Compatibility Mode (slower, use if glitchy)" 0.0 0.0 1.0 1.0 
@@ -87,6 +89,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter bloom "          Bloom Strength" 0.0 0.0 2.0 0.05
 #define bloom         params.bloom     // bloom effect
 
+#pragma parameter mask_bloom "          Mask Bloom" 0.0 -2.0 2.0 0.05
+#define mask_bloom         global.mask_bloom     // mask bloom effect
+
 #pragma parameter bloom_dist "          Bloom Distribution" 0.0 0.0 3.0 0.05
 #define bloom_dist         global.bloom_dist     // bloom effect distribution
 
@@ -107,7 +112,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter gsl "          Scanline Type" 0.0 -1.0 2.0 1.0
 #define gsl          params.gsl      // Alternate scanlines
 
-#pragma parameter scanline1 "          Scanline Beam Shape Center" 6.0 -20.0 20.0 0.5
+#pragma parameter scanline1 "          Scanline Beam Shape Center" 6.0 -20.0 40.0 0.5
 #define scanline1    params.scanline1      // scanline param, vertical sharpness
 
 #pragma parameter scanline2 "          Scanline Beam Shape Edges" 8.0 0.0 70.0 1.0 
@@ -116,22 +121,22 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter beam_min "          Scanline Shape Dark Pixels" 1.30 0.25 10.0 0.05
 #define beam_min     params.beam_min     // dark area beam min - narrow
 
-#pragma parameter beam_max "          Scanline Shape Bright Pixels" 1.00 0.4 3.5 0.025
+#pragma parameter beam_max "          Scanline Shape Bright Pixels" 1.00 0.2 3.5 0.025
 #define beam_max     params.beam_max     // bright area beam max - wide
 
 #pragma parameter beam_size "          Increased Bright Scanline Beam" 0.60 0.0 1.0 0.05
 #define beam_size    params.beam_size     // increased max. beam size
 
-#pragma parameter vertmask "          Scanline Color Deconvergence" 0.0 -1.0 1.0 0.1
-#define vertmask     params.vertmask     // Scanline deconvergence colors
-
 #pragma parameter scans "          Scanline Saturation / Mask Falloff" 0.50 -5.0 5.0 0.10
 #define scans        params.scans     // scanline saturation
 
-#pragma parameter scan_falloff "          Scanline Falloff" 1.0 0.20 2.0 0.05
+#pragma parameter scan_falloff "          Scanline Falloff" 1.0 0.10 2.0 0.05
 #define scan_falloff        global.scan_falloff     // scanline falloff
 
-#pragma parameter no_scanlines "          No-scanline mode" 0.0 0.0 1.0 1.0
+#pragma parameter ssharp "          Smart Sharpen Scanlines" 0.0 0.0 0.30 0.01
+#define ssharp global.ssharp
+
+#pragma parameter no_scanlines "          No-scanline mode" 0.0 0.0 1.5 0.05
 #define no_scanlines global.no_scanlines
 
 #pragma parameter bogus_masks "[ CRT MASK OPTIONS ]: " 0.0 0.0 1.0 1.0
@@ -169,10 +174,10 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter slotmask1 "          Slot Mask Strength Dark Pixels" 0.0 0.0 1.0 0.05
 #define slotmask1     global.slotmask1
 
-#pragma parameter slotwidth "          Slot Mask Width" 2.0 1.0 16.0 1.0
+#pragma parameter slotwidth "          Slot Mask Width (0:Auto)" 0.0 0.0 16.0 1.0
 #define slotwidth    params.slotwidth     // Slot Mask Width
 
-#pragma parameter double_slot "          Slot Mask Height: 2x1 or 4x1..." 1.0 1.0 4.0 1.0
+#pragma parameter double_slot "          Slot Mask Height: 2x1 or 4x1..." 2.0 1.0 4.0 1.0
 #define double_slot  params.double_slot     // Slot Mask Height
 
 #pragma parameter slotms "          Slot Mask Thickness" 1.0 1.0 4.0 1.0
@@ -186,11 +191,14 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter bogus_deconvergence22 "[ HORIZONTAL DECONVERGENCE ]:" 0.0 0.0 1.0 1.0
 
-#pragma parameter DER  "          Deconvergence Red offset" 0.0 -15.0 15.0 0.5
+#pragma parameter vertmask "          Scanline Color Deconvergence" 0.0 -1.0 1.0 0.1
+#define vertmask     params.vertmask     // Scanline deconvergence colors
 
-#pragma parameter DEG  "          Deconvergence Green offset" 0.0 -15.0 15.0 0.5
+#pragma parameter DER  "          Deconvergence Red offset" 0.0 -15.0 15.0 0.05
 
-#pragma parameter DEB  "          Deconvergence Blue offset" 0.0 -15.0 15.0 0.5
+#pragma parameter DEG  "          Deconvergence Green offset" 0.0 -15.0 15.0 0.05
+
+#pragma parameter DEB  "          Deconvergence Blue offset" 0.0 -15.0 15.0 0.05
 
 #pragma parameter DES  "          Deconvergence Strength" 0.7 0.0 1.0 0.05
 
@@ -233,33 +241,36 @@ float st(float x)
 	return exp2(-10.0*x*x);
 } 
    
-float sw0(float x, float color, float scanline)
+vec3 sw0(float x, float color, float scanline, vec3 c)
 {
 	float tmp = mix(beam_min, beam_max, color);
+	vec3 sat = mix(1.0.xxx + 1.5*abs(scans), 1.0.xxx, c);
 	float ex = x*tmp;
 	ex = (gsl > -0.5) ? ex*ex : mix(ex*ex, ex*ex*ex, 0.4);
-	return exp2(-scanline*ex);
+	return exp2(-scanline*ex*sat);
 } 
 
-float sw1(float x, float color, float scanline)
+vec3 sw1(float x, float color, float scanline, vec3 c)
 {	
 	x = mix (x, beam_min*x, max(x-0.4*color,0.0));
+	vec3 sat = mix(1.0.xxx + 1.5*abs(scans), 1.0.xxx, c);	
 	float tmp = mix(1.2*beam_min, beam_max, color);
 	float ex = x*tmp;
-	return exp2(-scanline*ex*ex);
+	return exp2(-scanline*ex*ex*sat);
 }    
 
-float sw2(float x, float color, float scanline)
+vec3 sw2(float x, float color, float scanline, vec3 c)
 {
 	float tmp = mix((2.5-0.5*color)*beam_min, beam_max, color);
+	vec3 sat = mix(1.0.xxx + 1.5*abs(scans), 1.0.xxx, c);	
 	tmp = mix(beam_max, tmp, pow(x, color+0.3));
 	float ex = x*tmp;
-	return exp2(-scanline*ex*ex);
+	return exp2(-scanline*ex*ex*sat);
 }  
 
 // Shadow mask (1-4 from PD CRT Lottes shader).
 
-vec3 Mask(vec2 pos, float mx)
+vec3 Mask(vec2 pos, float mx, inout float swidth)
 {
 	vec2 pos0 = pos;
 	pos.y = floor(pos.y/masksize);
@@ -289,6 +300,7 @@ vec3 Mask(vec2 pos, float mx)
 		pos.x = fract(pos.x*0.5);
 		if (pos.x < 0.49) { mask.r = 1.0; mask.g = mc; mask.b = 1.0; }
 		else { mask.r = mc; mask.g = 1.0; mask.b = mc; }
+		swidth = 2.0;
 	}    
    
 	// Very compressed TV style shadow mask.
@@ -308,7 +320,7 @@ vec3 Mask(vec2 pos, float mx)
 		else if (pos.x < 1.5) mask.g = maskLight;
 		else                  mask.b = maskLight;
 		
-		mask*=line;  
+		mask*=line;
 	} 
 
 	// Aperture-grille.
@@ -342,6 +354,7 @@ vec3 Mask(vec2 pos, float mx)
 		if      (pos.x < 0.3) mask.r = maskLight;
 		else if (pos.x < 0.6) mask.g = maskLight;
 		else                  mask.b = maskLight;
+		swidth = 6.0;
 	}
 	
 	// Trinitron mask 5
@@ -355,6 +368,7 @@ vec3 Mask(vec2 pos, float mx)
 		}
 		else     mask.g = 1.0;
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
+		swidth = 2.0;
 	}    
 
 	// Trinitron mask 6
@@ -378,6 +392,7 @@ vec3 Mask(vec2 pos, float mx)
 		}
 		else     mask = 1.0.xxx;
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
+		swidth = 2.0;		
 	}    
 
 	// BW Trinitron mask 8
@@ -411,7 +426,8 @@ vec3 Mask(vec2 pos, float mx)
 		else if (pos.x < 0.4)  mask.r = 1.0;
 		else if (pos.x < 0.7)  mask.g = 1.0;	
 		else                   mask.b = 1.0;
-		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;		
+		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
+		swidth = 4.0;
 	}  
 
 	// 4k mask
@@ -423,7 +439,8 @@ vec3 Mask(vec2 pos, float mx)
 		else if (pos.x < 0.4)  mask.rg = 1.0.xx;
 		else if (pos.x < 0.7)  mask.gb = 1.0.xx;	
 		else                   mask.b  = 1.0;
-		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;		
+		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
+		swidth = 4.0;		
 	}     
 
 	// RRGGBBX mask
@@ -436,6 +453,7 @@ vec3 Mask(vec2 pos, float mx)
 		else if (pos.x < 4.5)  mask.g = 1.0;	
 		else                   mask.b = 1.0;
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
+		swidth = 7.0;
 	}
 
 	// 4k mask
@@ -450,25 +468,27 @@ vec3 Mask(vec2 pos, float mx)
 		else if (pos.x < 4.5)  mask.gb = 1.0.xx;		
 		else                   mask.b = 1.0;
 		mask = clamp(mix( mix(one, mask, mcut), mix(one, mask, maskstr), mx), 0.0, 1.0) * dark_compensate;
+		swidth = 6.0;
 	}
 	
+	swidth*=masksize;
 	float maskmin = min(min(mask.r,mask.g),mask.b);
-	return (mask - maskmin) * maskboost + maskmin;
+	return (mask - maskmin) * (1.0 + (maskboost-1.0)) + maskmin;
 }
 
-float SlotMask(vec2 pos, float m)
+float SlotMask(vec2 pos, float m, float swidth)
 {
 	if ((slotmask + slotmask1) == 0.0) return 1.0;
 	else
 	{
 	pos.y = floor(pos.y/slotms);
-	float mlen = slotwidth*2.0;
+	float mlen = swidth*2.0;
 	float px = floor(mod(pos.x, 0.99999*mlen));
 	float py = floor(fract(pos.y/(2.0*double_slot))*2.0*double_slot);
 	float slot_dark = mix(1.0-slotmask1, 1.0-slotmask, m);
 	float slot = 1.0;
-	if (py == 0.0 && px < slotwidth) slot = slot_dark; else
-	if (py == double_slot && px >= slotwidth) slot = slot_dark;		
+	if (py == 0.0 && px < swidth) slot = slot_dark; else
+	if (py == double_slot && px >= swidth) slot = slot_dark;		
 	
 	return slot;
 	}
@@ -535,7 +555,8 @@ vec3 calculate_bloom (vec2 pos, vec2 x, vec2 y)
 void main()
 {
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
-	bool interb  = (intera < 0.75);
+	bool interb  = ((intera < 0.75) || (no_scanlines > 0.025));
+
 	vec4 result = COMPAT_TEXTURE(Pass2Feedback, vTexCoord);
 
 	vec2 texcoord = TEX0.xy;
@@ -560,14 +581,14 @@ void main()
 	float same3 = COMPAT_TEXTURE(PrePassDontChange,pc4   ).a;
 	float same4 = COMPAT_TEXTURE(PrePassDontChange,pc4+yy).a;
 	float same5 = COMPAT_TEXTURE(PrePassDontChange,pc4+y2).a;
+	bool not_same = (same2 + same3 + same4 + same5) > 0.05;
 	
-	float refresh1 = 30.0;
-	float refresh2 = round(TEX0.y*29.0);
+	float refresh1 = 60.0;
+	float refresh2 = round(TEX0.y*59.0);
 	
-	bool frames = (floor(mod(float(global.FrameCount), refresh1)) == refresh2);
-	bool not_same = (same2 + same3 + same4 + same5) > 0.25;
+	bool frames = (abs(floor(mod(float(global.FrameCount), refresh1)) - refresh2) < 0.001);
 
-if ( not_same || frames || interb || global.fcompat > 0.5)
+if ( not_same || frames || (interb && (no_scanlines < 0.025)) || global.fcompat > 0.5)
 
 {
 
@@ -604,7 +625,7 @@ if ( not_same || frames || interb || global.fcompat > 0.5)
 
 	if (global.intres == 0.5) pC4.y = floor(pC4.y * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
 	
-	if (interb)  pC4.y = pos.y - inters * SourceSize.w;
+	if (interb && no_scanlines < 0.025)  pC4.y = pos.y - inters * SourceSize.w; else if (interb) pC4.y = pC4.y + smoothstep(0.40-0.5*no_scanlines, 0.60 + 0.5*no_scanlines, f)*SourceSize.w;
 	
 	vec3 color1 = COMPAT_TEXTURE(Source, pC4      ).rgb;
 	vec3 dcolor1 = color1;
@@ -615,7 +636,7 @@ if ( not_same || frames || interb || global.fcompat > 0.5)
 	
 	vec3 scolor1 = 	COMPAT_TEXTURE(Source, pC4      ).aaa;
 	
-	if (interb) pC4.y = pos.y + inters * SourceSize.w; else
+	if (interb && no_scanlines < 0.025) pC4.y = pos.y + inters * SourceSize.w; else
 	pC4+=dy;
 
 	if (global.intres == 0.5) pC4.y = floor((pos.y + 0.33*dy.y) * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
@@ -636,8 +657,11 @@ if ( not_same || frames || interb || global.fcompat > 0.5)
 
 if (!interb)
 {	
-	float shape1 = mix(scanline1, scanline2, f);
-	float shape2 = mix(scanline1, scanline2, 1.0-f);	
+	vec3 luma = vec3(0.2126, 0.7152, 0.0722);	
+	float ssub = ssharp*max(abs(scolor1.x-scolor2.x), abs(dot(color1,luma)-dot(color2,luma)));
+
+	float shape1 = mix(scanline1, scanline2 + ssub * scolor1.x * 35.0, f);
+	float shape2 = mix(scanline1, scanline2 + ssub * scolor2.x * 35.0, 1.0-f);
 	
 	float wt1 = st(f);
 	float wt2 = st(1.0-f);
@@ -649,35 +673,27 @@ if (!interb)
 	vec3 sctmp = max(scolor0/(wt1+wt2), ctmp);
 	mcolor = sctmp;
 	
-	float wf1, wf2;
+	vec3 w1, w2;
 	
 	vec3 cref1 = mix(sctmp, scolor1, beam_size); float creff1 = pow(max(max(cref1.r,cref1.g),cref1.b), scan_falloff);
 	vec3 cref2 = mix(sctmp, scolor2, beam_size); float creff2 = pow(max(max(cref2.r,cref2.g),cref2.b), scan_falloff);
 
 	float f1 = f; 
 	float f2 = 1.0-f;
-	
-	if (gsl <  0.5) { wf1 = sw0(f1,creff1,shape1); wf2 = sw0(f2,creff2,shape2);} else
-	if (gsl == 1.0) { wf1 = sw1(f1,creff1,shape1); wf2 = sw1(f2,creff2,shape2);} else
-	                { wf1 = sw2(f1,creff1,shape1); wf2 = sw2(f2,creff2,shape2);}
 
-	if ((wf1 + wf2) > 1.0) { float wtmp = 1.0/(wf1+wf2); wf1*=wtmp; wf2*=wtmp; }
-	
-	// Scanline saturation application
-	
-	vec3 w1 = vec3(wf1); vec3 w2 = vec3(wf2);
-	w3 = wf1+wf2;
-	
 	float mc1 = max(max(color1.r,color1.g),color1.b) + eps;
 	float mc2 = max(max(color2.r,color2.g),color2.b) + eps;
 	
 	cref1 = color1 / mc1;
 	cref2 = color2 / mc2;
 
-	float scanpow1 = (scans > 0.0) ? 1.0 : pow(f1, 0.33);
-	float scanpow2 = (scans > 0.0) ? 1.0 : pow(f2, 0.33);	
-	w1 = pow(w1, mix(2.0*abs(scans).xxx + 1.0, 1.0.xxx, mix(1.0.xxx, cref1, scanpow1)));
-	w2 = pow(w2, mix(2.0*abs(scans).xxx + 1.0, 1.0.xxx, mix(1.0.xxx, cref2, scanpow2)));
+	if (gsl <  0.5) { w1 = sw0(f1,creff1,shape1,cref1); w2 = sw0(f2,creff2,shape2,cref2);} else
+	if (gsl == 1.0) { w1 = sw1(f1,creff1,shape1,cref1); w2 = sw1(f2,creff2,shape2,cref2);} else
+	                { w1 = sw2(f1,creff1,shape1,cref1); w2 = sw2(f2,creff2,shape2,cref2);}
+
+	vec3 w4 = w1+w2;
+	float wf1 = max(max(w4.r,w4.g),w4.b); w3 = wf1;
+	if (wf1 > 1.0) {wf1 = 1.0/wf1; w1*=wf1, w2*=wf1;}
 	
 	// Scanline Deconvergence
 	
@@ -705,7 +721,7 @@ if (abs(vertmask) > 0.025)
 	}
 }
 	
-	color = (gc(color1)*w1*cd1 + gc(color2)*w2*cd2)/mix(1.0.xxx, w1+w2, no_scanlines);
+	color = (gc(color1)*w1*cd1 + gc(color2)*w2*cd2);
 	color = min(color, 1.0);
 }
 	
@@ -716,6 +732,7 @@ if (abs(vertmask) > 0.025)
 	}
 
 	float mx = max(max(mcolor.r,mcolor.g),mcolor.b);
+	float mxg = mx;
 	mx = pow(mx, 1.20/gamma_in);
    
 	// Apply Mask
@@ -723,28 +740,37 @@ if (abs(vertmask) > 0.025)
 	vec3 orig1 = color;
 	vec3 cmask = one;
 	
-	float smask = SlotMask(gl_FragCoord.xy * 1.000001, mx);
-	smask = clamp(smask + mix(smask_mit, 0.0, min(w3, sqrt(max(max(orig1.r,orig1.g),orig1.b)))), 0.0, 1.0);
-	cmask*= Mask(gl_FragCoord.xy * 1.000001, mx);
+	float swidth = 3.0;
+	cmask*= Mask(gl_FragCoord.xy * 1.000001, mx, swidth);
+	if (slotwidth > 0.5) swidth = slotwidth;
+	float smask = SlotMask(gl_FragCoord.xy * 1.000001, mx, swidth);
+	smask = clamp(smask + mix(smask_mit, 0.0, min(w3, pow(w3*max(max(orig1.r,orig1.g),orig1.b), 0.33333))), 0.0, 1.0);
 
 	if (mask_layout > 0.5) cmask = cmask.rbg;
-	
-	color = color*cmask;
-	color = min(color,1.0);
-	color = color*smask;
 
-	cmask = min(cmask*smask, 1.0);
-
-	if (interb) ctmp = color;
-	float colmx = pow( max( max(ctmp.r, ctmp.g), ctmp.b), 1.40/gamma_out);
-	float bb = mix(brightboost, brightboost1, colmx);
-	if (interb) bb = (abs(intera-0.5)<0.1) ? pow(0.80*bb, 0.65) : pow(bb, 0.60);
-	color*=bb;
+	cmask = cmask*smask;
 
 	vec3  Glow = calculate_bloom (pos, xx, 0.75*yy);
 	float maxb = max(max(Glow.r, Glow.g),Glow.b);
 	Glow = pow(Glow, 1.4.xxx);	
 	vec3  Bloom = Glow;
+
+	if (interb) ctmp = color;
+	float colmx = pow( max( max(ctmp.r, ctmp.g), ctmp.b), 1.40/gamma_out);
+
+	if (abs(mask_bloom) > 0.025)
+	{
+		float maxbl = max(max(max(Bloom.r,Bloom.g),Bloom.b), mxg);
+		maxbl = maxbl * max(mix(1.0, 2.0-colmx, bloom_dist), 0.0);
+		if (mask_bloom > 0.025) cmask = max(min(cmask + maxbl*mask_bloom, 1.0), cmask); else cmask = max(mix(cmask, cmask*(1.0-0.5*maxbl) + plant(pow(Bloom,0.35.xxx),maxbl), -mask_bloom),cmask);
+	}
+
+	color = color*cmask;
+	color = min(color,1.0);
+	cmask = min(cmask, 1.0);
+
+	float bb = mix(brightboost, brightboost1, colmx);
+	color*=bb;
 
 if(bloom > 0.025)
 {
@@ -754,15 +780,16 @@ if(bloom > 0.025)
 	color = color + bloom * Bloom1;
 }
 
-	color = min(color, mix(one, cmask, mclip));
 	if (!interb) color = declip(color, pow(w3,0.60));
 
 	if (halation > 0.025) {
 		Bloom = mix(0.5*(Bloom + Bloom*Bloom), 0.75*Bloom*Bloom, colmx);
 		color = color + 0.75*(0.75+maxb)*Bloom*(0.4+sqrt(colmx))*mix(1.0,w3,0.5*colmx)*mix(one,cmask,0.35 + 0.4*maxb)*halation; }
 
-	Glow = mix(Glow, 0.25*color, 0.7*colmx);
+	Glow = mix(Glow, 0.25*color, colmx);
 	color = color + 0.5*glow*Glow;
+
+	color = min(color, mix(one, cmask, mclip));
 	
 	color = pow(color, vec3(1.0/gamma_out));
 	color = min(color, 1.0);

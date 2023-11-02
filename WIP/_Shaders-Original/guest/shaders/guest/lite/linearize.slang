@@ -44,8 +44,8 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	mat4 MVP;
 } global;
 
-#pragma parameter bogus_gamma "[ GAMMA OPTIONS ]: " 0.0 0.0 0.0 1.0
 
+#pragma parameter bogus_gamma "[ GAMMA OPTIONS ]: " 0.0 0.0 0.0 1.0
 
 #pragma parameter GAMMA_INPUT "          Gamma Input" 2.4 1.0 5.0 0.05
 #define GAMMA_INPUT params.GAMMA_INPUT
@@ -68,10 +68,10 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #define intres         params.intres     // interlace resolution
 
-#pragma parameter downsample_levelx "          Downsampling-X (High-res content, pre-scalers)" 0.0 0.0 2.0 0.05
+#pragma parameter downsample_levelx "          Downsampling-X (High-res content, pre-scalers)" 0.0 0.0 3.0 0.05
 #define downsample_levelx         params.downsample_levelx     // downsample level
 
-#pragma parameter downsample_levely "          Downsampling-Y (High-res content, pre-scalers)" 0.0 0.0 2.0 0.05
+#pragma parameter downsample_levely "          Downsampling-Y (High-res content, pre-scalers)" 0.0 0.0 3.0 0.05
 #define downsample_levely         params.downsample_levely     // downsample level
 
 #pragma parameter iscans "          Interlacing (Scanline) Saturation" 0.25 0.0 1.0 0.05
@@ -135,7 +135,7 @@ void main()
 		c1 = fetch_pixel(vTexCoord);
 		c2 = fetch_pixel(vTexCoord + vec2(0.0, params.OriginalSize.w));	
 	}
-
+	
 	vec3  c  = c1;
 
 	float intera = 1.0;

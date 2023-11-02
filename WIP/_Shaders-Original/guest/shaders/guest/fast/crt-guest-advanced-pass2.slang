@@ -27,7 +27,7 @@
 layout(push_constant) uniform Push
 {
 	float brightboost, brightboost1, gsl, scanline1, scanline2, beam_min, beam_max, beam_size,
-    glow, vertmask, maskstr, inters, bloom, halation, scans, gamma_c, gamma_out, IOS, no_scanlines;
+    glow, maskstr, inters, bloom, halation, scans, gamma_c, gamma_out, IOS, no_scanlines, tds, clips, ssharp;
 } params;
 
 layout(std140, set = 0, binding = 0) uniform UBO
@@ -51,7 +51,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float scan_falloff;
 	float overscanX;
 	float overscanY;
-	float bloom_dist;	
+	float bloom_dist;
+	float bmask1;
+	float hmask1;
 } global;
 
 #pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
@@ -99,14 +101,20 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter bloom "          Bloom Strength" 0.0 -2.0 2.0 0.05
 #define bloom         params.bloom     // bloom effect
 
-#pragma parameter mask_bloom "          Mask Bloom" 0.0 0.0 2.0 0.05
+#pragma parameter mask_bloom "          Mask Bloom" 0.0 -2.0 2.0 0.05
 #define mask_bloom         params.mask_bloom     // bloom effect
 
-#pragma parameter bloom_dist "          Bloom Distribution" 0.0 0.0 3.0 0.05
+#pragma parameter bloom_dist "          Bloom Distribution" 0.0 -2.0 3.0 0.05
 #define bloom_dist         global.bloom_dist     // bloom effect distribution
 
 #pragma parameter halation "          Halation Strength" 0.0 -2.0 2.0 0.025
 #define halation         params.halation     // halation effect
+
+#pragma parameter bmask1 "          Bloom Mask Strength" 0.0 -1.0 1.0 0.025
+#define bmask1         global.bmask1     // bloom/halation mask strength
+
+#pragma parameter hmask1 "          Halation Mask Strength" 0.5 0.0 1.0 0.025
+#define hmask1         global.hmask1     // bloom/halation mask strength
 
 #pragma parameter gamma_c "          Gamma correct" 1.0 0.50 2.0 0.025
 #define gamma_c   params.gamma_c     // adjust brightness
@@ -117,12 +125,15 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter brightboost1 "          Bright Boost Bright Pixels" 1.10 0.25 3.00 0.025
 #define brightboost1  params.brightboost1     // adjust brightness
 
+#pragma parameter clips "          Clip Saturated Color Beams" 0.0 -1.0 1.0 0.05
+#define clips  params.clips     // kinky effect
+
 #pragma parameter bogus_scanline "[ SCANLINE OPTIONS ]: " 0.0 0.0 1.0 1.0
 
 #pragma parameter gsl "          Scanline Type" 0.0 -1.0 2.0 1.0
 #define gsl          params.gsl      // Alternate scanlines
 
-#pragma parameter scanline1 "          Scanline Beam Shape Center" 6.0 -20.0 20.0 0.5
+#pragma parameter scanline1 "          Scanline Beam Shape Center" 6.0 -20.0 40.0 0.5
 #define scanline1    params.scanline1      // scanline param, vertical sharpness
 
 #pragma parameter scanline2 "          Scanline Beam Shape Edges" 8.0 0.0 70.0 1.0 
@@ -131,22 +142,25 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter beam_min "          Scanline Shape Dark Pixels" 1.30 0.25 10.0 0.05
 #define beam_min     params.beam_min     // dark area beam min - narrow
 
-#pragma parameter beam_max "          Scanline Shape Bright Pixels" 1.00 0.4 3.5 0.025
+#pragma parameter beam_max "          Scanline Shape Bright Pixels" 1.00 0.2 3.5 0.025
 #define beam_max     params.beam_max     // bright area beam max - wide
+
+#pragma parameter tds "          Thinner Dark Scanlines" 0.0 0. 1.0 1.0
+#define tds     params.tds     // thinner dark scanlines
 
 #pragma parameter beam_size "          Increased Bright Scanline Beam" 0.60 0.0 1.0 0.05
 #define beam_size    params.beam_size     // increased max. beam size
 
-#pragma parameter vertmask "          Scanline Color Deconvergence" 0.0 -1.0 1.0 0.1
-#define vertmask     params.vertmask     // Scanline deconvergence colors
-
 #pragma parameter scans "          Scanline Saturation / Mask Falloff" 0.50 -5.0 5.0 0.10
 #define scans        params.scans     // scanline saturation
 
-#pragma parameter scan_falloff "          Scanline Falloff" 1.0 0.20 2.0 0.05
+#pragma parameter scan_falloff "          Scanline Falloff" 1.0 0.10 2.0 0.05
 #define scan_falloff        global.scan_falloff     // scanline falloff
 
-#pragma parameter no_scanlines "          No-scanline mode" 0.0 0.0 1.0 1.0
+#pragma parameter ssharp "          Smart Sharpen Scanlines" 0.0 0.0 0.30 0.01
+#define ssharp params.ssharp
+
+#pragma parameter no_scanlines "          No-scanline mode" 0.0 0.0 1.5 0.05
 #define no_scanlines params.no_scanlines
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
@@ -180,30 +194,38 @@ float st(float x)
 {
 	return exp2(-10.0*x*x);
 } 
-   
-float sw0(float x, float color, float scanline)
+
+float st1(float x)
+{
+	return exp2(-8.0*x*x);
+}
+
+vec3 sw0(float x, float color, float scanline, vec3 c)
 {
 	float tmp = mix(beam_min, beam_max, color);
+	vec3 sat = mix(1.0.xxx + 1.5*abs(scans), 1.0.xxx, c);
 	float ex = x*tmp;
 	ex = (gsl > -0.5) ? ex*ex : mix(ex*ex, ex*ex*ex, 0.4);
-	return exp2(-scanline*ex);
+	return exp2(-scanline*ex*sat);
 } 
 
-float sw1(float x, float color, float scanline)
+vec3 sw1(float x, float color, float scanline, vec3 c)
 {	
 	x = mix (x, beam_min*x, max(x-0.4*color,0.0));
+	vec3 sat = mix(1.0.xxx + 1.5*abs(scans), 1.0.xxx, c);	
 	float tmp = mix(1.2*beam_min, beam_max, color);
 	float ex = x*tmp;
-	return exp2(-scanline*ex*ex);
+	return exp2(-scanline*ex*ex*sat);
 }    
 
-float sw2(float x, float color, float scanline)
+vec3 sw2(float x, float color, float scanline, vec3 c)
 {
 	float tmp = mix((2.5-0.5*color)*beam_min, beam_max, color);
+	vec3 sat = mix(1.0.xxx + 1.5*abs(scans), 1.0.xxx, c);	
 	tmp = mix(beam_max, tmp, pow(x, color+0.3));
 	float ex = x*tmp;
-	return exp2(-scanline*ex*ex);
-}  
+	return exp2(-scanline*ex*ex*sat);
+}   
 
 
 vec3 gc(vec3 c)
@@ -226,6 +248,12 @@ vec2 Warp(vec2 pos)
 	return pos*0.5 + 0.5;
 }
 
+vec3 plant (vec3 tar, float r)
+{
+	float t = max(max(tar.r,tar.g),tar.b) + 0.00001;
+	return tar * r / t;
+}
+
 
 void main()
 {
@@ -234,7 +262,7 @@ void main()
 	vec4 SourceSize = vec4(global.SourceSize.x, global.OriginalSize.y, global.SourceSize.z, global.OriginalSize.w);
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
-	bool interb  = (intera < 0.5);
+	bool interb  = ((intera < 0.5) || (no_scanlines > 0.025));
 
 	float SourceY = SourceSize.y;
 	float sy = 1.0;
@@ -274,10 +302,10 @@ void main()
 	
 	pC4.y = floor(OGL2Pos) * ps.y + 0.5*ps.y; 
 	pC4.x = pos.x;
-	
-	if (interb)  pC4.y = pos.y;
 
 	if (global.intres == 0.5 && prescalex.y < 1.5) pC4.y = floor(pC4.y * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
+
+	if (interb && no_scanlines < 0.025)  pC4.y = pos.y; else if (interb) pC4.y = pC4.y + smoothstep(0.40-0.5*no_scanlines, 0.60 + 0.5*no_scanlines, f)*SourceSize.w;
 	
 	vec3 color1 = COMPAT_TEXTURE(Pass1, pC4      ).rgb;
 	vec3 scolor1 = 	COMPAT_TEXTURE(Pass1, pC4      ).aaa;
@@ -296,8 +324,11 @@ void main()
 
 if (!interb)
 {	
-	float shape1 = mix(scanline1, scanline2, f);
-	float shape2 = mix(scanline1, scanline2, 1.0-f);	
+	vec3 luma = vec3(0.2126, 0.7152, 0.0722);	
+	float ssub = ssharp*max(abs(scolor1.x-scolor2.x), abs(dot(color1,luma)-dot(color2,luma)));
+
+	float shape1 = mix(scanline1, scanline2 + ssub * scolor1.x * 35.0, f);
+	float shape2 = mix(scanline1, scanline2 + ssub * scolor2.x * 35.0, 1.0-f);
 	
 	float wt1 = st(f);
 	float wt2 = st(1.0-f);
@@ -308,63 +339,43 @@ if (!interb)
 	ctmp = color00/(wt1+wt2);
 	vec3 sctmp = max(scolor0/(wt1+wt2), ctmp);
 	
-	float wf1, wf2;
+	vec3 w1, w2;
 	
 	vec3 cref1 = mix(sctmp, scolor1, beam_size); float creff1 = pow(max(max(cref1.r,cref1.g),cref1.b), scan_falloff);
 	vec3 cref2 = mix(sctmp, scolor2, beam_size); float creff2 = pow(max(max(cref2.r,cref2.g),cref2.b), scan_falloff);
 
+	if (tds > 0.5) { shape1 = mix(scanline2, shape1, creff1); shape2 = mix(scanline2, shape2, creff2); }
+
 	float f1 = f; 
 	float f2 = 1.0-f;
-	
-	if (gsl <  0.5) { wf1 = sw0(f1,creff1,shape1); wf2 = sw0(f2,creff2,shape2);} else
-	if (gsl == 1.0) { wf1 = sw1(f1,creff1,shape1); wf2 = sw1(f2,creff2,shape2);} else
-	                { wf1 = sw2(f1,creff1,shape1); wf2 = sw2(f2,creff2,shape2);}
 
-	if ((wf1 + wf2) > 1.0) { float wtmp = 1.0/(wf1+wf2); wf1*=wtmp; wf2*=wtmp; }
-	
-	// Scanline saturation application
-	
-	vec3 w1 = vec3(wf1); vec3 w2 = vec3(wf2);
-	w3 = wf1+wf2;
-	
 	float mc1 = max(max(color1.r,color1.g),color1.b) + eps;
 	float mc2 = max(max(color2.r,color2.g),color2.b) + eps;
 	
 	cref1 = color1 / mc1;
 	cref2 = color2 / mc2;
 
-	float scanpow1 = (scans > 0.0) ? 1.0 : pow(f1, 0.375);
-	float scanpow2 = (scans > 0.0) ? 1.0 : pow(f2, 0.375);	
-	w1 = pow(w1, mix(2.0*abs(scans).xxx + 1.0, 1.0.xxx, mix(1.0.xxx, cref1, scanpow1)));
-	w2 = pow(w2, mix(2.0*abs(scans).xxx + 1.0, 1.0.xxx, mix(1.0.xxx, cref2, scanpow2)));
-	
-	// Scanline Deconvergence
-	
-	vec3 cd1 = one; vec3 cd2 = one;
-	
-if (abs(vertmask) > 0.025)
-{
-	float vm = sqrt(abs(vertmask));
-	float v_high1 = 1.0 + 0.3*vm;
-	float v_high2 = 1.0 + 0.6*vm;	
-	float v_low  = 1.0 - vm;
-	
-	float ds1 = min(max(1.0-w3*w3, 2.5*f1), 1.0);
-	float ds2 = min(max(1.0-w3*w3, 2.5*f2), 1.0);
-	
-	if (vertmask < 0.0) 
+	if (gsl <  0.5) { w1 = sw0(f1,creff1,shape1,cref1); w2 = sw0(f2,creff2,shape2,cref2);} else
+	if (gsl == 1.0) { w1 = sw1(f1,creff1,shape1,cref1); w2 = sw1(f2,creff2,shape2,cref2);} else
+	                { w1 = sw2(f1,creff1,shape1,cref1); w2 = sw2(f2,creff2,shape2,cref2);}
+
+	vec3 w3 = w1+w2;
+	float wf1 = max(max(w3.r,w3.g),w3.b);
+	if (wf1 > 1.0) {wf1 = 1.0/wf1; w1*=wf1, w2*=wf1;}
+
+	if (abs(clips) > 0.005)
 	{
-		cd1 = mix(one, vec3(v_high2, v_low, v_low), ds1);
-		cd2 = mix(one, vec3(v_low, v_high1, v_high1), ds2);
-	}
-	else
-	{
-		cd1 = mix(one, vec3(v_high1, v_low, v_high1), ds1);
-		cd2 = mix(one, vec3(v_low, v_high2, v_low), ds2);
-	}
-}
+		sy = mc1; vec3 l1 = sqrt(w1*wt1); vec3 l2 = sqrt(w2*wt2);
+		one = (clips > 0.0) ? w1 : mix(w1, l1, sy);
+		float sat = 1.0001-min(min(cref1.r,cref1.g),cref1.b);
+		color1 = mix(color1, plant(pow(color1, 0.70.xxx-0.325*sat),sy), pow(sat,0.3333)*one*abs(clips));
+		sy = mc2;
+		sat =       1.0001-min(min(cref2.r,cref2.g),cref2.b);
+		one = (clips > 0.0) ? w2 : mix(w2, l2, sy);
+		color2 = mix(color2, plant(pow(color2, 0.70.xxx-0.325*sat),sy), pow(sat,0.3333)*one*abs(clips));
+	}	
 	
-	color = (gc(color1)*w1*cd1 + gc(color2)*w2*cd2)/mix(1.0.xxx, w1+w2, no_scanlines);
+	color = (gc(color1)*w1 + gc(color2)*w2);
 	color = min(color, 1.0);
 }
 	

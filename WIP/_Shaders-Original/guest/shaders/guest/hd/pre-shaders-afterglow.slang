@@ -3,7 +3,7 @@
 /*
    CRT Advanced Afterglow, color altering
    
-   Copyright (C) 2019-2022 guest(r) and Dr. Venom
+   Copyright (C) 2019-2023 guest(r) and Dr. Venom
    
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -60,7 +60,7 @@ layout(push_constant) uniform Push
 #pragma parameter TNTC "          LUT Colors: Trin.1 | Trin.2 | Nec Mult. | NTSC" 0.0 0.0 4.0 1.0
 #define TNTC params.TNTC
 
-#pragma parameter LS "          LUT Size" 32.0 32.0 64.0 32.0
+#pragma parameter LS "          LUT Size" 32.0 16.0 64.0 16.0
 #define LS params.LS
 
 #define LUTLOW 5.0  // "Fix LUT Dark - Range" from 0.0 to 50.0 - RGB singletons

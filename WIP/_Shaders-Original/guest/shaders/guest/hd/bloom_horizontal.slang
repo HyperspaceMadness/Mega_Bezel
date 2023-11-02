@@ -3,7 +3,7 @@
 /*
    Gaussian blur - horizontal pass, dynamic range, resizable
    
-   Copyright (C) 2020 - 2022 guest(r) - guest.r@gmail.com
+   Copyright (C) 2020 - 2023 guest(r) - guest.r@gmail.com
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -23,24 +23,28 @@
 
 layout(push_constant) uniform Push
 {
-	vec4 SourceSize;
+	vec4 LinearizePassSize;
 	vec4 OriginalSize;
 	vec4 OutputSize;
 	uint FrameCount;
 	float SIZEHB;
 	float SIGMA_HB;
 	float BLOOMCUT_H;
+	float FINE_BLOOM;
 } params;
 
-#pragma parameter bogus_glow2 "[ BLOOM PASS SETTINGS ]:" 0.0 0.0 1.0 1.0 
+#pragma parameter bogus_bloom "[ BLOOM/HALATION/(GLOW) PASS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
-#pragma parameter SIZEHB "          H. Bloom/Halation Radius" 4.0 1.0 30.0 1.0 
+#pragma parameter FINE_BLOOM "          Fine Bloom/Halation Sampling" 1.0 1.0 4.0 1.0 
+#define FINE_BLOOM params.FINE_BLOOM
+
+#pragma parameter SIZEHB "          Horizontal Bloom/Halation Radius" 3.0 1.0 50.0 1.0 
 #define SIZEHB params.SIZEHB
 
-#pragma parameter SIGMA_HB "          Horizontal Bloom/Halation Sigma" 1.0 0.25 15.0 0.05
+#pragma parameter SIGMA_HB "          Horizontal Bloom/Halation Sigma" 0.75 0.25 15.0 0.025
 #define SIGMA_HB params.SIGMA_HB
 
-#pragma parameter BLOOMCUT_H "          Horizontal Bloom/Halation Substract" 0.0 0.0 0.5 0.01
+#pragma parameter BLOOMCUT_H "          Horizontal Bloom/Halation Substract" 0.0 -0.5 0.5 0.05
 #define BLOOMCUT_H params.BLOOMCUT_H
 
 layout(std140, set = 0, binding = 0) uniform UBO
@@ -75,7 +79,7 @@ float gaussian(float x)
 
 void main()
 {
-	vec4 SourceSize1 = params.OriginalSize;
+	vec4 SourceSize1 = params.OriginalSize * mix(1.0.xxxx, vec4(FINE_BLOOM, FINE_BLOOM, 1.0/FINE_BLOOM, 1.0/FINE_BLOOM), min(FINE_BLOOM-1.0,1.0));
 	float f = fract(SourceSize1.x * vTexCoord.x);
 	f = 0.5 - f;
 	vec2 tex = floor(SourceSize1.xy * vTexCoord)*SourceSize1.zw + 0.5*SourceSize1.zw;
@@ -90,7 +94,8 @@ void main()
 	do
 	{
 		pixel  = COMPAT_TEXTURE(LinearizePass, tex + n*dx);
-		w      = max(gaussian(n+f) - BLOOMCUT_H, 0.0);
+		w = gaussian(n+f);
+		w      = (BLOOMCUT_H >= 0.0) ? max(w - BLOOMCUT_H, 0.0) : (max(w + BLOOMCUT_H, 0.0)/(1.0 + BLOOMCUT_H));
 		pixel.a = max(max(pixel.r, pixel.g),pixel.b);
 		pixel.a*=pixel.a*pixel.a;
 		color  = color + w * pixel;

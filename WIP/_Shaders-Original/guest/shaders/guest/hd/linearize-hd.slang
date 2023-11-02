@@ -3,7 +3,7 @@
 /*
    Interlacing
    
-   Copyright (C) 2020-2021 guest(r) - guest.r@gmail.com
+   Copyright (C) 2020-2023 guest(r) - guest.r@gmail.com
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -59,7 +59,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter interm "          Interlace Mode: OFF, Normal 1-3, Interpolation 4" 4.0 0.0 4.0 1.0
 #define interm         params.interm     // interlace mode 
 
-#pragma parameter iscan "          Interlacing Scanline Effect" 0.20 0.0 1.0 0.05
+#pragma parameter iscan "          Interlacing Scanline Effect ('Laced brightness)" 0.20 0.0 1.0 0.05
 #define iscan  params.iscan     // interlacing effect scanlining
 
 #pragma parameter intres "          Internal Resolution Y: 0.5...y-dowsample" 0.0 0.0 6.0 0.5 // Joint parameter with main pass, values must match
@@ -129,7 +129,7 @@ void main()
 			c = plant( mix(mix(c1,c2, min(mix(m1, 1.0-m2, min(m1,1.0-m1))/(d+0.00001),1.0)), c1, ii), r);
 			if (interm == 3.0) c = (1.0-0.5*iscan)*mix(c2, c1, ii);
 		}
-		if (interm == 4.0) { c = plant(mix(c, c*c, 0.5*iscans), max(max(c.r,c.g),c.b)); intera = 0.45; }
+		if (interm == 4.0) { c = plant(mix(c, c*c, 0.5*iscans), max(max(c.r,c.g),c.b)) * (1.0-0.5*iscan); }
 	}
 	c = pow(c, vec3(gamma_in));
 	

@@ -53,7 +53,7 @@ layout(push_constant) uniform Push
 
 #pragma parameter m_glow_mask "          Magic Glow Mask Strength" 1.0 0.0 2.0 0.025 
 
-#pragma parameter bogus_glow1 "[ GLOW PASS SETTINGS ]:" 0.0 0.0 1.0 1.0
+#pragma parameter bogus_glow "[ GLOW PASS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
 #pragma parameter SIZEH "          Horizontal Glow Radius" 6.0 1.0 50.0 1.0 
 #define SIZEH params.SIZEH

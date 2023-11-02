@@ -3,7 +3,7 @@
 /*
    CRT - Guest - Advanced
    
-   Copyright (C) 2018-2022 guest(r) - guest.r@gmail.com
+   Copyright (C) 2018-2023 guest(r) - guest.r@gmail.com
 
    Incorporates many good ideas and suggestions from Dr. Venom.
    I would also like give thanks to many Libretro forums members for continuous feedback, suggestions and caring about the shader.
@@ -26,7 +26,7 @@
 
 layout(push_constant) uniform Push
 {
-	float IOS, brightboost, brightboost1, csize, bsize1, warpX, warpY, glow, shadowMask, masksize,
+	float TATE, IOS, OS, BLOOM, brightboost, brightboost1, csize, bsize1, warpX, warpY, glow, shadowMask, masksize,
 	slotmask, slotmask1, slotwidth, double_slot, mcut, maskDark, maskLight, maskstr, mshift, mask_layout, mask_bloom;
 } params;
 
@@ -45,7 +45,6 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float overscanX;
 	float overscanY;	
 	float intres;
-	float prescalex;
 	float c_shape;
 	float barspeed;
 	float barintensity;   
@@ -55,8 +54,8 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float deconr;
 	float decons;
 	float addnoised;
-	float noiseresd;
 	float noisetype;
+	float noiseresd;
 	float deconrr;
 	float deconrg;
 	float deconrb;
@@ -73,7 +72,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float m_glow_low;
 	float m_glow_high;
 	float m_glow_dist;
-	float m_glow_mask;	
+	float m_glow_mask;
 	float smask_mit;
 	float mask_zoom;
 	float no_scanlines;
@@ -81,7 +80,6 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float bmask1;
 	float hmask1;
 } global;
-
 
 #pragma parameter no_scanlines "          No-scanline mode" 0.0 0.0 1.5 0.05
 
@@ -128,6 +126,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #define gamma_c   global.gamma_c     // adjust brightness
 
 #pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
+
+#pragma parameter TATE "          TATE Mode" 0.0 0.0 1.0 1.0
+#define TATE         params.TATE     // Screen orientation
 
 #pragma parameter IOS "          Integer Scaling: Odd:Y, Even:'X'+Y" 0.0 0.0 4.0 1.0
 #define IOS          params.IOS     // Smart Integer Scaling
@@ -221,15 +222,11 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter bmask "          Base (black) Mask strength" 0.0 0.0 0.25 0.01
 #define bmask  global.bmask
 
-#pragma parameter gamma_out "          Gamma out" 1.75 1.0 5.0 0.05
+#pragma parameter gamma_out "          Gamma out" 2.4 1.0 5.0 0.05
 #define gamma_out    global.gamma_out     // output gamma
 
 
 #pragma parameter bogus_deconvergence11 "[ HORIZONTAL/VERTICAL DECONVERGENCE ]: " 0.0 0.0 1.0 1.0
-
-#pragma parameter dctypex "          Deconvergence type X : 0.0 - static, other - dynamic" 0.0 0.0 0.75 0.05
-
-#pragma parameter dctypey "          Deconvergence type Y : 0.0 - static, other - dynamic" 0.0 0.0 0.75 0.05
 
 #pragma parameter deconrr "          Horizontal Deconvergence Red Range" 0.0 -15.0 15.0 0.25
 
@@ -275,10 +272,10 @@ void main()
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 2) uniform sampler2D LinearizePass;
-layout(set = 0, binding = 3) uniform sampler2D BloomPass;
-layout(set = 0, binding = 4) uniform sampler2D PrePass;
-layout(set = 0, binding = 5) uniform sampler2D Source;
-layout(set = 0, binding = 6) uniform sampler2D GlowPass;
+layout(set = 0, binding = 3) uniform sampler2D GlowPass;
+layout(set = 0, binding = 4) uniform sampler2D BloomPass;
+layout(set = 0, binding = 5) uniform sampler2D PrePass;
+layout(set = 0, binding = 6) uniform sampler2D Source;
 
 #define eps 1e-10 
 
@@ -566,23 +563,7 @@ void fetch_pixel (inout vec3 c, inout vec3 b, inout vec3 g, vec2 coord, vec2 bco
 		float ds = global.decons;
 				
 		vec2 dx = vec2(stepx, 0.0);
-		vec2 dy = vec2(0.0, stepy);		
-		
-		float posx = 2.0*coord.x - 1.0;
-		float posy = 2.0*coord.y - 1.0;
-		
-		if (global.dctypex > 0.025)
-		{
-			posx = sign(posx)*pow(abs(posx), 1.05-global.dctypex);
-			dx = posx * dx;
-		}
-
-		if (global.dctypey > 0.025)
-		{
-
-			posy = sign(posy)*pow(abs(posy), 1.05-global.dctypey);
-			dy = posy * dy;
-		}
+		vec2 dy = vec2(0.0, stepy);
 
 		vec2 rc = global.deconrr * dx + global.deconrry*dy;
 		vec2 gc = global.deconrg * dx + global.deconrgy*dy;
@@ -618,19 +599,19 @@ void main()
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
 	bool interb  = (intera < 0.5 || global.no_scanlines > 0.025);
+	bool notate  = (TATE < 0.5);
 	
 	// Calculating texel coordinates
    
 	vec2 texcoord = TEX0.xy;
-
 	if (IOS > 0.0 && !interb){
 		vec2 ofactor = OutputSize.xy/global.OriginalSize.xy;
 		vec2 intfactor = (IOS < 2.5) ? floor(ofactor) : ceil(ofactor);
 		vec2 diff = ofactor/intfactor;
-		float scan = diff.y;
+		float scan = mix(diff.y, diff.x, TATE);
 		texcoord = Overscan(texcoord, scan, scan);
-		if (IOS == 1.0 || IOS == 3.0) texcoord = vec2(TEX0.x, texcoord.y);
-	} 
+		if (IOS == 1.0 || IOS == 3.0) texcoord = mix(vec2(TEX0.x, texcoord.y), vec2(texcoord.x, TEX0.y), TATE);
+	}
 
 	texcoord = Overscan(texcoord, (global.OriginalSize.x - overscanX)/global.OriginalSize.x, (global.OriginalSize.y - overscanY)/global.OriginalSize.y);
 
@@ -651,20 +632,20 @@ if ((abs(global.deconrr) + abs(global.deconrry) + abs(global.deconrg) + abs(glob
 	float colmx = max(mx1, cm);
 	float w3 = min((cm + 0.0001) / (colmx + 0.0005), 1.0); if(interb) w3 = 1.0;
 	
-	vec2 dx = vec2(0.001, 0.0);
+	vec2 dx = mix(vec2(0.001, 0.0), vec2(0.0, 0.001), TATE);
 	float mx0 = COMPAT_TEXTURE(Source, pos1 - dx).a;
 	float mx2 = COMPAT_TEXTURE(Source, pos1 + dx).a;
 	float mxg = max(max(mx0,mx1),max(mx2,cm));
 	float mx = pow(mxg, 1.40/gamma_in);
-	
-	vec3 one = vec3(1.0);
 
 	// mask boost tweak
 	
-	dx = vec2(global.OriginalSize.z, 0.0)*0.25;
+	dx = mix(vec2(global.OriginalSize.z, 0.0), vec2(0.0, global.OriginalSize.w), TATE) * 0.25;
 	mx0 = COMPAT_TEXTURE(Source, pos1 - dx).a;
 	mx2 = COMPAT_TEXTURE(Source, pos1 + dx).a;
 	float mb = (1.0 - min(abs(mx0-mx2)/(0.5+mx1), 1.0));
+	
+	vec3 one = vec3(1.0);
 	
 	// Apply Mask
 	
@@ -681,7 +662,8 @@ if ((abs(global.deconrr) + abs(global.deconrry) + abs(global.deconrg) + abs(glob
 
 if (shadowMask > -0.5)
 {	
-	vec2 maskcoord = gl_FragCoord.xy * 1.00001;
+	vec2 maskcoord = gl_FragCoord.yx * 1.00001;
+	if (notate) maskcoord = maskcoord.yx;
 	vec2 scoord = maskcoord;
 	
 	mwidth = floor(mwidth) * masksize;
@@ -743,7 +725,7 @@ else{
 	float bb = mix(brightboost, brightboost1, mx) * dark_compensate;
 	color*=bb;
 
-	vec3  Ref = COMPAT_TEXTURE(LinearizePass, pos).rgb;	
+	vec3  Ref = COMPAT_TEXTURE(LinearizePass, pos).rgb;
 	float maxb = COMPAT_TEXTURE(BloomPass, pos).a;
 	float vig  = COMPAT_TEXTURE(PrePass, clamp(pos, 0.0+0.5*global.OriginalSize.zw, 1.0-0.5*global.OriginalSize.zw)).a;
 
@@ -770,10 +752,11 @@ else{
 		float mbl = max(max(Bloom.r,Bloom.g),Bloom.b);
 		Bloom = plant(Bloom + Ref + orig1 + Bloom*Bloom*Bloom, min(mbl*mbl,0.75));
 		color = color + 2.0*mix(1.0,w3,0.5*colmx)*hcmask*Bloom*(-halation); }
-	
+
 
 	float w = 0.25 + 0.60*mix(w3, 1.0, sqrt(colmx));
 	if (smoothmask > 0.5) { color = min(color,1.0); color = max(min(color/w3, 1.0)*w3, min(orig1*bb,color*(1.0-w3))); }
+	
 
 	if (global.m_glow < 0.5) Glow = mix(Glow, 0.25*color, colmx);
 	else
@@ -787,7 +770,7 @@ else{
 		Bloom = mix(maxb*min(Bloom,orig2), w*mix(mix(Glow, max(max(Ref.g,Ref.g),Ref.b)*Glow, max(mx,mx0)), mix(color, Glow, mx2), max(mx0,mx2)*Ref), min(sqrt((1.10-mx0)*(0.10+mx2)),1.0));
 		Glow = mix(global.m_glow_low*Glow, global.m_glow_high*Bloom, pow(colmx, global.m_glow_dist/gamma_in));
 	}
-	
+
 	if (global.m_glow < 0.5) {
 		if (glow >= 0.0) color = color + 0.5*Glow*glow; else color = color + abs(glow)*min(cmask2*cmask2,1.0)*Glow; }
 	else { cmask1 = clamp(mix(one, cmask1, global.m_glow_mask),0.0, 1.0); color = color + abs(glow)*cmask1*Glow; }
@@ -804,7 +787,7 @@ else{
 		if (global.noisetype < 0.5) color = mix(color, noise0, 0.25*abs(global.addnoised) * rc); 
 		else color = min(color * mix(1.0, 1.5*noise0.x, 0.5*abs(global.addnoised)), 1.0);
 	}
-
+	
 	colmx = max(max(orig1.r,orig1.g),orig1.b);
 	color = color + bmask*mix(cmask2, 0.125*(1.0-colmx)*color, min(20.0*colmx, 1.0));
 	
