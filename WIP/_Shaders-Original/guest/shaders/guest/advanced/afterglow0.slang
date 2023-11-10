@@ -3,7 +3,7 @@
 /*
    Phosphor Afterglow Shader pass 0
    
-   Copyright (C) 2020 - 2022 guest(r) - guest.r@gmail.com
+   Copyright (C) 2020 - 2023 guest(r) - guest.r@gmail.com
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -84,7 +84,7 @@ void main()
 	float w = 1.0;
 	if ((color0.r + color0.g + color0.b < 5.0/255.0)) { w = 0.0; }
 
-	vec3 result = mix( max(mix(color, accumulate, 0.49 + vec3(PR, PG, PB))- 2.0/255.0, 0.0), color, w);
+	vec3 result = mix( max(mix(color, accumulate, 0.49 + vec3(PR, PG, PB))- 1.25/255.0, 0.0), color, w);
 
 	FragColor = vec4(result, w);
-}
+}  

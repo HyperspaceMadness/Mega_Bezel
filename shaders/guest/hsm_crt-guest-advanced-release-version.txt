@@ -1,1 +1,4 @@
-crt-guest-advanced-2023-03-11-release1
+crt-guest-advanced-2023-11-01-release1
+
+Grade is not included in this version of Guest. 
+This is because we want to use guest color correction as well as grade  

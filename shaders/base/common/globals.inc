@@ -706,6 +706,10 @@ float HSM_REFLECT_MASK_MIPMAPPING_BLEND_BIAS;
 	float m_glow_dist;
 	float m_glow_mask;
 	float smask_mit;
+	float mask_zoom;
+	float bmask;
+	float bmask1;
+	float hmask1;
 
 	float glow;
 	float bloom;
@@ -734,6 +738,7 @@ float HSM_REFLECT_MASK_MIPMAPPING_BLEND_BIAS;
 	float gamma_c;
 	float brightboost;
 	float brightboost1;
+	float clips;
 
 	float blendMode;
 
@@ -742,11 +747,13 @@ float HSM_REFLECT_MASK_MIPMAPPING_BLEND_BIAS;
 	float scanline2;
 	float beam_min;
 	float beam_max;
+	float tds;
 	float beam_size;
 	float vertmask;
 	float scans;
 	float scan_falloff;
 	float spike;
+	float ssharp;
 	float ring;
 	float no_scanlines;
 	float scangamma;
@@ -777,7 +784,6 @@ float HSM_REFLECT_MASK_MIPMAPPING_BLEND_BIAS;
 	float slotwidth;
 	float double_slot;
 	float slotms;
-	float mclip;
 	float smoothmask;
 	float mshift;
 	float mask_layout;
@@ -803,7 +809,19 @@ float HSM_REFLECT_MASK_MIPMAPPING_BLEND_BIAS;
 
 	// Grade Params
 	float g_grade_on;
+    float g_Dark_to_Dim;
+    float g_GCompress;
     float wp_temperature;
+    float g_analog;
+    float g_digital;
+    float g_sfixes;
+    float g_MD_Pal;
+    float g_SMS_bl;
+    float g_CRT_br;
+    float g_CRT_bg;
+    float g_CRT_bb;
+    float g_CRT_rf;
+    float g_CRT_sl;
     float g_satr;
     float g_satg;
     float g_satb;
@@ -930,9 +948,9 @@ vec2 ROTATED_CORE_ORIGINAL_SIZE = vec2(1);
 vec2 ROTATED_CORE_PREPPED_SIZE = vec2(1);
 vec2 ROTATED_DEREZED_SIZE = vec2(1);
 
+vec2 CROPPED_ROTATED_SIZE = vec2(1);
 vec2 CROPPED_ROTATED_SIZE_WITH_RES_MULT = vec2(1);
 vec2 CROPPED_ROTATED_SIZE_WITH_RES_MULT_FEEDBACK = vec2(1);
-vec2 CROPPED_ROTATED_SIZE = vec2(1);
 vec2 SAMPLE_AREA_START_PIXEL_COORD = vec2(1);
 
 vec2 SCREEN_SIZE = vec2(1);

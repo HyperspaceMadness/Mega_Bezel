@@ -3,7 +3,7 @@
 /*
    Phosphor Afterglow Shader pass 0
    
-   Copyright (C) 2020 - 2022 guest(r) - guest.r@gmail.com
+   Copyright (C) 2020 - 2023 guest(r) - guest.r@gmail.com
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -23,10 +23,7 @@
 
 layout(push_constant) uniform Push
 {
-   vec4 SourceSize;
-   vec4 OriginalSize;
-   vec4 OutputSize;
-   uint FrameCount;
+   vec4 DerezedPassSize;
    float PR, PG, PB;
 } params;
 
@@ -35,12 +32,10 @@ layout(push_constant) uniform Push
 
 #pragma parameter GDV_AFTERGLOW_LINE							" " 0 0 0.001 0.001
 #pragma parameter bogus_afterglow         "[ AFTERGLOW ]:" 0.0 0.0 1.0 1.0
-#pragma parameter GDV_AFTERGLOW_THRESHOLD "          Threshold ( Afterglow Appears Under Threshold )" 0.5 0.0 100 0.5
 #pragma parameter PR                      "          Persistence Red -- PR" 0.32 0.0 0.50 0.01
 #pragma parameter PG                      "          Persistence Green -- PG"  0.32 0.0 0.50 0.01
 #pragma parameter PB                      "          Persistence Blue -- PB"  0.32 0.0 0.50 0.01
 
-#define GDV_AFTERGLOW_THRESHOLD params.GDV_AFTERGLOW_THRESHOLD / 100
 #define PR params.PR
 #define PG params.PG
 #define PB params.PB
@@ -74,8 +69,8 @@ layout(set = 0, binding = 3) uniform sampler2D AfterglowPassFeedback;
 
 void main()
 {
-	vec2 dx = vec2(params.OriginalSize.z, 0.0);
-	vec2 dy = vec2(0.0, params.OriginalSize.w);
+	vec2 dx = vec2(params.DerezedPassSize.z, 0.0);
+	vec2 dy = vec2(0.0, params.DerezedPassSize.w);
 	
 	vec3 color0  = COMPAT_TEXTURE(PreCRTPass, TEX0.xy).rgb;
 	vec3 color1  = COMPAT_TEXTURE(PreCRTPass, TEX0.xy - dx).rgb;
@@ -90,7 +85,7 @@ void main()
 	float w = 1.0;
 	if ((color0.r + color0.g + color0.b < 5.0/255.0)) { w = 0.0; }
 
-	vec3 result = mix( max(mix(color, accumulate, 0.49 + vec3(PR, PG, PB))- 2.0/255.0, 0.0), color, w);
+	vec3 result = mix( max(mix(color, accumulate, 0.49 + vec3(PR, PG, PB))- 1.25/255.0, 0.0), color, w);
 
 	FragColor = vec4(result, w);
 }

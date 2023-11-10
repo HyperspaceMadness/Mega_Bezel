@@ -65,7 +65,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter bloom "          Bloom Strength" 0.0 -2.0 2.0 0.05
 #define bloom         global.bloom     // bloom effect
 
-#pragma parameter mask_bloom "          Mask Bloom" 0.0 -2.0 2.0 0.05
+#pragma parameter mask_bloom 	"          Mask Bloom -- mask_bloom" 0.0 -2.0 2.0 0.05
 #define mask_bloom         params.mask_bloom     // bloom effect
 
 #pragma parameter bloom_dist "          Bloom Distribution" 0.0 -2.0 3.0 0.05

@@ -3,7 +3,7 @@
 /*
    Gaussian blur - vertical pass, dynamic range, resizable
    
-   Copyright (C) 2020 - 2022 guest(r) - guest.r@gmail.com
+   Copyright (C) 2020 - 2023 guest(r) - guest.r@gmail.com
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -24,18 +24,16 @@
 layout(push_constant) uniform Push
 {
 	vec4 SourceSize;
-	vec4 OriginalSize;
-	vec4 OutputSize;
-	uint FrameCount;
+	vec4 DerezedPassSize;
 	float SIZEV;
 	float SIGMA_V;
 } params;
 
 
-#pragma parameter SIZEV "          Vertical Radius (Num Samples) -- SIZEV" 6.0 1.0 50.0 1.0 
+#pragma parameter SIZEV "          Vertical Glow Radius (Num Samples) -- SIZEV" 6.0 1.0 50.0 1.0 
 #define SIZEV params.SIZEV
 
-#pragma parameter SIGMA_V "          Vertical Sigma ( Spread ) -- SIGMA_V" 1.20 0.20 15.0 0.10
+#pragma parameter SIGMA_V "          Vertical Glow Sigma ( Spread ) -- SIGMA_V" 1.20 0.20 15.0 0.05
 #define SIGMA_V params.SIGMA_V
 
 layout(std140, set = 0, binding = 0) uniform UBO
@@ -70,7 +68,7 @@ float gaussian(float x)
 
 void main()
 {
-	vec4 SourceSize1 = vec4(params.SourceSize.x, params.OriginalSize.y, params.SourceSize.z, params.OriginalSize.w);
+	vec4 SourceSize1 = vec4(params.SourceSize.x, params.DerezedPassSize.y, params.SourceSize.z, params.DerezedPassSize.w);
 	float f = fract(SourceSize1.y * vTexCoord.y);
 	f = 0.5 - f;
 	vec2 tex = floor(SourceSize1.xy * vTexCoord)*SourceSize1.zw + 0.5*SourceSize1.zw;

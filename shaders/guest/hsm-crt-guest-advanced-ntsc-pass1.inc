@@ -34,30 +34,34 @@ layout(push_constant) uniform Push
 	float HARNG;
 	float HSHARP; 
 	float spike;
+	float MAXS;
 } params;
 
 //---------------------------------------------------------------------------------------------------
 // NTSC Filtering
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_NTSCPASS1_FILTERING_EMPTY_LINE		" " 0 0 0.001 0.001
-#pragma parameter bogus_filtering "[ FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
+#pragma parameter bogus_filtering "[ FILTERING OPTIONS ]: " 0 0 0.001 0.001
 
-#pragma parameter HSHARPNESS 		"          NTSC Horizontal Filter Range -- HSHARPNESS" 1.5 1.0 8.0 0.05
+#pragma parameter HSHARPNESS 		"          NTSC Horizontal Filter Range -- HSHARPNESS" 1.75 1.0 8.0 0.05
 #define HSHARPNESS params.HSHARPNESS
 
-#pragma parameter SIGMA_HOR 		"          Horizontal Blur Sigma -- SIGMA_HOR" 0.90 0.1 7.0 0.05
+#pragma parameter SIGMA_HOR 		"          Horizontal Blur Sigma -- SIGMA_HOR" 0.85 0.1 7.0 0.05
 #define SIGMA_HOR params.SIGMA_HOR
 
-#pragma parameter S_SHARP 			"          Substractive Sharpness -- S_SHARP" 0.9 0.0 2.0 0.10
+#pragma parameter S_SHARP 			"          Substractive Sharpness -- S_SHARP" 1.4 0.0 3.0 0.10
 #define S_SHARP params.S_SHARP
 
 #pragma parameter HSHARP 			"          Sharpness Definition -- HSHARP" 1.2 0.0 2.0 0.10
 #define HSHARP params.HSHARP
 
+#pragma parameter MAXS 				"          Maximum Sharpness" 0.18 0.0 0.30 0.01
+#define MAXS params.MAXS 
+
 #pragma parameter HARNG 			"          Substractive Sharpness Ringing -- HARNG" 0.4 0.0 4.0 0.10
 #define HARNG params.HARNG 
 
-#pragma parameter spike 		"          Scanline Spike Removal -- spike" 1.0 0.0 2.0 0.10
+#pragma parameter spike 			"          Scanline Spike Removal -- spike" 1.0 0.0 2.0 0.10
 #define spike params.spike
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
@@ -118,7 +122,7 @@ void main()
 	vec3 cmax = 0.0.xxx;
 	vec3 cmin = 1.0.xxx;
 	float sharp = gaussian(hsharpness) * S_SHARP;
-	float maxsharp = 0.20;
+	float maxsharp = MAXS;
 	float FPR = hsharpness;
 	float fpx = 0.0;
 	float sp = 0.0;

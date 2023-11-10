@@ -1,27 +1,12 @@
 ![Mega_Bezel_Logo|512x256, 75%](upload://6PNkvcMF9Go9Wnk6OJXfYR1opXI.png) 
 
-Mega Bezel is updated to V1.14.0_2023-04-15
+Mega Bezel is updated to V1.15.0_2023-11-XX
 
 Changes:
-  * Added PASSTHROUGH base variants
-    * These have a minimal processing on the image coming from the core, and no CRT shader
-    * Includes FXAA for antialiasing 3D poligonal graphics
-    * Guest's G-Sharp used for scaling the game image down to the size on the screen
-    * Added NO-TUBE-FX versions here as well
-  * Did a really big refactor of the building of the presets
-    * This makes it easier to keep the presets consistent and know what is in each one
-    * Removed Negative crop passes, since it's not being used
-    * Removed first pass which wasn't needed since we don't use mipmapping for DREZ anymore
-    * Moved the Intro after ScaleFX so the Static should no longer get smoothed
-  * Added support to fix flipping in more core with glcore
-  * Fixed Reflection Disappearing with Raster Bloom Enabled
-  * Fixed Reflection on Dual Screen LCD presets where the whole unsplit image was being used for both screens
-  * Added Threshold to GSharp so that it doesn't apply to a similar incoming resolution
-  * Updated Dual Screen presets to use params files which users could leverage if desired 
-  * Overscan and Raster Bloom is now available for all shaderschain__30__dedithering__none.slangp
-  * Potato CRT Curvature is affecting black line which it shouldn't
-  * Removed Afterglow on all Potato Presets (Before some had them some didn't)
-  * Remove Sega Luma Fix from the Guest shader used so only the one in Grade is used (since it will be turned on automatically for sega consoles)
+  * Updated to Guest Advanced crt-guest-advanced-2023-11-01-release1
+  * Updated to latest Grade
+  * Grade Color Temperature set to 7200
+
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------

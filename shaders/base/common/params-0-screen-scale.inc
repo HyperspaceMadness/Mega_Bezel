@@ -327,7 +327,7 @@ float HSM_CROP_BLACK_THRESHOLD = global.HSM_CROP_BLACK_THRESHOLD / 100;
 #pragma parameter HSM_SCANLINE_DIRECTION 							"          Scanline Direction - Auto | Horiz | Vert"  0 0 2 1
 float HSM_SCANLINE_DIRECTION = global.HSM_SCANLINE_DIRECTION;
 
-#pragma parameter no_scanlines "          No-Scanline Mode (Guest Advanced Only)" 0.0 0.0 1.0 1.0
+#pragma parameter no_scanlines "          No-Scanline Mode (Guest Advanced Only)" 0.0 0.0 1.5 0.05
 
 
 //---------------------------------------------------------------------------------------------------
@@ -375,7 +375,7 @@ float HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = global.HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR
 #pragma parameter HSM_INTERLACE_EFFECT_SMOOTHNESS_INTERS 			"          Interlacing Effect Smoothness" 0 0 100 10
 #define HSM_INTERLACE_EFFECT_SMOOTHNESS_INTERS global.HSM_INTERLACE_EFFECT_SMOOTHNESS_INTERS / 200
 
-#pragma parameter HSM_INTERLACE_SCANLINE_EFFECT 					"          Interlacing Scanline Effect" 20 0 100 5
+#pragma parameter HSM_INTERLACE_SCANLINE_EFFECT 					"          Interlacing Scanline Effect ('Laced brightness)" 0.20 0.0 1.0 0.05
 #define HSM_INTERLACE_SCANLINE_EFFECT global.HSM_INTERLACE_SCANLINE_EFFECT / 100
 
 #pragma parameter iscans 				                            "          Interlacing (Scanline) Saturation" 0.25 0 1 0.05

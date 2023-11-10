@@ -11,9 +11,10 @@ layout(std140, set = 0, binding = 0) uniform UBO
    vec4 OriginalSize;
    vec4 SourceSize;
    vec4 DerezedPassSize;
+   float auto_res;
    float ntsc_sharp;
    float ntsc_shape;
-   float blendMode;
+   float blendMode;    
 } global;
 
 #pragma parameter NTSC_SHARPNESS_EMPTY_LINE							" " 0 0 0.001 0.001
@@ -70,7 +71,8 @@ vec3 rgb2yiq(vec3 col)
 void main()
 {
    vec2 offsetx = vec2(0.5 * global.DerezedPassSize.z, 0.0);
-   vec2 texcoord = vTexCoord + vec2(0.25 * global.SourceSize.z, 0.0);
+   vec2 dx = vec2(0.25 * global.SourceSize.z, 0.0);
+   vec2 texcoord = vTexCoord + dx;
    
    vec3 l1  = texture(Source, texcoord +      offsetx).xyz;
    vec3 l2  = texture(Source, texcoord -      offsetx).xyz;
@@ -78,7 +80,7 @@ void main()
    vec3 l4  = texture(Source, texcoord - 0.50*offsetx).xyz;
    vec3 ref = texture(Source, texcoord).xyz;
    
-   float lum1 = texture(NPass1, vTexCoord).a;
+   float lum1 = min(texture(Source, vTexCoord - dx).a, texture(Source, vTexCoord + dx).a);
    float lum2 = max(ref.x, 0.0);
 
    float dif = max(max(abs(l1.x-l2.x), abs(l1.y-l2.y)), max(abs(l1.z-l2.z), abs(l1.x*l1.x-l2.x*l2.x)));

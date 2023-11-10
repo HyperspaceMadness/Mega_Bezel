@@ -3,7 +3,7 @@
 /*
    Gaussian blur - vertical pass, dynamic range, resizable
    
-   Copyright (C) 2020 - 2022 guest(r) - guest.r@gmail.com
+   Copyright (C) 2020 - 2023 guest(r) - guest.r@gmail.com
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -24,22 +24,23 @@
 layout(push_constant) uniform Push
 {
 	vec4 SourceSize;
-	vec4 OriginalSize;
-	vec4 OutputSize;
-	uint FrameCount;
+	vec4 DerezedPassSize;
 	float SIZEVB;
 	float SIGMA_VB;
 	float BLOOMCUT_V;
+	float FINE_BLOOM;
 } params;
 
+#pragma parameter FINE_BLOOM "          Fine Bloom/Halation Sampling" 1.0 1.0 4.0 1.0 
+#define FINE_BLOOM params.FINE_BLOOM
 
-#pragma parameter SIZEVB "          Vertical Radius ( Num Samples ) -- SIZEVB" 3.0 1.0 50.0 1.0 
+#pragma parameter SIZEVB "          Vertical Bloom/Halation Radius  -- SIZEVB" 3.0 1.0 50.0 1.0 
 #define SIZEVB params.SIZEVB
 
-#pragma parameter SIGMA_VB "          Vertical Sigma ( Spread ) -- SIGMA_VB" 0.60 0.25 15.0 0.05
+#pragma parameter SIGMA_VB "          Vertical Bloom/Halation Sigma -- SIGMA_VB" 0.60 0.25 15.0 0.025
 #define SIGMA_VB params.SIGMA_VB
 
-#pragma parameter BLOOMCUT_V "          Vertical Bloom/Halation/(Glow) Substract" 0.0 0.0 0.5 0.01
+#pragma parameter BLOOMCUT_V "          Vertical Bloom/Halation Subtract -- BLOOMCUT_V" 0.0 -0.5 0.5 0.05
 #define BLOOMCUT_V params.BLOOMCUT_V
 
 layout(std140, set = 0, binding = 0) uniform UBO
@@ -75,7 +76,8 @@ float gaussian(float x)
 void main()
 {
 	vec4 SourceSize1 = params.SourceSize;
-	SourceSize1.yw = params.OriginalSize.yw;
+	SourceSize1.yw = params.DerezedPassSize.yw;
+	SourceSize1 = SourceSize1 * mix(1.0.xxxx, vec4(FINE_BLOOM, FINE_BLOOM, 1.0/FINE_BLOOM, 1.0/FINE_BLOOM), min(FINE_BLOOM-1.0,1.0));
 
 	float f = fract(SourceSize1.y * vTexCoord.y);
 	f = 0.5 - f;
@@ -91,7 +93,8 @@ void main()
 	do
 	{
 		pixel  = COMPAT_TEXTURE(Source, tex + n*dy);
-		w      = max(gaussian(n+f) - BLOOMCUT_V, 0.0);
+		w = gaussian(n+f);
+		w      = (BLOOMCUT_V >= 0.0) ? max(w - BLOOMCUT_V, 0.0) : (max(w + BLOOMCUT_V, 0.0)/(1.0 + BLOOMCUT_V));
 		pixel.a*=pixel.a*pixel.a;
 		color  = color + w * pixel;
 		wsum   = wsum + w;
