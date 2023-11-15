@@ -79,6 +79,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float bmask;
 	float bmask1;
 	float hmask1;
+	float mzoom_sh;	
 } global;
 
 
@@ -186,6 +187,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter mask_zoom "          CRT Mask Zoom (+ mask width)" 0.0 -5.0 5.0 1.0
 #define mask_zoom     global.mask_zoom     // Mask Size
+
+#pragma parameter mzoom_sh "          CRT Mask Zoom Sharpen (needs Mask Zoom)" 0.0 0.0 1.0 0.05
+#define mzoom_sh     global.mzoom_sh  
 
 #pragma parameter mshift "          (Transform to) Shadow Mask" 0.0 0.0 1.0 0.5
 #define mshift     params.mshift     // do the "shadow mask"
@@ -708,15 +712,15 @@ if ( mshift > 0.25 )
 	float next_line = float(floor(mod(maskcoord.y, 2.0*stagg_lvl)) < stagg_lvl);
 	maskcoord0.x = maskcoord0.x + next_line * 0.5 * mwidth1;
 }		
-	maskcoord = maskcoord0/masksize; if (mask_zoom >= 0.0) maskcoord = floor(maskcoord);
+	maskcoord = maskcoord0/masksize;
 
 if ( !zoomed )	
 	cmask*= Mask(floor(maskcoord), mx, mb);
 else{
 	mscale  = mwidth1/mwidth;
-	float mlerp = fract(maskcoord.x/mscale);	
+	float mlerp = fract(maskcoord.x/mscale); if (mzoom_sh > 0.025) mlerp = (1.0 + mzoom_sh)*mlerp - 0.5*mzoom_sh;
 	float mcoord = floor(maskcoord.x/mscale); if (shadowMask == 12.0 && mask_zoom == -2.0) mcoord = ceil(maskcoord.x/mscale);
-	cmask*=mix(Mask(vec2(mcoord,maskcoord.y), mx, mb), Mask(vec2(mcoord + 1.0, maskcoord.y), mx, mb), mlerp);
+	cmask*=max(mix(Mask(vec2(mcoord,maskcoord.y), mx, mb), Mask(vec2(mcoord + 1.0, maskcoord.y), mx, mb), mlerp), 0.0);
 }
 
 	if (slotwidth > 0.5) swidth = slotwidth; float smask = 1.0;

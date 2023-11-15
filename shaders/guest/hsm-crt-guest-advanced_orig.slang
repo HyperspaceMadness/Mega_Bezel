@@ -65,7 +65,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter bloom "          Bloom Strength" 0.0 -2.0 2.0 0.05
 #define bloom         global.bloom     // bloom effect
 
-#pragma parameter mask_bloom 	"          Mask Bloom -- mask_bloom" 0.0 -2.0 2.0 0.05
+#pragma parameter mask_bloom "          Mask Bloom" 0.0 -2.0 2.0 0.05
 #define mask_bloom         params.mask_bloom     // bloom effect
 
 #pragma parameter bloom_dist "          Bloom Distribution" 0.0 -2.0 3.0 0.05
@@ -279,6 +279,8 @@ vec3 plant (vec3 tar, float r)
 
 void main()
 {
+
+
 	vec2 prescalex = vec2(vec2(textureSize(LinearizePass, 0))/global.OriginalSize.xy);
 	
 	vec4 SourceSize = global.OriginalSize * mix( vec4(prescalex.x, 1.0, 1.0/prescalex.x, 1.0), vec4(1.0, prescalex.y, 1.0, 1.0/prescalex.y), TATE);
@@ -287,14 +289,19 @@ void main()
 	
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
-	bool interb  = ((intera < 0.5) || (no_scanlines > 0.025));
+	bool interb  = ((intera < 0.35) || (no_scanlines > 0.025));
 	bool notate  = (TATE < 0.5);
+	bool vgascan = ((abs(intera-0.5) < 0.05) && (no_scanlines == 0.0));
 
 	float SourceY = mix(SourceSize.y, SourceSize.x, TATE);
 	
 	float sy = 1.0;
 	if (global.intres == 1.0) sy = SourceY/224.0;
 	if (global.intres > 0.25 && global.intres != 1.0) sy = global.intres;
+	
+	// VGA Scan Mode
+	if (vgascan) sy = 0.5; else if (abs(intera-0.75) < 0.05) sy = 1.0;
+	
 	if (notate) SourceSize*=vec4(1.0, 1.0/sy, 1.0, sy); else SourceSize*=vec4(1.0/sy, 1.0, sy, 1.0);
 	
 	// Calculating texel coordinates
@@ -346,8 +353,8 @@ void main()
 	
 	vec2 pC4 = floor(OGL2Pos) * ps + 0.5*ps; 
 	
-	if (global.intres == 0.5 &&  notate && prescalex.y < 1.5) pC4.y = floor(pC4.y * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
-	if (global.intres == 0.5 && !notate && prescalex.x < 1.5) pC4.x = floor(pC4.x * global.OriginalSize.x)*global.OriginalSize.z + 0.5*global.OriginalSize.z;
+	if ((global.intres == 0.5 &&  notate && prescalex.y < 1.5) || vgascan) pC4.y = floor(pC4.y * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
+	if ((global.intres == 0.5 && !notate && prescalex.x < 1.5) || (vgascan && !notate)) pC4.x = floor(pC4.x * global.OriginalSize.x)*global.OriginalSize.z + 0.5*global.OriginalSize.z;
 	
 	if (interb && no_scanlines < 0.025)  pC4.y = pos.y; else if (interb) pC4.y = pC4.y + smoothstep(0.40-0.5*no_scanlines, 0.60 + 0.5*no_scanlines, f)*mix(SourceSize.w, SourceSize.z, TATE);
 	
@@ -441,8 +448,8 @@ void main()
 {	
 	pC4+=offy;
 
-	if (global.intres == 0.5 &&  notate && prescalex.y < 1.5) pC4.y = floor((pos.y + 0.33*offy.y) * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
-	if (global.intres == 0.5 && !notate && prescalex.x < 1.5) pC4.x = floor((pos.x + 0.33*offy.x) * global.OriginalSize.x)*global.OriginalSize.z + 0.5*global.OriginalSize.z;
+	if ((global.intres == 0.5 &&  notate && prescalex.y < 1.5) || vgascan) pC4.y = floor((pos.y + 0.33*offy.y) * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
+	if ((global.intres == 0.5 && !notate && prescalex.x < 1.5) || (vgascan && !notate)) pC4.x = floor((pos.x + 0.33*offy.x) * global.OriginalSize.x)*global.OriginalSize.z + 0.5*global.OriginalSize.z;
 	
 	l3 = COMPAT_TEXTURE(LinearizePass, pC4 -off2).rgb;
 	l2 = COMPAT_TEXTURE(LinearizePass, pC4 -offx).rgb;

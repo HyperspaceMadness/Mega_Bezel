@@ -1082,10 +1082,13 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 	vec2 cropped_rotated_size = vec2(100);
 	vec2 cropped_sample_area_start_pixel_coord = vec2(100);
 	HSM_GetCroppedRotatedSizeAndPixelSampleAreaStart(1, original_pass, cropped_rotated_size, cropped_sample_area_start_pixel_coord);
+	// vec2 cropped_unrotated_size = abs(HSM_ROTATE_CORE_IMAGE) > 0.5 ? cropped_rotated_size.yx : cropped_rotated_size.xy;
+
 	float screen_aspect = HSM_GetScreenAspect(1, cropped_rotated_size);
 	float use_vertical_scanlines = HSM_GetUseVerticalScanlines(screen_aspect);
 	vec2 sampling_dir_mult = HSM_GetResMult(use_vertical_scanlines);
 	vec2 cropped_rotated_size_with_res_mult = HSM_GetCroppedRotatedSizeWithResMult(cropped_rotated_size, sampling_dir_mult);
+	// vec2 cropped_unrotated_size_with_res_mult = abs(HSM_ROTATE_CORE_IMAGE) > 0.5 ? cropped_rotated_size_with_res_mult.yx : cropped_rotated_size_with_res_mult.xy;
 
 	// First Screen
 	vec3 screen_pos_and_height = HSM_GetScreenPlacementAndHeight(screen_placement_image, 60);
@@ -1182,6 +1185,17 @@ vec4 HSM_GetColorForScreenInfoCache(vec2 viewport_coord, sampler2D feedback_pass
 		out_color.rg = cropped_rotated_size;
 		out_color.ba = cropped_sample_area_start_pixel_coord;
 	}
+
+	// // Sample 5, 1
+	// // rg CROPPED_UNROTATED_SIZE
+	// sample_2d_range = HSM_GetCacheSampleRange(5, 1);
+	// if (HSM_IsCoordIn2DRange(viewport_coord, sample_2d_range) == 1)
+	// {
+	// 	out_color.rg = cropped_unrotated_size;
+	// 	out_color.ba = cropped_unrotated_size_with_res_mult;
+	// }
+
+// TODO Need to add unrotated sizes
 
 	// Sample 2, 2
 	// r SCREEN_ASPECT_2ND_SCREEN

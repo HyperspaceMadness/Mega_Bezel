@@ -196,6 +196,12 @@ vec4 HSM_UpdateGlobalScreenValuesFromCache(sampler2D in_cache_pass, vec2 vTexCoo
 		CROPPED_ROTATED_SIZE = texture_sample.rg;
 		SAMPLE_AREA_START_PIXEL_COORD = texture_sample.ba;
 
+		// // Sample 5, 1
+		// // rg CROPPED_UNROTATED_SIZE
+		// sample_coord = HSM_GetCacheSampleCoord(5, 1);
+		// CROPPED_UNROTATED_SIZE = texture_sample.rg;
+		// CROPPED_UNROTATED_SIZE_WITH_RES_MULT = texture_sample.ba;
+
 		// Sample 4, 4
 		// rg screen size first screen
 		// ba screen size second screen

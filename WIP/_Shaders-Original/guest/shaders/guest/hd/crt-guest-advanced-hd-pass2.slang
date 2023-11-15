@@ -351,12 +351,17 @@ void main()
 	vec4 SourceSize = vec4(global.SourceSize.x, global.OriginalSize.y, global.SourceSize.z, global.OriginalSize.w);
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
-	bool interb  = ((intera < 0.5) || (no_scanlines > 0.025));
-
+	bool interb  = ((intera < 0.35) || (no_scanlines > 0.025));
+	bool vgascan = ((abs(intera-0.5) < 0.05) && (no_scanlines == 0.0));
+	
 	float SourceY = SourceSize.y;
 	float sy = 1.0;
 	if (global.intres == 1.0) sy = SourceY/224.0;
 	if (global.intres > 0.25 && global.intres != 1.0) sy = global.intres;
+	
+	// VGA Scan Mode
+	if (vgascan) sy = 0.5; else if (abs(intera-0.75) < 0.05) sy = 1.0;	
+	
 	SourceSize*=vec4(1.0, 1.0/sy, 1.0, sy);
 
 	// Calculating texel coordinates
@@ -392,7 +397,7 @@ void main()
 	pC4.y = floor(OGL2Pos) * ps.y + 0.5*ps.y; 
 	pC4.x = pos.x;
 
-	if (global.intres == 0.5 && prescalex.y < 1.5) pC4.y = floor(pC4.y * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
+	if ((global.intres == 0.5 && prescalex.y < 1.5) || vgascan) pC4.y = floor(pC4.y * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
 	if (interb && no_scanlines > 0.025) pC4.y = pC4.y + smoothstep(0.40-0.5*no_scanlines, 0.60 + 0.5*no_scanlines, f)*SourceSize.w;
 	
 	vec3 color1 = COMPAT_TEXTURE(Pass1, pC4      ).rgb;
@@ -406,7 +411,7 @@ void main()
 	
 	pC4+=dy;
 
-	if (global.intres == 0.5 && prescalex.y < 1.5) pC4.y = floor((pos.y + 0.33*dy.y) * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
+	if ((global.intres == 0.5 && prescalex.y < 1.5) || vgascan) pC4.y = floor((pos.y + 0.33*dy.y) * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
 	
 	vec3 color2 = COMPAT_TEXTURE(Pass1, pC4      ).rgb;
 	vec3 scolor2 = 	COMPAT_TEXTURE(Pass1, pC4      ).aaa;

@@ -366,19 +366,22 @@ float HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = global.HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR
 #pragma parameter HSM_INTERLACE_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter HSM_INTERLACE_TITLE								"[ INTERLACING From Guest.r :) ]:" 0 0 0.001 0.001
 
-#pragma parameter HSM_INTERLACE_TRIGGER_RES 						"          Interlacing and Fake Scanlines Trigger Res" 650 100 2000 25
-#define HSM_INTERLACE_TRIGGER_RES global.HSM_INTERLACE_TRIGGER_RES
+#pragma parameter HSM_INTERLACE_SUPPORT1 							"[ Interlace Mode is what happens at Trigger Resolution ]" 0 0 0.0001 1
+#pragma parameter HSM_INTERLACE_SUPPORT2 							"[ -1:NO SCANLN 0:NO LACE 1-3:NORM LACE 4-5:INTERPOLATE FIELDS ]" 0 0 0.0001 1
 
-#pragma parameter HSM_INTERLACE_MODE 								"    Interlace Mode: -1:NO SCANLN 0:OFF 1-3:NORM 4-5:INTERPOLATE" 4 -1.0 5.0 1.0
+#pragma parameter HSM_INTERLACE_MODE 								"          Interlace Mode:" 4 -1.0 5.0 1.0
 #define HSM_INTERLACE_MODE global.HSM_INTERLACE_MODE
 
-#pragma parameter HSM_INTERLACE_EFFECT_SMOOTHNESS_INTERS 			"          Interlacing Effect Smoothness" 0 0 100 10
+#pragma parameter HSM_INTERLACE_TRIGGER_RES 						"          Vertical Trigger Res (For Interlace & Fake Scanlines)" 650 100 2000 25
+#define HSM_INTERLACE_TRIGGER_RES global.HSM_INTERLACE_TRIGGER_RES
+
+#pragma parameter HSM_INTERLACE_EFFECT_SMOOTHNESS_INTERS 			"          Interlace Effect Smoothness" 0 0 100 10
 #define HSM_INTERLACE_EFFECT_SMOOTHNESS_INTERS global.HSM_INTERLACE_EFFECT_SMOOTHNESS_INTERS / 200
 
-#pragma parameter HSM_INTERLACE_SCANLINE_EFFECT 					"          Interlacing Scanline Effect ('Laced brightness)" 0.20 0.0 1.0 0.05
+#pragma parameter HSM_INTERLACE_SCANLINE_EFFECT 					"          Interlace Scanline Effect ('Laced brightness)" 0.20 0.0 1.0 0.05
 #define HSM_INTERLACE_SCANLINE_EFFECT global.HSM_INTERLACE_SCANLINE_EFFECT / 100
 
-#pragma parameter iscans 				                            "          Interlacing (Scanline) Saturation" 0.25 0 1 0.05
+#pragma parameter iscans 				                            "          Interlace (Scanline) Saturation" 0.25 0 1 0.05
 #define iscans global.iscans
 
 

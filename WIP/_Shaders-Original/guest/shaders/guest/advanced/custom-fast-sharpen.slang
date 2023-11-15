@@ -30,7 +30,7 @@ layout(push_constant) uniform Push
 } params;
 
 #pragma parameter CSHARPEN  "Sharpen strength"       0.00 0.0 5.00 0.10 
-#pragma parameter CCONTR    "Amount of sharpening"  0.05 0.0 0.25 0.01 
+#pragma parameter CCONTR    "Ammount of sharpening"  0.05 0.0 0.25 0.01 
 #pragma parameter CDETAILS  "Details sharpened "     1.00 0.0 1.00 0.05 
 
 #define CSHARPEN params.CSHARPEN

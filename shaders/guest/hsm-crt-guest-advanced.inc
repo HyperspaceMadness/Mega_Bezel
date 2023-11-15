@@ -126,6 +126,7 @@
 
 // #pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
 
+// HSM the resolution scaling is controlled by HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR
 // #pragma parameter intres "          Internal Resolution Y: 0.5...y-dowsample" 0.0 0.0 6.0 0.5 // Joint parameter with linearize pass, values must match
 
 // #pragma parameter TATE "          TATE Mode" 0.0 0.0 1.0 1.0
@@ -280,35 +281,42 @@ void main()
 
 	float TATE = USE_VERTICAL_SCANLINES;
 
-	/* HSM Removed
-	vec2 prescalex = vec2(vec2(textureSize(LinearizePass, 0))/global.OriginalSize.xy);
-	
-	vec4 SourceSize = global.OriginalSize * mix( vec4(prescalex.x, 1.0, 1.0/prescalex.x, 1.0), vec4(1.0, prescalex.y, 1.0, 1.0/prescalex.y), TATE);
-	*/
-
 	// HSM Added
+	vec2 prescalex = vec2(vec2(textureSize(LinearizePass, 0))/global.DerezedPassSize.xy);
 
-	vec4 SourceSize = vec4(CROPPED_ROTATED_SIZE_WITH_RES_MULT, 1 / CROPPED_ROTATED_SIZE_WITH_RES_MULT);
-	// float sy = CROPPED_ROTATED_SIZE_WITH_RES_MULT.y / CROPPED_ROTATED_SIZE.y;
+	vec4 SourceSize = vec4(CROPPED_ROTATED_SIZE, 1 / CROPPED_ROTATED_SIZE) * mix( vec4(prescalex.x, 1.0, 1.0/prescalex.x, 1.0), vec4(1.0, prescalex.y, 1.0, 1.0/prescalex.y), TATE);
 
 	// float lum = COMPAT_TEXTURE(AvgLumPass, vec2(0.5,0.5)).a;
-	
+
+	// // HSM Added
+	// // If Use Fake Scanlines is On then turn off Guest Scanlines as they will just look bad
+	// float scan_res = (1 - USE_VERTICAL_SCANLINES) * CROPPED_ROTATED_SIZE_WITH_RES_MULT.y + 
+	// 					USE_VERTICAL_SCANLINES *  CROPPED_ROTATED_SIZE_WITH_RES_MULT.x;
+
+	float hsm_no_scanlines = HSM_GetUseFakeScanlines()  ? 1 : no_scanlines;
+	// float hsm_no_scanlines = HSM_GetUseFakeScanlines() || HSM_INTERLACE_MODE < 0 && HSM_INTERLACE_TRIGGER_RES <= scan_res ? 1 : no_scanlines;
+
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
-	bool interb  = (intera < 0.5);
-	bool notate  = (TATE < 0.5);
+	bool interb  = ((intera < 0.35) || (hsm_no_scanlines > 0.025));
+	// bool notate  = (TATE < 0.5);
+	bool vgascan = ((abs(intera-0.5) < 0.05) && (hsm_no_scanlines == 0.0));
 
-	if (USE_VERTICAL_SCANLINES > 0.5 && interb)
-		notate = true;
+	float SourceY = mix(SourceSize.y, SourceSize.x, TATE);
+
+	float hsm_intres = 1 / HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR;
+	float sy = hsm_intres;
 
 	/* HSM Removed
-	float SourceY = mix(SourceSize.y, SourceSize.x, TATE);
-	// HSM TODO need sy, seems to be a scale multiplier on interpreted source resolution
-	float sy = 1.0;
-	if (global.intres == 1.0) sy = SourceY/224.0;
-	if (global.intres > 0.25 && global.intres != 1.0) sy = global.intres;
-	if (notate) SourceSize*=vec4(1.0, 1.0/sy, 1.0, sy); else SourceSize*=vec4(1.0/sy, 1.0, sy, 1.0);
-	
+	if (hsm_intres == 1.0) sy = SourceY/224.0;
+	if (hsm_intres > 0.25 && hsm_intres != 1.0) sy = hsm_intres;
+	*/
+	// VGA Scan Mode
+	if (vgascan) sy = 0.5; else if (abs(intera-0.75) < 0.05) sy = 1.0;
+
+	if (TATE < 0.5) SourceSize*=vec4(1.0, 1.0/sy, 1.0, sy); else SourceSize*=vec4(1.0/sy, 1.0, sy, 1.0);
+
+	/* HSM Removed
 	// Calculating texel coordinates
    
 	vec2 texcoord = TEX0.xy;
@@ -321,7 +329,7 @@ void main()
 		if (IOS == 1.0 || IOS == 3.0) texcoord = mix(vec2(TEX0.x, texcoord.y), vec2(texcoord.x, TEX0.y), TATE);
 	}
    
-	float factor  = 1.00 + (1.0-0.5*HSM_OVERSCAN_RASTER_BLOOM_MODE)*HSM_OVERSCAN_RASTER_BLOOM_AMOUNT/100.0 - lum*HSM_OVERSCAN_RASTER_BLOOM_AMOUNT/100.0;
+	float factor  = 1.00 + (1.0-0.5*OS)*BLOOM/100.0 - lum*BLOOM/100.0;
 	texcoord  = Overscan(texcoord, factor, factor);
 
 	texcoord = Overscan(texcoord, (global.OriginalSize.x - overscanX)/global.OriginalSize.x, (global.OriginalSize.y - overscanY)/global.OriginalSize.y);
@@ -329,8 +337,7 @@ void main()
 	vec2 pos  = Warp(texcoord);
  	*/
 
-	// HSM Added
-	float sy = mix(SAMPLING_OPPOSITE_DIR_MULT, SAMPLING_SCANLINE_DIR_MULT, TATE);
+	// HSM Added Raster Bloom
 	float raster_bloom_avg_lum = texture(AvgLumPass, vec2(0.5,0.5)).a;
 	vec2 screen_curved_coord = vec2(0.5);
 	vec2 screen_curved_coord_with_overscan = vec2(0.5);
@@ -348,7 +355,7 @@ void main()
 	vec2 pos = screen_curved_coord_with_overscan_and_mirror;
 	// End Addition
 
-	bool smarte  = (smart_ei > 0.01); // smart edge interpolation on / off
+	bool smarte  = (smart_ei > 0.01 && TATE < 0.5); // smart edge interpolation on / off
 
 	vec2 coffset = vec2(0.5, 0.5);
 
@@ -367,51 +374,27 @@ void main()
 	vec2 off2 = x2;
 	vec2 offy = dy;
 	float fpx = fp.x;
-	if(!notate)
+	if(TATE > 0.5)
 	{
 		offx = dy;
 		off2 = y2;
 		offy = dx;
 		fpx = fp.y;
 	}
-	float  f = (notate) ? fp.y : fp.x;
+	float  f = TATE < 0.5 ? fp.y : fp.x;
 	
 	vec2 pC4 = floor(OGL2Pos) * ps + 0.5*ps; 
 
-	/* HSM Removed
-	if (global.intres == 0.5 &&  notate && prescalex.y < 1.5) pC4.y = floor(pC4.y * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
-	if (global.intres == 0.5 && !notate && prescalex.x < 1.5) pC4.x = floor(pC4.x * global.OriginalSize.x)*global.OriginalSize.z + 0.5*global.OriginalSize.z;
-	*/
-
-// TODO could do something to support the VGA double resolution of the 
-
-
-	/* HSM Removed
-	if (interb && no_scanlines < 0.025)  pC4.y = pos.y; else if (interb) pC4.y = pC4.y + smoothstep(0.40-0.5*no_scanlines, 0.60 + 0.5*no_scanlines, f)*mix(SourceSize.w, SourceSize.z, TATE);
-	*/
-
-	// HSM Added
-	// If Use Fake Scanlines is On then turn off Guest Scanlines as they will just look bad
-	float scan_res = (1 - USE_VERTICAL_SCANLINES) * CROPPED_ROTATED_SIZE_WITH_RES_MULT.y + 
-						USE_VERTICAL_SCANLINES *  CROPPED_ROTATED_SIZE_WITH_RES_MULT.x;
-	float hsm_no_scanlines = HSM_GetUseFakeScanlines() || HSM_INTERLACE_MODE < 0 && HSM_INTERLACE_TRIGGER_RES <= scan_res ? 1 : no_scanlines;
-
+	if ((hsm_intres == 0.5 &&  TATE < 0.5 && prescalex.y < 1.5) || vgascan) pC4.y = floor(pC4.y * global.DerezedPassSize.y)*global.DerezedPassSize.w + 0.5*global.DerezedPassSize.w;
+	if ((hsm_intres == 0.5 && TATE > 0.5 && prescalex.x < 1.5) || (vgascan && TATE > 0.5)) pC4.x = floor(pC4.x * global.DerezedPassSize.x)*global.DerezedPassSize.z + 0.5*global.DerezedPassSize.z;
 
 	if (interb && hsm_no_scanlines < 0.025)  pC4.y = pos.y; else if (interb) pC4.y = pC4.y + smoothstep(0.40-0.5*hsm_no_scanlines, 0.60 + 0.5*hsm_no_scanlines, f)*mix(SourceSize.w, SourceSize.z, TATE);
 
 	float zero = exp2(-h_sharp);
 	float sharp1 = s_sharp * zero;
 	
-	/* HSM Removed
 	float idiv = clamp(mix(SourceSize.x, SourceSize.y, TATE) / 400.0, 1.0, 2.0);
 	float fdivider = max(min(mix(prescalex.x, prescalex.y,TATE), 2.0), idiv*float(interb));
-	*/
-	
-	// HSM Added
-	float fdivider = min((1 - USE_VERTICAL_SCANLINES) * SAMPLING_SCANLINE_DIR_MULT + 
-			   				  USE_VERTICAL_SCANLINES *  SAMPLING_OPPOSITE_DIR_MULT, 
-			   				  2.0);
-	// End Addition
 
 	float wl3 = (2.0 + fpx)/fdivider;
 	float wl2 = (1.0 + fpx)/fdivider;
@@ -497,12 +480,8 @@ void main()
 {	
 	pC4+=offy;
 
-	/* HSM Removed
-	if (global.intres == 0.5 &&  notate && prescalex.y < 1.5) pC4.y = floor((pos.y + 0.33*offy.y) * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
-	if (global.intres == 0.5 && !notate && prescalex.x < 1.5) pC4.x = floor((pos.x + 0.33*offy.x) * global.OriginalSize.x)*global.OriginalSize.z + 0.5*global.OriginalSize.z;
-	*/
-
-// TODO could do something to support the VGA double resolution of the 
+	if ((hsm_intres == 0.5 &&  TATE < 0.5 && prescalex.y < 1.5) || vgascan) pC4.y = floor((pos.y + 0.33*offy.y) * global.DerezedPassSize.y)*global.DerezedPassSize.w + 0.5*global.DerezedPassSize.w;
+	if ((hsm_intres == 0.5 && TATE > 0.5 && prescalex.x < 1.5) || (vgascan && TATE > 0.5)) pC4.x = floor((pos.x + 0.33*offy.x) * global.DerezedPassSize.x)*global.DerezedPassSize.z + 0.5*global.DerezedPassSize.z;
 
 	l3 = COMPAT_TEXTURE(LinearizePass, pC4 -off2).rgb;
 	l2 = COMPAT_TEXTURE(LinearizePass, pC4 -offx).rgb;
@@ -619,7 +598,17 @@ if (!interb)
 
 	if (HSM_GetUseFakeScanlines())
 	{
-		vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 1, TUBE_DIFFUSE_SCALE, TUBE_SCALE, TUBE_DIFFUSE_ASPECT, 1);
-		FragColor = HSM_ApplyScanlineMask(FragColor, screen_scale_with_overscan, screen_coord_with_overscan, screen_curved_coord_with_overscan, tube_curved_coord, HSM_FAKE_SCANLINE_OPACITY);
+		vec2 tube_curved_coord = HSM_GetTubeCurvedCoord(TUBE_DIFFUSE_COORD, 
+														1, 
+														TUBE_DIFFUSE_SCALE, 
+														TUBE_SCALE, 
+														TUBE_DIFFUSE_ASPECT, 
+														1);
+		FragColor = HSM_ApplyScanlineMask(FragColor, 
+											screen_scale_with_overscan, 
+											screen_coord_with_overscan, 
+											screen_curved_coord_with_overscan, 
+											tube_curved_coord, 
+											HSM_FAKE_SCANLINE_OPACITY);
 	}
 }

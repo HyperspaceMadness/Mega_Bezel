@@ -132,12 +132,12 @@ layout(push_constant) uniform Push
 
 #pragma parameter DG_COLOR_SPACE_EMPTY_LINE " " 0 0 0.001 0.001
 #pragma parameter DG_SIGNAL_CSPACE_TITLE "[ SIGNAL & COLOR SPACE ]:" 0 0 0 1
-#pragma parameter g_signal_type         "          Signal Type (0:RGB 1:Composite)"                             1.0  0.0 1.0 1.0
-#pragma parameter dg_support1           "Phosphor Gamuts for the different Regions/Eras:"                       0.0  0.0 0.0001 0.0001
-#pragma parameter dg_support2           "    -3:SMPTE 170M  -2:Rear Proj TV 95  -1:P22 80s  0:sRGB Prims"       0.0  0.0 0.0001 0.0001
-#pragma parameter dg_support3           "     1: P22 90s     2: P22 NTSC-J       3: SMPTE 470BG"                0.0  0.0 0.0001 0.0001
+#pragma parameter dg_support1           "[ Phosphor Gamuts for the different Regions/Eras: ]"                   0.0  0.0 0.0001 0.0001
+#pragma parameter dg_support2           "[ -3:SMPTE 170M  -2:Rear Proj TV 95  -1:P22 80s  0:sRGB Prims ]"       0.0  0.0 0.0001 0.0001
+#pragma parameter dg_support3           "[  1: P22 90s     2: P22 NTSC-J       3: SMPTE 470BG ]"                0.0  0.0 0.0001 0.0001
 #pragma parameter g_crtgamut            "   Phosphor Gamut"                                                     1.0 -3.0 3.0 1.0  // Dogway Default was 2 NTSC-J
 #pragma parameter g_space_out           "   Diplay Color Space (-1:709 0:sRGB 1:P3-D65 2:2020 3:Adobe)"         0.0 -1.0 3.0 1.0
+#pragma parameter g_signal_type         "   Signal Type (0:RGB 1:Composite)"                                    1.0  0.0 1.0 1.0
 #pragma parameter g_Dark_to_Dim         "   Dark to Dim adaptation"                                             1.0  0.0 1.0 1.0
 #pragma parameter g_GCompress           "   Gamut Compression"                                                  1.0  0.0 1.0 1.0
 
