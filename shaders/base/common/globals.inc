@@ -152,6 +152,7 @@ float HSM_SINDEN_BORDER_EMPTY_TUBE_COMPENSATION;
 	float HSM_INTERLACE_EFFECT_SMOOTHNESS_INTERS;
 	float HSM_INTERLACE_SCANLINE_EFFECT;
 	float iscans;
+	float vga_mode;
 
 	//    FAKE SCANLINES
 	float HSM_FAKE_SCANLINE_MODE;
@@ -706,7 +707,6 @@ float HSM_REFLECT_MASK_MIPMAPPING_BLEND_BIAS;
 	float m_glow_dist;
 	float m_glow_mask;
 	float smask_mit;
-	float mask_zoom;
 	float bmask;
 	float bmask1;
 	float hmask1;
@@ -775,6 +775,8 @@ float HSM_REFLECT_MASK_MIPMAPPING_BLEND_BIAS;
 	float mcut;	
 	float maskboost;
 	float masksize;
+	float mask_zoom;
+	float mzoom_sh;
 	float masksizeautothreshold;
 	float maskDark;
 	float maskLight;

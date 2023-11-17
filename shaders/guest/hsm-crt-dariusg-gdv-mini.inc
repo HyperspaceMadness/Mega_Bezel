@@ -68,8 +68,8 @@ layout(push_constant) uniform Push
 #pragma parameter shadowMask 		"          CRT Mask: 0:CGWG, 1-4:Lottes, 5-6:Trinitron" 0.0 -1.0 10.0 1.0
 #define shadowMask params.shadowMask
 
-#pragma parameter masksize 			"          CRT Mask Size (2.0 is nice in 4k) -- masksize" 0.0 0.0 2.0 1.0
-#define masksize params.masksize
+#pragma parameter masksize 			"          Mask Size - 0:Auto | 2K | 4k -- masksize" 1.0 0.0 4 1.0
+#define masksize     global.masksize     // Mask Size
 
 #pragma parameter mcut 				"          Mask 5-7-10 cutoff -- mcut" 0.2 0.0 0.5 0.05
 #define mcut params.mcut

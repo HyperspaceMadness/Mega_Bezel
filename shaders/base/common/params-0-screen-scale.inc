@@ -372,7 +372,7 @@ float HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = global.HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR
 #pragma parameter HSM_INTERLACE_MODE 								"          Interlace Mode:" 4 -1.0 5.0 1.0
 #define HSM_INTERLACE_MODE global.HSM_INTERLACE_MODE
 
-#pragma parameter HSM_INTERLACE_TRIGGER_RES 						"          Vertical Trigger Res (For Interlace & Fake Scanlines)" 650 100 2000 25
+#pragma parameter HSM_INTERLACE_TRIGGER_RES 						"          Trigger Res for Interlace, Fake Scanlines & VGA" 375 100 2000 25
 #define HSM_INTERLACE_TRIGGER_RES global.HSM_INTERLACE_TRIGGER_RES
 
 #pragma parameter HSM_INTERLACE_EFFECT_SMOOTHNESS_INTERS 			"          Interlace Effect Smoothness" 0 0 100 10
@@ -383,6 +383,9 @@ float HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = global.HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR
 
 #pragma parameter iscans 				                            "          Interlace (Scanline) Saturation" 0.25 0 1 0.05
 #define iscans global.iscans
+
+#pragma parameter vga_mode                                          "          VGA Single/Double Scan mode" 0.0 0.0 1.0 1.0
+#define vga_mode  global.vga_mode     // interlace saturation
 
 
 //---------------------------------------------------------------------------------------------------
