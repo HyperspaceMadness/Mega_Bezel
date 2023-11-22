@@ -17,8 +17,8 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter NTSC_EMPTY_LINE		" " 0 0 0.001 0.001
 #pragma parameter ntsc_quality_title   "[ NTSC QUALITY ]:" 0 0 0.01 0.01
-// TODO seems like quality has been removed
-#pragma parameter quality              "   Fringe & Artifact Values: Svideo 0 | Composite 1 | RF 2" 0 0 0.001 0.001
+
+#pragma parameter quality              "INFO:  Fringe & Artifact Values: Svideo 0 | Composite 1 | RF 2" 0 0 0.001 0.001
 #pragma parameter cust_fringing        "          Fringing Value" 1.0 0.0 5.0 0.1
 #pragma parameter cust_artifacting     "          Artifacting Value" 1.0 0.0 5.0 0.1
 
@@ -28,7 +28,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter ntsc_scale           "          Resolution Scaling" 1.0 0.20 2.5 0.025
 
 #pragma parameter ntsc_color_title     "[ NTSC COLOR & BRIGHTNESS]:" 0 0 0.01 0.01
-#pragma parameter ntsc_cscale          "          Chroma Scaling / Bleeding" 1.0 0.20 2.25 0.05
+#pragma parameter ntsc_cscale          "          Chroma Scaling / Bleeding" 1.0 0.20 4.0 0.05
 #pragma parameter ntsc_sat             "          Color Saturation" 1.0 0.0 2.0 0.01
 #pragma parameter ntsc_bright          "          Brightness" 1.0 0.0 1.5 0.01
 

@@ -3,7 +3,7 @@
 Mega Bezel is updated to V1.15.0_2023-11-18
 
 Changes:
-  * Updated to Guest Advanced crt-guest-advanced-2023-11-01-release1
+  * Updated to Guest Advanced crt-guest-advanced-2023-11-18-release1
   * Updated to latest Grade
   * Grade Color Temperature set to 7200
 

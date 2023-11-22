@@ -17,7 +17,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
    float ntsc_cscale;
 } global;
 
-#pragma parameter ntsc_cscale          "          Chroma Scaling / Bleeding" 1.0 0.20 2.25 0.05
+#pragma parameter ntsc_cscale          "          Chroma Scaling / Bleeding" 1.0 0.20 4.0 0.05
 #pragma parameter ntsc_scale           "          Resolution Scaling" 1.0 0.20 2.5 0.025
 #pragma parameter ntsc_phase           "          Phase: Auto | 2 phase | 3 phase | Mixed" 1.0 1.0 4.0 1.0
 #pragma parameter ntsc_ring            "          Anti-Ringing" 0.5 0.0 1.0 0.10
@@ -40,10 +40,11 @@ layout(set = 0, binding = 2) uniform sampler2D Source;
 layout(set = 0, binding = 3) uniform sampler2D PrePass0;
 
 
-vec3 fetch_offset(float offset, float one_x)
+vec3 fetch_offset(float offset, vec2 one_x)
 {
-   return vec3(texture(Source, vTexCoord + vec2((offset) * (one_x), 0.0)).x, texture(Source, vTexCoord + vec2((offset) * (one_x/global.ntsc_cscale), 0.0)).yz);
+   return vec3(texture(Source, vTexCoord + vec2((offset) * (one_x.x), 0.0)).x, texture(Source, vTexCoord + vec2((offset) * one_x.y, 0.0)).yz);
 }
+
 
 const mat3 yiq2rgb_mat = mat3(
    1.0, 0.956, 0.6210,
@@ -95,8 +96,8 @@ const float luma_filter_2_phase[33] = float[33](
    -0.016897700,
    -0.022914480,
    -0.021642347,
-   -0.008863273,
-   0.017271957,
+   -0.028863273,
+   0.027271957,
    0.054921920,
    0.098342579,
    0.139044281,
@@ -235,11 +236,13 @@ float chroma_filter_2_phase[33] = float[33](
    0.031517031);
 
    float res = global.ntsc_scale;
-   float one_x = global.SourceSize.z / res;
+   float OriginalSize = global.DerezedPassSize.x;
+   vec2 one_x = global.SourceSize.zz / res;
    vec3 signal = vec3(0.0);
-   float phase = (global.ntsc_phase < 1.5) ? ((global.DerezedPassSize.x > 300.0) ? 2.0 : 3.0) : ((global.ntsc_phase > 2.5) ? 3.0 : 2.0);
+   float phase = (global.ntsc_phase < 1.5) ? ((OriginalSize > 300.0) ? 2.0 : 3.0) : ((global.ntsc_phase > 2.5) ? 3.0 : 2.0);
    if (global.ntsc_phase == 4.0) { phase = 2.0; chroma_filter_2_phase = chroma_filter_4_phase; }
    
+   float cres = global.ntsc_cscale; if (phase == 3.0 || global.ntsc_phase == 4.0) cres = min(cres, 2.25); one_x.y = one_x.y/cres;
 
    if(phase < 2.5)
    {

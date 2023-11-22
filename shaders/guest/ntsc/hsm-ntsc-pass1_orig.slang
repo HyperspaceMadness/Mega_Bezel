@@ -15,14 +15,14 @@ layout(std140, set = 0, binding = 0) uniform UBO
 } global;
 
 #pragma parameter ntsc-row1 "------------------------------------------------" 0.0 0.0 1.0 1.0
-#pragma parameter quality "Values: Svideo = 0.0 | Composite = 1.0 | RF = 2.0" 0.0 0.0 1.0 1.0
+#pragma parameter quality "Values (Info Only): Svideo = 0.0 | Composite = 1.0 | RF = 2.0" 0.0 0.0 0.0 1.0
 #pragma parameter cust_fringing "NTSC Fringing Value" 1.0 0.0 5.0 0.1
 #pragma parameter cust_artifacting "NTSC Artifacting Value" 1.0 0.0 5.0 0.1
 #pragma parameter ntsc-row2 "------------------------------------------------" 0.0 0.0 1.0 1.0
 #pragma parameter ntsc_fields "NTSC Merge Fields: Auto | NO | YES" -1.0 -1.0 1.0 1.0
 #pragma parameter ntsc_phase "NTSC Phase: Auto | 2 phase | 3 phase | Mixed" 1.0 1.0 4.0 1.0
 #pragma parameter ntsc_scale "NTSC Resolution Scaling" 1.0 0.20 2.5 0.025
-#pragma parameter ntsc_cscale "NTSC Chroma Scaling / Bleeding" 1.0 0.20 2.25 0.05
+#pragma parameter ntsc_cscale "NTSC Chroma Scaling / Bleeding" 1.0 0.20 4.0 0.05
 #pragma parameter ntsc_sat "NTSC Color Saturation" 1.0 0.0 2.0 0.01
 #pragma parameter ntsc_bright "NTSC Brightness" 1.0 0.0 1.5 0.01
 

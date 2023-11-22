@@ -112,8 +112,8 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter beam_size "          Increased Bright Scanline Beam" 0.60 0.0 1.0 0.05
 #define beam_size    params.beam_size     // increased max. beam size
 
-#pragma parameter scans "          Scanline Saturation / Mask Falloff" 0.5 0.0 5.0 0.10
-#define scans        params.scans     // scanline saturation
+#pragma parameter scans "          Scanline Saturation / Mask Falloff" 0.50 0.0 6.0 0.10
+#define scans        1.5*params.scans     // scanline saturation
 
 #pragma parameter scan_falloff "          Scanline Falloff" 1.0 0.10 2.0 0.025
 #define scan_falloff        global.scan_falloff     // scanline falloff
@@ -193,7 +193,7 @@ float st1(float x)
 vec3 sw(float x, vec3 color, float c, float scanline)
 {
 	float tmp = mix(beam_min, beam_max, c);
-	vec3  sat = mix(1.0.xxx + 1.5*scans, 1.0.xxx, color/c);
+	vec3  sat = mix(1.0.xxx + scans, 1.0.xxx, color/c);
 	float  ex = x*tmp;
 	return exp2(-scanline*ex*ex*sat);
 } 
