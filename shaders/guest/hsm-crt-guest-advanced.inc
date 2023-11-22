@@ -100,8 +100,8 @@
 #pragma parameter scangamma "          Scanline Gamma" 2.40 0.5 10.0 0.05
 #define scangamma 	global.scangamma
 
-#pragma parameter no_scanlines "          No-Scanline Mode (Guest Advanced Only)" 0.0 0.0 1.5 0.05
-#define no_scanlines global.no_scanlines
+// #pragma parameter no_scanlines "          No-Scanline Mode (Guest Advanced Only)" 0.0 0.0 1.5 0.05
+// #define no_scanlines global.no_scanlines
 
 #pragma parameter GDV_FILTERING_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter bogus_filtering "[ FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
@@ -282,25 +282,21 @@ void main()
 	float TATE = USE_VERTICAL_SCANLINES;
 
 	// HSM Added
-	vec2 prescalex = vec2(vec2(textureSize(LinearizePass, 0))/global.DerezedPassSize.xy);
+	vec2 prescalex = textureSize(LinearizePass, 0).xy / global.DerezedPassSize.xy;
 
 	vec4 SourceSize = vec4(CROPPED_ROTATED_SIZE, 1 / CROPPED_ROTATED_SIZE) * mix( vec4(prescalex.x, 1.0, 1.0/prescalex.x, 1.0), vec4(1.0, prescalex.y, 1.0, 1.0/prescalex.y), TATE);
 
 	// float lum = COMPAT_TEXTURE(AvgLumPass, vec2(0.5,0.5)).a;
 
-	// // HSM Added
-	// // If Use Fake Scanlines is On then turn off Guest Scanlines as they will just look bad
-	// float scan_res = (1 - USE_VERTICAL_SCANLINES) * CROPPED_ROTATED_SIZE_WITH_RES_MULT.y + 
-	// 					USE_VERTICAL_SCANLINES *  CROPPED_ROTATED_SIZE_WITH_RES_MULT.x;
-
-	float hsm_no_scanlines = HSM_GetUseFakeScanlines()  ? 1 : no_scanlines;
-	// float hsm_no_scanlines = HSM_GetUseFakeScanlines() || HSM_INTERLACE_MODE < 0 && HSM_INTERLACE_TRIGGER_RES <= scan_res ? 1 : no_scanlines;
+	// HSM Added
+	// Find out if we should use no scanlines based on interlace mode, no scanlines param, & intetrlace settings
+	float no_scanlines = HSM_GetNoScanlineMode();
 
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
-	bool interb  = ((intera < 0.35) || (hsm_no_scanlines > 0.025));
+	bool interb  = ((intera < 0.35) || (no_scanlines > 0.025));
 	// bool notate  = (TATE < 0.5);
-	bool vgascan = ((abs(intera-0.5) < 0.05) && (hsm_no_scanlines == 0.0));
+	bool vgascan = ((abs(intera-0.5) < 0.05) && (no_scanlines == 0.0));
 
 	float SourceY = mix(SourceSize.y, SourceSize.x, TATE);
 
@@ -388,7 +384,7 @@ void main()
 	if ((hsm_intres == 0.5 &&  TATE < 0.5 && prescalex.y < 1.5) || vgascan) pC4.y = floor(pC4.y * global.DerezedPassSize.y)*global.DerezedPassSize.w + 0.5*global.DerezedPassSize.w;
 	if ((hsm_intres == 0.5 && TATE > 0.5 && prescalex.x < 1.5) || (vgascan && TATE > 0.5)) pC4.x = floor(pC4.x * global.DerezedPassSize.x)*global.DerezedPassSize.z + 0.5*global.DerezedPassSize.z;
 
-	if (interb && hsm_no_scanlines < 0.025)  pC4.y = pos.y; else if (interb) pC4.y = pC4.y + smoothstep(0.40-0.5*hsm_no_scanlines, 0.60 + 0.5*hsm_no_scanlines, f)*mix(SourceSize.w, SourceSize.z, TATE);
+	if (interb && no_scanlines < 0.025)  pC4.y = pos.y; else if (interb) pC4.y = pC4.y + smoothstep(0.40-0.5*no_scanlines, 0.60 + 0.5*no_scanlines, f)*mix(SourceSize.w, SourceSize.z, TATE);
 
 	float zero = exp2(-h_sharp);
 	float sharp1 = s_sharp * zero;

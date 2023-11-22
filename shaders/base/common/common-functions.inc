@@ -992,6 +992,15 @@ bool HSM_GetUseFakeScanlines()
 	return HSM_FAKE_SCANLINE_OPACITY > 0.001 && (HSM_FAKE_SCANLINE_MODE == 1 || (HSM_FAKE_SCANLINE_MODE == 2 && scane_axis_core_res > HSM_INTERLACE_TRIGGER_RES));
 }
 
+float HSM_GetNoScanlineMode()
+{
+	// If Use Fake Scanlines is On then turn off Guest Scanlines as they will just look bad
+	float scan_res = (1 - USE_VERTICAL_SCANLINES) * CROPPED_ROTATED_SIZE_WITH_RES_MULT.y + 
+						USE_VERTICAL_SCANLINES *  CROPPED_ROTATED_SIZE_WITH_RES_MULT.x;
+
+	return global.no_scanlines > 0.5 || HSM_GetUseFakeScanlines() || HSM_INTERLACE_MODE < 0 && HSM_INTERLACE_TRIGGER_RES <= scan_res ? 1 : 0;
+}
+
 vec4 HSM_ApplyScanlineMask(vec4 in_color, vec2 screen_scale, vec2 in_coord, vec2 in_screen_curved_coord, vec2 in_tube_curved_coord, float in_scanline_opacity)
 {
 	//   Stuff to try implementing

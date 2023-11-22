@@ -123,12 +123,12 @@ layout(push_constant) uniform Push
 #pragma parameter scangamma "          Scanline Gamma -- scangamma" 2.40 0.5 5.0 0.05
 #define scangamma global.scangamma
 
-#pragma parameter no_scanlines "          No-Scanline Mode (Guest Advanced Only)" 0.0 0.0 1.5 0.05
-#define no_scanlines global.no_scanlines
+// #pragma parameter no_scanlines "          No-Scanline Mode (Guest Advanced Only)" 0.0 0.0 1.5 0.05
+// #define no_scanlines global.no_scanlines
 
 // #pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
 
-#pragma parameter intres "          Internal Resolution Y: 0.5...y-dowsample" 0.0 0.0 6.0 0.5 // Joint parameter with linearize pass, values must match
+// #pragma parameter intres "          Internal Resolution Y: 0.5...y-dowsample" 0.0 0.0 6.0 0.5 // Joint parameter with linearize pass, values must match
 
 // #pragma parameter IOS "          Integer Scaling: Odd:Y, Even:'X'+Y" 0.0 0.0 4.0 1.0
 // #define IOS          params.IOS     // Smart Integer Scaling
@@ -280,17 +280,13 @@ void main()
 			return;
 	}
 
-	/* HSM Removed
-	float prescalex = float(textureSize(LinearizePass, 0).x) / (2.0*global.OriginalSize.x);
-	
-	vec4 SourceSize = global.OriginalSize * vec4(prescalex, 1.0, 1.0/prescalex, 1.0);
-	*/
+	// HSM Added
 
-	float prescalex = float(textureSize(LinearizePass, 0).x) / (2.0*global.DerezedPassSize.x);
+	// Find out if we should use no scanlines based on interlace mode, no scanlines param, & intetrlace settings
+	float no_scanlines = HSM_GetNoScanlineMode();
 
-	vec2 crop_ratio = CROPPED_ROTATED_SIZE / ROTATED_DEREZED_SIZE;
-	vec2 cropped_size = crop_ratio * global.DerezedPassSize.xy;
-	vec4 SourceSize = vec4(cropped_size, 1 / cropped_size) * vec4(prescalex, 1.0, 1.0/prescalex, 1.0);
+	float prescalex = float(CROPPED_ROTATED_SIZE_WITH_RES_MULT.x / CROPPED_ROTATED_SIZE.x); 
+	vec4 SourceSize = vec4(CROPPED_ROTATED_SIZE_WITH_RES_MULT, 1 / CROPPED_ROTATED_SIZE_WITH_RES_MULT);
 
 	SourceSize*= vec4(2.0, 1.0, 0.5, 1.0);
 
@@ -301,23 +297,10 @@ void main()
 	bool interb  = ((intera < 0.5) || (no_scanlines > 0.025));
 
 	float SourceY = SourceSize.y;	
+   	/* HSM Removed
 	float sy = 1.0;
-
-	/* HSM Removed
 	if (global.intres == 1.0) sy = SourceY/224.0;
 	if (global.intres > 0.25 && global.intres != 1.0) sy = global.intres;
-	*/
-	// HSM Added
-	// Get the resolution mult
-	vec2 res_mult = CROPPED_ROTATED_SIZE_WITH_RES_MULT / CROPPED_ROTATED_SIZE;
-	if (res_mult.y < 0.5)
-		sy = SourceY / 224.0;
-	else
-		sy = CROPPED_ROTATED_SIZE_WITH_RES_MULT.y / CROPPED_ROTATED_SIZE.y;
-
-	SourceSize*=vec4(1.0, 1.0/sy, 1.0, sy);
-
-   	/* HSM Removed
 	// Calculating texel coordinates
    
 	vec2 texcoord = TEX0.xy;
@@ -383,8 +366,6 @@ void main()
 	// if (global.intres == 0.5 && prescalex < 1.5) 
 		pC4.y = floor(pC4.y * SourceSize.y) * SourceSize.w + 0.5 * SourceSize.w;
 	// End Addition
-	
-	if (interb && no_scanlines < 0.025)  pC4.y = pos.y; else if (interb) pC4.y = pC4.y + smoothstep(0.40-0.5*no_scanlines, 0.60 + 0.5*no_scanlines, f)*SourceSize.w;	
 
 	vec3 color1 = COMPAT_TEXTURE(Pass1, pC4      ).rgb;
 	vec3 scolor1 = 	COMPAT_TEXTURE(Pass1, pC4      ).aaa;
@@ -454,7 +435,7 @@ if (!interb)
 
 	if (abs(clips) > 0.005)
 	{
-		sy = mc1; vec3 l1 = sqrt(w1*wt1); vec3 l2 = sqrt(w2*wt2);
+		float sy = mc1; vec3 l1 = sqrt(w1*wt1); vec3 l2 = sqrt(w2*wt2);
 		one = (clips > 0.0) ? w1 : mix(w1, l1, sy);
 		float sat = 1.0001-min(min(cref1.r,cref1.g),cref1.b);
 		color1 = mix(color1, plant(pow(color1, 0.70.xxx-0.325*sat),sy), pow(sat,0.3333)*one*abs(clips));
@@ -466,10 +447,8 @@ if (!interb)
 	
 	color = (gc(color1)*w1 + gc(color2)*w2);
 
-	// // HSM Added
-	// float scan_res = (1 - USE_VERTICAL_SCANLINES) * CROPPED_ROTATED_SIZE_WITH_RES_MULT.y + 
-	// 					USE_VERTICAL_SCANLINES *  CROPPED_ROTATED_SIZE_WITH_RES_MULT.x;
-	// float hsm_no_scanlines = HSM_INTERLACE_MODE < 0 && HSM_INTERLACE_TRIGGER_RES <= scan_res ? 1 : no_scanlines;
+
+	// 	color = (gc(color1)*w1*cd1 + gc(color2)*w2*cd2)/mix(1.0.xxx, w1+w2, no_scanlines);
 
 	color = min(color, 1.0);
 }

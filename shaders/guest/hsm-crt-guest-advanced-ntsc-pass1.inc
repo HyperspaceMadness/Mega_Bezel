@@ -102,7 +102,7 @@ void main()
 	vec4 SourceSize = params.OriginalSize * vec4(2.0*prescalex.x, prescalex.y, 0.5/prescalex.x, 1.0/prescalex.y);
 	*/
 
-	vec2 prescalex = vec2(textureSize(LinearizePass, 0)) / global.DerezedPassSize.xy;
+	vec2 prescalex = textureSize(LinearizePass, 0).xy / global.DerezedPassSize.xy;
 
 	vec4 SourceSize = global.DerezedPassSize * vec4(2.0*prescalex.x, prescalex.y, 0.5/prescalex.x, 1.0/prescalex.y);
 

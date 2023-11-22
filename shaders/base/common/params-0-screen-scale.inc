@@ -23,7 +23,7 @@
 */
 
 // Screen Scale Required Parameters
-#pragma parameter HSM_MEGA_BEZEL_TITLE								"[ --- HSM MEGA BEZEL V1.14.0_2023-04-15 --- ]" 0 0 0.001 0.001
+#pragma parameter HSM_MEGA_BEZEL_TITLE								"[ --- HSM MEGA BEZEL V1.15.0_2023-11-18 --- ]" 0 0 0.001 0.001
 
 #pragma parameter HSM_RESOLUTION_DEBUG_ON							"          Show Resolution Info" 0 0 1 1
 float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
@@ -318,17 +318,6 @@ float HSM_CROP_BLACK_THRESHOLD = global.HSM_CROP_BLACK_THRESHOLD / 100;
 #pragma parameter HSM_DREZ_SHAR 			"          Sharpness Definition" 0.5 0.0 2.0 0.05
 #pragma parameter HSM_DREZ_HAR 			    "          Anti-Ringing" 0.5 0.0 1.0 0.10
 
-//---------------------------------------------------------------------------------------------------
-//    SCANLINE DIRECTION
-//---------------------------------------------------------------------------------------------------
-#pragma parameter HSM_SCANLINE_EMPTY_LINE							" " 0 0 0.001 0.001
-#pragma parameter HSM_SCANLINE_TITLE								"[ SCANLINE DIRECTION ]:" 0 0 0.001 0.001
-
-#pragma parameter HSM_SCANLINE_DIRECTION 							"          Scanline Direction - Auto | Horiz | Vert"  0 0 2 1
-float HSM_SCANLINE_DIRECTION = global.HSM_SCANLINE_DIRECTION;
-
-#pragma parameter no_scanlines "          No-Scanline Mode (Guest Advanced Only)" 0.0 0.0 1.5 0.05
-
 
 //---------------------------------------------------------------------------------------------------
 //    CORE RES SAMPLING
@@ -360,13 +349,18 @@ float HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = global.HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR
 #pragma parameter CONTR    			"          Amount of Sharpening"  	0.05 0.0 0.25 0.01
 #pragma parameter DETAILS  			"          Details Sharpened"     	1.00 0.0 1.00 0.05
 
+// Uses naming from Guest Advanced
+#pragma parameter no_scanlines                                      "          No-Scanline Mode (Guest Advanced Only)" 0.0 0.0 1.5 0.05
+
 //---------------------------------------------------------------------------------------------------
-//    INTERLACING
+//    INTERLACING from Guest.r's Guest Advanced Shader
 //---------------------------------------------------------------------------------------------------
 #pragma parameter HSM_INTERLACE_EMPTY_LINE							" " 0 0 0.001 0.001
-#pragma parameter HSM_INTERLACE_TITLE								"[ INTERLACING From Guest.r :) ]:" 0 0 0.001 0.001
+#pragma parameter HSM_INTERLACE_TITLE								"[ SCANLINES & INTERLACING( By Guest.r) ]:" 0 0 0.001 0.001
+#pragma parameter HSM_SCANLINE_DIRECTION 							"          Scanline Direction - Auto | Horiz | Vert"  0 0 2 1
+float HSM_SCANLINE_DIRECTION = global.HSM_SCANLINE_DIRECTION;
 
-#pragma parameter HSM_INTERLACE_SUPPORT1 							"[ Interlace Mode is what happens at Trigger Resolution ]" 0 0 0.0001 1
+#pragma parameter HSM_INTERLACE_SUPPORT1							"[  Interlace Mode: What Happens if Vertical Res > Trigger Res ]" 0 0 0.001 0.001
 #pragma parameter HSM_INTERLACE_SUPPORT2 							"[ -1:NO SCANLN 0:NO LACE 1-3:NORM LACE 4-5:INTERPOLATE FIELDS ]" 0 0 0.0001 1
 
 #pragma parameter HSM_INTERLACE_MODE 								"          Interlace Mode:" 4 -1.0 5.0 1.0
