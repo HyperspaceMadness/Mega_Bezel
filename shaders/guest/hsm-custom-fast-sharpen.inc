@@ -21,6 +21,7 @@
 layout(push_constant) uniform Push
 {
 	vec4 SourceSize;
+	vec4 DerezedPassSize;
 	float SHARPEN_ON;
 	float CSHARPEN, CCONTR, CDETAILS, DEBLUR;
 } params;
@@ -96,8 +97,8 @@ void main()
 		return;
 	}
 
-	vec2 g01 = vec2(-1.0, 0.0)*params.SourceSize.zw;
-	vec2 g21 = vec2( 1.0, 0.0)*params.SourceSize.zw; 
+	vec2 g01 = vec2(-0.5*params.DerezedPassSize.z, 0.0);
+	vec2 g21 = vec2( 0.5*params.DerezedPassSize.z, 0.0); 
 
 	vec3 c01 = texture(Source, vTexCoord + g01).rgb;
 	vec3 c21 = texture(Source, vTexCoord + g21).rgb;
@@ -116,6 +117,7 @@ void main()
 	
 	vec3 res = clamp(mix(c11,b11,-sharpen), mn1,mx1);
 
+#ifdef IS_NTSC_PRESET
 if (DEBLUR > 1.125) 
 {
 	c01 = texture(PrePass0, vTexCoord + 2.0*g01).rgb;
@@ -134,6 +136,7 @@ if (DEBLUR > 1.125)
 	res.x = dot(sharpen,vec3(0.2989, 0.5870, 0.1140));
 	res = max(yiq2rgb(res),0.0);
 }
+#endif
 	
 	FragColor = vec4(res,1.0); 
 }

@@ -270,7 +270,6 @@ alias40 = "ReflectionPass"
 
 # Combine Passes ----------------------------------------------------------------
 shader41 = ../../../shaders/base/combine-passes.slang
-scale_type41 = viewport
 alias41 = "CombinePass"
 
 # Textures All
@@ -382,5 +381,3 @@ HSM_TUBE_BLACK_EDGE_THICKNESS = 50
 HSM_BZL_WIDTH = 160
 HSM_BZL_HEIGHT = 150
 HSM_FRM_THICKNESS = 100
-
-ntsc_scale = 0.33

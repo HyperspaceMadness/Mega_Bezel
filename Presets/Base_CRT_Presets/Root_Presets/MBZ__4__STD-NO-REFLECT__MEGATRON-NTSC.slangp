@@ -88,7 +88,7 @@ scale_type13 = source
 scale_x13 = 1.0
 scale_y13 = 1.0
 
-shader14 =  ../../../shaders/guest/hsm-custom-fast-sharpen.slang
+shader14 =  ../../../shaders/guest/hsm-custom-fast-sharpen-ntsc.slang
 filter_linear14 = true
 scale_type14 = source
 scale_x14 = 1.0
@@ -164,7 +164,6 @@ alias23 = "BR_LayersOverCRTPass"
 
 # Combine Passes ----------------------------------------------------------------
 shader24 = ../../../shaders/base/combine-passes-no-reflect-hdr.slang
-scale_type24 = viewport
 alias24 = "CombinePass"
 
 # Textures All

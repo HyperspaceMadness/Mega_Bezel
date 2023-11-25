@@ -31,7 +31,7 @@ layout(push_constant) uniform Push
 #pragma parameter LCD_BSUBPIX_B     "          Colour of B subpixel: B" 0.75 0.0 1.0 0.01
 #pragma parameter LCDGRID_BRIGHTNESS_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter LCD_BRIGHT_TITLE	"[ BRIGHTNESS & GAMMA ]:" 0 0 0.01 0.01
-#pragma parameter LCD_GAIN          "          Gain"                    1.75 0.5 2.0 0.05
+#pragma parameter LCD_GAIN          "          Gain"                    1.30 0.5 2.0 0.05 // This was 1.75 before for an unknown reason
 #pragma parameter LCD_GAMMA         "          LCD Gamma"               2.5 0.5 5.0 0.1
 #pragma parameter LCD_AMBIENT       "          Ambient"                 0.0 0.0 25 0.1
 #pragma parameter LCD_BGR           "          BGR LCD Sub Pixel Order" 0 0 1 1

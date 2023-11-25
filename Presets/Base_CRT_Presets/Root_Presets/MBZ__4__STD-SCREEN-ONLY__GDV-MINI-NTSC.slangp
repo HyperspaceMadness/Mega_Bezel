@@ -88,7 +88,7 @@ scale_type13 = source
 scale_x13 = 1.0
 scale_y13 = 1.0
 
-shader14 =  ../../../shaders/guest/hsm-custom-fast-sharpen.slang
+shader14 =  ../../../shaders/guest/hsm-custom-fast-sharpen-ntsc.slang
 filter_linear14 = true
 scale_type14 = source
 scale_x14 = 1.0
@@ -141,7 +141,6 @@ alias20 = "PostCRTPass"
 
 # Combine Passes ----------------------------------------------------------------
 shader21 = ../../../shaders/base/output-sdr.slang
-scale_type21 = viewport
 alias21 = "OutputPass"
 
 # Textures All

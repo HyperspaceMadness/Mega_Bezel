@@ -134,7 +134,6 @@ alias20 = "BR_LayersOverCRTPass"
 
 # Combine Passes ----------------------------------------------------------------
 shader21 = ../../../shaders/base/combine-passes-no-reflect.slang
-scale_type21 = viewport
 alias21 = "CombinePass"
 
 # Textures All

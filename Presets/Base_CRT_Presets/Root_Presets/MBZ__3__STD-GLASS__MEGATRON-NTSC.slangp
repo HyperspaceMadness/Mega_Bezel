@@ -88,7 +88,7 @@ scale_type13 = source
 scale_x13 = 1.0
 scale_y13 = 1.0
 
-shader14 =  ../../../shaders/guest/hsm-custom-fast-sharpen.slang
+shader14 =  ../../../shaders/guest/hsm-custom-fast-sharpen-ntsc.slang
 filter_linear14 = true
 scale_type14 = source
 scale_x14 = 1.0
@@ -208,7 +208,6 @@ alias27 = "ReflectionPass"
 
 # Combine Passes ----------------------------------------------------------------
 shader28 = ../../../shaders/base/output-hdr.slang
-scale_type28 = viewport
 alias28 = "OutputPass"
 
 # Textures Glass

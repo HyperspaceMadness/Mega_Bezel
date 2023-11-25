@@ -124,7 +124,7 @@ scale_type23 = source
 scale_x23 = 1.0
 scale_y23 = 1.0
 
-shader24 =  ../../../shaders/guest/hsm-custom-fast-sharpen.slang
+shader24 =  ../../../shaders/guest/hsm-custom-fast-sharpen-ntsc.slang
 filter_linear24 = true
 scale_type24 = source
 scale_x24 = 1.0
@@ -291,7 +291,6 @@ alias43 = "ReflectionPass"
 
 # Combine Passes ----------------------------------------------------------------
 shader44 = ../../../shaders/base/combine-passes.slang
-scale_type44 = viewport
 alias44 = "CombinePass"
 
 # Textures All
@@ -398,5 +397,3 @@ SHARPEN = 0
 # Drez X Viewport Scale Parameters
 HSM_ASPECT_RATIO_ORIENTATION = 1
 HSM_ASPECT_RATIO_MODE = 0
-
-ntsc_scale = 0.33

@@ -251,7 +251,6 @@ alias36 = "BR_LayersOverCRTPass"
 
 # Combine Passes ----------------------------------------------------------------
 shader37 = ../../../shaders/base/combine-passes-no-reflect.slang
-scale_type37 = viewport
 alias37 = "CombinePass"
 
 # Textures All
@@ -364,8 +363,6 @@ HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = 600
 HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR = 100
 HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR = 0
 HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = 0
-
-ntsc_scale = 0.52
 
 # gamma_c = 0.9
 # gsl = -1

@@ -276,7 +276,6 @@ alias43 = "ReflectionPass"
 
 # Combine Passes ----------------------------------------------------------------
 shader44 = ../../../shaders/base/combine-passes-hdr.slang
-scale_type44 = viewport
 alias44 = "CombinePass"
 
 # Textures All
@@ -388,8 +387,6 @@ HSM_CORE_RES_SAMPLING_MULT_SCANLINE_DIR = 600
 HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR = 100
 HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR = 0
 HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = 30
-
-ntsc_scale = 0.33
 
 # Lottes mask, a bit like a slot mask effect
 shadowMask = 1

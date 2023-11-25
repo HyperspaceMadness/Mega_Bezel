@@ -231,7 +231,6 @@ alias35 = "ReflectionPass"
 
 # Combine Passes ----------------------------------------------------------------
 shader36 = ../../../shaders/base/output-hdr.slang
-scale_type36 = viewport
 alias36 = "OutputPass"
 
 # Textures Glass

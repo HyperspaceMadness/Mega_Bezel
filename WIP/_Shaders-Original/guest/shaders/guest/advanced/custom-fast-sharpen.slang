@@ -84,8 +84,8 @@ vec3 rgb2yiq(vec3 col)
 
 void main()
 {
-	vec2 g01 = vec2(-1.0, 0.0)*params.SourceSize.zw;
-	vec2 g21 = vec2( 1.0, 0.0)*params.SourceSize.zw; 
+	vec2 g01 = vec2(-0.5*params.OriginalSize.z, 0.0);
+	vec2 g21 = vec2( 0.5*params.OriginalSize.z, 0.0); 
 
 	vec3 c01 = texture(Source, vTexCoord + g01).rgb;
 	vec3 c21 = texture(Source, vTexCoord + g21).rgb;

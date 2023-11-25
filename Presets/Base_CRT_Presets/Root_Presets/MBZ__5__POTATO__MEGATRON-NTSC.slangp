@@ -111,7 +111,6 @@ alias14 = "PostCRTPass"
 
 # Combine Passes ----------------------------------------------------------------
 shader15 = ../../../shaders/base/output-hdr.slang
-scale_type15 = viewport
 alias15 = "OutputPass"
 
 # Textures Potato

@@ -1,4 +1,4 @@
-shaders = 18
+shaders = 7
 
 
 shader0 = shaders/guest/advanced/stock.slang

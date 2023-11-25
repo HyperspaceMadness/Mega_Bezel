@@ -144,5 +144,3 @@ SHARPEN = 0
 # Drez X Viewport Scale Parameters
 HSM_ASPECT_RATIO_ORIENTATION = 1
 HSM_ASPECT_RATIO_MODE = 0
-
-ntsc_scale = 0.33

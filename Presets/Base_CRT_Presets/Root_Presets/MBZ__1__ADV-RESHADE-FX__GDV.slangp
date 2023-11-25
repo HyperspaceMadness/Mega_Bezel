@@ -342,7 +342,6 @@ alias49 = "ReflectionPass"
 
 # Combine Passes ----------------------------------------------------------------
 shader50 = ../../../shaders/base/combine-passes.slang
-scale_type50 = viewport
 alias50 = "CombinePass"
 
 # Textures All-Reshade-Fx

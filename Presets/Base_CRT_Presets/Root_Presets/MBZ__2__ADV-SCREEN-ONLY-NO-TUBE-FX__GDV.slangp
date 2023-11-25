@@ -197,7 +197,6 @@ alias32 = "PostCRTPass"
 
 # Combine Passes ----------------------------------------------------------------
 shader33 = ../../../shaders/base/output-sdr.slang
-scale_type33 = viewport
 alias33 = "OutputPass"
 
 # Textures All

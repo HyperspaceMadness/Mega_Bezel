@@ -4,9 +4,8 @@
 // based on Themaister's NTSC shader
 
 
-layout(std140, set = 0, binding = 0) uniform UBO
+layout(push_constant) uniform Push
 {
-   mat4 MVP;
    vec4 OutputSize;
    vec4 OriginalSize;
    vec4 SourceSize;
@@ -15,6 +14,11 @@ layout(std140, set = 0, binding = 0) uniform UBO
    float auto_res;
    float ntsc_ring;
    float ntsc_cscale;
+} params;
+
+layout(std140, set = 0, binding = 0) uniform UBO
+{
+	mat4 MVP;
 } global;
 
 #pragma parameter ntsc_cscale "NTSC Chroma Scaling / Bleeding" 1.0 0.20 4.0 0.05
@@ -30,7 +34,7 @@ layout(location = 0) out vec2 vTexCoord;
 void main()
 {
    gl_Position = global.MVP * Position;
-   vTexCoord = TexCoord - vec2(0.5 / global.SourceSize.x, 0.0); // Compensate for decimate-by-2.
+   vTexCoord = TexCoord - vec2(0.25 * params.OriginalSize.z/4.0, 0.0); // Compensate for decimate-by-2.
 }
 
 #pragma stage fragment
@@ -235,14 +239,14 @@ float chroma_filter_2_phase[33] = float[33](
    0.031420995,
    0.031517031);
 
-   float res = global.ntsc_scale;
-   float OriginalSize = global.OriginalSize.x; 
-   vec2 one_x = global.SourceSize.zz / res;
+   float res = params.ntsc_scale;
+   float OriginalSize = params.OriginalSize.x; 
+   vec2 one_x = 0.25*params.OriginalSize.zz / res;
    vec3 signal = vec3(0.0);
-   float phase = (global.ntsc_phase < 1.5) ? ((OriginalSize > 300.0) ? 2.0 : 3.0) : ((global.ntsc_phase > 2.5) ? 3.0 : 2.0);
-   if (global.ntsc_phase == 4.0) { phase = 2.0; chroma_filter_2_phase = chroma_filter_4_phase; }
+   float phase = (params.ntsc_phase < 1.5) ? ((OriginalSize > 300.0) ? 2.0 : 3.0) : ((params.ntsc_phase > 2.5) ? 3.0 : 2.0);
+   if (params.ntsc_phase == 4.0) { phase = 2.0; chroma_filter_2_phase = chroma_filter_4_phase; }
    
-   float cres = global.ntsc_cscale; if (phase == 3.0 || global.ntsc_phase == 4.0) cres = min(cres, 2.25); one_x.y = one_x.y/cres;
+   float cres = params.ntsc_cscale; if (phase == 3.0 || params.ntsc_phase == 4.0) cres = min(cres, 2.25); one_x.y = one_x.y/cres;
 
    if(phase < 2.5)
    {
@@ -329,15 +333,15 @@ float chroma_filter_2_phase[33] = float[33](
    }
 
    
-   if (global.ntsc_ring > 0.05)
+   if (params.ntsc_ring > 0.05)
    {
-      vec2 dx = vec2(global.OriginalSize.z / min(res, 1.0), 0.0);
+      vec2 dx = vec2(params.OriginalSize.z / min(res, 1.0), 0.0);
 	  float a = texture(Source, vTexCoord - 1.5*dx).a;
 	  float b = texture(Source, vTexCoord - 0.5*dx).a;
 	  float c = texture(Source, vTexCoord + 1.5*dx).a;
 	  float d = texture(Source, vTexCoord + 0.5*dx).a;
       float e = texture(Source, vTexCoord         ).a;	  
-      signal.x = mix(signal.x, clamp(signal.x, min(min(min(a,b),min(c,d)),e), max(max(max(a,b),max(c,d)),e)), global.ntsc_ring);
+      signal.x = mix(signal.x, clamp(signal.x, min(min(min(a,b),min(c,d)),e), max(max(max(a,b),max(c,d)),e)), params.ntsc_ring);
    }
    
    

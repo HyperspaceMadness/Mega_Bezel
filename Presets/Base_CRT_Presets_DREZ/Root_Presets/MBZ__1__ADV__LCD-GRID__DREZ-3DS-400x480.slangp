@@ -231,7 +231,6 @@ alias36 = "ReflectionPass"
 
 # Combine Passes ----------------------------------------------------------------
 shader37 = ../../../shaders/base/combine-passes.slang
-scale_type37 = viewport
 alias37 = "CombinePass"
 
 # Textures All

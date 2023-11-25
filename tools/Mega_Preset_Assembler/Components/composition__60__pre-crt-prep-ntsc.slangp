@@ -2,5 +2,5 @@
 #reference "chain__54__prep__gdv-afterglow.slangp"
 #reference "chain__55__color-correct__grade.slangp"
 #reference "chain__57__prep__gdv-ntsc.slangp"
-#reference "chain__58__fast-sharpen.slangp"
+#reference "chain__58__fast-sharpen-ntsc.slangp"
 #reference "chain__59__prep__gdv-linearize.slangp"

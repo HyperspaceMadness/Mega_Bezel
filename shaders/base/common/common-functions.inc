@@ -1030,7 +1030,7 @@ vec4 HSM_ApplyScanlineMask(vec4 in_color, vec2 screen_scale, vec2 in_coord, vec2
 	if (HSM_FAKE_SCANLINE_INT_SCALE == 1)
 		scanline_size = ceil(scanline_size);
 
-	float scan = mod(scan_axis_pos * scan_axis_screen_scale_res + scanline_size / 2, scanline_size) / scanline_size;
+	float scan = mod(scan_axis_pos * scan_axis_screen_scale_res + scanline_size, scanline_size) / scanline_size;
 
 	// Alternate, modulating the scanline width depending on brightness
 	//float scanline_mask = HHLP_EasePowerOut(1 - abs(scan - 0.5) * 2, 0.5 + 2 * smoothstep(0.4, 0.9, (in_color.r + in_color.g +  in_color.b) / 3));
