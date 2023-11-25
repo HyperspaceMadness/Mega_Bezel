@@ -13,15 +13,13 @@ layout(std140, set = 0, binding = 0) uniform UBO
    vec4 DerezedPassSize;
    float auto_res;
    float ntsc_sharp;
-   float ntsc_shape;
-   float blendMode;    
+   float ntsc_shape;  
 } global;
 
 #pragma parameter NTSC_SHARPNESS_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter ntsc_sharpness_title "   [ NTSC SHARPNESS ]:" 0 0 0.01 0.01
 #pragma parameter ntsc_sharp           "          Sharpness (Negative: Adaptive)" 0.0 -10.0 10.0 0.50
 #pragma parameter ntsc_shape           "          Sharpness Shape" 0.75 0.5 1.0 0.05
-#pragma parameter blendMode            "          Blend Mode (Main Mode Control)" 1.0 0.0 1.0 1.0 
 
 #pragma stage vertex
 layout(location = 0) in vec4 Position;
@@ -115,12 +113,6 @@ void main()
    }
   
    rgb = clamp(yiq2rgb(rgb), 0.0, 1.0);  
-  
-   if (global.blendMode < 0.5)
-   {
-      vec3 orig = texture(PrePass0, vTexCoord).rgb;
-      rgb = normalize(rgb + 0.00001) * min(length(rgb), length(orig));    
-   }
    
    FragColor = vec4(rgb, 1.0);
 }  

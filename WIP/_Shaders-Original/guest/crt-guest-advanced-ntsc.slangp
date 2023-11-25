@@ -52,8 +52,8 @@ float_framebuffer4 = true
 float_framebuffer5 = true
 
 scale_type5 = source
-scale_x5 = 0.5
-scale_y5 = 1.0
+scale_x5 = 0.50
+scale_y5 = 1.00
 
 shader6 = shaders/guest/advanced/ntsc/ntsc-pass3.slang
 filter_linear6 = true

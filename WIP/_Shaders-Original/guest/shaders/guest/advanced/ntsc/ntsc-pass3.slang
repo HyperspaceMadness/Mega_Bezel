@@ -13,12 +13,10 @@ layout(std140, set = 0, binding = 0) uniform UBO
    float auto_res;
    float ntsc_sharp;
    float ntsc_shape;
-   float blendMode;    
 } global;
 
 #pragma parameter ntsc_sharp "NTSC Sharpness (negative: Adaptive)" 0.0 -10.0 10.0 0.50
 #pragma parameter ntsc_shape "NTSC Sharpness Shape" 0.75 0.5 1.0 0.05
-#pragma parameter blendMode "NTSC Blend Mode (Main Mode Control)" 1.0 0.0 1.0 1.0 
 
 #pragma stage vertex
 layout(location = 0) in vec4 Position;
@@ -111,13 +109,7 @@ void main()
       rgb.x = mix(ref.x, rgb.x, sweight);
    }
   
-   rgb = clamp(yiq2rgb(rgb), 0.0, 1.0);  
-  
-   if (global.blendMode < 0.5)
-   {
-      vec3 orig = texture(PrePass0, vTexCoord).rgb;
-      rgb = normalize(rgb + 0.00001) * min(length(rgb), length(orig));    
-   }
+   rgb = clamp(yiq2rgb(rgb), 0.0, 1.0);
    
    FragColor = vec4(rgb, 1.0);
 }  

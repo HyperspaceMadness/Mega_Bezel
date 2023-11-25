@@ -1,7 +1,5 @@
-#version 450
-
 /*
-   Fast Sharpen Shader (Custom)
+   Fast Sharpen Shader
    
    Copyright (C) 2005 - 2023 guest(r) - guest.r@gmail.com
 
@@ -23,17 +21,20 @@
 layout(push_constant) uniform Push
 {
 	vec4 SourceSize;
-	vec4 OriginalSize;
-	vec4 OutputSize;
-	uint FrameCount;
+	float SHARPEN_ON;
 	float CSHARPEN, CCONTR, CDETAILS, DEBLUR;
 } params;
 
-#pragma parameter CSHARPEN  "FSharpen - Sharpen strength"         0.00 0.0 5.00 0.10 
-#pragma parameter CCONTR    "FSharpen - Sharpen Contrast/Ringing" 0.05 0.0 0.25 0.01 
-#pragma parameter CDETAILS  "FSharpen - Details sharpened"        1.00 0.0 1.00 0.05 
-#pragma parameter DEBLUR    "FSharpen - Deblur Strength"          1.00 1.0 7.00 0.25 
+#pragma parameter SHARPEN_EMPTY_LINE							" " 0 0 0.001 0.001
+#pragma parameter SHARPEN_TITLE  	"[ FAST SHARPEN - GUEST.R ]:"         			0.00 0.0 2.00 0.05
+#pragma parameter SHARPEN_ON  		"          FSharpen - ON"       		1 0 1 1
 
+#pragma parameter CSHARPEN  		"          FSharpen - Sharpen strength"         0.00 0.0 5.00 0.10 
+#pragma parameter CCONTR    		"          FSharpen - Sharpen Contrast/Ringing" 0.05 0.0 0.25 0.01 
+#pragma parameter CDETAILS  		"          FSharpen - Details sharpened"        1.00 0.0 1.00 0.05 
+#pragma parameter DEBLUR    		"          FSharpen - Deblur Strength (For NTSC Only)"          1.00 1.0 7.00 0.25 
+
+#define SHARPEN_ON params.SHARPEN_ON
 #define CSHARPEN params.CSHARPEN
 #define CCONTR params.CCONTR
 #define CDETAILS params.CDETAILS
@@ -59,7 +60,12 @@ void main()
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 2) uniform sampler2D Source;
-layout(set = 0, binding = 3) uniform sampler2D PrePass0;
+
+#ifdef IS_NTSC_PRESET
+	layout(set = 0, binding = 3) uniform sampler2D PrePass0;
+#else
+	#define PrePass0 Source
+#endif
 
 const mat3 yiq2rgb_mat = mat3(
    1.0, 0.956, 0.6210,
@@ -84,6 +90,12 @@ vec3 rgb2yiq(vec3 col)
 
 void main()
 {
+	if ( SHARPEN_ON < 0.5 )
+	{
+		FragColor = texture(Source, vTexCoord);
+		return;
+	}
+
 	vec2 g01 = vec2(-1.0, 0.0)*params.SourceSize.zw;
 	vec2 g21 = vec2( 1.0, 0.0)*params.SourceSize.zw; 
 

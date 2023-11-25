@@ -345,12 +345,12 @@ float HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = global.HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR
 //---------------------------------------------------------------------------------------------------
 #pragma parameter SHARPEN_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter SHARPEN_TITLE  	"[ FAST SHARPEN - GUEST.R ]:"         			0.00 0.0 2.00 0.05
-#pragma parameter SHARPEN  			"          Sharpen Strength"    0.00 0.0 4.00 0.10 
-#pragma parameter CONTR    			"          Amount of Sharpening"  	0.05 0.0 0.25 0.01
-#pragma parameter DETAILS  			"          Details Sharpened"     	1.00 0.0 1.00 0.05
+#pragma parameter SHARPEN_ON  		"          FSharpen - ON"       		1 0 1 1
+#pragma parameter CSHARPEN          "          FSharpen - Sharpen strength"         0.00 0.0 5.00 0.10 
+#pragma parameter CCONTR            "          FSharpen - Sharpen Contrast/Ringing" 0.05 0.0 0.25 0.01 
+#pragma parameter CDETAILS          "          FSharpen - Details sharpened"        1.00 0.0 1.00 0.05 
+#pragma parameter DEBLUR            "          FSharpen - Deblur Strength (For NTSC Only)"          1.00 1.0 7.00 0.25 
 
-// Uses naming from Guest Advanced
-#pragma parameter no_scanlines                                      "          No-Scanline Mode (Guest Advanced Only)" 0.0 0.0 1.5 0.05
 
 //---------------------------------------------------------------------------------------------------
 //    INTERLACING from Guest.r's Guest Advanced Shader
@@ -359,6 +359,9 @@ float HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = global.HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR
 #pragma parameter HSM_INTERLACE_TITLE								"[ SCANLINES & INTERLACING( By Guest.r) ]:" 0 0 0.001 0.001
 #pragma parameter HSM_SCANLINE_DIRECTION 							"          Scanline Direction - Auto | Horiz | Vert"  0 0 2 1
 float HSM_SCANLINE_DIRECTION = global.HSM_SCANLINE_DIRECTION;
+
+// Uses naming from Guest Advanced
+#pragma parameter no_scanlines                                      "          No-Scanline Mode (Guest Advanced Only)" 0.0 0.0 1.5 0.05
 
 #pragma parameter HSM_INTERLACE_SUPPORT1							"[  Interlace Mode: What Happens if Vertical Res > Trigger Res ]" 0 0 0.001 0.001
 #pragma parameter HSM_INTERLACE_SUPPORT2 							"[ -1:NO SCANLN 0:NO LACE 1-3:NORM LACE 4-5:INTERPOLATE FIELDS ]" 0 0 0.0001 1
