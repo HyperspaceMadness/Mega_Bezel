@@ -114,7 +114,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter bmask1 "          Bloom Mask Strength" 0.0 -1.0 1.0 0.025
 #define bmask1         global.bmask1     // bloom/halation mask strength
 
-#pragma parameter hmask1 "          Halation Mask Strength" 0.5 0.0 1.0 0.025
+#pragma parameter hmask1 "          Halation Mask Strength" 0.5 -1.0 1.0 0.025
 #define hmask1         global.hmask1     // bloom/halation mask strength
 
 #pragma parameter brightboost "          Bright Boost Dark Pixels" 1.40 0.25 10.0 0.05
@@ -264,14 +264,6 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter post_br "          Post Brightness" 1.0 0.25 5.0 0.01
 
-#define red vec3(1, 0, 0)
-#define green vec3(0, 1, 0)
-#define blue vec3(0, 0, 1)
-#define magenta vec3(1, 0, 1)
-#define yellow vec3(1, 1, 0)
-#define cyan vec3(0, 1, 1)
-#define white vec3(1, 1, 1)
-#define black vec3(0, 0, 0)
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
 #define TEX0 vTexCoord

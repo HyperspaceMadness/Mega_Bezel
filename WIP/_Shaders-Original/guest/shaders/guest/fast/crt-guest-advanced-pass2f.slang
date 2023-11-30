@@ -99,10 +99,10 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter bloom_dist "          Bloom Distribution" 0.0 0.0 3.0 0.05
 #define bloom_dist         global.bloom_dist     // bloom effect distribution
 
-#pragma parameter halation "          Halation Strength" 0.0 0.0 1.5 0.025
+#pragma parameter halation "          Halation Strength" 0.0 0.0 2.0 0.05
 #define halation         params.halation     // halation effect
 
-#pragma parameter hmask1 "          Halation Mask Strength" 0.5 0.0 1.0 0.025
+#pragma parameter hmask1 "          Halation Mask Strength" 0.5 -1.0 1.0 0.025
 #define hmask1         global.hmask1     // bloom/halation mask strength
 
 #pragma parameter gamma_c "          Gamma correct" 1.0 0.50 2.0 0.025
@@ -788,12 +788,13 @@ if(bloom > 0.025)
 	color = color + bloom * Bloom1;
 }
 
+	vec3 hcmask = mix(one, cmask, hmask1);
+
 if (halation > 0.025)
 {
-	vec3 hcmask = mix(one, cmask, hmask1);
 	float mbl = max(max(Bloom.r,Bloom.g),Bloom.b);
 	Bloom = plant(Bloom + orig1 + Bloom*Bloom*Bloom, min(mbl*mbl,0.75));
-	color = color + 2.0*mix(1.0,w3,0.5*colmx)*hcmask*Bloom* mix(1.0, 2.0-colmx, bloom_dist)*halation; 
+	color = color + 2.0*mix(1.0,w3,0.5*colmx)*hcmask*Bloom* mix(1.0, 2.0-colmx, bloom_dist)*(-halation); 
 }
 	
 	color = clamp(color, 0.0, 1.0);

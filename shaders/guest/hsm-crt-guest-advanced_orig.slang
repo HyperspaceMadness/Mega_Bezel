@@ -77,7 +77,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter bmask1 "          Bloom Mask Strength" 0.0 -1.0 1.0 0.025
 #define bmask1         global.bmask1     // bloom/halation mask strength
 
-#pragma parameter hmask1 "          Halation Mask Strength" 0.5 0.0 1.0 0.025
+#pragma parameter hmask1 "          Halation Mask Strength" 0.5 -1.0 1.0 0.025
 #define hmask1         global.hmask1     // bloom/halation mask strength
 
 #pragma parameter gamma_c "          Gamma correct" 1.0 0.50 2.0 0.025
@@ -536,13 +536,11 @@ if (!interb)
 	
 	if (abs(clips) > 0.005)
 	{
-		sy = mc1; vec3 l1 = sqrt(w1*wt1); vec3 l2 = sqrt(w2*wt2);
-		one = (clips > 0.0) ? w1 : mix(w1, l1, sy);
+		sy = mc1; one = (clips > 0.0) ? w1 : 1.0.xxx;
 		float sat = 1.0001-min(min(cref1.r,cref1.g),cref1.b);
 		color1 = mix(color1, plant(pow(color1, 0.70.xxx-0.325*sat),sy), pow(sat,0.3333)*one*abs(clips));
-		sy = mc2;
+		sy = mc2; one = (clips > 0.0) ? w2 : 1.0.xxx;
 		sat =       1.0001-min(min(cref2.r,cref2.g),cref2.b);
-		one = (clips > 0.0) ? w2 : mix(w2, l2, sy);
 		color2 = mix(color2, plant(pow(color2, 0.70.xxx-0.325*sat),sy), pow(sat,0.3333)*one*abs(clips));
 	}	
 	

@@ -35,6 +35,7 @@ layout(push_constant) uniform Push
 	float downsample_levelx;
 	float downsample_levely;
 	float gamma_out;
+	float hiscan;
 } params;
 
 
@@ -75,6 +76,10 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter iscans "          Interlacing (Scanline) Saturation" 0.25 0.0 1.0 0.05
 #define iscans        params.iscans     // interlace saturation
+
+#pragma parameter hiscan "          High Resolution Scanlines (prepend a scaler...)" 0.0 0.0 1.0 1.0
+#define hiscan        params.hiscan
+
 
 #pragma stage vertex
 layout(location = 0) in vec4 Position;
@@ -150,8 +155,10 @@ void main()
 	float r = m1;
 
 	float yres_div = 1.0; if (intres > 1.25) yres_div = intres;
+
+	bool hscan = (hiscan > 0.5);
 		
-	if (inter <= params.OriginalSize.y/yres_div && interm > 0.5 && intres != 1.0 && intres != 0.5) 
+	if (inter <= params.OriginalSize.y/yres_div && interm > 0.5 && intres != 1.0 && intres != 0.5 || hscan) 
 	{
 		intera = 0.25;
 		float line_no  = clamp(floor(mod(params.OriginalSize.y*vTexCoord.y, 2.0)), 0.0, 1.0);
@@ -167,6 +174,8 @@ void main()
 		}
 		if (interm == 4.0) { c = plant(mix(c, c*c, 0.5*iscans), max(max(c.r,c.g),c.b)) * (1.0-0.5*iscan); }
 		if (interm == 5.0) { c = mix(c2, c1, 0.5); c = plant(mix(c, c*c, 0.5*iscans), max(max(c.r,c.g),c.b)) * (1.0-0.5*iscan); }
+		
+		if (hscan) c = c1;		
 	}
 	c = pow(c, vec3(gamma_in));
 	

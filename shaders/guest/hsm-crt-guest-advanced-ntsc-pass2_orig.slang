@@ -27,7 +27,7 @@
 layout(push_constant) uniform Push
 {
 	float IOS, OS, BLOOM, brightboost, brightboost1, gsl, scanline1, scanline2, beam_min, beam_max, beam_size,
-	h_sharp, s_sharp, warpX, warpY, glow, shadowMask, masksize, ring, no_scanlines, tds, clips, ssharp;
+	h_sharp, s_sharp, warpX, warpY, glow, shadowMask, masksize, ring, no_scanlines, tds, clips, ssharp, hiscan;
 } params;
 
 layout(std140, set = 0, binding = 0) uniform UBO
@@ -55,6 +55,8 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float hmask1;
 } global;
 
+#pragma parameter hiscan "          High Resolution Scanlines (prepend a scaler...)" 0.0 0.0 1.0 1.0
+#define hiscan        params.hiscan
 
 #pragma parameter bogus_brightness "[ BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
@@ -76,7 +78,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter bmask1 "          Bloom Mask Strength" 0.0 -1.0 1.0 0.025
 #define bmask1         global.bmask1     // bloom/halation mask strength
 
-#pragma parameter hmask1 "          Halation Mask Strength" 0.5 0.0 1.0 0.025
+#pragma parameter hmask1 "          Halation Mask Strength" 0.5 -1.0 1.0 0.025
 #define hmask1         global.hmask1     // bloom/halation mask strength
 
 #pragma parameter gamma_c "          Gamma correct" 1.0 0.50 2.0 0.025
@@ -262,7 +264,8 @@ void main()
 	
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
-	bool interb  = ((intera < 0.5) || (no_scanlines > 0.025));
+	bool hscan = (hiscan > 0.5);
+	bool interb  = (((intera < 0.5) || (no_scanlines > 0.025)) && !hscan);
 
 	float SourceY = SourceSize.y;	
 	float sy = 1.0;
@@ -308,12 +311,12 @@ void main()
 
 	if (global.intres == 0.5 && prescalex < 1.5) pC4.y = floor(pC4.y * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
 	
-	if (interb && no_scanlines < 0.025)  pC4.y = pos.y; else if (interb) pC4.y = pC4.y + smoothstep(0.40-0.5*no_scanlines, 0.60 + 0.5*no_scanlines, f)*SourceSize.w;	
+	if (interb && no_scanlines < 0.025 || hscan)  pC4.y = pos.y; else if (interb) pC4.y = pC4.y + smoothstep(0.40-0.5*no_scanlines, 0.60 + 0.5*no_scanlines, f)*SourceSize.w;	
 	
 	vec3 color1 = COMPAT_TEXTURE(Pass1, pC4      ).rgb;
 	vec3 scolor1 = 	COMPAT_TEXTURE(Pass1, pC4      ).aaa;
 
-	if(!interb) color1 = pow(color1, vec3(scangamma/gamma_in));
+	color1 = pow(color1, vec3(scangamma/gamma_in));
   
 	pC4+=dy;
 
@@ -322,12 +325,14 @@ void main()
 	vec3 color2 = COMPAT_TEXTURE(Pass1, pC4      ).rgb;
 	vec3 scolor2 = 	COMPAT_TEXTURE(Pass1, pC4      ).aaa;
 
-	if(!interb) color2 = pow(color2, vec3(scangamma/gamma_in)); 
+	color2 = pow(color2, vec3(scangamma/gamma_in)); 
 
 	vec3 ctmp = color1; float w3 = 1.0; vec3 color = color1;
 	vec3 one = vec3(1.0);
+	
+	if (hscan) { color2 = color1; scolor2 = scolor1; }
 
-if (!interb)
+if (!interb || hscan)
 {	
 	// calculating scanlines
 	vec3 luma = vec3(0.2126, 0.7152, 0.0722);
@@ -371,13 +376,11 @@ if (!interb)
 
 	if (abs(clips) > 0.005)
 	{
-		sy = mc1; vec3 l1 = sqrt(w1*wt1); vec3 l2 = sqrt(w2*wt2);
-		one = (clips > 0.0) ? w1 : mix(w1, l1, sy);
+		sy = mc1; one = (clips > 0.0) ? w1 : 1.0.xxx;
 		float sat = 1.0001-min(min(cref1.r,cref1.g),cref1.b);
 		color1 = mix(color1, plant(pow(color1, 0.70.xxx-0.325*sat),sy), pow(sat,0.3333)*one*abs(clips));
-		sy = mc2;
+		sy = mc2; one = (clips > 0.0) ? w2 : 1.0.xxx;
 		sat =       1.0001-min(min(cref2.r,cref2.g),cref2.b);
-		one = (clips > 0.0) ? w2 : mix(w2, l2, sy);
 		color2 = mix(color2, plant(pow(color2, 0.70.xxx-0.325*sat),sy), pow(sat,0.3333)*one*abs(clips));
 	}
 	
@@ -386,14 +389,14 @@ if (!interb)
 	color = min(color, 1.0);
 }
 	
-	if (interb) 
+	if (interb && !hscan)
 	{
 		color = gc(color1);
 	}
 
 	float colmx = max(max(ctmp.r,ctmp.g),ctmp.b);
 
-	if(!interb) color = pow( color, vec3(gamma_in/scangamma) );
+	color = pow( color, vec3(gamma_in/scangamma) );
   
 	FragColor = vec4(color, colmx);
 }

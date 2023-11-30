@@ -10,7 +10,7 @@ layout(push_constant) uniform Push
    vec4 OriginalSize;
    vec4 SourceSize;
    uint FrameCount;
-   float quality, ntsc_sat, cust_fringing, cust_artifacting, ntsc_bright, ntsc_scale, ntsc_fields, ntsc_phase, ntsc_cscalen, ntsc_gamma;
+   float quality, ntsc_sat, cust_fringing, cust_artifacting, ntsc_bright, ntsc_scale, ntsc_fields, ntsc_phase, ntsc_gamma;
 } params;
 
 layout(std140, set = 0, binding = 0) uniform UBO
@@ -34,7 +34,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter ntsc_cscale          "          Chroma Scaling / Bleeding" 1.0 0.20 4.0 0.05
 #pragma parameter ntsc_sat             "          Color Saturation" 1.0 0.0 2.0 0.01
 #pragma parameter ntsc_bright          "          Brightness" 1.0 0.0 1.5 0.01
-#pragma parameter ntsc_gamma           "          NTSC Filtering Gamma Correction" 0.90 0.5 1.5 0.025
+#pragma parameter ntsc_gamma           "          NTSC Filtering Gamma Correction" 1.0 0.25 2.0 0.025
 
 
 

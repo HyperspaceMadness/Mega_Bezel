@@ -22,7 +22,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter ntsc_sharp "NTSC Sharpness (negative: Adaptive)" 0.0 -10.0 10.0 0.50
 #pragma parameter ntsc_shape "NTSC Sharpness Shape" 0.75 0.5 1.0 0.05
-#pragma parameter ntsc_gamma "NTSC Filtering Gamma Correction" 0.90 0.5 1.5 0.025
+#pragma parameter ntsc_gamma "NTSC Filtering Gamma Correction" 1.0 0.25 2.0 0.025
 
 #pragma stage vertex
 layout(location = 0) in vec4 Position;
@@ -40,12 +40,7 @@ layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 2) uniform sampler2D Source;
 layout(set = 0, binding = 3) uniform sampler2D NPass1;
-layout(set = 0, binding = 4) uniform sampler2D PrePass0;
 
-float fetch_offset(float offset, float one_x)
-{
-   return texture(NPass1, vTexCoord + vec2((offset) * (one_x), 0.0)).x;
-}
 
 const mat3 yiq2rgb_mat = mat3(
    1.0, 0.956, 0.6210,

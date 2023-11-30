@@ -332,7 +332,6 @@ float chroma_filter_2_phase[33] = float[33](
          vec3(luma_filter_3_phase[TAPS_3_phase], chroma_filter_3_phase[TAPS_3_phase], chroma_filter_3_phase[TAPS_3_phase]);
    }
 
-   
    if (params.ntsc_ring > 0.05)
    {
       vec2 dx = vec2(params.OriginalSize.z / min(res, 1.0), 0.0);
@@ -343,7 +342,6 @@ float chroma_filter_2_phase[33] = float[33](
       float e = texture(Source, vTexCoord         ).a;	  
       signal.x = mix(signal.x, clamp(signal.x, min(min(min(a,b),min(c,d)),e), max(max(max(a,b),max(c,d)),e)), params.ntsc_ring);
    }
-   
    
    vec3 orig = rgb2yiq(texture(PrePass0, vTexCoord).rgb);
    
