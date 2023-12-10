@@ -27,7 +27,7 @@
 layout(push_constant) uniform Push
 {
 	float TATE, IOS, OS, BLOOM, brightboost, brightboost1, gsl, scanline1, scanline2, beam_min, beam_max, beam_size,
-	h_sharp, s_sharp, csize, bsize1, warpX, warpY, glow, spike, ring, no_scanlines, tds, clips, ssharp;
+	h_sharp, s_sharp, csize, bsize1, warpX, warpY, glow, spike, ring, no_scanlines, tds, clips, ssharp, hiscan;
 } params;
 
 layout(std140, set = 0, binding = 0) uniform UBO
@@ -56,6 +56,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float hmask1;
 } global;
 
+
+#pragma parameter hiscan "          High Resolution Scanlines (prepend a scaler...)" 0.0 0.0 1.0 1.0
+#define hiscan        params.hiscan
 
 #pragma parameter bogus_brightness "[ BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
@@ -287,7 +290,8 @@ void main()
 	
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
-	bool interb  = ((intera < 0.35) || (no_scanlines > 0.025));
+	bool hscan = (hiscan > 0.5);
+	bool interb  = (((intera < 0.35) || (no_scanlines > 0.025)) && !hscan);
 	bool notate  = (TATE < 0.5);
 	bool vgascan = ((abs(intera-0.5) < 0.05) && (no_scanlines == 0.0));
 
@@ -354,7 +358,8 @@ void main()
 	if ((global.intres == 0.5 &&  notate && prescalex.y < 1.5) || vgascan) pC4.y = floor(pC4.y * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
 	if ((global.intres == 0.5 && !notate && prescalex.x < 1.5) || (vgascan && !notate)) pC4.x = floor(pC4.x * global.OriginalSize.x)*global.OriginalSize.z + 0.5*global.OriginalSize.z;
 	
-	if (interb && no_scanlines < 0.025)  pC4.y = pos.y; else if (interb) pC4.y = pC4.y + smoothstep(0.40-0.5*no_scanlines, 0.60 + 0.5*no_scanlines, f)*mix(SourceSize.w, SourceSize.z, TATE);
+	if (interb && no_scanlines < 0.025 && !hscan)  pC4.y = pos.y; else if (interb) pC4.y = pC4.y + smoothstep(0.40-0.5*no_scanlines, 0.60 + 0.5*no_scanlines, f)*mix(SourceSize.w, SourceSize.z, TATE);
+	if (hscan) pC4 = mix(vec2(pC4.x, pos.y), vec2(pos.x, pC4.y), TATE);
 	
 	float zero = exp2(-h_sharp);
 	float sharp1 = s_sharp * zero;
@@ -442,7 +447,7 @@ void main()
 	
 	vec3 scolor2;
 	
-	if (!interb)
+	if (!interb && !hscan)
 {	
 	pC4+=offy;
 
@@ -491,6 +496,8 @@ void main()
 
 	vec3 ctmp = color1; float w3 = 1.0; vec3 color = color1;
 	vec3 one = vec3(1.0);
+
+	if (hscan) { color2 = color1; scolor2 = scolor1; }
 
 if (!interb)
 {	

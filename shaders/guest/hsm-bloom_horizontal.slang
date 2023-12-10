@@ -26,7 +26,6 @@ layout(push_constant) uniform Push
 	vec4 DerezedPassSize;
 	float SIZEHB;
 	float SIGMA_HB;
-	float BLOOMCUT_H;
 	float FINE_BLOOM;
 } params;
 
@@ -41,9 +40,6 @@ layout(push_constant) uniform Push
 
 #pragma parameter SIGMA_HB 		"         Horizontal Bloom/Halation Sigma -- SIGMA_HB" 0.75 0.25 15.0 0.025
 #define SIGMA_HB params.SIGMA_HB
-
-#pragma parameter BLOOMCUT_H 	"          Horizontal Bloom/Halation Subtract -- BLOOMCUT_H" 0.0 -0.5 0.5 0.05
-#define BLOOMCUT_H params.BLOOMCUT_H
 
 layout(std140, set = 0, binding = 0) uniform UBO
 {
@@ -93,7 +89,6 @@ void main()
 	{
 		pixel  = COMPAT_TEXTURE(LinearizePass, tex + n*dx);
 		w = gaussian(n+f);
-		w      = (BLOOMCUT_H >= 0.0) ? max(w - BLOOMCUT_H, 0.0) : (max(w + BLOOMCUT_H, 0.0)/(1.0 + BLOOMCUT_H));
 		pixel.a = max(max(pixel.r, pixel.g),pixel.b);
 		pixel.a*=pixel.a*pixel.a;
 		color  = color + w * pixel;

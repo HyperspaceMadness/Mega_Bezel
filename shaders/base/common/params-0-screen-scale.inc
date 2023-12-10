@@ -23,7 +23,7 @@
 */
 
 // Screen Scale Required Parameters
-#pragma parameter HSM_MEGA_BEZEL_TITLE								"[ --- HSM MEGA BEZEL V1.15.0_2023-11-25 --- ]" 0 0 0.001 0.001
+#pragma parameter HSM_MEGA_BEZEL_TITLE								"[ --- HSM MEGA BEZEL V1.16.0_2023-12-10 --- ]" 0 0 0.001 0.001
 
 #pragma parameter HSM_RESOLUTION_DEBUG_ON							"          Show Resolution Info" 0 0 1 1
 float HSM_RESOLUTION_DEBUG_ON = global.HSM_RESOLUTION_DEBUG_ON;
@@ -359,6 +359,9 @@ float HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = global.HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR
 #pragma parameter HSM_INTERLACE_TITLE								"[ SCANLINES & INTERLACING( By Guest.r) ]:" 0 0 0.001 0.001
 #pragma parameter HSM_SCANLINE_DIRECTION 							"          Scanline Direction - Auto | Horiz | Vert"  0 0 2 1
 float HSM_SCANLINE_DIRECTION = global.HSM_SCANLINE_DIRECTION;
+
+#pragma parameter hiscan "          High Resolution Scanlines (ScaleFx or XBR Only)" 0.0 0.0 1.0 1.0
+#define hiscan        global.hiscan
 
 // Uses naming from Guest Advanced
 #pragma parameter no_scanlines                                      "          No-Scanline Mode (Guest Advanced Only)" 0.0 0.0 1.5 0.05

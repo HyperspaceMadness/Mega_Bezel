@@ -27,7 +27,6 @@ layout(push_constant) uniform Push
 	vec4 DerezedPassSize;
 	float SIZEVB;
 	float SIGMA_VB;
-	float BLOOMCUT_V;
 	float FINE_BLOOM;
 } params;
 
@@ -39,9 +38,6 @@ layout(push_constant) uniform Push
 
 #pragma parameter SIGMA_VB "          Vertical Bloom/Halation Sigma -- SIGMA_VB" 0.60 0.25 15.0 0.025
 #define SIGMA_VB params.SIGMA_VB
-
-#pragma parameter BLOOMCUT_V "          Vertical Bloom/Halation Subtract -- BLOOMCUT_V" 0.0 -0.5 0.5 0.05
-#define BLOOMCUT_V params.BLOOMCUT_V
 
 layout(std140, set = 0, binding = 0) uniform UBO
 {
@@ -94,7 +90,6 @@ void main()
 	{
 		pixel  = COMPAT_TEXTURE(Source, tex + n*dy);
 		w = gaussian(n+f);
-		w      = (BLOOMCUT_V >= 0.0) ? max(w - BLOOMCUT_V, 0.0) : (max(w + BLOOMCUT_V, 0.0)/(1.0 + BLOOMCUT_V));
 		pixel.a*=pixel.a*pixel.a;
 		color  = color + w * pixel;
 		wsum   = wsum + w;

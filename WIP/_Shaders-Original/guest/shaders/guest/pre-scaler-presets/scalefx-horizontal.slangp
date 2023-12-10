@@ -32,3 +32,5 @@ filter_linear5 = false
 scale_type5 = source
 scale_x5 = 3.0
 scale_y5 = 1.0
+
+SFX_SCN = 0.0

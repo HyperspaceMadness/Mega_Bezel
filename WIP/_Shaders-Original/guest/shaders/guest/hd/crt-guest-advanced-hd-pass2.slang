@@ -306,7 +306,7 @@ vec3 v_resample (vec2 tex0, vec4 Size) {
 
 	vec3 cmax = 0.0.xxx;
 	vec3 cmin = 1.0.xxx;
-	float vsharpness = max(VSHARPNESS*internal_res, 1.0);
+	float vsharpness = max(VSHARPNESS*internal_res, 0.6);
 	float sharp = gaussian(vsharpness) * S_SHARPV;
 	float maxsharp = MAXS;
 	float FPR = vsharpness;
@@ -355,7 +355,7 @@ void main()
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
 	bool hscan = (hiscan > 0.5);
-	bool interb  = (((intera < 0.5) || (no_scanlines > 0.025)) && !hscan);
+	bool interb  = (((intera < 0.35) || (no_scanlines > 0.025)) && !hscan);
 	bool vgascan = ((abs(intera-0.5) < 0.05) && (no_scanlines == 0.0));
 	
 	float SourceY = SourceSize.y;
@@ -484,7 +484,7 @@ if (!interb || hscan)
 	color = min(color, 1.0);
 }
 	
-	if (interb && !hscan) 
+	if (interb) 
 	{
 		color = gc(color1);
 	}

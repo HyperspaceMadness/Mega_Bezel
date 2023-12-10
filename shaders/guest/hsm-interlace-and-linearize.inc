@@ -37,6 +37,7 @@ layout(push_constant) uniform Push
 	// float downsample_levely;
 	// float gamma_out;
 	// float vga_mode;
+	// float hiscan;
 } params;
 
 
@@ -91,6 +92,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 // #pragma parameter vga_mode "          VGA Single/Double Scan mode" 0.0 0.0 1.0 1.0
 // #define vga_mode        global.vga_mode     // interlace saturation
+
+#pragma parameter hiscan "          High Resolution Scanlines (ScaleFx or XBR Only)" 0.0 0.0 1.0 1.0
+#define hiscan        global.hiscan
 
 
 bool use_vert_scanlines_bool = false;
@@ -229,8 +233,10 @@ void main()
 	if (inter <= params.OriginalSize.y/yres_div && interm > 0.5 && intres != 1.0  && intres != 0.5 && vga_mode < 0.5)
 	*/
 
+	bool hscan = (hiscan > 0.5);
+		
 	// HSM Added
-	if (HSM_INTERLACE_TRIGGER_RES <= derezed_scaled_opposite_dir_res && interm > 0.5 && HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR != 1.0 && vga_mode < 0.5) 
+	if (HSM_INTERLACE_TRIGGER_RES <= derezed_scaled_opposite_dir_res && interm > 0.5 && HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR != 1.0 && vga_mode < 0.5 || hscan) 
 	{
 		intera = 0.25;
 
@@ -253,6 +259,8 @@ void main()
 		}
 		if (interm == 4.0) { c = plant(mix(c, c*c, 0.5*iscans), max(max(c.r,c.g),c.b)) * (1.0-0.5*iscan); }
 		if (interm == 5.0) { c = mix(c2, c1, 0.5); c = plant(mix(c, c*c, 0.5*iscans), max(max(c.r,c.g),c.b)) * (1.0-0.5*iscan); }
+	
+		if (hscan) c = c1;	
 	}
 
 	#ifndef DO_NOT_LINEARIZE

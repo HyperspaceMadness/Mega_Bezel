@@ -22,6 +22,9 @@
    
 */
 
+#pragma parameter hiscan "          High Resolution Scanlines (ScaleFx or XBR Only)" 0.0 0.0 1.0 1.0
+#define hiscan        global.hiscan
+
 #pragma parameter GDV_BRIGHTNESS_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter bogus_brightness "[ BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
@@ -669,7 +672,7 @@ void main()
 	float no_scanlines = HSM_GetNoScanlineMode();
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
-	bool interb  = (intera < 0.5 || no_scanlines > 0.025);
+	bool interb  = (intera < 0.35 || no_scanlines > 0.025) && hiscan < 0.5;
 	bool notate  = (TATE < 0.5);
 
 	/* HSM Removed

@@ -1,13 +1,10 @@
 ![Mega_Bezel_Logo|512x256, 75%](upload://6PNkvcMF9Go9Wnk6OJXfYR1opXI.png) 
 
-Mega Bezel is updated to V1.15.0_2023-11-25
+Mega Bezel is updated to V1.16.0_2023-12-10
 
 Changes:
-  * Updated to Guest Advanced crt-guest-advanced-2023-11-24-release1
-  * Updated to latest Grade
-  * Grade Color Temperature set to 7200
-  * Removed Viewport Scaling on Final pass, should fix HDR, let me know if this works
-  * Fixed the first Sharpen Parameters in the list 
+  * Updated to Guest Advanced crt-guest-advanced-2023-12-02-release1
+  * Adjusted some Parameter Positioning, High Res Scanlines Appears with interlacing settings
 
 
 ----------------------------------------------------

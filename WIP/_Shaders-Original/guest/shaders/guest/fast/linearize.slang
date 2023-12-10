@@ -36,6 +36,7 @@ layout(push_constant) uniform Push
 	float downsample_levely;
 	float gamma_out;
 	float vga_mode;
+	float hiscan;
 } params;
 
 
@@ -80,6 +81,10 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 #pragma parameter vga_mode "          VGA Single/Double Scan mode" 0.0 0.0 1.0 1.0
 #define vga_mode        params.vga_mode     // interlace saturation
+
+#pragma parameter hiscan "          High Resolution Scanlines (prepend a scaler...)" 0.0 0.0 1.0 1.0
+#define hiscan        params.hiscan
+
 
 #pragma stage vertex
 layout(location = 0) in vec4 Position;
@@ -155,6 +160,8 @@ void main()
 	float r = m1;
 
 	float yres_div = 1.0; if (intres > 1.25) yres_div = intres;
+
+	bool hscan = (hiscan > 0.5);
 		
 	if (inter <= params.OriginalSize.y/yres_div && interm > 0.5 && intres != 1.0  && intres != 0.5 && vga_mode < 0.5)
 	{
@@ -172,6 +179,8 @@ void main()
 		}
 		if (interm == 4.0) { c = plant(mix(c, c*c, 0.5*iscans), max(max(c.r,c.g),c.b)) * (1.0-0.5*iscan); }
 		if (interm == 5.0) { c = mix(c2, c1, 0.5); c = plant(mix(c, c*c, 0.5*iscans), max(max(c.r,c.g),c.b)) * (1.0-0.5*iscan); }
+
+		if (hscan) c = c1;
 	}
 	
 	if (vga_mode > 0.5)

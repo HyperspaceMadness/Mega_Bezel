@@ -1,1 +1,1 @@
-crt-guest-advanced-2023-11-28-release1
+crt-guest-advanced-2023-12-02-release1

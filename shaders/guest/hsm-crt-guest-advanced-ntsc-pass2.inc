@@ -51,7 +51,7 @@ layout(push_constant) uniform Push
 // 	float bloom_dist;
 // } global;
 
-#pragma parameter hiscan "          High Resolution Scanlines (prepend a scaler...)" 0.0 0.0 1.0 1.0
+#pragma parameter hiscan "          High Resolution Scanlines (ScaleFx or XBR Only)" 0.0 0.0 1.0 1.0
 #define hiscan        params.hiscan
 
 #pragma parameter GDV_BRIGHTNESS_EMPTY_LINE							" " 0 0 0.001 0.001
@@ -297,7 +297,7 @@ void main()
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
 	bool hscan = (hiscan > 0.5);
-	bool interb  = ((intera < 0.5) || (no_scanlines > 0.025) && !hscan);
+	bool interb  = (((intera < 0.35) || (no_scanlines > 0.025)) && !hscan);
 
 	float SourceY = SourceSize.y;	
    	/* HSM Removed
@@ -369,8 +369,8 @@ void main()
 	vec3 color1 = COMPAT_TEXTURE(Pass1, pC4      ).rgb;
 	vec3 scolor1 = 	COMPAT_TEXTURE(Pass1, pC4      ).aaa;
 
-	color1 = pow(color1, vec3(scangamma/gamma_in));
-  
+	if(!interb) color1 = pow(color1, vec3(scangamma/gamma_in));
+
 	pC4+=dy;
 
 	/* HSM Removed
@@ -382,7 +382,7 @@ void main()
 		pC4.y = floor((pos.y + 0.33 * dy.y) * SourceSize.y) * SourceSize.w + 0.5 * SourceSize.w;
 	// End Addition
 
-	vec3 color2 = COMPAT_TEXTURE(Pass1, pC4      ).rgb;
+	if(!interb) color2 = pow(color2, vec3(scangamma/gamma_in)); 
 	vec3 scolor2 = 	COMPAT_TEXTURE(Pass1, pC4      ).aaa;
 
 	color2 = pow(color2, vec3(scangamma/gamma_in)); 
@@ -452,15 +452,15 @@ if (!interb || hscan)
 	color = min(color, 1.0);
 }
 	
-	if (interb && !hscan)
+	if (interb)
 	{
 		color = gc(color1);
 	}
 
 	float colmx = max(max(ctmp.r,ctmp.g),ctmp.b);
 
-	color = pow( color, vec3(gamma_in/scangamma) );
-
+	if(!interb) color = pow( color, vec3(gamma_in/scangamma) );
+  
 	FragColor = vec4(color, colmx);
 
 	if (HSM_GetUseFakeScanlines())

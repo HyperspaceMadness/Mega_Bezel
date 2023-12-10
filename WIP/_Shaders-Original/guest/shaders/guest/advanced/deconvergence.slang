@@ -27,7 +27,7 @@
 layout(push_constant) uniform Push
 {
 	float TATE, IOS, OS, BLOOM, brightboost, brightboost1, csize, bsize1, warpX, warpY, glow, shadowMask, masksize,
-	slotmask, slotmask1, slotwidth, double_slot, mcut, maskDark, maskLight, maskstr, mshift, mask_layout, mask_bloom;
+	slotmask, slotmask1, slotwidth, double_slot, mcut, maskDark, maskLight, maskstr, mshift, mask_layout, mask_bloom, hiscan;
 } params;
 
 layout(std140, set = 0, binding = 0) uniform UBO
@@ -81,6 +81,9 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float hmask1;
 	float mzoom_sh;	
 } global;
+
+#pragma parameter hiscan "          High Resolution Scanlines (prepend a scaler...)" 0.0 0.0 1.0 1.0
+#define hiscan        params.hiscan
 
 #pragma parameter no_scanlines "          No-scanline mode" 0.0 0.0 1.5 0.05
 
@@ -631,7 +634,7 @@ void main()
 	
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
-	bool interb  = (intera < 0.5 || global.no_scanlines > 0.025);
+	bool interb  = ((intera < 0.35 || global.no_scanlines > 0.025) && hiscan < 0.5);
 	bool notate  = (TATE < 0.5);
 	
 	// Calculating texel coordinates

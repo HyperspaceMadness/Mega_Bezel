@@ -26,6 +26,7 @@ layout(push_constant) uniform Push
 	vec4 DerezedPassSize;
 	float SIZEH;
 	float SIGMA_H;
+	float FINE_GLOW;	
 	float m_glow;
 	float m_glow_cutoff;
 	float m_glow_low;
@@ -38,6 +39,9 @@ layout(push_constant) uniform Push
 #pragma parameter GDV_GDV_ADV_TITLE_2 		"[ --- GUEST-DrVenom Advanced --- ]:" 0 0 0.001 0.001
 
 #pragma parameter bogus_mglow "[ MAGIC GLOW SETTINGS ]:" 0 0 0.001 0.001
+
+#pragma parameter FINE_GLOW "          Fine Glow/M.Glow Sampling" 1.0 1.0 5.0 1.0 
+#define FINE_GLOW params.FINE_GLOW
 
 #pragma parameter m_glow 		"          Ordinary Glow / Magic Glow -- m_glow" 0.0 0.0 1.0 1.0
 #define m_glow params.m_glow
@@ -100,7 +104,7 @@ vec3 plant (vec3 tar, float r)
 
 void main()
 {
-	vec4 SourceSize1 = params.DerezedPassSize;
+	vec4 SourceSize1 = params.DerezedPassSize*mix(1.0.xxxx, vec4(FINE_GLOW, FINE_GLOW, 1.0/FINE_GLOW, 1.0/FINE_GLOW), min(FINE_GLOW-1.0,1.0));
 	float f = fract(SourceSize1.x * vTexCoord.x);
 	f = 0.5 - f;
 	vec2 tex = floor(SourceSize1.xy * vTexCoord)*SourceSize1.zw + 0.5*SourceSize1.zw;

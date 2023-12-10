@@ -153,6 +153,7 @@ float HSM_SINDEN_BORDER_EMPTY_TUBE_COMPENSATION;
 	float HSM_INTERLACE_SCANLINE_EFFECT;
 	float iscans;
 	float vga_mode;
+	float hiscan;
 
 	//    FAKE SCANLINES
 	float HSM_FAKE_SCANLINE_MODE;

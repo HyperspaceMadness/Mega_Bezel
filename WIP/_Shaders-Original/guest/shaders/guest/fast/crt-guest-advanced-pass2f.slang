@@ -28,7 +28,7 @@ layout(push_constant) uniform Push
 {
 	float brightboost, brightboost1, gsl, scanline1, scanline2, beam_min, beam_max, beam_size,
     shadowMask, masksize, vertmask, slotmask, slotmask1, slotwidth, double_slot, mcut, maskDark, maskLight,
-	maskstr, inters, bloom, halation, fbenchmode, slotms, gamma_c, gamma_out, DER, DEG, DEB, DES, IOS, clips;
+	maskstr, inters, bloom, halation, slotms, gamma_c, gamma_out, DER, DEG, DEB, DES, IOS, clips;
 } params;
 
 layout(std140, set = 0, binding = 0) uniform UBO
@@ -60,8 +60,6 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float post_br;
 } global;
 
-
-#pragma parameter fbenchmode "          Bench Mode / Game Mode (regarding FF)" 1.0 0.0 1.0 1.0
 
 #pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
 
@@ -114,7 +112,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 #pragma parameter brightboost1 "          Bright Boost Bright Pixels" 1.10 0.25 3.00 0.025
 #define brightboost1  params.brightboost1     // adjust brightness
 
-#pragma parameter clips "          Clip Saturated Color Beams" 0.0 0.0 1.0 0.05
+#pragma parameter clips "          Clip Saturated Color Beams" 0.0 -1.0 1.0 0.05
 #define clips  params.clips   // works only in scanline mode
 
 #pragma parameter bogus_scanline "[ SCANLINE OPTIONS ]: " 0.0 0.0 1.0 1.0
@@ -241,7 +239,7 @@ layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
 layout(set = 0, binding = 2) uniform sampler2D Source;
 layout(set = 0, binding = 3) uniform sampler2D LinearizePass;
-layout(set = 0, binding = 4) uniform sampler2D PrePassDontChange;
+layout(set = 0, binding = 4) uniform sampler2D PerfPass;
 layout(set = 0, binding = 5) uniform sampler2D Pass2Feedback;
 
 #define eps 1e-10 
@@ -535,10 +533,6 @@ void main()
 
 	vec4 result = texture(Pass2Feedback, vTexCoord);
 	
-	uint framemod = global.FrameCount % 256;
-	float framediff = abs(float(framemod) - 255.0*result.a);
-	bool fforward = (framediff > 2.5 && framediff < 150.0) && (params.fbenchmode > 0.5);
-
 	vec2 texcoord = vTexCoord * 1.00001;
 
 	if (IOS > 0.0 && !interb){
@@ -555,11 +549,10 @@ void main()
 	vec2 y2 = yy+yy;
 	vec2 pos  = Warp(texcoord);	
 
-	bool not_same = (texture(PrePassDontChange, pos   ).a < 0.5);
+	bool not_same = (texture(PerfPass, pos   ).a < 0.5);
 	vec3 color = 0.0.xxx;
 
-if ( (not_same || (interb && (no_scanlines < 0.025))) || fforward)
-
+if ( (not_same || (interb && (no_scanlines < 0.025))) )
 {
 	vec4 SourceSize = global.OriginalSize;
 	float SourceY = SourceSize.y;
@@ -683,15 +676,16 @@ if (abs(vertmask) > 0.025)
 		cd2 = mix(one, vec3(v_low, v_high2, v_low), ds2);
 	}
 }
-	
-if (clips > 0.005)
-{
-		sy = mc1; clip = w1;
+	float aclips = abs(clips);
+	if (aclips > 0.005)
+	{
+		sy = mc1; clip = (clips > 0.0) ? w1 : 1.0.xxx;
 		float sat = 1.0001-min(min(cref1.r,cref1.g),cref1.b);
-		color1 = mix(color1, plant(pow(color1, 0.70.xxx-0.325*sat),sy), pow(sat,0.3333)*clip*clips);
-		sy = mc2; sat = 1.0001-min(min(cref2.r,cref2.g),cref2.b);
-		clip = w2; color2 = mix(color2, plant(pow(color2, 0.70.xxx-0.325*sat),sy), pow(sat,0.3333)*clip*clips);
-}	
+		color1 = mix(color1, plant(pow(color1, 0.70.xxx-0.325*sat),sy), pow(sat,0.3333)*clip*aclips);
+		sy = mc2; clip = (clips > 0.0) ? w2 : 1.0.xxx;
+		sat =       1.0001-min(min(cref2.r,cref2.g),cref2.b);
+		color2 = mix(color2, plant(pow(color2, 0.70.xxx-0.325*sat),sy), pow(sat,0.3333)*clip*aclips);
+	}	
 	
 	color = color1*w1*cd1 + color2*w2*cd2;
 	color = min(color, 1.0);
@@ -794,7 +788,7 @@ if (halation > 0.025)
 {
 	float mbl = max(max(Bloom.r,Bloom.g),Bloom.b);
 	Bloom = plant(Bloom + orig1 + Bloom*Bloom*Bloom, min(mbl*mbl,0.75));
-	color = color + 2.0*mix(1.0,w3,0.5*colmx)*hcmask*Bloom* mix(1.0, 2.0-colmx, bloom_dist)*(-halation); 
+	color = color + 2.0*mix(1.0,w3,0.5*colmx)*hcmask*Bloom* mix(1.0, 2.0-colmx, bloom_dist)*halation; 
 }
 	
 	color = clamp(color, 0.0, 1.0);
@@ -803,5 +797,5 @@ if (halation > 0.025)
 	result.rgb = color*corner0*global.post_br;
 
 }
-	FragColor = vec4(result.rgb, float(framemod)/255.0);
+	FragColor = vec4(result.rgb, 1.0);
 } 

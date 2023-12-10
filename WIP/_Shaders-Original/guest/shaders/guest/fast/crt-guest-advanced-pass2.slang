@@ -27,7 +27,7 @@
 layout(push_constant) uniform Push
 {
 	float brightboost, brightboost1, gsl, scanline1, scanline2, beam_min, beam_max, beam_size,
-    glow, maskstr, inters, bloom, halation, scans, gamma_c, gamma_out, IOS, no_scanlines, tds, clips, ssharp;
+    glow, maskstr, inters, bloom, halation, scans, gamma_c, gamma_out, IOS, no_scanlines, tds, clips, ssharp, hiscan;
 } params;
 
 layout(std140, set = 0, binding = 0) uniform UBO
@@ -55,6 +55,10 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	float bmask1;
 	float hmask1;
 } global;
+
+
+#pragma parameter hiscan "          High Resolution Scanlines (prepend a scaler...)" 0.0 0.0 1.0 1.0
+#define hiscan        params.hiscan
 
 #pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
 
@@ -262,7 +266,8 @@ void main()
 	vec4 SourceSize = vec4(global.SourceSize.x, global.OriginalSize.y, global.SourceSize.z, global.OriginalSize.w);
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
-	bool interb  = ((intera < 0.35) || (no_scanlines > 0.025));
+	bool hscan = (hiscan > 0.5);
+	bool interb  = (((intera < 0.35) || (no_scanlines > 0.025)) && !hscan);
 	bool vgascan = ((abs(intera-0.5) < 0.05) && (no_scanlines == 0.0));	
 
 	float SourceY = SourceSize.y;
@@ -310,7 +315,7 @@ void main()
 
 	if ((global.intres == 0.5 && prescalex.y < 1.5) || vgascan) pC4.y = floor(pC4.y * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
 
-	if (interb && no_scanlines < 0.025)  pC4.y = pos.y; else if (interb) pC4.y = pC4.y + smoothstep(0.40-0.5*no_scanlines, 0.60 + 0.5*no_scanlines, f)*SourceSize.w;
+	if (interb && no_scanlines < 0.025 || hscan)  pC4.y = pos.y; else if (interb) pC4.y = pC4.y + smoothstep(0.40-0.5*no_scanlines, 0.60 + 0.5*no_scanlines, f)*SourceSize.w;
 	
 	vec3 color1 = COMPAT_TEXTURE(Pass1, pC4      ).rgb;
 	vec3 scolor1 = 	COMPAT_TEXTURE(Pass1, pC4      ).aaa;
@@ -326,6 +331,8 @@ void main()
 
 	vec3 ctmp = color1; float w3 = 1.0; vec3 color = color1;
 	vec3 one = vec3(1.0);
+
+	if (hscan) { color2 = color1; scolor2 = scolor1; }
 
 if (!interb)
 {	

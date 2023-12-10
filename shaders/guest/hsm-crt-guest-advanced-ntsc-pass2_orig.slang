@@ -265,7 +265,7 @@ void main()
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
 	bool hscan = (hiscan > 0.5);
-	bool interb  = (((intera < 0.5) || (no_scanlines > 0.025)) && !hscan);
+	bool interb  = (((intera < 0.35) || (no_scanlines > 0.025)) && !hscan);
 
 	float SourceY = SourceSize.y;	
 	float sy = 1.0;
@@ -316,7 +316,7 @@ void main()
 	vec3 color1 = COMPAT_TEXTURE(Pass1, pC4      ).rgb;
 	vec3 scolor1 = 	COMPAT_TEXTURE(Pass1, pC4      ).aaa;
 
-	color1 = pow(color1, vec3(scangamma/gamma_in));
+	if(!interb) color1 = pow(color1, vec3(scangamma/gamma_in));
   
 	pC4+=dy;
 
@@ -325,7 +325,7 @@ void main()
 	vec3 color2 = COMPAT_TEXTURE(Pass1, pC4      ).rgb;
 	vec3 scolor2 = 	COMPAT_TEXTURE(Pass1, pC4      ).aaa;
 
-	color2 = pow(color2, vec3(scangamma/gamma_in)); 
+	if(!interb) color2 = pow(color2, vec3(scangamma/gamma_in)); 
 
 	vec3 ctmp = color1; float w3 = 1.0; vec3 color = color1;
 	vec3 one = vec3(1.0);
@@ -389,14 +389,14 @@ if (!interb || hscan)
 	color = min(color, 1.0);
 }
 	
-	if (interb && !hscan)
+	if (interb)
 	{
 		color = gc(color1);
 	}
 
 	float colmx = max(max(ctmp.r,ctmp.g),ctmp.b);
 
-	color = pow( color, vec3(gamma_in/scangamma) );
+	if(!interb) color = pow( color, vec3(gamma_in/scangamma) );
   
 	FragColor = vec4(color, colmx);
 }

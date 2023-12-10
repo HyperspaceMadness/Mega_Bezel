@@ -631,7 +631,7 @@ void main()
 	
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
-	bool interb  = ((intera < 0.5 || global.no_scanlines > 0.025) && hiscan < 0.5);
+	bool interb  = ((intera < 0.35 || global.no_scanlines > 0.025) && hiscan < 0.5);
 	
 	// Calculating texel coordinates
    
