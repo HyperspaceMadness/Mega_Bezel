@@ -3,14 +3,14 @@
 Mega Bezel is updated to V1.16.0_2023-12-10
 
 Changes:
-  * Updated to Guest Advanced crt-guest-advanced-2023-12-02-release1
-  * Adjusted some Parameter Positioning, High Res Scanlines Appears with interlacing settings
+  * x
 
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
 ----------------------------------------------------
 
+  * Update Smooth presets to have a Hires Scanlines option, and possibly horizontal source sampling for antialias look
   * Use parameters to control Text instead of custom text for each family
     * Get from Cache
   * Implement Original Scaling Mode
