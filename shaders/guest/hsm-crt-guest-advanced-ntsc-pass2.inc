@@ -25,7 +25,7 @@
 layout(push_constant) uniform Push
 {
 	float IOS, OS, BLOOM, brightboost, brightboost1, gsl, scanline1, scanline2, beam_min, beam_max, beam_size,
-	h_sharp, s_sharp, warpX, warpY, glow, shadowMask, masksize, vertmask, ring, no_scanlines, hiscan;
+	h_sharp, s_sharp, warpX, warpY, glow, shadowMask, masksize, vertmask, ring, no_scanlines;
 } params;
 
 // layout(std140, set = 0, binding = 0) uniform UBO
@@ -51,8 +51,8 @@ layout(push_constant) uniform Push
 // 	float bloom_dist;
 // } global;
 
-#pragma parameter hiscan "          High Resolution Scanlines (ScaleFx or XBR Only)" 0.0 0.0 1.0 1.0
-#define hiscan        params.hiscan
+// #pragma parameter hiscan "          High Resolution Scanlines (prepend a scaler...)" 0.0 0.0 1.0 1.0
+// #define hiscan        params.hiscan
 
 #pragma parameter GDV_BRIGHTNESS_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter bogus_brightness "[ BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
@@ -382,10 +382,10 @@ void main()
 		pC4.y = floor((pos.y + 0.33 * dy.y) * SourceSize.y) * SourceSize.w + 0.5 * SourceSize.w;
 	// End Addition
 
-	if(!interb) color2 = pow(color2, vec3(scangamma/gamma_in)); 
+	vec3 color2 = COMPAT_TEXTURE(Pass1, pC4      ).rgb;
 	vec3 scolor2 = 	COMPAT_TEXTURE(Pass1, pC4      ).aaa;
 
-	color2 = pow(color2, vec3(scangamma/gamma_in)); 
+	if(!interb) color2 = pow(color2, vec3(scangamma/gamma_in)); 
 
 	vec3 ctmp = color1; float w3 = 1.0; vec3 color = color1;
 	vec3 one = vec3(1.0);
@@ -445,9 +445,6 @@ if (!interb || hscan)
 	}
 	
 	color = (gc(color1)*w1 + gc(color2)*w2);
-
-
-	// 	color = (gc(color1)*w1*cd1 + gc(color2)*w2*cd2)/mix(1.0.xxx, w1+w2, no_scanlines);
 
 	color = min(color, 1.0);
 }

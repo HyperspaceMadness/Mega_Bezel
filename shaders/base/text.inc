@@ -569,11 +569,11 @@ float DrawResolutions(vec2 uv, vec2 viewport_size, vec2 screen_size, vec4 screen
     print_pos.x = margin;
     print_pos.y += STRHEIGHT(1);
 
-   // Text Version V1.16.0_2023-12-10
+   // Text Version V1.16.1_2023-12-26
    // Version
-   _1 _per _1 _6 _per _0 _spc
+   _1 _per _1 _6 _per _1 _spc
    // Date
-   _2 _0 _2 _3 _dsh _1 _2 _dsh _1 _0
+   _2 _0 _2 _3 _dsh _1 _2 _dsh _2 _6
 
     // Title ----------------------------------------------------------
     print_pos.x = margin;
