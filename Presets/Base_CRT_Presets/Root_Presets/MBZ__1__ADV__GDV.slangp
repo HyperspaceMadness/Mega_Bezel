@@ -347,7 +347,6 @@ alias46 = "ReflectPass"
 shader47 = ../../../shaders/base/final-composite.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
 filter_linear47 = false
-scale_type47 = viewport
 
 
 # Textures All

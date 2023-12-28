@@ -25,6 +25,9 @@
 // All parameter uniform values are in globals.inc 
 
 
+// #pragma parameter hiscan "       High Resolution Scanlines (GDV with ScaleFx or XBR Only)" 0.0 0.0 1.0 1.0
+// #define hiscan        global.hiscan
+
 #pragma parameter GDV_BRIGHTNESS_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter bogus_brightness "[ BRIGHTNESS SETTINGS ]:" 0.0 0.0 1.0 1.0
 
@@ -34,14 +37,20 @@
 #pragma parameter bloom "          Bloom Strength -- bloom" 0.0 -2.0 2.0 0.05
 #define bloom         global.bloom     // bloom effect
 
-#pragma parameter mask_bloom "          Mask Bloom -- mask_bloom" 0.0 0.0 2.0 0.05
+#pragma parameter mask_bloom 	"          Mask Bloom -- mask_bloom" 0.0 -2.0 2.0 0.05
 #define mask_bloom         global.mask_bloom     // bloom effect
 
-#pragma parameter bloom_dist "          Bloom Distribution -- bloom_dist" 0.0 0.0 3.0 0.05
+#pragma parameter bloom_dist 	"          Bloom Distribution -- bloom_dist" 0.0 -2.0 3.0 0.05
 #define bloom_dist         global.bloom_dist     // bloom effect distribution
 
-#pragma parameter halation "          Halation Strength -- halation" 0.0 -2.0 2.0 0.025
+#pragma parameter halation 		"          Halation Strength -- halation" 0.0 -2.0 2.0 0.025
 #define halation         global.halation     // halation effect
+
+#pragma parameter bmask1 "          Bloom Mask Strength -- bmask1" 0.0 -1.0 1.0 0.025
+#define bmask1         global.bmask1     // bloom/halation mask strength
+
+#pragma parameter hmask1 "          Halation Mask Strength -- hmask1" 0.5 -1.0 1.0 0.025
+#define hmask1         global.hmask1     // bloom/halation mask strength
 
 #pragma parameter gamma_c "          Gamma Correct -- gamma_c" 1.0 0.50 2.0 0.025
 #define gamma_c   global.gamma_c     // adjust brightness
@@ -52,47 +61,50 @@
 #pragma parameter brightboost1 "          Bright Boost Bright Pixels -- brightboost1" 1.10 0.25 3.00 0.025
 #define brightboost1  global.brightboost1     // adjust brightness
 
+#pragma parameter clips "          Clip Saturated Color Beams -- clips" 0.0 -1.0 1.0 0.05
+#define clips  global.clips     // kinky effect
+
 #pragma parameter GDV_SCANLINE_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter bogus_scanline "[ SCANLINE OPTIONS ]: " 0.0 0.0 1.0 1.0
 
 #pragma parameter gsl "          Scanline Type -- gsl" 0.0 -1.0 2.0 1.0
 #define gsl          global.gsl      // Alternate scanlines
 
-#pragma parameter scanline1 "          Scanline Beam Shape Center -- scanline1" 6.0 -20.0 20.0 0.5
+#pragma parameter scanline1 "          Scanline Beam Shape Center -- scanline1" 6.0 -20.0 40.0 0.5
 #define scanline1    global.scanline1      // scanline param, vertical sharpness
 
 #pragma parameter scanline2 "          Scanline Beam Shape Edges -- scanline2" 8.0 0.0 70.0 1.0
 #define scanline2    global.scanline2      // scanline param, vertical sharpness
 
-#pragma parameter beam_min "          Scanline Shape Dark Pixels -- beam_min" 1.30 0.20 5 0.05
+#pragma parameter beam_min "          Scanline Shape Dark Pixels -- beam_min" 1.30 0.25 10.0 0.05
 #define beam_min     global.beam_min     // dark area beam min - narrow
 
-#pragma parameter beam_max "          Scanline Shape Bright Pixels -- beam_max" 1.00 0.4 3.5 0.025
+#pragma parameter beam_max "          Scanline Shape Bright Pixels -- beam_max" 1.00 0.2 3.5 0.025
 #define beam_max     global.beam_max     // bright area beam max - wide
+
+#pragma parameter tds "          Thinner Dark Scanlines -- tds" 0.0 0. 1.0 1.0
+#define tds     global.tds     // thinner dark scanlines
 
 #pragma parameter beam_size "          Increased Bright Scanline Beam -- beam_size" 0.60 0.0 1.0 0.05
 #define beam_size    global.beam_size     // increased max. beam size
 
-#pragma parameter vertmask "          Scanline Color Deconvergence -- vertmask" 0.0 -1.0 1.0 0.1
-#define vertmask     global.vertmask     // Scanline deconvergence colors
+#pragma parameter scans "          Scanline Saturation / Mask Falloff -- scans" 0.50 0.0 6.0 0.10
+#define scans        1.5*global.scans     // scanline saturation
 
-#pragma parameter scans "          Scanline Saturation / Mask Falloff -- scans" 0.5 -5.0 5.0 0.10
-#define scans        global.scans     // scanline saturation
-
-#pragma parameter scan_falloff "          Scanline Falloff -- scan_falloff" 1.0 0.20 2.0 0.05
+#pragma parameter scan_falloff "          Scanline Falloff -- scan_falloff" 1.0 0.10 2.0 0.025
 #define scan_falloff        global.scan_falloff     // scanline falloff
 
 #pragma parameter spike "          Scanline Spike Removal -- spike" 1.0 0.0 2.0 0.10
 #define spike global.spike
 
-#pragma parameter rolling_scan "          Rolling Scanlines -- rolling_scan" 0.0 -1.0 1.0 0.01
-#define rolling_scan	global.rolling_scan     // rolling scanlines
+#pragma parameter ssharp "          Smart Sharpen Scanlines" 0.0 0.0 0.30 0.01
+#define ssharp global.ssharp
 
 #pragma parameter scangamma "          Scanline Gamma" 2.40 0.5 10.0 0.05
 #define scangamma 	global.scangamma
 
-#pragma parameter no_scanlines "          No-Scanline Mode (Guest Advanced Only)" 0.0 0.0 1.0 1.0
-#define no_scanlines global.no_scanlines
+// #pragma parameter no_scanlines "          No-Scanline Mode (Guest Advanced Only)" 0.0 0.0 1.5 0.05
+// #define no_scanlines global.no_scanlines
 
 #pragma parameter GDV_FILTERING_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter bogus_filtering "[ FILTERING OPTIONS ]: " 0.0 0.0 1.0 1.0
@@ -117,6 +129,7 @@
 
 // #pragma parameter bogus_screen "[ SCREEN OPTIONS ]: " 0.0 0.0 1.0 1.0
 
+// HSM the resolution scaling is controlled by HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR
 // #pragma parameter intres "          Internal Resolution Y: 0.5...y-dowsample" 0.0 0.0 6.0 0.5 // Joint parameter with linearize pass, values must match
 
 // #pragma parameter TATE "          TATE Mode" 0.0 0.0 1.0 1.0
@@ -124,6 +137,12 @@
 
 // #pragma parameter IOS "          Integer Scaling: Odd:Y, Even:'X'+Y" 0.0 0.0 4.0 1.0
 // #define IOS          params.IOS     // Smart Integer Scaling
+
+// #pragma parameter OS "          R. Bloom Overscan Mode" 1.0 0.0 2.0 1.0
+// #define OS           params.OS     // Do overscan
+
+// #pragma parameter BLOOM "          Raster bloom %" 0.0 0.0 20.0 1.0
+// #define BLOOM        params.BLOOM     // Bloom overscan percentage
 
 // #pragma parameter warpX "          CurvatureX (default 0.03)" 0.0 0.0 0.25 0.01
 // #define warpX        params.warpX     // Curvature X
@@ -140,17 +159,8 @@
 // #pragma parameter overscanY "          Overscan Y original pixels" 0.0 -200.0 200.0 1.0
 // #define overscanY        global.overscanY     // OverscanY pixels
 
-/* HSM Removed
-#define COMPAT_TEXTURE(c,d) texture(c,d)
-*/
 
-// HSM Added
 #define COMPAT_TEXTURE(c,d) HSM_GetCroppedTexSample(c,d)
-// End Addition
-
-/* HSM Removed
-#define TEX0 vTexCoord
-*/
 
 #define OutputSize global.OutputSize
 #define gl_FragCoord (vTexCoord * OutputSize.xy)
@@ -183,32 +193,36 @@ float st(float x)
 
 float st1(float x)
 {
-	return exp2(-7.0*x*x);
+	return exp2(-8.0*x*x);
 }
    
-float sw0(float x, float color, float scanline)
+vec3 sw0(float x, float color, float scanline, vec3 c)
 {
 	float tmp = mix(beam_min, beam_max, color);
+	vec3 sat = mix(1.0.xxx + scans, 1.0.xxx, c);
 	float ex = x*tmp;
 	ex = (gsl > -0.5) ? ex*ex : mix(ex*ex, ex*ex*ex, 0.4);
-	return exp2(-scanline*ex);
+	return exp2(-scanline*ex*sat);
 } 
 
-float sw1(float x, float color, float scanline)
+vec3 sw1(float x, float color, float scanline, vec3 c)
 {	
 	x = mix (x, beam_min*x, max(x-0.4*color,0.0));
+	vec3 sat = mix(1.0.xxx + scans, 1.0.xxx, c);	
 	float tmp = mix(1.2*beam_min, beam_max, color);
 	float ex = x*tmp;
-	return exp2(-scanline*ex*ex);
+	return exp2(-scanline*ex*ex*sat);
 }    
 
-float sw2(float x, float color, float scanline)
+vec3 sw2(float x, float color, float scanline, vec3 c)
 {
 	float tmp = mix((2.5-0.5*color)*beam_min, beam_max, color);
+	vec3 sat = mix(1.0.xxx + scans, 1.0.xxx, c);	
 	tmp = mix(beam_max, tmp, pow(x, color+0.3));
 	float ex = x*tmp;
-	return exp2(-scanline*ex*ex);
-}
+	return exp2(-scanline*ex*ex*sat);
+}   
+
 
 /* HSM Removed
 vec2 Warp(vec2 pos)
@@ -217,7 +231,6 @@ vec2 Warp(vec2 pos)
 	pos  = mix(pos, vec2(pos.x*inversesqrt(1.0-c_shape*pos.y*pos.y), pos.y*inversesqrt(1.0-c_shape*pos.x*pos.x)), vec2(warpX, warpY)/c_shape);
 	return pos*0.5 + 0.5;
 }
-
 */
 
 vec2 Overscan(vec2 pos, float dx, float dy){
@@ -226,12 +239,20 @@ vec2 Overscan(vec2 pos, float dx, float dy){
 	return pos*0.5+0.5;
 } 
 
+
 vec3 gc(vec3 c)
 {
 	float mc = max(max(c.r,c.g),c.b);
 	float mg = pow(mc, 1.0/gamma_c);
 	return c * mg/(mc + eps);  
 }
+
+vec3 plant (vec3 tar, float r)
+{
+	float t = max(max(tar.r,tar.g),tar.b) + 0.00001;
+	return tar * r / t;
+}
+
 
 void main()
 {
@@ -240,39 +261,45 @@ void main()
 
 	if (HSM_IsOutsideReflectionBoundary())
 	{
-		FragColor = vec4(0);
-		return;
+			FragColor = vec4(0);
+			return;
 	}
 
 	float TATE = USE_VERTICAL_SCANLINES;
 
-	/* HSM Removed
-	vec2 prescalex = vec2(vec2(textureSize(LinearizePass, 0))/global.OriginalSize.xy);
-	
-	vec4 SourceSize = global.OriginalSize * mix( vec4(prescalex.x, 1.0, 1.0/prescalex.x, 1.0), vec4(1.0, prescalex.y, 1.0, 1.0/prescalex.y), TATE);
-	*/
-
 	// HSM Added
+	vec2 prescalex = textureSize(LinearizePass, 0).xy / global.DerezedPassSize.xy;
 
-	vec4 SourceSize = vec4(CROPPED_ROTATED_SIZE_WITH_RES_MULT, 1 / CROPPED_ROTATED_SIZE_WITH_RES_MULT);
+	vec4 SourceSize = vec4(CROPPED_ROTATED_SIZE, 1 / CROPPED_ROTATED_SIZE) * mix( vec4(prescalex.x, 1.0, 1.0/prescalex.x, 1.0), vec4(1.0, prescalex.y, 1.0, 1.0/prescalex.y), TATE);
 
 	// float lum = COMPAT_TEXTURE(AvgLumPass, vec2(0.5,0.5)).a;
-	
+
+	// HSM Added
+	// Find out if we should use no scanlines based on interlace mode, no scanlines param, & intetrlace settings
+	float no_scanlines = HSM_GetNoScanlineMode();
+
 	float gamma_in = 1.0/COMPAT_TEXTURE(LinearizePass, vec2(0.25,0.25)).a;
 	float intera = COMPAT_TEXTURE(LinearizePass, vec2(0.75,0.25)).a;
-	bool interb  = (intera < 0.5);
-	bool notate  = (TATE < 0.5);
+	bool hscan = (hiscan > 0.5);
+	bool interb  = (((intera < 0.35) || (no_scanlines > 0.025)) && !hscan);
+	// bool notate  = (TATE < 0.5);
+	bool vgascan = ((abs(intera-0.5) < 0.05) && (no_scanlines == 0.0));
 
-	if (USE_VERTICAL_SCANLINES > 0.5 && interb)
-		notate = true;
+	float SourceY = mix(SourceSize.y, SourceSize.x, TATE);
+
+	float hsm_intres = 1 / HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR;
+	float sy = hsm_intres;
 
 	/* HSM Removed
-	float SourceY = mix(SourceSize.y, SourceSize.x, TATE);
-	float sy = 1.0;
-	if (global.intres == 1.0) sy = SourceY/224.0;
-	if (global.intres > 0.25 && global.intres != 1.0) sy = global.intres;
-	if (notate) SourceSize*=vec4(1.0, 1.0/sy, 1.0, sy); else SourceSize*=vec4(1.0/sy, 1.0, sy, 1.0);
-	
+	if (hsm_intres == 1.0) sy = SourceY/224.0;
+	if (hsm_intres > 0.25 && hsm_intres != 1.0) sy = hsm_intres;
+	*/
+	// VGA Scan Mode
+	if (vgascan) sy = 0.5; else if (abs(intera-0.75) < 0.05) sy = 1.0;
+
+	if (TATE < 0.5) SourceSize*=vec4(1.0, 1.0/sy, 1.0, sy); else SourceSize*=vec4(1.0/sy, 1.0, sy, 1.0);
+
+	/* HSM Removed
 	// Calculating texel coordinates
    
 	vec2 texcoord = TEX0.xy;
@@ -285,7 +312,7 @@ void main()
 		if (IOS == 1.0 || IOS == 3.0) texcoord = mix(vec2(TEX0.x, texcoord.y), vec2(texcoord.x, TEX0.y), TATE);
 	}
    
-	float factor  = 1.00 + (1.0-0.5*HSM_OVERSCAN_RASTER_BLOOM_MODE)*HSM_OVERSCAN_RASTER_BLOOM_AMOUNT/100.0 - lum*HSM_OVERSCAN_RASTER_BLOOM_AMOUNT/100.0;
+	float factor  = 1.00 + (1.0-0.5*OS)*BLOOM/100.0 - lum*BLOOM/100.0;
 	texcoord  = Overscan(texcoord, factor, factor);
 
 	texcoord = Overscan(texcoord, (global.OriginalSize.x - overscanX)/global.OriginalSize.x, (global.OriginalSize.y - overscanY)/global.OriginalSize.y);
@@ -293,7 +320,7 @@ void main()
 	vec2 pos  = Warp(texcoord);
  	*/
 
-	// HSM Added
+	// HSM Added Raster Bloom
 	float raster_bloom_avg_lum = texture(AvgLumPass, vec2(0.5,0.5)).a;
 	vec2 screen_curved_coord = vec2(0.5);
 	vec2 screen_curved_coord_with_overscan = vec2(0.5);
@@ -311,7 +338,7 @@ void main()
 	vec2 pos = screen_curved_coord_with_overscan_and_mirror;
 	// End Addition
 
-	bool smarte  = (smart_ei > 0.01); // smart edge interpolation on / off
+	bool smarte  = (smart_ei > 0.01 && TATE < 0.5); // smart edge interpolation on / off
 
 	vec2 coffset = vec2(0.5, 0.5);
 
@@ -330,39 +357,28 @@ void main()
 	vec2 off2 = x2;
 	vec2 offy = dy;
 	float fpx = fp.x;
-	if(!notate)
+	if(TATE > 0.5)
 	{
 		offx = dy;
 		off2 = y2;
 		offy = dx;
 		fpx = fp.y;
 	}
-	float  f = (notate) ? fp.y : fp.x;
+	float  f = TATE < 0.5 ? fp.y : fp.x;
 	
 	vec2 pC4 = floor(OGL2Pos) * ps + 0.5*ps; 
 
-	/* HSM Removed
-	if (global.intres == 0.5 &&  notate && prescalex.y < 1.5) pC4.y = floor(pC4.y * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
-	if (global.intres == 0.5 && !notate && prescalex.x < 1.5) pC4.x = floor(pC4.x * global.OriginalSize.x)*global.OriginalSize.z + 0.5*global.OriginalSize.z;
-	*/
+	if ((hsm_intres == 0.5 &&  TATE < 0.5 && prescalex.y < 1.5) || vgascan) pC4.y = floor(pC4.y * global.DerezedPassSize.y)*global.DerezedPassSize.w + 0.5*global.DerezedPassSize.w;
+	if ((hsm_intres == 0.5 && TATE > 0.5 && prescalex.x < 1.5) || (vgascan && TATE > 0.5)) pC4.x = floor(pC4.x * global.DerezedPassSize.x)*global.DerezedPassSize.z + 0.5*global.DerezedPassSize.z;
 
-// TODO could do something to support the VGA double resolution of the 
-
-	if (interb)  pC4.y = pos.y;
+	if (interb && no_scanlines < 0.025 && !hscan)  pC4.y = pos.y; else if (interb) pC4.y = pC4.y + smoothstep(0.40-0.5*no_scanlines, 0.60 + 0.5*no_scanlines, f)*mix(SourceSize.w, SourceSize.z, TATE);
+	if (hscan) pC4 = mix(vec2(pC4.x, pos.y), vec2(pos.x, pC4.y), TATE);
 
 	float zero = exp2(-h_sharp);
 	float sharp1 = s_sharp * zero;
 	
-	/* HSM Removed
 	float idiv = clamp(mix(SourceSize.x, SourceSize.y, TATE) / 400.0, 1.0, 2.0);
 	float fdivider = max(min(mix(prescalex.x, prescalex.y,TATE), 2.0), idiv*float(interb));
-	*/
-	
-	// HSM Added
-	float fdivider = min((1 - USE_VERTICAL_SCANLINES) * SAMPLING_SCANLINE_DIR_MULT + 
-			   				  USE_VERTICAL_SCANLINES *  SAMPLING_OPPOSITE_DIR_MULT, 
-			   				  2.0);
-	// End Addition
 
 	float wl3 = (2.0 + fpx)/fdivider;
 	float wl2 = (1.0 + fpx)/fdivider;
@@ -424,7 +440,6 @@ void main()
 	color1 = (l3*twl3 + l2*twl2 + l1*twl1 + r1*twr1 + r2*twr2 + r3*twr3)/(twl3+twl2+twl1+twr1+twr2+twr3);
 
 	if (sharp) color1 = clamp(mix(clamp(color1, colmin, colmax), color1, ring), 0.0, 1.0);
-
 	float ts = 0.025;
 	vec3 luma = vec3(0.2126, 0.7152, 0.0722);
 	
@@ -445,16 +460,12 @@ void main()
 	
 	vec3 scolor2;
 	
-	if (!interb)
+	if (!interb && !hscan)
 {	
 	pC4+=offy;
 
-	/* HSM Removed
-	if (global.intres == 0.5 &&  notate && prescalex.y < 1.5) pC4.y = floor((pos.y + 0.33*offy.y) * global.OriginalSize.y)*global.OriginalSize.w + 0.5*global.OriginalSize.w;
-	if (global.intres == 0.5 && !notate && prescalex.x < 1.5) pC4.x = floor((pos.x + 0.33*offy.x) * global.OriginalSize.x)*global.OriginalSize.z + 0.5*global.OriginalSize.z;
-	*/
-
-// TODO could do something to support the VGA double resolution of the 
+	if ((hsm_intres == 0.5 &&  TATE < 0.5 && prescalex.y < 1.5) || vgascan) pC4.y = floor((pos.y + 0.33*offy.y) * global.DerezedPassSize.y)*global.DerezedPassSize.w + 0.5*global.DerezedPassSize.w;
+	if ((hsm_intres == 0.5 && TATE > 0.5 && prescalex.x < 1.5) || (vgascan && TATE > 0.5)) pC4.x = floor((pos.x + 0.33*offy.x) * global.DerezedPassSize.x)*global.DerezedPassSize.z + 0.5*global.DerezedPassSize.z;
 
 	l3 = COMPAT_TEXTURE(LinearizePass, pC4 -off2).rgb;
 	l2 = COMPAT_TEXTURE(LinearizePass, pC4 -offx).rgb;
@@ -499,12 +510,16 @@ void main()
 	vec3 ctmp = color1; float w3 = 1.0; vec3 color = color1;
 	vec3 one = vec3(1.0);
 
+	if (hscan) { color2 = color1; scolor2 = scolor1; }
+
 if (!interb)
 {	
 	// calculating scanlines
 
-	float shape1 = mix(scanline1, scanline2, f);
-	float shape2 = mix(scanline1, scanline2, 1.0-f);	
+	float ssub = ssharp*max(abs(scolor1.x-scolor2.x), abs(dot(color1,luma)-dot(color2,luma)));
+
+	float shape1 = mix(scanline1, scanline2 + ssub * scolor1.x * 35.0, f);
+	float shape2 = mix(scanline1, scanline2 + ssub * scolor2.x * 35.0, 1.0-f);
 	
 	float wt1 = st(f);
 	float wt2 = st(1.0-f);
@@ -515,34 +530,15 @@ if (!interb)
 	ctmp = color00/(wt1+wt2);
 	vec3 sctmp = scolor0/(wt1+wt2);
 
-	float wf1, wf2;
+	vec3 w1, w2;
 	
 	vec3 cref1 = mix(sctmp, scolor1, beam_size); float creff1 = pow(max(max(cref1.r,cref1.g),cref1.b), scan_falloff);
 	vec3 cref2 = mix(sctmp, scolor2, beam_size); float creff2 = pow(max(max(cref2.r,cref2.g),cref2.b), scan_falloff);
 
+	if (tds > 0.5) { shape1 = mix(scanline2, shape1, creff1); shape2 = mix(scanline2, shape2, creff2); }
+
 	float f1 = f; 
 	float f2 = 1.0-f;
-
-	/* HSM Removed	
-	float scanpix = mix(SourceSize.x/OutputSize.x, SourceSize.y/OutputSize.y, float(notate));
-	*/
-
-	// HSM Added
-	float scanpix = mix(SourceSize.x/(SCREEN_SCALE.x * OutputSize.x), SourceSize.y/(SCREEN_SCALE.y * OutputSize.y), float(notate));
-
-	f1 = fract(f1 + rolling_scan*float(global.FrameCount)*scanpix);
-	f2 = 1.0 - f1;
-	
-	if (gsl <  0.5) { wf1 = sw0(f1,creff1,shape1); wf2 = sw0(f2,creff2,shape2);} else
-	if (gsl == 1.0) { wf1 = sw1(f1,creff1,shape1); wf2 = sw1(f2,creff2,shape2);} else
-	                { wf1 = sw2(f1,creff1,shape1); wf2 = sw2(f2,creff2,shape2);}
-	
-	if ((wf1 + wf2) > 1.0) { float wtmp = 1.0/(wf1+wf2); wf1*=wtmp; wf2*=wtmp; }
-
-	// Scanline saturation application
-	
-	vec3 w1 = vec3(wf1); vec3 w2 = vec3(wf2);
-	w3 = wf1+wf2;
 	
 	float mc1 = max(max(color1.r,color1.g),color1.b) + eps;
 	float mc2 = max(max(color2.r,color2.g),color2.b) + eps;
@@ -550,71 +546,26 @@ if (!interb)
 	cref1 = color1 / mc1;
 	cref2 = color2 / mc2;
 
-	float scanpow1 = (scans > 0.0) ? 1.0 : pow(f1, 0.375);
-	float scanpow2 = (scans > 0.0) ? 1.0 : pow(f2, 0.375);	
-	w1 = pow(w1, mix(2.0*abs(scans).xxx + 1.0, 1.0.xxx, mix(1.0.xxx, cref1, scanpow1)));
-	w2 = pow(w2, mix(2.0*abs(scans).xxx + 1.0, 1.0.xxx, mix(1.0.xxx, cref2, scanpow2)));
-	
-	// Scanline Deconvergence
-	
-	vec3 cd1 = one; vec3 cd2 = one;
+	if (gsl <  0.5) { w1 = sw0(f1,creff1,shape1,cref1); w2 = sw0(f2,creff2,shape2,cref2);} else
+	if (gsl == 1.0) { w1 = sw1(f1,creff1,shape1,cref1); w2 = sw1(f2,creff2,shape2,cref2);} else
+	                { w1 = sw2(f1,creff1,shape1,cref1); w2 = sw2(f2,creff2,shape2,cref2);}
 
-if (abs(vertmask) > 0.025)
-{
-	float vm = sqrt(abs(vertmask));
-	float v_high1 = 1.0 + 0.3*vm;
-	float v_high2 = 1.0 + 0.6*vm;	
-	float v_low  = 1.0 - vm;
+	vec3 w3 = w1+w2;
+	float wf1 = max(max(w3.r,w3.g),w3.b);
+	if (wf1 > 1.0) {wf1 = 1.0/wf1; w1*=wf1, w2*=wf1;}
 	
-	float ds1 = min(max(1.0-w3*w3, 2.5*f1), 1.0);
-	float ds2 = min(max(1.0-w3*w3, 2.5*f2), 1.0);
-	
-	if (vertmask < 0.0) 
+	if (abs(clips) > 0.005)
 	{
-		cd1 = mix(one, vec3(v_high2, v_low, v_low), ds1);
-		cd2 = mix(one, vec3(v_low, v_high1, v_high1), ds2);
-	}
-	else
-	{
-		cd1 = mix(one, vec3(v_high1, v_low, v_high1), ds1);
-		cd2 = mix(one, vec3(v_low, v_high2, v_low), ds2);
-	}
-}
-
-	/* HSM Removed
-	color = (gc(color1)*w1*cd1 + gc(color2)*w2*cd2)/mix(1.0.xxx, w1+w2, no_scanlines);
-	*/
-
-	// HSM Added
-	float scan_res = (1 - USE_VERTICAL_SCANLINES) * CROPPED_ROTATED_SIZE_WITH_RES_MULT.y + 
-						USE_VERTICAL_SCANLINES *  CROPPED_ROTATED_SIZE_WITH_RES_MULT.x;
-	float hsm_no_scanlines = HSM_INTERLACE_MODE < 0 && HSM_INTERLACE_TRIGGER_RES <= scan_res ? 1 : no_scanlines;
+		sy = mc1; one = (clips > 0.0) ? w1 : 1.0.xxx;
+		float sat = 1.0001-min(min(cref1.r,cref1.g),cref1.b);
+		color1 = mix(color1, plant(pow(color1, 0.70.xxx-0.325*sat),sy), pow(sat,0.3333)*one*abs(clips));
+		sy = mc2; one = (clips > 0.0) ? w2 : 1.0.xxx;
+		sat =       1.0001-min(min(cref2.r,cref2.g),cref2.b);
+		color2 = mix(color2, plant(pow(color2, 0.70.xxx-0.325*sat),sy), pow(sat,0.3333)*one*abs(clips));
+	}	
 	
-	// HSM Added
-	// float screen_mask = HSM_GetCornerMask((screen_curved_coord - 0.5) * 0.999 + 0.5, SCREEN_ASPECT, HSM_GLOBAL_CORNER_RADIUS * HSM_SCREEN_CORNER_RADIUS_SCALE, 0.9);
-	// bool is_inside_screen = screen_mask > 0.001;
+	color = (gc(color1)*w1 + gc(color2)*w2);
 
-	// if (is_inside_screen)
-		color = (gc(color1)*w1*cd1 + gc(color2)*w2*cd2)/mix(1.0.xxx, w1+w2, hsm_no_scanlines);
-
-	// TODO this bit was to remove scanlines outside of the screen, 
-	//      but it has a problem when scangamma is used, so is disabled for now
-	// else
-	// {
-	// 	color = (gc(color1)*w1*cd1 + gc(color2)*w2*cd2)/(w1+w2);
-	// 	vec3 color_no_scanline = gc(color1) + gc(color2);
-	// 	color = mix(color, color_no_scanline, hsm_no_scanlines);
-	// }
-	// End HSM Addition
-
-	if (abs(rolling_scan) > 0.005) 
-	{ 
-		wt1 = st1(f);
-		wt2 = st1(1.0-f);
-		color00 = (color1*wt1 + color2*wt2)/(wt1+wt2);
-		color = gc(color00) * mix(w1+w2, w3.xxx, max(wf1,wf2));	
-	}
-	
 	color = min(color, 1.0);
 }
 	
@@ -626,7 +577,7 @@ if (abs(vertmask) > 0.025)
 	float colmx = max(max(ctmp.r,ctmp.g),ctmp.b);
 
 	if(!interb) color = pow( color, vec3(gamma_in/scangamma) );
-
+	
 	FragColor = vec4(color, colmx);
 
 	if (HSM_GetUseFakeScanlines())

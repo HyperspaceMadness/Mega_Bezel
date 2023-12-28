@@ -1,7 +1,7 @@
 /*
    Interlacing
    
-   Copyright (C) 2020 - 2022 guest(r) - guest.r@gmail.com
+   Copyright (C) 2020 - 2023 guest(r) - guest.r@gmail.com
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -27,14 +27,17 @@ layout(push_constant) uniform Push
 	vec4 OriginalSize;
 	vec4 OutputSize;
 	uint FrameCount;
-
-// 	float GAMMA_INPUT;
-// 	float inter;
-// 	float interm;
-// 	float inters;
-// 	float iscan;
-// 	float intres;
-// 	float downsample_level;
+	// float GAMMA_INPUT;
+	// float inter;
+	// float interm;
+	// float iscan;
+	// float intres;
+	// float iscans;
+	// float downsample_levelx;
+	// float downsample_levely;
+	// float gamma_out;
+	// float vga_mode;
+	// float hiscan;
 } params;
 
 
@@ -44,7 +47,7 @@ layout(std140, set = 0, binding = 0) uniform UBO
 	vec4 SourceSize;
 	mat4 MVP;
 } global;
-
+*/
 
 // #pragma parameter bogus_gamma "[ GAMMA OPTIONS ]: " 0.0 0.0 0.0 1.0
 
@@ -56,36 +59,43 @@ layout(std140, set = 0, binding = 0) uniform UBO
 
 // #pragma parameter bogus_interlacing "[ INTERLACING OPTIONS ]: " 0.0 0.0 0.0 1.0
 
-// #pragma parameter inter "          Interlace Trigger Resolution :" 350.0 0.0 800.0 25.0
+// #pragma parameter inter "          Interlace Trigger Resolution :" 375.0 0.0 800.0 25.0
 // #define inter         params.inter     // interlace resolution
 
 // #pragma parameter interm "          Interlace Mode: OFF, Normal 1-3, Interpolation 4-5" 1.0 0.0 5.0 1.0
-*/
+
 #define interm      HSM_INTERLACE_MODE     // interlace mode 
 
-/*
+
 // #pragma parameter inters "          Interlacing Effect Smoothness" 0.0 0.0 0.5 0.05 // Joint parameter with main pass, values must match
-*/
+
 #define inters  	HSM_INTERLACE_EFFECT_SMOOTHNESS_INTERS     // interlacing effect smoothing
 
-/*
+
 // #pragma parameter iscan "          Interlacing Scanline Effect" 0.20 0.0 1.0 0.05
-*/
+
 #define iscan  		HSM_INTERLACE_SCANLINE_EFFECT     // interlacing effect scanlining
 
-/*
+
 // #pragma parameter intres "          Internal Resolution Y: 224p/240p, 1.5...y-dowsample" 0.0 0.0 6.0 0.5 // Joint parameter with main pass, values must match
 
 // #define intres         params.intres     // interlace resolution
 
 // #pragma parameter downsample_levelx "          Downsampling-X (High-res content, pre-scalers)" 0.0 0.0 2.0 0.25
-*/
+
 #define downsample_level         HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR     // downsample level
 
 // #pragma parameter downsample_levely "          Downsampling-Y (High-res content, pre-scalers)" 0.0 0.0 2.0 0.25
 
-#pragma parameter iscans 	"          Interlacing (Scanline) Saturation" 0.25 0 1 0.05
-#define iscans global.iscans
+// #pragma parameter iscans 	"          Interlacing (Scanline) Saturation" 0.25 0 1 0.05
+// #define iscans global.iscans
+
+// #pragma parameter vga_mode "          VGA Single/Double Scan mode" 0.0 0.0 1.0 1.0
+// #define vga_mode        global.vga_mode     // interlace saturation
+
+#pragma parameter hiscan "       High Resolution Scanlines (GDV with ScaleFx or XBR Only)" 0.0 0.0 1.0 1.0
+#define hiscan        global.hiscan
+
 
 bool use_vert_scanlines_bool = false;
 #pragma stage vertex
@@ -102,9 +112,8 @@ void main()
 #pragma stage fragment
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 0) out vec4 FragColor;
-
-layout(set = 0, binding = 1) uniform sampler2D CacheInfoPass;
-layout(set = 0, binding = 3) uniform sampler2D PrePass;
+layout(set = 0, binding = 2) uniform sampler2D PrePass;
+layout(set = 0, binding = 3) uniform sampler2D CacheInfoPass;
 layout(set = 0, binding = 4) uniform sampler2D DerezedPass;
 
 #define COMPAT_TEXTURE(c,d) texture(c,d)
@@ -116,20 +125,13 @@ vec3 plant (vec3 tar, float r)
 	return tar * r / t;
 }
 
-// TODO need to adjust downsample
+
 vec3 fetch_pixel(vec2 coord)
 {
-	vec2 prescale_tex_size = textureSize(DerezedPass, 0);
-
-	vec2 dx = vec2(1 / prescale_tex_size.x, 0.0) * HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR;
-	vec2 dy = vec2(0.0, 1 / prescale_tex_size.y) * HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR;
-
-	if (use_vert_scanlines_bool)
-	{
-		dx = vec2(1 / prescale_tex_size.x, 0.0) * HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR;
-		dy = vec2(0.0, 1 / prescale_tex_size.y) * HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR;
-	}
-
+	float downsample_levelx = use_vert_scanlines_bool ? HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR : HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR;
+	float downsample_levely = use_vert_scanlines_bool ? HSM_DOWNSAMPLE_BLUR_SCANLINE_DIR : HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR;
+	vec2 dx = vec2(global.DerezedPassSize.z, 0.0) * downsample_levelx;
+	vec2 dy = vec2(0.0, global.DerezedPassSize.w) * downsample_levely;
 	vec2 d1 = dx + dy;
 	vec2 d2 = dx - dy;
 	
@@ -193,9 +195,6 @@ void main()
 	float derezed_scaled_opposite_dir_res = derezed_opposite_dir_res * HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR;
 
 	float orig_opposite_dir_res = use_vert_scanlines_bool ? ROTATED_CORE_PREPPED_SIZE.x : ROTATED_CORE_PREPPED_SIZE.y;
-	float scaled_opposite_dir_res = orig_opposite_dir_res * HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR;
-
-	float orig_scanline_dir_res = use_vert_scanlines_bool ? ROTATED_CORE_PREPPED_SIZE.y : ROTATED_CORE_PREPPED_SIZE.x;
 
 	float tex_coord_scan_dir = use_vert_scanlines_bool ? vTexCoord.x : vTexCoord.y;
 
@@ -231,11 +230,13 @@ void main()
 	/* HSM Removed
 	 float yres_div = 1.0; if (intres > 1.25) yres_div = intres;
 
-	if (inter < params.OriginalSize.y/yres_div && interm > 0.5 && intres != 1.0 && intres != 0.5) 
+	if (inter <= params.OriginalSize.y/yres_div && interm > 0.5 && intres != 1.0  && intres != 0.5 && vga_mode < 0.5)
 	*/
 
+	bool hscan = (hiscan > 0.5);
+		
 	// HSM Added
-	if (HSM_INTERLACE_TRIGGER_RES <= derezed_scaled_opposite_dir_res && interm > 0.5) 
+	if (HSM_INTERLACE_TRIGGER_RES <= derezed_scaled_opposite_dir_res && interm > 0.5 && HSM_CORE_RES_SAMPLING_MULT_OPPOSITE_DIR != 1.0 && vga_mode < 0.5 || hscan) 
 	{
 		intera = 0.25;
 
@@ -256,8 +257,10 @@ void main()
 			if (interm == 3.0) c = (1.0-0.5*iscan)*mix(c2, c1, ii);
 			intera = 0.0;
 		}
-		if (interm == 4.0) { c = plant(mix(c, c*c, 0.5*iscans), max(max(c.r,c.g),c.b)); intera = 0.45; }
-		if (interm == 5.0) { c = mix(c2, c1, 0.5); c = plant(mix(c, c*c, 0.5*iscans), max(max(c.r,c.g),c.b)); intera = 0.45; }
+		if (interm == 4.0) { c = plant(mix(c, c*c, 0.5*iscans), max(max(c.r,c.g),c.b)) * (1.0-0.5*iscan); }
+		if (interm == 5.0) { c = mix(c2, c1, 0.5); c = plant(mix(c, c*c, 0.5*iscans), max(max(c.r,c.g),c.b)) * (1.0-0.5*iscan); }
+	
+		if (hscan) c = c1;	
 	}
 
 	if (HSM_NON_USER_LINEARIZE_INTERLACE_PASS > 0.5)
@@ -265,9 +268,6 @@ void main()
 		// Linearize Color
 		c = pow(c, vec3(gamma_in));
 	}
-	
-	// if (USE_VERTICAL_SCANLINES > 0.5)
-	// 	intera = 1;
 
 	// HSM Added Noise based on Guest.r's noise from deconvergence pass
 	if (HSM_SIGNAL_NOISE_ON > 0.5)

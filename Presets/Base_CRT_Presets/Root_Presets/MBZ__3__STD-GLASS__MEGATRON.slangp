@@ -255,7 +255,6 @@ alias27 = "ReflectPass"
 
 # Combine Passes ----------------------------------------------------------------
 shader28 = ../../../shaders/base/output-hdr.slang
-scale_type28 = viewport
 alias28 = "OutputPass"
 
 

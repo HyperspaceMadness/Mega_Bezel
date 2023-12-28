@@ -284,7 +284,6 @@ HSM_REFLECT_GLOBAL_AMOUNT = "7.000000"
 
 # Combine Passes ----------------------------------------------------------------
 shader38 = ../../../shaders/base/output-hdr.slang
-scale_type38 = viewport
 alias38 = "OutputPass"
 
 

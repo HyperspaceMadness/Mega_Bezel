@@ -155,6 +155,8 @@ float HSM_INTERLACE_MODE;
 float HSM_INTERLACE_EFFECT_SMOOTHNESS_INTERS;
 float HSM_INTERLACE_SCANLINE_EFFECT;
 float iscans;
+float vga_mode;
+float hiscan;
 
 //    FAKE SCANLINES
 float HSM_FAKE_SCANLINE_MODE;
@@ -824,6 +826,9 @@ float m_glow_high;
 float m_glow_dist;
 float m_glow_mask;
 float smask_mit;
+float bmask;
+float bmask1;
+float hmask1;
 
 float glow;
 float bloom;
@@ -852,6 +857,7 @@ float warpY;
 float gamma_c;
 float brightboost;
 float brightboost1;
+float clips;
 
 float blendMode;
 
@@ -860,11 +866,13 @@ float scanline1;
 float scanline2;
 float beam_min;
 float beam_max;
+float tds;
 float beam_size;
 float vertmask;
 float scans;
 float scan_falloff;
 float spike;
+float ssharp;
 float ring;
 float no_scanlines;
 float scangamma;
@@ -886,6 +894,8 @@ float maskstr;
 float mcut;	
 float maskboost;
 float masksize;
+float mask_zoom;
+float mzoom_sh;
 float masksizeautothreshold;
 float maskDark;
 float maskLight;
@@ -895,7 +905,6 @@ float slotmask1;
 float slotwidth;
 float double_slot;
 float slotms;
-float mclip;
 float smoothmask;
 float mshift;
 float mask_layout;
@@ -920,11 +929,23 @@ float noiseresd;
 float noiseresd4kmult;
 
 // Grade Params
-float g_grade_on;
-float wp_temperature;
-float g_satr;
-float g_satg;
-float g_satb;
+	float g_grade_on;
+    float g_Dark_to_Dim;
+    float g_GCompress;
+    float wp_temperature;
+    float g_analog;
+    float g_digital;
+    float g_sfixes;
+    float g_MD_Pal;
+    float g_SMS_bl;
+    float g_CRT_br;
+    float g_CRT_bg;
+    float g_CRT_bb;
+    float g_CRT_rf;
+    float g_CRT_sl;
+    float g_satr;
+    float g_satg;
+    float g_satb;
 
 // Grade Afterglow Params
 float AS;

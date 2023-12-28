@@ -1,4 +1,4 @@
-shaders = 39
+shaders = 41
 
 shader0 = ../../../shaders/base/drez-none.slang
 filter_linear0 = false
@@ -200,12 +200,12 @@ scale_type30 = absolute
 scale_x30 = 8
 scale_y30 = 8
 
-# Tube Layers ----------------------------------------------------------------
+# Heightmap & Normals ----------------------------------------------------------------
 
-shader31 = ../../../shaders/base/tubelayers-default.slang
+shader31 = ../../../shaders/base/height-and-normals.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
 filter_linear31 = false
-mipmap_input31 = true
+mipmap_input31 = false
 scale_type31 = viewport
 scale31 = 1.0
 
@@ -218,34 +218,53 @@ filter_linear32 = false
 scale_type32 = absolute
 scale_x32 = 8
 scale_y32 = 8
+
+# Tube Layers ----------------------------------------------------------------
+
+shader33 = ../../../shaders/base/tubelayers-default.slang
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear33 = false
+mipmap_input33 = true
+scale_type33 = viewport
+scale33 = 1.0
+
+// This pass IS ABSOLUTELY NECESSARY
+// A pass with filter_linear = false must be placed after a pass which is packing 4 8 Bit values into a 32 Bit output
+// Not having this pass results in incorrect sampling/corrupted values coming from the pass when sampled within another pass
+shader34 = ../../../shaders/base/do-nothing.slang
+mipmap_input34 = false
+filter_linear34 = false
+scale_type34 = absolute
+scale_x34 = 8
+scale_y34 = 8
 feedback_pass = "0"
 
 # Sony Megatron Colour Video Monitor by Major Pain The Cactus
-shader33 = "../../../shaders/megatron/crt-sony-megatron-source-pass.slang"
-filter_linear33 = "false"
-scale_type33 = "source"
-scale33 = "1.0"
-wrap_mode33 = "clamp_to_border"
-mipmap_input33 = "false"
-alias33 = "SourceSDR"
-float_framebuffer33 = "true"
-
-shader34 = "../../../shaders/megatron/crt-sony-megatron-hdr-pass.slang"
-filter_linear34 = "false"
-scale_type34 = "source"
-scale34 = "1.0"
-wrap_mode34 = "clamp_to_border"
-mipmap_input34 = "false"
-alias34 = "SourceHDR"
-float_framebuffer34 = "true"
-
-shader35 = "../../../shaders/megatron/crt-sony-megatron.slang"
+shader35 = "../../../shaders/megatron/crt-sony-megatron-source-pass.slang"
 filter_linear35 = "false"
+scale_type35 = "source"
+scale35 = "1.0"
 wrap_mode35 = "clamp_to_border"
 mipmap_input35 = "false"
-scale_type35 = "viewport"
+alias35 = "SourceSDR"
 float_framebuffer35 = "true"
-alias35 = "CrtPass"
+
+shader36 = "../../../shaders/megatron/crt-sony-megatron-hdr-pass.slang"
+filter_linear36 = "false"
+scale_type36 = "source"
+scale36 = "1.0"
+wrap_mode36 = "clamp_to_border"
+mipmap_input36 = "false"
+alias36 = "SourceHDR"
+float_framebuffer36 = "true"
+
+shader37 = "../../../shaders/megatron/crt-sony-megatron.slang"
+filter_linear37 = "false"
+wrap_mode37 = "clamp_to_border"
+mipmap_input37 = "false"
+scale_type37 = "viewport"
+float_framebuffer37 = "true"
+alias37 = "CrtPass"
 
 
 # -----------------------------------------------------------------------------------------------
@@ -267,26 +286,25 @@ HSM_REFLECT_GLOBAL_AMOUNT = "7.000000"
 
 # Bezel Generation & Composite of  Layers ----------------------------------------------------------------
 
-shader36 = ../../../shaders/base/bezel-and-image-layers.slang
+shader38 = ../../../shaders/base/bezel-and-image-layers.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
-filter_linear36 = false
-scale_type36 = viewport
-scale36 = 1.0
-alias36 = "SceneLayersPass"
+filter_linear38 = false
+scale_type38 = viewport
+scale38 = 1.0
+alias38 = "SceneLayersPass"
 
 // This pass IS ABSOLUTELY NECESSARY
 // A pass with filter_linear = false must be placed after a pass which is packing 4 8 Bit values into a 32 Bit output
 // Not having this pass results in incorrect sampling/corrupted values coming from the pass when sampled within another pass
-shader37 = ../../../shaders/base/do-nothing.slang
-mipmap_input37 = false
-filter_linear37 = false
-scale_type37 = absolute
-scale_x37 = 8
-scale_y37 = 8
+shader39 = ../../../shaders/base/do-nothing.slang
+mipmap_input39 = false
+filter_linear39 = false
+scale_type39 = absolute
+scale_x39 = 8
+scale_y39 = 8
 
 # Combine Passes ----------------------------------------------------------------
-shader38 = ../../../shaders/base/final-composite-no-reflect-hdr.slang
-scale_type38 = viewport
+shader40 = ../../../shaders/base/final-composite-no-reflect-hdr.slang
 
 
 # Textures All

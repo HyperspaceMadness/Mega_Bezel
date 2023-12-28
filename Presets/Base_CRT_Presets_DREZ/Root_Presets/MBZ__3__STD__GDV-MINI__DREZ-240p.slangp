@@ -1,4 +1,4 @@
-shaders = 30
+shaders = 32
 
 shader0 = ../../../shaders/base/drez-g-sharp_resampler.slang
 filter_linear0 = false
@@ -128,12 +128,12 @@ scale_type16 = absolute
 scale_x16 = 8
 scale_y16 = 8
 
-# Tube Layers ----------------------------------------------------------------
+# Heightmap & Normals ----------------------------------------------------------------
 
-shader17 = ../../../shaders/base/tubelayers-default.slang
+shader17 = ../../../shaders/base/height-and-normals.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
 filter_linear17 = false
-mipmap_input17 = true
+mipmap_input17 = false
 scale_type17 = viewport
 scale17 = 1.0
 
@@ -147,17 +147,36 @@ scale_type18 = absolute
 scale_x18 = 8
 scale_y18 = 8
 
-shader19 = ../../../shaders/base/delinearize.slang
-scale_type19 = source
-float_framebuffer19 = "true"
+# Tube Layers ----------------------------------------------------------------
 
-shader20 = ../../../shaders/guest/hsm-crt-dariusg-gdv-mini-with-tubefx.slang
-scale_type20 = viewport
-scale_x20 = 1.0
-scale_y20 = 1.0
-filter_linear20 = true
-float_framebuffer20 = "true"
-alias20 = "CrtPass"
+shader19 = ../../../shaders/base/tubelayers-default.slang
+// Must use nearest neighbor sampling so precision differences don't distort the cached image over time
+filter_linear19 = false
+mipmap_input19 = true
+scale_type19 = viewport
+scale19 = 1.0
+
+// This pass IS ABSOLUTELY NECESSARY
+// A pass with filter_linear = false must be placed after a pass which is packing 4 8 Bit values into a 32 Bit output
+// Not having this pass results in incorrect sampling/corrupted values coming from the pass when sampled within another pass
+shader20 = ../../../shaders/base/do-nothing.slang
+mipmap_input20 = false
+filter_linear20 = false
+scale_type20 = absolute
+scale_x20 = 8
+scale_y20 = 8
+
+shader21 = ../../../shaders/base/delinearize.slang
+scale_type21 = source
+float_framebuffer21 = "true"
+
+shader22 = ../../../shaders/guest/hsm-crt-dariusg-gdv-mini-with-tubefx.slang
+scale_type22 = viewport
+scale_x22 = 1.0
+scale_y22 = 1.0
+filter_linear22 = true
+float_framebuffer22 = "true"
+alias22 = "CrtPass"
 
 
 # -----------------------------------------------------------------------------------------------
@@ -174,87 +193,86 @@ g_gamma_out = 2.45
 #      Reduce the resolution to a small static size regardless of final resolution
 #      Allows consistent look and faster at different final resolutions for blur
 #      Mipmap option allows downscaling without artifacts
-shader21 = ../../../shaders/base/linearize-crt.slang
-mipmap_input21 = true
-filter_linear21 = true
-wrap_mode21 = "mirrored_repeat"
-scale_type21 = absolute
-scale_x21 = 800
-scale_y21 = 600
-float_framebuffer21 = true
-alias21 = "ReflectPrepLowResPass"
-
-# Add Blur for the Reflection (Horizontal) ----------------------------------------------------------------
-shader22 = ../../../shaders/base/blur-outside-screen-horiz.slang
-mipmap_input22 = true
-wrap_mode22 = "mirrored_repeat"
-filter_linear22 = true
-float_framebuffer22 = true
-
-# Add Blur for the Reflection (Vertical) ----------------------------------------------------------------
-shader23 = ../../../shaders/base/blur-outside-screen-vert.slang
+shader23 = ../../../shaders/base/linearize-crt.slang
+mipmap_input23 = true
 filter_linear23 = true
 wrap_mode23 = "mirrored_repeat"
+scale_type23 = absolute
+scale_x23 = 800
+scale_y23 = 600
 float_framebuffer23 = true
-alias23 = "ReflectPrepBlurredPass"
+alias23 = "ReflectPrepLowResPass"
+
+# Add Blur for the Reflection (Horizontal) ----------------------------------------------------------------
+shader24 = ../../../shaders/base/blur-outside-screen-horiz.slang
+mipmap_input24 = true
+wrap_mode24 = "mirrored_repeat"
+filter_linear24 = true
+float_framebuffer24 = true
+
+# Add Blur for the Reflection (Vertical) ----------------------------------------------------------------
+shader25 = ../../../shaders/base/blur-outside-screen-vert.slang
+filter_linear25 = true
+wrap_mode25 = "mirrored_repeat"
+float_framebuffer25 = true
+alias25 = "ReflectPrepBlurredPass"
 
 # Reduce resolution ----------------------------------------------------------------
 # Reduced to a very small amount so we can create a blur which will create a glow from the screen
 #      Mipmap option allows smoother downscaling
-shader24 = ../../../../../blurs/shaders/royale/blur9x9.slang
-mipmap_input24 = true
-filter_linear24 = true
-wrap_mode24 = "mirrored_repeat"
-scale_type24 = absolute
-scale_x24 = 128
-scale_y24 = 128
-float_framebuffer24 = true
-alias24 = "ReflectPrepDiffusedPass"
-
-# Add more blurred glow, used for Bounce Lighting
-shader25 = ../../../../../blurs/shaders/royale/blur9x9.slang
-mipmap_input25 = true
-filter_linear25 = true
-wrap_mode25 = "mirrored_repeat"
-scale_type25 = absolute
-scale_x25 = 32
-scale_y25 = 32
-float_framebuffer25 = true
-alias25 = "BounceLightPass"
-
-# Add Diffused glow all around the screen ----------------------------------------------------------------
-#      Blurred so much that it's non directional
-#      Mipmap option allows downscaling without artifacts
 shader26 = ../../../../../blurs/shaders/royale/blur9x9.slang
 mipmap_input26 = true
 filter_linear26 = true
 wrap_mode26 = "mirrored_repeat"
 scale_type26 = absolute
-scale_x26 = 12
-scale_y26 = 12
+scale_x26 = 128
+scale_y26 = 128
 float_framebuffer26 = true
-alias26 = "ReflectPrepFullscreenGlowPass"
+alias26 = "ReflectPrepDiffusedPass"
 
-// This pass IS NECESSARY to get the previous pass to be mipmapped
-shader27 = ../../../shaders/base/do-nothing.slang
+# Add more blurred glow, used for Bounce Lighting
+shader27 = ../../../../../blurs/shaders/royale/blur9x9.slang
 mipmap_input27 = true
 filter_linear27 = true
+wrap_mode27 = "mirrored_repeat"
 scale_type27 = absolute
-scale_x27 = 8
-scale_y27 = 8
+scale_x27 = 32
+scale_y27 = 32
+float_framebuffer27 = true
+alias27 = "BounceLightPass"
+
+# Add Diffused glow all around the screen ----------------------------------------------------------------
+#      Blurred so much that it's non directional
+#      Mipmap option allows downscaling without artifacts
+shader28 = ../../../../../blurs/shaders/royale/blur9x9.slang
+mipmap_input28 = true
+filter_linear28 = true
+wrap_mode28 = "mirrored_repeat"
+scale_type28 = absolute
+scale_x28 = 12
+scale_y28 = 12
+float_framebuffer28 = true
+alias28 = "ReflectPrepFullscreenGlowPass"
+
+// This pass IS NECESSARY to get the previous pass to be mipmapped
+shader29 = ../../../shaders/base/do-nothing.slang
+mipmap_input29 = true
+filter_linear29 = true
+scale_type29 = absolute
+scale_x29 = 8
+scale_y29 = 8
 
 # Bezel Reflection ----------------------------------------------------------------
-shader28 = ../../../shaders/base/reflection.slang
-scale_type28 = viewport
-filter_linear28 = true
-float_framebuffer28 = true
-alias28 = "ReflectPass"
+shader30 = ../../../shaders/base/reflection.slang
+scale_type30 = viewport
+filter_linear30 = true
+float_framebuffer30 = true
+alias30 = "ReflectPass"
 
 # Combine Passes ----------------------------------------------------------------
-shader29 = ../../../shaders/base/final-composite.slang
+shader31 = ../../../shaders/base/final-composite.slang
 // Must use nearest neighbor sampling so precision differences don't distort the cached image over time
-filter_linear29 = false
-scale_type29 = viewport
+filter_linear31 = false
 
 
 # Textures All

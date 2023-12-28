@@ -49,7 +49,7 @@ layout(push_constant) uniform Push
 #define sat params.sat
 
 #pragma parameter GDV_COLOR_LINE							" " 0 0 0.001 0.001
-#pragma parameter bogus_color    "[ COLOR TWEAKS ]:" 0.0 0.0 1.0 1.0
+#pragma parameter bogus_color    "[ GUEST COLOR TWEAKS ]:" 0.0 0.0 1.0 1.0
 
 #pragma parameter CS             "       Display Gamut: sRGB, Modern, DCI, Adobe, Rec.2020 -- CS" 0.0 0.0 4.0 1.0 
 #pragma parameter CP             "       CRT Profile: EBU | P22 | SMPTE-C | Philips | Trin. -- CP" 0.0 -1.0 5.0 1.0 
@@ -60,7 +60,7 @@ layout(push_constant) uniform Push
 #pragma parameter TNTC           "       LUT Colors: Trin. | InvTrin. | NEC Mult. | NTSC -- TNTC" 0.0 0.0 4.0 1.0
 #define TNTC params.TNTC
 
-#pragma parameter LS             "          LUT Size -- LS" 32.0 32.0 64.0 32.0
+#pragma parameter LS             "          LUT Size -- LS" 32.0 16.0 64.0 16.0
 #define LS params.LS
 
 #define LUTLOW 5.0  // "Fix LUT Dark - Range" from 0.0 to 50.0 - RGB singletons

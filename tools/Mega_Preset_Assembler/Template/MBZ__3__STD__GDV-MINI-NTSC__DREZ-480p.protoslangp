@@ -3,6 +3,7 @@
 #reference "../Components/composition__40__pre-crt-chain__std.slangp"
 #reference "../Components/composition__60__crt-prep__ntsc.slangp"
 #reference "../Components/chain__59__bezel-images.slangp"
+#reference "../Components/chain__59__height-and-normals.slangp"
 #reference "../Components/chain__59__tubelayers-default.slangp"
 #reference "../Components/chain__60__crt__gdvmini-with-tubefx.slangp"
 #reference "../Components/composition__90__post-crt__default.slangp"

@@ -224,7 +224,6 @@ HSM_REFLECT_GLOBAL_AMOUNT = "7.000000"
 
 # Combine Passes ----------------------------------------------------------------
 shader32 = ../../../shaders/base/output-hdr.slang
-scale_type32 = viewport
 alias32 = "OutputPass"
 
 

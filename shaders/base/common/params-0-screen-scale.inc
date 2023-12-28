@@ -426,6 +426,8 @@ float HSM_SCANLINE_DIRECTION = global.HSM_SCANLINE_DIRECTION;
 
 #pragma parameter no_scanlines "          No-Scanline Mode (Guest Advanced Only)" 0.0 0.0 1.0 1.0
 
+#pragma parameter hiscan "       High Resolution Scanlines (GDV with ScaleFx or XBR Only)" 0.0 0.0 1.0 1.0
+#define hiscan        global.hiscan
 
 //---------------------------------------------------------------------------------------------------
 //    CORE RES SAMPLING
@@ -453,9 +455,12 @@ float HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR = global.HSM_DOWNSAMPLE_BLUR_OPPOSITE_DIR
 //---------------------------------------------------------------------------------------------------
 #pragma parameter SHARPEN_EMPTY_LINE							" " 0 0 0.001 0.001
 #pragma parameter SHARPEN_TITLE  	"[ FAST SHARPEN - GUEST.R ]:"         			0.00 0.0 2.00 0.05
-#pragma parameter SHARPEN  			"          Sharpen Strength"    0.00 0.0 4.00 0.10 
-#pragma parameter CONTR    			"          Amount of Sharpening"  	0.05 0.0 0.25 0.01
-#pragma parameter DETAILS  			"          Details Sharpened"     	1.00 0.0 1.00 0.05
+#pragma parameter SHARPEN_ON  		"          FSharpen - ON"       		1 0 1 1
+#pragma parameter CSHARPEN          "          FSharpen - Sharpen strength"         0.00 0.0 5.00 0.10 
+#pragma parameter CCONTR            "          FSharpen - Sharpen Contrast/Ringing" 0.05 0.0 0.25 0.01 
+#pragma parameter CDETAILS          "          FSharpen - Details sharpened"        1.00 0.0 1.00 0.05 
+#pragma parameter DEBLUR            "          FSharpen - Deblur Strength (For NTSC Only)"          1.00 1.0 7.00 0.25 
+
 
 //---------------------------------------------------------------------------------------------------
 //    INTERLACING
@@ -477,6 +482,9 @@ float HSM_INTERLACE_TRIGGER_RES = global.HSM_INTERLACE_TRIGGER_RES;
 
 #pragma parameter iscans 				                            "          Interlacing (Scanline) Saturation" 0.25 0 1 0.05
 #define iscans global.iscans
+
+#pragma parameter vga_mode                                          "          VGA Single/Double Scan mode" 0.0 0.0 1.0 1.0
+#define vga_mode  global.vga_mode     // interlace saturation
 
 
 //---------------------------------------------------------------------------------------------------
