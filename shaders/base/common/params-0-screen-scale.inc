@@ -443,8 +443,13 @@ float HSM_SCANLINE_DIRECTION = global.HSM_SCANLINE_DIRECTION;
 #define HSM_OVERSCAN_RASTER_BLOOM_MODE           global.HSM_OVERSCAN_RASTER_BLOOM_MODE
 
 #pragma parameter HSM_OVERSCAN_RASTER_BLOOM_AMOUNT "          Raster Bloom %" 5.0 0.0 20.0 1.0
-#define HSM_OVERSCAN_RASTER_BLOOM_AMOUNT        global.HSM_OVERSCAN_RASTER_BLOOM_AMOUNT     // Bloom overscan percentage
+#define HSM_OVERSCAN_RASTER_BLOOM_AMOUNT        global.HSM_OVERSCAN_RASTER_BLOOM_AMOUNT / 100     // Bloom overscan percentage
 
+#pragma parameter HSM_OVERSCAN_RASTER_BLOOM_NEUTRAL_RANGE "          Raster Bloom Overscan Neutral Area" 0.3 0.0 1.0 0.05
+#define HSM_OVERSCAN_RASTER_BLOOM_NEUTRAL_RANGE           global.HSM_OVERSCAN_RASTER_BLOOM_NEUTRAL_RANGE
+
+#pragma parameter HSM_OVERSCAN_RASTER_BLOOM_NEUTRAL_RANGE_CENTER "          Raster Bloom Overscan Neutral Area Center" 0.5 0.0 1.0 0.05
+#define HSM_OVERSCAN_RASTER_BLOOM_NEUTRAL_RANGE_CENTER           global.HSM_OVERSCAN_RASTER_BLOOM_NEUTRAL_RANGE_CENTER
 
 
 //---------------------------------------------------------------------------------------------------
