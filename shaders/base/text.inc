@@ -611,15 +611,16 @@ float GetText(vec2 in_coord)
    in_coord.x = HSM_FLIP_VIEWPORT_HORIZONTAL * HSM_FLIP_CORE_HORIZONTAL * (in_coord.x - 0.5) + 0.5;
    in_coord.y = HSM_FLIP_VIEWPORT_VERTICAL * HSM_FLIP_CORE_VERTICAL * (in_coord.y - 0.5) + 0.5;
 
-   vec2 int_mult = GetIntegerScaleMult(SCREEN_SIZE, CROPPED_ROTATED_SIZE);
-   vec2 canvas_size = global.DerezedPassSize.xy;
+    vec2 int_mult = GetIntegerScaleMult(SCREEN_SIZE, CROPPED_ROTATED_SIZE);
+    vec2 canvas_size = global.DerezedPassSize.xy;
 
     in_coord = (in_coord - 0.5) * vec2(1, -1) + 0.5;
-    float downscale = 1;
-    if (canvas_size.y > 460) downscale = 2;
-    if (canvas_size.y > 1000) downscale = 3;
 
-   vec2 uv = global.OutputSize.xy * in_coord;
+    vec2 downscale = vec2(1, 1);
+    downscale.x = max(max(floor(canvas_size.x / 240), 1), 1);
+    downscale.y = max(max(ceil(canvas_size.y / 200), 1), 1);
+
+    vec2 uv = global.OutputSize.xy * in_coord;
 	vec2 downscaled_uv = floor(global.OutputSize.xy * in_coord / downscale);
 
     vec4 screen_region = GetScreenRegion(SCREEN_SIZE);
@@ -636,10 +637,9 @@ float GetText(vec2 in_coord)
 void main()
 {
 	vec2 UNFLIPPED_VIEWPORT_COORD = vTexCoord;
-   vec2 VIEWPORT_COORD = vTexCoord;
+    vec2 VIEWPORT_COORD = vTexCoord;
 	HSM_UpdateGlobalScreenValuesFromCache(InfoCachePass, vTexCoord);
 
-   // vec4 feedback_color_test = texture(PassFeedback, vec2(0,0));
    if (!CACHE_INFO_CHANGED)
    {
       FragColor = texture(PassFeedback, UNFLIPPED_VIEWPORT_COORD);
