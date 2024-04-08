@@ -96,7 +96,8 @@ float gaussian(float x, float y)
 
 void main()
 {
-	if (HSM_DREZ_GSHARP_ON == 0 || OutputSize.y / SourceSize.y < HSM_DREZ_THRESHOLD_RATIO)
+	// If the effext is disabled or the downsample ratio is below the threshold, just sample the texture
+	if (HSM_DREZ_GSHARP_ON == 0 || SourceSize.y / OutputSize.y < HSM_DREZ_THRESHOLD_RATIO)
 	{
 		FragColor = texture(Source, vTexCoord);
 		return;
