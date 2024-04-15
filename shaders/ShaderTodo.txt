@@ -1,10 +1,11 @@
 ![Mega_Bezel_Logo|512x256, 75%](upload://6PNkvcMF9Go9Wnk6OJXfYR1opXI.png) 
 
-Mega Bezel is updated to V1.16.1_2024-XX-XX
+Mega Bezel is updated to V1.17.1_2024-04-14
 
 Changes:
   * Fixed NTSC variants
-  * Added Raster Bloom neutral range 
+  * Added Raster Bloom neutral range
+  * Fixed DREZ presets resampler, the resampler was never worked at least recently
 
 ----------------------------------------------------
 --- TODO  ---------------------------------------
