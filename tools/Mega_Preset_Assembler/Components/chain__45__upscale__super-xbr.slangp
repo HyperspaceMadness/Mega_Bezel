@@ -39,7 +39,7 @@ scale_x3 = "1.000000"
 scale_type_y3 = "source"
 scale_y3 = "1.000000"
 
-shader4 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/hyllian/crt-super-xbr/custom-bicubic-X.slang
+shader4 = :/shaders/shaders_slang/bezel/Mega_Bezel/shaders/hyllian/crt-super-xbr/custom-bicubic-x.slang
 filter_linear4 = "false"
 wrap_mode4 = "clamp_to_border"
 mipmap_input4 = "false"
